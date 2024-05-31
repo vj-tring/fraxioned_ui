@@ -3,7 +3,12 @@ import './Signup.css';
 import { useNavigate } from 'react-router-dom';
 import {  Button } from '@mui/material';
 
+interface SignupProps {
+  navigate?: (url: string) => void;
+}
+
 const Signup: React.FC = () => {
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [fullName, setFullName] = useState<string>("");

@@ -6,7 +6,7 @@ html {
     margin:0;
     padding:0;
     font-family: sans-serif;
-    background: linear-gradient(#141e30, #446891);
+    /* background: linear-gradient(#141e30, #446891); */
     
   }
   
@@ -19,8 +19,7 @@ html {
     transform: translate(-50%, -50%);
     background: white;
     box-sizing: border-box;
-    box-shadow: 0 15px 25px rgba(0,0,0,.6);
-    border-radius: 10px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;    border-radius: 10px;
     color: black;
   }
   
@@ -64,7 +63,7 @@ html {
     color: #03e9f4;
     font-size: 12px;
   }
-  
+/*   
   .login-box form a {
     position: relative;
     display: inline-block;
@@ -77,8 +76,8 @@ html {
     transition: .5s;
     margin-top: 40px;
     letter-spacing: 4px
-  }
-  
+  } */
+/*   
   .login-box a:hover {
     background: #03e9f4;
     color: #fff;
@@ -88,7 +87,7 @@ html {
                 0 0 50px #03e9f4,
                 0 0 100px #03e9f4;
   }
-  
+   */
   .login-box a span {
     position: absolute;
     display: block;
@@ -246,3 +245,4 @@ html {
     height: 40px;
     background-color: white;
   }
+ 

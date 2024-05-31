@@ -4,7 +4,7 @@ import Login from "./Components/Login/Login";
 import Signup from './Components/Signup/Signup';
 import ForgotPassword from './Components/ForgetPassword/ForgotPassword';
 import ResetPassword from './Components/ResetPassword/ResetPassword';
-import { Dashboard } from './Components/Dashboard/Dashboard1';
+import Dashboard from './Components/Dashboard/Dashboard1';
 
 const App: React.FC = () => {
   return (
