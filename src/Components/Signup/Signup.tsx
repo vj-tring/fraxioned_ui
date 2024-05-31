@@ -7,7 +7,7 @@ interface SignupProps {
   navigate?: (url: string) => void;
 }
 
-const Signup: React.FC = () => {
+const Signup: React.FC<SignupProps> = () => {
 
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
