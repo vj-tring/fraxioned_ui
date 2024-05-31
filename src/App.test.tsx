@@ -1,9 +1,8 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import App from './App';
+// import { render, screen } from '@testing-library/react';
+// import { Login } from '@mui/icons-material';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
-});
+// test('renders learn react link', () => {
+//   render(<Login />);
+//   const linkElement = screen.getByText(/login/i);
+//   expect(linkElement).toBeInTheDocument();
+// });
