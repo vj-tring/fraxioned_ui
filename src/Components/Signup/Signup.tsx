@@ -27,7 +27,7 @@ const Signup: React.FC = () => {
     return phoneRegex.test(phone);
   };
 
-  const onButtonClick = (e: React.FormEvent<HTMLFormElement>): void => {
+  const onButtonClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     setEmailError("");
     setPasswordError("");
@@ -74,18 +74,25 @@ const Signup: React.FC = () => {
       setTermsError("You must accept the terms and conditions");
       return;
     }
+     
 
-    navigate("/dashboard");
+
+
+  localStorage.setItem("Email",email);
+  localStorage.setItem("Password",password);
+  localStorage.setItem("FullName",fullName);
+
+    navigate("/login");
   };
 
   return (
     <div className="login-box">
       <h2>Signup</h2>
-      <form onSubmit={onButtonClick}>
+      <form >
         <div className="user-box">
           <input
             value={fullName}
-            placeholder="Enter full name"
+            placeholder="Name"
             onChange={ev => setFullName(ev.target.value)}
             className="user-box"
             type="text"
@@ -95,7 +102,7 @@ const Signup: React.FC = () => {
         <div className="user-box">
           <input
             value={email}
-            placeholder="Enter email address here"
+            placeholder="Email"
             onChange={ev => setEmail(ev.target.value)}
             className="user-box"
             type="email"
@@ -105,7 +112,7 @@ const Signup: React.FC = () => {
         <div className="user-box">
           <input
             value={phone}
-            placeholder="Enter phone number"
+            placeholder="PhoneNumber"
             onChange={ev => setPhone(ev.target.value)}
             className="user-box"
             type="text"
@@ -115,7 +122,7 @@ const Signup: React.FC = () => {
         <div className="user-box">
           <input
             value={password}
-            placeholder="Enter password here"
+            placeholder="Password"
             onChange={ev => setPassword(ev.target.value)}
             className="user-box"
             type="password"
@@ -134,9 +141,12 @@ const Signup: React.FC = () => {
         
 
        <Button
+          onClick={onButtonClick}
+          style={{marginTop:"40px"}}
           className="inputButton "
           variant="contained"
           color="primary"
+          type="button"
         >
           Submit
         </Button>

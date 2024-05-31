@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import './Login.css';
+import './ForgotPassword.css';
 import { useNavigate } from 'react-router-dom';
-import {  Button } from '@mui/material';
+import { Button } from '@mui/material';
 
-const Login: React.FC = () => {
+const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
   const [emailError, setEmailError] = useState<string>("");
-  const [passwordError, setPasswordError] = useState<string>("");
   const navigate = useNavigate();
 
   const validateEmail = (email: string): boolean => {
@@ -18,7 +16,6 @@ const Login: React.FC = () => {
   const onButtonClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     setEmailError("");
-    setPasswordError("");
 
     if (email === "") {
       setEmailError("Please enter your email");
@@ -30,32 +27,13 @@ const Login: React.FC = () => {
       return;
     }
 
-    if (password === "") {
-      setPasswordError("Please enter a password");
-      return;
-    }
-
-    if (password.length < 8) {
-      setPasswordError("Password must be 8 characters or longer");
-      return;
-    }
-    const Email=localStorage.getItem("Email");
-    const Pass=localStorage.getItem("Password");
-  
-    if(Email === email && Pass === password){
-      navigate("/dashboard");
-
-    }
-    else{
-      alert("Invalid Credentials");
-      setEmail("");
-      setPassword("");
-    }
+    
+    navigate("/dashboard");
   };
 
   return (
     <div className="login-box">
-      <h2>Login</h2>
+      <h2>Forgot Password</h2>
       <form>
         <div className="user-box">
           <input
@@ -66,16 +44,6 @@ const Login: React.FC = () => {
             type="email"
           />
           <label className="errorLabel">{emailError}</label>
-        </div>
-        <div className="user-box">
-          <input
-            value={password}
-            placeholder="Password"
-            onChange={ev => setPassword(ev.target.value)}
-            className="user-box"
-            type="password"
-          />
-          <label className="errorLabel">{passwordError}</label>
         </div>
         <Button
           onClick={onButtonClick}
@@ -91,4 +59,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;
