@@ -1,0 +1,26 @@
+/* Signup.css */
+
+/* .container {
+    max-width: 500px;
+  }
+   */
+  .signup-box {
+    width: 30%;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .text-danger {
+    color: #dc3545;
+    font-size: small;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .signup-box input {
+    width: 100%;
+    padding: 10px 0;
+    padding-left: 10px;
+  }
