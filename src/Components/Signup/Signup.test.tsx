@@ -3,7 +3,6 @@ import { render, fireEvent, screen } from '@testing-library/react';
 import Signup from './Signup';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-// Mocking useNavigate hook
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: jest.fn(),
@@ -16,7 +15,7 @@ describe('Signup component', () => {
         <Signup />
       </Router>
     );
-    const emailInput = screen.getByPlaceholderText('Enter email address here');
+    const emailInput = screen.getByPlaceholderText('Email');
     const submitButton = screen.getByText('Submit');
 
     fireEvent.change(emailInput, { target: { value: 'valid@gmail.com' } });
@@ -30,28 +29,39 @@ describe('Signup component', () => {
         <Signup />
       </Router>
     );
-    const fullNameInput = screen.getByPlaceholderText('Enter full name');
+    const fullNameInput = screen.getByPlaceholderText('Name');
     const submitButton = screen.getByText('Submit');
 
     fireEvent.change(fullNameInput, { target: { value: 'test' } });
     fireEvent.click(submitButton);
-    expect(screen.queryByText('Please enter a valid Name address')).toBeNull();
+    expect(screen.queryByText('Please enter your full name')).toBeNull();
   });
 
-  test('validates phome number input correctly', () => {
+  test('validates phone number input correctly', () => {
     render(
       <Router>
         <Signup />
       </Router>
     );
-    const phoneInput = screen.getByPlaceholderText('Enter phone number');
+    const phoneInput = screen.getByPlaceholderText('PhoneNumber');
     const submitButton = screen.getByText('Submit');
 
-    fireEvent.change(phoneInput, { target: { value: '56778279886' } });
+    fireEvent.change(phoneInput, { target: { value: '5677827988' } });
     fireEvent.click(submitButton);
-    expect(screen.queryByText('Please enter a valid Phone Number')).toBeNull();
+    expect(screen.queryByText('Please enter a valid 10-digit phone number')).toBeNull();
   });
-  
 
-  // Write similar tests for other validations
+  test('validates password input correctly', () => {
+    render(
+      <Router>
+        <Signup />
+      </Router>
+    );
+    const phoneInput = screen.getByPlaceholderText('Password');
+    const submitButton = screen.getByText('Submit');
+
+    fireEvent.change(phoneInput, { target: { value: 'test12345' } });
+    fireEvent.click(submitButton);
+    expect(screen.queryByText('Password must be 8 characters or longer')).toBeNull();
+  });
 });

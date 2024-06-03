@@ -1,96 +1,54 @@
-// import React from 'react';
-// import { render, screen, fireEvent } from '@testing-library/react';
-// import '@testing-library/jest-dom/extend-expect';
-// import { BrowserRouter, useNavigate } from 'react-router-dom';
-// import Login from './Login';
-
-// jest.mock('react-router-dom', () => ({
-//   ...jest.requireActual('react-router-dom'),
-//   useNavigate: jest.fn(),
-// }));
-
-// const renderWithRouter = (ui: React.ReactElement) => {
-//   return render(<BrowserRouter>{ui}</BrowserRouter>);
-// };
-
-// describe('Login Component', () => {
-//   test('renders login form with inputs and submit button', () => {
-//     renderWithRouter(<Login />);
-
-//     expect(screen.getByPlaceholderText('Enter email address here')).toBeInTheDocument();
-//     expect(screen.getByPlaceholderText('Enter password here')).toBeInTheDocument();
-//     expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
-//   });
-
-//   test('shows error message when email is empty', () => {
-//     renderWithRouter(<Login />);
-
-//     fireEvent.click(screen.getByRole('button', { name: /submit/i }));
-
-//     expect(screen.getByText('Please enter your email')).toBeInTheDocument();
-//   });
-
-//   test('shows error message when email is invalid', () => {
-//     renderWithRouter(<Login />);
-
-//     fireEvent.change(screen.getByPlaceholderText('Enter email address here'), { target: { value: 'invalid-email' } });
-//     fireEvent.click(screen.getByRole('button', { name: /submit/i }));
-
-//     expect(screen.getByText('Please enter a valid email address')).toBeInTheDocument();
-//   });
-
-//   test('shows error message when password is empty', () => {
-//     renderWithRouter(<Login />);
-
-//     fireEvent.change(screen.getByPlaceholderText('Enter email address here'), { target: { value: 'test@example.com' } });
-//     fireEvent.click(screen.getByRole('button', { name: /submit/i }));
-
-//     expect(screen.getByText('Please enter a password')).toBeInTheDocument();
-//   });
-
-//   test('shows error message when password is less than 8 characters', () => {
-//     renderWithRouter(<Login />);
-
-//     fireEvent.change(screen.getByPlaceholderText('Enter email address here'), { target: { value: 'test@example.com' } });
-//     fireEvent.change(screen.getByPlaceholderText('Enter password here'), { target: { value: 'short' } });
-//     fireEvent.click(screen.getByRole('button', { name: /submit/i }));
-
-//     expect(screen.getByText('Password must be 8 characters or longer')).toBeInTheDocument();
-//   });
-
-//   test('navigates to dashboard when form is valid', () => {
-//     const mockNavigate = jest.fn();
-//     (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
-
-//     renderWithRouter(<Login />);
-
-//     fireEvent.change(screen.getByPlaceholderText('Enter email address here'), { target: { value: 'test@example.com' } });
-//     fireEvent.change(screen.getByPlaceholderText('Enter password here'), { target: { value: 'password123' } });
-//     fireEvent.click(screen.getByRole('button', { name: /submit/i }));
-
-//     expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
-//   });
-// });
-
-// export {};
 import { render, screen, fireEvent } from '@testing-library/react';
-import Login from './Login'; // Make sure the path to your Login component is correct
-import { BrowserRouter } from 'react-router-dom';
-import { JSX } from 'react/jsx-runtime';
+import Login from './Login'; 
+import { BrowserRouter as Router } from 'react-router-dom';
 
-// A utility function to render with Router context if needed
-function renderWithRouter(ui: JSX.Element, { route = '/' } = {}) {
-  window.history.pushState({}, 'Test page', route);
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: jest.fn(),
+}));
+ describe('Login Component', () => {
+  test('validates email input correctly', () => {
+    render(
+      <Router>
+        <Login />
+      </Router>
+    );
+    const emailInput = screen.getByPlaceholderText('Email');
+    const submitButton = screen.getByText('Submit');
 
-  return render(ui, { wrapper: BrowserRouter });
-}
+    fireEvent.change(emailInput, { target: { value: 'valid@gmail.com' } });
+    fireEvent.click(submitButton);
+    expect(screen.queryByText('Please enter a valid email address')).toBeNull();
+  });
 
-test('navigates to dashboard when form is valid', () => {
-  renderWithRouter(<Login />);
+  test('validates password input correctly', () => {
+    render(
+      <Router>
+        <Login />
+      </Router>
+    );
+    const phoneInput = screen.getByPlaceholderText('Password');
+    const submitButton = screen.getByText('Submit');
 
-  fireEvent.change(screen.getByPlaceholderText('Email'), { target: { value: 'test@example.com' } });
-  fireEvent.change(screen.getByPlaceholderText('Password'), { target: { value: 'password123' } });
-  fireEvent.click(screen.getByRole('button', { name: /submit/i }));
+    fireEvent.change(phoneInput, { target: { value: 'test12345' } });
+    fireEvent.click(submitButton);
+    expect(screen.queryByText('Password must be 8 characters or longer')).toBeNull();
+  });
 
-  // Add your assertions here
-});
+  test('navigates to dashboard when form is valid', () => {
+    render(
+      <Router>
+        <Login />
+      </Router>
+    );
+    
+      fireEvent.change(screen.getByPlaceholderText('Email'), { target: { value: 'test@example.com' } });
+      fireEvent.change(screen.getByPlaceholderText('Password'), { target: { value: 'password123' } });
+      fireEvent.click(screen.getByRole('button', { name: /submit/i }));
+    
+      // Add your assertions here
+      // expect(screen.queryByText('Invalid Credentials')).toBeNull();
+    });
+ })
+
+
