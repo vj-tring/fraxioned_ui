@@ -1,161 +1,122 @@
-import React, { useState } from 'react';
-import './Signup.css';
+import React from 'react';
+import './Signup.css'; // You can create this CSS file for styling
 import { useNavigate } from 'react-router-dom';
-import {  Button } from '@mui/material';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
-interface SignupProps {
-  navigate?: (url: string) => void;
-}
-
-const Signup: React.FC<SignupProps> = () => {
-
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [fullName, setFullName] = useState<string>("");
-  const [phone, setPhone] = useState<string>("");
-  const [acceptTerms, setAcceptTerms] = useState<boolean>(false);
-  const [emailError, setEmailError] = useState<string>("");
-  const [passwordError, setPasswordError] = useState<string>("");
-  const [fullNameError, setFullNameError] = useState<string>("");
-  const [phoneError, setPhoneError] = useState<string>("");
-  const [termsError, setTermsError] = useState<string>("");
-
+const Signup: React.FC = () => {
   const navigate = useNavigate();
 
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    return emailRegex.test(email);
-  };
+  const validationSchema = Yup.object({
+    name: Yup.string()
+      .required('Please enter your name'),
+    email: Yup.string()
+      .email('Invalid email address')
+      .required('Please enter your email'),
+    password: Yup.string()
+      .required('Please enter a password')
+      .min(8, 'Password must be 8 characters or longer'),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref('password')], 'Passwords must match')
+      .required('Please confirm your password'),
+  });
 
-  const validatePhone = (phone: string): boolean => {
-    const phoneRegex = /^[0-9]{10}$/;
-    return phoneRegex.test(phone);
-  };
-
-  const onButtonClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    e.preventDefault();
-    setEmailError("");
-    setPasswordError("");
-    setFullNameError("");
-    setPhoneError("");
-    setTermsError("");
-
-    if (fullName === "") {
-      setFullNameError("Please enter your full name");
-      return;
-    }
-
-    if (email === "") {
-      setEmailError("Please enter your email");
-      return;
-    }
-
-    if (!validateEmail(email)) {
-      setEmailError("Please enter a valid email address");
-      return;
-    }
-
-    if (phone === "") {
-      setPhoneError("Please enter your phone number");
-      return;
-    }
-
-    if (!validatePhone(phone)) {
-      setPhoneError("Please enter a valid 10-digit phone number");
-      return;
-    }
-
-    if (password === "") {
-      setPasswordError("Please enter a password");
-      return;
-    }
-
-    if (password.length < 8) {
-      setPasswordError("Password must be 8 characters or longer");
-      return;
-    }
-
-    if (!acceptTerms) {
-      setTermsError("You must accept the terms and conditions");
-      return;
-    }
-     
-
-
-
-  localStorage.setItem("Email",email);
-  localStorage.setItem("Password",password);
-  localStorage.setItem("FullName",fullName);
-
-    navigate("/login");
-  };
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      alert('Form submitted successfully!');
+      localStorage.setItem("Email",formik.values.email);
+      localStorage.setItem("Password",formik.values.password);
+      console.log(values); // Do whatever you want with form values
+      navigate('/login'); // Redirect to login page after successful submission
+    },
+  });
 
   return (
-    <div className="login-box">
-      <h2>Signup</h2>
-      <form >
-        <div className="user-box">
-          <input
-            value={fullName}
-            placeholder="Name"
-            onChange={ev => setFullName(ev.target.value)}
-            className="user-box"
-            type="text"
-          />
-          <label className="errorLabel">{fullNameError}</label>
-        </div>
-        <div className="user-box">
-          <input
-            value={email}
-            placeholder="Email"
-            onChange={ev => setEmail(ev.target.value)}
-            className="user-box"
-            type="email"
-          />
-          <label className="errorLabel">{emailError}</label>
-        </div>
-        <div className="user-box">
-          <input
-            value={phone}
-            placeholder="PhoneNumber"
-            onChange={ev => setPhone(ev.target.value)}
-            className="user-box"
-            type="text"
-          />
-          <label className="errorLabel">{phoneError}</label>
-        </div>
-        <div className="user-box">
-          <input
-            value={password}
-            placeholder="Password"
-            onChange={ev => setPassword(ev.target.value)}
-            className="user-box"
-            type="password"
-          />
-          <label className="errorLabel">{passwordError}</label>
-        </div>
-        <div className="terms-box">
-          <input
-            type="checkbox"
-            checked={acceptTerms}
-            onChange={ev => setAcceptTerms(ev.target.checked)}
-          />
-          <label>I accept the terms and conditions</label>
-          <label className="errorLabel">{termsError}</label>
-        </div>
-        
-
-       <Button
-          onClick={onButtonClick}
-          style={{marginTop:"40px"}}
-          className="inputButton "
-          variant="contained"
-          color="primary"
-          type="button"
-        >
-          Submit
-        </Button>
-      </form>
+    <div className="container d-flex justify-content-center align-items-center vh-100">
+      <div className="signup-box shadow p-4 bg-white rounded">
+        <h2 className="text-center ">Sign Up</h2>
+        <form onSubmit={formik.handleSubmit} className="row g-3">
+          <div className="col-12 mt-4">
+            <label htmlFor="name" className="form-label">
+              {formik.touched.name && formik.errors.name ? (
+                <span className="text-danger flex-end">  {formik.errors.name}</span>
+              ) : null}
+            </label>
+            <input
+              name="name"
+              type="text"
+              placeholder="Enter your name"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.name}
+              className={`form-control ${formik.touched.name && formik.errors.name ? 'is-invalid' : ''}`}
+            />
+          </div>
+          <div className="col-12 mt-4">
+            <label htmlFor="email" className="form-label">
+               {formik.touched.email && formik.errors.email ? (
+                <span className="text-danger"> {formik.errors.email}</span>
+              ) : null}
+            </label>
+            <input
+              name="email"
+              type="email"
+              placeholder="Enter your email"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.email}
+              className={`form-control ${formik.touched.email && formik.errors.email ? 'is-invalid' : ''}`}
+            />
+          </div>
+          <div className="col-12 mt-4 ">
+            <label htmlFor="password" className="form-label">
+               {formik.touched.password && formik.errors.password ? (
+                <span className="text-danger">  {formik.errors.password}</span>
+              ) : null}
+            </label>
+            <input
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.password}
+              className={`form-control ${formik.touched.password && formik.errors.password ? 'is-invalid' : ''}`}
+            />
+          </div>
+          <div className="col-12 mt-4">
+            <label htmlFor="confirmPassword" className="form-label">
+                {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
+                <span className="text-danger ">  {formik.errors.confirmPassword}</span>
+              ) : null}
+            </label>
+            <input
+              name="confirmPassword"
+              type="password"
+              placeholder="Confirm your password"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.confirmPassword}
+              className={`form-control ${formik.touched.confirmPassword && formik.errors.confirmPassword ? 'is-invalid' : ''}`}
+            />
+          </div>
+          <div className="col-12">
+            <button
+              type="submit"
+              className="btn  btn-primary mt-3"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

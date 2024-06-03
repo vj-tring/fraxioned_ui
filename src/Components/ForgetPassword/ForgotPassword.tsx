@@ -1,60 +1,62 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './ForgotPassword.css';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 
+const validationSchema = Yup.object({
+  email: Yup.string().email('Invalid email address').required('Please enter your email'),
+});
+
 const ForgotPassword: React.FC = () => {
-  const [email, setEmail] = useState<string>("");
-  const [emailError, setEmailError] = useState<string>("");
   const navigate = useNavigate();
 
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    return emailRegex.test(email);
-  };
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: values => {
+      // Send a request to the server to handle forgot password logic
+      //...
 
-  const onButtonClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    e.preventDefault();
-    setEmailError("");
-
-    if (email === "") {
-      setEmailError("Please enter your email");
-      return;
-    }
-
-    if (!validateEmail(email)) {
-      setEmailError("Please enter a valid email address");
-      return;
-    }
-
-    
-    navigate("/dashboard");
-  };
+      // Navigate to the dashboard page
+      navigate('/dashboard');
+    },
+  });
 
   return (
-    <div className="login-box">
-      <h2>Forgot Password</h2>
-      <form>
-        <div className="user-box">
-          <input
-            value={email}
-            placeholder="Email"
-            onChange={ev => setEmail(ev.target.value)}
-            className="user-box"
-            type="email"
-          />
-          <label className="errorLabel">{emailError}</label>
-        </div>
-        <Button
-          onClick={onButtonClick}
-          className="inputButton mt-3"
-          type="button"
-          variant="contained"
-          color="primary"
-        >
-          Submit
-        </Button>
-      </form>
+    <div className="container d-flex justify-content-center align-items-center vh-100">
+      <div className="forgot shadow bg-white rounded p-4">
+        <h2 className="text-center mb-5">Forgot Password</h2>
+        <form onSubmit={formik.handleSubmit}>
+          <div className="form-group position-relative">
+            {formik.touched.email && formik.errors.email ? (
+              <div className="invalid-feedback d-block mb-2">{formik.errors.email}</div>
+            ) : null}
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Enter your email"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.email}
+              className={`form-control ${formik.touched.email && formik.errors.email ? 'is-invalid' : ''}`}
+            />
+          </div>
+          <Button
+            type="submit"
+            className="w-100 mt-3"
+            variant="contained"
+            color="primary"
+          >
+            Submit
+          </Button>
+        </form>
+      </div>
     </div>
   );
 };

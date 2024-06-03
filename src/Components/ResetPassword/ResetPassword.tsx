@@ -1,114 +1,84 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './ResetPassword.css';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 
+const validationSchema = Yup.object({
+  newPassword: Yup.string()
+    .min(8, 'Password must be at least 8 characters')
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, 'Password must contain at least one uppercase letter, one lowercase letter, and one digit')
+    .required('Please enter a new password'),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref('newPassword')], 'Passwords must match')
+    .required('Please confirm your password'),
+});
+
 const ResetPassword: React.FC = () => {
-  const [email, setEmail] = useState<string>("");
-  const [emailError, setEmailError] = useState<string>("");
-  const [newPassword, setNewPassword] = useState<string>("");
-  const [newPasswordError, setNewPasswordError] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState<string>("");
   const navigate = useNavigate();
 
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    return emailRegex.test(email);
-  };
+  const formik = useFormik({
+    initialValues: {
+      newPassword: '',
+      confirmPassword: '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: values => {
+      // Send a request to the server to reset the password
+      //...
 
-  const validatePassword = (password: string): boolean => {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-    return passwordRegex.test(password);
-  };
-
-  const onButtonClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    e.preventDefault();
-    setEmailError("");
-    setNewPasswordError("");
-    setConfirmPasswordError("");
-
-    if (email === "") {
-      setEmailError("Please enter your email");
-      return;
-    }
-
-    if (!validateEmail(email)) {
-      setEmailError("Please enter a valid email address");
-      return;
-    }
-
-    if (newPassword === "") {
-      setNewPasswordError("Please enter a new password");
-      return;
-    }
-
-    if (!validatePassword(newPassword)) {
-      setNewPasswordError("Password must contain at least one uppercase letter, one lowercase letter, and one digit");
-      return;
-    }
-
-    if (confirmPassword === "") {
-      setConfirmPasswordError("Please confirm your new password");
-      return;
-    }
-
-    if (newPassword!== confirmPassword) {
-      setConfirmPasswordError("Passwords do not match");
-      return;
-    }
-
-    // Send a request to the server to reset the password
-    //...
-
-    // Navigate to the dashboard page
-    navigate("/dashboard");
-  };
+      // Navigate to the dashboard page
+      navigate('/dashboard');
+    },
+  });
 
   return (
-    <div className="login-box">
-      <h2>Reset Password</h2>
-      <form>
-        <div className="user-box">
-          <input
-            value={email}
-            placeholder="Email"
-            onChange={ev => setEmail(ev.target.value)}
-            className="user-box"
-            type="email"
-          />
-          <label className="errorLabel">{emailError}</label>
-        </div>
-        <div className="user-box">
-          <input
-            value={newPassword}
-            placeholder="New Password"
-            onChange={ev => setNewPassword(ev.target.value)}
-            className="user-box"
-            type="password"
-          />
-          <label className="errorLabel">{newPasswordError}</label>
-        </div>
-        <div className="user-box">
-          <input
-            value={confirmPassword}
-            placeholder="Confirm Password"
-            onChange={ev => setConfirmPassword(ev.target.value)}
-            className="user-box"
-            type="password"
-          />
-          <label className="errorLabel">{confirmPasswordError}</label>
-        </div>
-        <Button
-          onClick={onButtonClick}
-          className="inputButton mt-3"
-          type="button"
-          variant="contained"
-          color="primary"
-        >
-          Submit
-        </Button>
-      </form>
+    <div className="container d-flex justify-content-center align-items-center vh-100">
+      <div className="reset shadow p-4 mt-3 bg-white rounded">
+        <h2 className="text-center mb-5">Reset Password</h2>
+        <form onSubmit={formik.handleSubmit}>
+          <div className="form-group position-relative mb-5">
+            {formik.touched.newPassword && formik.errors.newPassword ? (
+              <div className="invalid-feedback d-block">{formik.errors.newPassword}</div>
+            ) : null}
+            <input
+              id="newPassword"
+              name="newPassword"
+              type="password"
+              placeholder="New Password"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.newPassword}
+              className={`form-control ${formik.touched.newPassword && formik.errors.newPassword ? 'is-invalid' : ''}`}
+            />
+          </div>
+          <div className="form-group position-relative mb-3">
+            {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
+              <div className="invalid-feedback d-block">{formik.errors.confirmPassword}</div>
+            ) : null}
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              placeholder="Confirm Password"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.confirmPassword}
+              className={`form-control ${formik.touched.confirmPassword && formik.errors.confirmPassword ? 'is-invalid' : ''}`}
+            />
+          </div>
+          <Button
+            type="submit"
+            className="w-100 mt-3"
+            variant="contained"
+            color="primary"
+          >
+            Submit
+          </Button>
+        </form>
+      </div>
     </div>
   );
 };
