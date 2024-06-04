@@ -1,14 +1,10 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ForgotPassword.css';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
-
-const validationSchema = Yup.object({
-  email: Yup.string().email('Invalid email address').required('Please enter your email'),
-});
+import validationSchema from './validationSchema'; 
 
 const ForgotPassword: React.FC = () => {
   const navigate = useNavigate();

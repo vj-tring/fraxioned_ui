@@ -1,20 +1,10 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ResetPassword.css';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
-
-const validationSchema = Yup.object({
-  newPassword: Yup.string()
-    .min(8, 'Password must be at least 8 characters')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, 'Password must contain at least one uppercase letter, one lowercase letter, and one digit')
-    .required('Please enter a new password'),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref('newPassword')], 'Passwords must match')
-    .required('Please confirm your password'),
-});
+import validationSchema from './validationSchema'; 
 
 const ResetPassword: React.FC = () => {
   const navigate = useNavigate();
@@ -26,10 +16,7 @@ const ResetPassword: React.FC = () => {
     },
     validationSchema: validationSchema,
     onSubmit: values => {
-      // Send a request to the server to reset the password
-      //...
 
-      // Navigate to the dashboard page
       navigate('/dashboard');
     },
   });
