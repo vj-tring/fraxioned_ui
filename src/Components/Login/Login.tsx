@@ -3,19 +3,9 @@ import './Login.css';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
-
+import validationSchema from './validationSchema'; 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-
-  const validationSchema = Yup.object({
-    email: Yup.string()
-      .email('Invalid email address')
-      .required('Please enter your email'),
-    password: Yup.string()
-      .required('Please enter a password')
-      .min(8, 'Password must be 8 characters or longer'),
-  });
 
   const formik = useFormik({
     initialValues: {
@@ -30,14 +20,14 @@ const Login: React.FC = () => {
       if (Email === values.email && Pass === values.password) {
         navigate('/dashboard');
       } else {
-        alert('Invalid Credentials');
+        alert('Invalid Credentials!');
         formik.resetForm();
       }
     },
   });
 
   return (
-    <div className="container d-flex justify-content-center align-items-center vh-100">
+    <div className="container  d-flex justify-content-center align-items-center vh-100">
       <div className="login-box shadow p-4 bg-white rounded">
         <h2 className="text-center mb-5">Login</h2>
         <form onSubmit={formik.handleSubmit}>
@@ -69,12 +59,14 @@ const Login: React.FC = () => {
               className={`form-control ${formik.touched.password && formik.errors.password ? 'is-invalid' : ''}`}
             />
           </div>
-          <button
-            type="submit"
-            className="btn btn-primary mt-3 "
+          <Button
+                 type="submit"
+                 className="w-100 mt-3"
+                 variant="contained"
+                 color="primary"
           >
             Submit
-          </button>
+          </Button>
         </form>
       </div>
     </div>
