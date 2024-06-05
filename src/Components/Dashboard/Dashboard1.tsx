@@ -1,5 +1,3 @@
-// Dashboard.tsx
-
 import React, { useState } from 'react';
 import { Routes } from 'react-router-dom';
 import CustomNavbar from '../Navbar/Navbar';
@@ -8,23 +6,25 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import fraxionedLogo from '../../assets/Fraxioned.png';
 import Footer from '../../Footer/Footer';
 import userImage from '../../assets/user.png';
+import backgroundImage from '../../assets/building.jpg'; // import the background image
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
+  
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const links = [
+  const links = [ 
     { name: 'HOME', href: '/' },
-    { name: 'BOOKING', href: '#', onClick: handleShow },
+    { name: 'BOOKING', href: '#' },
     { name: 'SERVICES', href: '/services' },
     { name: 'CONTACT', href: '#', onClick: handleShow },
   ];
 
   return (
-    <div>
+    <div className="dashboard-container">
       <CustomNavbar
         logo={fraxionedLogo}
         links={links}
@@ -34,7 +34,9 @@ const Dashboard: React.FC = () => {
       <Routes>
         {/* Define your routes here */}
       </Routes>
-
+      <div className="background-img">
+        {/* Other content can go here */}
+      </div>
       <ContactModal show={show} handleClose={handleClose} />
       <Footer />
     </div>

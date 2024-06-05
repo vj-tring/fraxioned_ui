@@ -1,0 +1,6 @@
+.modal-footer-custom {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px; /* Add space between buttons */
+  }
+  

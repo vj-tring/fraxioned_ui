@@ -58,3 +58,20 @@
     font-size: 16px;
   }
 
+
+  .username-dropdown-toggle {
+    background: none !important;
+    border: none !important;
+    padding-right: 60px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .username-dropdown-toggle:hover,
+  .username-dropdown-toggle:focus,
+  .username-dropdown-toggle:active,
+  .username-dropdown-toggle.show {
+    background: none !important;
+    box-shadow: none !important;
+  }
+  

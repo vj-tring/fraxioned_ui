@@ -6,6 +6,7 @@ import ForgotPassword from './Components/ForgetPassword/ForgotPassword';
 import ResetPassword from './Components/ResetPassword/ResetPassword';
 import Dashboard from './Components/Dashboard/Dashboard1';
 import Contact from './Components/ContactUs/Contact';
+import SendInvite from './Components/SendInvite/SendInvite';
 
 const App: React.FC = () => {
   return (
@@ -18,6 +19,7 @@ const App: React.FC = () => {
         <Route path="/Reset-password" element={<ResetPassword />} />      
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/send-invite" element={<SendInvite />} />
 
       </Routes>
     </Router>

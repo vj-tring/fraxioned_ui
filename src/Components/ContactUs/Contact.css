@@ -37,11 +37,10 @@
 }
 
 .contacttext {
-  /* width: 300px; */
   text-align: justify;
   color: #72d5ee;
   font-size: larger;
-  margin: 0 auto; /* Center the text block */
+  margin: 0 auto; 
 }
 
 .TFW {
@@ -51,7 +50,7 @@
 .HT {
   color: #4891a4;
   font-weight: bold;
-  text-align: center; /* Center the heading */
+  text-align: center;
 }
 
 .leftside {
