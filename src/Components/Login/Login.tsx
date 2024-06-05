@@ -18,7 +18,7 @@ const Login: React.FC = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        const response = await axios.post(`${PortURL}/login`, values);
+        const response = await axios.post(`${PortURL}/authentication/login`, values);
         if (response.status === 200) {
           const { data } = response;
           localStorage.setItem('email', data.email);
