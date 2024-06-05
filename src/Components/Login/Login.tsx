@@ -3,7 +3,10 @@ import './Login.css';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { useFormik } from 'formik';
-import validationSchema from './validationSchema'; 
+import axios from 'axios';
+import validationSchema from './validationSchema';
+import { PortURL } from '../../Components/config';
+
 const Login: React.FC = () => {
   const navigate = useNavigate();
 
@@ -13,13 +16,15 @@ const Login: React.FC = () => {
       password: '',
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      const Email = localStorage.getItem('Email');
-      const Pass = localStorage.getItem('Password');
-  
-      if (Email === values.email && Pass === values.password) {
-        navigate('/dashboard');
-      } else {
+    onSubmit: async (values) => {
+      try {
+        const response = await axios.post(`${PortURL}/login`, values);
+        if (response.status === 200) {
+          const { data } = response;
+          localStorage.setItem('email', data.email);
+          navigate('/dashboard');
+        }
+      } catch (error) {
         alert('Invalid Credentials!');
         formik.resetForm();
       }
@@ -27,7 +32,7 @@ const Login: React.FC = () => {
   });
 
   return (
-    <div className="container  d-flex justify-content-center align-items-center vh-100">
+    <div className="container d-flex justify-content-center align-items-center vh-100">
       <div className="login-box shadow p-4 bg-white rounded">
         <h2 className="text-center mb-5">Login</h2>
         <form onSubmit={formik.handleSubmit}>
@@ -60,10 +65,10 @@ const Login: React.FC = () => {
             />
           </div>
           <Button
-                 type="submit"
-                 className="w-100 mt-3"
-                 variant="contained"
-                 color="primary"
+            type="submit"
+            className="w-100 mt-3"
+            variant="contained"
+            color="primary"
           >
             Submit
           </Button>
