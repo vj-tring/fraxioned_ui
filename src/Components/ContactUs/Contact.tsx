@@ -14,13 +14,13 @@ const Contact: React.FC = () => {
       <Row>
         <Col md={6} className="leftside">
           <div className="d-flex flex-column mb-3 textarea">
-            <FaMapMarkerAlt size={30} className="me-2" />
-            <h2 className="HT">HI THERE!</h2>
+            <FaMapMarkerAlt size={60} className="me-2" />
+            <h2 className="HT mt-3">HI THERE!</h2>
           </div>
-          <p className="contacttext">
-            The Owner services team at fraxioned, is here to help! Please use this form to send us an email. I'll get back to you soon as possible
+          <p className="contacttext pt-4 mb-5">
+            The Owner services team at fraxioned, is here to help! Please use this form to send us an email. I'll get back to you soon as possible.
           </p>
-          <h5 className="mt-4 TFW">
+          <h5 className="mt-4  TFW">
             THANKS FOR
             <h5>REACHING OUT!</h5>
           </h5>
@@ -38,8 +38,8 @@ const Contact: React.FC = () => {
             <Form.Group controlId="formSubject" className="mt-3">
               <Form.Control type="text" placeholder="Enter the subject" className="orange-border" />
             </Form.Group>
-            <Form.Group controlId="formEmail" className="mt-3">
-              <Form.Control type="email" placeholder="Enter your email" className="orange-border box" />
+            <Form.Group controlId="formMessage" className="mt-3">
+              <Form.Control as="textarea" rows={4} placeholder="Enter your message" className="orange-border" />
             </Form.Group>
             <Button variant="outline-light" type="submit" className="mt-3 sendBtn" style={{ backgroundColor: 'orange' }}>
               SEND

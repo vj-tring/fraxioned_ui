@@ -11,10 +11,10 @@ body{
 }
 
 .modal-fullscreen {
-    width: 100vw; 
+    width: 100vw;
     height: 100vh;
     margin: 0;
-    padding: 20px;
+    padding: 30px;
     max-width: 100%;
   }
   
@@ -22,4 +22,6 @@ body{
     height: 100%;
     border: none;
     border-radius: 0;
+    
   }
+  

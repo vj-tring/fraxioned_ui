@@ -6,16 +6,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 interface CustomNavbarProps {
   logo: string;
-  links: { name: string; href: string }[];
-  userImage?: string; 
+  links: { name: string; href: string; onClick?: () => void }[];
+  userImage?: string;
   userName: string;
 }
 
 const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, userName }) => {
-
   return (
-    <Navbar bg="light" expand="lg" className='p-2'>
-      <Navbar.Brand href="#home" className='p-2'>
+    <Navbar bg="light" expand="lg" className="p-2">
+      <Navbar.Brand href="#home" className="p-2">
         <img
           src={logo}
           height="30"
@@ -27,7 +26,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
           {links.map((link, index) => (
-            <Nav.Link key={index} href={link.href} className="nav-link-with-margin">
+            <Nav.Link key={index} href={link.href} onClick={link.onClick} className="nav-link-with-margin">
               {link.name}
             </Nav.Link>
           ))}
@@ -41,7 +40,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
           className="mr-2"
           alt="User"
         />
-        <span style={{ marginLeft: '15px'}}>{userName}</span>
+        <span style={{ marginLeft: '15px' }}>{userName}</span>
       </Nav>
     </Navbar>
   );
