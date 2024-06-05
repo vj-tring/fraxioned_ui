@@ -1,29 +1,47 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Signup.css'; 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useFormik } from 'formik';
+import axios from 'axios';
 import validationSchema from './validationSchema'; 
 import { Button } from '@mui/material';
+import { PortURL } from '../../Components/config';
 
 const Signup: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const inviteToken = params.get('inviteToken') || '';
 
   const formik = useFormik({
     initialValues: {
-      name: '',
-      email: '',
+      username: '',
+      phone: '',
       password: '',
       confirmPassword: '',
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      alert('Form submitted successfully!');
-      localStorage.setItem("Email", formik.values.email);
-      localStorage.setItem("Password", formik.values.password);
-      console.log(values); // Do whatever you want with form values
-      navigate('/login'); // Redirect to login page after successful submission
+    onSubmit: async (values) => {
+      try {
+        console.log('Submitting values:', values);
+        const response = await axios.post(`${PortURL}/authentication/register`, values);
+        if (response.status === 201) {
+          alert('Registration successful!');
+          navigate('/login'); 
+        }
+      } catch (error) {
+        alert('Registration failed!');
+        console.error('Error during registration:', error);
+        formik.resetForm();
+      }
     },
   });
+
+  useEffect(() => {
+    if (inviteToken) {
+      formik.setFieldValue('inviteToken', inviteToken);
+    }
+  }, [formik, inviteToken]);
 
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
@@ -31,35 +49,35 @@ const Signup: React.FC = () => {
         <h2 className="text-center">Sign Up</h2>
         <form onSubmit={formik.handleSubmit} className="row g-3">
           <div className="col-12 mt-4">
-            <label htmlFor="name" className="form-label">
-              {formik.touched.name && formik.errors.name ? (
-                <span className="text-danger flex-end">{formik.errors.name}</span>
+            <label htmlFor="username" className="form-label">
+              {formik.touched.username && formik.errors.username ? (
+                <span className="text-danger flex-end">{formik.errors.username}</span>
               ) : null}
             </label>
             <input
-              name="name"
+              name="username"
               type="text"
-              placeholder="Enter your name"
+              placeholder="Enter your username"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.name}
-              className={`form-control ${formik.touched.name && formik.errors.name ? 'is-invalid' : ''}`}
+              value={formik.values.username}
+              className={`form-control ${formik.touched.username && formik.errors.username ? 'is-invalid' : ''}`}
             />
           </div>
           <div className="col-12 mt-4">
-            <label htmlFor="email" className="form-label">
-              {formik.touched.email && formik.errors.email ? (
-                <span className="text-danger">{formik.errors.email}</span>
+            <label htmlFor="phone" className="form-label">
+              {formik.touched.phone && formik.errors.phone ? (
+                <span className="text-danger">{formik.errors.phone}</span>
               ) : null}
             </label>
             <input
-              name="email"
-              type="email"
-              placeholder="Enter your email"
+              name="phone"
+              type="tel"
+              placeholder="Enter your phone number"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.email}
-              className={`form-control ${formik.touched.email && formik.errors.email ? 'is-invalid' : ''}`}
+              value={formik.values.phone}
+              className={`form-control ${formik.touched.phone && formik.errors.phone ? 'is-invalid' : ''}`}
             />
           </div>
           <div className="col-12 mt-4">
