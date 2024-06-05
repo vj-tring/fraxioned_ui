@@ -1,0 +1,72 @@
+.sendBtn{
+    background-color: #fbc676 !important;
+    color: white;
+    
+}
+.sendBtn:hover{
+    background-color: #fbc676 !important;
+    color: white;
+    
+}
+.container1{
+    /* height: 500px;
+    width: 1000px; */
+    /* width: 100vw; */
+    padding: 40px;
+    align-content: center;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+   
+}
+
+.orange-border {
+    border: 3px solid #fbcc76;
+  }
+  
+  /* .textarea{
+    padding-left: 100px;
+  } */
+
+
+  .form-label1 {
+    display: block;
+    /* width: 100%; */
+    height: 60px;
+    
+    text-align: center;
+    background-color: #fbcc76;
+    padding: 16px;
+    color: white;
+    
+    /* border-radius: 5px; */
+  }
+  
+  
+  .orange-border::placeholder{
+    color:#fbcc76;
+  }
+  .form-control, .form-label {
+    width: 100%;
+    border-radius: 0;
+  }
+  
+  .contacttext{
+    width: 200px;
+    text-align: justify;
+    color: #72d5ee;
+    font-size: larger;
+  }
+  .TFW{
+    color: #72d5ee;
+
+  }
+  .HT{
+    color: #4891a4;
+    font-weight: bold;
+
+  }
+  .leftside{
+    padding-left: 150px;
+  }
+  .box{
+height: 200px;
+  }
