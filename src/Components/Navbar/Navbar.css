@@ -6,9 +6,17 @@
     background-color: #333;
     color: #fff;
   }
+
+  .user{
+    padding-left: 20px;
+  }
+
+  .username{padding-left: 30px;
+  }
   
   .navbar-logo img {
     height: 40px;
+    padding: 10px;
   }
   
   .navbar-links {
@@ -32,6 +40,14 @@
     gap: 10px;
   }
   
+  .nav-link-with-margin {
+    margin-right: 20px;
+  }
+
+  .navbar-user-name{
+    padding: 10px;
+  }
+
   .navbar-user-image {
     height: 30px;
     width: 30px;
@@ -41,4 +57,4 @@
   .navbar-user-name {
     font-size: 16px;
   }
-  
+

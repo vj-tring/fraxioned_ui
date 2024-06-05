@@ -1,30 +1,28 @@
 import React from 'react';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import CustomNavbar from '../Navbar/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from 'react-bootstrap/Navbar';
+import fraxionedLogo from '../../assets/Fraxioned.png';
+import Footer from '../../Footer/Footer';
+import userImage from '../../assets/user.png'; // Import the user image
 
 const Dashboard: React.FC = () => {
   const links = [
-    { name: 'Home', href: '/' },
-    { name: 'About', href: '/about' },
-    { name: 'Services', href: '/services' },
-    { name: 'Contact', href: '/contact' },
+    { name: 'HOME', href: '/'},
+    { name: 'BOOKING', href: '/about' },
+    { name: 'PEAK SEASON', href: '/services' },
+    { name: 'PAYMENTS', href: '/contact' },
+    { name: 'FAQ', href: '/faq' },
   ];
 
   return (
     <div>
       <CustomNavbar
-        logo="path/to/logo.png"
+        logo={fraxionedLogo} 
         links={links}
-        userImage="path/to/user-image.jpg" // or leave empty to use the default image
+        userImage={userImage} // Pass the user image
         userName="John Doe"
       />
-     
+      <Footer />
     </div>
   );
 }
