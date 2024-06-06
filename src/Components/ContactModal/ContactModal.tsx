@@ -21,12 +21,12 @@ const ContactModal: React.FC<ContactModalProps> = ({ show, handleClose }) => {
         <Contact />
       </Modal.Body>
       <Modal.Footer>
-        {/* <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button> */}
+      
       </Modal.Footer>
     </Modal>
   );
 };
+
+
 
 export default ContactModal;

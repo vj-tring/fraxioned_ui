@@ -10,25 +10,27 @@ import './Contact.css';
 
 const Contact: React.FC = () => {
   return (
-    <div className="container1 mt-5">
+    <div className="container1 ">
       <Row>
         <Col md={6} className="leftside">
-          <div className="d-flex flex-column mb-3 textarea">
-            <FaMapMarkerAlt size={60} className="me-2" />
-            <h2 className="HT mt-3">HI THERE!</h2>
+          <div className="d-flex flex-column mb-3 textarea  ">
+            <FaMapMarkerAlt size={60} className="me-2 mb-4" />
+            <h2 className="HT ">HI THERE!</h2>
           </div>
-          <p className="contacttext pt-4 mb-5">
-            The Owner services team at fraxioned, is here to help! Please use this form to send us an email. I'll get back to you soon as possible.
+          <p className="contacttext  mb-5">
+          The Owner services team at fraxioned, is here to help! Please use this form to send us an email. I'll get back to you soon as possible.
+          The Owner services team at fraxioned, is here to help! Please use this form to send us an email. I'll get back to you soon as possible.
+          The Owner services team at fraxioned, is here to help! Please use this form to send us an email. I'll get back to you soon as possible.
           </p>
           <h5 className="mt-4  TFW">
             THANKS FOR
-            <h5>REACHING OUT!</h5>
+            REACHING OUT!
           </h5>
         </Col>
         <Col md={6}>
           <Form>
             <Form.Group controlId="formLabel">
-              <Form.Label className="form-label1">
+              <Form.Label className="form-label1 mt-5">
                 EMAILING OWNERS@FRAXIONED.COM
               </Form.Label>
             </Form.Group>

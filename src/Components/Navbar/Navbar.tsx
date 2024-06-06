@@ -26,7 +26,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
 
   const handleShowLogoutModal = () => setShowLogoutModal(true);
   const handleCloseLogoutModal = () => setShowLogoutModal(false);
- const navigate=useNavigate();
+  const navigate = useNavigate();
   const handleLogout = () => {
     // Perform logout action here
     console.log('User logged out');
@@ -36,11 +36,12 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
 
   return (
     <>
-      <Navbar  bg="light" expand="lg" className="p-2 ">
+      <Navbar bg="light" expand="lg" className="p-2">
         <Navbar.Brand href="#home" className="p-2">
           <img
             src={logo}
-            height="30"
+            height="40"
+            width="160"
             className="d-inline-block align-top"
             alt="Logo"
           />
@@ -55,13 +56,13 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
             ))}
           </Nav>
         </Navbar.Collapse>
-        <Nav className="ml-auto">
+        <Nav className="ml-auto ">
           {userImage && (
             <Image
               src={userImage}
               roundedCircle
               height="30"
-              className="mr-2"
+              className="mr-2 responsive-image"
               alt="User"
             />
           )}
@@ -74,17 +75,17 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
               <span>{userName}</span>
             </Dropdown.Toggle>
 
-            <Dropdown.Menu>
-              <Dropdown.Item onClick={handleOpenInviteModal}>Send Invite</Dropdown.Item>
-              <Dropdown.Item onClick={handleShowLogoutModal}>Logout</Dropdown.Item>
-              <Dropdown.Item href="#/action-3">Settings</Dropdown.Item>
+            <Dropdown.Menu className="Drop-menu">
+              <Dropdown.Item className="Drop-item" onClick={handleOpenInviteModal}>Send Invite</Dropdown.Item>
+              <Dropdown.Item  className="Drop-item" onClick={handleShowLogoutModal}>Logout</Dropdown.Item>
+              <Dropdown.Item className="Drop-item" href="#/action-3">Settings</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </Nav>
       </Navbar>
 
       <Modal show={showInviteModal} onHide={handleCloseInviteModal} centered>
-        <Modal.Header closeButton >
+        <Modal.Header closeButton>
           <Modal.Title>Send Invite</Modal.Title>
         </Modal.Header>
         <Modal.Body>
