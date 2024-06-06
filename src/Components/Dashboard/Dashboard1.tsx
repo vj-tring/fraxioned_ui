@@ -33,6 +33,7 @@ const Dashboard: React.FC = () => {
 
       <Routes />
       
+
       <Home />
       
       <ContactModal show={show} handleClose={handleClose} />
@@ -40,5 +41,6 @@ const Dashboard: React.FC = () => {
     </div>
   );
 };
+
 
 export default Dashboard;

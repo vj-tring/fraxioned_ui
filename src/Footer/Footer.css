@@ -1,10 +1,10 @@
 .footer {
-  background-color: #f0f0f0;
+  background-color: #d4faf9;
   position: fixed;
   bottom: 0;
   width: 100%;
   color: #fff;
-  padding: 20px;
+  padding: 10px;
   text-align: center;
 }
 
@@ -13,7 +13,7 @@
   background-size: contain;
   background-repeat: no-repeat;
   width: 216px;
-  height: 40px;
+  height: 100px;
   margin-top: 22px;
   margin-right: 10px;
 }
@@ -27,6 +27,7 @@
   display: flex;
   justify-content: space-between;
   text-align: start;
+  padding: 10px;
 }
 
 .col-md-3 {
@@ -43,12 +44,25 @@ ul {
 .no-underline {
   text-decoration: none;
   color: rgb(23, 97, 79);
-}
 
+}
+.col-md-2{
+  margin:12px;
+}
+.col-md-2>ul{
+  display: flex;
+ flex-direction: column;
+  justify-content: space-around;
+  
+}
+.no-underline:hover{
+  color: orange;
+}
 .contact-us {
   width: 70%;
   height: 50px;
-  background-color: #e3922f;
+  background-color: #1d31e6;
+  border-radius: 30px;
   border: none;
   margin-right: 22px;
   margin-top: 13px;
@@ -69,7 +83,8 @@ ul {
 }
 
 .contact-us:hover {
-  background-color: #d9811f;
+  background-color: #081aba;
+  border-radius: 30px;
 }
 
 .contact-us:hover .arrow {
