@@ -1,21 +1,31 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Signup.css'; 
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useFormik } from 'formik';
 import axios from 'axios';
-import validationSchema from './validationSchema'; 
 import { Button } from '@mui/material';
-import { PortURL } from '../../Components/config';
+import { PortURL } from '../config';
+import validationSchema from './validationSchema';
+import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
 
 const Signup: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const inviteToken = params.get('inviteToken') || '';
+
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'info' | 'warning' | 'error'>('success');
+  const [inviteToken, setInviteToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const token = params.get('inviteToken');
+    setInviteToken(token);
+  }, [location.search]);
 
   const formik = useFormik({
     initialValues: {
-      username: '',
+      name: '',
       phone: '',
       password: '',
       confirmPassword: '',
@@ -23,45 +33,63 @@ const Signup: React.FC = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        console.log('Submitting values:', values);
-        const response = await axios.post(`${PortURL}/authentication/register`, values);
-        if (response.status === 201) {
-          alert('Registration successful!');
-          navigate('/login'); 
-        }
+        const payload = {
+          ...values,
+          inviteToken,
+        };
+
+        const response = await axios.post(`${PortURL}/authentication/register`, payload);
+        setSnackbarMessage('Signup successful!');
+        setSnackbarSeverity('success');
+        setOpenSnackbar(true);
+        localStorage.setItem("Phone", formik.values.phone);
+        localStorage.setItem("Password", formik.values.password);
+        navigate('/login');
       } catch (error) {
-        alert('Registration failed!');
-        console.error('Error during registration:', error);
-        formik.resetForm();
+        if (axios.isAxiosError(error)) {
+          setSnackbarMessage('Error submitting form: ' + (error.response?.data?.message || error.message));
+        } else {
+          setSnackbarMessage('An unknown error occurred');
+        }
+        setSnackbarSeverity('error');
+        setOpenSnackbar(true);
+        console.error('Error submitting form:', error);
       }
     },
   });
 
-  useEffect(() => {
-    if (inviteToken) {
-      formik.setFieldValue('inviteToken', inviteToken);
+  const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
     }
-  }, [formik, inviteToken]);
+    setOpenSnackbar(false);
+  };
 
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
+      <CustomizedSnackbars
+        open={openSnackbar}
+        handleClose={handleSnackbarClose}
+        message={snackbarMessage}
+        severity={snackbarSeverity}
+      />
       <div className="signup-box shadow p-4 bg-white rounded">
         <h2 className="text-center">Sign Up</h2>
         <form onSubmit={formik.handleSubmit} className="row g-3">
           <div className="col-12 mt-4">
-            <label htmlFor="username" className="form-label">
-              {formik.touched.username && formik.errors.username ? (
-                <span className="text-danger flex-end">{formik.errors.username}</span>
+            <label htmlFor="name" className="form-label">
+              {formik.touched.name && formik.errors.name ? (
+                <span className="text-danger flex-end">{formik.errors.name}</span>
               ) : null}
             </label>
             <input
-              name="username"
+              name="name"
               type="text"
-              placeholder="Enter your username"
+              placeholder="Enter your name"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.username}
-              className={`form-control ${formik.touched.username && formik.errors.username ? 'is-invalid' : ''}`}
+              value={formik.values.name}
+              className={`form-control ${formik.touched.name && formik.errors.name ? 'is-invalid' : ''}`}
             />
           </div>
           <div className="col-12 mt-4">
@@ -72,7 +100,7 @@ const Signup: React.FC = () => {
             </label>
             <input
               name="phone"
-              type="tel"
+              type="text"
               placeholder="Enter your phone number"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -114,10 +142,10 @@ const Signup: React.FC = () => {
           </div>
           <div className="col-12">
             <Button
-                   type="submit"
-                   className="w-100 mt-3"
-                   variant="contained"
-                   color="primary"
+              type="submit"
+              className="w-100 mt-3"
+              variant="contained"
+              color="primary"
             >
               Submit
             </Button>

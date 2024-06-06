@@ -6,9 +6,7 @@
     background-color: white;
 }
 
-body{
-    width: 100vw;
-}
+
 
 .modal-fullscreen {
     width: 100vw;
@@ -25,9 +23,16 @@ body{
     
   }
 
-  .img{
-    background: url('C:\Users\Sivabharathi P\Documents\Git\fraxioned_ui\src\assets\building.jpg');
+  .background-img{
+    position: absolute;
+    top:10;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: url('../../assets/building.jpg') no-repeat center center;
+    background-size: cover;  
+    /* background-color: red; */
+  
   }
   
-
   

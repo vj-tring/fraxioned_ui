@@ -26,7 +26,7 @@ const ResetPassword: React.FC = () => {
       <div className="reset shadow p-4 mt-3 bg-white rounded">
         <h2 className="text-center mb-5">Reset Password</h2>
         <form onSubmit={formik.handleSubmit}>
-          <div className="form-group position-relative mb-5">
+          <div className="form-group position-relative mb-5 ">
             {formik.touched.newPassword && formik.errors.newPassword ? (
               <div className="invalid-feedback d-block">{formik.errors.newPassword}</div>
             ) : null}
@@ -38,7 +38,7 @@ const ResetPassword: React.FC = () => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.newPassword}
-              className={`form-control ${formik.touched.newPassword && formik.errors.newPassword ? 'is-invalid' : ''}`}
+              className={`form-control  ${formik.touched.newPassword && formik.errors.newPassword ? 'is-invalid' : ''}`}
             />
           </div>
           <div className="form-group position-relative mb-3">

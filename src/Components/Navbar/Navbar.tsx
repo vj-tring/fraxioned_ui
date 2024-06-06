@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import SendInvite from '../SendInvite/SendInvite';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import './Navbar.css';
+import { Navigate, redirect, useNavigate } from 'react-router-dom';
 
 interface CustomNavbarProps {
   logo: string;
@@ -25,16 +26,17 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
 
   const handleShowLogoutModal = () => setShowLogoutModal(true);
   const handleCloseLogoutModal = () => setShowLogoutModal(false);
-
+ const navigate=useNavigate();
   const handleLogout = () => {
     // Perform logout action here
     console.log('User logged out');
     handleCloseLogoutModal();
+    navigate('/login');
   };
 
   return (
     <>
-      <Navbar bg="light" expand="lg" className="p-2">
+      <Navbar  bg="light" expand="lg" className="p-2 ">
         <Navbar.Brand href="#home" className="p-2">
           <img
             src={logo}
@@ -82,7 +84,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
       </Navbar>
 
       <Modal show={showInviteModal} onHide={handleCloseInviteModal} centered>
-        <Modal.Header closeButton>
+        <Modal.Header closeButton >
           <Modal.Title>Send Invite</Modal.Title>
         </Modal.Header>
         <Modal.Body>

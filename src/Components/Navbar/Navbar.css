@@ -1,77 +1,84 @@
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #333;
-    color: #fff;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #333;
+  color: #fff;
+  /* position: sticky; */
+  top: 0;
+  z-index: 1000;
+  position: fixed;
+    width: 100vw;
+}
 
-  .user{
-    padding-left: 20px;
-  }
+.user {
+  padding-left: 20px;
+}
 
-  .username{padding-left: 30px;
-  }
-  
-  .navbar-logo img {
-    height: 40px;
-    padding: 10px;
-  }
-  
-  .navbar-links {
-    display: flex;
-    gap: 20px;
-  }
-  
-  .navbar-link {
-    color: #fff;
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-  
-  .navbar-link:hover {
-    color: #ddd;
-  }
-  
-  .navbar-user {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .nav-link-with-margin {
-    margin-right: 20px;
-  }
+.username {
+  padding-left: 30px;
+}
 
-  .navbar-user-name{
-    padding: 10px;
-  }
+.navbar-logo img {
+  height: 40px;
+  padding: 10px;
+}
 
-  .navbar-user-image {
-    height: 30px;
-    width: 30px;
-    border-radius: 50%;
-  }
-  
-  .navbar-user-name {
-    font-size: 16px;
-  }
+.navbar-links {
+  display: flex;
+  gap: 20px;
+}
 
+.navbar-link {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
 
-  .username-dropdown-toggle {
-    background: none !important;
-    border: none !important;
-    padding-right: 60px;
-    display: flex;
-    align-items: center;
-  }
-  
-  .username-dropdown-toggle:hover,
-  .username-dropdown-toggle:focus,
-  .username-dropdown-toggle:active,
-  .username-dropdown-toggle.show {
-    background: none !important;
-    box-shadow: none !important;
-  }
-  
+.navbar-link:hover {
+  color: #ddd;
+}
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-link-with-margin {
+  margin-right: 20px;
+}
+
+.navbar-user-name {
+  padding: 10px;
+  font-size: 16px;
+}
+
+.navbar-user-image {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+}
+
+.username-dropdown-toggle {
+  background: none !important;
+  border: none !important;
+  padding-right: 60px;
+  display: flex;
+  align-items: center;
+}
+
+.username-dropdown-toggle:hover,
+.username-dropdown-toggle:focus,
+.username-dropdown-toggle:active,
+.username-dropdown-toggle.show {
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.modal-header{
+ border: none;
+ align-items: center;
+ padding-left: 38%;
+}

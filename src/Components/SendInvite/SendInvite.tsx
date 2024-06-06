@@ -17,8 +17,8 @@ const SendInvite: React.FC = () => {
     setErrorMessage('');
 
     try {
-      // Use the PortURL from the config file
-      const response = await axios.post(`${PortURL}/invite`, { email });
+      const roleId=1;
+      const response = await axios.post(`${PortURL}/authentication/invite`, { email,roleId });
       console.log(`Invite sent to: ${email}`);
       setStatus('success');
     } catch (error) {
@@ -37,10 +37,11 @@ const SendInvite: React.FC = () => {
           value={email} 
           onChange={(e) => setEmail(e.target.value)} 
           required 
+          style={{padding:10,borderRadius:3,marginTop:20,marginBottom:20}}
         />
       </Form.Group>
 
-      <Button variant="primary" type="submit" className="mt-3" disabled={status === 'loading'}>
+      <Button variant="primary" type="submit" className="mt-3 " disabled={status === 'loading'}>
         {status === 'loading' ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : 'Send Invite'}
       </Button>
 
