@@ -22,7 +22,7 @@
       { name: 'BOOKING', href: 'https://www.airbnb.co.in/' },
       { name: 'PEAK SEASON', href: '/services' },
       { name: 'PAYEMENTS', href: 'https://payments.google.com/gp/w/home/paymentmethods?sctid=1592381138486457' },
-      { name: 'FAQ', href: '#' },
+      { name: 'FAQ', href: '/FAQ' },
     ];
 
     return (
