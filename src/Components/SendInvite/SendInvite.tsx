@@ -1,35 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
-import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import useSendInviteHandler from './SendInviteApiHandler';
+import axios from 'axios';
 import { PortURL } from '../config';
+
 const SendInvite: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [errorMessage, setErrorMessage] = useState('');
+  const {
+    handleSubmit,
+    email,
+    status,
+    errorMessage,
+    setEmail,
+    selectedRole,
+    setSelectedRole
+  } = useSendInviteHandler();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setStatus('loading');
-    setErrorMessage('');
+  const [roles, setRoles] = useState<{ id: number, name: string }[]>([]);
 
-    try {
-      const roleId=1;
-      const response = await axios.post(`${PortURL}/authentication/invite`, { email,roleId });
-      console.log(`Invite sent to: ${email}`);
-      setStatus('success');
-    } catch (error) {
-      console.error('Failed to send invite:', error);
-      setErrorMessage('Failed to send the invite. Please try again later.');
-      setStatus('error');
-    }
-  };
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const response = await axios.get(`${PortURL}/roles`);
+        setRoles(response.data);
+      } catch (error) {
+        console.error('Failed to fetch roles:', error);
+      }
+    };
+
+    fetchRoles();
+  }, []);
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit}>  
       <Form.Group controlId="formEmail">
         <Form.Control 
           type="email" 
@@ -37,11 +43,26 @@ const SendInvite: React.FC = () => {
           value={email} 
           onChange={(e) => setEmail(e.target.value)} 
           required 
-          style={{padding:10,borderRadius:3,marginTop:20,marginBottom:20}}
+          style={{ padding: 10, borderRadius: 3, marginTop: 20, marginBottom: 20 }}
         />
       </Form.Group>
 
-      <Button variant="primary" type="submit" className="mt-3 " disabled={status === 'loading'}>
+      <Form.Group controlId="formRole">
+        <Form.Control 
+          as="select" 
+          value={selectedRole} 
+          onChange={(e) => setSelectedRole(Number(e.target.value))} 
+          required 
+          style={{ padding: 10, borderRadius: 3, marginTop: 20, marginBottom: 20 }}
+        >
+          <option value="">Select role</option>
+          {roles.map(role => (
+            <option key={role.id} value={role.id}>{role.name}</option>
+          ))}
+        </Form.Control>
+      </Form.Group>
+
+      <Button variant="primary" type="submit" className="mt-3" disabled={status === 'loading'}>
         {status === 'loading' ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : 'Send Invite'}
       </Button>
 

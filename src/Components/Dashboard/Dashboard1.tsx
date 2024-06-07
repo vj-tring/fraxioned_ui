@@ -16,10 +16,11 @@ const Dashboard: React.FC = () => {
   const handleShow = () => setShow(true);
 
   const links = [ 
-    { name: 'HOME', href: '/' },
-    { name: 'BOOKING', href: '#' },
-    { name: 'SERVICES', href: '/services' },
-    { name: 'CONTACT', href: '#', onClick: handleShow },
+    { name: 'HOME', href: '/dashboard' },
+    { name: 'BOOKING', href: 'https://www.airbnb.co.in/' },
+    { name: 'PEAK SEASON', href: '/services' },
+    { name: 'PAYEMENTS', href: 'https://payments.google.com/gp/w/home/paymentmethods?sctid=1592381138486457' },
+    { name: 'FAQ', href: '/FAQ' },
   ];
 
   return (

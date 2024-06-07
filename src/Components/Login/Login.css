@@ -75,3 +75,17 @@
 
 
 } */
+
+.login-box button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #df9526;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login-box button[type="submit"]:hover {
+  background-color: #e48f10;
+}

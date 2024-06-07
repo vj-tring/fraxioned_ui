@@ -9,6 +9,8 @@ import SendInvite from '../SendInvite/SendInvite';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import './Navbar.css';
 import { Navigate, redirect, useNavigate } from 'react-router-dom';
+import userImage from '../../assets/profile.jpeg';
+
 
 interface CustomNavbarProps {
   logo: string;
@@ -28,7 +30,6 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
   const handleCloseLogoutModal = () => setShowLogoutModal(false);
   const navigate = useNavigate();
   const handleLogout = () => {
-    // Perform logout action here
     console.log('User logged out');
     handleCloseLogoutModal();
     navigate('/login');

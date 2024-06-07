@@ -1,30 +1,33 @@
 import React from 'react';
 import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ForgotPassword.css';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
-import validationSchema from './validationSchema'; 
+import useForgotHandler from './ForgotApiHandler';
+import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
+
 
 const ForgotPassword: React.FC = () => {
-  const navigate = useNavigate();
 
-  const formik = useFormik({
-    initialValues: {
-      email: '',
-    },
-    validationSchema: validationSchema,
-    onSubmit: values => {
-      // Send a request to the server to handle forgot password logic
-      //...
+  const {
+    formik,
+    openSnackbar,
+    snackbarMessage,
+    snackbarSeverity,
+    handleSnackbarClose,
+} = useForgotHandler()
 
-      // Navigate to the dashboard page
-      navigate('/dashboard');
-    },
-  });
 
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
+       <CustomizedSnackbars
+                open={openSnackbar}
+                handleClose={handleSnackbarClose}
+                message={snackbarMessage}
+                severity={snackbarSeverity}
+            />
       <div className="forgot shadow bg-white rounded p-4">
         <h2 className="text-center mb-5">Forgot Password</h2>
         <form onSubmit={formik.handleSubmit}>

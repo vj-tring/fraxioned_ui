@@ -1,26 +1,55 @@
 /* Signup.css */
 
-/* .container {
-    max-width: 500px;
-  }
-   */
-  .signup-box {
-    width: 30%;
-  }
-  
-  .form-group {
-    margin-bottom: 1rem;
-  }
-  
-  .text-danger {
-    color: #dc3545;
-    font-size: small;
-    display: flex;
-    justify-content: flex-end;
-  }
-  
-  .signup-box input {
-    width: 100%;
-    padding: 10px 0;
-    padding-left: 10px;
-  }
+.container {
+  max-width: 500px;
+  margin: 100px auto; 
+}
+
+.signup-box {
+  width: 450px ; /* change the width to 100% to make it responsive */
+  margin: 0 auto; /* add this line to center the signup box */
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  height: 93%;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.text-danger {
+  color: #dc3545;
+  font-size:xx-small;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.signup-box input {
+  width: 100%;
+  padding: 10px;
+  /* margin-bottom: 20px; */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.signup-box input:focus {
+  border-color: #aaa;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.signup-box button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #df9526;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.signup-box button[type="submit"]:hover {
+  background-color: #e48f10;
+}

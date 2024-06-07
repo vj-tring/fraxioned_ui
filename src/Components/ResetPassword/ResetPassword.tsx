@@ -1,28 +1,29 @@
 import React from 'react';
-import { useFormik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ResetPassword.css';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
-import validationSchema from './validationSchema'; 
-
+import useResetHandler from './ResetApiHandler';
+import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
 const ResetPassword: React.FC = () => {
-  const navigate = useNavigate();
+  const {
+    formik,
+    openSnackbar,
+    handleSnackbarClose,
+    snackbarMessage,
+    snackbarSeverity
 
-  const formik = useFormik({
-    initialValues: {
-      newPassword: '',
-      confirmPassword: '',
-    },
-    validationSchema: validationSchema,
-    onSubmit: values => {
+} = useResetHandler()
 
-      navigate('/dashboard');
-    },
-  });
 
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
+       <CustomizedSnackbars
+        open={openSnackbar}
+        handleClose={handleSnackbarClose}
+        message={snackbarMessage}
+        severity={snackbarSeverity}
+      />
+      
       <div className="reset shadow p-4 mt-3 bg-white rounded">
         <h2 className="text-center mb-5">Reset Password</h2>
         <form onSubmit={formik.handleSubmit}>

@@ -11,6 +11,8 @@
     margin: 0;
     padding: 30px;
     max-width: 100%;
+    scroll-behavior: smooth;
+  
   }
   
   .modal-fullscreen .modal-content {
