@@ -19,13 +19,14 @@ const SendInvite: React.FC = () => {
     setSelectedRole
   } = useSendInviteHandler();
 
-  const [roles, setRoles] = useState<{ id: number, name: string }[]>([]);
+  const [roles, setRoles] = useState<{ id: number, roleName: string }[]>([]);
 
   useEffect(() => {
     const fetchRoles = async () => {
       try {
         const response = await axios.get(`${PortURL}/roles`);
         setRoles(response.data);
+        console.log("roles",roles);
       } catch (error) {
         console.error('Failed to fetch roles:', error);
       }
@@ -57,7 +58,7 @@ const SendInvite: React.FC = () => {
         >
           <option value="">Select role</option>
           {roles.map(role => (
-            <option key={role.id} value={role.id}>{role.name}</option>
+            <option key={role.id} value={role.id}>{role.roleName}</option>
           ))}
         </Form.Control>
       </Form.Group>

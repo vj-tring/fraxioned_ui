@@ -23,15 +23,21 @@ const useLoginHandler = () => {
         onSubmit: async (values) => {
             try {
                 const response = await axios.post(`${PortURL}/authentication/login`, values)
-                if (response.status === 200) {
+                console.log("register1");
+
+                if (response.status === 201) {
+                    console.log("register");
+
                     const { data } = response
                     console.log('dataresponse', data)
-                    localStorage.setItem('email', data.email)
-                    localStorage.setItem('userData', JSON.stringify(data)) // Store the entire data object
+                    localStorage.setItem('userData', JSON.stringify(data.user));
+          localStorage.setItem('token', data.session.token);
+          localStorage.setItem('expiresAt', data.session.expiresAt);
 
                     setSnackbarMessage('Login successful!')
                     setSnackbarSeverity('success')
                     setOpenSnackbar(true)
+                    console.log("register");
                     navigate('/dashboard')
                 }
             } catch (error) {

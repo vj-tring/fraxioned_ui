@@ -48,7 +48,7 @@ const useSignupHandler= () => {
             navigate('/login');
           } catch (error) {
             if (axios.isAxiosError(error)) {
-              setSnackbarMessage('Error submitting form: ' + (error.response?.data?.message || error.message));
+              setSnackbarMessage( (error.response?.data?.message || error.message));
             } else {
               setSnackbarMessage('An unknown error occurred');
             }

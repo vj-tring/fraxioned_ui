@@ -33,6 +33,8 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
     console.log('User logged out');
     handleCloseLogoutModal();
     navigate('/login');
+
+    localStorage.clear();
   };
 
   return (
