@@ -13,7 +13,7 @@
   border: 1px solid #ddd;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  height: 93%;
+  height: 650px ;
 }
 
 .form-group {
@@ -52,4 +52,9 @@
 
 .signup-box button[type="submit"]:hover {
   background-color: #e48f10;
+}
+.backlogin{
+  display: flex;
+   justify-content: center;
+   color: blue;
 }

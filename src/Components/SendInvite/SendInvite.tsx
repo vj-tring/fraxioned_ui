@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import useSendInviteHandler from './SendInviteApiHandler';
+import useSendInviteHandler from  "./SendInviteApiHandler"; // Adjust the import path accordingly
 import axios from 'axios';
 import { PortURL } from '../config';
 
@@ -26,7 +26,6 @@ const SendInvite: React.FC = () => {
       try {
         const response = await axios.get(`${PortURL}/roles`);
         setRoles(response.data);
-        console.log("roles",roles);
       } catch (error) {
         console.error('Failed to fetch roles:', error);
       }

@@ -15,12 +15,23 @@ const useSendInviteHandler = () => {
     setErrorMessage('');
 
     try {
-      const response = await axios.post(`${PortURL}/authentication/invite`, { email, roleId: selectedRole });
-      console.log(`Invite sent to: ${email}`);
-      setStatus('success');
+      const userString = localStorage.getItem('userData');
+      if (userString) {
+        const userObject = JSON.parse(userString);
+        const invitedBy = userObject.id;
+        console.log("userEmail", invitedBy);
+
+        const response = await axios.post(`${PortURL}/authentication/invite`, { email, roleId: selectedRole, invitedBy });
+        console.log(`Invite sent to: ${email}`);
+        setStatus('success');
+      }
     } catch (error) {
       console.error('Failed to send invite:', error);
-      setErrorMessage('Failed to send the invite. Please try again later.');
+      if (axios.isAxiosError(error)) {
+        setErrorMessage(error.response?.data?.message || 'Failed to send the invite. Please try again later.');
+      } else {
+        setErrorMessage('An unknown error occurred');
+      }
       setStatus('error');
     }
   };
