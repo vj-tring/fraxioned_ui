@@ -22,7 +22,6 @@ const App: React.FC = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/send-invite" element={<SendInvite />} />
         <Route path="/FAQ" element={<CustomizedAccordions />} />
-
       </Routes>
     </Router>
   );

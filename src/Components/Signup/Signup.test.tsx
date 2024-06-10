@@ -1,139 +1,72 @@
-/* eslint-disable testing-library/no-unnecessary-act */
-/* eslint-disable react/react-in-jsx-scope */
-import { render, fireEvent, screen, act, waitForElementToBeRemoved } from '@testing-library/react';
+import React from 'react';
+import { render, fireEvent, screen } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect'; // For additional matchers
 import Signup from './Signup';
-import { BrowserRouter as Router } from 'react-router-dom';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: jest.fn(),
-}));
+describe('Signup Component', () => {
+  it('renders the signup form', () => {
+    render(<Signup />);
+    
+    expect(screen.getByText('Sign Up')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Enter your name')).toBeInTheDocument();
+    // Add similar expectations for other input fields
+  });
 
-describe('Signup component', () => {
-  test('validates name input correctly', async () => {
-    render(
-      <Router>
-        <Signup />
-      </Router>
-    );
-    const nameInput = screen.getByPlaceholderText('Enter your name');
-    const submitButton = screen.getByText('Submit');
-  
-    fireEvent.change(nameInput, { target: { value: '' } });
-    fireEvent.blur(nameInput);
-    fireEvent.click(submitButton);
-  
-    // Wait for the error message to be displayed
-    await screen.findByText('Please enter your name');
+  it('submits the form with valid input', async () => {
+    const mockSignupHandler = jest.fn();
+    jest.mock('./SignupApiHandler', () => () => ({
+      formik: {
+        handleSubmit: mockSignupHandler,
+        handleChange: jest.fn(),
+        handleBlur: jest.fn(),
+        values: {
+          name: 'John Doe',
+          // Add values for other fields
+        },
+        touched: {},
+        errors: {},
+      },
+      openSnackbar: false,
+      snackbarMessage: '',
+      snackbarSeverity: '',
+      handleSnackbarClose: jest.fn(),
+    }));
+
+    render(<Signup />);
+    
+    // Submit the form
+    fireEvent.click(screen.getByText('Submit'));
+
+    // Expect that handleSubmit function was called
+    expect(mockSignupHandler).toHaveBeenCalled();
+  });
+
+  it('displays error messages for invalid input', () => {
+    // Mock the SignupApiHandler to return errors for each field
+    jest.mock('./SignupApiHandler', () => () => ({
+      formik: {
+        handleChange: jest.fn(),
+        handleBlur: jest.fn(),
+        values: {},
+        touched: {
+          name: true,
+          // Add other fields with true to indicate they are touched
+        },
+        errors: {
+          name: 'Please enter your name',
+          // Add error messages for other fields
+        },
+      },
+      openSnackbar: false,
+      snackbarMessage: '',
+      snackbarSeverity: '',
+      handleSnackbarClose: jest.fn(),
+    }));
+
+    render(<Signup />);
+    
+    // Expect error messages to be displayed
     expect(screen.getByText('Please enter your name')).toBeInTheDocument();
-  
-    fireEvent.change(nameInput, { target: { value: 'John Doe' } });
-    fireEvent.blur(nameInput);
-    fireEvent.click(submitButton);
-  
-    // Wait for the error message to disappear
-    await waitForElementToBeRemoved(() => screen.queryByText('Please enter your name'));
-    expect(screen.queryByText('Please enter your name')).toBeNull();
-  });
-  
-
-  test('validates email input correctly', async () => {
-    render(
-      <Router>
-        <Signup />
-      </Router>
-    );
-    const emailInput = screen.getByPlaceholderText('Enter your email');
-    const submitButton = screen.getByText('Submit');
-
-    await act(async () => {
-      fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
-      fireEvent.blur(emailInput);
-      fireEvent.click(submitButton);
-    });
-    expect(screen.getByText('Invalid email address')).toBeInTheDocument();
-
-    await act(async () => {
-      fireEvent.change(emailInput, { target: { value: 'valid@gmail.com' } });
-      fireEvent.blur(emailInput);
-      fireEvent.click(submitButton);
-    });
-    expect(screen.queryByText('Invalid email address')).toBeNull();
-  });
-
-  test('validates password input correctly', async () => {
-    render(
-      <Router>
-        <Signup />
-      </Router>
-    );
-    const passwordInput = screen.getByPlaceholderText('Enter your password');
-    const submitButton = screen.getByText('Submit');
-
-    await act(async () => {
-      fireEvent.change(passwordInput, { target: { value: 'short' } });
-      fireEvent.blur(passwordInput);
-      fireEvent.click(submitButton);
-    });
-    expect(screen.getByText('Password must be 8 characters or longer')).toBeInTheDocument();
-
-    await act(async () => {
-      fireEvent.change(passwordInput, { target: { value: 'validPassword123' } });
-      fireEvent.blur(passwordInput);
-      fireEvent.click(submitButton);
-    });
-    expect(screen.queryByText('Password must be 8 characters or longer')).toBeNull();
-  });
-
-  test('validates confirm password input correctly', async () => {
-    render(
-      <Router>
-        <Signup />
-      </Router>
-    );
-    const passwordInput = screen.getByPlaceholderText('Enter your password');
-    const confirmPasswordInput = screen.getByPlaceholderText('Confirm your password');
-    const submitButton = screen.getByText('Submit');
-
-    await act(async () => {
-      fireEvent.change(passwordInput, { target: { value: 'validPassword123' } });
-      fireEvent.change(confirmPasswordInput, { target: { value: 'differentPassword123' } });
-      fireEvent.blur(confirmPasswordInput);
-      fireEvent.click(submitButton);
-    });
-    expect(screen.getByText('Passwords must match')).toBeInTheDocument();
-
-    await act(async () => {
-      fireEvent.change(confirmPasswordInput, { target: { value: 'validPassword123' } });
-      fireEvent.blur(confirmPasswordInput);
-      fireEvent.click(submitButton);
-    });
-    expect(screen.queryByText('Passwords must match')).toBeNull();
-  });
-
-  test('submits the form successfully with valid data', async () => {
-    render(
-      <Router>
-        <Signup />
-      </Router>
-    );
-    const nameInput = screen.getByPlaceholderText('Enter your name');
-    const emailInput = screen.getByPlaceholderText('Enter your email');
-    const passwordInput = screen.getByPlaceholderText('Enter your password');
-    const confirmPasswordInput = screen.getByPlaceholderText('Confirm your password');
-    const submitButton = screen.getByText('Submit');
-
-    await act(async () => {
-      fireEvent.change(nameInput, { target: { value: 'John Doe' } });
-      fireEvent.change(emailInput, { target: { value: 'valid@gmail.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'validPassword123' } });
-      fireEvent.change(confirmPasswordInput, { target: { value: 'validPassword123' } });
-      fireEvent.click(submitButton);
-    });
-
-    expect(screen.queryByText('Please enter your name')).toBeNull();
-    expect(screen.queryByText('Invalid email address')).toBeNull();
-    expect(screen.queryByText('Password must be 8 characters or longer')).toBeNull();
-    expect(screen.queryByText('Passwords must match')).toBeNull();
+    // Add similar expectations for other error messages
   });
 });

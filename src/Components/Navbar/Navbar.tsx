@@ -8,8 +8,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import SendInvite from '../SendInvite/SendInvite';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import './Navbar.css';
-import { Navigate, redirect, useNavigate } from 'react-router-dom';
-import userImage from '../../assets/profile.jpeg';
+import { useNavigate } from 'react-router-dom';
+// import userImage from '../../assets/profile.jpeg';
 
 
 interface CustomNavbarProps {

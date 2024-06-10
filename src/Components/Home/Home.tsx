@@ -9,7 +9,6 @@ const Home: React.FC = () => {
      
 
       <Card className="home-card">
-        <Card.Body>
         <h1 className="welcome-owner">WELCOME OWNER!</h1>
       <h2 className="your-homes">YOUR HOMES</h2>
           <div className="home-grid">
@@ -19,17 +18,16 @@ const Home: React.FC = () => {
               </div>
               <div className="home-details">
                 <h3>BLUE BEAR LAKE</h3>
-                <p>537 Blue Lake St, Garden City, UT 84078</p>
-                <p>YOU OWN 1/8 SHARE</p>
+                <p className='address'>537 Blue Lake St, Garden City, UT 84078</p>
+                <p className='address'>YOU OWN 1/8 SHARE</p>
                 <Button variant="warning" className="book-stay-btn">BOOK A STAY</Button>
               </div>
             </div>
 
             <div className="season-card">
-              <Card.Body>
                 <h3>OFF-SEASON 2024</h3>
                 <p>Dec 31 - May 29 & Sept 20 - Dec 30</p>
-                <Table bordered>
+                <Table bordered >
                   <tbody>
                     <tr>
                       <td><strong>TOTAL NIGHTS</strong></td>
@@ -69,11 +67,9 @@ const Home: React.FC = () => {
                     </tr>
                   </tbody>
                 </Table>
-              </Card.Body>
             </div>
 
-            <div className="season-card">
-              <Card.Body>
+            <div className="season-card2">
                 <h3>PEAK-SEASON 2024</h3>
                 <p>May 30 - Sept 19</p>
                 <Table bordered>
@@ -97,10 +93,8 @@ const Home: React.FC = () => {
                   </tbody>
                 </Table>
                 <Button variant="warning" className="peak-season-btn">MY 2024 PEAK-SEASON</Button>
-              </Card.Body>
             </div>
           </div>
-        </Card.Body>
       </Card>
     </div>
   );
