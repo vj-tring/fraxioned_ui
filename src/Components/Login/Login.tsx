@@ -15,7 +15,7 @@ const Login: React.FC = () => {
     } = useLoginHandler()
 
     return (
-        <div className="container d-flex justify-content-center align-items-center vh-100">
+        <div className="container d-flex justify-content-center flex-column align-items-center vh-100">
             <CustomizedSnackbars
                 open={openSnackbar}
                 handleClose={handleSnackbarClose}
@@ -76,7 +76,10 @@ const Login: React.FC = () => {
                         Submit
                     </Button>
                 </form>
+                            <a href='/register' className='newUser'>New User? SignUp</a>
+
             </div>
+
         </div>
     )
 }

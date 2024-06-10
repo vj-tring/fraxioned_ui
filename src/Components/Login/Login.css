@@ -89,3 +89,10 @@
 .login-box button[type="submit"]:hover {
   background-color: #e48f10;
 }
+
+.newUser{
+  display: flex;
+   justify-content: center;
+   color: blue;
+   
+}

@@ -8,9 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import SendInvite from '../SendInvite/SendInvite';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import './Navbar.css';
-import { Navigate, redirect, useNavigate } from 'react-router-dom';
-import userImage from '../../assets/profile.jpeg';
-
+import { useNavigate } from 'react-router-dom';
 
 interface CustomNavbarProps {
   logo: string;
@@ -22,19 +20,32 @@ interface CustomNavbarProps {
 const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, userName }) => {
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showUserDetailsModal, setShowUserDetailsModal] = useState(false);
 
   const handleOpenInviteModal = () => setShowInviteModal(true);
   const handleCloseInviteModal = () => setShowInviteModal(false);
 
   const handleShowLogoutModal = () => setShowLogoutModal(true);
   const handleCloseLogoutModal = () => setShowLogoutModal(false);
+
+  const handleShowUserDetailsModal = () => setShowUserDetailsModal(true);
+  const handleCloseUserDetailsModal = () => setShowUserDetailsModal(false);
+
   const navigate = useNavigate();
   const handleLogout = () => {
     console.log('User logged out');
     handleCloseLogoutModal();
     navigate('/login');
-
     localStorage.clear();
+  };
+
+  const userDetails = {
+    name: userName,
+    email: 'user@example.com',
+    phone: '123-456-7890',
+    mailingAddress: '123 Main St, Anytown, USA',
+    secondaryEmail: 'user.secondary@example.com',
+    secondaryPhone: '098-765-4321'
   };
 
   return (
@@ -59,7 +70,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
             ))}
           </Nav>
         </Navbar.Collapse>
-        <Nav className="ml-auto ">
+        <Nav className="ml-auto">
           {userImage && (
             <Image
               src={userImage}
@@ -67,6 +78,8 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
               height="30"
               className="mr-2 responsive-image"
               alt="User"
+              onClick={handleShowUserDetailsModal}
+              style={{ cursor: 'pointer' }}
             />
           )}
           <Dropdown>
@@ -80,7 +93,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
 
             <Dropdown.Menu className="Drop-menu">
               <Dropdown.Item className="Drop-item" onClick={handleOpenInviteModal}>Send Invite</Dropdown.Item>
-              <Dropdown.Item  className="Drop-item" onClick={handleShowLogoutModal}>Logout</Dropdown.Item>
+              <Dropdown.Item className="Drop-item" onClick={handleShowLogoutModal}>Logout</Dropdown.Item>
               <Dropdown.Item className="Drop-item" href="#/action-3">Settings</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
@@ -105,6 +118,23 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
         confirmLabel="Logout"
         cancelLabel="Cancel"
       />
+
+      <Modal show={showUserDetailsModal} onHide={handleCloseUserDetailsModal} centered>
+        <Modal.Header closeButton style={{ backgroundColor: 'orange' }}>
+          <Modal.Title>User Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ backgroundColor: 'orange' }}>
+          <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+            {userImage && <Image src={userImage} roundedCircle height="60" className="mb-3" alt="User" />}
+            <h5>{userDetails.name}</h5>
+          </div>
+          <p><strong>Email:</strong> {userDetails.email}</p>
+          <p><strong>Phone:</strong> {userDetails.phone}</p>
+          <p><strong>Mailing Address:</strong> {userDetails.mailingAddress}</p>
+          <p><strong>Secondary Email:</strong> {userDetails.secondaryEmail}</p>
+          <p><strong>Secondary Phone:</strong> {userDetails.secondaryPhone}</p>
+        </Modal.Body>
+      </Modal>
     </>
   );
 };
