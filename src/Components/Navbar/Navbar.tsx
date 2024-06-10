@@ -10,6 +10,7 @@ import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import './Navbar.css';
 import { useNavigate } from 'react-router-dom';
 
+
 interface CustomNavbarProps {
   logo: string;
   links: { name: string; href: string; onClick?: () => void }[];
