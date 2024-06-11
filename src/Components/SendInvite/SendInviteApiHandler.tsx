@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { PortURL } from '../config';
+import { sendInvite } from './api'; // Import the API handler
 
 const useSendInviteHandler = () => {
   const [email, setEmail] = useState('');
@@ -20,8 +20,9 @@ const useSendInviteHandler = () => {
         const userObject = JSON.parse(userString);
         const invitedBy = userObject.id;
         console.log("userEmail", invitedBy);
+        const payload = { email, roleId: selectedRole, invitedBy };
 
-        const response = await axios.post(`${PortURL}/authentication/invite`, { email, roleId: selectedRole, invitedBy });
+        const response = await sendInvite(payload);
         console.log(`Invite sent to: ${email}`);
         setStatus('success');
       }

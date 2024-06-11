@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { PortURL } from '../../Components/config';
 import { useFormik } from 'formik';
+import { forgotPassword } from './api'; // Import the API handler
+import validationSchema from './validationSchema';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ForgotPassword.css';
-import * as Yup from 'yup';
-import validationSchema from './validationSchema';
 
 const useForgotHandler = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -19,10 +17,10 @@ const useForgotHandler = () => {
     initialValues: {
       email: '',
     },
-    validationSchema: validationSchema,
+    validationSchema,
     onSubmit: async (values) => {
       try {
-        const response = await axios.post(`${PortURL}/authentication/forgot-password`, values);
+        const response = await forgotPassword(values);
         setSnackbarMessage('Password reset email sent successfully!');
         setSnackbarSeverity('success');
         setOpenSnackbar(true);

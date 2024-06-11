@@ -4,6 +4,7 @@ import React from 'react'
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars'
 import './Login.css'
 import useLoginHandler from './LoginApiHandler'
+import { Link } from 'react-router-dom';
 
 const Login: React.FC = () => {
     const {
@@ -65,6 +66,9 @@ const Login: React.FC = () => {
                                     : ''
                             }`}
                         />
+                         <Link to="/forgot-password" className="forgot-password">
+        Forgot Password?
+    </Link>
                     </div>
                     <Button
                         type="submit"
@@ -76,7 +80,6 @@ const Login: React.FC = () => {
                         Submit
                     </Button>
                 </form>
-                            <a href='/register' className='newUser'>New User? SignUp</a>
 
             </div>
 

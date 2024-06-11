@@ -4,6 +4,7 @@ import axios from 'axios';
 import { PortURL } from '../../Components/config';
 import { useFormik } from 'formik';
 import validationSchema from './validationSchema';
+import { registerUser } from './api';
 
 const useSignupHandler = () => {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ const useSignupHandler = () => {
 
         console.log("Payload being sent to server:", payload);
 
-        const response = await axios.post(`${PortURL}/authentication/register`, payload);
+        const response = await registerUser(payload);
 
         if (response.status === 201) {
           setSnackbarMessage('Signup successful!');

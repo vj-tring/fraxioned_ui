@@ -6,14 +6,15 @@
 }
 
 .signup-box {
-  width: 450px ; /* change the width to 100% to make it responsive */
+  width: 600px ; 
   margin: 0 auto; /* add this line to center the signup box */
   padding: 20px;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  height: 650px ;
+  height: 675px ;
+  margin-bottom: 50px;
 }
 
 .form-group {

@@ -228,8 +228,9 @@ const Signup: React.FC = () => {
               Submit
             </Button>
           </div>
+          <a href='/login' className='backlogin'>Back to login?</a>
+
         </form>
-        <a href='/login' className='backlogin'>Back to login?</a>
       </div>
     </div>
   );

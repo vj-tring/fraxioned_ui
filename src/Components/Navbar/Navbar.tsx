@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
@@ -8,7 +8,7 @@ import InviteModal from './InviteModal';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import UserDetailsModal from './UserDetailsModal';
 import './Navbar.css';
-import { useNavigate } from 'react-router-dom';
+import useNavbarHandler from "./useNavbarHandler";
 
 interface CustomNavbarProps {
   logo: string;
@@ -18,28 +18,18 @@ interface CustomNavbarProps {
 }
 
 const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, userName }) => {
-
-  const [showInviteModal, setShowInviteModal] = useState(false);
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const [showUserDetailsModal, setShowUserDetailsModal] = useState(false);
-
-  const handleOpenInviteModal = () => setShowInviteModal(true);
-  const handleCloseInviteModal = () => setShowInviteModal(false);
-
-  const handleShowLogoutModal = () => setShowLogoutModal(true);
-  const handleCloseLogoutModal = () => setShowLogoutModal(false);
-
-  const handleShowUserDetailsModal = () => setShowUserDetailsModal(true);
-  const handleCloseUserDetailsModal = () => setShowUserDetailsModal(false);
-
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    console.log('User logged out');
-    handleCloseLogoutModal();
-    navigate('/login');
-    localStorage.clear();
-  };
+  const {
+    showInviteModal,
+    showLogoutModal,
+    showUserDetailsModal,
+    handleOpenInviteModal,
+    handleCloseInviteModal,
+    handleShowLogoutModal,
+    handleCloseLogoutModal,
+    handleShowUserDetailsModal,
+    handleCloseUserDetailsModal,
+    handleLogout,
+  } = useNavbarHandler();
 
   const userDetails = {
     name: userName,
@@ -47,7 +37,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
     phone: '123-456-7890',
     mailingAddress: '123 Main St, Anytown, USA',
     secondaryEmail: 'user.secondary@example.com',
-    secondaryPhone: '098-765-4321'
+    secondaryPhone: '098-765-4321',
   };
 
   return (
@@ -74,7 +64,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
         </Navbar.Collapse>
         <Nav className="ml-auto">
           {userImage && (
-            <Image  
+            <Image
               src={userImage || '../../assets/profile.jpeg'}
               roundedCircle
               height="30"
@@ -85,14 +75,9 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
             />
           )}
           <Dropdown>
-            <Dropdown.Toggle
-              variant="light"
-              id="dropdown-basic"
-              className="username-dropdown-toggle"
-            >
+            <Dropdown.Toggle variant="light" id="dropdown-basic" className="username-dropdown-toggle">
               <span>{userName}</span>
             </Dropdown.Toggle>
-
             <Dropdown.Menu className="Drop-menu">
               <Dropdown.Item className="Drop-item" onClick={handleOpenInviteModal}>Send Invite</Dropdown.Item>
               <Dropdown.Item className="Drop-item" onClick={handleShowLogoutModal}>Logout</Dropdown.Item>

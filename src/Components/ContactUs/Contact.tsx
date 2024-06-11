@@ -5,8 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FaMapMarkerAlt } from 'react-icons/fa';
-import axios from 'axios';
-import { PortURL } from '../config';
+import { handleSubmit } from './ContactApiHandler';
 import './Contact.css';
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
 
@@ -17,53 +16,27 @@ const Contact: React.FC = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    try {
-      const response = await axios.post(`${PortURL}/contact-us`, {
-        name,
-        subject,
-        
-        message,
-      });
-      console.log(response.data);
-      setSnackbarMessage('Message sent successfully!');
-      setOpenSnackbar(true);
-      setName('');
-      setSubject('');
-      setMessage('');
-    } catch (error) {
-      console.error(error);
-      // Handle error response
-      setSnackbarMessage('Error sending message. Please try again.');
-      setOpenSnackbar(true);
-    }
-  };
-
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
   };
 
   return (
-    <div className="container1 ">
+    <div className="container1">
       <Row>
         <Col md={6} className="leftside">
-          <div className="d-flex flex-column mb-3 textarea  ">
+          <div className="d-flex flex-column mb-3 textarea">
             <FaMapMarkerAlt size={60} className="me-2 mb-4" />
-            <h2 className="HT ">HI THERE!</h2>
+            <h2 className="HT">HI THERE!</h2>
           </div>
-          <p className="contacttext  mb-5">
-            The Owner services team at fraxioned, is here to help! Please use this form to send us an email. I'll get back to you soon as possible.
-            The Owner services team at fraxioned, is here to help! Please use this form to send us an email. I'll get back to you soon as possible.
-            The Owner services team at fraxioned, is here to help! Please use this form to send us an email. I'll get back to you soon as possible.
+          <p className="contacttext mb-5">
+            The Owner services team at Fraxioned is here to help! Please use this form to send us an email. I'll get back to you as soon as possible.
           </p>
-          <h5 className="mt-4  TFW">
-            THANKS FOR
-            REACHING OUT!
+          <h5 className="mt-4 TFW">
+            THANKS FOR REACHING OUT!
           </h5>
         </Col>
         <Col md={6}>
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={(event) => handleSubmit(event, name, subject, message, setSnackbarMessage, setOpenSnackbar, setName, setSubject, setMessage)}>
             <Form.Group controlId="formLabel">
               <Form.Label className="form-label1 mt-5">
                 EMAILING OWNERS@FRAXIONED.COM

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes } from 'react-router-dom';
 import CustomNavbar from '../Navbar/Navbar';
 import ContactModal from '../ContactModal/ContactModal';
@@ -11,7 +11,18 @@ import Home from '../Home/Home';
 
 const Dashboard: React.FC = () => {
   const [show, setShow] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
 
+  useEffect(() => {
+    const storedUserData = localStorage.getItem('userData');
+    if (storedUserData) {
+      const userData = JSON.parse(storedUserData);
+      if (userData && userData.email) {
+        setUserEmail(userData.email);
+      }
+    }
+  }, []);
+   
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -29,7 +40,7 @@ const Dashboard: React.FC = () => {
         logo={fraxionedLogo}
         links={links}
         userImage={userImage}
-        userName="John Doe"
+        userName={userEmail}
       />
 
       <Routes />

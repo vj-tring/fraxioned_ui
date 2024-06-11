@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { PortURL } from '../config';
+
 import { useFormik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ResetPassword.css';
-import * as Yup from 'yup';
 import validationSchema from './validationSchema';
+import { resetPassword } from './api'; // Import the API handler
 
 const useResetHandler = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -23,7 +22,7 @@ const useResetHandler = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        const response = await axios.post(`${PortURL}/authentication/reset-password`, values);
+        const response = await resetPassword(values);
         setSnackbarMessage('Password reset successfully!');
         setSnackbarSeverity('success');
         setOpenSnackbar(true);
