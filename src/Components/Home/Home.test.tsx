@@ -18,7 +18,7 @@ describe('Home Component', () => {
     render(<Home />);
     const image = screen.getByAltText(/Blue Bear Lake/i);
     expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute('src', 'building.jpg'); // Adjust the path if necessary
+    expect(image).toHaveAttribute('src', 'building.jpg'); 
   });
 
   test('renders the home details', () => {

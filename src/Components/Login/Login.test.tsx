@@ -6,7 +6,7 @@ import Login from './Login';
 
 describe('Login Component', () => {
   it('renders the login form', () => {
-    render(<Router><Login /></Router>); // Wrap Login component with Router
+    render(<Router><Login /></Router>); 
     
     expect(screen.getByText('Login')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
@@ -21,11 +21,9 @@ describe('Login Component', () => {
     fireEvent.change(screen.getByPlaceholderText('Password'), { target: { value: 'password' } });
   
     fireEvent.click(screen.getByText('Submit'));
-  
-    // Wait for a brief moment to allow the UI to update
+
     await new Promise(resolve => setTimeout(resolve, 100));
   
-    // Check if the success message exists
     const successMessage = screen.queryByText('Login Successful');
     expect(successMessage).toBeInTheDocument();
   });

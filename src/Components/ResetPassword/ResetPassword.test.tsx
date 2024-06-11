@@ -1,90 +1,50 @@
-/* eslint-disable testing-library/no-unnecessary-act */
-/* eslint-disable react/react-in-jsx-scope */
-import { render, screen, fireEvent, act } from '@testing-library/react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import React from 'react';
+import { render, fireEvent,  screen } from '@testing-library/react';
 import ResetPassword from './ResetPassword';
-import { useNavigate } from 'react-router-dom';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: jest.fn(),
-}));
 
 describe('ResetPassword component', () => {
-  const mockNavigate = jest.fn();
-
-  beforeEach(() => {
-    (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
+  it('renders correctly', () => {
+    render(<ResetPassword />);
+    expect(screen.getByText('Reset Password')).toBeInTheDocument();
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
-  test('validates new password input correctly', async () => {
-    await act(async () => {
-      render(
-        <Router>
-          <ResetPassword />
-        </Router>
-      );
-    });
-
-    const newPasswordInput = screen.getByPlaceholderText('New Password');
-    const submitButton = screen.getByText('Submit');
-
-    await act(async () => {
-      fireEvent.change(newPasswordInput, { target: { value: 'test' } });
-      fireEvent.blur(newPasswordInput);
-      fireEvent.click(submitButton);
-    });
-
-    // Add your validation check here if needed
-  });
-
-  test('validates confirm password input correctly', async () => {
-    await act(async () => {
-      render(
-        <Router>
-          <ResetPassword />
-        </Router>
-      );
-    });
-
+  it('displays error messages for invalid input', () => {
+    render(<ResetPassword />);
     const newPasswordInput = screen.getByPlaceholderText('New Password');
     const confirmPasswordInput = screen.getByPlaceholderText('Confirm Password');
-    const submitButton = screen.getByText('Submit');
 
-    await act(async () => {
-      fireEvent.change(newPasswordInput, { target: { value: 'Test1234' } });
-      fireEvent.change(confirmPasswordInput, { target: { value: 'Test1234' } });
-      fireEvent.blur(confirmPasswordInput);
-      fireEvent.click(submitButton);
-    });
+    fireEvent.change(newPasswordInput, { target: { value: 'hort' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'hort' } });
 
-    expect(screen.queryByText('Passwords must match')).toBeNull();
+    expect(screen.getByText('Password must be at least 8 characters')).toBeInTheDocument();
   });
 
-  test('displays error message when passwords do not match', async () => {
-    await act(async () => {
-      render(
-        <Router>
-          <ResetPassword />
-        </Router>
-      );
-    });
-
+  it('displays success message when form is submitted successfully', () => {
+    render(<ResetPassword />);
     const newPasswordInput = screen.getByPlaceholderText('New Password');
     const confirmPasswordInput = screen.getByPlaceholderText('Confirm Password');
+
+    fireEvent.change(newPasswordInput, { target: { value: 'newpassword123' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'newpassword123' } });
+
     const submitButton = screen.getByText('Submit');
+    fireEvent.click(submitButton);
 
-    await act(async () => {
-      fireEvent.change(newPasswordInput, { target: { value: 'Test1234' } });
-      fireEvent.change(confirmPasswordInput, { target: { value: 'Different1234' } });
-      fireEvent.blur(confirmPasswordInput);
-      fireEvent.click(submitButton);
-    });
+    expect(screen.getByText('Password reset successfully')).toBeInTheDocument();
+  });
 
-    expect(screen.getByText('Passwords must match')).toBeInTheDocument();
+  it('calls the onSubmit function when the form is submitted', () => {
+    const onSubmit = jest.fn();
+    const newPasswordInput = screen.getByPlaceholderText('New Password');
+    const confirmPasswordInput = screen.getByPlaceholderText('Confirm Password');
+
+    fireEvent.change(newPasswordInput, { target: { value: 'newpassword123' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'newpassword123' } });
+
+    const submitButton = screen.getByText('Submit');
+    fireEvent.click(submitButton);
+
+    expect(onSubmit).toHaveBeenCalledTimes(1);
   });
 });

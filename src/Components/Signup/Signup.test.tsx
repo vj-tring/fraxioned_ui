@@ -8,8 +8,7 @@ describe('Signup Component', () => {
     render(<Signup />);
     
     expect(screen.getByText('Sign Up')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Enter your name')).toBeInTheDocument();
-    // Add similar expectations for other input fields
+    expect(screen.getByPlaceholderText(' Username')).toBeInTheDocument();
   });
 
   it('submits the form with valid input', async () => {
@@ -36,13 +35,10 @@ describe('Signup Component', () => {
     
     // Submit the form
     fireEvent.click(screen.getByText('Submit'));
-
-    // Expect that handleSubmit function was called
     expect(mockSignupHandler).toHaveBeenCalled();
   });
 
   it('displays error messages for invalid input', () => {
-    // Mock the SignupApiHandler to return errors for each field
     jest.mock('./SignupApiHandler', () => () => ({
       formik: {
         handleChange: jest.fn(),
