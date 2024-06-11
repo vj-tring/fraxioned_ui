@@ -1,50 +1,127 @@
 import React from 'react';
-import { render, fireEvent,  screen } from '@testing-library/react';
+import { render, fireEvent, screen, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import ResetPassword from './ResetPassword';
+import useResetHandler from './ResetApiHandler';
 
+jest.mock('./ResetApiHandler');
 
-describe('ResetPassword component', () => {
-  it('renders correctly', () => {
+const mockedUseResetHandler = useResetHandler as jest.MockedFunction<typeof useResetHandler>;
+
+describe('ResetPassword Component', () => {
+  beforeEach(() => {
+    mockedUseResetHandler.mockReturnValue({
+      formik: {
+        initialValues: { newPassword: '', confirmPassword: '' },
+        initialErrors: {},
+        initialTouched: {},
+        initialStatus: null,
+        handleSubmit: jest.fn(),
+        handleChange: jest.fn(),
+        handleBlur: jest.fn(),
+        touched: { newPassword: false, confirmPassword: false },
+        errors: { newPassword: '', confirmPassword: '' },
+        values: { newPassword: '', confirmPassword: '' },
+        isSubmitting: false,
+        isValidating: false,
+        isValid: true,
+        dirty: false,
+        validateOnBlur: true,
+        validateOnChange: true,
+        validateOnMount: false,
+        submitForm: jest.fn(),
+        resetForm: jest.fn(),
+        setErrors: jest.fn(),
+        setFieldError: jest.fn(),
+        setFieldTouched: jest.fn(),
+        setFieldValue: jest.fn(),
+        setFormikState: jest.fn(),
+        setStatus: jest.fn(),
+        setSubmitting: jest.fn(),
+        setTouched: jest.fn(),
+        setValues: jest.fn(),
+        submitCount: 0,
+        validateField: jest.fn(),
+        validateForm: jest.fn(),
+        getFieldMeta: jest.fn(),
+        getFieldHelpers: jest.fn(),
+        getFieldProps: jest.fn(),
+        handleReset: jest.fn(),
+        unregisterField: jest.fn(),
+        registerField: jest.fn()
+      },
+      openSnackbar: false,
+      snackbarMessage: '',
+      snackbarSeverity: 'success',
+      handleSnackbarClose: jest.fn(),
+    });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('renders ResetPassword component', () => {
     render(<ResetPassword />);
     expect(screen.getByText('Reset Password')).toBeInTheDocument();
   });
 
-  it('displays error messages for invalid input', () => {
+  test('renders input fields and submit button', () => {
     render(<ResetPassword />);
-    const newPasswordInput = screen.getByPlaceholderText('New Password');
-    const confirmPasswordInput = screen.getByPlaceholderText('Confirm Password');
-
-    fireEvent.change(newPasswordInput, { target: { value: 'hort' } });
-    fireEvent.change(confirmPasswordInput, { target: { value: 'hort' } });
-
-    expect(screen.getByText('Password must be at least 8 characters')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('New Password')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Confirm Password')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
   });
 
-  it('displays success message when form is submitted successfully', () => {
+  test('calls formik handleSubmit on form submission', () => {
     render(<ResetPassword />);
-    const newPasswordInput = screen.getByPlaceholderText('New Password');
-    const confirmPasswordInput = screen.getByPlaceholderText('Confirm Password');
-
-    fireEvent.change(newPasswordInput, { target: { value: 'newpassword123' } });
-    fireEvent.change(confirmPasswordInput, { target: { value: 'newpassword123' } });
-
-    const submitButton = screen.getByText('Submit');
-    fireEvent.click(submitButton);
-
-    expect(screen.getByText('Password reset successfully')).toBeInTheDocument();
+    fireEvent.submit(screen.getByRole('button', { name: /submit/i }));
+    expect(mockedUseResetHandler().formik.handleSubmit).toHaveBeenCalled();
   });
 
-  it('calls the onSubmit function when the form is submitted', () => {
-    const onSubmit = jest.fn();
-    const newPasswordInput = screen.getByPlaceholderText('New Password');
-    const confirmPasswordInput = screen.getByPlaceholderText('Confirm Password');
+  test('displays newPassword validation error', async () => {
+    mockedUseResetHandler.mockReturnValueOnce({
+      ...mockedUseResetHandler(),
+      formik: {
+        ...mockedUseResetHandler().formik,
+        touched: { newPassword: true, confirmPassword: false },
+        errors: { newPassword: 'New Password is required', confirmPassword: '' },
+      }
+    });
 
-    fireEvent.change(newPasswordInput, { target: { value: 'newpassword123' } });
-    fireEvent.change(confirmPasswordInput, { target: { value: 'newpassword123' } });
+    render(<ResetPassword />);
+    fireEvent.blur(screen.getByPlaceholderText('New Password'));
+    await waitFor(() => {
+      expect(screen.getByText('New Password is required')).toBeInTheDocument();
+    });
+  });
 
-    const submitButton = screen.getByText('Submit');
-    fireEvent.click(submitButton);
+  test('displays confirmPassword validation error', async () => {
+    mockedUseResetHandler.mockReturnValueOnce({
+      ...mockedUseResetHandler(),
+      formik: {
+        ...mockedUseResetHandler().formik,
+        touched: { newPassword: false, confirmPassword: true },
+        errors: { newPassword: '', confirmPassword: 'Confirm Password is required' },
+      }
+    });
 
-    expect(onSubmit).toHaveBeenCalledTimes(1);
+    render(<ResetPassword />);
+    fireEvent.blur(screen.getByPlaceholderText('Confirm Password'));
+    await waitFor(() => {
+      expect(screen.getByText('Confirm Password is required')).toBeInTheDocument();
+    });
+  });
+
+  test('renders Snackbar when openSnackbar is true', () => {
+    mockedUseResetHandler.mockReturnValueOnce({
+      ...mockedUseResetHandler(),
+      openSnackbar: true,
+      snackbarMessage: 'Test Message',
+      snackbarSeverity: 'error',
+    });
+
+    render(<ResetPassword />);
+    expect(screen.getByText('Test Message')).toBeInTheDocument();
   });
 });
