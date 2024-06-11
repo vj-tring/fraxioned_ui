@@ -3,13 +3,12 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Dropdown from 'react-bootstrap/Dropdown';
-import Modal from 'react-bootstrap/Modal';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import SendInvite from '../SendInvite/SendInvite';
+import InviteModal from './InviteModal';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
+import UserDetailsModal from './UserDetailsModal';
 import './Navbar.css';
 import { useNavigate } from 'react-router-dom';
-
 
 interface CustomNavbarProps {
   logo: string;
@@ -19,6 +18,7 @@ interface CustomNavbarProps {
 }
 
 const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, userName }) => {
+
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showUserDetailsModal, setShowUserDetailsModal] = useState(false);
@@ -33,6 +33,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
   const handleCloseUserDetailsModal = () => setShowUserDetailsModal(false);
 
   const navigate = useNavigate();
+
   const handleLogout = () => {
     console.log('User logged out');
     handleCloseLogoutModal();
@@ -73,8 +74,8 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
         </Navbar.Collapse>
         <Nav className="ml-auto">
           {userImage && (
-            <Image
-              src={userImage}
+            <Image  
+              src={userImage || '../../assets/profile.jpeg'}
               roundedCircle
               height="30"
               className="mr-2 responsive-image"
@@ -101,15 +102,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
         </Nav>
       </Navbar>
 
-      <Modal show={showInviteModal} onHide={handleCloseInviteModal} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Send Invite</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <SendInvite />
-        </Modal.Body>
-      </Modal>
-
+      <InviteModal show={showInviteModal} onHide={handleCloseInviteModal} />
       <ConfirmationModal
         show={showLogoutModal}
         onHide={handleCloseLogoutModal}
@@ -119,23 +112,12 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
         confirmLabel="Logout"
         cancelLabel="Cancel"
       />
-
-      <Modal show={showUserDetailsModal} onHide={handleCloseUserDetailsModal} centered>
-        <Modal.Header closeButton style={{ backgroundColor: 'orange' }}>
-          <Modal.Title>User Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body style={{ backgroundColor: 'orange' }}>
-          <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-            {userImage && <Image src={userImage} roundedCircle height="60" className="mb-3" alt="User" />}
-            <h5>{userDetails.name}</h5>
-          </div>
-          <p><strong>Email:</strong> {userDetails.email}</p>
-          <p><strong>Phone:</strong> {userDetails.phone}</p>
-          <p><strong>Mailing Address:</strong> {userDetails.mailingAddress}</p>
-          <p><strong>Secondary Email:</strong> {userDetails.secondaryEmail}</p>
-          <p><strong>Secondary Phone:</strong> {userDetails.secondaryPhone}</p>
-        </Modal.Body>
-      </Modal>
+      <UserDetailsModal 
+        show={showUserDetailsModal} 
+        onHide={handleCloseUserDetailsModal} 
+        userImage={userImage} 
+        userDetails={userDetails} 
+      />
     </>
   );
 };

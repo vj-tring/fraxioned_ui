@@ -5,7 +5,7 @@ import ContactModal from '../ContactModal/ContactModal';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import fraxionedLogo from '../../assets/Fraxioned.png';
 import Footer from '../../Footer/Footer';
-import userImage from '../../assets/user.png';
+import userImage from '../../assets/profile.jpeg';
 import './Dashboard.css';
 import Home from '../Home/Home';
 

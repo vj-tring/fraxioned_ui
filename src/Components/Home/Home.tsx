@@ -5,6 +5,8 @@ import homeImage from '../../assets/building.jpg';
 
 const Home: React.FC = () => {
   return (
+
+    
     <div className="home-content">
      
 
