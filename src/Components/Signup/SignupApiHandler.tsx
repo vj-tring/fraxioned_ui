@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { useFormik } from 'formik';
+import validationSchema from './validationSchema';
+import { registerUser } from "../../Api/RegisterApi";
 import { PortURL } from '../../Components/config';
 import { useFormik } from 'formik';
 import validationSchema from './validationSchema';
-import { registerUser } from './api';
+
 
 const useSignupHandler = () => {
   const navigate = useNavigate();

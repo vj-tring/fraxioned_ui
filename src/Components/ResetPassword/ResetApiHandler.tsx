@@ -5,7 +5,8 @@ import { useFormik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ResetPassword.css';
 import validationSchema from './validationSchema';
-import { resetPassword } from './api'; // Import the API handler
+import { resetPassword } from '../../Api/ResetApi';
+
 
 const useResetHandler = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);

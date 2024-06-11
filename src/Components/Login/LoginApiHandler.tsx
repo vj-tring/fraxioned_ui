@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
-import { login } from './api';
+
+import validationSchema from './validationSchema';
+
+import { login } from '../../Api/LoginApi';
 import validationSchema from './validationSchema';
 
 const useLoginHandler = () => {

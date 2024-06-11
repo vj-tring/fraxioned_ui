@@ -1,4 +1,5 @@
-import { sendContactMessage } from './api';
+import { sendContactMessage } from '../../Api/ContactUsApi'
+import { ContactMessagePayload } from '../../Components/Types/contact';
 
 export const handleSubmit = async (
   event: React.FormEvent<HTMLFormElement>,
@@ -18,8 +19,11 @@ export const handleSubmit = async (
       const userObject = JSON.parse(userString);
       const invitedBy = userObject.email;
       console.log("userEmail", invitedBy);
+      const payload: ContactMessagePayload = { name, subject, message, invitedBy };
+      await sendContactMessage(payload);
 
-      await sendContactMessage(name, subject, message, invitedBy);
+
+
 
       setSnackbarMessage('Message sent successfully!');
       setOpenSnackbar(true);

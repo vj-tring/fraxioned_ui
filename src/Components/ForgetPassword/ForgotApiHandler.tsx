@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
-import { forgotPassword } from './api'; // Import the API handler
+import { forgotPassword } from '../../Api/ForgotApi';
+import validationSchema from './validationSchema';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './ForgotPassword.css';
 import validationSchema from './validationSchema';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ForgotPassword.css';
