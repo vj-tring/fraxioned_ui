@@ -23,6 +23,8 @@ export const handleSubmit = async (
       await sendContactMessage(payload);
 
 
+
+
       setSnackbarMessage('Message sent successfully!');
       setOpenSnackbar(true);
       setName('');

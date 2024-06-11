@@ -5,6 +5,10 @@ import { forgotPassword } from '../../Api/ForgotApi';
 import validationSchema from './validationSchema';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ForgotPassword.css';
+import validationSchema from './validationSchema';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './ForgotPassword.css';
+
 const useForgotHandler = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');

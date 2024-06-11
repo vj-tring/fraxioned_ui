@@ -3,6 +3,7 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { sendInvite } from "../../Api/send-inviteApi";
 
+
 const useSendInviteHandler = () => {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');

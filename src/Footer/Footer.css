@@ -1,0 +1,108 @@
+.footer {
+  background-color: #edf5f5;
+  bottom: 0;
+  width: 100%;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+}
+
+.logo {
+  background-image: url('../assets/Fraxioned.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 216px;
+  height: 100px;
+  margin-top: 22px;
+  margin-right: 10px;
+}
+
+.container {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  text-align: start;
+  padding: 10px;
+}
+
+.col-md-3 {
+  flex: 0 0 auto;
+  width: 22%;
+  text-align: start;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.no-underline {
+  text-decoration: none;
+  color: rgb(23, 97, 79);
+
+}
+.col-md-2{
+  margin:12px;
+}
+.col-md-2>ul{
+  display: flex;
+ flex-direction: column;
+  justify-content: space-around;
+  
+}
+.no-underline:hover{
+  color: orange;
+}
+.contact-us {
+  width: 70%;
+  height: 50px;
+  background-color: #0c888c;
+  border-radius: 30px;
+  border: none;
+  margin-right: 22px;
+  margin-top: 13px;
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.3s;
+  color: white;
+  font-size: larger;
+}
+
+.contact-us .arrow {
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  position: absolute;
+  right: 30;
+  color: white;
+
+}
+
+.contact-us:hover {
+  background-color: #081aba;
+  border-radius: 30px;
+}
+
+.contact-us:hover .arrow {
+  opacity: 1;
+  transform: translateX(10px);
+}
+
+
+.modal-fullscreen {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 30px;
+  max-width: 100%;
+}
+
+.modal-fullscreen .modal-content {
+  height: 100%;
+  border: none;
+  border-radius: 0;
+  
+}
