@@ -15,5 +15,10 @@ module.exports = {
   transformIgnorePatterns: [
     "node_modules/(?!(axios|react|react-dom|bootstrap)/)",
     "\\.css$" 
-  ]
+  ],
+  moduleNameMapper: {
+    '\\.(css|less|scss)$': 'identity-obj-proxy',
+    "~src/(.*)": "<rootDir>/src/$1",
+},
+testEnvironment: 'jsdom'
 };

@@ -1,7 +1,7 @@
 // CustomNavbar.test.tsx
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import CustomNavbar from './Navbar';
 
@@ -32,14 +32,14 @@ describe('CustomNavbar', () => {
         <CustomNavbar logo={logo} links={links} userName={userName} />
       </Router>
     );
-
+  
     fireEvent.click(screen.getByText(userName));
     fireEvent.click(screen.getByText('Send Invite'));
-
+  
     expect(screen.getByText('Send Invite')).toBeInTheDocument();
-
+  
     fireEvent.click(screen.getByRole('button', { name: /close/i }));
-
+  
     await waitFor(() => {
       expect(screen.queryByText('Send Invite')).not.toBeInTheDocument();
     });
@@ -64,22 +64,24 @@ describe('CustomNavbar', () => {
     });
   });
 
-  test('handles logout action and redirects to login', async () => {
-    render(
-      <Router>
-        <CustomNavbar logo={logo} links={links} userName={userName} />
-      </Router>
-    );
+ test('handles logout action and redirects to login', async () => {
+  render(
+    <Router>
+      <CustomNavbar logo={logo} links={links} userName={userName} />
+    </Router>
+  );
 
-    fireEvent.click(screen.getByText(userName));
-    fireEvent.click(screen.getByText('Logout'));
+  fireEvent.click(screen.getByText(userName));
+  fireEvent.click(screen.getByText('Logout'));
 
-    fireEvent.click(screen.getByRole('button', { name: /logout/i }));
+  expect(screen.getByText('Confirm Logout')).toBeInTheDocument();
 
-    await waitFor(() => {
-      expect(screen.getByText('User logged out')).toBeInTheDocument();
-    });
+  fireEvent.click(screen.getByRole('button', { name: /logout/i }));
 
-    expect(window.location.pathname).toBe('/login');
+  await waitFor(() => {
+    expect(screen.getByText('User logged out')).toBeInTheDocument();
   });
+
+  expect(window.location.pathname).toBe('/login');
+}); 
 });
