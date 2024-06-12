@@ -24,7 +24,7 @@ const Dashboard: React.FC = () => {
   }, []);
    
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  // const handleShow = () => setShow(true);
 
   const links = [ 
     { name: 'HOME', href: '/dashboard' },

@@ -72,6 +72,8 @@ const useSignupHandler = () => {
     },
   });
 
+  
+
   const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
@@ -89,3 +91,4 @@ const useSignupHandler = () => {
 }
 
 export default useSignupHandler;
+

@@ -1,16 +1,12 @@
 import React from 'react';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ForgotPassword.css';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import useForgotHandler from './ForgotApiHandler';
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
 
 
 const ForgotPassword: React.FC = () => {
-
   const {
     formik,
     openSnackbar,
@@ -59,5 +55,7 @@ const ForgotPassword: React.FC = () => {
     </div>
   );
 };
+
+
 
 export default ForgotPassword;

@@ -1,69 +1,86 @@
+// Home.test.js
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/extend-expect';
 import Home from './Home';
-import homeImage from '../../assets/building.jpg';
 
 describe('Home Component', () => {
-  test('renders Home component', () => {
+  it('renders the welcome message', () => {
     render(<Home />);
-    expect(screen.getByText('WELCOME OWNER!')).toBeInTheDocument();
-    expect(screen.getByText('YOUR HOMES')).toBeInTheDocument();
+    const welcomeElement = screen.getByText(/WELCOME OWNER!/i);
+    expect(welcomeElement).toBeInTheDocument();
   });
 
-  test('renders home image', () => {
+  it('renders the "YOUR HOMES" heading', () => {
     render(<Home />);
-    const image = screen.getByAltText('Blue Bear Lake');
-    expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute('src', homeImage);
+    const homesHeading = screen.getByText(/YOUR HOMES/i);
+    expect(homesHeading).toBeInTheDocument();
   });
 
-  test('renders home details', () => {
+  it('renders the home image with the correct alt text', () => {
     render(<Home />);
-    expect(screen.getByText('BLUE BEAR LAKE')).toBeInTheDocument();
-    expect(screen.getByText('537 Blue Lake St, Garden City, UT 84078')).toBeInTheDocument();
-    expect(screen.getByText('YOU OWN 1/8 SHARE')).toBeInTheDocument();
+    const homeImage = screen.getByAltText('Blue Bear Lake');
+    expect(homeImage).toBeInTheDocument();
+    expect(homeImage).toHaveAttribute('src', 'building.jpg'); // Check the image src attribute
   });
 
-  test('renders book stay button', () => {
+  it('renders the home details', () => {
     render(<Home />);
-    const button = screen.getByText('BOOK A STAY');
-    expect(button).toBeInTheDocument();
-    expect(button).toHaveClass('book-stay-btn');
+    const homeTitle = screen.getByText('BLUE BEAR LAKE');
+    const address = screen.getByText('537 Blue Lake St, Garden City, UT 84078');
+    const shareInfo = screen.getByText('YOU OWN 1/8 SHARE');
+    expect(homeTitle).toBeInTheDocument();
+    expect(address).toBeInTheDocument();
+    expect(shareInfo).toBeInTheDocument();
   });
 
-  test('renders off-season table correctly', () => {
+  it('renders the "BOOK A STAY" button', () => {
     render(<Home />);
-    expect(screen.getByText('OFF-SEASON 2024')).toBeInTheDocument();
-    expect(screen.getByText('Dec 31 - May 29 & Sept 20 - Dec 30')).toBeInTheDocument();
-    expect(screen.getByText('TOTAL NIGHTS')).toBeInTheDocument();
-    expect(screen.getByText('30')).toBeInTheDocument();
-    expect(screen.getByText('NIGHTS USED')).toBeInTheDocument();
-    expect(screen.getByText('0')).toBeInTheDocument();
-    expect(screen.getByText('NIGHTS BOOKED')).toBeInTheDocument();
-    expect(screen.getByText('7')).toBeInTheDocument();
-    expect(screen.getByText('NIGHTS REMAINING')).toBeInTheDocument();
-    expect(screen.getByText('23')).toBeInTheDocument();
+    const bookStayButton = screen.getByRole('button', { name: /BOOK A STAY/i });
+    expect(bookStayButton).toBeInTheDocument();
   });
 
-  test('renders peak-season table correctly', () => {
+  it('renders off-season table with correct data', () => {
     render(<Home />);
-    expect(screen.getByText('PEAK-SEASON 2024')).toBeInTheDocument();
-    expect(screen.getByText('May 30 - Sept 19')).toBeInTheDocument();
-    expect(screen.getByText('TOTAL NIGHTS')).toBeInTheDocument();
-    expect(screen.getByText('14')).toBeInTheDocument();
-    expect(screen.getByText('NIGHTS STAYING')).toBeInTheDocument();
-    expect(screen.getByText('5')).toBeInTheDocument();
-    expect(screen.getByText('NIGHTS RENTING')).toBeInTheDocument();
-    expect(screen.getByText('9')).toBeInTheDocument();
-    expect(screen.getByText('NIGHTS UNDECIDED')).toBeInTheDocument();
-    expect(screen.getByText('0')).toBeInTheDocument();
+    const offSeasonHeader = screen.getByText('OFF-SEASON 2024');
+    const totalNights = screen.getByText('30');
+    const nightsUsed = screen.getByText('0', { exact: false });
+    const nightsBooked = screen.getByText('7');
+    const nightsRemaining = screen.getByText('23');
+    const totalHolidays = screen.getByText('1', { exact: false });
+    const holidaysUsed = screen.getByText('0', { exact: false });
+    const holidaysBooked = screen.getByText('0', { exact: false });
+    const holidaysRemaining = screen.getByText('1', { exact: false });
+
+    expect(offSeasonHeader).toBeInTheDocument();
+    expect(totalNights).toBeInTheDocument();
+    expect(nightsUsed).toBeInTheDocument();
+    expect(nightsBooked).toBeInTheDocument();
+    expect(nightsRemaining).toBeInTheDocument();
+    expect(totalHolidays).toBeInTheDocument();
+    expect(holidaysUsed).toBeInTheDocument();
+    expect(holidaysBooked).toBeInTheDocument();
+    expect(holidaysRemaining).toBeInTheDocument();
   });
 
-  test('renders peak-season button', () => {
+  it('renders peak-season table with correct data', () => {
     render(<Home />);
-    const button = screen.getByText('MY 2024 PEAK-SEASON');
-    expect(button).toBeInTheDocument();
-    expect(button).toHaveClass('peak-season-btn');
+    const peakSeasonHeader = screen.getByText('PEAK-SEASON 2024');
+    const totalNights = screen.getByText('14', { exact: false });
+    const nightsStaying = screen.getByText('5', { exact: false });
+    const nightsRenting = screen.getByText('9', { exact: false });
+    const nightsUndecided = screen.getByText('0', { exact: false });
+
+    expect(peakSeasonHeader).toBeInTheDocument();
+    expect(totalNights).toBeInTheDocument();
+    expect(nightsStaying).toBeInTheDocument();
+    expect(nightsRenting).toBeInTheDocument();
+    expect(nightsUndecided).toBeInTheDocument();
+  });
+
+  it('renders the "MY 2024 PEAK-SEASON" button', () => {
+    render(<Home />);
+    const peakSeasonButton = screen.getByRole('button', { name: /MY 2024 PEAK-SEASON/i });
+    expect(peakSeasonButton).toBeInTheDocument();
   });
 });

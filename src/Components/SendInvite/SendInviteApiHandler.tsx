@@ -23,7 +23,8 @@ const useSendInviteHandler = () => {
         console.log("userEmail", invitedBy);
         const payload = { email, roleId: selectedRole, invitedBy };
 
-        const response = await sendInvite(payload);
+        // const response = await sendInvite(payload);
+        await sendInvite(payload);
         console.log(`Invite sent to: ${email}`);
         setStatus('success');
       }

@@ -23,7 +23,8 @@ const useResetHandler = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        const response = await resetPassword(values);
+        // const response = await resetPassword(values);
+         await resetPassword(values);
         setSnackbarMessage('Password reset successfully!');
         setSnackbarSeverity('success');
         setOpenSnackbar(true);
