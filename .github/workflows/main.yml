@@ -1,6 +1,6 @@
 
 # Name of this action
-name: Automatic Testing
+name: Automated Unit Testing
 
 
 # For more detail visit https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#on
@@ -44,3 +44,6 @@ jobs:
 
       - name: Run Jest Tests
         run: npm run test
+
+      - name: Run React Build
+        run: npm run build
