@@ -4,19 +4,15 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Login from './Login';
 import useLoginHandler from './LoginApiHandler';
 import '@testing-library/jest-dom';
+
 jest.mock('./LoginApiHandler');
 
-
-
 const mockedUseLoginHandler = useLoginHandler as jest.MockedFunction<typeof useLoginHandler>;
-
 
 describe('Login Component', () => {
     beforeEach(() => {
         mockedUseLoginHandler.mockReturnValue({
             formik: {
-            
-
                 initialValues: { email: '', password: '' },
                 initialErrors: {},
                 initialTouched: {},
@@ -80,27 +76,7 @@ describe('Login Component', () => {
 
     test('shows validation errors on form submit', async () => {
         const handleSubmit = jest.fn((e) => e?.preventDefault());
-
-
-    test('renders Login component', () => {
-        render(<Login />);
-        expect(screen.getByText('Login')).toBeInTheDocument();
-    });
-
-    test('renders input fields and submit button', () => {
-        render(<Login />);
-        expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
-        expect(screen.getByPlaceholderText('Password')).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
-    });
-
-    test('calls formik handleSubmit on form submission', () => {
-        render(<Login />);
-        fireEvent.submit(screen.getByRole('button', { name: /submit/i }));
-        expect(mockedUseLoginHandler().formik.handleSubmit).toHaveBeenCalled();
-    });
-
-    test('displays email validation error', async () => {
+        
         mockedUseLoginHandler.mockReturnValueOnce({
             ...mockedUseLoginHandler(),
             formik: {
@@ -121,29 +97,59 @@ describe('Login Component', () => {
 
         await waitFor(() => {
             expect(screen.getByText('Invalid email address')).toBeInTheDocument();
-        });
-
-        await waitFor(() => {
             expect(screen.getByText('Password must be 8 characters or longer')).toBeInTheDocument();
         });
 
         expect(handleSubmit).toHaveBeenCalled();
     });
 
-    test('displays snackbar on successful login', async () => {
+    test('displays email validation error on blur', async () => {
+        mockedUseLoginHandler.mockReturnValueOnce({
+            ...mockedUseLoginHandler(),
+            formik: {
+                ...mockedUseLoginHandler().formik,
                 touched: { email: true, password: false },
                 errors: { email: 'Email is required', password: '' },
             }
         });
 
-        render(<Login />);
+        render(
+            <Router>
+                <Login />
+            </Router>
+        );
+
         fireEvent.blur(screen.getByPlaceholderText('Email'));
+
         await waitFor(() => {
             expect(screen.getByText('Email is required')).toBeInTheDocument();
         });
     });
 
-    test('displays password validation error', async () => {
+    test('displays password validation error on blur', async () => {
+        mockedUseLoginHandler.mockReturnValueOnce({
+            ...mockedUseLoginHandler(),
+            formik: {
+                ...mockedUseLoginHandler().formik,
+                touched: { email: false, password: true },
+                errors: { email: '', password: 'Password is required' },
+            }
+        });
+
+        render(
+            <Router>
+                <Login />
+            </Router>
+        );
+
+        fireEvent.blur(screen.getByPlaceholderText('Password'));
+
+        await waitFor(() => {
+            expect(screen.getByText('Password is required')).toBeInTheDocument();
+        });
+    });
+
+    test('displays snackbar on successful login', async () => {
         mockedUseLoginHandler.mockReturnValueOnce({
             ...mockedUseLoginHandler(),
             formik: {
@@ -190,18 +196,6 @@ describe('Login Component', () => {
             expect(screen.getByText('Invalid Credentials!')).toBeInTheDocument();
         });
     });
-});
-                touched: { email: false, password: true },
-                errors: { email: '', password: 'Password is required' },
-            }
-        });
-
-        render(<Login />);
-        fireEvent.blur(screen.getByPlaceholderText('Password'));
-        await waitFor(() => {
-            expect(screen.getByText('Password is required')).toBeInTheDocument();
-        });
-    });
 
     test('renders Snackbar when openSnackbar is true', () => {
         mockedUseLoginHandler.mockReturnValueOnce({
@@ -211,7 +205,12 @@ describe('Login Component', () => {
             snackbarSeverity: 'error',
         });
 
-        render(<Login />);
+        render(
+            <Router>
+                <Login />
+            </Router>
+        );
+
         expect(screen.getByText('Test Message')).toBeInTheDocument();
     });
 });

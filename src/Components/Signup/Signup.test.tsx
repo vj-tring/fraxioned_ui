@@ -462,4 +462,3 @@ describe('Signup Component', () => {
         expect(screen.getByText('Password must be 8 characters or longer')).toBeInTheDocument();
         expect(screen.getByText('Passwords must match')).toBeInTheDocument();
     });
-});

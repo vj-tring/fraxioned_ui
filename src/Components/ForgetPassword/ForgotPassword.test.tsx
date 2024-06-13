@@ -358,4 +358,3 @@ describe('ForgotPassword Component', () => {
         render(<ForgotPassword />);
         expect(screen.getByText('Test message')).toBeInTheDocument();
     });
-});

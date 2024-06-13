@@ -11,6 +11,7 @@ import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
 
 const Contact: React.FC = () => {
   const [name, setName] = useState('');
+  const [email, setEmail] = useState(''); // Added email state
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -36,7 +37,7 @@ const Contact: React.FC = () => {
           </h5>
         </Col>
         <Col md={6}>
-          <Form onSubmit={(event) => handleSubmit(event, name, subject, message, setSnackbarMessage, setOpenSnackbar, setName, setSubject, setMessage)}>
+          <Form onSubmit={(event) => handleSubmit(event, name, email, subject, message, setSnackbarMessage, setOpenSnackbar, setName, setEmail, setSubject, setMessage)}>
             <Form.Group controlId="formLabel">
               <Form.Label className="form-label1 mt-5">
                 EMAILING OWNERS@FRAXIONED.COM
@@ -49,6 +50,15 @@ const Contact: React.FC = () => {
                 className="orange-border"
                 value={name}
                 onChange={(event) => setName(event.target.value)}
+              />
+            </Form.Group>
+            <Form.Group controlId="formEmail" className="mt-3"> {/* Added email input */}
+              <Form.Control
+                type="email"
+                placeholder="Enter your email"
+                className="orange-border"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
               />
             </Form.Group>
             <Form.Group controlId="formSubject" className="mt-3">
