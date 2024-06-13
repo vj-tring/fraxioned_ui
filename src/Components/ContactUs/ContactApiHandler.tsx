@@ -4,11 +4,14 @@ import { ContactMessagePayload } from '../../Components/Types/contact';
 export const handleSubmit = async (
   event: React.FormEvent<HTMLFormElement>,
   name: string,
+  email: string,
+
   subject: string,
   message: string,
   setSnackbarMessage: (message: string) => void,
   setOpenSnackbar: (isOpen: boolean) => void,
   setName: (name: string) => void,
+  setemail: (email: string) => void,
   setSubject: (subject: string) => void,
   setMessage: (message: string) => void
 ) => {
@@ -17,6 +20,16 @@ export const handleSubmit = async (
     const userString = localStorage.getItem('userData');
     if (userString) {
       const userObject = JSON.parse(userString);
+      const userId = userObject.id;
+      console.log("userId", userId);
+      const payload: ContactMessagePayload = { userId, name, email, message };
+      await sendContactMessage(payload);
+
+      setSnackbarMessage('Message sent successfully!');
+      setOpenSnackbar(true);
+      setName('');
+      setemail('');
+
       const invitedBy = userObject.email;
       console.log("userEmail", invitedBy);
       const payload: ContactMessagePayload = { name, subject, message, invitedBy };

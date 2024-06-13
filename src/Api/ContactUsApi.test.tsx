@@ -10,6 +10,7 @@ jest.mock('axios', () => ({
 describe('sendContactMessage', () => {
   it('should send a POST request to the correct URL with the payload', async () => {
     const payload: ContactMessagePayload = {
+      userId:1,
       name: 'John Doe',
       email: 'johndoe@example.com',
       message: 'Hello, world!',
@@ -24,6 +25,10 @@ describe('sendContactMessage', () => {
 
   it('should throw an error if the request fails', async () => {
     const payload: ContactMessagePayload = {
+
+      userId:1,
+
+ 
       name: 'John Doe',
       email: 'johndoe@example.com',
       message: 'Hello, world!',

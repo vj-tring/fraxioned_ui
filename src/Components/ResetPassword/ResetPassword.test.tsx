@@ -48,7 +48,8 @@ describe('ResetPassword Component', () => {
         getFieldProps: jest.fn(),
         handleReset: jest.fn(),
         unregisterField: jest.fn(),
-        registerField: jest.fn()
+        registerField: jest.fn(),
+
       },
       openSnackbar: false,
       snackbarMessage: '',

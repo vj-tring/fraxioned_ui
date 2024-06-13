@@ -1,11 +1,10 @@
 import React from 'react';
+
 import { render, screen, fireEvent} from '@testing-library/react';
 import SendInvite from './SendInvite';
 import '@testing-library/jest-dom';
 import axios from 'axios';
 import useSendInviteHandler from './SendInviteApiHandler';
-
-
 
 jest.mock('axios');
 jest.mock('./SendInviteApiHandler');
@@ -130,3 +129,4 @@ describe('SendInvite Component', () => {
     expect(mockHandleSubmit).toHaveBeenCalled();
   });
 });
+

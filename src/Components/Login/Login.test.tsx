@@ -1,17 +1,22 @@
-import React from 'react'; // Add this import
-import { render, fireEvent, screen, waitFor } from '@testing-library/react';
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import Login from './Login';
-import '@testing-library/jest-dom'
 import useLoginHandler from './LoginApiHandler';
-
+import '@testing-library/jest-dom';
 jest.mock('./LoginApiHandler');
 
+
+
 const mockedUseLoginHandler = useLoginHandler as jest.MockedFunction<typeof useLoginHandler>;
+
 
 describe('Login Component', () => {
     beforeEach(() => {
         mockedUseLoginHandler.mockReturnValue({
             formik: {
+            
+
                 initialValues: { email: '', password: '' },
                 initialErrors: {},
                 initialTouched: {},
@@ -61,6 +66,22 @@ describe('Login Component', () => {
         jest.clearAllMocks();
     });
 
+    test('renders login form', () => {
+        render(
+            <Router>
+                <Login />
+            </Router>
+        );
+
+        expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
+        expect(screen.getByPlaceholderText('Password')).toBeInTheDocument();
+        expect(screen.getByText('Submit')).toBeInTheDocument();
+    });
+
+    test('shows validation errors on form submit', async () => {
+        const handleSubmit = jest.fn((e) => e?.preventDefault());
+
+
     test('renders Login component', () => {
         render(<Login />);
         expect(screen.getByText('Login')).toBeInTheDocument();
@@ -84,6 +105,32 @@ describe('Login Component', () => {
             ...mockedUseLoginHandler(),
             formik: {
                 ...mockedUseLoginHandler().formik,
+                handleSubmit,
+                touched: { email: true, password: true },
+                errors: { email: 'Invalid email address', password: 'Password must be 8 characters or longer' },
+            },
+        });
+
+        render(
+            <Router>
+                <Login />
+            </Router>
+        );
+
+        fireEvent.submit(screen.getByRole('button', { name: /submit/i }));
+
+        await waitFor(() => {
+            expect(screen.getByText('Invalid email address')).toBeInTheDocument();
+        });
+
+        await waitFor(() => {
+            expect(screen.getByText('Password must be 8 characters or longer')).toBeInTheDocument();
+        });
+
+        expect(handleSubmit).toHaveBeenCalled();
+    });
+
+    test('displays snackbar on successful login', async () => {
                 touched: { email: true, password: false },
                 errors: { email: 'Email is required', password: '' },
             }
@@ -101,6 +148,49 @@ describe('Login Component', () => {
             ...mockedUseLoginHandler(),
             formik: {
                 ...mockedUseLoginHandler().formik,
+                handleSubmit: jest.fn((e) => e?.preventDefault()),
+            },
+            openSnackbar: true,
+            snackbarMessage: 'Login successful!',
+            snackbarSeverity: 'success',
+            handleSnackbarClose: jest.fn(),
+        });
+
+        render(
+            <Router>
+                <Login />
+            </Router>
+        );
+
+        await waitFor(() => {
+            expect(screen.getByText('Login successful!')).toBeInTheDocument();
+        });
+    });
+
+    test('displays snackbar on login failure', async () => {
+        mockedUseLoginHandler.mockReturnValueOnce({
+            ...mockedUseLoginHandler(),
+            formik: {
+                ...mockedUseLoginHandler().formik,
+                handleSubmit: jest.fn((e) => e?.preventDefault()),
+            },
+            openSnackbar: true,
+            snackbarMessage: 'Invalid Credentials!',
+            snackbarSeverity: 'error',
+            handleSnackbarClose: jest.fn(),
+        });
+
+        render(
+            <Router>
+                <Login />
+            </Router>
+        );
+
+        await waitFor(() => {
+            expect(screen.getByText('Invalid Credentials!')).toBeInTheDocument();
+        });
+    });
+});
                 touched: { email: false, password: true },
                 errors: { email: '', password: 'Password is required' },
             }

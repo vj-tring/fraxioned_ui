@@ -1,8 +1,8 @@
-// src/types/contact.ts
+// src/Components/Types/contact.ts
 export interface ContactMessagePayload {
-    name: string;
-    subject: string;
-    message: string;
-    invitedBy: string;
-  }
-  
+  userId:number;
+  name: string;
+  email: string; // Add this property
+  message: string;
+}
+
