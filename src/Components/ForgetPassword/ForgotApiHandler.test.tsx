@@ -53,6 +53,5 @@ describe('useForgotHandler', () => {
     expect(result.current.openSnackbar).toBe(true);
     expect(result.current.snackbarMessage).toBe('Error sending password reset email!');
     expect(result.current.snackbarSeverity).toBe('error');
-    // You may add more assertions related to handling of errors
   });
 });
