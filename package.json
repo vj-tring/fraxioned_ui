@@ -8,7 +8,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.97",
-    "@types/react": "^18.3.3",
+    "@types/react": "^17.0.80",
     "@types/react-dom": "^18.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -42,6 +42,16 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.3.0",
+<<<<<<< Updated upstream
+=======
+    "@testing-library/jest-dom": "^6.4.6",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/react-hooks": "^8.0.1",
+    "@types/jest": "^29.5.12",
+    "@types/testing-library__react-hooks": "^4.0.0",
+    "babel-jest": "^29.7.0",
+    "cross-env": "^7.0.3",
+>>>>>>> Stashed changes
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.2",
     "globals": "^15.3.0",
