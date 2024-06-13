@@ -9,6 +9,7 @@ const Home: React.FC = () => {
     
     <div className="home-content">
      
+
       <Card className="home-card">
         <h1 className="welcome-owner">WELCOME OWNER!</h1>
       <h2 className="your-homes">YOUR HOMES</h2>

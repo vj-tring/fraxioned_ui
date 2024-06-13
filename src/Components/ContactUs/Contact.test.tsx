@@ -4,6 +4,10 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import axios from 'axios';
 import Contact from './Contact';
 
+
+import { PortURL } from '../config';
+import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
+
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 

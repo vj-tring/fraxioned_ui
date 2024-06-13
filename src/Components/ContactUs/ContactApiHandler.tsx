@@ -5,11 +5,14 @@ export const handleSubmit = async (
   event: React.FormEvent<HTMLFormElement>,
   name: string,
   email: string,
+
+  subject: string,
   message: string,
   setSnackbarMessage: (message: string) => void,
   setOpenSnackbar: (isOpen: boolean) => void,
   setName: (name: string) => void,
   setemail: (email: string) => void,
+  setSubject: (subject: string) => void,
   setMessage: (message: string) => void
 ) => {
   event.preventDefault();
@@ -26,6 +29,19 @@ export const handleSubmit = async (
       setOpenSnackbar(true);
       setName('');
       setemail('');
+
+      const invitedBy = userObject.email;
+      console.log("userEmail", invitedBy);
+      const payload: ContactMessagePayload = { name, subject, message, invitedBy };
+      await sendContactMessage(payload);
+
+
+
+
+      setSnackbarMessage('Message sent successfully!');
+      setOpenSnackbar(true);
+      setName('');
+      setSubject('');
       setMessage('');
     }
   } catch (error) {

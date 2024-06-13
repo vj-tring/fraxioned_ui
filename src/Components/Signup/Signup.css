@@ -1,0 +1,61 @@
+/* Signup.css */
+
+.container {
+  max-width: 500px;
+  margin: 100px auto; 
+}
+
+.signup-box {
+  width: 600px ; 
+  margin: 0 auto; /* add this line to center the signup box */
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  height: 675px ;
+  margin-bottom: 50px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.text-danger {
+  color: #dc3545;
+  font-size:xx-small;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.signup-box input {
+  width: 100%;
+  padding: 10px;
+  /* margin-bottom: 20px; */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.signup-box input:focus {
+  border-color: #aaa;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.signup-box button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #df9526;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.signup-box button[type="submit"]:hover {
+  background-color: #e48f10;
+}
+.backlogin{
+  display: flex;
+   justify-content: center;
+   color: blue;
+}

@@ -1,5 +1,4 @@
 
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -27,6 +26,7 @@ const useResetHandler = () => {
       try {
         const response = await resetPassword(values);
         //  await resetPassword(values);
+        // const response = await resetPassword(values);
         setSnackbarMessage('Password reset successfully!');
         setSnackbarSeverity('success');
         setOpenSnackbar(true);

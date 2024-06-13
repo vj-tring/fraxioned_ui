@@ -3,4 +3,3 @@
       newPassword: string;
       confirmPassword: string;
     }
-    

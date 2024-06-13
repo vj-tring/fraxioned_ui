@@ -5,3 +5,4 @@ export interface ContactMessagePayload {
   email: string; // Add this property
   message: string;
 }
+

@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+
+import { render, screen, fireEvent} from '@testing-library/react';
 import SendInvite from './SendInvite';
 import '@testing-library/jest-dom';
 import axios from 'axios';
@@ -128,3 +129,4 @@ describe('SendInvite Component', () => {
     expect(mockHandleSubmit).toHaveBeenCalled();
   });
 });
+
