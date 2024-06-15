@@ -31,7 +31,7 @@ const useResetHandler = () => {
         setSnackbarSeverity('success');
         setOpenSnackbar(true);
         // Navigate to dashboard on success
-        navigate('/dashboard');
+        navigate('/login');
       } catch (error) {
         setSnackbarMessage('Error resetting password!');
         setSnackbarSeverity('error');

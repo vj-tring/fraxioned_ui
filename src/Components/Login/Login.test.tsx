@@ -1,68 +1,36 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Login from './Login';
 import useLoginHandler from './LoginApiHandler';
-import '@testing-library/jest-dom';
 
+// Mock the useLoginHandler hook
 jest.mock('./LoginApiHandler');
 
-const mockedUseLoginHandler = useLoginHandler as jest.MockedFunction<typeof useLoginHandler>;
+const mockedUseLoginHandler = useLoginHandler as jest.Mock;
 
 describe('Login Component', () => {
+    const mockFormik = {
+        handleSubmit: jest.fn((e) => e.preventDefault()),
+        handleChange: jest.fn(),
+        handleBlur: jest.fn(),
+        values: { email: '', password: '' },
+        touched: { email: false, password: false },
+        errors: { email: '', password: '' },
+    };
+
     beforeEach(() => {
         mockedUseLoginHandler.mockReturnValue({
-            formik: {
-                initialValues: { email: '', password: '' },
-                initialErrors: {},
-                initialTouched: {},
-                initialStatus: null,
-                handleSubmit: jest.fn(),
-                handleChange: jest.fn(),
-                handleBlur: jest.fn(),
-                touched: { email: false, password: false },
-                errors: { email: '', password: '' },
-                values: { email: '', password: '' },
-                isSubmitting: false,
-                isValidating: false,
-                isValid: true,
-                dirty: false,
-                validateOnBlur: true,
-                validateOnChange: true,
-                validateOnMount: false,
-                submitForm: jest.fn(),
-                resetForm: jest.fn(),
-                setErrors: jest.fn(),
-                setFieldError: jest.fn(),
-                setFieldTouched: jest.fn(),
-                setFieldValue: jest.fn(),
-                setFormikState: jest.fn(),
-                setStatus: jest.fn(),
-                setSubmitting: jest.fn(),
-                setTouched: jest.fn(),
-                setValues: jest.fn(),
-                submitCount: 0,
-                validateField: jest.fn(),
-                validateForm: jest.fn(),
-                getFieldMeta: jest.fn(),
-                getFieldHelpers: jest.fn(),
-                getFieldProps: jest.fn(),
-                handleReset: jest.fn(),
-                unregisterField: jest.fn(),
-                registerField: jest.fn()
-            },
+            formik: mockFormik,
             openSnackbar: false,
             snackbarMessage: '',
-            snackbarSeverity: 'success',
+            snackbarSeverity: 'info',
             handleSnackbarClose: jest.fn(),
         });
     });
 
-    afterEach(() => {
-        jest.clearAllMocks();
-    });
-
-    test('renders login form', () => {
+    test('renders the login form', () => {
         render(
             <Router>
                 <Login />
@@ -71,21 +39,12 @@ describe('Login Component', () => {
 
         expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
         expect(screen.getByPlaceholderText('Password')).toBeInTheDocument();
-        expect(screen.getByText('Submit')).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
     });
 
-    test('shows validation errors on form submit', async () => {
-        const handleSubmit = jest.fn((e) => e?.preventDefault());
-        
-        mockedUseLoginHandler.mockReturnValueOnce({
-            ...mockedUseLoginHandler(),
-            formik: {
-                ...mockedUseLoginHandler().formik,
-                handleSubmit,
-                touched: { email: true, password: true },
-                errors: { email: 'Invalid email address', password: 'Password must be 8 characters or longer' },
-            },
-        });
+    test('shows validation errors', () => {
+        mockFormik.touched = { email: true, password: true };
+        mockFormik.errors = { email: 'Invalid email', password: 'Invalid password' };
 
         render(
             <Router>
@@ -93,71 +52,26 @@ describe('Login Component', () => {
             </Router>
         );
 
-        fireEvent.submit(screen.getByRole('button', { name: /submit/i }));
-
-        await waitFor(() => {
-            expect(screen.getByText('Invalid email address')).toBeInTheDocument();
-            expect(screen.getByText('Password must be 8 characters or longer')).toBeInTheDocument();
-        });
-
-        expect(handleSubmit).toHaveBeenCalled();
+        expect(screen.getByText('Invalid email')).toBeInTheDocument();
+        expect(screen.getByText('Invalid password')).toBeInTheDocument();
     });
 
-    test('displays email validation error on blur', async () => {
-        mockedUseLoginHandler.mockReturnValueOnce({
-            ...mockedUseLoginHandler(),
-            formik: {
-                ...mockedUseLoginHandler().formik,
-                touched: { email: true, password: false },
-                errors: { email: 'Email is required', password: '' },
-            }
-        });
-
+    test('calls formik handleSubmit on form submission', () => {
         render(
             <Router>
                 <Login />
             </Router>
         );
 
-        fireEvent.blur(screen.getByPlaceholderText('Email'));
-
-        await waitFor(() => {
-            expect(screen.getByText('Email is required')).toBeInTheDocument();
-        });
+        fireEvent.click(screen.getByRole('button', { name: /submit/i }));
+        expect(mockFormik.handleSubmit).toHaveBeenCalled();
     });
 
-    test('displays password validation error on blur', async () => {
+    test('shows snackbar with message', () => {
         mockedUseLoginHandler.mockReturnValueOnce({
-            ...mockedUseLoginHandler(),
-            formik: {
-                ...mockedUseLoginHandler().formik,
-                touched: { email: false, password: true },
-                errors: { email: '', password: 'Password is required' },
-            }
-        });
-
-        render(
-            <Router>
-                <Login />
-            </Router>
-        );
-
-        fireEvent.blur(screen.getByPlaceholderText('Password'));
-
-        await waitFor(() => {
-            expect(screen.getByText('Password is required')).toBeInTheDocument();
-        });
-    });
-
-    test('displays snackbar on successful login', async () => {
-        mockedUseLoginHandler.mockReturnValueOnce({
-            ...mockedUseLoginHandler(),
-            formik: {
-                ...mockedUseLoginHandler().formik,
-                handleSubmit: jest.fn((e) => e?.preventDefault()),
-            },
+            formik: mockFormik,
             openSnackbar: true,
-            snackbarMessage: 'Login successful!',
+            snackbarMessage: 'Login successful',
             snackbarSeverity: 'success',
             handleSnackbarClose: jest.fn(),
         });
@@ -168,21 +82,31 @@ describe('Login Component', () => {
             </Router>
         );
 
-        await waitFor(() => {
-            expect(screen.getByText('Login successful!')).toBeInTheDocument();
-        });
+        expect(screen.getByText('Login successful')).toBeInTheDocument();
     });
 
-    test('displays snackbar on login failure', async () => {
+    test('navigates to forgot password page', () => {
+        render(
+            <Router>
+                <Login />
+            </Router>
+        );
+
+        fireEvent.click(screen.getByText('Forgot Password?'));
+        expect(window.location.pathname).toBe('/forgot-password');
+    });
+
+    test('handles form submission with API', async () => {
+        const mockSubmit = jest.fn((e) => e.preventDefault());
         mockedUseLoginHandler.mockReturnValueOnce({
-            ...mockedUseLoginHandler(),
             formik: {
-                ...mockedUseLoginHandler().formik,
-                handleSubmit: jest.fn((e) => e?.preventDefault()),
+                ...mockFormik,
+                handleSubmit: mockSubmit,
+                values: { email: 'test@example.com', password: 'password' },
             },
             openSnackbar: true,
-            snackbarMessage: 'Invalid Credentials!',
-            snackbarSeverity: 'error',
+            snackbarMessage: 'Login successful',
+            snackbarSeverity: 'success',
             handleSnackbarClose: jest.fn(),
         });
 
@@ -192,25 +116,19 @@ describe('Login Component', () => {
             </Router>
         );
 
+        fireEvent.change(screen.getByPlaceholderText('Email'), {
+            target: { value: 'test@example.com' },
+        });
+        fireEvent.change(screen.getByPlaceholderText('Password'), {
+            target: { value: 'password' },
+        });
+        fireEvent.click(screen.getByRole('button', { name: /submit/i }));
+
         await waitFor(() => {
-            expect(screen.getByText('Invalid Credentials!')).toBeInTheDocument();
+            expect(mockSubmit).toHaveBeenCalled();    
         });
-    });
-
-    test('renders Snackbar when openSnackbar is true', () => {
-        mockedUseLoginHandler.mockReturnValueOnce({
-            ...mockedUseLoginHandler(),
-            openSnackbar: true,
-            snackbarMessage: 'Test Message',
-            snackbarSeverity: 'error',
-        });
-
-        render(
-            <Router>
-                <Login />
-            </Router>
-        );
-
-        expect(screen.getByText('Test Message')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText('Login successful')).toBeInTheDocument();
+        })
     });
 });

@@ -14,7 +14,8 @@ module.exports = {
   },
   transformIgnorePatterns: [
     "node_modules/(?!(axios|react|react-dom|bootstrap)/)",
-    "\\.css$" 
+    "\\.css$", 
+    "assets"
   ],
   moduleNameMapper: {
     '\\.(css|less|scss)$': 'identity-obj-proxy',

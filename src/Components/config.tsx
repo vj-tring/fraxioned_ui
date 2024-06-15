@@ -1,1 +1,1 @@
-export const PortURL = 'http://192.168.1.225:3001/api';
+export const PortURL = 'http://localhost:3001/api';
