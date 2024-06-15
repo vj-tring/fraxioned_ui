@@ -7,10 +7,7 @@ import MuiAccordionSummary, {
 } from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
-import CustomNavbar from '../Navbar/Navbar';
-import fraxionedLogo from '../../assets/Fraxioned.png';
 
-import userImage from '../../assets/profile.jpeg';
 import "./CustomizedAccordions.css";
 const Accordion = styled((props: AccordionProps) => (
   <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -56,22 +53,10 @@ export default function CustomizedAccordions() {
     (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
       setExpanded(newExpanded ? panel : false);
     };
-    const links = [ 
-        { name: 'HOME', href: '/dashboard' },
-        { name: 'BOOKING', href: 'https://www.airbnb.co.in/' },
-        { name: 'PEAK SEASON', href: '/services' },
-        { name: 'PAYEMENTS', href: 'https://payments.google.com/gp/w/home/paymentmethods?sctid=1592381138486457' },
-        { name: 'FAQ', href: '/FAQ' },
-      ];
+  
   return (
     <div>
    
-   <CustomNavbar
-          logo={fraxionedLogo}
-          links={links}
-          userImage={userImage}
-          userName="John Doe"
-        />
 
        <Accordion  className="drilldown" expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
         <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">

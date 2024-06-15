@@ -8,6 +8,8 @@ import Dashboard from './Components/Dashboard/Dashboard';
 import Contact from './Components/ContactUs/Contact';
 import SendInvite from './Components/SendInvite/SendInvite';
 import CustomizedAccordions from './Components/CustomizedAccordions/CustomizedAccordions';
+import Home from './Components/Home/Home';
+import UserDetails from './Components/UserDetails/UserDetails';
 
 const App: React.FC = () => {
   return (
@@ -17,11 +19,10 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Signup />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/Reset-password" element={<ResetPassword />} />      
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/send-invite" element={<SendInvite />} />
-        <Route path="/FAQ" element={<CustomizedAccordions />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        {/* <Route path="/user-details" element={<UserDetails/>} /> */}
+
+        <Route path="/dashboard/*" element={<Dashboard />} />
       </Routes>
     </Router>
   );

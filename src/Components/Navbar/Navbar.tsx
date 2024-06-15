@@ -3,21 +3,22 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import InviteModal from './InviteModal';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
-import UserDetailsModal from './UserDetailsModal';
-import './Navbar.css';
 import useNavbarHandler from "./useNavbarHandler";
+import './Navbar.css';
 
 interface CustomNavbarProps {
   logo: string;
   links: { name: string; href: string; onClick?: () => void }[];
   userImage?: string;
   userName: string;
+  onUserImageClick?: () => void; // Add onUserImageClick prop
 }
 
-const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, userName }) => {
+const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, userName, onUserImageClick }) => {
   const {
     showInviteModal,
     showLogoutModal,
@@ -70,8 +71,8 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
               height="30"
               className="mr-2 responsive-image"
               alt="User"
-              onClick={handleShowUserDetailsModal}
               style={{ cursor: 'pointer' }}
+              onClick={onUserImageClick} // Add onClick event handler to the user image
             />
           )}
           <Dropdown>
@@ -96,12 +97,6 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
         message="Are you sure you want to log out?"
         confirmLabel="Logout"
         cancelLabel="Cancel"
-      />
-      <UserDetailsModal 
-        show={showUserDetailsModal} 
-        onHide={handleCloseUserDetailsModal} 
-        userImage={userImage} 
-        userDetails={userDetails} 
       />
     </>
   );

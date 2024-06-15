@@ -1,69 +1,74 @@
-.sendBtn {
-  background-color: #fbc676 !important;
-  color: white;
-}
+/* Contact.css */
 
-.sendBtn:hover {
-  background-color: #fbc676 !important;
-  color: white;
-}
-
-.container1 {
-  padding: 40px;
-  align-content: center;
-  /* box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px; */
-}
-
-.orange-border {
-  border: 3px solid #fbcc76;
-}
-
-.form-label1 {
-  display: block;
-  height: 60px;
-  text-align: center;
-  background-color: #fbcc76;
-  padding: 16px;
-  color: white;
-}
-
-.orange-border::placeholder {
-  color: #fbcc76;
-}
-
-.form-control, .form-label {
-  width: 100%;
-  border-radius: 0;
-}
-
-.contacttext {
-  text-align: justify;
-  color: #045367;
-  font-size: larger;
-  margin: 0 auto; 
-}
-
-.TFW {
-  color: #045367;
-}
-
-.HT {
-  color: #045367;
-  font-weight: bold;
-  text-align: center;
- 
-}
-
-.leftside {
-  padding-left: 70px;
-  padding-right: 70px;
-}
-
-.box {
-  height: 200px;
-}
-
-.textarea{
+.contact-container {
   display: flex;
+  flex-direction: row;
+  padding: 20px;
+}
+
+.contact-left {
+  background-color: #f9f9f9;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  text-align: center;
+}
+
+.contact-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contact-icon {
+  color: #00aaff;
+}
+
+.contact-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.contact-text {
+  font-size: 16px;
+  margin: 20px 0;
+}
+
+.contact-thanks {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 30px;
+}
+
+.contact-right {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.contact-form-group {
+  margin-bottom: 20px;
+}
+
+.contact-form-label {
+  font-size: 18px;
+  color: #ffaa00;
+}
+
+.contact-form-control {
+  border: 2px solid #ffaa00;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.contact-send-btn {
+  background-color: #ffaa00;
+  color: #fff;
+  font-size: 16px;
+  padding: 10px 20px;
+  border: none;
 }

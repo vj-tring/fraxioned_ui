@@ -34,5 +34,29 @@
   
   }
   
+  .dashboard-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
   
+  .content-container {
+    flex: 1;
+    padding-top: 60px; /* Adjust based on your navbar height */
+    overflow-y: auto;
+  }
   
+  /* CustomNavbar styles if needed */
+  .custom-navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+  
+  .user-image {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-left: 10px;
+  }

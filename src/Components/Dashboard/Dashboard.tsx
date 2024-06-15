@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Routes } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import CustomNavbar from '../Navbar/Navbar';
-import ContactModal from '../ContactModal/ContactModal';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import fraxionedLogo from '../../assets/Fraxioned.png';
 import Footer from '../../Footer/Footer';
 import userImage from '../../assets/profile.jpeg';
 import './Dashboard.css';
 import Home from '../Home/Home';
+import CustomizedAccordions from '../CustomizedAccordions/CustomizedAccordions';
+import Contact from '../ContactUs/Contact';
+import UserDetails from '../UserDetails/UserDetails';
 
 const Dashboard: React.FC = () => {
-  const [show, setShow] = useState(false);
   const [userEmail, setUserEmail] = useState('');
+  const navigate = useNavigate(); // Hook for programmatic navigation
 
   useEffect(() => {
     const storedUserData = localStorage.getItem('userData');
@@ -22,16 +24,15 @@ const Dashboard: React.FC = () => {
       }
     }
   }, []);
-   
-  const handleClose = () => setShow(false);
-  // const handleShow = () => setShow(true);
 
-  const links = [ 
+  const links = [
     { name: 'HOME', href: '/dashboard' },
-    { name: 'BOOKING', href: 'https://www.airbnb.co.in/' },
-    { name: 'PEAK SEASON', href: '/services' },
-    { name: 'PAYEMENTS', href: 'https://payments.google.com/gp/w/home/paymentmethods?sctid=1592381138486457' },
-    { name: 'FAQ', href: '/FAQ' },
+    { name: 'BOOKING', href: '/dashboard/booking' },
+    { name: 'PEAK SEASON', href: '/dashboard/services' },
+    { name: 'PAYEMENTS', href: '/dashboard/payements' },
+    { name: 'FAQ', href: '/dashboard/FAQ' },
+    { name: 'CONTACT', href: '/dashboard/contact' },
+
   ];
 
   return (
@@ -41,18 +42,23 @@ const Dashboard: React.FC = () => {
         links={links}
         userImage={userImage}
         userName={userEmail}
+        onUserImageClick={() => navigate('/dashboard/user-details')} // Directly navigate to user details page
+
       />
 
-      <Routes />
-      
+      <div className="content-container">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="FAQ" element={<CustomizedAccordions />} />
+          <Route path="contact" element={<Contact />} />
+          <Route path="user-details" element={<UserDetails />} />
 
-      <Home />
-      
-      <ContactModal show={show} handleClose={handleClose} />
+        </Routes>
+      </div>
+
       <Footer />
     </div>
   );
 };
-
 
 export default Dashboard;

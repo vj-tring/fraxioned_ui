@@ -11,7 +11,7 @@ import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
 
 const Contact: React.FC = () => {
   const [name, setName] = useState('');
-  const [email, setEmail] = useState(''); // Added email state
+  const [email, setEmail] = useState('');
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -22,65 +22,65 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <div className="container1">
+    <div className="contact-container">
       <Row>
-        <Col md={6} className="leftside">
-          <div className="d-flex flex-column mb-3 textarea">
-            <FaMapMarkerAlt size={60} className="me-2 mb-4" />
-            <h2 className="HT">HI THERE!</h2>
+        <Col md={6} className="contact-left">
+          <div className="contact-header">
+            <FaMapMarkerAlt size={60} className="contact-icon" />
+            <h2 className="contact-title">HI THERE!</h2>
           </div>
-          <p className="contacttext mb-5">
-            The Owner services team at Fraxioned is here to help! Please use this form to send us an email. I'll get back to you as soon as possible.
+          <p className="contact-text">
+            The Owner Services team at Fraxioned is here to help! Please use this form to send us an email, and I’ll get back to you as soon as possible.
           </p>
-          <h5 className="mt-4 TFW">
+          <h5 className="contact-thanks">
             THANKS FOR REACHING OUT!
           </h5>
         </Col>
-        <Col md={6}>
+        <Col md={6} className="contact-right">
           <Form onSubmit={(event) => handleSubmit(event, name, email, subject, message, setSnackbarMessage, setOpenSnackbar, setName, setEmail, setSubject, setMessage)}>
-            <Form.Group controlId="formLabel">
-              <Form.Label className="form-label1 mt-5">
+            <Form.Group controlId="formLabel" className="contact-form-group">
+              <Form.Label className="contact-form-label">
                 EMAILING OWNERS@FRAXIONED.COM
               </Form.Label>
             </Form.Group>
-            <Form.Group controlId="formName" className="mt-3">
+            <Form.Group controlId="formName" className="contact-form-group">
               <Form.Control
                 type="text"
-                placeholder="Enter your name"
-                className="orange-border"
+                placeholder="NAME"
+                className="contact-form-control"
                 value={name}
                 onChange={(event) => setName(event.target.value)}
               />
             </Form.Group>
-            <Form.Group controlId="formEmail" className="mt-3"> {/* Added email input */}
-              <Form.Control
-                type="email"
-                placeholder="Enter your email"
-                className="orange-border"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-              />
-            </Form.Group>
-            <Form.Group controlId="formSubject" className="mt-3">
+            <Form.Group controlId="formSubject" className="contact-form-group">
               <Form.Control
                 type="text"
-                placeholder="Enter the subject"
-                className="orange-border"
+                placeholder="SUBJECT"
+                className="contact-form-control"
                 value={subject}
                 onChange={(event) => setSubject(event.target.value)}
               />
             </Form.Group>
-            <Form.Group controlId="formMessage" className="mt-3">
+            <Form.Group controlId="formEmail" className="contact-form-group">
+              <Form.Control
+                type="email"
+                placeholder="EMAIL"
+                className="contact-form-control"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+              />
+            </Form.Group>
+            <Form.Group controlId="formMessage" className="contact-form-group">
               <Form.Control
                 as="textarea"
                 rows={4}
                 placeholder="Enter your message"
-                className="orange-border"
+                className="contact-form-control"
                 value={message}
                 onChange={(event) => setMessage(event.target.value)}
               />
             </Form.Group>
-            <Button variant="outline-light" type="submit" className="mt-3 sendBtn" style={{ backgroundColor: 'orange' }}>
+            <Button variant="outline-light" type="submit" className="contact-send-btn">
               SEND
             </Button>
           </Form>
