@@ -19,7 +19,7 @@ describe('sendContactMessage', () => {
     const response = await sendContactMessage(payload);
 
     expect(axios.post).toHaveBeenCalledTimes(1);
-    expect(axios.post).toHaveBeenCalledWith('http://192.168.1.225:3001/api/contact-us', payload);
+    expect(axios.post).toHaveBeenCalledWith('http://localhost:3001/api/contact-us', payload);
     expect(response).toBe('mock response');
   });
 
