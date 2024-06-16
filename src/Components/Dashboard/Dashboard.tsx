@@ -13,7 +13,7 @@ import UserDetails from '../UserDetails/UserDetails';
 
 const Dashboard: React.FC = () => {
   const [userEmail, setUserEmail] = useState('');
-  const navigate = useNavigate(); // Hook for programmatic navigation
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const storedUserData = localStorage.getItem('userData');
@@ -26,13 +26,12 @@ const Dashboard: React.FC = () => {
   }, []);
 
   const links = [
-    { name: 'HOME', href: '/dashboard' },
-    { name: 'BOOKING', href: '/dashboard/booking' },
-    { name: 'PEAK SEASON', href: '/dashboard/services' },
-    { name: 'PAYEMENTS', href: '/dashboard/payements' },
-    { name: 'FAQ', href: '/dashboard/FAQ' },
-    { name: 'CONTACT', href: '/dashboard/contact' },
-
+    { name: 'HOME', href: '/dashboard', disabled: false },
+    { name: 'BOOKING', href: '/dashboard/booking', disabled: true },
+    { name: 'PEAK SEASON', href: '/dashboard/services', disabled: true },
+    { name: 'PAYEMENTS', href: '/dashboard/payements', disabled: true },
+    { name: 'FAQ', href: '/dashboard/FAQ', disabled: false },
+    { name: 'CONTACT', href: '/dashboard/contact', disabled: false },
   ];
 
   return (
@@ -46,14 +45,15 @@ const Dashboard: React.FC = () => {
 
       />
 
-      <div className="content-container">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="FAQ" element={<CustomizedAccordions />} />
-          <Route path="contact" element={<Contact />} />
-          <Route path="user-details" element={<UserDetails />} />
-
-        </Routes>
+     <div className="content-container">
+        <div className="content-wrapper"> {/* Add a wrapper for content */}
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="FAQ" element={<CustomizedAccordions />} />
+            <Route path="contact" element={<Contact />} />
+            <Route path="user-details" element={<UserDetails />} />
+          </Routes>
+        </div>
       </div>
 
       <Footer />

@@ -4,8 +4,8 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { FaMapMarkerAlt } from 'react-icons/fa';
 import { handleSubmit } from './ContactApiHandler';
+import fraxionedIcon from '../../assets/Fraxioned-icon.png'; 
 import './Contact.css';
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
 
@@ -26,8 +26,8 @@ const Contact: React.FC = () => {
       <Row>
         <Col md={6} className="contact-left">
           <div className="contact-header">
-            <FaMapMarkerAlt size={60} className="contact-icon" />
-            <h2 className="contact-title">HI THERE!</h2>
+          <img className='contact-icon' src={fraxionedIcon} alt="Icon" />
+          <h2 className="contact-title">HI THERE!</h2>
           </div>
           <p className="contact-text">
             The Owner Services team at Fraxioned is here to help! Please use this form to send us an email, and I’ll get back to you as soon as possible.
@@ -61,7 +61,7 @@ const Contact: React.FC = () => {
                 onChange={(event) => setSubject(event.target.value)}
               />
             </Form.Group>
-            <Form.Group controlId="formEmail" className="contact-form-group">
+            {/* <Form.Group controlId="formEmail" className="contact-form-group">
               <Form.Control
                 type="email"
                 placeholder="EMAIL"
@@ -69,7 +69,7 @@ const Contact: React.FC = () => {
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
               />
-            </Form.Group>
+            </Form.Group> */}
             <Form.Group controlId="formMessage" className="contact-form-group">
               <Form.Control
                 as="textarea"

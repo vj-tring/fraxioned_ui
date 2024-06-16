@@ -12,7 +12,9 @@ import './Navbar.css';
 
 interface CustomNavbarProps {
   logo: string;
-  links: { name: string; href: string; onClick?: () => void }[];
+  links: {
+    disabled: boolean | undefined; name: string; href: string; onClick?: () => void 
+}[];
   userImage?: string;
   userName: string;
   onUserImageClick?: () => void; // Add onUserImageClick prop
@@ -57,7 +59,13 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
             {links.map((link, index) => (
-              <Nav.Link key={index} href={link.href} onClick={link.onClick} className="nav-link-with-margin">
+              <Nav.Link
+                key={index}
+                href={link.href}
+                onClick={link.onClick}
+                className="nav-link-with-margin"
+                disabled={link.disabled} // Add disabled attribute
+              >
                 {link.name}
               </Nav.Link>
             ))}

@@ -6,12 +6,11 @@ import CustomNavbar from './Navbar';
 
 describe('CustomNavbar', () => {
   const logo = 'logo.png';
-  const links = [
-    { name: 'Home', href: '/home' },
-    { name: 'Profile', href: '/profile' },
-  ];
+const links = [
+  { disabled: undefined, name: 'Home', href: '/home' },
+  { disabled: undefined, name: 'Profile', href: '/profile' },
+];
   const userName = 'John Doe';
-
   test('renders CustomNavbar with logo, links, and user info', () => {
     render(
       <Router>
