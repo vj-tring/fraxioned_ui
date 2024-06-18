@@ -5,7 +5,7 @@ import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars'
 import './Login.css'
 import useLoginHandler from './LoginApiHandler'
 import { Link } from 'react-router-dom';
-
+import ResponsiveAppBar from '../NavbarMUI/NavbarUI'
 const Login: React.FC = () => {
     const {
         formik,
@@ -16,13 +16,18 @@ const Login: React.FC = () => {
     } = useLoginHandler()
 
     return (
-        <div className="container d-flex justify-content-center flex-column align-items-center vh-100">
+        
+        <div className=" d-flex justify-content-center flex-column align-items-center ">
+            
+          <ResponsiveAppBar/>
+
             <CustomizedSnackbars
                 open={openSnackbar}
                 handleClose={handleSnackbarClose}
                 message={snackbarMessage}
                 severity={snackbarSeverity}
             />
+
             <div className="login-box shadow p-4 bg-white rounded">
                 <h2 className="text-center mb-5">Login</h2>
                 <form onSubmit={formik.handleSubmit}>

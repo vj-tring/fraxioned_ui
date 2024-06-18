@@ -4,6 +4,7 @@ import './ForgotPassword.css';
 import { Button } from '@mui/material';
 import useForgotHandler from './ForgotApiHandler';
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
+import ResponsiveAppBar from '../NavbarMUI/NavbarUI'
 
 
 const ForgotPassword: React.FC = () => {
@@ -17,8 +18,11 @@ const ForgotPassword: React.FC = () => {
 
 
   return (
-    <div className="container d-flex justify-content-center align-items-center vh-100">
-       <CustomizedSnackbars
+    <div className=" d-flex flex-column justify-content-center align-items-center ">
+
+<ResponsiveAppBar/>
+
+<CustomizedSnackbars
                 open={openSnackbar}
                 handleClose={handleSnackbarClose}
                 message={snackbarMessage}

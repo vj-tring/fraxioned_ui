@@ -4,6 +4,8 @@ import './ResetPassword.css';
 import { Button } from '@mui/material';
 import useResetHandler from './ResetApiHandler';
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
+import ResponsiveAppBar from '../NavbarMUI/NavbarUI'
+
 const ResetPassword: React.FC = () => {
   const {
     formik,
@@ -16,7 +18,9 @@ const ResetPassword: React.FC = () => {
 
 
   return (
-    <div className="container d-flex justify-content-center align-items-center vh-100">
+    <div className=" d-flex  flex-column justify-content-center align-items-center ">
+                <ResponsiveAppBar/>
+
        <CustomizedSnackbars
         open={openSnackbar}
         handleClose={handleSnackbarClose}
@@ -24,7 +28,7 @@ const ResetPassword: React.FC = () => {
         severity={snackbarSeverity}
       />
       
-      <div className="reset shadow p-4 mt-3 bg-white rounded">
+      <div className="reset shadow p-4  bg-white rounded">
         <h2 className="text-center mb-5">Reset Password</h2>
         <form onSubmit={formik.handleSubmit}>
           <div className="form-group position-relative mb-5 ">

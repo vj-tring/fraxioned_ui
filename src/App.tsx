@@ -5,6 +5,7 @@ import Signup from './Components/Signup/Signup';
 import ForgotPassword from './Components/ForgetPassword/ForgotPassword';
 import ResetPassword from './Components/ResetPassword/ResetPassword';
 import Dashboard from './Components/Dashboard/Dashboard';
+import ResponsiveAppBar from './Components/NavbarMUI/NavbarUI';
 
 
 const App: React.FC = () => {
@@ -17,6 +18,9 @@ const App: React.FC = () => {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         {/* <Route path="/user-details" element={<UserDetails/>} /> */}
+        
+
+        <Route path="/ResponsiveAppBar" element={<ResponsiveAppBar />} />
 
         <Route path="/dashboard/*" element={<Dashboard />} />
       </Routes>

@@ -3,7 +3,7 @@ import { Button } from '@mui/material';
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
 import useSignupHandler from './SignupApiHandler';
 import './Signup.css';
-
+import ResponsiveAppBar from '../NavbarMUI/NavbarUI';
 const Signup: React.FC = () => {
   const {
     formik,
@@ -14,13 +14,14 @@ const Signup: React.FC = () => {
   } = useSignupHandler();
 
   return (
-    <div className="container d-flex justify-content-center align-items-center vh-100">
+    <div className=" d-flex flex-column justify-content-center align-items-center ">
       <CustomizedSnackbars
         open={openSnackbar}
         handleClose={handleSnackbarClose}
         message={snackbarMessage}
         severity={snackbarSeverity}
       />
+          <ResponsiveAppBar/>
 
       <div className="signup-box shadow p-4 bg-white rounded mt-5">
     <h2 className="text-center">Sign Up</h2>
