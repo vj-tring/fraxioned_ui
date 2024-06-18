@@ -3,4 +3,25 @@
     justify-content: flex-end;
     gap: 10px; /* Add space between buttons */
   }
+
+.primary{
+  background-color: #df9526;
+  border: none;
+  height: 40px;
+  width: 20%;
+  color: white;
+  border-radius: 5px;
+}  
+
+.primary:hover{
+  background-color: #e48f10;
+}
   
+.success{
+  background-color: #0c888c;
+  border: none;
+  height: 40px;
+  width: 20%;
+  color: white;
+  border-radius: 5px;
+}
