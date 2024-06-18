@@ -1,3 +1,4 @@
+import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -10,10 +11,9 @@ function ResponsiveAppBar() {
  
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ boxShadow: 'none' }}>
       <Container maxWidth="xl" sx={{
-            backgroundColor:'#FFAC1C',
-
+            backgroundColor:'white',
       }}>
 
         <Toolbar disableGutters>

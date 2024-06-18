@@ -4,7 +4,7 @@ import Signup from './Signup';
 import '@testing-library/jest-dom';
 
 import useSignupHandler from './SignupApiHandler';
-
+jest.mock('../../assets/Fraxioned.png', () => 'Fraxioned.png');
 jest.mock('./SignupApiHandler');
 
 const mockedUseSignupHandler = useSignupHandler as jest.MockedFunction<typeof useSignupHandler>;

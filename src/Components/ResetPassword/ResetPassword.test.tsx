@@ -3,7 +3,7 @@ import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ResetPassword from './ResetPassword';
 import useResetHandler from './ResetApiHandler';
-
+jest.mock('../../assets/Fraxioned.png', () => 'Fraxioned.png');
 jest.mock('./ResetApiHandler');
 
 const mockedUseResetHandler = useResetHandler as jest.MockedFunction<typeof useResetHandler>;

@@ -17,7 +17,7 @@ const Login: React.FC = () => {
 
     return (
         
-        <div className=" d-flex justify-content-center flex-column align-items-center ">
+        <div className=" d-flex justify-content-center flex-column align-items-center     ">
             
           <ResponsiveAppBar/>
 
@@ -28,7 +28,7 @@ const Login: React.FC = () => {
                 severity={snackbarSeverity}
             />
 
-            <div className="login-box shadow p-4 bg-white rounded">
+            <div className="login-box shadow p-4 bg-white rounded ">
                 <h2 className="text-center mb-5">Login</h2>
                 <form onSubmit={formik.handleSubmit}>
                     <div className="form-group position-relative">

@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Login from './Login';
 import useLoginHandler from './LoginApiHandler';
-
+jest.mock('../../assets/Fraxioned.png', () => 'Fraxioned.png');
 // Mock the useLoginHandler hook
 jest.mock('./LoginApiHandler');
 
