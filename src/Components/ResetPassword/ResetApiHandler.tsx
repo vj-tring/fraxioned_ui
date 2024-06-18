@@ -33,7 +33,7 @@ const useResetHandler = () => {
       try {
         const token = getTokenFromParams(); // Get token from URL params
         console.log(token);
-        const response = await resetPassword(values, token);       
+        await resetPassword(values, token);       
         setSnackbarMessage('Password reset successfully!');
         setSnackbarSeverity('success');
         setOpenSnackbar(true);
