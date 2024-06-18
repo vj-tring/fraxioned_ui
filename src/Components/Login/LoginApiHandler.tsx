@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
+// import { useDispatch } from 'react-redux';
+// import { setLogin } from '../../Redux/Features/loginSlice'
 
 import validationSchema from './validationSchema';
 
 import { login } from '../../Api/LoginApi';
 const useLoginHandler = () => {
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -26,6 +29,8 @@ const useLoginHandler = () => {
           localStorage.setItem('userData', JSON.stringify(data.user));
           localStorage.setItem('token', data.session.token);
           localStorage.setItem('expiresAt', data.session.expiresAt);
+
+          // dispatch(setLogin(values)); // Dispatch the setLogin action
 
           setSnackbarMessage('Login successful!');
           setSnackbarSeverity('success');

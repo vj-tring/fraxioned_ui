@@ -4,5 +4,6 @@ export interface ContactMessagePayload {
   name: string;
   email: string; // Add this property
   message: string;
+  subject:string
 }
 

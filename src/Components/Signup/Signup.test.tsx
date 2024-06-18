@@ -14,7 +14,9 @@ describe('Signup Component', () => {
     mockedUseSignupHandler.mockReturnValue({
       formik: {
         initialValues: {
-          username: '',
+          username:'',
+          firstName: '',
+          lastName: '',
           phone: '',
           secondaryPhone: '',
           secondaryEmail: '',
@@ -36,8 +38,10 @@ describe('Signup Component', () => {
         touched: {},
         errors: {},
         values: {
-          username: '',
-          phone: '',
+          username:'',
+
+          firstName: '',
+          lastName: '',          phone: '',
           secondaryPhone: '',
           secondaryEmail: '',
           address1: '',
@@ -99,8 +103,8 @@ describe('Signup Component', () => {
       formik: {
         ...mockedUseSignupHandler().formik,
         touched: {
-          username: true,
-          phone: true,
+          firstName: true,
+          lastName: true,          phone: true,
           address1: true,
           state: true,
           city: true,
@@ -109,7 +113,8 @@ describe('Signup Component', () => {
           confirmPassword: true
         },
         errors: {
-          username: 'Please enter your username',
+          firstName: 'Please enter your firstName',
+          lastName: 'Please enter your lastName',
           phone: 'Please enter your phone number',
           address1: 'Please enter your address line 1',
           state: 'Please enter your state',
@@ -179,8 +184,10 @@ describe('Signup Component', () => {
         mockedUseSignupHandler.mockReturnValue({
             formik: {
                 initialValues: {
-                    username: '',
-                    phone: '',
+                  username:'',
+                  firstName: '',
+                  lastName: '',
+                  phone: '',
                     secondaryPhone: '',
                     secondaryEmail: '',
                     address1: '',
@@ -201,8 +208,11 @@ describe('Signup Component', () => {
                 touched: {},
                 errors: {},
                 values: {
-                    username: '',
-                    phone: '',
+                            username:'',
+
+                  firstName: '',
+                  lastName: '',
+                  phone: '',
                     secondaryPhone: '',
                     secondaryEmail: '',
                     address1: '',
@@ -266,8 +276,9 @@ describe('Signup Component', () => {
             formik: {
                 ...mockedUseSignupHandler().formik,
                 touched: {
-                    username: true,
-                    phone: true,
+                  firstName: true,
+                  lastName: true,
+                  phone: true,
                     address1: true,
                     state: true,
                     city: true,
@@ -276,8 +287,9 @@ describe('Signup Component', () => {
                     confirmPassword: true
                 },
                 errors: {
-                    username: 'Please enter your username',
-                    phone: 'Please enter your phone number',
+                  firstName: 'Please enter your firstName',
+                  lastName: 'Please enter your lastnmae',
+                  phone: 'Please enter your phone number',
                     address1: 'Please enter your address line 1',
                     state: 'Please enter your state',
                     city: 'Please enter your city',

@@ -26,8 +26,10 @@ const useForgotHandler = () => {
         setSnackbarMessage('Password reset email sent successfully!');
         setSnackbarSeverity('success');
         setOpenSnackbar(true);
-        // Navigate to password reset page or display a success message
-        navigate('/login');
+        setTimeout(() => {
+          navigate('/login');
+        }, 3000); 
+        
       } catch (error) {
         setSnackbarMessage('Error sending password reset email!');
         setSnackbarSeverity('error');

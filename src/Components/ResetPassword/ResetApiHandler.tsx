@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import { useFormik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,8 +14,15 @@ const useResetHandler = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'info' | 'warning' | 'error'>('success');
 
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Function to extract token from URL params
+  const getTokenFromParams = () => {
+    const searchParams = new URLSearchParams(location.search);
+    return searchParams.get('resetToken') || '';
+  };
   const formik = useFormik({
     initialValues: {
       newPassword: '',
@@ -24,14 +31,19 @@ const useResetHandler = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        const response = await resetPassword(values);
-        //  await resetPassword(values);
-        // const response = await resetPassword(values);
+        const token = getTokenFromParams(); // Get token from URL params
+        console.log(token);
+        const response = await resetPassword(values, token);       
         setSnackbarMessage('Password reset successfully!');
         setSnackbarSeverity('success');
         setOpenSnackbar(true);
-        // Navigate to dashboard on success
-        navigate('/login');
+        
+
+
+        setTimeout(() => {
+          navigate('/login');
+        }, 3000); 
+        
       } catch (error) {
         setSnackbarMessage('Error resetting password!');
         setSnackbarSeverity('error');

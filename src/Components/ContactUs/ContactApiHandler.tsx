@@ -20,8 +20,8 @@ export const handleSubmit = async (
     if (userString) {
       const userObject = JSON.parse(userString);
       const userId = userObject.id;
-      console.log("userId", userId);
-      const payload: ContactMessagePayload = { userId, name, email, message };
+      console.log("userId", userId); 
+      const payload: ContactMessagePayload = { userId, name, email, message, subject };
       await sendContactMessage(payload);
 
       setSnackbarMessage('Message sent successfully!');

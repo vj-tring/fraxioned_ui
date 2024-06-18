@@ -23,7 +23,9 @@ const useSignupHandler = () => {
 
   const formik = useFormik({
     initialValues: {
-      username: '',
+      username:'',
+      firstName: '',
+      lastName: '',
       phone: '',
       secondaryPhone: '',
       secondaryEmail: '',

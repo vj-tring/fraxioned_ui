@@ -10,20 +10,26 @@ import Home from '../Home/Home';
 import CustomizedAccordions from '../CustomizedAccordions/CustomizedAccordions';
 import Contact from '../ContactUs/Contact';
 import UserDetails from '../UserDetails/UserDetails';
+import { isAuthenticated } from '../../authService';
 
 const Dashboard: React.FC = () => {
   const [userEmail, setUserEmail] = useState('');
   const navigate = useNavigate(); 
 
   useEffect(() => {
-    const storedUserData = localStorage.getItem('userData');
-    if (storedUserData) {
-      const userData = JSON.parse(storedUserData);
-      if (userData && userData.email) {
-        setUserEmail(userData.email);
+    if (!isAuthenticated()) {
+      navigate('/login'); // Redirect to login if not authenticated
+    } else {
+      const storedUserData = localStorage.getItem('userData');
+      if (storedUserData) {
+        const userData = JSON.parse(storedUserData);
+        if (userData && userData.email) {
+          setUserEmail(userData.email);
+        }
       }
     }
-  }, []);
+  }, [navigate]);
+
 
   const links = [
     { name: 'HOME', href: '/dashboard', disabled: false },
