@@ -5,11 +5,7 @@ import Signup from './Components/Signup/Signup';
 import ForgotPassword from './Components/ForgetPassword/ForgotPassword';
 import ResetPassword from './Components/ResetPassword/ResetPassword';
 import Dashboard from './Components/Dashboard/Dashboard';
-import Contact from './Components/ContactUs/Contact';
-import SendInvite from './Components/SendInvite/SendInvite';
-import CustomizedAccordions from './Components/CustomizedAccordions/CustomizedAccordions';
-import Home from './Components/Home/Home';
-import UserDetails from './Components/UserDetails/UserDetails';
+
 
 const App: React.FC = () => {
   return (

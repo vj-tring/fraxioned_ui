@@ -3,7 +3,6 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Dropdown from 'react-bootstrap/Dropdown';
-import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import InviteModal from './InviteModal';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
@@ -17,31 +16,21 @@ interface CustomNavbarProps {
 }[];
   userImage?: string;
   userName: string;
-  onUserImageClick?: () => void; // Add onUserImageClick prop
+  onUserImageClick?: () => void; 
 }
 
 const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, userName, onUserImageClick }) => {
   const {
     showInviteModal,
     showLogoutModal,
-    showUserDetailsModal,
     handleOpenInviteModal,
     handleCloseInviteModal,
     handleShowLogoutModal,
     handleCloseLogoutModal,
-    handleShowUserDetailsModal,
-    handleCloseUserDetailsModal,
+  
     handleLogout,
   } = useNavbarHandler();
 
-  const userDetails = {
-    name: userName,
-    email: 'user@example.com',
-    phone: '123-456-7890',
-    mailingAddress: '123 Main St, Anytown, USA',
-    secondaryEmail: 'user.secondary@example.com',
-    secondaryPhone: '098-765-4321',
-  };
 
   return (
     <>
