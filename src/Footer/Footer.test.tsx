@@ -1,36 +1,77 @@
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
-import '@testing-library/jest-dom'; 
+import { BrowserRouter } from 'react-router-dom';
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import Footer from './Footer';
 
 describe('Footer Component', () => {
-  test('renders Footer component with links', () => {
-    render(<Footer />);
-    expect(screen.getByText('Home')).toBeInTheDocument();
-    expect(screen.getByText('Booking')).toBeInTheDocument();
-    expect(screen.getByText('Peak Season')).toBeInTheDocument();
-    expect(screen.getByText('Payments')).toBeInTheDocument();
-    expect(screen.getByText('FAQ')).toBeInTheDocument();
-    expect(screen.getByText('Account')).toBeInTheDocument();
-    expect(screen.getByText('Documents')).toBeInTheDocument();
-    expect(screen.getByText('Contact')).toBeInTheDocument();
+  const renderFooter = () =>
+    render(
+      <BrowserRouter>
+        <Footer />
+      </BrowserRouter>
+    );
+
+
+  test('renders Home link', () => {
+    renderFooter();
+    const homeLink = screen.getByText('Home');
+    expect(homeLink).toBeInTheDocument();
+    expect(homeLink).toHaveAttribute('href', '/');
   });
 
-  test('opens and closes Contact Modal when Contact Us button is clicked', () => {
-    render(<Footer />);
-    expect(screen.getByText('Contact Us')).toBeInTheDocument();
-    expect(screen.getByText('Home')).toBeInTheDocument();
-    expect(screen.getByText('Booking')).toBeInTheDocument();
-    expect(screen.getByText('Peak Season')).toBeInTheDocument();
-    expect(screen.getByText('Payments')).toBeInTheDocument();
-    expect(screen.getByText('FAQ')).toBeInTheDocument();
-    expect(screen.getByText('Account')).toBeInTheDocument();
-    expect(screen.getByText('Documents')).toBeInTheDocument();
-    expect(screen.getByText('Contact')).toBeInTheDocument();
+  test('renders Booking link', () => {
+    renderFooter();
+    const bookingLink = screen.getByText('Booking');
+    expect(bookingLink).toBeInTheDocument();
+    expect(bookingLink).toHaveAttribute('href', '/dashboard/booking');
   });
 
-  test('shows Contact Modal when "Contact Us" button is clicked', () => {
-    render(<Footer />);
-    expect(screen.getByText('Contact Us')).toBeInTheDocument();
+  test('renders Peak Season link', () => {
+    renderFooter();
+    const peakSeasonLink = screen.getByText('Peak Season');
+    expect(peakSeasonLink).toBeInTheDocument();
+    expect(peakSeasonLink).toHaveAttribute('href', '/dashboard/peak-season');
+  });
+
+  test('renders Payments link', () => {
+    renderFooter();
+    const paymentsLink = screen.getByText('Payments');
+    expect(paymentsLink).toBeInTheDocument();
+    expect(paymentsLink).toHaveAttribute('href', '/dashboard/payments');
+  });
+
+  test('renders FAQ link', () => {
+    renderFooter();
+    const faqLink = screen.getByText('FAQ');
+    expect(faqLink).toBeInTheDocument();
+    expect(faqLink).toHaveAttribute('href', '/dashboard/faq');
+  });
+
+  test('renders Account link', () => {
+    renderFooter();
+    const accountLink = screen.getByText('Account');
+    expect(accountLink).toBeInTheDocument();
+    expect(accountLink).toHaveAttribute('href', '/dashboard/account');
+  });
+
+  test('renders Documents link', () => {
+    renderFooter();
+    const documentsLink = screen.getByText('Documents');
+    expect(documentsLink).toBeInTheDocument();
+    expect(documentsLink).toHaveAttribute('href', '/dashboard/documents');
+  });
+
+  test('renders Contact link', () => {
+    renderFooter();
+    const contactLink = screen.getByText('Contact');
+    expect(contactLink).toBeInTheDocument();
+    expect(contactLink).toHaveAttribute('href', '/dashboard/contact');
+  });
+
+  test('renders Contact Us button', () => {
+    renderFooter();
+    const contactUsButton = screen.getByText('Contact Us');
+    expect(contactUsButton).toBeInTheDocument();
   });
 });

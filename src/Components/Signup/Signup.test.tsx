@@ -104,7 +104,9 @@ describe('Signup Component', () => {
         ...mockedUseSignupHandler().formik,
         touched: {
           firstName: true,
-          lastName: true,          phone: true,
+          lastName: true,  
+          username: true,        
+          phone: true,
           address1: true,
           state: true,
           city: true,
@@ -115,6 +117,7 @@ describe('Signup Component', () => {
         errors: {
           firstName: 'Please enter your firstName',
           lastName: 'Please enter your lastName',
+          username: 'Please enter your username',
           phone: 'Please enter your phone number',
           address1: 'Please enter your address line 1',
           state: 'Please enter your state',
@@ -278,6 +281,7 @@ describe('Signup Component', () => {
                 touched: {
                   firstName: true,
                   lastName: true,
+                  username: true,
                   phone: true,
                     address1: true,
                     state: true,
@@ -289,6 +293,7 @@ describe('Signup Component', () => {
                 errors: {
                   firstName: 'Please enter your firstName',
                   lastName: 'Please enter your lastnmae',
+                  username: 'Please enter your username',
                   phone: 'Please enter your phone number',
                     address1: 'Please enter your address line 1',
                     state: 'Please enter your state',

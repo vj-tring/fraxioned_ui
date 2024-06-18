@@ -30,15 +30,9 @@ const Footer: React.FC = () => {
             <li><Link to='/dashboard/contact' className='no-underline'>Contact</Link></li>
           </ul>
         </div>
-       
-       
         <div className='col-md-3'><a href='/dashboard/contact'> 
-        <button className='contact-us'> 
-  Contact Us <span className="arrow">&#8594;</span>
-</button>
-
+        <button className='contact-us'> Contact Us <span className="arrow">&#8594;</span></button>
         </a>
-
 </div>
       </div>
     </footer>

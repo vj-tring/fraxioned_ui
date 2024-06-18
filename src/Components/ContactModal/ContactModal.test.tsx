@@ -3,6 +3,8 @@ import { render, fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom'; 
 import ContactModal from './ContactModal';
 
+jest.mock('../../assets/Fraxioned-icon.png', () => 'Fraxioned-icon.png');
+
 describe('ContactModal', () => {
   it('renders correctly', () => {
     render(<ContactModal show={false} handleClose={function (): void {
