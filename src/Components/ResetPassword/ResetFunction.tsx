@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useFormik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ResetPassword.css';
-import validationSchema from './ValidationSchema';
+import validationSchema from './validationSchema';
 import { resetPassword } from '../../Api/Reset';
 
 const useResetHandler = () => {
