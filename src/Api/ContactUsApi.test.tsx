@@ -1,7 +1,7 @@
 // __tests__/contactApi.test.ts
 import axios from 'axios';
 import { sendContactMessage } from "../Api/ContactUsApi";
-import { ContactMessagePayload } from '../../src/Components/Types/contact';
+import { ContactMessagePayload } from 'Components/Types/contact';
 
 jest.mock('axios', () => ({
   post: jest.fn(() => Promise.resolve({ data: 'mock response' })),

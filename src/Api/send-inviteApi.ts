@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { ApiUrl } from '../Components/config';
-import { SendInvitePayload } from '../Components/Types/Send-invite';
-
+import { SendInvitePayload } from 'Components/Types/Send-invite';
 
 export const sendInvite = async (payload: SendInvitePayload) => {
   try {
