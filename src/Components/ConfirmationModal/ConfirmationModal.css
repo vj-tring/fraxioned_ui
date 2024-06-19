@@ -1,14 +1,16 @@
  
 .modal-footer-custom {
     display: flex;
-    justify-content: space-between;
   }
-
+.title{
+  display: flex;
+  align-items: flex-start;
+}
 .primary{
   background-color: #df9526;
   border: none;
   height: 40px;
-  width: 40%;
+  width: 20%;
   color: white;
   border-radius: 5px;
 }  
@@ -18,18 +20,30 @@
 }
   
 .success{
-  background-color: #0c888c;
+  background-color: grey;
   border: none;
   height: 40px;
-  width: 40%;
+  width: 20%;
   color: white;
   border-radius: 5px;
 }
+.success:hover{
+  background-color: rgb(122, 121, 121);
 
+}
 .message{
-  text-align: center;
-  padding-bottom: 30px;
+  /* text-align: center; */
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-left: 12px;
 }
 .title{
   margin-top: 5px;
 }
+.modal-header {
+  padding-left: 5% !important;
+}
+.modal{
+  border: none;
+}
+

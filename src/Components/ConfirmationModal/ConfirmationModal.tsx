@@ -14,7 +14,7 @@ interface ConfirmationModalProps {
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ show, onHide, onConfirm, title, message, confirmLabel, cancelLabel }) => {
   return (
     <Modal show={show} onHide={onHide} centered className='modal'>
-      <Modal.Header closeButton>
+      <Modal.Header closeButton >
         <Modal.Title className='title'>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body className='message'>
