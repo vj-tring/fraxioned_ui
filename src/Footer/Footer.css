@@ -57,9 +57,9 @@ ul {
 .no-underline:hover{
   color: orange;
 }
-.contact-us {
-  width: 70%;
-  height: 50px;
+.contact-us {   
+  width: 90%;
+  height: 66px;
   background-color: #0c888c;
   border-radius: 30px;
   border: none;
@@ -82,8 +82,9 @@ ul {
 }
 
 .contact-us:hover {
-  background-color: #081aba;
+  background-color: #F7981D;
   border-radius: 30px;
+  text-decoration: underline;
 }
 
 .contact-us:hover .arrow {
