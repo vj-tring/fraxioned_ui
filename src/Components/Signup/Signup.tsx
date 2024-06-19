@@ -4,6 +4,8 @@ import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
 import useSignupHandler from './SignupApiHandler';
 import './Signup.css';
 import ResponsiveAppBar from '../NavbarMUI/NavbarUI';
+import Loader from '../Loader/Loader';
+
 const Signup: React.FC = () => {
   const {
     formik,
@@ -11,6 +13,7 @@ const Signup: React.FC = () => {
     snackbarMessage,
     snackbarSeverity,
     handleSnackbarClose,
+    loading
   } = useSignupHandler();
 
   return (
@@ -26,7 +29,7 @@ const Signup: React.FC = () => {
       <div className="signup-box shadow p-4 bg-white rounded mt-5">
     <h2 className="text-center">Sign Up</h2>
     <form onSubmit={formik.handleSubmit} className="row g-3">
-    <div className="col-6 mt-2">
+    <div className="col-12 mt-2">
         <label htmlFor="username" className="form-label">
           {formik.touched.username && formik.errors.username ? (
             <span className="text-danger flex-end">{formik.errors.username}</span>
@@ -35,7 +38,7 @@ const Signup: React.FC = () => {
         <input
           name="username"
           type="text"
-          placeholder=" username"
+          placeholder=" User Name"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.username}
@@ -51,7 +54,7 @@ const Signup: React.FC = () => {
         <input
           name="firstName"
           type="text"
-          placeholder=" firstName"
+          placeholder=" First Name"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.firstName}
@@ -67,14 +70,14 @@ const Signup: React.FC = () => {
         <input
           name="lastName"
           type="text"
-          placeholder=" lastName"
+          placeholder=" Last Name"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.lastName}
           className={`form-control ${formik.touched.lastName && formik.errors.lastName ? 'is-invalid' : ''}`}
         />
       </div>
-      <div className="col-6 mt-2">
+      <div className="col-4 mt-2">
         <label htmlFor="phone" className="form-label">
           {formik.touched.phone && formik.errors.phone ? (
             <span className="text-danger">{formik.errors.phone}</span>
@@ -82,15 +85,17 @@ const Signup: React.FC = () => {
         </label>
         <input
           name="phone"
-          type="text"
-          placeholder=" phone number"
+          type="number"
+          pattern="[0-9]*"
+
+          placeholder="Phone Number"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.phone}
           className={`form-control ${formik.touched.phone && formik.errors.phone ? 'is-invalid' : ''}`}
         />
       </div>
-      <div className="col-6 mt-2">
+      <div className="col-4 mt-2">
         <label htmlFor="secondaryPhone" className="form-label">
           {formik.touched.secondaryPhone && formik.errors.secondaryPhone ? (
             <span className="text-danger">{formik.errors.secondaryPhone}</span>
@@ -98,8 +103,8 @@ const Signup: React.FC = () => {
         </label>
         <input
           name="secondaryPhone"
-          type="text"
-          placeholder=" secondary phone number"
+          type="number"
+          placeholder=" Secondary Phone Number"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.secondaryPhone}
@@ -107,7 +112,7 @@ const Signup: React.FC = () => {
         />
       </div>
      
-      <div className="col-6 mt-2">
+      <div className="col-4 mt-2">
         <label htmlFor="secondaryEmail" className="form-label">
           {formik.touched.secondaryEmail && formik.errors.secondaryEmail ? (
             <span className="text-danger">{formik.errors.secondaryEmail}</span>
@@ -116,14 +121,14 @@ const Signup: React.FC = () => {
         <input
           name="secondaryEmail"
           type="email"
-          placeholder=" secondary email"
+          placeholder=" Secondary Email"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.secondaryEmail}
           className={`form-control ${formik.touched.secondaryEmail && formik.errors.secondaryEmail ? 'is-invalid' : ''}`}
         />
       </div>
-      <div className="col-6 mt-2">
+      <div className="col-4 mt-2">
         <label htmlFor="address1" className="form-label">
           {formik.touched.address1 && formik.errors.address1 ? (
             <span className="text-danger">{formik.errors.address1}</span>
@@ -132,14 +137,14 @@ const Signup: React.FC = () => {
         <input
           name="address1"
           type="text"
-          placeholder=" address line 1"
+          placeholder=" Address Line 1"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.address1}
           className={`form-control ${formik.touched.address1 && formik.errors.address1 ? 'is-invalid' : ''}`}
         />
       </div>
-      <div className="col-6 mt-2">
+      <div className="col-4 mt-2">
         <label htmlFor="address2" className="form-label">
           {formik.touched.address2 && formik.errors.address2 ? (
             <span className="text-danger">{formik.errors.address2}</span>
@@ -148,14 +153,14 @@ const Signup: React.FC = () => {
         <input
           name="address2"
           type="text"
-          placeholder=" address line 2"
+          placeholder=" Address Line 2"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.address2}
           className={`form-control ${formik.touched.address2 && formik.errors.address2 ? 'is-invalid' : ''}`}
         />
       </div>
-      <div className="col-6 mt-2">
+      <div className="col-4 mt-2">
         <label htmlFor="state" className="form-label">
           {formik.touched.state && formik.errors.state ? (
             <span className="text-danger">{formik.errors.state}</span>
@@ -164,14 +169,14 @@ const Signup: React.FC = () => {
         <input
           name="state"
           type="text"
-          placeholder=" state"
+          placeholder=" State"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.state}
           className={`form-control ${formik.touched.state && formik.errors.state ? 'is-invalid' : ''}`}
         />
       </div>
-      <div className="col-6 mt-2">
+      <div className="col-4 mt-2">
         <label htmlFor="city" className="form-label">
           {formik.touched.city && formik.errors.city ? (
             <span className="text-danger">{formik.errors.city}</span>
@@ -180,14 +185,14 @@ const Signup: React.FC = () => {
         <input
           name="city"
           type="text"
-          placeholder=" city"
+          placeholder=" City"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.city}
           className={`form-control ${formik.touched.city && formik.errors.city ? 'is-invalid' : ''}`}
         />
       </div>
-      <div className="col-6 mt-2">
+      <div className="col-4 mt-2">
         <label htmlFor="zip" className="form-label">
           {formik.touched.zip && formik.errors.zip ? (
             <span className="text-danger">{formik.errors.zip}</span>
@@ -196,14 +201,14 @@ const Signup: React.FC = () => {
         <input
           name="zip"
           type="text"
-          placeholder=" zip code"
+          placeholder=" Zip Code"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.zip}
           className={`form-control ${formik.touched.zip && formik.errors.zip ? 'is-invalid' : ''}`}
         />
         </div>
-      <div className="col-6 mt-2">
+      <div className="col-4 mt-2">
         <label htmlFor="imageUrl" className="form-label">
           {formik.touched.imageUrl && formik.errors.imageUrl ? (
             <span className="text-danger">{formik.errors.imageUrl}</span>
@@ -212,7 +217,7 @@ const Signup: React.FC = () => {
         <input
           name="imageUrl"
           type="text"
-          placeholder="Enter image URL"
+          placeholder=" Image URL"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.imageUrl}
@@ -228,7 +233,7 @@ const Signup: React.FC = () => {
         <input
           name="password"
           type="password"
-          placeholder=" password"
+          placeholder=" Password"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.password}
@@ -236,7 +241,7 @@ const Signup: React.FC = () => {
         />
       </div>
       <div className="col-6 mt-2">
-        <label htmlFor="confirmPassword" className="form-label">
+        <label htmlFor="Confirm Password" className="form-label">
           {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
             <span className="text-danger">{formik.errors.confirmPassword}</span>
           ) : null}
@@ -244,7 +249,7 @@ const Signup: React.FC = () => {
         <input
           name="confirmPassword"
           type="password"
-          placeholder="Confirm your password"
+          placeholder="Confirm Password"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.confirmPassword}
@@ -257,12 +262,18 @@ const Signup: React.FC = () => {
           className="w-100 mt-3 signbtn"
           variant="contained"
           color="primary"
+          disabled={loading}
+
         >
-          Submit
+                  {loading ? 'Loading...' : 'Submit'}
+
         </Button>
+
       </div>
 
     </form>
+    {loading && <Loader />}
+
   </div>
 </div>
   );

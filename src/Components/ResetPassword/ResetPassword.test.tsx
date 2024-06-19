@@ -51,6 +51,7 @@ describe('ResetPassword Component', () => {
         registerField: jest.fn(),
 
       },
+      loading:true,
       openSnackbar: false,
       snackbarMessage: '',
       snackbarSeverity: 'success',

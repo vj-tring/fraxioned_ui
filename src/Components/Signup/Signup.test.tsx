@@ -4,6 +4,7 @@ import Signup from './Signup';
 import '@testing-library/jest-dom';
 
 import useSignupHandler from './SignupApiHandler';
+import { boolean } from 'yup';
 jest.mock('../../assets/Fraxioned.png', () => 'Fraxioned.png');
 jest.mock('./SignupApiHandler');
 
@@ -82,6 +83,8 @@ describe('Signup Component', () => {
         registerField: jest.fn()
       },
       openSnackbar: false,
+
+      loading:true,
       snackbarMessage: '',
       snackbarSeverity: 'success',
       handleSnackbarClose: jest.fn(),
@@ -245,6 +248,7 @@ describe('Signup Component', () => {
                 setSubmitting: jest.fn(),
                 setTouched: jest.fn(),
                 setValues: jest.fn(),
+                
                 submitCount: 0,
                 validateField: jest.fn(),
                 validateForm: jest.fn(),
@@ -256,6 +260,7 @@ describe('Signup Component', () => {
                 registerField: jest.fn()
             },
             openSnackbar: false,
+            loading:false,
             snackbarMessage: '',
             snackbarSeverity: 'success',
             handleSnackbarClose: jest.fn(),
@@ -271,7 +276,6 @@ describe('Signup Component', () => {
         expect(screen.getByText('Sign Up')).toBeInTheDocument();
     });
 
-    // Other tests remain the same until the validation errors test
 
     test('displays validation errors for required fields', async () => {
         mockedUseSignupHandler.mockReturnValueOnce({
