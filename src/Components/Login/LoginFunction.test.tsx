@@ -132,20 +132,20 @@ describe('useLoginHandler', () => {
   //   expect(result.current.formik.values.password).toBe('password123');
   // });
 
-  // test('handles Snackbar close event', async () => {
-  //   const { result } = renderHook(() => useLoginHandler());
+  test('handles Snackbar close event', async () => {
+    const { result } = renderHook(() => useLoginHandler());
 
-  //   // Simulate closing Snackbar
-  //   act(() => {
-  //     result.current.handleSnackbarClose(undefined, 'clickaway');
-  //   });
+    // Simulate closing Snackbar
+    act(() => {
+      result.current.handleSnackbarClose(undefined, 'clickaway');
+    });
 
-  //   expect(result.current.openSnackbar).toBe(false);
+    expect(result.current.openSnackbar).toBe(false);
 
-  //   act(() => {
-  //     result.current.handleSnackbarClose();
-  //   });
+    act(() => {
+      result.current.handleSnackbarClose();
+    });
 
-  //   expect(result.current.openSnackbar).toBe(false);
-  // });
+    expect(result.current.openSnackbar).toBe(false);
+  });
 });
