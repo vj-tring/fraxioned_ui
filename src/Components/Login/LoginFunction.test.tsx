@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import useLoginHandler from './LoginFunction';
 // import { login } from '../../Api/LoginApi';
 
-jest.mock('../../Api/LoginApi.ts');
+jest.mock('../../Api/Login.ts');
 jest.mock('axios');
 jest.mock('react-router-dom', () => ({
   useNavigate: jest.fn(),

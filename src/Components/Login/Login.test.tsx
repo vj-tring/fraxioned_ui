@@ -6,7 +6,7 @@ import Login from './Login';
 import useLoginHandler from './LoginFunction';
 jest.mock('../../assets/Fraxioned.png', () => 'Fraxioned.png');
 // Mock the useLoginHandler hook
-jest.mock('./LoginApiHandler');
+jest.mock('./LoginFunction');
 
 const mockedUseLoginHandler = useLoginHandler as jest.Mock;
 

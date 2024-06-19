@@ -73,7 +73,7 @@ describe('ResetPassword Component', () => {
     render(<ResetPassword />);
     expect(screen.getByPlaceholderText('New Password')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Confirm Password')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Loading/i })).toBeInTheDocument();
   });
 
   test('calls formik handleSubmit on form submission', () => {

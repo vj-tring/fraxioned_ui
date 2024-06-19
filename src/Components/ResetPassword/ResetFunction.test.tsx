@@ -6,7 +6,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 // import { ResetPasswordPayload } from '../Types/Reset'; 
 
 jest.mock('axios');
-jest.mock('../../Api/ResetApi');
+jest.mock('../../Api/Reset');
 jest.mock('react-router-dom', () => ({
   useNavigate: jest.fn(),
   useLocation: jest.fn(),

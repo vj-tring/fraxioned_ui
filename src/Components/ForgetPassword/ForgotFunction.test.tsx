@@ -6,7 +6,7 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => jest.fn(),
 }));
 
-jest.mock('../../Api/ForgotApi', () => ({
+jest.mock('../../Api/Forgot', () => ({
   forgotPassword: jest.fn(),
 }));
 
