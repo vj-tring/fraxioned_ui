@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { sendInvite } from "../../Api/Send-invite";
+import { sendInvite } from "../../Api/send-invite";
 
 
 const useSendInviteHandler = () => {
