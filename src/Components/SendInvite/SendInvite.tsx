@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import useSendInviteHandler from  "./SendInviteApiHandler"; // Adjust the import path accordingly
 import axios from 'axios';
 import { ApiUrl } from '../config';
+import './sendInvite.css';
 
 const SendInvite: React.FC = () => {
   const {
@@ -62,9 +62,9 @@ const SendInvite: React.FC = () => {
         </Form.Control>
       </Form.Group>
 
-      <Button variant="primary" type="submit" className="mt-3" disabled={status === 'loading'}>
+      <button type="submit" className="send-invite-btn" disabled={status === 'loading'}>
         {status === 'loading' ? <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" /> : 'Send Invite'}
-      </Button>
+      </button>
 
       {status === 'success' && (
         <Alert variant="success" className="mt-3">

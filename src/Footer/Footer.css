@@ -81,6 +81,13 @@ ul {
 
 }
 
+.disabled {
+  color: #a8a8a8; 
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+
 .contact-us:hover {
   background-color: #F7981D;
   border-radius: 30px;
