@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { login } from '../../Api/Login';
-import validationSchema from './ValidationSchema';
+import validationSchema from './validationSchema';
 const useLoginHandler = () => {
   const [loading, setLoading] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
