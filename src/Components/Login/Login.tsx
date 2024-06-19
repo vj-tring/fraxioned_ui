@@ -6,6 +6,8 @@ import './Login.css'
 import useLoginHandler from './LoginApiHandler'
 import { Link } from 'react-router-dom';
 import ResponsiveAppBar from '../NavbarMUI/NavbarUI'
+import Loader from '../Loader/Loader';
+
 const Login: React.FC = () => {
     const {
         formik,
@@ -13,6 +15,7 @@ const Login: React.FC = () => {
         snackbarMessage,
         snackbarSeverity,
         handleSnackbarClose,
+        loading 
     } = useLoginHandler()
 
     return (
@@ -80,11 +83,14 @@ const Login: React.FC = () => {
                         className="w-100 mt-3"
                         variant="contained"
                         color="primary"
-                        
+                        disabled={loading}
                     >
-                        Submit
+                        
+                        {loading ? 'Loading...' : 'Submit'}
+
                     </Button>
                 </form>
+                {loading && <Loader />}
 
             </div>
 

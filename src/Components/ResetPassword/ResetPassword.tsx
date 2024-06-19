@@ -5,14 +5,15 @@ import { Button } from '@mui/material';
 import useResetHandler from './ResetApiHandler';
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
 import ResponsiveAppBar from '../NavbarMUI/NavbarUI'
-
+import Loader from 'Components/Loader/Loader';
 const ResetPassword: React.FC = () => {
   const {
     formik,
     openSnackbar,
     handleSnackbarClose,
     snackbarMessage,
-    snackbarSeverity
+    snackbarSeverity,
+    loading
 
 } = useResetHandler()
 
@@ -66,10 +67,14 @@ const ResetPassword: React.FC = () => {
             className="w-100 mt-3"
             variant="contained"
             color="primary"
+            disabled={loading}
+
           >
-            Submit
-          </Button>
+                        {loading ? 'Loading...' : 'Submit'}
+                        </Button>
         </form>
+        {loading && <Loader />}
+
       </div>
     </div>
   );

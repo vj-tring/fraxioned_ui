@@ -1,19 +1,15 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
-// import { useDispatch } from 'react-redux';
-// import { setLogin } from '../../Redux/Features/loginSlice'
-
-import validationSchema from './validationSchema';
-
 import { login } from '../../Api/LoginApi';
+import validationSchema from './validationSchema';
 const useLoginHandler = () => {
-  // const dispatch = useDispatch();
-  const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'info' | 'warning' | 'error'>('success');
+
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -22,6 +18,7 @@ const useLoginHandler = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
+      setLoading(true);
       try {
         const response = await login(values);
         if (response.status === 201) {
@@ -30,21 +27,21 @@ const useLoginHandler = () => {
           localStorage.setItem('token', data.session.token);
           localStorage.setItem('expiresAt', data.session.expiresAt);
 
-          // dispatch(setLogin(values)); // Dispatch the setLogin action
-
           setSnackbarMessage('Login successful!');
           setSnackbarSeverity('success');
           setOpenSnackbar(true);
 
           setTimeout(() => {
             navigate('/dashboard');
-          }, 3000); 
+          });
         }
       } catch (error) {
         setSnackbarMessage('Invalid Credentials!');
         setSnackbarSeverity('error');
         setOpenSnackbar(true);
         formik.resetForm();
+      } finally {
+        setLoading(false);
       }
     },
   });
@@ -65,6 +62,7 @@ const useLoginHandler = () => {
     snackbarMessage,
     snackbarSeverity,
     handleSnackbarClose,
+    loading,
   };
 };
 

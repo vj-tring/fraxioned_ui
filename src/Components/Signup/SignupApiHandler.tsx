@@ -9,6 +9,7 @@ import { registerUser } from "../../Api/RegisterApi";
 const useSignupHandler = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [loading, setLoading] = useState(false);
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -40,6 +41,7 @@ const useSignupHandler = () => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      setLoading(true);
       console.log("Form submitted");
       try {
         const payload = {
@@ -70,7 +72,11 @@ const useSignupHandler = () => {
         }
         setSnackbarSeverity('error');
         setOpenSnackbar(true);
+        setLoading(false);
+
       }
+      setLoading(false);
+
     },
   });
 
@@ -89,6 +95,7 @@ const useSignupHandler = () => {
     snackbarMessage,
     snackbarSeverity,
     handleSnackbarClose,
+    loading
   };
 }
 
