@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { resetPassword } from './ResetApi';
-import { PortURL } from '../Components/config';
+import { ApiUrl } from '../Components/config';
 import '@testing-library/jest-dom';
 import { ResetPasswordPayload } from '../Components/Types/Reset';
 
@@ -27,7 +27,7 @@ describe('resetPassword API', () => {
 
     expect(axios.post).toHaveBeenCalledTimes(1);
     expect(axios.post).toHaveBeenCalledWith(
-      `${PortURL}/authentication/reset-password`,
+      `${ApiUrl}/authentication/reset-password`,
       payload,
       {
         headers: {

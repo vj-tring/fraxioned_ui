@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { forgotPassword } from './ForgotApi';
-import { PortURL } from '../Components/config';
+import { ApiUrl } from '../Components/config';
 
 jest.mock('axios');
 axios.post = jest.fn();
@@ -14,7 +14,7 @@ describe('forgotPassword', () => {
 
     const result = await forgotPassword(payload);
 
-    expect(axios.post).toHaveBeenCalledWith(`${PortURL}/authentication/forgot-password`, payload);
+    expect(axios.post).toHaveBeenCalledWith(`${ApiUrl}/authentication/forgot-password`, payload);
     expect(result).toEqual(response);
   });
 

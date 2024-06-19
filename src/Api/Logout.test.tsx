@@ -1,7 +1,7 @@
 // logout.api.test.js
 import axios from 'axios';
 import { logout } from './LogoutApi';
-import { PortURL } from "../Components/config";
+import { ApiUrl } from "../Components/config";
 
 jest.mock('axios');
 
@@ -18,7 +18,7 @@ describe('logout API', () => {
     await logout();
 
     expect(axios.post).toHaveBeenCalledTimes(1);
-    expect(axios.post).toHaveBeenCalledWith(`${PortURL}/authentication/logout`);
+    expect(axios.post).toHaveBeenCalledWith(`${ApiUrl}/authentication/logout`);
   });
 
   it('returns the response from the API', async () => {

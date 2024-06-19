@@ -1,7 +1,7 @@
 // sendInvite.api.test.js
 import axios from 'axios';
 import { sendInvite } from './send-inviteApi';
-import { PortURL } from '../Components/config';
+import { ApiUrl } from '../Components/config';
 import { SendInvitePayload } from '../Components/Types/Send-invite';
 
 jest.mock('axios');
@@ -25,7 +25,7 @@ describe('sendInvite API', () => {
     await sendInvite(payload);
 
     expect(axios.post).toHaveBeenCalledTimes(1);
-    expect(axios.post).toHaveBeenCalledWith(`${PortURL}/authentication/invite`, payload);
+    expect(axios.post).toHaveBeenCalledWith(`${ApiUrl}/authentication/invite`, payload);
   });
 
   it('returns the response from the API', async () => {

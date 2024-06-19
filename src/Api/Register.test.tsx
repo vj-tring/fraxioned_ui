@@ -1,7 +1,7 @@
 // register.api.test.js
 import axios from 'axios';
 import { registerUser } from './RegisterApi';
-import { PortURL } from "../Components/config";
+import { ApiUrl } from "../Components/config";
 
 jest.mock('axios');
 
@@ -24,7 +24,7 @@ describe('registerUser API', () => {
     await registerUser(payload);
 
     expect(axios.post).toHaveBeenCalledTimes(1);
-    expect(axios.post).toHaveBeenCalledWith(`${PortURL}/authentication/register`, payload);
+    expect(axios.post).toHaveBeenCalledWith(`${ApiUrl}/authentication/register`, payload);
   });
 
   it('returns the response from the API', async () => {

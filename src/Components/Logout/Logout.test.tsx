@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { logout } from '../Logout/Logout';
-import { PortURL } from '../config';
+import { ApiUrl } from '../config';
 
 jest.mock('axios', () => ({
   post: jest.fn(),
@@ -14,7 +14,7 @@ describe('logout', () => {
     const result = await logout();
 
     expect(axios.post).toHaveBeenCalledTimes(1);
-    expect(axios.post).toHaveBeenCalledWith(`${PortURL}/authentication/logout`);
+    expect(axios.post).toHaveBeenCalledWith(`${ApiUrl}/authentication/logout`);
     expect(result).toEqual(response);
   });
 

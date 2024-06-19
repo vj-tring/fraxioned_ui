@@ -6,7 +6,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import useSendInviteHandler from  "./SendInviteApiHandler"; // Adjust the import path accordingly
 import axios from 'axios';
-import { PortURL } from '../config';
+import { ApiUrl } from '../config';
 
 const SendInvite: React.FC = () => {
   const {
@@ -24,7 +24,7 @@ const SendInvite: React.FC = () => {
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const response = await axios.get(`${PortURL}/roles`);
+        const response = await axios.get(`${ApiUrl}/roles`);
         setRoles(response.data);
       } catch (error) {
         console.error('Failed to fetch roles:', error);
