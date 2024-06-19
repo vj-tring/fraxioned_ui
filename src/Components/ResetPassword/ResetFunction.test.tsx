@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react-hooks';
-import useResetHandler from './ResetApiHandler';
+import useResetHandler from './ResetFunction';
 import { useNavigate, useLocation } from 'react-router-dom';
 // import axios from 'axios';
 // import { resetPassword } from '../../Api/ResetApi'; 

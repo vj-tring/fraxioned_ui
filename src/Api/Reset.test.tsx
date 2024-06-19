@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { resetPassword } from './ResetApi';
+import { resetPassword } from './Reset';
 import { ApiUrl } from '../Components/config';
 import '@testing-library/jest-dom';
-import { ResetPasswordPayload } from '../Components/Types/Reset';
+import { ResetPassword } from '../Components/Types/Reset';
 
 jest.mock('axios');
 
@@ -10,7 +10,7 @@ describe('resetPassword API', () => {
   const token = 'test-token';
 
   it('calls the correct endpoint with the correct payload', async () => {
-    const payload: ResetPasswordPayload = {
+    const payload: ResetPassword = {
       newPassword: 'newpassword',
       confirmPassword: 'newpassword',
     };
@@ -38,7 +38,7 @@ describe('resetPassword API', () => {
   });
 
   it('returns the response from the API', async () => {
-    const payload: ResetPasswordPayload = {
+    const payload: ResetPassword= {
       newPassword: 'newpassword',
       confirmPassword: 'newpassword',
     };
@@ -57,7 +57,7 @@ describe('resetPassword API', () => {
   });
 
   it('throws an error if the API call fails', async () => {
-    const payload: ResetPasswordPayload = {
+    const payload: ResetPassword = {
       newPassword: 'newpassword',
       confirmPassword: 'newpassword',
     };

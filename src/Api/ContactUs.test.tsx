@@ -1,7 +1,7 @@
 // __tests__/contactApi.test.ts
 import axios from 'axios';
-import { sendContactMessage } from "./ContactUsApi";
-import { ContactMessagePayload } from 'Components/Types/contact';
+import { sendContactMessage } from "./ContactUs";
+import { ContactMessage } from 'Components/Types/Contact';
 
 jest.mock('axios', () => ({
   post: jest.fn(() => Promise.resolve({ data: 'mock response' })),
@@ -23,7 +23,7 @@ describe('sendContactMessage', () => {
   // });
 
   it('should throw an error if the request fails', async () => {
-    const payload: ContactMessagePayload = {
+    const payload: ContactMessage = {
 
       userId:1,
 

@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { ApiUrl } from '../Components/config';
-import { ResetPasswordPayload } from 'Components/Types/Reset';
+import { ResetPassword } from 'Components/Types/Reset';
 
-export const resetPassword = async (payload: ResetPasswordPayload, token: string) => {
+export const resetPassword = async (payload: ResetPassword, token: string) => {
   try {
     const response = await axios.post(
       `${ApiUrl}/authentication/reset-password`,

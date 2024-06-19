@@ -1,6 +1,6 @@
 // register.api.test.js
 import axios from 'axios';
-import { registerUser } from './RegisterApi';
+import { registerUser } from './Register';
 import { ApiUrl } from "../Components/config";
 
 jest.mock('axios');

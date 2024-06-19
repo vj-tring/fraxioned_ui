@@ -2,7 +2,7 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ForgotPassword.css';
 import { Button } from '@mui/material';
-import useForgotHandler from './ForgotApiHandler';
+import useForgotHandler from './ForgotFunction';
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
 import ResponsiveAppBar from '../NavbarMUI/NavbarUI'
 

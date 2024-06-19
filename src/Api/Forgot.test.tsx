@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { forgotPassword } from './ForgotApi';
+import { forgotPassword } from './Forgot';
 import { ApiUrl } from '../Components/config';
 
 jest.mock('axios');

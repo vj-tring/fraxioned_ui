@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import useSendInviteHandler from  "./SendInviteApiHandler"; // Adjust the import path accordingly
+import useSendInviteHandler from  "./SendInviteFunction"; // Adjust the import path accordingly
 import axios from 'axios';
 import { ApiUrl } from '../config';
 import './sendInvite.css';

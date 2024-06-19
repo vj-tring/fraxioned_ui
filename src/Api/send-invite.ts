@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { ApiUrl } from '../Components/config';
-import { SendInvitePayload } from '../Components/Types/Send-invite';
+import { SendInvite } from '../Components/Types/Send-invite';
 
 
-export const sendInvite = async (payload: SendInvitePayload) => {
+export const sendInvite = async (payload: SendInvite) => {
   try {
     const response = await axios.post(`${ApiUrl}/authentication/invite`, payload);
     return response;

@@ -4,10 +4,10 @@ import { render, screen, fireEvent} from '@testing-library/react';
 import SendInvite from './SendInvite';
 import '@testing-library/jest-dom';
 import axios from 'axios';
-import useSendInviteHandler from './SendInviteApiHandler';
+import useSendInviteHandler from './SendInviteFunction';
 
 jest.mock('axios');
-jest.mock('./SendInviteApiHandler');
+jest.mock('./SendInviteFunction');
 
 const mockedUseSendInviteHandler = useSendInviteHandler as jest.MockedFunction<typeof useSendInviteHandler>;
 

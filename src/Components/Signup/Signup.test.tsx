@@ -3,10 +3,10 @@ import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import Signup from './Signup';
 import '@testing-library/jest-dom';
 
-import useSignupHandler from './SignupApiHandler';
+import useSignupHandler from './SignupFunction';
 import { boolean } from 'yup';
 jest.mock('../../assets/Fraxioned.png', () => 'Fraxioned.png');
-jest.mock('./SignupApiHandler');
+jest.mock('./SignupFunction');
 
 const mockedUseSignupHandler = useSignupHandler as jest.MockedFunction<typeof useSignupHandler>;
 
@@ -133,9 +133,8 @@ describe('Signup Component', () => {
     });
 
     render(<Signup />);
-    fireEvent.submit(screen.getByRole('button', { name: /Submit/i }));
-
-    await waitFor(() => {
+    fireEvent.submit(screen.getByRole('button', { name: /Loading/i }));  
+      await waitFor(() => {
       expect(screen.getByText('Please enter your username')).toBeInTheDocument();
     });
     expect(screen.getByText('Please enter your phone number')).toBeInTheDocument();
@@ -172,8 +171,7 @@ describe('Signup Component', () => {
     });
 
     render(<Signup />);
-    fireEvent.submit(screen.getByRole('button', { name: /Submit/i }));
-
+    fireEvent.submit(screen.getByText('Loading...'));
     await waitFor(() => {
       expect(screen.getByText('Phone number must be 10 digits')).toBeInTheDocument();
     });

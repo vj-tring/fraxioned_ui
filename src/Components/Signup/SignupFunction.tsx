@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useFormik } from 'formik';
-import validationSchema from './validationSchema';
-import { registerUser } from "../../Api/RegisterApi";
+import validationSchema from './ValidationSchema';
+import { registerUser } from "../../Api/Register";
 
 
 const useSignupHandler = () => {

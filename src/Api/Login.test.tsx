@@ -1,14 +1,14 @@
 // login.api.test.js
 import axios from 'axios';
-import { login } from './LoginApi';
+import { login } from './Login';
 import { ApiUrl } from '../Components/config';
-import { LoginPayload } from '../Components/Types/Login';
+import { Login } from '../Components/Types/Login';
 
 jest.mock('axios');
 
 describe('login API', () => {
   it('calls the correct endpoint with the correct payload', async () => {
-    const payload: LoginPayload = {
+    const payload: Login = {
       email: 'email',
       password: 'password',
     };
@@ -28,7 +28,7 @@ describe('login API', () => {
   });
 
   it('returns the response from the API', async () => {
-    const payload: LoginPayload = {
+    const payload: Login = {
       email: 'email',
       password: 'password',
     };
@@ -47,7 +47,7 @@ describe('login API', () => {
   });
 
   it('throws an error if the API call fails', async () => {
-    const payload: LoginPayload = {
+    const payload: Login = {
       email: 'email',
       password: 'password',
     };

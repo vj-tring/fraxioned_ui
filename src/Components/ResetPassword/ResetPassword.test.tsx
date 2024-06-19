@@ -1,10 +1,11 @@
+
 import React from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ResetPassword from './ResetPassword';
-import useResetHandler from './ResetApiHandler';
+import useResetHandler from './ResetFunction';
 jest.mock('../../assets/Fraxioned.png', () => 'Fraxioned.png');
-jest.mock('./ResetApiHandler');
+jest.mock('./ResetFunction');
 
 const mockedUseResetHandler = useResetHandler as jest.MockedFunction<typeof useResetHandler>;
 
@@ -77,7 +78,7 @@ describe('ResetPassword Component', () => {
 
   test('calls formik handleSubmit on form submission', () => {
     render(<ResetPassword />);
-    fireEvent.submit(screen.getByRole('button', { name: /submit/i }));
+    fireEvent.submit(screen.getByRole('button', { name: /Loading/i })); 
     expect(mockedUseResetHandler().formik.handleSubmit).toHaveBeenCalled();
   });
 

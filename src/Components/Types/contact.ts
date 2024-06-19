@@ -1,8 +1,8 @@
 // src/Components/Types/contact.ts
-export interface ContactMessagePayload {
+export interface ContactMessage {
   userId:number;
   name: string;
-  email: string; // Add this property
+  email: string; 
   message: string;
   subject:string
 }

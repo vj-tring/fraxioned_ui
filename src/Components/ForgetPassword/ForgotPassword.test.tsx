@@ -2,11 +2,11 @@ import React from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ForgotPassword from './ForgotPassword';
-import useForgotHandler from './ForgotApiHandler';
+import useForgotHandler from './ForgotFunction';
 
 import { FormikState, FormikErrors, FormikTouched, FieldConfig, FieldInputProps, FieldMetaProps, FieldHelperProps } from 'formik';
 jest.mock('../../assets/Fraxioned.png', () => 'Fraxioned.png');
-jest.mock('./ForgotApiHandler');
+jest.mock('./ForgotFunction');
 const mockedUseForgotHandler = useForgotHandler as jest.MockedFunction<typeof useForgotHandler>;
 
 describe('ForgotPassword Component', () => {

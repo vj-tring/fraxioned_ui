@@ -1,14 +1,14 @@
 // sendInvite.api.test.js
 import axios from 'axios';
-import { sendInvite } from './send-inviteApi';
+import { sendInvite } from './Send-inviteApi';
 import { ApiUrl } from '../Components/config';
-import { SendInvitePayload } from '../Components/Types/Send-invite';
+import { SendInvite} from '../Components/Types/Send-invite';
 
 jest.mock('axios');
 
 describe('sendInvite API', () => {
   it('calls the correct endpoint with the correct payload', async () => {
-    const payload: SendInvitePayload = {
+    const payload: SendInvite = {
       email: 'email@example.com',
       roleId:1,
       invitedBy:""
@@ -29,7 +29,7 @@ describe('sendInvite API', () => {
   });
 
   it('returns the response from the API', async () => {
-    const payload: SendInvitePayload = {
+    const payload: SendInvite = {
       email: 'email@example.com',
       roleId:1,
       invitedBy:""    };
@@ -48,7 +48,7 @@ describe('sendInvite API', () => {
   });
 
   it('throws an error if the API call fails', async () => {
-    const payload: SendInvitePayload = {
+    const payload: SendInvite = {
       email: 'email@example.com',
       roleId:1,
       invitedBy:""    };

@@ -3,7 +3,7 @@ import { Button } from '@mui/material'
 import React from 'react'
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars'
 import './Login.css'
-import useLoginHandler from './LoginApiHandler'
+import useLoginHandler from './LoginFunction'
 import { Link } from 'react-router-dom';
 import ResponsiveAppBar from '../NavbarMUI/NavbarUI'
 import Loader from '../Loader/Loader';

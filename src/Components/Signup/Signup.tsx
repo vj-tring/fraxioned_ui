@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@mui/material';
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
-import useSignupHandler from './SignupApiHandler';
+import useSignupHandler from './SignupFunction';
 import './Signup.css';
 import ResponsiveAppBar from '../NavbarMUI/NavbarUI';
 import Loader from '../Loader/Loader';

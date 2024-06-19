@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { ApiUrl } from '../Components/config';
-import { ForgotPasswordPayload } from 'Components/Types/Forgot';
+import { ForgotPassword } from 'Components/Types/Forgot';
 
-export const forgotPassword = async (payload: ForgotPasswordPayload) => {
+export const forgotPassword = async (payload: ForgotPassword) => {
   try {
     const response = await axios.post(`${ApiUrl}/authentication/forgot-password`, payload);
     return response;

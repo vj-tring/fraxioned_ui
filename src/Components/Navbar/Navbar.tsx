@@ -4,9 +4,9 @@ import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Dropdown from 'react-bootstrap/Dropdown';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import InviteModal from './InviteModal';
+import InviteModal from './SentInviteModal';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
-import useNavbarHandler from "./useNavbarHandler";
+import useNavbarHandler from "./NavbarFunction";
 import './Navbar.css';
 
 interface CustomNavbarProps {

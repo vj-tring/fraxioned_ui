@@ -1,5 +1,5 @@
 
-  export interface ResetPasswordPayload {
+  export interface ResetPassword {
       newPassword: string;
       confirmPassword: string;
     }

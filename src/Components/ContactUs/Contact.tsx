@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { handleSubmit } from './ContactApiHandler';
+import { handleSubmit } from './ContactFunction';
 import fraxionedIcon from '../../assets/Fraxioned-icon.png'; 
 import './Contact.css';
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';

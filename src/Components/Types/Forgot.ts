@@ -1,5 +1,5 @@
 // src/types/authentication.ts
-export interface ForgotPasswordPayload {
+export interface ForgotPassword{
     email: string;
   }
   

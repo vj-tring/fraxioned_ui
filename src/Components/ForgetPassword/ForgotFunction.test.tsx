@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import useForgotHandler from './ForgotApiHandler';
+import useForgotHandler from './ForgotFunction';
 // import { forgotPassword } from '../../Api/ForgotApi';
 
 jest.mock('react-router-dom', () => ({

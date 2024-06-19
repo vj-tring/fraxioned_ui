@@ -2,10 +2,10 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ResetPassword.css';
 import { Button } from '@mui/material';
-import useResetHandler from './ResetApiHandler';
+import useResetHandler from './ResetFunction';
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
 import ResponsiveAppBar from '../NavbarMUI/NavbarUI'
-import Loader from 'Components/Loader/Loader';
+import Loader from '../../Components/Loader/Loader';
 const ResetPassword: React.FC = () => {
   const {
     formik,

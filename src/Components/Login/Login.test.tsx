@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Login from './Login';
-import useLoginHandler from './LoginApiHandler';
+import useLoginHandler from './LoginFunction';
 jest.mock('../../assets/Fraxioned.png', () => 'Fraxioned.png');
 // Mock the useLoginHandler hook
 jest.mock('./LoginApiHandler');
