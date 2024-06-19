@@ -2,7 +2,7 @@ import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import fraxionedLogo from '../../assets/Fraxioned-icon.png';
+import fraxionedLogo from '../../assets/Fraxioned.png';
 import Container from '@mui/material/Container';
 
 
