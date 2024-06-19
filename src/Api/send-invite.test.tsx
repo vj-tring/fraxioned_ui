@@ -1,6 +1,6 @@
 // sendInvite.api.test.js
 import axios from 'axios';
-import { sendInvite } from './Send-inviteApi';
+import { sendInvite } from './Send-invite';
 import { ApiUrl } from '../Components/config';
 import { SendInvite} from '../Components/Types/Send-invite';
 
