@@ -16,6 +16,12 @@ const Signup: React.FC = () => {
     loading
   } = useSignupHandler();
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      formik.setFieldValue('imageUrl', e.target.files[0]);
+    }
+  };
+
   return (
     <div className=" d-flex flex-column justify-content-center align-items-center ">
       <CustomizedSnackbars
@@ -208,22 +214,19 @@ const Signup: React.FC = () => {
           className={`form-control ${formik.touched.zip && formik.errors.zip ? 'is-invalid' : ''}`}
         />
         </div>
-      <div className="col-4 mt-2">
-        <label htmlFor="imageUrl" className="form-label">
-          {formik.touched.imageUrl && formik.errors.imageUrl ? (
-            <span className="text-danger">{formik.errors.imageUrl}</span>
-          ) : null}
-        </label>
-        <input
-          name="imageUrl"
-          type="text"
-          placeholder=" Image URL"
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          value={formik.values.imageUrl}
-          className={`form-control ${formik.touched.imageUrl && formik.errors.imageUrl ? 'is-invalid' : ''}`}
-        />
-      </div>
+        <div className="col-4 mt-2">
+            <label htmlFor="imageUrl" className="form-label">
+              {formik.touched.imageUrl && formik.errors.imageUrl ? (
+                <span className="text-danger">{formik.errors.imageUrl}</span>
+              ) : null}
+            </label>
+            <input
+              name="imageUrl"
+              type="file"
+              onChange={handleImageChange}
+              className={`form-control ${formik.touched.imageUrl && formik.errors.imageUrl ? 'is-invalid' : ''}`}
+            />
+          </div>
       <div className="col-6 mt-2">
         <label htmlFor="password" className="form-label">
           {formik.touched.password && formik.errors.password ? (

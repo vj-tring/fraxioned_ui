@@ -5,7 +5,6 @@ import { useFormik } from 'formik';
 import validationSchema from './validationSchema';
 import { registerUser } from "../../Api/Register";
 
-
 const useSignupHandler = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,7 +20,6 @@ const useSignupHandler = () => {
     const token = params.get('inviteToken');
     setInviteToken(token);
   }, [location.search]);
-
   const formik = useFormik({
     initialValues: {
       username:'',
@@ -35,7 +33,7 @@ const useSignupHandler = () => {
       state: '',
       city: '',
       zip: '',
-      imageUrl: '',
+      imageUrl: null as File | null,  // Initialize imageUrl as null for file
       password: '',
       confirmPassword: '',
     },
@@ -44,15 +42,29 @@ const useSignupHandler = () => {
       setLoading(true);
       console.log("Form submitted");
       try {
-        const payload = {
-          ...values,
-          inviteToken,
-        };
-
-        console.log("Payload being sent to server:", payload);
-
-        const response = await registerUser(payload);
-
+        const formData = new FormData();
+        formData.append('username', values.username);
+        formData.append('firstName', values.firstName);
+        formData.append('lastName', values.lastName);
+        formData.append('phone', values.phone);
+        formData.append('secondaryPhone', values.secondaryPhone);
+        formData.append('secondaryEmail', values.secondaryEmail);
+        formData.append('address1', values.address1);
+        formData.append('address2', values.address2);
+        formData.append('state', values.state);
+        formData.append('city', values.city);
+        formData.append('zip', values.zip);
+        
+        if (values.imageUrl) {
+          formData.append('imageUrl', values.imageUrl);
+        }
+     
+        formData.append('password', values.password);
+        formData.append('confirmPassword', values.confirmPassword);
+        formData.append('inviteToken', inviteToken || '');  
+  
+        const response = await registerUser(formData);
+  
         if (response.status === 201) {
           setSnackbarMessage('Signup successful!');
           setSnackbarSeverity('success');
@@ -72,16 +84,11 @@ const useSignupHandler = () => {
         }
         setSnackbarSeverity('error');
         setOpenSnackbar(true);
-        setLoading(false);
-
       }
       setLoading(false);
-
     },
   });
-
   
-
   const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
@@ -100,4 +107,3 @@ const useSignupHandler = () => {
 }
 
 export default useSignupHandler;
-

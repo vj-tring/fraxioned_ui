@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
   username: Yup.string()
-  .required('Please enter your user name'),
+    .required('Please enter your user name'),
   firstName: Yup.string()
     .required('Please enter your first name'),
   lastName: Yup.string()
@@ -27,8 +27,20 @@ const validationSchema = Yup.object({
   zip: Yup.string()
     .matches(/^\d{5}$/, 'Zip code must be 5 digits')
     .required('Please enter your zip code'),
-  imageUrl: Yup.string()
-    .url('Invalid URL format')
+  imageUrl: Yup.mixed()
+    .test('fileType', 'Invalid file format', (value) => {
+      // Allow null or check if it's a File object
+      return !value || (value instanceof File);
+    })
+    .test('fileSize', 'File size is too large', (value) => {
+      if (!value) return true; // If value is null, return true (valid)
+
+      // Type assertion to treat value as File
+      const file = value as File;
+      // Adjust max file size limit as needed (10MB in this case)
+      return file.size <= 10 * 1024 * 1024;
+    })
+    .nullable()
     .notRequired(),
   password: Yup.string()
     .required('Please enter a password')

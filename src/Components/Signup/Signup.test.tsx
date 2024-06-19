@@ -26,7 +26,7 @@ describe('Signup Component', () => {
           state: '',
           city: '',
           zip: '',
-          imageUrl: '',
+          imageUrl:null,
           password: '',
           confirmPassword: ''
         },
@@ -50,7 +50,7 @@ describe('Signup Component', () => {
           state: '',
           city: '',
           zip: '',
-          imageUrl: '',
+          imageUrl: null,
           password: '',
           confirmPassword: ''
         },
@@ -199,7 +199,7 @@ describe('Signup Component', () => {
                     state: '',
                     city: '',
                     zip: '',
-                    imageUrl: '',
+                    imageUrl:null,
                     password: '',
                     confirmPassword: ''
                 },
@@ -224,7 +224,7 @@ describe('Signup Component', () => {
                     state: '',
                     city: '',
                     zip: '',
-                    imageUrl: '',
+                    imageUrl: null,
                     password: '',
                     confirmPassword: ''
                 },
