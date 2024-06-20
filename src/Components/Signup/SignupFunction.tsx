@@ -20,9 +20,10 @@ const useSignupHandler = () => {
     const token = params.get('inviteToken');
     setInviteToken(token);
   }, [location.search]);
+
   const formik = useFormik({
     initialValues: {
-      username:'',
+      username: '',
       firstName: '',
       lastName: '',
       phone: '',
@@ -42,28 +43,12 @@ const useSignupHandler = () => {
       setLoading(true);
       console.log("Form submitted");
       try {
-        const formData = new FormData();
-        formData.append('username', values.username);
-        formData.append('firstName', values.firstName);
-        formData.append('lastName', values.lastName);
-        formData.append('phone', values.phone);
-        formData.append('secondaryPhone', values.secondaryPhone);
-        formData.append('secondaryEmail', values.secondaryEmail);
-        formData.append('address1', values.address1);
-        formData.append('address2', values.address2);
-        formData.append('state', values.state);
-        formData.append('city', values.city);
-        formData.append('zip', values.zip);
+        const payload = {
+          ...values,
+          inviteToken,
+        };
         
-        if (values.imageUrl) {
-          formData.append('imageUrl', values.imageUrl);
-        }
-     
-        formData.append('password', values.password);
-        formData.append('confirmPassword', values.confirmPassword);
-        formData.append('inviteToken', inviteToken || '');  
-  
-        const response = await registerUser(formData);
+        const response = await registerUser(payload);
   
         if (response.status === 201) {
           setSnackbarMessage('Signup successful!');
