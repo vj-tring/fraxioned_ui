@@ -182,7 +182,7 @@ const Signup: React.FC = () => {
           className={`form-control ${formik.touched.state && formik.errors.state ? 'is-invalid' : ''}`}
         />
       </div>
-      <div className="col-4 mt-2">
+      <div className="col-6 mt-2">
         <label htmlFor="city" className="form-label">
           {formik.touched.city && formik.errors.city ? (
             <span className="text-danger">{formik.errors.city}</span>
@@ -198,7 +198,7 @@ const Signup: React.FC = () => {
           className={`form-control ${formik.touched.city && formik.errors.city ? 'is-invalid' : ''}`}
         />
       </div>
-      <div className="col-4 mt-2">
+      <div className="col-6 mt-2">
         <label htmlFor="zip" className="form-label">
           {formik.touched.zip && formik.errors.zip ? (
             <span className="text-danger">{formik.errors.zip}</span>
@@ -214,7 +214,7 @@ const Signup: React.FC = () => {
           className={`form-control ${formik.touched.zip && formik.errors.zip ? 'is-invalid' : ''}`}
         />
         </div>
-        <div className="col-4 mt-2">
+        <div className="col-12 mt-2">
             <label htmlFor="imageUrl" className="form-label">
               {formik.touched.imageUrl && formik.errors.imageUrl ? (
                 <span className="text-danger">{formik.errors.imageUrl}</span>

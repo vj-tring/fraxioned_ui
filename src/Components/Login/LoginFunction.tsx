@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { login } from '../../Api/Login';
 import validationSchema from './validationSchema';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { loginUser } from '../../Redux/actions/loginActions';
+
 const useLoginHandler = () => {
   const [loading, setLoading] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -10,7 +13,10 @@ const useLoginHandler = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'info' | 'warning' | 'error'>('success');
 
   const navigate = useNavigate();
-
+  // const dispatch = useDispatch();
+  // const { loading, openSnackbar, snackbarMessage, snackbarSeverity } = useSelector(
+  //   (state) => state.login
+  // );
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -26,6 +32,7 @@ const useLoginHandler = () => {
           localStorage.setItem('userData', JSON.stringify(data.user));
           localStorage.setItem('token', data.session.token);
           localStorage.setItem('expiresAt', data.session.expiresAt);
+          // dispatch(loginUser(values));
 
           setSnackbarMessage('Login successful!');
           setSnackbarSeverity('success');
