@@ -2,6 +2,11 @@
     padding: 20px;
 
   }
+
+  .edit{
+    height: 30px;
+    margin-bottom: 30px;
+  }
   
   .user-header {
     display: flex;
@@ -85,7 +90,7 @@
 
   }
  .SecPhone {
-    padding-left: 110px;
+    padding-left: 103px;
     
   }
   @media (min-width: 768px) {

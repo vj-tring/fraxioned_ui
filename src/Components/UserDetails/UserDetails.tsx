@@ -2,22 +2,25 @@ import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './UserDetails.css';
 import userImage from '../../assets/profile.jpeg';
+import EditIcon from '../../assets/edit-icon.png';
 
 interface UserDetailsProps {
+  id: number;
   name: string;
   email: string;
   phone: string;
-  mailingAddress: string;
+  address1: string;
   secondaryEmail: string;
   secondaryPhone: string;
 }
 
 const UserDetails: React.FC = () => {
   const [userDetails, setUserDetails] = useState<UserDetailsProps>({
+    id: 0,
     name: '',
     email: '',
     phone: '',
-    mailingAddress: '',
+    address1: '',
     secondaryEmail: '',
     secondaryPhone: '',
   });
@@ -26,20 +29,31 @@ const UserDetails: React.FC = () => {
     const userData = localStorage.getItem('userData');
     if (userData) {
       const userDataObject = JSON.parse(userData);
-      setUserDetails({
-        email: userDataObject.email,
-        name: userDataObject.username,
-        phone: '(123) 456-7890',
-        mailingAddress: '123 Main Street, Salt Lake City, UT. 84101',
-        secondaryEmail: 'jane.doe@example.com',
-        secondaryPhone: '(123) 555-5555',
-      });
+      const localStorageId = userDataObject.id;
+
+      fetch(`http://localhost:3001/api/users/user/${localStorageId}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data) {
+            setUserDetails({
+              id: data.id,
+              email: data.email,
+              name: data.username,
+              phone: data.phone,
+              address1: data.address1,
+              secondaryEmail: data.secondaryEmail,
+              secondaryPhone: data.secondaryPhone,
+            });
+            console.log('User details:', data);
+          } else {
+            console.error('No matching user found');
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching user details:', error);
+        });
     } else {
-      const userFromLocalStorage = localStorage.getItem('userDetails');
-      if (userFromLocalStorage) {
-        const userDetailsData = JSON.parse(userFromLocalStorage);
-        setUserDetails(userDetailsData);
-      }
+      console.error('No user data found in local storage');
     }
   }, []);
 
@@ -49,9 +63,11 @@ const UserDetails: React.FC = () => {
         <img src={userImage} alt="User" className="user-image" />
         <div className="name">
           <h5>{userDetails.name}</h5>
-          <h6>& {userDetails.email}</h6>
+          <h6>{userDetails.email}</h6>
         </div>
-        <div className="edit-icon">Edit</div>
+        <div className="edit-icon">
+          <img className='edit' src={EditIcon} alt="Edit" />
+        </div>
       </div>
       <div className="user-info">
         <div className="info-box email-phone">
@@ -59,7 +75,7 @@ const UserDetails: React.FC = () => {
           <p><strong>PHONE</strong><br />{userDetails.phone}</p>
         </div>
         <div className="info-box">
-          <p><strong>MAILING ADDRESS</strong><br />{userDetails.mailingAddress}</p>
+          <p><strong>MAILING ADDRESS</strong><br />{userDetails.address1}</p>
         </div>
         <div className="info-box secondary-info">
           <p><strong>SECONDARY EMAIL</strong><br />{userDetails.secondaryEmail}</p>

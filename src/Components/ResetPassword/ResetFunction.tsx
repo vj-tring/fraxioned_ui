@@ -33,7 +33,7 @@ const useResetHandler = () => {
       try {
         setLoading(true);
 
-        const token = getTokenFromParams(); // Get token from URL params
+        const token = getTokenFromParams(); 
         console.log(token);
         const response = await resetPassword(values, token);
 
