@@ -5,6 +5,16 @@ import { useFormik } from 'formik';
 import validationSchema from './validationSchema';
 import { registerUser } from "../../Api/Register";
 
+// Helper function to convert file to base64
+const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = error => reject(error);
+  });
+};
+
 const useSignupHandler = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -43,8 +53,12 @@ const useSignupHandler = () => {
       setLoading(true);
       console.log("Form submitted");
       try {
+        // Convert image file to base64 string
+        const imageUrl = "string";
+        
         const payload = {
           ...values,
+          // imageUrl, // Use base64 string
           inviteToken,
         };
         
