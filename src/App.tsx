@@ -6,7 +6,7 @@ import ForgotPassword from './Components/ForgetPassword/ForgotPassword';
 import ResetPassword from './Components/ResetPassword/ResetPassword';
 import Dashboard from './Components/Dashboard/Dashboard';
 import ResponsiveAppBar from './Components/NavbarMUI/NavbarUI';
-import { resetPassword } from 'Api/Reset';
+// import { resetPassword } from 'Api/Reset';
 
 interface PrivateRouteProps {
   element: React.ComponentType;
