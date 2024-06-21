@@ -6,7 +6,9 @@ import axios from 'axios';
 import { ApiUrl } from '../config';
 import './sendInvite.css';
 
-// Create a styled button using Material-UI's styled utility
+
+
+
 const StyledButton = styled('button')({
   backgroundColor: '#ffffff',
   color: '#F7981D',

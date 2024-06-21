@@ -30,7 +30,7 @@ const ForgotPassword: React.FC = () => {
                 severity={snackbarSeverity}
             />
       <div className="forgot shadow rounded p-4">
-        <h4 className="forgot-pass text-center mb-5">Forgot Password</h4>
+        <h4 className="forgot-pass text-center mb-4">Forgot Password</h4>
         <form onSubmit={formik.handleSubmit}>
           <div className="form-group position-relative">
             {formik.touched.email && formik.errors.email ? (
