@@ -1,0 +1,49 @@
+ 
+.modal-footer-custom {
+    display: flex;
+  }
+.title{
+  display: flex;
+  align-items: flex-start;
+}
+.primary{
+  background-color: #df9526;
+  border: none;
+  height: 40px;
+  width: 20%;
+  color: white;
+  border-radius: 5px;
+}  
+
+.primary:hover{
+  background-color: #e48f10;
+}
+  
+.success{
+  background-color: grey;
+  border: none;
+  height: 40px;
+  width: 20%;
+  color: white;
+  border-radius: 5px;
+}
+.success:hover{
+  background-color: rgb(122, 121, 121);
+
+}
+.message{
+  /* text-align: center; */
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-left: 12px;
+}
+.title{
+  margin-top: 5px;
+}
+.modal-header {
+  padding-left: 5% !important;
+}
+.modal{
+  border: none;
+}
+
