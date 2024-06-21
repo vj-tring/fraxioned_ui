@@ -17,7 +17,7 @@ describe('Footer Component', () => {
     renderFooter();
     const homeLink = screen.getByText('Home');
     expect(homeLink).toBeInTheDocument();
-    expect(homeLink).toHaveAttribute('href', '/');
+    expect(homeLink).toHaveAttribute('href', '/dashboard');
   });
 
   test('renders Booking link', () => {
