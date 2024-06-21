@@ -59,6 +59,7 @@ const SendInvite: React.FC = () => {
           fullWidth
 
           label="Enter email"
+          placeholder='Enter email'
           variant="outlined"
           value={email}
           onChange={(e) => setEmail(e.target.value)}

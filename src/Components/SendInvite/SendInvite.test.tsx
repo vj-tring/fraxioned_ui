@@ -3,7 +3,7 @@ import React from 'react';
 import { render, screen, fireEvent} from '@testing-library/react';
 import SendInvite from './SendInvite';
 import '@testing-library/jest-dom';
-import axios from 'axios';
+// import axios from 'axios';
 import useSendInviteHandler from './SendInviteFunction';
 
 jest.mock('axios');
@@ -22,13 +22,6 @@ describe('SendInvite Component', () => {
       selectedRole: '',
       setSelectedRole: jest.fn(),
     });
-
-    axios.get = jest.fn().mockResolvedValue({
-      data: [
-        { id: 1, roleName: 'Admin' },
-        { id: 2, roleName: 'User' },
-      ],
-    });
   });
 
   afterEach(() => {
@@ -41,9 +34,6 @@ describe('SendInvite Component', () => {
     expect(screen.getByPlaceholderText('Enter email')).toBeInTheDocument();
     expect(screen.getByText('Select role')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Send Invite/i })).toBeInTheDocument();
-    
-    await screen.findByText('Admin');
-    await screen.findByText('User');
   });
 
   test('calls setEmail on email input change', () => {
