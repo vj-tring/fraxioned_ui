@@ -65,7 +65,7 @@ const UserDetails: React.FC = () => {
       <div className="user-header">
         <img src={userImage} alt="User" className="user-image" />
         <div className="name">
-          <h5>{userDetails.name}</h5>
+          {/* <h5>{userDetails.email}</h5> */}
           <h6>{userDetails.email}</h6>
         </div>
         <div className="edit-icon">
