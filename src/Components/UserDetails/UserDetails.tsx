@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './UserDetails.css';
 import userImage from '../../assets/profile.jpeg';
 import EditIcon from '../../assets/edit-icon.png';
-
+import { ApiUrl } from 'Components/config';
 interface UserDetailsProps {
   id: number;
   name: string;
@@ -30,8 +30,11 @@ const UserDetails: React.FC = () => {
     if (userData) {
       const userDataObject = JSON.parse(userData);
       const localStorageId = userDataObject.id;
+      console.log("id",localStorageId);
 
-      fetch(`http://localhost:3001/api/users/user/${localStorageId}`)
+
+
+      fetch(`${ApiUrl}/users/user/${localStorageId}`)
         .then(response => response.json())
         .then(data => {
           if (data) {

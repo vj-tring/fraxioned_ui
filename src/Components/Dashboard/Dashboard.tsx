@@ -14,7 +14,7 @@ import { isAuthenticated } from '../../authService';
 
 const Dashboard: React.FC = () => {
   const [userEmail, setUserEmail] = useState('');
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -30,14 +30,12 @@ const Dashboard: React.FC = () => {
     }
   }, [navigate]);
 
-
   const links = [
     { name: 'HOME', href: '/dashboard', disabled: false },
     { name: 'BOOKING', href: '/dashboard/booking', disabled: true },
     { name: 'PEAK SEASON', href: '/dashboard/services', disabled: true },
     { name: 'PAYEMENTS', href: '/dashboard/payements', disabled: true },
-    { name: 'FAQ', href: '/dashboard/FAQ', disabled: false },
-    // { name: 'CONTACT', href: '/dashboard/contact', disabled: false },
+    { name: 'FAQ', href: '/faq', disabled: false }, 
   ];
 
   return (
@@ -47,17 +45,16 @@ const Dashboard: React.FC = () => {
         links={links}
         userImage={userImage}
         userName={userEmail}
-        onUserImageClick={() => navigate('/dashboard/user-details')} // Directly navigate to user details page
-
+        onUserImageClick={() => navigate('/user-details')}
       />
 
-     <div className="content-container">
-        <div className="content-wrapper"> {/* Add a wrapper for content */}
+      <div className="content-container">
+        <div className="content-wrapper">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="FAQ" element={<CustomizedAccordions />} />
-            <Route path="contact" element={<Contact />} />
-            <Route path="user-details" element={<UserDetails />} />
+            <Route path="/dashboard" element={<Home />} />
+            <Route path="/faq" element={<CustomizedAccordions />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/user-details" element={<UserDetails />} />
           </Routes>
         </div>
       </div>

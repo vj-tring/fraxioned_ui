@@ -79,7 +79,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
             <Dropdown.Menu className="Drop-menu">
               <Dropdown.Item className="Drop-item" onClick={handleOpenInviteModal}>Send Invite</Dropdown.Item>
               <Dropdown.Item className="Drop-item" onClick={handleShowLogoutModal}>Logout</Dropdown.Item>
-              <Dropdown.Item className="Drop-item" href="#/action-3">Settings</Dropdown.Item>
+              {/* <Dropdown.Item className="Drop-item" href="#/action-3">Settings</Dropdown.Item> */}
             </Dropdown.Menu>
           </Dropdown>
         </Nav>
