@@ -4,7 +4,6 @@ import Signup from './Signup';
 import '@testing-library/jest-dom';
 
 import useSignupHandler from './SignupFunction';
-import { boolean } from 'yup';
 jest.mock('../../assets/Fraxioned.png', () => 'Fraxioned.png');
 jest.mock('./SignupFunction');
 
