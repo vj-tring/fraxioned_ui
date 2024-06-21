@@ -8,6 +8,7 @@ import ResponsiveAppBar from '../NavbarMUI/NavbarUI'
 
 
 const ForgotPassword: React.FC = () => {
+
   const {
     formik,
     openSnackbar,
@@ -22,14 +23,14 @@ const ForgotPassword: React.FC = () => {
 
 <ResponsiveAppBar/>
 
-<CustomizedSnackbars
+              <CustomizedSnackbars
                 open={openSnackbar}
                 handleClose={handleSnackbarClose}
                 message={snackbarMessage}
                 severity={snackbarSeverity}
             />
       <div className="forgot shadow rounded p-4">
-        <h2 className="text-center mb-4">Forgot Password</h2>
+        <h4 className="forgot-pass text-center mb-5">Forgot Password</h4>
         <form onSubmit={formik.handleSubmit}>
           <div className="form-group position-relative">
             {formik.touched.email && formik.errors.email ? (
