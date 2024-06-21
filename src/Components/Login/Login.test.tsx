@@ -39,7 +39,7 @@ describe('Login Component', () => {
 
         expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
         expect(screen.getByPlaceholderText('Password')).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /Sign In/i })).toBeInTheDocument();
     });
 
     test('shows validation errors', () => {
@@ -63,7 +63,7 @@ describe('Login Component', () => {
             </Router>
         );
 
-        fireEvent.click(screen.getByRole('button', { name: /submit/i }));
+        fireEvent.click(screen.getByRole('button', { name: /Sign In/i }));
         expect(mockFormik.handleSubmit).toHaveBeenCalled();
     });
 
@@ -122,7 +122,7 @@ describe('Login Component', () => {
         fireEvent.change(screen.getByPlaceholderText('Password'), {
             target: { value: 'password' },
         });
-        fireEvent.click(screen.getByRole('button', { name: /submit/i }));
+        fireEvent.click(screen.getByRole('button', { name: /Sign In/i }));
 
         await waitFor(() => {
             expect(mockSubmit).toHaveBeenCalled();    
