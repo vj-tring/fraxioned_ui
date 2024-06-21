@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import CustomNavbar from '../Navbar/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import fraxionedLogo from '../../assets/Fraxioned.png';
@@ -18,7 +18,7 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     if (!isAuthenticated()) {
-      navigate('/login'); // Redirect to login if not authenticated
+      navigate('/login'); 
     } else {
       const storedUserData = localStorage.getItem('userData');
       if (storedUserData) {
@@ -51,10 +51,11 @@ const Dashboard: React.FC = () => {
       <div className="content-container">
         <div className="content-wrapper">
           <Routes>
-            <Route path="/dashboard" element={<Home />} />
+            <Route path="/" element={<Home />} />
             <Route path="/faq" element={<CustomizedAccordions />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/user-details" element={<UserDetails />} />
+            <Route path="*" element={<Navigate to="/dashboard" />} />
           </Routes>
         </div>
       </div>
