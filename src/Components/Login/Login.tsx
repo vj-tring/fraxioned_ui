@@ -87,7 +87,7 @@ const Login: React.FC = () => {
                         disabled={loading}
                     >
                         
-                        {loading ? 'Loading...' : 'Submit'}
+                        {loading ? 'Loading...' : 'Sign In'}
 
                     </Button>
                 </form>
