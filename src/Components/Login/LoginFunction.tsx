@@ -13,10 +13,7 @@ const useLoginHandler = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'info' | 'warning' | 'error'>('success');
 
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
-  // const { loading, openSnackbar, snackbarMessage, snackbarSeverity } = useSelector(
-  //   (state) => state.login
-  // );
+ 
   const formik = useFormik({
     initialValues: {
       email: '',

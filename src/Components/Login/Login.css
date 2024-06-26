@@ -38,18 +38,26 @@ body, html {
        flex-direction: column;
        height: 578px;
    }
-   .image-container1{
+   /* .login-image-container1{
     flex: 3 ;
 
    }
    .login-container {
     flex: 1  ;
    
+  } */
+  .login-box {
+    width: 100%;
+    max-width: 350px;
+    height: 300px;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 100px;
   }
   
 }
 
-.image-container1 {
+.login-image-container1 {
   flex: 2;
   background: url("../../assets/building.jpg") no-repeat center center;
   background-size:cover;  
@@ -58,6 +66,7 @@ body, html {
 .login-container {
   flex: 1 ;
   display: flex;
+  height: 600px;
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.9); 
@@ -66,7 +75,7 @@ body, html {
 .login-box {
   width: 100%;
   max-width: 350px;
-  height: 300px;
+  /* height: 300px; */
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 100px;

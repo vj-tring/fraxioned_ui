@@ -50,7 +50,9 @@ describe('ForgotPassword Component', () => {
         isSubmitting: false,
         isValidating: false,
         submitCount: 0,
+
       },
+      loading: false, 
       openSnackbar: false,
       snackbarMessage: '',
       snackbarSeverity: 'success',
@@ -273,6 +275,7 @@ describe('ForgotPassword Component', () => {
               isValidating: false,
               submitCount: 0
             },
+            loading: false, 
             openSnackbar: false,
             snackbarMessage: '',
             snackbarSeverity: 'success',

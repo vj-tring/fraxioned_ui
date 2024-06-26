@@ -23,7 +23,7 @@ const Login: React.FC = () => {
           <div className="container1"> 
              
             <div className="main-container d-flex">
-                <div className="image-container1">       </div>
+                <div    className="login-image-container1">       </div>
                 
                 <div className="login-container d-flex flex-column align-items-center justify-content-center">
                     <CustomizedSnackbars
@@ -71,7 +71,7 @@ const Login: React.FC = () => {
                             </div>
                             <Button
                                 type="submit"
-                                className="w-100 mt-3 loginbtn"
+                                className="w-100 mt-5 loginbtn"
                                 variant="contained"
                                 color="primary"
                                 disabled={loading}

@@ -5,6 +5,7 @@ import { Button } from '@mui/material';
 import useForgotHandler from './ForgotFunction';
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
 import ResponsiveAppBar from '../NavbarMUI/NavbarUI'
+import Loader from '../Loader/Loader';
 
 
 const ForgotPassword: React.FC = () => {
@@ -15,6 +16,7 @@ const ForgotPassword: React.FC = () => {
     snackbarMessage,
     snackbarSeverity,
     handleSnackbarClose,
+    loading
 } = useForgotHandler()
 
 
@@ -58,9 +60,12 @@ const ForgotPassword: React.FC = () => {
             variant="contained"
             color="primary"
           >
-            Submit
+   {loading ? 'Loading...' : 'Submit'}
+
           </Button>
         </form>
+        {loading && <Loader />}
+
       </div>
     </div>
     </div>

@@ -38,10 +38,11 @@ const Signup: React.FC = () => {
             message={snackbarMessage}
             severity={snackbarSeverity}
           />
-          <div className="signup-box  p-4 rounded">
-          <h3 className="text-center">Sign Up</h3>
+                    <h3 className="text-center">Sign Up</h3>
 
-            <form onSubmit={formik.handleSubmit} className="row g-3">
+          <div className="signup-box  p-4 rounded">
+
+            <form onSubmit={formik.handleSubmit} className="row signuprow g-3">
               <div className="col-12 mt-2">
                 <label htmlFor="username" className="form-label">
                   {formik.touched.username && formik.errors.username ? (

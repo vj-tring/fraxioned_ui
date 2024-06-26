@@ -23,7 +23,7 @@ const Contact: React.FC = () => {
 
   return (
     <div className="contact-container">
-      <Row>
+      <Row  className='contactrow'>
         <Col md={6} className="contact-left">
           <div className="contact-header">
           <img className='contact-icon' src={fraxionedIcon} alt="Icon" />

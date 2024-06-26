@@ -8,6 +8,8 @@ import './ForgotPassword.css';
 
 
 const useForgotHandler = () => {
+  const [loading, setLoading] = useState(false);
+
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'info' | 'warning' | 'error'>('success');
@@ -20,6 +22,8 @@ const useForgotHandler = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
+      setLoading(true);
+
       try {
         // const response = await forgotPassword(values);
          await forgotPassword(values);
@@ -35,6 +39,7 @@ const useForgotHandler = () => {
         setSnackbarSeverity('error');
         setOpenSnackbar(true);
       }
+      setLoading(false);
     },
   });
 
@@ -51,6 +56,7 @@ const useForgotHandler = () => {
     snackbarMessage,
     snackbarSeverity,
     handleSnackbarClose,
+    loading,
   };
 };
 

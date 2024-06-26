@@ -13,7 +13,9 @@ body, html {
 
  
 }
-
+.signuprow{
+  background-color: white !important;
+}
 .image-container3 {
   flex: 1 !important;
   background: url('../../assets//building.jpg') no-repeat center center;
