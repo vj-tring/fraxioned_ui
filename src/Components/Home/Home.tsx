@@ -7,7 +7,6 @@ import HomeCard from '../../Components/Home/HomeCard';
 import OffSeasonCard from '../../Components/Home/OffSeasonCard';
 import PeakSeasonCard from '../../Components/Home/PeakSeasonCard';
 import { fetchHomeData, fetchOffSeasonData, fetchPeakSeasonData } from './HomeDataFetchers';
-import { HomeData, OffSeasonData, PeakSeasonData, CombinedData } from './types';
 
 const Home: React.FC = () => {
   const [combinedData, setCombinedData] = useState<CombinedData[]>([]);
