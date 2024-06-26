@@ -27,8 +27,7 @@
   justify-content: space-between;
   text-align: start;
   padding: 10px;
-  background-color: white;
-}
+  background-color: #eaf9fc;}
 
 .col-md-3 {
   flex: 0 0 auto;

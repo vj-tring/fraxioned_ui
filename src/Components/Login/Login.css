@@ -1,24 +1,75 @@
-#password{
-  margin-bottom: 15px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.container{
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+body, html {
   height: 100%;
+  background-color: aliceblue;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.container1{
+  /* background: url("../../assets/buildingnew.jpg"); */
+  /* background-color: rgb(247, 238, 224); */
+  background-repeat: no-repeat;
   background-size: cover;
+  height: 94vh;
+  padding-top: 10px;
+}
+
+.main-container {
+  height: calc(100vh - 56px); 
+  display: flex;
+  margin: 2% 5%;
+    box-shadow: var(--bs-box-shadow) !important;
+    height:500px !important;
+}
+
+@media only screen and (max-width: 776px) {
+  .main-container {
+       flex-direction: column;
+       height: 578px;
+   }
+   .image-container1{
+    flex: 3 ;
+
+   }
+   .login-container {
+    flex: 1  ;
+   
+  }
+  
+}
+
+.image-container1 {
+  flex: 2;
+  background: url("../../assets/building.jpg") no-repeat center center;
+  background-size:cover;  
+}
+
+.login-container {
+  flex: 1 ;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9); 
 }
 
 .login-box {
   width: 100%;
-  max-width: 330px;
+  max-width: 350px;
+  height: 300px;
   padding: 20px;
   border-radius: 10px;
-  margin-top: 100px;
-  margin-bottom: 20px;
-  background-color: #fbfbfb
+  margin-bottom: 100px;
 }
 
 .login-box h2 {
@@ -26,7 +77,7 @@
   text-align: center;
 }
 
-.text-center{
+.text-center {
   color: #F7981D;
 }
 
@@ -36,12 +87,10 @@
   font-size: 16px;
   margin-top: 10px;
   margin-bottom: 40px;
-  /* border: none; */
-  /* border-bottom: 1px solid #b5b2b2; */
   outline: none;
-  /* background: transparent; */
   padding-left: 10px;
 }
+
 
 .login-box label {
   position: absolute;
@@ -74,22 +123,12 @@
   color: #dc3545;
 }
 
-.container {
-  height: 100vh;
-}
-/* .btn{
-  width:100%;
-    background-color: blue !important;
-
-
-} */
-
-.forgot-password{
+.forgot-password {
   color: #F7981D;
   padding: 4px;
 }
 
-.forgot-password:hover{
+.forgot-password:hover {
   text-decoration: underline;
   color: rgb(105, 105, 255);
 }
@@ -109,9 +148,14 @@
   background-color: #e48f10;
 }
 
-.newUser{
+.newUser {
   display: flex;
-   justify-content: center;
-   color: blue;
-   
+  justify-content: center;
+  color: blue;
+}
+.passinput{
+  margin-bottom: 10px !important;
+}
+.loginbtn{
+  margin-top: 30px !important;
 }

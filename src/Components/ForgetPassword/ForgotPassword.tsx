@@ -19,9 +19,14 @@ const ForgotPassword: React.FC = () => {
 
 
   return (
-    <div className=" d-flex flex-column justify-content-center align-items-center ">
+    <div className="  ">
 
 <ResponsiveAppBar/>
+
+<div className="main-container4 d-flex">
+        <div className="image-container4">
+        </div>
+        <div className="forgot-container ">
 
               <CustomizedSnackbars
                 open={openSnackbar}
@@ -29,7 +34,7 @@ const ForgotPassword: React.FC = () => {
                 message={snackbarMessage}
                 severity={snackbarSeverity}
             />
-      <div className="forgot shadow rounded p-4">
+      <div className="forgot  rounded p-4">
         <h4 className="forgot-pass text-center mb-4">Forgot Password</h4>
         <form onSubmit={formik.handleSubmit}>
           <div className="form-group position-relative">
@@ -57,6 +62,8 @@ const ForgotPassword: React.FC = () => {
           </Button>
         </form>
       </div>
+    </div>
+    </div>
     </div>
   );
 };

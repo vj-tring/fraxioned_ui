@@ -19,9 +19,14 @@ const ResetPassword: React.FC = () => {
 
 
   return (
-    <div className=" d-flex  flex-column justify-content-center align-items-center ">
+    <div >
                 <ResponsiveAppBar/>
 
+
+                <div className="container4">  
+            <div className="main-container d-flex">
+                <div className="image-container4">       </div>
+                <div className="reset-container ">
        <CustomizedSnackbars
         open={openSnackbar}
         handleClose={handleSnackbarClose}
@@ -29,7 +34,7 @@ const ResetPassword: React.FC = () => {
         severity={snackbarSeverity}
       />
       
-      <div className="reset shadow p-4 rounded">
+      <div className="reset  p-4 rounded">
         <h4 className="text-center mb-5">Reset Password</h4>
         <form onSubmit={formik.handleSubmit}>
           <div className="form-group position-relative mb-5 ">
@@ -75,8 +80,12 @@ const ResetPassword: React.FC = () => {
         </form>
         {loading && <Loader />}
 
-      </div>
-    </div>
+        </div>
+        </div> 
+        </div>
+        </div>
+        </div>
+    
   );
 };
 

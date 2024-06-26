@@ -64,7 +64,7 @@
 .username-dropdown-toggle {
   background: none !important;
   border: none !important;
-  padding-right: 70px;
+  padding-right: 10px;
   display: flex;
   align-items: center;
   color: orange;
@@ -103,6 +103,7 @@
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   border-radius: 0;
   border: none;
+  margin-left: 10px;
 }
 .Drop-item:hover{
   color: orange;

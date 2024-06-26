@@ -6,9 +6,6 @@ import axios from 'axios';
 import { ApiUrl } from '../config';
 import './sendInvite.css';
 
-
-
-
 const StyledButton = styled('button')({
   backgroundColor: '#ffffff',
   color: '#F7981D',

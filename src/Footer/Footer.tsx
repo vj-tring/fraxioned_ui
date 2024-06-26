@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
         </div>
         <div className='col-md-2'>
           <ul>
-            <li><Link to='/' className='no-underline'>Home</Link></li>
+            <li><Link to='/dashboard' className='no-underline'>Home</Link></li>
             <li><Link to='/booking' className='no-underline disabled'>Booking</Link></li>
             <li><Link to='/peak-season' className='no-underline disabled'>Peak Season</Link></li>
           </ul>

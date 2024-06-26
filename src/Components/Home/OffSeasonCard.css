@@ -1,0 +1,48 @@
+
+.season-card {
+    text-align: center;
+    color: #0c888c;
+    width: 80%;
+    /* margin-left: 2%; */
+  }
+  
+  .season-card > h3 {
+    margin-right: 20px;
+  }
+  
+  .offseason {
+    align-content: center;
+  }
+  
+  table,
+  tr,
+  td {
+    color: #0c888c;
+    margin-left: 50px;
+    /* width: 10px; */
+
+  }
+  
+  .offseason > tr > td {
+    color: #0c888c !important;
+    text-align: left;
+     padding: 3px;
+  }
+  
+  
+  .season-card > table {
+    border: 1px solid  #0c888c; /* Specify the border style */
+  }
+  
+  .offseason > tr > td.nights {
+    font-weight: 600;
+    text-align: left;
+  }
+  .off{
+    color: #0d7477 !important;
+    font-weight: 600;
+
+  }
+  .num{
+    text-align: center !important;
+}

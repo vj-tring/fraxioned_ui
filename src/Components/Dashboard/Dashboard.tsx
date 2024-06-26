@@ -36,6 +36,7 @@ const Dashboard: React.FC = () => {
     { name: 'PEAK SEASON', href: '/dashboard/services', disabled: true },
     { name: 'PAYEMENTS', href: '/dashboard/payements', disabled: true },
     { name: 'FAQ', href: '/faq', disabled: false }, 
+    
   ];
 
   return (

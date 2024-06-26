@@ -27,7 +27,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
     handleCloseInviteModal,
     handleShowLogoutModal,
     handleCloseLogoutModal,
-  
+    // handleShowProfileModal,
     handleLogout,
   } = useNavbarHandler();
 
@@ -79,12 +79,14 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
             <Dropdown.Menu className="Drop-menu">
               <Dropdown.Item className="Drop-item" onClick={handleOpenInviteModal}>Send Invite</Dropdown.Item>
               <Dropdown.Item className="Drop-item" onClick={handleShowLogoutModal}>Logout</Dropdown.Item>
+              
+              <Dropdown.Item className="Drop-item" onClick={onUserImageClick} >Profile</Dropdown.Item>
+
               {/* <Dropdown.Item className="Drop-item" href="#/action-3">Settings</Dropdown.Item> */}
             </Dropdown.Menu>
           </Dropdown>
         </Nav>
       </Navbar>
-
       <InviteModal show={showInviteModal} onHide={handleCloseInviteModal} />
       <ConfirmationModal
         show={showLogoutModal}

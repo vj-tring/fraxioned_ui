@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom'; // For better assertions
-import Home from './Home'; // Adjust import as per your file structure
+import '@testing-library/jest-dom'; 
+import Home from './Home'; 
 
-// Mock the image import
+
 jest.mock('../../assets/building.jpg', () => ({
   default: 'mocked-home-image-path',
 }));
