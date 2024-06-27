@@ -25,19 +25,22 @@ body, html {
   padding-top: 10px;
 }
 
-.main-container {
+.login-main-container {
   height: calc(100vh - 56px); 
   display: flex;
   margin: 2% 5%;
     box-shadow: var(--bs-box-shadow) !important;
     height:500px !important;
+    border-radius: 10px ;
+    
 }
 
 @media only screen and (max-width: 776px) {
-  .main-container {
+  .login-main-container {
        flex-direction: column;
        height: 578px;
    }
+   
    /* .login-image-container1{
     flex: 3 ;
 

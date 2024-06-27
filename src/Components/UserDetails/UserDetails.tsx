@@ -4,18 +4,15 @@ import './UserDetails.css';
 import userImage from '../../assets/profile.jpeg';
 import EditIcon from '../../assets/edit-icon.png';
 import { ApiUrl } from 'Components/config';
-interface UserDetailsProps {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  address1: string;
-  secondaryEmail: string;
-  secondaryPhone: string;
+
+interface Document {
+  title: string;
+  dateUploaded: string;
+  content: string; // This could be the path to the local file or the content itself
 }
 
 const UserDetails: React.FC = () => {
-  const [userDetails, setUserDetails] = useState<UserDetailsProps>({
+  const [userDetails, setUserDetails] = useState({
     id: 0,
     name: '',
     email: '',
@@ -25,14 +22,29 @@ const UserDetails: React.FC = () => {
     secondaryPhone: '',
   });
 
+  const [documents, setDocuments] = useState<Document[]>([
+    {
+      title: 'Signing Doc',
+      dateUploaded: '1/23/2024',
+      content: require('../../assets/ownerPortal.pdf') // Example path or content
+    },
+    {
+      title: 'Property Summary',
+      dateUploaded: '1/23/2024',
+      content: require('../../assets/ownerPortal1.pdf') // Example path or content
+    },
+    {
+      title: 'Welcome Packet',
+      dateUploaded: '1/23/2024',
+      content: require('../../assets/ownerPortal2.pdf') // Example path or content
+    }
+  ]);
+
   useEffect(() => {
     const userData = localStorage.getItem('userData');
     if (userData) {
       const userDataObject = JSON.parse(userData);
       const localStorageId = userDataObject.id;
-      console.log("id",localStorageId);
-
-
 
       fetch(`${ApiUrl}/users/user/${localStorageId}`)
         .then(response => response.json())
@@ -60,6 +72,11 @@ const UserDetails: React.FC = () => {
     }
   }, []);
 
+  const handleViewDocument = (content: string) => {
+    // Open the PDF document in a new tab/window
+    window.open(content, '_blank');
+  };
+
   return (
     <div className="user-details-container">
       <div className="user-header">
@@ -85,32 +102,35 @@ const UserDetails: React.FC = () => {
           <p className='SecPhone'><strong>SECONDARY PHONE</strong><br />{userDetails.secondaryPhone}</p>
         </div>
       </div>
-      <div className="user-documents">
-        <h3>MY DOCUMENTS</h3>
-        <table>
-          <thead>
+
+
+      <div className="user-document mt-4">
+        <h3 className="mb-4">MY DOCUMENTS</h3>
+        <table className="table table-bordered user-table">
+          <thead className="thead-light">
             <tr>
-              <th>TITLE</th>
-              <th>DATE UPLOADED</th>
-              <th>DOCUMENT</th>
+              <th scope="col">TITLE</th>
+              <th scope="col">DATE UPLOADED</th>
+              <th scope="col" className='document'>DOCUMENT</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Signing Doc</td>
-              <td>1/23/2024</td>
-              <td>nfjhjaionflklewanhio;vegwvanvionehwaiohgnvkenvaio;gneio;wanbvkjnhjiahfegowj</td>
-            </tr>
-            <tr>
-              <td>Property Summary</td>
-              <td>1/23/2024</td>
-              <td>jfeoahgiohrioahgvikjwajohgiveowaovheioawhrviogewhaigiohjiofgjheiowahfgiwa</td>
-            </tr>
-            <tr>
-              <td>Welcome Packet</td>
-              <td>1/23/2024</td>
-              <td>hnfioevhwaiogvhioawhgrioiwaidhviohagioehgwaiohvwoiahhivwahviewha</td>
-            </tr>
+            {documents.map((doc, index) => (
+              <tr key={index}>
+                <td>{doc.title}</td>
+                <td>{doc.dateUploaded}</td>
+                <td >
+                  {doc.content.endsWith('.pdf') ? (
+                    < div className='document'>
+                      <button className="btn btn-primary View-btn mr-2" onClick={() => handleViewDocument(doc.content)}>View</button>
+                      <a href={doc.content} download className="btn btn-secondary download-btn">Download</a>
+                    </div>
+                  ) : (
+                    <p>{doc.content}</p>
+                  )}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

@@ -61,26 +61,28 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
           </Nav>
         </Navbar.Collapse>
         <Nav className="ml-auto">
-          {userImage && (
+        
+          <Dropdown>
+            
+            <Dropdown.Toggle variant="light" id="dropdown-basic" className="username-dropdown-toggle">
+            {userImage && (
             <Image
               src={userImage || '../../assets/profile.jpeg'}
               roundedCircle
               height="30"
               className="mr-2 responsive-image"
               alt="User"
-              style={{ cursor: 'pointer' }}
-              onClick={onUserImageClick} // Add onClick event handler to the user image
+              style={{ cursor: 'pointer',marginRight:'10px' }}
             />
           )}
-          <Dropdown>
-            <Dropdown.Toggle variant="light" id="dropdown-basic" className="username-dropdown-toggle">
               <span>{userName}</span>
             </Dropdown.Toggle>
             <Dropdown.Menu className="Drop-menu">
+            <Dropdown.Item className="Drop-item" onClick={onUserImageClick} >Profile</Dropdown.Item>
+
               <Dropdown.Item className="Drop-item" onClick={handleOpenInviteModal}>Send Invite</Dropdown.Item>
               <Dropdown.Item className="Drop-item" onClick={handleShowLogoutModal}>Logout</Dropdown.Item>
               
-              <Dropdown.Item className="Drop-item" onClick={onUserImageClick} >Profile</Dropdown.Item>
 
               {/* <Dropdown.Item className="Drop-item" href="#/action-3">Settings</Dropdown.Item> */}
             </Dropdown.Menu>

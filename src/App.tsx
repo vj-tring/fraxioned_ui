@@ -6,6 +6,7 @@ import ForgotPassword from './Components/ForgetPassword/ForgotPassword';
 import ResetPassword from './Components/ResetPassword/ResetPassword';
 import Dashboard from './Components/Dashboard/Dashboard';
 import ResponsiveAppBar from './Components/NavbarMUI/NavbarUI';
+import Booking from 'Components/Booking/Booking';
 // import { resetPassword } from 'Api/Reset';
 
 interface PrivateRouteProps {
@@ -25,6 +26,7 @@ const App: FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Signup />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/booking" element={<Booking />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/ResponsiveAppBar" element={<ResponsiveAppBar />} />
         <Route path="/dashboard" element={<PrivateRoute element={Dashboard} />} />

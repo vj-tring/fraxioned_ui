@@ -24,10 +24,11 @@
 
 .row {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   text-align: start;
   padding: 10px;
-  background-color: #eaf9fc;}
+  /* background-color: #eaf9fc; */
+}
 
 .col-md-3 {
   flex: 0 0 auto;

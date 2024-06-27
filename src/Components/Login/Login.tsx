@@ -22,7 +22,7 @@ const Login: React.FC = () => {
             <ResponsiveAppBar/>
           <div className="container1"> 
              
-            <div className="main-container d-flex">
+            <div className="login-main-container d-flex">
                 <div    className="login-image-container1">       </div>
                 
                 <div className="login-container d-flex flex-column align-items-center justify-content-center">

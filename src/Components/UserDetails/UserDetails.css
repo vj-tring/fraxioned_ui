@@ -63,11 +63,15 @@
     margin-bottom: 20px;
   }
   
-  .user-documents table {
+  .user-documents table .user-table {
     width: 100%;
     border-collapse: collapse;
   }
   
+  .user-table{
+    width: 100% !important;
+    margin: 0 !important;
+  }
   .user-documents th,
   .user-documents td {
     border: 1px solid #ccc;
@@ -90,7 +94,7 @@
 
   }
  .SecPhone {
-    padding-left: 103px;
+    padding-left: 130px;
     
   }
   @media (min-width: 768px) {
@@ -102,4 +106,11 @@
 h6{
   text-transform: lowercase;
 
+}
+.View-btn{
+  background-color: #0c888c;
+}
+
+.View-btn:hover{
+  background-color: #0b6569;
 }
