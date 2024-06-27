@@ -8,7 +8,7 @@ import { ApiUrl } from 'Components/config';
 interface Document {
   title: string;
   dateUploaded: string;
-  content: string; // This could be the path to the local file or the content itself
+  content: string; 
 }
 
 const UserDetails: React.FC = () => {
@@ -26,17 +26,17 @@ const UserDetails: React.FC = () => {
     {
       title: 'Signing Doc',
       dateUploaded: '1/23/2024',
-      content: require('../../assets/ownerPortal.pdf') // Example path or content
+      content: require('../../assets/ownerPortal.pdf') 
     },
     {
       title: 'Property Summary',
       dateUploaded: '1/23/2024',
-      content: require('../../assets/ownerPortal1.pdf') // Example path or content
+      content: require('../../assets/ownerPortal1.pdf') 
     },
     {
       title: 'Welcome Packet',
       dateUploaded: '1/23/2024',
-      content: require('../../assets/ownerPortal2.pdf') // Example path or content
+      content: require('../../assets/ownerPortal2.pdf') 
     }
   ]);
 
@@ -73,7 +73,6 @@ const UserDetails: React.FC = () => {
   }, []);
 
   const handleViewDocument = (content: string) => {
-    // Open the PDF document in a new tab/window
     window.open(content, '_blank');
   };
 
