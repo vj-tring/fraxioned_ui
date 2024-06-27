@@ -22,7 +22,7 @@ const UserDetails: React.FC = () => {
     secondaryPhone: '',
   });
 
-  const [documents, setDocuments] = useState<Document[]>([
+  const [documents, ] = useState<Document[]>([
     {
       title: 'Signing Doc',
       dateUploaded: '1/23/2024',
