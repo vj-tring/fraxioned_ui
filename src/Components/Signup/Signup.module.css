@@ -69,8 +69,8 @@ form {
 .fraxioned-header {
   margin-top: 1px;
   margin-left: 102px;
-  margin-bottom: 5px;
-  font-weight: bold;
+  margin-bottom: 10px;
+  font-weight: 600;
   font-family: Sunborn Sansone, sans-serif !important;
 }
 
@@ -174,10 +174,10 @@ form {
 
 .form-header {
   margin-bottom: 30px;
-  margin-left: 12px;
+  margin-left: 20px;
   height: 15px;
   text-align: center;
   font-family: "Jost" !important;
   color: #151515;
-  font-size: 1.3rem;
+  font-size: 1.23rem;
 }
