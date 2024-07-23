@@ -37,7 +37,7 @@ describe('Login Component', () => {
             </Router>
         );
 
-        expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
+        expect(screen.getByPlaceholderText('Email Address')).toBeInTheDocument();
         expect(screen.getByPlaceholderText('Password')).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /Sign In/i })).toBeInTheDocument();
     });
@@ -125,7 +125,7 @@ describe('Login Component', () => {
         fireEvent.click(screen.getByRole('button', { name: /Sign In/i }));
 
         await waitFor(() => {
-            expect(mockSubmit).toHaveBeenCalled();    
+            expect(mockSubmit).toHaveBeenCalled();
         });
         await waitFor(() => {
             expect(screen.getByText('Login successful')).toBeInTheDocument();

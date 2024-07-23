@@ -1,66 +1,56 @@
-import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './ForgotPassword.css';
-import { Button } from '@mui/material';
-import useForgotHandler from './ForgotFunction';
-import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
-import ResponsiveAppBar from '../NavbarMUI/NavbarUI'
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import styles from './ForgotPassword.module.css';
 
 
 const ForgotPassword: React.FC = () => {
+  const [email, setEmail] = useState('');
 
-  const {
-    formik,
-    openSnackbar,
-    snackbarMessage,
-    snackbarSeverity,
-    handleSnackbarClose,
-} = useForgotHandler()
-
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+  };
 
   return (
-    <div className=" d-flex flex-column justify-content-center align-items-center ">
-
-<ResponsiveAppBar/>
-
-              <CustomizedSnackbars
-                open={openSnackbar}
-                handleClose={handleSnackbarClose}
-                message={snackbarMessage}
-                severity={snackbarSeverity}
-            />
-      <div className="forgot shadow rounded p-4">
-        <h4 className="forgot-pass text-center mb-4">Forgot Password</h4>
-        <form onSubmit={formik.handleSubmit}>
-          <div className="form-group position-relative">
-            {formik.touched.email && formik.errors.email ? (
-              <div className="invalid-feedback d-block mb-2">{formik.errors.email}</div>
-            ) : null}
+    <div className={styles['login-container']}>
+      <div className={styles['welcome-section']}>
+        <h1 className={styles['welcome-header']} >Welcome to Fraxioned</h1>
+        <p className={styles['paragraph-header']}>CO-OWN YOUR DREAM VACATION HOME</p>
+        <div className={styles['social-logins']}>
+          <a href="https://www.facebook.com/fraxioned">
+            <button className={`${styles['social-button']} ${styles.facebook}`}>Facebook</button>
+          </a>
+          <a href="https://x.com/Fraxioned_">
+            <button className={`${styles['social-button']} ${styles.twitter}`}>Twitter</button>
+          </a>
+          <a href="https://www.fraxioned.com/">
+            <button className={`${styles['social-button']} ${styles.google}`}>Google</button>
+          </a>
+        </div>
+      </div>
+      <div className={styles['login-form-section']}>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <h2 className={styles['fraxioned-header']}>Fraxioned</h2>
+          <h3 className={styles['form-header']}>Recover your passowrd</h3>
+          <div className={styles['form-group']}>
             <input
-              id="email"
-              name="email"
               type="email"
-              placeholder="Enter your email"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.email}
-              className={`form-control ${formik.touched.email && formik.errors.email ? 'is-invalid' : ''}`}
+              placeholder="Email Address"
+              role="presentation"
+              autoComplete='off'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className={styles['input-field']}
             />
           </div>
-          <Button
-            type="submit"
-            className="w-100 mt-3"
-            variant="contained"
-            color="primary"
-          >
-            Submit
-          </Button>
+          <button type="submit" className={styles['login-button']}>Send Me Email</button>
+          <p className={styles['register-link']}>
+            Already a member? <Link to="/">Login here</Link>
+          </p>
         </form>
       </div>
     </div>
   );
 };
-
-
 
 export default ForgotPassword;
