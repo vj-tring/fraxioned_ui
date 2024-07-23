@@ -1,102 +1,71 @@
-
-import { Button } from '@mui/material'
-import React from 'react'
-import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars'
-import './Login.css'
-import useLoginHandler from './LoginFunction'
+import React, { useState } from 'react';
+import styles from './Login1.module.css';
 import { Link } from 'react-router-dom';
-import ResponsiveAppBar from '../NavbarMUI/NavbarUI'
-import Loader from '../Loader/Loader';
+
 
 const Login: React.FC = () => {
-    const {
-        formik,
-        openSnackbar,
-        snackbarMessage,
-        snackbarSeverity,
-        handleSnackbarClose,
-        loading 
-    } = useLoginHandler()
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    // const navigate = useNavigate();
+
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        console.log('Login attempted with:', email, password);
+    };
 
     return (
-        
-        <div className=" d-flex justify-content-center flex-column align-items-center">
-            
-          <ResponsiveAppBar/>
-
-            <CustomizedSnackbars
-                open={openSnackbar}
-                handleClose={handleSnackbarClose}
-                message={snackbarMessage}
-                severity={snackbarSeverity}
-            />
-
-            <div className="login-box shadow p-4 rounded ">
-                <h2 className="text-center mt-1">Login</h2>
-                <form onSubmit={formik.handleSubmit}>
-                    <div className="form-group position-relative">
-                        {formik.touched.email && formik.errors.email && (
-                            <div className="invalid-feedback d-block">
-                                {formik.errors.email}
-                            </div>
-                        )}
+        <div className={styles['login-container']}>
+            <div className={styles['welcome-section']}>
+                <h1 className={styles['welcome-header']} >Welcome to Fraxioned</h1>
+                <p className={styles['paragraph-header']}>CO-OWN YOUR DREAM VACATION HOME</p>
+                <div className={styles['social-logins']}>
+                    <a href="https://www.facebook.com/fraxioned">
+                        <button className={`${styles['social-button']} ${styles.facebook}`}>Facebook</button>
+                    </a>
+                    <a href="https://x.com/Fraxioned_">
+                        <button className={`${styles['social-button']} ${styles.twitter}`}>Twitter</button>
+                    </a>
+                    <a href="https://www.fraxioned.com/">
+                        <button className={`${styles['social-button']} ${styles.google}`}>Google</button>
+                    </a>
+                </div>
+            </div>
+            <div className={styles['login-form-section']}>
+                <form onSubmit={handleSubmit} className={styles.form}>
+                    <h2 className={styles['fraxioned-header']}>Fraxioned</h2>
+                    <h3 className={styles['form-header']}>Sign Into Your Account</h3>
+                    <div className={styles['form-group']}>
                         <input
-                            name="email"
                             type="email"
-                            placeholder="Email"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values.email}
-                            className={`form-control ${
-                                formik.touched.email && formik.errors.email
-                                    ? 'is-invalid'
-                                    : ''
-                            }`}
+                            placeholder="Email Address"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            className={styles['input-field']}
                         />
                     </div>
-                    <div className="form-group position-relative">
-                        {formik.touched.password && formik.errors.password && (
-                            <div className="invalid-feedback d-block">
-                                {formik.errors.password}
-                            </div>
-                        )}
+                    <div className={styles['form-group']}>
                         <input
-                            id='password'
-                            name="password"
                             type="password"
                             placeholder="Password"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            value={formik.values.password}
-                            className={`form-control ${
-                                formik.touched.password &&
-                                formik.errors.password
-                                    ? 'is-invalid'
-                                    : ''
-                            }`}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            className={styles['input-field']}
                         />
-                         <Link to="/forgot-password" className="forgot-password">
-        Forgot Password?
-    </Link>
                     </div>
-                    <Button
-                        type="submit"
-                        className="w-100 mt-3"
-                        variant="contained"
-                        color="primary"
-                        disabled={loading}
-                    >
-                        
-                        {loading ? 'Loading...' : 'Sign In'}
-
-                    </Button>
+                    <div className={styles['form-footer']}>
+                        <label className={styles['Remember-me']}>
+                            <input type="checkbox" /> Remember me
+                        </label>
+                        <Link to="/forgot-password" className={styles['forgot-password']}>Forgot password?</Link>
+                    </div>
+                    <button type="submit" className={styles['login-button']}>Login</button>
                 </form>
-                {loading && <Loader />}
-
             </div>
-
         </div>
-    )
-}
+    );
+};
 
-export default Login
+export default Login;

@@ -17,8 +17,8 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isAuthenticated()) {
-      navigate('/login'); 
+    if (isAuthenticated()) {
+      navigate('/login');
     } else {
       const storedUserData = localStorage.getItem('userData');
       if (storedUserData) {
@@ -35,7 +35,7 @@ const Dashboard: React.FC = () => {
     { name: 'BOOKING', href: '/dashboard/booking', disabled: true },
     { name: 'PEAK SEASON', href: '/dashboard/services', disabled: true },
     { name: 'PAYEMENTS', href: '/dashboard/payements', disabled: true },
-    { name: 'FAQ', href: '/faq', disabled: false }, 
+    { name: 'FAQ', href: '/faq', disabled: false },
   ];
 
   return (
