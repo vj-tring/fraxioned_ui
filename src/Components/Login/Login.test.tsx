@@ -116,13 +116,13 @@ describe('Login Component', () => {
             </Router>
         );
 
-        fireEvent.change(screen.getByPlaceholderText('Email'), {
+        fireEvent.change(screen.getByPlaceholderText('Email Address'), {
             target: { value: 'test@example.com' },
         });
         fireEvent.change(screen.getByPlaceholderText('Password'), {
             target: { value: 'password' },
         });
-        fireEvent.click(screen.getByRole('button', { name: /Sign In/i }));
+        fireEvent.click(screen.getByRole('button', { name: /Login/i }));
 
         await waitFor(() => {
             expect(mockSubmit).toHaveBeenCalled();

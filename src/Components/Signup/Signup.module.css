@@ -72,6 +72,7 @@ form {
   margin-bottom: 10px;
   font-weight: 600;
   font-family: Sunborn Sansone, sans-serif !important;
+  text-shadow: 1px 2px 3px rgba(127, 127, 127, 0.8);
 }
 
 .form-group {

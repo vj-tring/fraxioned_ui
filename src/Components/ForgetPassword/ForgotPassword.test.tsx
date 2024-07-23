@@ -291,8 +291,8 @@ test('renders ForgotPassword component', () => {
 
 test('renders email input and submit button', () => {
   render(<ForgotPassword />);
-  expect(screen.getByPlaceholderText('Enter your email')).toBeInTheDocument();
-  expect(screen.getByRole('button', { name: /Submit/i })).toBeInTheDocument();
+  expect(screen.getByPlaceholderText('Email Address')).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: /Send Me Email/i })).toBeInTheDocument();
 });
 
 test('calls handleChange on email input change', () => {

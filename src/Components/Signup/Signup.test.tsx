@@ -346,7 +346,7 @@ test('displays validation errors for specific field formats', async () => {
   });
 
   render(<Signup />);
-  fireEvent.submit(screen.getByRole('button', { name: /Submit/i }));
+  fireEvent.submit(screen.getByRole('button', { name: /Register/i }));
 
   await waitFor(() => {
     expect(screen.getByText('Phone number must be 10 digits')).toBeInTheDocument();
