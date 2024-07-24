@@ -1,56 +1,62 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import styles from './ForgotPassword.module.css';
+import { Link } from 'react-router-dom';
+import logo from './fraxioned.png'
 
-
-const ForgotPassword: React.FC = () => {
+const ForgetPassword: React.FC = () => {
   const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email.trim()) {
+      setError('Please fill in the Email ID');
+    } else {
+      setError('');
+      console.log('Password reset requested for:', email);
+    }
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    if (e.target.value.trim()) {
+      setError('');
+    }
   };
 
   return (
-    <div className={styles['login-container']}>
-      <div className={styles['welcome-section']}>
-        <h1 className={styles['welcome-header']} >Welcome to Fraxioned</h1>
-        <p className={styles['paragraph-header']}>CO-OWN YOUR DREAM VACATION HOME</p>
-        <div className={styles['social-logins']}>
-          <a href="https://www.facebook.com/fraxioned">
-            <button className={`${styles['social-button']} ${styles.facebook}`}>Facebook</button>
-          </a>
-          <a href="https://x.com/Fraxioned_">
-            <button className={`${styles['social-button']} ${styles.twitter}`}>Twitter</button>
-          </a>
-          <a href="https://www.fraxioned.com/">
-            <button className={`${styles['social-button']} ${styles.google}`}>Google</button>
-          </a>
+    <div className={styles.outerContainer}>
+      <div className={styles.innerContainer}>
+        <img src={logo} alt="Fraxioned Logo" className={styles.logo} />
+        <div className={styles.formWrapper}>
+          <h2 className={styles.login}>Reset here</h2>
+          <p className={styles.loginSubtext}>Recover your password</p>
+          <form onSubmit={handleSubmit} className={styles.form}>
+            <div className={styles.inputGroup}>
+              {error && <div className={styles.errorMessage}>{error}</div>}
+
+              <input
+                type="text"
+                placeholder="Email"
+                value={email}
+                autoFocus
+                onChange={handleEmailChange}
+                className={`${styles.input} ${error ? styles.errorInput : ''}`}
+              />
+            </div>
+
+            <div className={styles.formFooter}>
+              <label className={styles.remember}>
+                <input type="checkbox" /> Remember password?
+              </label>
+              <Link to="/" className={styles.forgotPassword}>Login here!</Link>
+            </div>
+            <button type="submit" className={styles.signInButton}>Submit</button>
+          </form>
         </div>
-      </div>
-      <div className={styles['login-form-section']}>
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <h2 className={styles['fraxioned-header']}>Fraxioned</h2>
-          <h3 className={styles['form-header']}>Recover your passowrd</h3>
-          <div className={styles['form-group']}>
-            <input
-              type="email"
-              placeholder="Email Address"
-              role="presentation"
-              autoComplete='off'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className={styles['input-field']}
-            />
-          </div>
-          <button type="submit" className={styles['login-button']}>Send Me Email</button>
-          <p className={styles['register-link']}>
-            Already a member? <Link to="/">Login here</Link>
-          </p>
-        </form>
       </div>
     </div>
   );
 };
 
-export default ForgotPassword;
+export default ForgetPassword;

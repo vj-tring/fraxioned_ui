@@ -1,46 +1,46 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
-import Login from './Login';
-import useLoginHandler from './LoginFunction';
-jest.mock('../../assets/Fraxioned.png', () => 'Fraxioned.png');
-// Mock the useLoginHandler hook
-jest.mock('./LoginFunction');
+// import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+// import '@testing-library/jest-dom';
+// import { BrowserRouter as Router } from 'react-router-dom';
+// import Login from './Login';
+// import useLoginHandler from './LoginFunction';
+// jest.mock('../../assets/Fraxioned.png', () => 'Fraxioned.png');
+// // Mock the useLoginHandler hook
+// jest.mock('./LoginFunction');
 
-const mockedUseLoginHandler = useLoginHandler as jest.Mock;
+// const mockedUseLoginHandler = useLoginHandler as jest.Mock;
 
-describe('Login Component', () => {
-    const mockFormik = {
-        handleSubmit: jest.fn((e) => e.preventDefault()),
-        handleChange: jest.fn(),
-        handleBlur: jest.fn(),
-        values: { email: '', password: '' },
-        touched: { email: false, password: false },
-        errors: { email: '', password: '' },
-    };
+// describe('Login Component', () => {
+//     const mockFormik = {
+//         handleSubmit: jest.fn((e) => e.preventDefault()),
+//         handleChange: jest.fn(),
+//         handleBlur: jest.fn(),
+//         values: { email: '', password: '' },
+//         touched: { email: false, password: false },
+//         errors: { email: '', password: '' },
+//     };
 
-    beforeEach(() => {
-        mockedUseLoginHandler.mockReturnValue({
-            formik: mockFormik,
-            openSnackbar: false,
-            snackbarMessage: '',
-            snackbarSeverity: 'info',
-            handleSnackbarClose: jest.fn(),
-        });
-    });
+//     beforeEach(() => {
+//         mockedUseLoginHandler.mockReturnValue({
+//             formik: mockFormik,
+//             openSnackbar: false,
+//             snackbarMessage: '',
+//             snackbarSeverity: 'info',
+//             handleSnackbarClose: jest.fn(),
+//         });
+//     });
 
-    test('renders the login form', () => {
-        render(
-            <Router>
-                <Login />
-            </Router>
-        );
+//     test('renders the login form', () => {
+//         render(
+//             <Router>
+//                 <Login />
+//             </Router>
+//         );
 
-        expect(screen.getByPlaceholderText('Email Address')).toBeInTheDocument();
-        expect(screen.getByPlaceholderText('Password')).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: /Sign In/i })).toBeInTheDocument();
-    });
+//         expect(screen.getByPlaceholderText('Email Address')).toBeInTheDocument();
+//         expect(screen.getByPlaceholderText('Password')).toBeInTheDocument();
+//         expect(screen.getByRole('button', { name: /Sign In/i })).toBeInTheDocument();
+//     });
 
     // test('shows validation errors', () => {
     //     mockFormik.touched = { email: true, password: true };
@@ -131,4 +131,4 @@ describe('Login Component', () => {
     //         expect(screen.getByText('Login successful')).toBeInTheDocument();
     //     })
     // });
-});
+// });

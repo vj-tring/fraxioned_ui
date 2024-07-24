@@ -28,6 +28,7 @@ const App: FC = () => {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/ResponsiveAppBar" element={<ResponsiveAppBar />} />
         <Route path="/dashboard" element={<PrivateRoute element={Dashboard} />} />
+        <Route path="/dashboard" element={<PrivateRoute element={Dashboard} />} />
         {/* Use PrivateRoute for all other routes that need to be protected */}
         <Route path="/*" element={<PrivateRoute element={Dashboard} />} />
       </Routes>

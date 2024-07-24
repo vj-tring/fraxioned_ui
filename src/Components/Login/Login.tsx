@@ -1,68 +1,87 @@
 import React, { useState } from 'react';
 import styles from './Login1.module.css';
 import { Link } from 'react-router-dom';
-
+import logo from './fraxioned.png';
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    // const navigate = useNavigate();
+    const [emailError, setEmailError] = useState(false);
+    const [passwordError, setPasswordError] = useState(false);
 
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Login attempted with:', email, password);
+        if (!email.trim()) {
+            setEmailError(true);
+            setPasswordError(false);
+        } else if (!password.trim()) {
+            setPasswordError(true);
+            setEmailError(false);
+        } else {
+            setEmailError(false);
+            setPasswordError(false);
+            console.log('Login attempted with:', email, password);
+        }
+    };
+
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEmail(e.target.value);
+        setEmailError(false);
+    };
+
+    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPassword(e.target.value);
+        setPasswordError(false);
     };
 
     return (
-        <div className={styles['login-container']}>
-            <div className={styles['welcome-section']}>
-                <h1 className={styles['welcome-header']} >Welcome to Fraxioned</h1>
-                <p className={styles['paragraph-header']}>CO-OWN YOUR DREAM VACATION HOME</p>
-                <div className={styles['social-logins']}>
-                    <a href="https://www.facebook.com/fraxioned">
-                        <button className={`${styles['social-button']} ${styles.facebook}`}>Facebook</button>
-                    </a>
-                    <a href="https://x.com/Fraxioned_">
-                        <button className={`${styles['social-button']} ${styles.twitter}`}>Twitter</button>
-                    </a>
-                    <a href="https://www.fraxioned.com/">
-                        <button className={`${styles['social-button']} ${styles.google}`}>Google</button>
-                    </a>
+        <div className={styles.outerContainer}>
+            <div className={styles.innerContainer}>
+                <img src={logo} alt="Fraxioned Logo" className={styles.logo} />
+                <div className={styles.formWrapper}>
+                    <h2 className={styles.login}>Login here</h2>
+                    <p className={styles.loginSubtext}>Please enter your details to sign in</p>
+                    <form onSubmit={handleSubmit} className={styles.form}>
+                        <div className={styles.inputGroup}>
+                            {emailError && (
+                                <div className={styles.errorMessage}>
+                                    Please fill in the Email ID
+                                </div>
+                            )}
+                            <input
+                                type="text"
+                                placeholder="Email"
+                                value={email}
+                                autoFocus
+                                onChange={handleEmailChange}
+                                className={emailError ? styles.errorInput : ''}
+                            />
+                        </div>
+                        <div className={styles.inputGroup}>
+                            {passwordError && (
+                                <div className={styles.errorMessage}>
+                                    Please fill in the Password
+                                </div>
+                            )}
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                value={password}
+                                onChange={handlePasswordChange}
+                                className={passwordError ? styles.errorInput : ''}
+                            />
+                        </div>
+
+                        <div className={styles.formFooter}>
+                            <label className={styles.remember}>
+                                <input type="checkbox" /> Remember me
+                            </label>
+                            <Link to="/forgot-password" className={styles.forgotPassword}>Forgot password?</Link>
+                        </div>
+                        <button type="submit" className={styles.signInButton}>Sign in</button>
+                    </form>
                 </div>
-            </div>
-            <div className={styles['login-form-section']}>
-                <form onSubmit={handleSubmit} className={styles.form}>
-                    <h2 className={styles['fraxioned-header']}>Fraxioned</h2>
-                    <h3 className={styles['form-header']}>Sign Into Your Account</h3>
-                    <div className={styles['form-group']}>
-                        <input
-                            type="email"
-                            placeholder="Email Address"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                            className={styles['input-field']}
-                        />
-                    </div>
-                    <div className={styles['form-group']}>
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                            className={styles['input-field']}
-                        />
-                    </div>
-                    <div className={styles['form-footer']}>
-                        <label className={styles['Remember-me']}>
-                            <input type="checkbox" /> Remember me
-                        </label>
-                        <Link to="/forgot-password" className={styles['forgot-password']}>Forgot password?</Link>
-                    </div>
-                    <button type="submit" className={styles['login-button']}>Login</button>
-                </form>
             </div>
         </div>
     );
