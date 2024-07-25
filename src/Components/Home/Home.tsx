@@ -1,10 +1,9 @@
-// src/Components/Home/Home.tsx
 
 import React from 'react';
 // import { Card } from 'react-bootstrap';
 import './Home.css';
-import imag1 from '../../assets/images/BC - Bookings Page Banner.jpg'
-import imag2 from '../../assets/images/BC - Home Page Banner.jpg'
+import imag1 from '../../assets/images/BC - Bookings Page Banner.jpg';
+import imag2 from '../../assets/images/BC - Home Page Banner.jpg';
 import Date from './DatesContainer/Date';
 import Card from '../../Components/Home/Cards/Card';
 // import HomeCard from '../../Components/Home/HomeCard';
