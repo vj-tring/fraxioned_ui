@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './ForgotPassword.module.css';
 import { Link } from 'react-router-dom';
-import logo from './fraxioned.png'
+import logo from '../Login/fraxioned.png'
 
 const ForgetPassword: React.FC = () => {
     const [email, setEmail] = useState('');
