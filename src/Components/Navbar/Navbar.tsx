@@ -4,9 +4,9 @@ import Nav from 'react-bootstrap/Nav';
 import Image from 'react-bootstrap/Image';
 import Dropdown from 'react-bootstrap/Dropdown';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import InviteModal from './SentInviteModal';
+// import InviteModal from './SentInviteModal';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
-import useNavbarHandler from "./NavbarFunction";
+// import useNavbarHandler from "./NavbarFunction";
 import './Navbar.css';
 
 interface CustomNavbarProps {
@@ -20,16 +20,16 @@ interface CustomNavbarProps {
 }
 
 const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, userName, onUserImageClick }) => {
-  const {
-    showInviteModal,
-    showLogoutModal,
-    handleOpenInviteModal,
-    handleCloseInviteModal,
-    handleShowLogoutModal,
-    handleCloseLogoutModal,
+  // const {
+  //   showInviteModal,
+  //   showLogoutModal,
+  //   handleOpenInviteModal,
+  //   handleCloseInviteModal,
+  //   handleShowLogoutModal,
+  //   handleCloseLogoutModal,
   
-    handleLogout,
-  } = useNavbarHandler();
+  //   handleLogout,
+  // } = useNavbarHandler();
 
 
   return (
@@ -77,24 +77,24 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({ logo, links, userImage, use
               <span>{userName}</span>
             </Dropdown.Toggle>
             <Dropdown.Menu className="Drop-menu">
-              <Dropdown.Item className="Drop-item" onClick={handleOpenInviteModal}>Send Invite</Dropdown.Item>
-              <Dropdown.Item className="Drop-item" onClick={handleShowLogoutModal}>Logout</Dropdown.Item>
+              {/* <Dropdown.Item className="Drop-item" onClick={handleOpenInviteModal}>Send Invite</Dropdown.Item> */}
+              {/* <Dropdown.Item className="Drop-item" onClick={handleShowLogoutModal}>Logout</Dropdown.Item> */}
               {/* <Dropdown.Item className="Drop-item" href="#/action-3">Settings</Dropdown.Item> */}
             </Dropdown.Menu>
           </Dropdown>
         </Nav>
       </Navbar>
 
-      <InviteModal show={showInviteModal} onHide={handleCloseInviteModal} />
-      <ConfirmationModal
-        show={showLogoutModal}
+      {/* <InviteModal show={showInviteModal} onHide={handleCloseInviteModal} /> */}
+      {/* <ConfirmationModal
+        // show={showLogoutModal}
         onHide={handleCloseLogoutModal}
         onConfirm={handleLogout}
         title="Confirm Logout"
         message="Are you sure you want to log out?"
         confirmLabel="Logout"
         cancelLabel="Cancel"
-      />
+      /> */}
     </>
   );
 };
