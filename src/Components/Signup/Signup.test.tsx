@@ -14,20 +14,21 @@ describe('Signup Component', () => {
     mockedUseSignupHandler.mockReturnValue({
       formik: {
         initialValues: {
-          username:'',
+          // username:'',
           firstName: '',
           lastName: '',
           phone: '',
-          secondaryPhone: '',
-          secondaryEmail: '',
-          address1: '',
-          address2: '',
-          state: '',
-          city: '',
-          zip: '',
-          imageUrl:null,
-          password: '',
-          confirmPassword: ''
+          // secondaryPhone: '',
+          email: '',
+          // address1: '',
+          // address2: '',
+          // state: '',
+          // city: '',
+          // zip: '',
+          // imageUrl:null,
+          // password: '',
+          // confirmPassword: ''
+          role:""
         },
         initialErrors: {},
         initialTouched: {},
@@ -38,20 +39,22 @@ describe('Signup Component', () => {
         touched: {},
         errors: {},
         values: {
-          username:'',
+          // username:'',
 
           firstName: '',
           lastName: '',          phone: '',
-          secondaryPhone: '',
-          secondaryEmail: '',
-          address1: '',
-          address2: '',
-          state: '',
-          city: '',
-          zip: '',
-          imageUrl: null,
-          password: '',
-          confirmPassword: ''
+          // secondaryPhone: '',
+          email: '',
+          // address1: '',
+          // address2: '',
+          // state: '',
+          // city: '',
+          // zip: '',
+          // imageUrl: null,
+          // password: '',
+          // confirmPassword: ''
+          role:''
+
         },
         isSubmitting: false,
         isValidating: false,
@@ -107,26 +110,26 @@ describe('Signup Component', () => {
         touched: {
           firstName: true,
           lastName: true,  
-          username: true,        
+          // username: true,        
           phone: true,
-          address1: true,
-          state: true,
-          city: true,
-          zip: true,
-          password: true,
-          confirmPassword: true
+          // address1: true,
+          // state: true,
+          // city: true,
+          // zip: true,
+          // password: true,
+          // confirmPassword: true
         },
         errors: {
           firstName: 'Please enter your firstName',
           lastName: 'Please enter your lastName',
-          username: 'Please enter your username',
+          // username: 'Please enter your username',
           phone: 'Please enter your phone number',
-          address1: 'Please enter your address line 1',
-          state: 'Please enter your state',
-          city: 'Please enter your city',
-          zip: 'Please enter your zip code',
-          password: 'Please enter a password',
-          confirmPassword: 'Please confirm your password'
+          // address1: 'Please enter your address line 1',
+          // state: 'Please enter your state',
+          // city: 'Please enter your city',
+          // zip: 'Please enter your zip code',
+          // password: 'Please enter a password',
+          // confirmPassword: 'Please confirm your password'
         },
       }
     });
@@ -152,19 +155,19 @@ describe('Signup Component', () => {
         ...mockedUseSignupHandler().formik,
         touched: {
           phone: true,
-          secondaryEmail: true,
-          zip: true,
-          imageUrl: true,
-          password: true,
-          confirmPassword: true
+          email: true,
+          // zip: true,
+          // imageUrl: true,
+          // password: true,
+          // confirmPassword: true
         },
         errors: {
           phone: 'Phone number must be 10 digits',
-          secondaryEmail: 'Invalid email format',
-          zip: 'Zip code must be 5 digits',
-          imageUrl: 'Invalid URL format',
-          password: 'Password must be 8 characters or longer',
-          confirmPassword: 'Passwords must match'
+          email: 'Invalid email format',
+          // zip: 'Zip code must be 5 digits',
+          // imageUrl: 'Invalid URL format',
+          // password: 'Password must be 8 characters or longer',
+          // confirmPassword: 'Passwords must match'
         },
       }
     });
@@ -187,20 +190,22 @@ describe('Signup Component', () => {
         mockedUseSignupHandler.mockReturnValue({
             formik: {
                 initialValues: {
-                  username:'',
+                  // username:'',
                   firstName: '',
                   lastName: '',
                   phone: '',
-                    secondaryPhone: '',
-                    secondaryEmail: '',
-                    address1: '',
-                    address2: '',
-                    state: '',
-                    city: '',
-                    zip: '',
-                    imageUrl:null,
-                    password: '',
-                    confirmPassword: ''
+                    // secondaryPhone: '',
+                    email: '',
+                    // address1: '',
+                    // address2: '',
+                    // state: '',
+                    // city: '',
+                    // zip: '',
+                    // imageUrl:null,
+                    // password: '',
+                    // confirmPassword: ''
+                    role:''
+
                 },
                 initialErrors: {},
                 initialTouched: {},
@@ -211,21 +216,23 @@ describe('Signup Component', () => {
                 touched: {},
                 errors: {},
                 values: {
-                            username:'',
+                            // username:'',
 
                   firstName: '',
                   lastName: '',
                   phone: '',
-                    secondaryPhone: '',
-                    secondaryEmail: '',
-                    address1: '',
-                    address2: '',
-                    state: '',
-                    city: '',
-                    zip: '',
-                    imageUrl: null,
-                    password: '',
-                    confirmPassword: ''
+                    // secondaryPhone: '',
+                    email: '',
+                    role:''
+
+                    // address1: '',
+                    // address2: '',
+                    // state: '',
+                    // city: '',
+                    // zip: '',
+                    // imageUrl: null,
+                    // password: '',
+                    // confirmPassword: ''
                 },
                 isSubmitting: false,
                 isValidating: false,
@@ -282,26 +289,26 @@ describe('Signup Component', () => {
                 touched: {
                   firstName: true,
                   lastName: true,
-                  username: true,
+                  // username: true,
                   phone: true,
-                    address1: true,
-                    state: true,
-                    city: true,
-                    zip: true,
-                    password: true,
-                    confirmPassword: true
+                    // address1: true,
+                    // state: true,
+                    // city: true,
+                    // zip: true,
+                    // password: true,
+                    // confirmPassword: true
                 },
                 errors: {
                   firstName: 'Please enter your firstName',
                   lastName: 'Please enter your lastnmae',
-                  username: 'Please enter your username',
+                  // username: 'Please enter your username',
                   phone: 'Please enter your phone number',
-                    address1: 'Please enter your address line 1',
-                    state: 'Please enter your state',
-                    city: 'Please enter your city',
-                    zip: 'Please enter your zip code',
-                    password: 'Please enter a password',
-                    confirmPassword: 'Please confirm your password'
+                    // address1: 'Please enter your address line 1',
+                    // state: 'Please enter your state',
+                    // city: 'Please enter your city',
+                    // zip: 'Please enter your zip code',
+                    // password: 'Please enter a password',
+                    // confirmPassword: 'Please confirm your password'
                 },
             }
         });
@@ -328,19 +335,19 @@ describe('Signup Component', () => {
                 ...mockedUseSignupHandler().formik,
                 touched: {
                     phone: true,
-                    secondaryEmail: true,
-                    zip: true,
-                    imageUrl: true,
-                    password: true,
-                    confirmPassword: true
+                    email: true,
+                    // zip: true,
+                    // imageUrl: true,
+                    // password: true,
+                    // confirmPassword: true
                 },
                 errors: {
                     phone: 'Phone number must be 10 digits',
-                    secondaryEmail: 'Invalid email format',
-                    zip: 'Zip code must be 5 digits',
-                    imageUrl: 'Invalid URL format',
-                    password: 'Password must be 8 characters or longer',
-                    confirmPassword: 'Passwords must match'
+                    email: 'Invalid email format',
+                    // zip: 'Zip code must be 5 digits',
+                    // imageUrl: 'Invalid URL format',
+                    // password: 'Password must be 8 characters or longer',
+                    // confirmPassword: 'Passwords must match'
                 },
             }
         });

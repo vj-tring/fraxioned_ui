@@ -34,10 +34,10 @@ const ResetPassword: React.FC = () => {
         severity={snackbarSeverity}
       />
       
-      <div className="reset  p-4 rounded">
-        <h4 className="text-center mb-5">Reset Password</h4>
+      <div className="reset   rounded">
+        <h4 className="text-center ">Reset Password</h4>
         <form onSubmit={formik.handleSubmit}>
-          <div className="form-group position-relative mb-5 ">
+          <div className="form-group position-relative  ">
             {formik.touched.newPassword && formik.errors.newPassword ? (
               <div className="invalid-feedback d-block">{formik.errors.newPassword}</div>
             ) : null}
@@ -52,7 +52,7 @@ const ResetPassword: React.FC = () => {
               className={`form-control  ${formik.touched.newPassword && formik.errors.newPassword ? 'is-invalid' : ''}`}
             />
           </div>
-          <div className="form-group position-relative mb-5">
+          <div className="form-group position-relative ">
             {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
               <div className="invalid-feedback d-block">{formik.errors.confirmPassword}</div>
             ) : null}

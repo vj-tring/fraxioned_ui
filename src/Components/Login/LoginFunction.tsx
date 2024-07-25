@@ -26,6 +26,25 @@ const useLoginHandler = () => {
         const response = await login(values);
         if (response.status === 201) {
           const { data } = response;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
           localStorage.setItem('userData', JSON.stringify(data.user));
           localStorage.setItem('token', data.session.token);
           localStorage.setItem('expiresAt', data.session.expiresAt);

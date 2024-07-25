@@ -41,7 +41,7 @@ const ForgotPassword: React.FC = () => {
         <form onSubmit={formik.handleSubmit}>
           <div className="form-group position-relative">
             {formik.touched.email && formik.errors.email ? (
-              <div className="invalid-feedback d-block mb-2">{formik.errors.email}</div>
+              <div className="invalid-feedback1 d-block mb-2">{formik.errors.email}</div>
             ) : null}
             <input
               id="email"

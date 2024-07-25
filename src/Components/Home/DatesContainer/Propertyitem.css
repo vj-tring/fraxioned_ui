@@ -1,0 +1,90 @@
+.card-btn {
+    border: none;
+    text-transform: none;
+    height: 35px;
+    border: 1px solid lightgrey;
+    border-radius: 38px;
+    margin-left: 10px;
+    width: 240px;
+    background: white;
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+  }
+  
+  .card-btn.active {
+    background-color: #e0e0e0;
+  }
+  
+  .card-btn1 {
+    border: none;
+    text-transform: none;
+    height: 30px;
+    border: 1px solid lightgrey;
+    border-radius: 38px;
+    margin-left: 10px;
+    width: 100px;
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+    background: white;
+  }
+  
+  .box {
+    border: 1px solid grey;
+    width: 410px;
+    height: 53px;
+    text-align: center;
+    align-items: center;
+    font-weight: 500;
+    font-size: x-large;
+    margin-left: 8px;
+  }
+  
+  .BlueHead {
+    font-weight: bold;
+  }
+  
+  .BlueFont{
+    font-size: small;
+  }
+  .image1 {
+    background: url("../../../assets//BC\ -\ Home\ Page\ Banner.jpg");
+    width: 100px;
+    height: 55px;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  .Available {
+    font-weight: 600;
+    padding-top: 3px;
+  }
+  
+  .Box-list {
+    font-size:7px;
+  }
+  
+  .property1 {
+    text-transform: capitalize;
+    color: grey;
+  }
+  
+  .DateHead1 {
+    text-transform: capitalize;
+    color: black;
+    font-weight: 500 !important;
+  }
+  
+  .PropertyBtn:hover {
+    background-color: rgb(236, 235, 235) !important;
+    border: none !important;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  }
+  
+  .CardItem {
+    border-radius: 32px;
+    width: 430px;
+    height: 255px;
+    overflow: hidden; /* Ensure content does not overflow outside the card */
+  }
+  
+  .css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root:hover{
+    background-color: white !important;
+  }

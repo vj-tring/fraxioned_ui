@@ -2,12 +2,16 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { logout } from "../../Api/Logout";
 
-const useNavbarHandler = () => {
+
+
+function useNavbarHandler() {
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showUserDetailsModal, setShowUserDetailsModal] = useState(false);
 
   const navigate = useNavigate();
+
+
 
   const handleOpenInviteModal = () => setShowInviteModal(true);
   const handleCloseInviteModal = () => setShowInviteModal(false);
@@ -21,6 +25,7 @@ const useNavbarHandler = () => {
   const handleLogout = async () => {
     try {
       const response = await logout();
+      
       if (response.status === 201) {
         console.log('User logged out successfully');
         handleCloseLogoutModal();
@@ -44,8 +49,9 @@ const useNavbarHandler = () => {
     handleCloseLogoutModal,
     handleShowUserDetailsModal,
     handleCloseUserDetailsModal,
+
     handleLogout,
   };
-};
+}
 
 export default useNavbarHandler;

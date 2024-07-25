@@ -2,8 +2,8 @@
   background-color: #edf5f5;
   bottom: 0;
   width: 100%;
-  color: #fff;
-  padding: 10px;
+  color: #333; /* Adjust text color for better readability */
+  padding: 30px 20px; /* Increased padding for better spacing */
   text-align: center;
 }
 
@@ -11,29 +11,26 @@
   background-image: url('../assets/Fraxioned.png');
   background-size: contain;
   background-repeat: no-repeat;
-  width: 216px;
-  height: 100px;
-  margin-top: 22px;
-  margin-right: 10px;
+  width: 180px; /* Adjust width of the logo */
+  height: 80px; /* Adjust height of the logo */
+  margin-top: 10px; /* Adjust margin for spacing */
 }
 
 .container {
-  max-width: 100%;
+  max-width: 1200px; /* Increased maximum width for better layout control */
   margin: 0 auto;
 }
 
 .row {
   display: flex;
-  /* justify-content: space-between; */
-  text-align: start;
-  padding: 10px;
-  /* background-color: #eaf9fc; */
+  justify-content: space-around; /* Adjusted to evenly distribute columns */
+  align-items: flex-start; /* Align items at the top */
+  padding: 10px 0; /* Adjusted vertical padding */
 }
 
-.col-md-3 {
-  flex: 0 0 auto;
-  width: 22%;
-  text-align: start;
+.col-md-3, .col-md-2 {
+  flex: 1; /* Allow columns to grow flexibly */
+  text-align: left; /* Align text to the left */
 }
 
 ul {
@@ -43,75 +40,59 @@ ul {
 
 .no-underline {
   text-decoration: none;
-  color: rgb(23, 97, 79);
+  color: #23527c; /* Adjust link color */
+  font-weight: 600; /* Increased font weight for better readability */
+  transition: color 0.3s; /* Smooth color transition */
+}
 
+.no-underline:hover {
+  color: #f7981d; /* Hover color */
 }
-.col-md-2{
-  margin:12px;
-}
-.col-md-2>ul{
-  display: flex;
- flex-direction: column;
-  justify-content: space-around;
-  
-}
-.no-underline:hover{
-  color: orange;
-}
-.contact-us {   
-  width: 90%;
-  height: 66px;
+
+.contact-us {
+  width: 100%;
+  max-width: 300px; /* Adjusted maximum width for the button */
+  height: 50px; /* Adjusted height for the button */
   background-color: #0c888c;
-  border-radius: 30px;
+  border-radius: 25px; /* Rounded button */
   border: none;
-  margin-right: 22px;
-  margin-top: 13px;
+  margin-top: 20px; /* Adjusted top margin */
   position: relative;
   overflow: hidden;
   transition: background-color 0.3s;
   color: white;
-  font-size: larger;
+  font-size: 16px; /* Adjusted font size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .contact-us .arrow {
-  opacity: 0;
-  transition: opacity 0.3s, transform 0.3s;
-  position: absolute;
-  right: 30;
-  color: white;
-
+  margin-left: 10px; /* Adjusted margin for arrow */
+  transition: transform 0.3s;
 }
-
-.disabled {
-  color: #a8a8a8; 
-  pointer-events: none;
-  cursor: not-allowed;
-}
-
 
 .contact-us:hover {
   background-color: #F7981D;
-  border-radius: 30px;
-  text-decoration: underline;
 }
 
 .contact-us:hover .arrow {
-  opacity: 1;
-  transform: translateX(10px);
+  transform: translateX(5px); /* Adjusted arrow movement */
 }
 
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column; /* Stack columns on smaller screens */
+    
+    align-items: center; /* Center items vertically */
+  }
 
-.modal-fullscreen {
-  width: 100vw;
-  height: 100vh;
-  margin: 0;
-  padding: 30px;
-  max-width: 100%;
-}
+  .col-md-3, .col-md-2 {
+    width: 100%; /* Full width for columns on smaller screens */
+    margin-bottom: 20px; /* Adjusted bottom margin */
+  }
 
-.modal-fullscreen .modal-content {
-  height: 100%;
-  border: none;
-  border-radius: 0;
-  
+  .logo {
+    margin-bottom: 20px; /* Adjusted bottom margin */
+  }
 }

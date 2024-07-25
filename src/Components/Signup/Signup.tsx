@@ -8,6 +8,9 @@ import Loader from '../Loader/Loader';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 
+
+
+
 const Signup: React.FC = () => {
   const {
     formik,
@@ -18,11 +21,7 @@ const Signup: React.FC = () => {
     loading
   } = useSignupHandler();
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      formik.setFieldValue('imageUrl', e.target.files[0]);
-    }
-  };
+ 
 
   return (
     <div>
@@ -38,32 +37,18 @@ const Signup: React.FC = () => {
             message={snackbarMessage}
             severity={snackbarSeverity}
           />
-                    <h3 className="text-center">Sign Up</h3>
+                    <h3 className="text-center">Create a new Account</h3>
 
           <div className="signup-box  p-4 rounded">
 
             <form onSubmit={formik.handleSubmit} className="row signuprow g-3">
-              <div className="col-12 mt-2">
-                <label htmlFor="username" className="form-label">
-                  {formik.touched.username && formik.errors.username ? (
-                    <span className="text-danger flex-end">{formik.errors.username}</span>
-                  ) : null}
-                </label>
-                <input
-                  name="username"
-                  type="text"
-                  placeholder="User Name"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.username}
-                  className={`form-control ${formik.touched.username && formik.errors.username ? 'is-invalid' : ''}`}
-                />
-              </div>
-              <div className="col-6 mt-2">
+          
+              <div className="col-12 ">
                 <label htmlFor="firstName" className="form-label">
                   {formik.touched.firstName && formik.errors.firstName ? (
                     <span className="text-danger flex-end">{formik.errors.firstName}</span>
                   ) : null}
+                  
                 </label>
                 <input
                   name="firstName"
@@ -75,10 +60,10 @@ const Signup: React.FC = () => {
                   className={`form-control ${formik.touched.firstName && formik.errors.firstName ? 'is-invalid' : ''}`}
                 />
               </div>
-              <div className="col-6 mt-2">
+              <div className="col-12 ">
                 <label htmlFor="lastName" className="form-label">
                   {formik.touched.lastName && formik.errors.lastName ? (
-                    <span className="text-danger flex-end">{formik.errors.lastName}</span>
+                    <span className="text-danger fle     x-end">{formik.errors.lastName}</span>
                   ) : null}
                 </label>
                 <input
@@ -91,144 +76,26 @@ const Signup: React.FC = () => {
                   className={`form-control ${formik.touched.lastName && formik.errors.lastName ? 'is-invalid' : ''}`}
                 />
               </div>
-              <div className="col-6 mt-2">
-                <label htmlFor="phone" className="form-label">
-                  {formik.touched.phone && formik.errors.phone ? (
-                    <span className="text-danger">{formik.errors.phone}</span>
-                  ) : null}
-                </label>
-                <PhoneInput
-                  country={'us'}
-                  value={formik.values.phone}
-                  placeholder='Phone'
-                  onChange={(phone) => formik.setFieldValue('phone', phone)}
-                  inputClass={`form-control ${formik.touched.phone && formik.errors.phone ? 'is-invalid' : ''}`}
-                />
-              </div>
-              <div className="col-6 mt-2">
-                <label htmlFor="secondaryPhone" className="form-label">
-                  {formik.touched.secondaryPhone && formik.errors.secondaryPhone ? (
-                    <span className="text-danger">{formik.errors.secondaryPhone}</span>
-                  ) : null}
-                </label>
-                <PhoneInput
-                  country={'us'}
-                  value={formik.values.secondaryPhone}
-                  placeholder='Secondary Phone'
-                  onChange={(secondaryPhone) => formik.setFieldValue('secondaryPhone', secondaryPhone)}
-                  inputClass={`form-control ${formik.touched.secondaryPhone && formik.errors.secondaryPhone ? 'is-invalid' : ''}`}
-                />
-              </div>
-              <div className="col-6 mt-2">
-                <label htmlFor="secondaryEmail" className="form-label">
-                  {formik.touched.secondaryEmail && formik.errors.secondaryEmail ? (
-                    <span className="text-danger">{formik.errors.secondaryEmail}</span>
+              <div className="col-12 ">
+                <label htmlFor="email" className="form-label">
+                  {formik.touched.email && formik.errors.email ? (
+                    <span className="text-danger">{formik.errors.email}</span>
                   ) : null}
                 </label>
                 <input
-                  name="secondaryEmail"
-                  type="email"
-                  placeholder="Secondary Email"
+                  name="email"
+                  type="Email"
+                  placeholder="Email"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  value={formik.values.secondaryEmail}
-                  className={`form-control ${formik.touched.secondaryEmail && formik.errors.secondaryEmail ? 'is-invalid' : ''}`}
+                  value={formik.values.email}
+                  className={`form-control ${formik.touched.email && formik.errors.email ? 'is-invalid' : ''}`}
                 />
               </div>
-              <div className="col-6 mt-2">
-                <label htmlFor="address1" className="form-label">
-                  {formik.touched.address1 && formik.errors.address1 ? (
-                    <span className="text-danger">{formik.errors.address1}</span>
-                  ) : null}
-                </label>
-                <input
-                  name="address1"
-                  type="text"
-                  placeholder="Address Line 1"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.address1}
-                  className={`form-control ${formik.touched.address1 && formik.errors.address1 ? 'is-invalid' : ''}`}
-                />
-              </div>
-              <div className="col-6 mt-2">
-                <label htmlFor="address2" className="form-label">
-                  {formik.touched.address2 && formik.errors.address2 ? (
-                    <span className="text-danger">{formik.errors.address2}</span>
-                  ) : null}
-                </label>
-                <input
-                  name="address2"
-                  type="text"
-                  placeholder="Address Line 2"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.address2}
-                  className={`form-control ${formik.touched.address2 && formik.errors.address2 ? 'is-invalid' : ''}`}
-                />
-              </div>
-              <div className="col-6 mt-2">
-                <label htmlFor="state" className="form-label">
-                  {formik.touched.state && formik.errors.state ? (
-                    <span className="text-danger">{formik.errors.state}</span>
-                  ) : null}
-                </label>
-                <input
-                  name="state"
-                  type="text"
-                  placeholder="State"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.state}
-                  className={`form-control ${formik.touched.state && formik.errors.state ? 'is-invalid' : ''}`}
-                />
-              </div>
-              <div className="col-6 mt-2">
-                <label htmlFor="city" className="form-label">
-                  {formik.touched.city && formik.errors.city ? (
-                    <span className="text-danger">{formik.errors.city}</span>
-                  ) : null}
-                </label>
-                <input
-                  name="city"
-                  type="text"
-                  placeholder="City"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.city}
-                  className={`form-control ${formik.touched.city && formik.errors.city ? 'is-invalid' : ''}`}
-                />
-              </div>
-              <div className="col-6 mt-2">
-                <label htmlFor="zip" className="form-label">
-                  {formik.touched.zip && formik.errors.zip ? (
-                    <span className="text-danger">{formik.errors.zip}</span>
-                  ) : null}
-                </label>
-                <input
-                  name="zip"
-                  type="text"
-                  placeholder="Zip Code"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.zip}
-                  className={`form-control ${formik.touched.zip && formik.errors.zip ? 'is-invalid' : ''}`}
-                />
-              </div>
-              <div className="col-12 mt-2">
-                <label htmlFor="imageUrl" className="form-label">
-                  {formik.touched.imageUrl && formik.errors.imageUrl ? (
-                    <span className="text-danger">{formik.errors.imageUrl}</span>
-                  ) : null}
-                </label>
-                <input
-                  name="imageUrl"
-                  type="file"
-                  onChange={handleImageChange}
-                  className={`form-control ${formik.touched.imageUrl && formik.errors.imageUrl ? 'is-invalid' : ''}`}
-                />
-              </div>
-              <div className="col-6 mt-2">
+              
+              
+{/*    
+              <div className="col-12 ">
                 <label htmlFor="password" className="form-label">
                   {formik.touched.password && formik.errors.password ? (
                     <span className="text-danger">{formik.errors.password}</span>
@@ -243,21 +110,19 @@ const Signup: React.FC = () => {
                   value={formik.values.password}
                   className={`form-control ${formik.touched.password && formik.errors.password ? 'is-invalid' : ''}`}
                 />
-              </div>
-              <div className="col-6 mt-2">
-                <label htmlFor="confirmPassword" className="form-label">
-                  {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-                    <span className="text-danger">{formik.errors.confirmPassword}</span>
+              </div> */}
+              <div className="col-12 ">
+                <label htmlFor="phone" className="form-label">
+                  {formik.touched.phone && formik.errors.phone ? (
+                    <span className="text-danger">{formik.errors.phone}</span>
                   ) : null}
                 </label>
-                <input
-                  name="confirmPassword"
-                  type="password"
-                  placeholder="Confirm Password"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.confirmPassword}
-                  className={`form-control ${formik.touched.confirmPassword && formik.errors.confirmPassword ? 'is-invalid' : ''}`}
+                <PhoneInput
+                  country={'us'}
+                  value={formik.values.phone}
+                  placeholder='Phone'
+                  onChange={(phone) => formik.setFieldValue('phone', phone)}
+                  inputClass={`form-control ${formik.touched.phone && formik.errors.phone ? 'is-invalid' : ''}`}
                 />
               </div>
               <div className="col-12">

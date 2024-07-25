@@ -31,11 +31,7 @@ const Footer: React.FC = () => {
             <li><a href='https://www.fraxioned.com/' className='no-underline'>fraxioned.com</a></li>
           </ul>
         </div>
-        <div className='col-md-3'>
-          <a href='/contact'>
-            <button className='contact-us'> Contact Us <span className="arrow">&#8594;</span></button>
-          </a>
-        </div>
+      
       </div>
     </footer>
   );

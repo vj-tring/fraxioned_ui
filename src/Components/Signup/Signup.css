@@ -8,18 +8,21 @@ body, html {
 .main-container1 {
   display: flex;
   margin: 2% 4%;
-  height: 700px !important;
+  height: 500px !important;
   box-shadow: var(--bs-box-shadow) !important;
-
+  border-top-left-radius: 32px;
+  border-bottom-left-radius: 32px;
  
 }
 .signuprow{
   background-color: white !important;
 }
 .image-container3 {
-  flex: 1 !important;
-  background: url('../../assets//building.jpg') no-repeat center center;
+  flex: 5 !important;
+  background: url('../../assets/images//BC\ -\ Bookings\ Page\ Banner.jpg') no-repeat center center;
   background-size: cover;
+  border-top-left-radius: 32px;
+ border-bottom-left-radius: 32px;
 }
 
 .signup-container {
@@ -28,7 +31,11 @@ body, html {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  
+  padding: 20px;
+ 
+
+
+
 
 }
 
@@ -60,12 +67,12 @@ body, html {
 .signup-box input,
 .react-tel-input .form-control {
   /* height: 30px;  */
-  padding: 5px; 
+  /* padding: 5px; 
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-bottom: 10px;
-  
+   */
 
 }
 
@@ -83,7 +90,7 @@ body, html {
 .signup-box .text-danger {
   font-size: xx-small;
   display: flex;
-  justify-content: flex-end;
+  /* justify-content: flex-end; */
   color: #dc3545;
 }
 

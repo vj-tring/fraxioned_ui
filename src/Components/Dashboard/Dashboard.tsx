@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import CustomNavbar from '../Navbar/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import fraxionedLogo from '../../assets/Fraxioned.png';
+import fraxionedLogo from '../../assets/images/BB - Owners.png';
 import Footer from '../../Footer/Footer';
 import userImage from '../../assets/profile.jpeg';
 import './Dashboard.css';
@@ -17,7 +17,7 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isAuthenticated()) {
+    if (isAuthenticated()) {
       navigate('/login'); 
     } else {
       const storedUserData = localStorage.getItem('userData');
@@ -56,6 +56,7 @@ const Dashboard: React.FC = () => {
             <Route path="/faq" element={<CustomizedAccordions />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/user-details" element={<UserDetails />} />
+            
             <Route path="*" element={<Navigate to="/dashboard" />} />
           </Routes>
         </div>

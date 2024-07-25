@@ -21,7 +21,6 @@ const Login: React.FC = () => {
         <div>
             <ResponsiveAppBar/>
           <div className="container1"> 
-             
             <div className="login-main-container d-flex">
                 <div    className="login-image-container1">       </div>
                 
@@ -32,10 +31,16 @@ const Login: React.FC = () => {
                         message={snackbarMessage}
                         severity={snackbarSeverity}
                     />
-                    <div className="login-box  p-4 rounded">
-                        <h2 className="text-center mt-1">Login</h2>
-                        <form onSubmit={formik.handleSubmit}>
-                            <div className="form-group position-relative">
+                    <div className="login-box">
+                    <h1 className='Hello'>Hello,</h1>
+                    {/* <p className='Welcome'>Welcome Back!</p> */}
+                    {/* <p className='Welcome'>The faster you fill up, the faster you get a house</p> */}
+
+                        {/* <h2 className="text-center mt-1">Login</h2> */}
+                        
+                        <form onSubmit={formik.handleSubmit} className='Login-form'>
+                            
+                            <div className="form-group1 position-relative">
                                 {formik.touched.email && formik.errors.email && (
                                     <div className="invalid-feedback d-block">
                                         {formik.errors.email}
@@ -44,14 +49,14 @@ const Login: React.FC = () => {
                                 <input
                                     name="email"
                                     type="email"
-                                    placeholder="Email"
+                                    placeholder="youremail@gmail.com"
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                     value={formik.values.email}
                                     className={`form-control ${formik.touched.email && formik.errors.email ? 'is-invalid' : ''}`}
                                 />
                             </div>
-                            <div className="form-group position-relative">
+                            <div className="form-group1 position-relative">
                                 {formik.touched.password && formik.errors.password && (
                                     <div className=" invalid-feedback d-block">
                                         {formik.errors.password}
@@ -61,7 +66,7 @@ const Login: React.FC = () => {
                                     id='password'
                                     name="password"
                                     type="password"
-                                    placeholder="Password"
+                                    placeholder="................"
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                     value={formik.values.password}

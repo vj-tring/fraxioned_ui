@@ -2,11 +2,17 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Montserrat", sans-serif !important;
+
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 
 body, html {
   height: 100%;
   background-color: aliceblue;
+
 }
 
 .navbar {
@@ -16,12 +22,18 @@ body, html {
   z-index: 1000;
 }
 
+.form-group1{
+  margin-bottom: 30px;
+}
+.Login-form{
+  margin-top: 25px;
+}
 .container1{
   /* background: url("../../assets/buildingnew.jpg"); */
   /* background-color: rgb(247, 238, 224); */
   background-repeat: no-repeat;
   background-size: cover;
-  height: 94vh;
+  /* height: 94vh; */
   padding-top: 10px;
 }
 
@@ -31,7 +43,9 @@ body, html {
   margin: 2% 5%;
     box-shadow: var(--bs-box-shadow) !important;
     height:500px !important;
-    border-radius: 10px ;
+    /* border-radius:20px ; */
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
     
 }
 
@@ -39,16 +53,21 @@ body, html {
   .login-main-container {
        flex-direction: column;
        height: 578px;
+
+      
    }
-   
-   /* .login-image-container1{
-    flex: 3 ;
+   .login-image-container1{
+    border-bottom-left-radius: 0 !important;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px !important;
+    background-size: cover;
 
    }
-   .login-container {
-    flex: 1  ;
+   .login-container{
+    padding-top: 0px !important;
+   }
    
-  } */
+  
   .login-box {
     width: 100%;
     max-width: 350px;
@@ -62,18 +81,27 @@ body, html {
 
 .login-image-container1 {
   flex: 2;
-  background: url("../../assets/building.jpg") no-repeat center center;
+  background: url("../../assets/images//BC\ -\ Bookings\ Page\ Banner.jpg") no-repeat center center;
   background-size:cover;  
+  /* border-radius: 30px; */
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
 }
 
 .login-container {
   flex: 1 ;
   display: flex;
   /* height: 600px; */
-  padding-top: 100px;
+  padding-top: 80px;
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.9); 
+
+  /* background: url('../../assets/assests//logo14.png'); */
+  /* background-size: 1500px; */
+ 
+  /* opacity: 10%; */
+  /* backdrop-filter: blur(70px); */
 }
 
 .login-box {
@@ -91,21 +119,21 @@ body, html {
 }
 
 .text-center {
-  color: #F7981D;
+  color: #E28f25;
 }
 
 .login-box input {
   width: 100%;
   padding: 10px 0;
-  font-size: 16px;
-  margin-top: 10px;
-  margin-bottom: 40px;
+  font-size: small;
+  /* margin-top: 10px; */
+  /* margin-bottom: 40px; */
   outline: none;
   padding-left: 10px;
 }
 
 
-.login-box label {
+/* .login-box label {
   position: absolute;
   top: 0;
   left: 0;
@@ -113,7 +141,7 @@ body, html {
   font-size: 16px;
   pointer-events: none;
   transition: 0.5s;
-}
+} */
 
 .login-box input:focus ~ label,
 .login-box input:valid ~ label {
@@ -130,35 +158,37 @@ body, html {
 .invalid-feedback {
   display: block;
   position: absolute;
-  top: -30px;
-  left: 0;
-  font-size: 12px;
+  top: -22px;
+    /* left: 180px; */
+  font-size: xx-small;
+  font-weight: bold ;
   color: #dc3545;
 }
 
 .forgot-password {
-  color: #F7981D;
+  color: #E28f25;
   padding: 4px;
 }
 
 .forgot-password:hover {
   text-decoration: underline;
-  color: rgb(105, 105, 255);
+  color: #E28f25;
 }
 
 .login-box button[type="submit"] {
   width: 100%;
   padding: 10px;
-  background-color: #F7981D;
+  background-color: #E28f25;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   margin-bottom: 10px;
+  font-weight:900;
 }
 
 .login-box button[type="submit"]:hover {
-  background-color: #e48f10;
+  background-color: #E28f25;
 }
 
 .newUser {
@@ -171,4 +201,8 @@ body, html {
 }
 .loginbtn{
   margin-top: 30px !important;
+}
+
+.Hello, .Welcome{
+  color: #E28f25;
 }
