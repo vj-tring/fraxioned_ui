@@ -1,117 +1,111 @@
 .user-details-container {
     padding: 20px;
+}
 
-  }
-
-  .edit{
+.edit {
     height: 30px;
     margin-bottom: 30px;
-  }
-  
-  .user-header {
+}
+
+.user-header {
     display: flex;
     align-items: center;
     padding: 20px;
     background-color: #f9f9f9;
     text-transform: uppercase;
-  }
-  
-  .user-image {
+}
+
+.user-image {
     border-radius: 50%;
     margin-right: 20px;
-  }
-  
-  .edit-icon {
+}
+
+.edit-icon {
     margin-left: auto;
     cursor: pointer;
     color: blue;
-  }
-  
-  .user-info {
+}
+
+.user-info {
     background-color: #d9a85f;
     padding: 20px;
     margin-top: 20px;
     display: flex;
     flex-wrap: wrap;
-  }
-  
-  .info-box {
+}
+
+.info-box {
     flex: 1 0 50%;
-  }
-  
-  .email-phone {
+}
+
+.email-phone {
     display: flex;
-  }
-  
-  .email-phone p {
+}
+
+.email-phone p {
     flex: 1;
-    
-  }
-  
-  .info-box p {
+}
+
+.info-box p {
     margin: 0;
     font-size: 16px;
     color: white;
-  }
-  
-  .user-documents {
+}
+
+.user-documents {
     margin-top: 40px;
-  }
-  
-  .user-documents h3 {
+}
+
+.user-documents h3 {
     font-size: 24px;
     margin-bottom: 20px;
-  }
-  
-  .user-documents table .user-table {
+}
+
+.user-documents table .user-table {
     width: 100%;
     border-collapse: collapse;
-  }
-  
-  .user-table{
+}
+
+.user-table {
     width: 100% !important;
     margin: 0 !important;
-  }
-  .user-documents th,
-  .user-documents td {
+}
+.user-documents th,
+.user-documents td {
     border: 1px solid #ccc;
     padding: 10px;
-  }
-  
-  .user-documents th {
+}
+
+.user-documents th {
     background-color: #f9f9f9;
     text-align: left;
-  }
-  
-  .user-documents td {
+}
+
+.user-documents td {
     word-wrap: break-word;
-  }
-  
-  .info-box.secondary-info {
+}
+
+.info-box.secondary-info {
     display: flex;
     flex-direction: column;
     margin-top: 40px;
-
-  }
- .SecPhone {
+}
+.SecPhone {
     padding-left: 130px;
-    
-  }
-  @media (min-width: 768px) {
+}
+@media (min-width: 768px) {
     .info-box.secondary-info {
-      flex-direction: row;
+        flex-direction: row;
     }
-  }
-  
-h6{
-  text-transform: lowercase;
-
-}
-.View-btn{
-  background-color: #0c888c;
 }
 
-.View-btn:hover{
-  background-color: #0b6569;
+h6 {
+    text-transform: lowercase;
+}
+.View-btn {
+    background-color: #0c888c;
 }
 
+.View-btn:hover {
+    background-color: #0b6569;
+}

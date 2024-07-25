@@ -1,4 +1,4 @@
-.DropItems{
+.DropItems {
     /* background-color: aqua; */
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
     padding: 3px;
@@ -7,7 +7,7 @@
     display: flex;
 
     flex-direction: column;
-    
+
     border-radius: 32px;
     position: absolute;
     right: -10px;
@@ -15,24 +15,23 @@
     margin-top: 8px;
 }
 
-.list-Items{
+.list-Items {
     display: flex;
     justify-content: space-around;
     margin-top: 10px;
     background-color: white;
-    
 }
 
-.Dec-circle,.Inc-circle{
- border-radius: 50%;
- width: 40px;
- height: 40px;
- border: 1px solid grey;
- font-size: 30px;
- display: flex;
- align-items: center;
- justify-content: center;
-
+.Dec-circle,
+.Inc-circle {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    border: 1px solid grey;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* 
@@ -45,19 +44,16 @@
 
 } */
 
-.Ad-count{
+.Ad-count {
     font-size: 16px;
     margin-top: 6px;
 }
 
-.list-Age{
+.list-Age {
     font-size: 14px;
     font-weight: 400;
-    
 }
 
-.HLine
-{
-margin: 5px;
+.HLine {
+    margin: 5px;
 }
-
