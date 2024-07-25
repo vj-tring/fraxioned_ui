@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styles from './Signup.module.css';
 import logo from '../Login/fraxioned.png';
 
+
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -59,7 +60,7 @@ const Login: React.FC = () => {
             <div className={styles.inputGroup}>
               {nameError && (
                 <div className={styles.errorMessage}>
-                  Please provide name
+                  Please fill in the Name
                 </div>
               )}
               <input
@@ -71,6 +72,21 @@ const Login: React.FC = () => {
                 className={nameError ? styles.errorInput : ''}
               />
             </div>
+            {/* <div className={styles.inputGroup}>
+              {nameError && (
+                <div className={styles.errorMessage}>
+                  Please fill in the Name
+                </div>
+              )}
+              <input
+                type="number"
+                placeholder="Phonenumber"
+                value={phone}
+                autoFocus
+                onChange={handleNameChange}
+                className={nameError ? styles.errorInput : ''}
+              />
+            </div> */}
             <div className={styles.inputGroup}>
               {emailError && (
                 <div className={styles.errorMessage}>

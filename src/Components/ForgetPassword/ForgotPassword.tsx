@@ -7,10 +7,17 @@ const ForgetPassword: React.FC = () => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
 
+  const validateEmail = (email: string) => {
+    const re = /^[a-zA-Z0-9]+([.@][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
+    return re.test(String(email).toLowerCase());
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) {
       setError('Please fill in the Email ID');
+    } else if (!validateEmail(email)) {
+      setError('Please enter a valid email ID');
     } else {
       setError('');
       console.log('Password reset requested for:', email);
@@ -19,8 +26,12 @@ const ForgetPassword: React.FC = () => {
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
-    if (e.target.value.trim()) {
-      setError('');
+    setError('');
+  };
+
+  const handleEmailBlur = () => {
+    if (email && !validateEmail(email)) {
+      setError('Please enter a valid email ID');
     }
   };
 
@@ -34,17 +45,16 @@ const ForgetPassword: React.FC = () => {
           <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.inputGroup}>
               {error && <div className={styles.errorMessage}>{error}</div>}
-
               <input
                 type="text"
                 placeholder="Email"
                 value={email}
                 autoFocus
                 onChange={handleEmailChange}
+                onBlur={handleEmailBlur}
                 className={`${styles.input} ${error ? styles.errorInput : ''}`}
               />
             </div>
-
             <div className={styles.formFooter}>
               <label className={styles.remember}>
                 <input type="checkbox" /> Remember password?

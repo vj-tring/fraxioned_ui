@@ -6,20 +6,27 @@ import logo from './fraxioned.png';
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [emailError, setEmailError] = useState(false);
+    const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState(false);
 
+    const validateEmail = (email: string) => {
+        const re = /^[a-zA-Z0-9]+([._@][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
+        return re.test(String(email).toLowerCase());
+    };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!email.trim()) {
-            setEmailError(true);
+            setEmailError('Please fill in the Email ID');
+            setPasswordError(false);
+        } else if (!validateEmail(email)) {
+            setEmailError('Please enter a valid email ID');
             setPasswordError(false);
         } else if (!password.trim()) {
             setPasswordError(true);
-            setEmailError(false);
+            setEmailError('');
         } else {
-            setEmailError(false);
+            setEmailError('');
             setPasswordError(false);
             console.log('Login attempted with:', email, password);
         }
@@ -27,7 +34,13 @@ const Login: React.FC = () => {
 
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
-        setEmailError(false);
+        setEmailError('');
+    };
+
+    const handleEmailBlur = () => {
+        if (email && !validateEmail(email)) {
+            setEmailError('Please enter a valid email ID');
+        }
     };
 
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +59,7 @@ const Login: React.FC = () => {
                         <div className={styles.inputGroup}>
                             {emailError && (
                                 <div className={styles.errorMessage}>
-                                    Please fill in the Email ID
+                                    {emailError}
                                 </div>
                             )}
                             <input
@@ -55,6 +68,7 @@ const Login: React.FC = () => {
                                 value={email}
                                 autoFocus
                                 onChange={handleEmailChange}
+                                onBlur={handleEmailBlur}
                                 className={emailError ? styles.errorInput : ''}
                             />
                         </div>
