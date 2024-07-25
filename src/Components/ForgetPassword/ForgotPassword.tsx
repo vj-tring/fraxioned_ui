@@ -40,8 +40,8 @@ const ForgetPassword: React.FC = () => {
       <div className={styles.innerContainer}>
         <img src={logo} alt="Fraxioned Logo" className={styles.logo} />
         <div className={styles.formWrapper}>
-          <h2 className={styles.login}>Reset here</h2>
-          <p className={styles.loginSubtext}>Recover your password</p>
+          <h2 className={styles.login}>Forget password</h2>
+          <p className={styles.loginSubtext}>Recover your password here</p>
           <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.inputGroup}>
               {error && <div className={styles.errorMessage}>{error}</div>}

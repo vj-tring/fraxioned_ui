@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
 import styles from './Login1.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from './fraxioned.png';
+import axios from 'axios';
+import { ApiUrl } from 'Components/config';
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState(false);
+    const [apiError, setApiError] = useState('');
+    const navigate = useNavigate();
 
     const validateEmail = (email: string) => {
         const re = /^[a-zA-Z0-9]+([._@][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
         return re.test(String(email).toLowerCase());
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!email.trim()) {
             setEmailError('Please fill in the Email ID');
@@ -28,7 +32,27 @@ const Login: React.FC = () => {
         } else {
             setEmailError('');
             setPasswordError(false);
-            console.log('Login attempted with:', email, password);
+            setApiError('');
+            try {
+                const response = await axios.post(`${ApiUrl}/authentication/login`, {
+                    email,
+                    password
+                });
+
+                const { user, session } = response.data;
+                localStorage.setItem('userData', JSON.stringify({
+                    ...user,
+                }));
+                localStorage.setItem('token', session.token);
+                localStorage.setItem('expiredAt', session.expires_at);
+                navigate('/dashboard');
+            } catch (error) {
+                if (axios.isAxiosError(error) && error.response) {
+                    setApiError(error.response.data.message || 'Login failed');
+                } else {
+                    setApiError('An error occurred. Please try again.');
+                }
+            }
         }
     };
 
@@ -39,7 +63,7 @@ const Login: React.FC = () => {
 
     const handleEmailBlur = () => {
         if (email && !validateEmail(email)) {
-            setEmailError('Please enter a valid email ID');
+            setEmailError('Please enter a valid email id');
         }
     };
 
@@ -55,6 +79,7 @@ const Login: React.FC = () => {
                 <div className={styles.formWrapper}>
                     <h2 className={styles.login}>Login here</h2>
                     <p className={styles.loginSubtext}>Please enter your details to sign in</p>
+                    {apiError && <div className={styles.errorMessage}>{apiError}</div>}
                     <form onSubmit={handleSubmit} className={styles.form}>
                         <div className={styles.inputGroup}>
                             {emailError && (
