@@ -1,72 +1,72 @@
-import React from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import './ForgotPassword.css'
-import { Button } from '@mui/material'
-import useForgotHandler from './ForgotFunction'
-import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars'
-import ResponsiveAppBar from '../NavbarMUI/NavbarUI'
-import Loader from '../Loader/Loader'
+import React, { useState } from 'react';
+import styles from './ForgotPassword.module.css';
+import { Link } from 'react-router-dom';
+import logo from './fraxioned.png'
 
-const ForgotPassword: React.FC = () => {
-    const {
-        formik,
-        openSnackbar,
-        snackbarMessage,
-        snackbarSeverity,
-        handleSnackbarClose,
-        loading,
-    } = useForgotHandler()
+const ForgetPassword: React.FC = () => {
+    const [email, setEmail] = useState('');
+    const [error, setError] = useState('');
+
+    const validateEmail = (email: string) => {
+        const re = /^[a-zA-Z0-9]+([.@][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
+        return re.test(String(email).toLowerCase());
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!email.trim()) {
+            setError('Please fill in the Email ID');
+        } else if (!validateEmail(email)) {
+            setError('Please enter a valid email ID');
+        } else {
+            setError('');
+            console.log('Password reset requested for:', email);
+        }
+    };
+
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEmail(e.target.value);
+        setError('');
+    };
+
+    const handleEmailBlur = () => {
+        if (email && !validateEmail(email)) {
+            setError('Please enter a valid email ID');
+        }
+    };
 
     return (
-        <div className="  ">
-            <ResponsiveAppBar />
-
-            <div className="main-container4 d-flex">
-                <div className="image-container4"></div>
-                <div className="forgot-container ">
-                    <CustomizedSnackbars
-                        open={openSnackbar}
-                        handleClose={handleSnackbarClose}
-                        message={snackbarMessage}
-                        severity={snackbarSeverity}
-                    />
-                    <div className="forgot  rounded p-4">
-                        <h4 className="forgot-pass text-center mb-4">
-                            Forgot Password
-                        </h4>
-                        <form onSubmit={formik.handleSubmit}>
-                            <div className="form-group position-relative">
-                                {formik.touched.email && formik.errors.email ? (
-                                    <div className="invalid-feedback1 d-block mb-2">
-                                        {formik.errors.email}
-                                    </div>
-                                ) : null}
-                                <input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    placeholder="Enter your email"
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    value={formik.values.email}
-                                    className={`form-control ${formik.touched.email && formik.errors.email ? 'is-invalid' : ''}`}
-                                />
-                            </div>
-                            <Button
-                                type="submit"
-                                className="w-100 mt-3"
-                                variant="contained"
-                                color="primary"
-                            >
-                                {loading ? 'Loading...' : 'Submit'}
-                            </Button>
-                        </form>
-                        {loading && <Loader />}
-                    </div>
+        <div className={styles.outerContainer}>
+            <div className={styles.innerContainer}>
+                <img src={logo} alt="Fraxioned Logo" className={styles.logo} />
+                <div className={styles.formWrapper}>
+                    <h2 className={styles.login}>Forget password</h2>
+                    <p className={styles.loginSubtext}>Recover your password here</p>
+                    <form onSubmit={handleSubmit} className={styles.form}>
+                        <div className={styles.inputGroup}>
+                            {error && <div className={styles.errorMessage}>{error}</div>}
+                            <input
+                                type="text"
+                                placeholder="Email"
+                                value={email}
+                                autoFocus
+                                onChange={handleEmailChange}
+                                onBlur={handleEmailBlur}
+                                className={`${styles.input} ${error ? styles.errorInput : ''}`}
+                            />
+                        </div>
+                        <div className={styles.formFooter}>
+                            <label className={styles.remember}>
+                                <input type="checkbox" /> Remember password?
+                            </label>
+                            <Link to="/" className={styles.forgotPassword}>Login here!</Link>
+                        </div>
+                        <button type="submit" className={styles.signInButton}>Submit</button>
+                    </form>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default ForgotPassword
+export default ForgetPassword;
