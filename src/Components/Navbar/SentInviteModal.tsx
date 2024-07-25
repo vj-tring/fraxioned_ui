@@ -46,3 +46,4 @@ const InviteModal: React.FC<InviteModalProps> = ({ show, onHide }) => {
 };
 
 export default InviteModal;
+

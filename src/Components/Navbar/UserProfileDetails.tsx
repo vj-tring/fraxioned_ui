@@ -102,3 +102,4 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({ show, onHide, userI
 };
 
 export default UserDetailsModal;
+

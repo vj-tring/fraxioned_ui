@@ -38,3 +38,4 @@ const HomeCard: React.FC<HomeCardProps> = ({ image, title, address, share, butto
 
 export default HomeCard;
   
+

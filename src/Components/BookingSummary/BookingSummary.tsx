@@ -18,3 +18,4 @@ const BookingSummary: React.FC =() =>{
 }
 
 export default BookingSummary;
+

@@ -39,3 +39,5 @@ const PeakSeasonCard: React.FC<PeakSeasonCardProps> = ({ totalNights, nightsStay
 };
 
 export default PeakSeasonCard;
+
+

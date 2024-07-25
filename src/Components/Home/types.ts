@@ -1,3 +1,4 @@
+
 // Update HomeData interface to reflect new structure
 export interface HomeData {
     id: number;
@@ -35,4 +36,6 @@ export interface HomeData {
     offSeasonData?: OffSeasonData;
     peakSeasonData?: PeakSeasonData;
   }
+  
+
   

@@ -25,3 +25,4 @@ describe('logout', () => {
     await expect(logout()).rejects.toThrowError(error);
   });
 });
+

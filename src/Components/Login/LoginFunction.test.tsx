@@ -149,3 +149,4 @@ describe('useLoginHandler', () => {
     expect(result.current.openSnackbar).toBe(false);
   });
 });
+

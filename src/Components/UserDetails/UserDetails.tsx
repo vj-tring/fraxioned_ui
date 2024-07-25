@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './UserDetails.css';
@@ -138,3 +139,5 @@ const UserDetails: React.FC = () => {
 };
 
 export default UserDetails;
+
+

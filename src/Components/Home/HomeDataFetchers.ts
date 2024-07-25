@@ -25,3 +25,5 @@ export const fetchPeakSeasonData = async (): Promise<PeakSeasonData[]> => {
     { ownerId: 3, totalNights: 10, nightsStaying: 3, nightsRenting: 7 }
   ];
 };
+
+

@@ -65,3 +65,5 @@ const OffSeasonCard: React.FC<OffSeasonCardProps> = ({ totalNights, nightsUsed, 
 };
 
 export default OffSeasonCard;
+
+
