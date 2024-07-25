@@ -1,0 +1,45 @@
+.MultiItems {
+    display: flex;
+    align-items: center;
+    /* padding: 5px; */
+}
+
+.MultiHead {
+    /* padding: 6px; */
+    flex-direction: column;
+    display: flex;
+}
+.MultiHead > a {
+    font-size: 12px;
+}
+
+.DescFont {
+    font-size: 13px;
+}
+
+.w-50 {
+    width: 43% !important;
+}
+
+.MultiIte {
+    padding-top: 9px;
+}
+
+.css-1tzgs8d-MuiAvatar-root {
+    background: none !important;
+    background-color: orange !important;
+    margin-bottom: 12px !important;
+}
+
+.MutliselectBtn {
+    /* height: 70px; */
+}
+
+/* .css-1ndhmnb-MuiButtonBase-root-MuiButton-root{
+height: 50px !important;
+} */
+
+.css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper {
+    border-radius: 10px !important;
+    margin-top: 10px !important;
+}

@@ -1,101 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 .home-content {
-    padding: 20px;
+    /* margin-top: 20px; */
+    /* padding: 50px; */
     text-align: center;
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  }
-  
-  .welcome-owner {
-    font-size: 2rem;
-    color: #F7981D;
+    /* font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-family: sans-serif !important; */
+
+    font-family: 'Montserrat', sans-serif;
+    font-optical-sizing: auto;
+    /* font-weight: 400; */
+    position: relative;
+}
+
+.welcome-section {
     text-align: left;
-  }
-  
-  .your-homes {
-    font-size: 1.5rem;
     margin-bottom: 20px;
-    color: #F7981D;
-    text-align: left;
-  }
-  
-  .home-card {
-    /* margin: 70px 0; */
-    max-width: 100%;
+    border-bottom: 3px solid #daf1f2;
+}
+
+.welcome-owner {
+    font-size: 2rem;
+    color: #f7981d;
+}
+
+.your-homes {
+    font-size: 1.5rem;
+    color: #f7981d;
+}
+
+.home-cards-container {
+    display: flex;
+    flex-direction: column;
+    /* gap: 20px; */
+}
+
+.home-card {
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  .home-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 20px;
-  }
-  
-  .home-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .home-image-container {
-    width: 100%;
-  }
-  
-  .home-image {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-  }
-  
-  .home-details {
-    display: flex;
-    flex-direction: column;
-    align-items: baseline;
-    margin-top: 10px;
-  }
-  
-  .book-stay-btn {
-    margin-top: 10px;
-    background-color: #F7981D;
-    color: white;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
     border: none;
-    padding: 10px 20px;
-    border-radius: 37px;
-    cursor: pointer;
-  }
+    display: flex;
+    flex-direction: row;
+    gap: 20px; /* Adds vertical gap between each card inside home-card */
+    border-bottom: 3px solid #daf1f2;
+}
 
-  .book-stay-btn:hover{
-    background-color: #ffab3c;
-    text-decoration: underline;
-  }
+@media only screen and (max-width: 776px) {
+    .home-cards-container {
+        display: flex;
+        flex-direction: column;
+        /* gap: 20px; */
+    }
 
-  /* .address{
-    font-size: 13px;
-  } */
-  
-  .season-card {
-    text-align: left;
-    color: #0c888c;
-    width: 80%;
-  }
-  
-  .season-card2 {
-    text-align: left;
-    color: #F7981D;
-    width: 80%;
-  }
+    .home-card {
+        padding: 20px;
+        /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
+        border: none;
+        display: flex;
+        flex-direction: column;
+        gap: 20px; /* Adds vertical gap between each card inside home-card */
+        border-bottom: 3px solid #daf1f2;
+    }
+}
 
-  .peak-season-btn {
-    margin-top: 10px;
-    background-color: #F7981D;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 37px;
-    cursor: pointer;
+.HomeImg {
     width: 100%;
-  }
-  
-  .peak-season-btn:hover{
-    background-color: #ffab3c;
-    text-decoration: underline;
-  }
+    height: 250px;
+    background: url('../../assets//uha7nQ.jpg');
+    background-size: cover;
+    background-position: center;
+    /* background-position:bottom; */
+    /* background-repeat: no-repeat; */
+    opacity: 60%;
+}
+
+.icons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 70px;
+}
+
+.Cardcontainer {
+    display: flex;
+    padding-left: 60px;
+    padding-top: 20px;
+    background: white !important;
+}
+
+.card1 {
+    background: url('../../assets//building1.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+hr {
+    color: black !important;
+}

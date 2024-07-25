@@ -1,99 +1,104 @@
-import React from 'react';
+import React from 'react'
 
-import { render, screen, fireEvent} from '@testing-library/react';
-import SendInvite from './SendInvite';
-import '@testing-library/jest-dom';
+import { render, screen, fireEvent } from '@testing-library/react'
+import SendInvite from './SendInvite'
+import '@testing-library/jest-dom'
 // import axios from 'axios';
-import useSendInviteHandler from './SendInviteFunction';
+import useSendInviteHandler from './SendInviteFunction'
 
-jest.mock('axios');
-jest.mock('./SendInviteFunction');
+jest.mock('axios')
+jest.mock('./SendInviteFunction')
 
-const mockedUseSendInviteHandler = useSendInviteHandler as jest.MockedFunction<typeof useSendInviteHandler>;
+const mockedUseSendInviteHandler = useSendInviteHandler as jest.MockedFunction<
+    typeof useSendInviteHandler
+>
 
 describe('SendInvite Component', () => {
-  beforeEach(() => {
-    mockedUseSendInviteHandler.mockReturnValue({
-      handleSubmit: jest.fn(),
-      email: '',
-      status: 'idle',
-      errorMessage: '',
-      setEmail: jest.fn(),
-      selectedRole: '',
-      setSelectedRole: jest.fn(),
-    });
-  });
+    beforeEach(() => {
+        mockedUseSendInviteHandler.mockReturnValue({
+            handleSubmit: jest.fn(),
+            email: '',
+            status: 'idle',
+            errorMessage: '',
+            setEmail: jest.fn(),
+            selectedRole: '',
+            setSelectedRole: jest.fn(),
+        })
+    })
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
 
-  test('renders SendInvite component', async () => {
-    render(<SendInvite />);
+    test('renders SendInvite component', async () => {
+        render(<SendInvite />)
 
-    expect(screen.getByPlaceholderText('Enter email')).toBeInTheDocument();
-    expect(screen.getByText('Select role')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Send Invite/i })).toBeInTheDocument();
-  });
+        expect(screen.getByPlaceholderText('Enter email')).toBeInTheDocument()
+        expect(screen.getByText('Select role')).toBeInTheDocument()
+        expect(
+            screen.getByRole('button', { name: /Send Invite/i })
+        ).toBeInTheDocument()
+    })
 
-  test('calls setEmail on email input change', () => {
-    const mockSetEmail = jest.fn();
-    mockedUseSendInviteHandler.mockReturnValueOnce({
-      ...mockedUseSendInviteHandler(),
-      setEmail: mockSetEmail,
-    });
+    test('calls setEmail on email input change', () => {
+        const mockSetEmail = jest.fn()
+        mockedUseSendInviteHandler.mockReturnValueOnce({
+            ...mockedUseSendInviteHandler(),
+            setEmail: mockSetEmail,
+        })
 
-    render(<SendInvite />);
+        render(<SendInvite />)
 
-    fireEvent.change(screen.getByPlaceholderText('Enter email'), {
-      target: { value: 'test@example.com' },
-    });
+        fireEvent.change(screen.getByPlaceholderText('Enter email'), {
+            target: { value: 'test@example.com' },
+        })
 
-    expect(mockSetEmail).toHaveBeenCalledWith('test@example.com');
-  });
-  
-  test('displays loading spinner when status is loading', () => {
-    mockedUseSendInviteHandler.mockReturnValueOnce({
-      ...mockedUseSendInviteHandler(),
-      status: 'loading',
-    });
-  });
+        expect(mockSetEmail).toHaveBeenCalledWith('test@example.com')
+    })
 
-  test('displays success message when status is success', () => {
-    mockedUseSendInviteHandler.mockReturnValueOnce({
-      ...mockedUseSendInviteHandler(),
-      status: 'success',
-    });
+    test('displays loading spinner when status is loading', () => {
+        mockedUseSendInviteHandler.mockReturnValueOnce({
+            ...mockedUseSendInviteHandler(),
+            status: 'loading',
+        })
+    })
 
-    render(<SendInvite />);
+    test('displays success message when status is success', () => {
+        mockedUseSendInviteHandler.mockReturnValueOnce({
+            ...mockedUseSendInviteHandler(),
+            status: 'success',
+        })
 
-    expect(screen.getByText('Invite sent successfully!')).toBeInTheDocument();
-  });
+        render(<SendInvite />)
 
-  test('displays error message when status is error', () => {
-    mockedUseSendInviteHandler.mockReturnValueOnce({
-      ...mockedUseSendInviteHandler(),
-      status: 'error',
-      errorMessage: 'Error sending invite',
-    });
+        expect(
+            screen.getByText('Invite sent successfully!')
+        ).toBeInTheDocument()
+    })
 
-    render(<SendInvite />);
+    test('displays error message when status is error', () => {
+        mockedUseSendInviteHandler.mockReturnValueOnce({
+            ...mockedUseSendInviteHandler(),
+            status: 'error',
+            errorMessage: 'Error sending invite',
+        })
 
-    expect(screen.getByText('Error sending invite')).toBeInTheDocument();
-  });
+        render(<SendInvite />)
 
-  test('calls handleSubmit on form submission', () => {
-    const mockHandleSubmit = jest.fn();
-    mockedUseSendInviteHandler.mockReturnValueOnce({
-      ...mockedUseSendInviteHandler(),
-      handleSubmit: mockHandleSubmit,
-    });
+        expect(screen.getByText('Error sending invite')).toBeInTheDocument()
+    })
 
-    render(<SendInvite />);
+    test('calls handleSubmit on form submission', () => {
+        const mockHandleSubmit = jest.fn()
+        mockedUseSendInviteHandler.mockReturnValueOnce({
+            ...mockedUseSendInviteHandler(),
+            handleSubmit: mockHandleSubmit,
+        })
 
-    fireEvent.submit(screen.getByRole('button', { name: /Send Invite/i }));
+        render(<SendInvite />)
 
-    expect(mockHandleSubmit).toHaveBeenCalled();
-  });
-});
+        fireEvent.submit(screen.getByRole('button', { name: /Send Invite/i }))
 
+        expect(mockHandleSubmit).toHaveBeenCalled()
+    })
+})

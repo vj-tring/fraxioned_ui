@@ -1,49 +1,52 @@
- 
+.modal-header {
+    padding-left: 5% !important;
+}
+
+.modal {
+    border: none;
+}
+
 .modal-footer-custom {
     display: flex;
-  }
-.title{
-  display: flex;
-  align-items: flex-start;
-}
-.primary{
-  background-color: #df9526;
-  border: none;
-  height: 40px;
-  width: 20%;
-  color: white;
-  border-radius: 5px;
-}  
-
-.primary:hover{
-  background-color: #e48f10;
-}
-  
-.success{
-  background-color: grey;
-  border: none;
-  height: 40px;
-  width: 20%;
-  color: white;
-  border-radius: 5px;
-}
-.success:hover{
-  background-color: rgb(122, 121, 121);
-
-}
-.message{
-  /* text-align: center; */
-  padding-top: 20px;
-  padding-bottom: 20px;
-  margin-left: 12px;
-}
-.title{
-  margin-top: 5px;
-}
-.modal-header {
-  padding-left: 5% !important;
-}
-.modal{
-  border: none;
+    justify-content: flex-end;
+    padding: 15px 20px;
+    border-top: 1px solid #dee2e6;
 }
 
+.title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.message {
+    font-size: 16px;
+    line-height: 1.5;
+    padding: 20px;
+}
+
+.primary {
+    background-color: #007bff;
+    border: none;
+    height: 40px;
+    width: 100px;
+    color: white;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.primary:hover {
+    background-color: #0056b3;
+}
+
+.success {
+    background-color: #6c757d;
+    border: none;
+    height: 40px;
+    width: 100px;
+    color: white;
+    border-radius: 5px;
+}
+
+.success:hover {
+    background-color: #5a6268;
+}

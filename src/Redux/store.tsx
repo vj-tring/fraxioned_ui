@@ -1,12 +1,12 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import loginSlice from "./Features/loginSlice";
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import loginSlice from './Features/loginSlice'
 
-export type RootState = ReturnType<typeof rootReducer>;
+export type RootState = ReturnType<typeof rootReducer>
 
 const rootReducer = combineReducers({
-  login: loginSlice,
-});
+    login: loginSlice,
+})
 
 export const store = configureStore({
-  reducer: rootReducer,
-});
+    reducer: rootReducer,
+})
