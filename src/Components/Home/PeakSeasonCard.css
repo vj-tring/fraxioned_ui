@@ -1,55 +1,55 @@
 /* src/components/PeakSeasonCard.css */
 .season-card2 {
-    text-align: start;
-    color: #f7981d;
-    width: 80%;
+  text-align: start;
+  color: #f7981d;
+  width: 80%;
 }
 
 .peak-season-btn {
-    margin-top: 10px;
-    background-color: #f7981d;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 37px;
-    cursor: pointer;
-    width: 70%;
-    text-decoration: underline;
+  margin-top: 10px;
+  background-color: #f7981d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 37px;
+  cursor: pointer;
+  width: 70%;
+  text-decoration: underline;
 }
 .peaktable {
-    margin-left: 0px;
+  margin-left: 0px;
 }
 
 .peak-season-btn:hover {
-    background-color: #ffab3c;
-    text-decoration: underline;
+  background-color: #ffab3c;
+  text-decoration: underline;
 }
 
 .PeakSeason > tr > td {
-    color: #f7981d;
-    text-align: left;
-    padding: 3px;
+  color: #f7981d;
+  text-align: left;
+  padding: 3px;
 }
 
 table {
-    width: 250px !important;
+  width: 250px !important;
 }
 
 .season-card2 > table {
-    border: #f7981d;
+  border: #f7981d;
 }
 
 .season-card2 > p {
-    margin-right: 145px;
+  margin-right: 145px;
 }
 
 .PeakSeason > tr > td.nights,
 .peak {
-    color: #e18b19 !important;
-    font-weight: 600;
-    /* padding: 3px; */
+  color: #e18b19 !important;
+  font-weight: 600;
+  /* padding: 3px; */
 }
 
 .num {
-    text-align: center !important;
+  text-align: center !important;
 }
