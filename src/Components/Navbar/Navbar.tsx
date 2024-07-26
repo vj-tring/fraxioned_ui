@@ -1,19 +1,18 @@
 import React, { useState } from 'react'
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
-// import Image from 'react-bootstrap/Image';
 import Dropdown from 'react-bootstrap/Dropdown'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import useNavbarHandler from './NavbarFunction'
 import Avatar from '@mui/material/Avatar'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
-// import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout'
 import InviteModal from './SentInviteModal'
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal'
 import FormDialog from '../RegisterFormPopUp/RegisterForm'
 import '../Navbar/Navbar.css'
+
 interface CustomNavbarProps {
     logo: string
     links: {
@@ -32,28 +31,25 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
     links,
     userImage,
     userName,
-    onUserImageClick,
 }) => {
     const {
         showInviteModal,
         showLogoutModal,
         handleOpenInviteModal,
         handleCloseInviteModal,
-        // handleShowLogoutModal,
-        handleCloseLogoutModal,
         handleShowLogoutModal,
+        handleCloseLogoutModal,
+        handleShowUserDetailsModal,
+        handleLogout,
     } = useNavbarHandler()
 
     const [open, setOpen] = useState(false)
-    const [openNewAccountDialog, setOpenNewAccountDialog] = useState(false) // Added state for new account dialog
+    const [openNewAccountDialog, setOpenNewAccountDialog] = useState(false)
 
     const handleToggle = () => {
         setOpen(!open)
     }
 
-    // const handleClose = () => {
-    //   setOpen(false);
-    // };
     const handleOpenNewAccountModal = () => {
         setOpenNewAccountDialog(true)
     }
@@ -130,7 +126,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu className="Drop-menu">
-                            <Dropdown.Item onClick={onUserImageClick}>
+                            <Dropdown.Item onClick={handleShowUserDetailsModal}>
                                 <ListItemIcon>
                                     <Avatar />{' '}
                                     <span className="profile">Profile</span>
@@ -151,12 +147,6 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                                     Add another account
                                 </span>
                             </Dropdown.Item>
-                            {/* <Dropdown.Item onClick={handleShowLogoutModal}>
-                <ListItemIcon>
-                  <SettingsIcon fontSize="small" />
-                </ListItemIcon>
-                Settings
-              </Dropdown.Item> */}
                             <Dropdown.Item onClick={handleShowLogoutModal}>
                                 <ListItemIcon>
                                     <LogoutIcon fontSize="small" />
@@ -175,7 +165,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
             <ConfirmationModal
                 show={showLogoutModal}
                 onHide={handleCloseLogoutModal}
-                onConfirm={handleShowLogoutModal}
+                onConfirm={handleLogout}
                 title="Confirm Logout"
                 message="Are you sure you want to log out?"
                 confirmLabel="Logout"
