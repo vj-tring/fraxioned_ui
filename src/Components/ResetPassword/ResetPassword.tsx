@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './ResetPassword.module.css';
+import axios from 'axios';
 import logo from '../Login/fraxioned.png';
+import { ApiUrl } from 'Components/config';
 
 const ResetPassword: React.FC = () => {
     const [oldPassword, setOldPassword] = useState('');
@@ -10,37 +12,51 @@ const ResetPassword: React.FC = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState(false);
     const [passwordMismatch, setPasswordMismatch] = useState(false);
+    const [userId, setUserId] = useState<number | null>(null);
+    const [apiError, setApiError] = useState<string | null>(null);
 
-    const handleSubmit = (e: React.FormEvent) => {
+
+    useEffect(() => {
+        const userData = localStorage.getItem('userData');
+        if (userData) {
+            const user = JSON.parse(userData);
+            setUserId(user.id);
+        }
+    }, []);
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setApiError(null);
+
         if (!oldPassword.trim()) {
             setOldPasswordError(true);
-            setNewPasswordError(false);
-            setConfirmPasswordError(false);
-            setPasswordMismatch(false);
         } else if (!newPassword.trim()) {
-            setOldPasswordError(false);
             setNewPasswordError(true);
-            setConfirmPasswordError(false);
-            setPasswordMismatch(false);
         } else if (!confirmPassword.trim()) {
-            setOldPasswordError(false);
-            setNewPasswordError(false);
             setConfirmPasswordError(true);
-            setPasswordMismatch(false);
         } else if (newPassword !== confirmPassword) {
-            setOldPasswordError(false);
-            setNewPasswordError(false);
-            setConfirmPasswordError(false);
             setPasswordMismatch(true);
+        } else if (userId === null) {
+            setApiError("User ID not found.");
         } else {
-            setOldPasswordError(false);
-            setNewPasswordError(false);
-            setConfirmPasswordError(false);
-            setPasswordMismatch(false);
-            console.log('Password change attempted with:', oldPassword, newPassword);
+            try {
+                const response = await axios.post(`${ApiUrl}/authentication/resetPassword`, {
+                    oldPassword,
+                    newPassword,
+                    userId
+                });
+
+                console.log('Password reset successful:', response.data);
+            } catch (error) {
+                if (axios.isAxiosError(error) && error.response) {
+                    setApiError(error.response.data.message || 'Password reset failed');
+                } else {
+                    setApiError('An error occurred. Please try again.');
+                }
+            }
         }
     };
+
 
     const handleOldPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setOldPassword(e.target.value);
@@ -67,6 +83,12 @@ const ResetPassword: React.FC = () => {
                     <h2 className={styles.login}>Reset password</h2>
                     <p className={styles.loginSubtext}>Set your new password here</p>
                     <form onSubmit={handleSubmit} className={styles.form}>
+                        {apiError && (
+                            <div className={styles.errorMessage}>
+                                {apiError}
+                            </div>
+                        )}
+
                         {passwordMismatch && (
                             <div className={styles.errorMessage}>
                                 New passwords do not match
