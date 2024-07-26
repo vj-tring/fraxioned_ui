@@ -1,99 +1,99 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 .home-content {
-    /* margin-top: 20px; */
-    /* padding: 50px; */
-    text-align: center;
-    /* font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  /* margin-top: 20px; */
+  /* padding: 50px; */
+  text-align: center;
+  /* font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   font-family: sans-serif !important; */
 
-    font-family: 'Montserrat', sans-serif;
-    font-optical-sizing: auto;
-    /* font-weight: 400; */
-    position: relative;
+  font-family: 'Montserrat', sans-serif;
+  font-optical-sizing: auto;
+  /* font-weight: 400; */
+  position: relative;
 }
 
 .welcome-section {
-    text-align: left;
-    margin-bottom: 20px;
-    border-bottom: 3px solid #daf1f2;
+  text-align: left;
+  margin-bottom: 20px;
+  border-bottom: 3px solid #daf1f2;
 }
 
 .welcome-owner {
-    font-size: 2rem;
-    color: #f7981d;
+  font-size: 2rem;
+  color: #f7981d;
 }
 
 .your-homes {
-    font-size: 1.5rem;
-    color: #f7981d;
+  font-size: 1.5rem;
+  color: #f7981d;
 }
 
 .home-cards-container {
-    display: flex;
-    flex-direction: column;
-    /* gap: 20px; */
+  display: flex;
+  flex-direction: column;
+  /* gap: 20px; */
 }
 
 .home-card {
+  padding: 20px;
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
+  border: none;
+  display: flex;
+  flex-direction: row;
+  gap: 20px; /* Adds vertical gap between each card inside home-card */
+  border-bottom: 3px solid #daf1f2;
+}
+
+@media only screen and (max-width: 776px) {
+  .home-cards-container {
+    display: flex;
+    flex-direction: column;
+    /* gap: 20px; */
+  }
+
+  .home-card {
     padding: 20px;
     /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
     border: none;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 20px; /* Adds vertical gap between each card inside home-card */
     border-bottom: 3px solid #daf1f2;
-}
-
-@media only screen and (max-width: 776px) {
-    .home-cards-container {
-        display: flex;
-        flex-direction: column;
-        /* gap: 20px; */
-    }
-
-    .home-card {
-        padding: 20px;
-        /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
-        border: none;
-        display: flex;
-        flex-direction: column;
-        gap: 20px; /* Adds vertical gap between each card inside home-card */
-        border-bottom: 3px solid #daf1f2;
-    }
+  }
 }
 
 .HomeImg {
-    width: 100%;
-    height: 250px;
-    background: url('../../assets//uha7nQ.jpg');
-    background-size: cover;
-    background-position: center;
-    /* background-position:bottom; */
-    /* background-repeat: no-repeat; */
-    opacity: 60%;
+  width: 100%;
+  height: 250px;
+  background: url('../../assets//uha7nQ.jpg');
+  background-size: cover;
+  background-position: center;
+  /* background-position:bottom; */
+  /* background-repeat: no-repeat; */
+  opacity: 60%;
 }
 
 .icons {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    height: 70px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  height: 70px;
 }
 
 .Cardcontainer {
-    display: flex;
-    padding-left: 60px;
-    padding-top: 20px;
-    background: white !important;
+  display: flex;
+  padding-left: 60px;
+  padding-top: 20px;
+  background: white !important;
 }
 
 .card1 {
-    background: url('../../assets//building1.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
+  background: url('../../assets//building1.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 hr {
-    color: black !important;
+  color: black !important;
 }

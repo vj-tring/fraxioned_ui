@@ -1,19 +1,19 @@
 .Book-heading {
-    font-family: sans-serif;
-    font-weight: 700;
+  font-family: sans-serif;
+  font-weight: 700;
 }
 .Blue-row {
-    display: flex;
-    width: 30%;
-    justify-content: space-between;
+  display: flex;
+  width: 30%;
+  justify-content: space-between;
 }
 
 .img-row {
-    display: flex;
-    width: 100%;
+  display: flex;
+  width: 100%;
 }
 .img1 {
-    height: 400px;
+  height: 400px;
 }
 
 /* .col-md-3{
@@ -21,35 +21,35 @@
     width: 25%;
   } */
 .image {
-    height: 198px;
+  height: 198px;
 }
 
 .container {
-    width: 80%;
+  width: 80%;
 }
 
 .cornerbottomright {
-    border-bottom-right-radius: 15px;
+  border-bottom-right-radius: 15px;
 }
 .cornertopright {
-    border-top-right-radius: 15px;
+  border-top-right-radius: 15px;
 }
 .cornertop {
-    border-top-left-radius: 15px;
-    border-bottom-left-radius: 15px;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
 }
 .location {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .document {
-    /* display: flex; */
-    /* justify-content: space-between; */
-    /* padding-left: 100px; */
+  /* display: flex; */
+  /* justify-content: space-between; */
+  /* padding-left: 100px; */
 }
 .user-table {
-    text-align: center;
+  text-align: center;
 }
 .download-btn {
-    margin-left: 50px;
+  margin-left: 50px;
 }

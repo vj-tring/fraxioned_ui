@@ -7,60 +7,60 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './ForgotPassword.css'
 
 const useForgotHandler = () => {
-    const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-    const [openSnackbar, setOpenSnackbar] = useState(false)
-    const [snackbarMessage, setSnackbarMessage] = useState('')
-    const [snackbarSeverity, setSnackbarSeverity] = useState<
-        'success' | 'info' | 'warning' | 'error'
-    >('success')
+  const [openSnackbar, setOpenSnackbar] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    'success' | 'info' | 'warning' | 'error'
+  >('success')
 
-    const navigate = useNavigate()
+  const navigate = useNavigate()
 
-    const formik = useFormik({
-        initialValues: {
-            email: '',
-        },
-        validationSchema,
-        onSubmit: async (values) => {
-            setLoading(true)
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+    },
+    validationSchema,
+    onSubmit: async (values) => {
+      setLoading(true)
 
-            try {
-                // const response = await forgotPassword(values);
-                await forgotPassword(values)
-                setSnackbarMessage('Password reset email sent successfully!')
-                setSnackbarSeverity('success')
-                setOpenSnackbar(true)
-                setTimeout(() => {
-                    navigate('/login')
-                }, 3000)
-            } catch (error) {
-                setSnackbarMessage('Error sending password reset email!')
-                setSnackbarSeverity('error')
-                setOpenSnackbar(true)
-            }
-            setLoading(false)
-        },
-    })
+      try {
+        // const response = await forgotPassword(values);
+        await forgotPassword(values)
+        setSnackbarMessage('Password reset email sent successfully!')
+        setSnackbarSeverity('success')
+        setOpenSnackbar(true)
+        setTimeout(() => {
+          navigate('/login')
+        }, 3000)
+      } catch (error) {
+        setSnackbarMessage('Error sending password reset email!')
+        setSnackbarSeverity('error')
+        setOpenSnackbar(true)
+      }
+      setLoading(false)
+    },
+  })
 
-    const handleSnackbarClose = (
-        event?: React.SyntheticEvent | Event,
-        reason?: string
-    ) => {
-        if (reason === 'clickaway') {
-            return
-        }
-        setOpenSnackbar(false)
+  const handleSnackbarClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return
     }
+    setOpenSnackbar(false)
+  }
 
-    return {
-        formik,
-        openSnackbar,
-        snackbarMessage,
-        snackbarSeverity,
-        handleSnackbarClose,
-        loading,
-    }
+  return {
+    formik,
+    openSnackbar,
+    snackbarMessage,
+    snackbarSeverity,
+    handleSnackbarClose,
+    loading,
+  }
 }
 
 export default useForgotHandler
