@@ -22,6 +22,8 @@ import Calendar from 'Components/Calender/Calender'
 // import FormDialog from 'Components/RegisterFormPopUp/RegisterForm';
 
 import Carosuel from 'Components/Home/DatesContainer/Carosuel'
+import Change from 'Components/ChangePassword/ChangePassword'
+// import Reset from 'Components/ChangePassword/ChangePassword'
 interface PrivateRouteProps {
   element: React.ComponentType
 }
@@ -38,6 +40,7 @@ const App: FC = () => {
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Signup />} />
+        <Route path="/change" element={<Change />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/booking" element={<Booking />} />
