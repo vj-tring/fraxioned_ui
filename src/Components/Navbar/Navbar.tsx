@@ -31,7 +31,6 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
     links,
     userImage,
     userName,
-    onUserImageClick,
 }) => {
     const {
         showInviteModal,
