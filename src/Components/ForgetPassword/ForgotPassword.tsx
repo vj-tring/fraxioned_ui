@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './ForgotPassword.module.css';
 import { Link } from 'react-router-dom';
-import logo from '../Login/fraxioned.png'
+import { ApiUrl } from 'Components/config';
+import logo from '../Login/fraxioned.png';
+import axios from 'axios';
 
 const ForgetPassword: React.FC = () => {
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
     const validateEmail = (email: string) => {
         const re = /^[a-zA-Z0-9]+([.@][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
         return re.test(String(email).toLowerCase());
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!email.trim()) {
             setError('Please fill in the Email ID');
@@ -20,7 +25,18 @@ const ForgetPassword: React.FC = () => {
             setError('Please enter a valid email ID');
         } else {
             setError('');
-            console.log('Password reset requested for:', email);
+            setIsLoading(true);
+            try {
+                const response = await axios.post(`${ApiUrl}/authentication/forgotPassword`, { email });
+                console.log('Password reset requested for:', email);
+                console.log('Server response:', response.data);
+                navigate('/');
+            } catch (error) {
+                console.error('Error requesting password reset:', error);
+                setError('Failed to request password reset. Please try again.');
+            } finally {
+                setIsLoading(false);
+            }
         }
     };
 
@@ -61,7 +77,9 @@ const ForgetPassword: React.FC = () => {
                             </label>
                             <Link to="/" className={styles.forgotPassword}>Login here!</Link>
                         </div>
-                        <button type="submit" className={styles.signInButton}>Submit</button>
+                        <button type="submit" className={styles.signInButton} disabled={isLoading}>
+                            {isLoading ? 'Submitting...' : 'Submit'}
+                        </button>
                     </form>
                 </div>
             </div>

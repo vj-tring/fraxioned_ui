@@ -72,21 +72,6 @@ const Signup: React.FC = () => {
                                 className={nameError ? styles.errorInput : ''}
                             />
                         </div>
-                        {/* <div className={styles.inputGroup}>
-              {nameError && (
-                <div className={styles.errorMessage}>
-                  Please fill in the Name
-                </div>
-              )}
-              <input
-                type="number"
-                placeholder="Phonenumber"
-                value={phone}
-                autoFocus
-                onChange={handleNameChange}
-                className={nameError ? styles.errorInput : ''}
-              />
-            </div> */}
                         <div className={styles.inputGroup}>
                             {emailError && (
                                 <div className={styles.errorMessage}>

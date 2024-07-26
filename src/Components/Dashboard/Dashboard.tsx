@@ -18,7 +18,7 @@ const Dashboard: React.FC = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (isAuthenticated()) {
+        if (!isAuthenticated()) {
             navigate('/login')
         } else {
             const storedUserData = localStorage.getItem('userData')
