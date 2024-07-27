@@ -55,6 +55,7 @@ const App: FC = () => {
                     path="/dashboard"
                     element={<PrivateRoute element={Dashboard} />}
                 />
+                
                 {/* Use PrivateRoute for all other routes that need to be protected */}
                 {/* <Route path="/*" element={<PrivateRoute element={Dashboard} />} /> */}
 
@@ -67,3 +68,5 @@ const App: FC = () => {
 }
 
 export default App
+
+

@@ -1,5 +1,5 @@
-import * as React from 'react'
-import { useState } from 'react'
+// import * as React from 'react'
+import React, { useState, useEffect } from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -10,16 +10,6 @@ import ChildFriendlyIcon from '@mui/icons-material/ChildFriendly'
 import PetsIcon from '@mui/icons-material/Pets'
 import '../DatesContainer/Multiselect.css'
 // import { relative } from 'path';
-const MenuProps = {
-    PaperProps: {
-        style: {
-            width: 380,
-            borderRadius: '8px',
-            marginTop: '8px',
-            overflow: 'hidden',
-        },
-    },
-}
 
 const names = [
     { label: 'Adults', description: 'Ages 13 or above', icon: <PeopleIcon /> },
@@ -34,12 +24,16 @@ const names = [
 
 const MultipleSelect: React.FC = () => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+    const open = Boolean(anchorEl)
+
     const [counts, setCounts] = useState<{ [key: string]: number }>({
         Adults: 1,
         Children: 0,
         Infants: 0,
         Pets: 0,
     })
+
+    // const [menuTop, setMenuTop] = useState(0) // State to keep track of menu top position
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
@@ -62,44 +56,61 @@ const MultipleSelect: React.FC = () => {
         }))
     }
 
+    useEffect(() => {
+        const handleScroll = () => {
+            if (open) {
+                handleClose() // Close menu on scroll
+            }
+        }
+
+        window.addEventListener('scroll', handleScroll)
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+        }
+    }, [open])
+
     return (
         <Box sx={{ width: '30%' }}>
-            <Button
-                disableRipple
-                disableTouchRipple
-                className="MutliselectBtn"
-                aria-controls="basic-menu"
-                aria-haspopup="true"
-                variant="outlined"
-                onClick={handleClick}
-                type="button" // Add this prop
-                sx={{
-                    borderRadius: '32px',
-                    width: '98%',
-                    // height: '70px',
-                    border: 'none',
-                    // textTransform: 'none',
-                    // justifyContent: 'flex-start',
-                    // paddingLeft: '16px',
-                    // paddingRight: '16px',
-                    '&:hover': {
-                        // backgroundColor: '#f0f0f0',
-                        height: '70px',
-                        border: 'none',
-                    },
-                }}
-            >
+              <Button
+            
+            aria-controls="basic-menu"
+            aria-haspopup="true"
+            onClick={handleClick}
+            variant="outlined"
+            className="PropertyBtn"
+            sx={{
+                borderRadius: 10,
+                width: 275,
+                height: 70,
+                border: 'none',
+                cursor: 'pointer',
+            }}
+        >
                 <div className="d-flex flex-column pt-3 text-align-center">
                     <span className="DateHead1">Who</span>
                     <p className="property1"> Add guests</p>
                 </div>
             </Button>
+
             <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
-                PaperProps={MenuProps.PaperProps}
+                // PaperProps={MenuProps.PaperProps}
+
+                PaperProps={{
+                    style: {
+                        width: 380,
+                        borderRadius: '8px',
+                        marginTop: '8px',
+                        overflow: 'hidden',
+
+                        // top: menuTop + 'px', // Dynamically set the top position of the menu
+                        position: 'fixed', // Ensure the menu stays fixed when scrolling
+                    },
+                }}
                 anchorOrigin={{
                     vertical: 'bottom',
                     horizontal: 'left',
@@ -127,7 +138,7 @@ const MultipleSelect: React.FC = () => {
                                 {item.icon}
                             </Avatar>
                             <div className=" w-50 ">
-                                <b>{item.label}</b>
+                                <b className="itemLabel">{item.label}</b>
                                 <p className="DescFont">{item.description}</p>
                             </div>
                             <div className="d-flex justify-content-around w-50 pb-2">
@@ -143,9 +154,9 @@ const MultipleSelect: React.FC = () => {
                                 >
                                     -
                                 </button>
-                                <span className="Ad-count">
+                                <p className="Ad-count ">
                                     {counts[item.label]}
-                                </span>
+                                </p>
                                 <button
                                     className="Inc-circle"
                                     onClick={() =>

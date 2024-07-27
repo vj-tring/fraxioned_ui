@@ -165,3 +165,10 @@
 .profile1 {
     padding-right: 10px;
 }
+
+.css-137ul40-MuiButtonBase-root-MuiIconButton-root{
+    border-radius: 0% !important;
+    background: none !important;
+    animation: none !important;
+}
+

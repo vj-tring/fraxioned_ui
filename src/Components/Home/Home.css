@@ -65,7 +65,7 @@
 
 .HomeImg {
     width: 100%;
-    height: 250px;
+    height: 230px;
     background: url('../../assets//uha7nQ.jpg');
     background-size: cover;
     background-position: center;
@@ -77,14 +77,17 @@
 .icons {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
-    height: 70px;
+    justify-content:space-evenly;
+    height: 60px;
+}
+.icon-container{
+    margin-bottom: 10px;
 }
 
 .Cardcontainer {
     display: flex;
     padding-left: 60px;
-    padding-top: 20px;
+    padding-top: 10px;
     background: white !important;
 }
 

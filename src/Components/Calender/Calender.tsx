@@ -1,10 +1,14 @@
 //@ts-nocheck
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Popover, Paper } from '@mui/material'
+// import Menu from '@mui/material/Menu'
+// import MenuItem from '@mui/material/MenuItem'
 import {
     ORIENTATION,
     StatefulCalendar as StatefulCalendarType,
 } from 'baseui/datepicker'
+import Box from '@mui/material/Box'
+// import Button from '@mui/material/Button'
 
 import '../Calender/Calender.css'
 
@@ -49,6 +53,9 @@ const Calendar: React.FC = () => {
     const [endDate, setEndDate] = useState<Date | null>(null)
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
+    const open = Boolean(anchorEl)
+
+    // const [menuTop, setMenuTop] = useState(0) // State to keep track of menu top position
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
@@ -58,7 +65,7 @@ const Calendar: React.FC = () => {
         setAnchorEl(null)
     }
 
-    const open = Boolean(anchorEl)
+    // const open = Boolean(anchorEl)
     const id = open ? 'calendar-popover' : undefined
 
     const bookedDates = [
@@ -194,155 +201,206 @@ const Calendar: React.FC = () => {
         }
     }
 
+    useEffect(() => {
+        const handleScroll = () => {
+            if (open) {
+                handleClose() // Close menu on scroll
+            }
+        }
+
+        window.addEventListener('scroll', handleScroll)
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+        }
+    }, [open])
+
     return (
-        <div className="calendar">
-            <div className="card-item " onClick={handleClick}>
-                <span className="DateHead">Check in</span>
-                <p className="property">Add Dates</p>
-            </div>
+        <Box>
+            <div className="calendar ">
+                <div className="card-item " onClick={handleClick}>
+                    <span className="DateHead">Check in</span>
+                    <p className="property">Add Dates</p>
+                </div>
 
-            <Popover
-                sx={{
-                    maxWidth: 700,
-                    maxHeight: 550,
-                    // overflowX:'scroll',
-                    // position:'static',
-                    // left:100,
-                }}
-                id={id}
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                }}
-            >
-                <Paper>
-                    <StatefulCalendar
-                        onChange={handleDateChange}
-                        orientation={ORIENTATION.horizontal}
-                        monthsShown={2}
-                        range
-                        filterDate={(date) => {
-                            if (startDate && !endDate) {
-                                const firstBookedDate =
-                                    getFirstBookedDateAfterCheckIn(startDate)
-                                const lastMinute =
-                                    isLastMinuteBooking(startDate)
+                <Popover
+                    sx={{
+                        // maxWidth: 700,
+                        // maxHeight: 500,
+                        // overflowX:'scroll',
+                        position:'relative',
+                        // right:300,
+                        // paddingTop:500,
 
+                    }}
+                    id={id}
+                    open={open}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                        // marginTop:100
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                    }}
+                    PaperProps={{
+                        style: {
+                            borderRadius:10,
+                            // top: menuTop + 'px',
+                            position: 'fixed',
+                            marginTop:20,
+                            // marginRight:100,
+                            marginLeft:-300
+                            // left:200
+                            // right:300,
+                        },
+                    }}
+                >
+                    <Paper
+                      disableRipple
+
+                      sx={{
+                        display: 'flex',
+                        flexDirection:'column',
+                        background:'white',
+                        backgroundColor:'white'
+                      }}
+                    >
+                        <StatefulCalendar
+                            onChange={handleDateChange}
+                            orientation={ORIENTATION.horizontal}
+                            monthsShown={2}
+                            range
+                            filterDate={(date) => {
+                                if (startDate && !endDate) {
+                                    const firstBookedDate =
+                                        getFirstBookedDateAfterCheckIn(
+                                            startDate
+                                        )
+                                    const lastMinute =
+                                        isLastMinuteBooking(startDate)
+
+                                    return (
+                                        date >= startDate &&
+                                        date <= twoYearsFromToday &&
+                                        !isBookedDate(date) &&
+                                        !isUnavailableDate(date) &&
+                                        (!firstBookedDate ||
+                                            date <= firstBookedDate) &&
+                                        (!lastMinute ||
+                                            (lastMinute &&
+                                                date <=
+                                                    new Date(
+                                                        startDate.getTime() +
+                                                            3 *
+                                                                24 *
+                                                                60 *
+                                                                60 *
+                                                                1000
+                                                    )))
+                                    )
+                                }
                                 return (
-                                    date >= startDate &&
+                                    date >= today &&
                                     date <= twoYearsFromToday &&
                                     !isBookedDate(date) &&
-                                    !isUnavailableDate(date) &&
-                                    (!firstBookedDate ||
-                                        date <= firstBookedDate) &&
-                                    (!lastMinute ||
-                                        (lastMinute &&
-                                            date <=
-                                                new Date(
-                                                    startDate.getTime() +
-                                                        3 * 24 * 60 * 60 * 1000
-                                                )))
+                                    !isUnavailableDate(date)
                                 )
-                            }
-                            return (
-                                date >= today &&
-                                date <= twoYearsFromToday &&
-                                !isBookedDate(date) &&
-                                !isUnavailableDate(date)
-                            )
-                        }}
-                        minDate={today}
-                        maxDate={twoYearsFromToday}
-                        overrides={{
-                            Day: {
-                                style: ({ $date }) => {
-                                    const dateString = `${$date.getFullYear()}-${String($date.getMonth() + 1).padStart(2, '0')}-${String(
-                                        $date.getDate()
-                                    ).padStart(2, '0')}`
-                                    const firstBookedDate =
-                                        startDate && !endDate
-                                            ? getFirstBookedDateAfterCheckIn(
-                                                  startDate
-                                              )
-                                            : null
-                                    const firstUnavailableDate =
-                                        startDate && !endDate
-                                            ? getFirstUnavailableDateAfterCheckIn(
-                                                  startDate
-                                              )
-                                            : null
+                            }}
+                            minDate={today}
+                            maxDate={twoYearsFromToday}
+                            overrides={{
+                                Day: {
+                                    style: ({ $date }) => {
+                                        const dateString = `${$date.getFullYear()}-${String($date.getMonth() + 1).padStart(2, '0')}-${String(
+                                            $date.getDate()
+                                        ).padStart(2, '0')}`
+                                        const firstBookedDate =
+                                            startDate && !endDate
+                                                ? getFirstBookedDateAfterCheckIn(
+                                                      startDate
+                                                  )
+                                                : null
+                                        const firstUnavailableDate =
+                                            startDate && !endDate
+                                                ? getFirstUnavailableDateAfterCheckIn(
+                                                      startDate
+                                                  )
+                                                : null
 
-                                    if (colorCodes[dateString]) {
-                                        return {
-                                            backgroundColor:
-                                                colorCodes[dateString],
-                                            pointerEvents: 'none',
+                                        if (colorCodes[dateString]) {
+                                            return {
+                                                backgroundColor:
+                                                    colorCodes[dateString],
+                                                pointerEvents: 'none',
+                                            }
+                                        } else if (isBookedDate($date)) {
+                                            return {
+                                                color: 'gray',
+                                                textDecoration: 'line-through',
+                                                pointerEvents: 'none',
+                                            }
+                                        } else if (isUnavailableDate($date)) {
+                                            return {
+                                                color: 'gray',
+                                                pointerEvents: 'none',
+                                            }
+                                        } else if (
+                                            startDate &&
+                                            firstBookedDate &&
+                                            $date > firstBookedDate
+                                        ) {
+                                            return {
+                                                color: 'gray',
+                                                textDecoration: 'line-through',
+                                                pointerEvents: 'none',
+                                            }
+                                        } else if (
+                                            startDate &&
+                                            firstUnavailableDate &&
+                                            $date > firstUnavailableDate
+                                        ) {
+                                            return {
+                                                color: 'gray',
+                                                pointerEvents: 'none',
+                                                textDecoration: 'line-through',
+                                            }
                                         }
-                                    } else if (isBookedDate($date)) {
-                                        return {
-                                            color: 'gray',
-                                            textDecoration: 'line-through',
-                                            pointerEvents: 'none',
-                                        }
-                                    } else if (isUnavailableDate($date)) {
-                                        return {
-                                            color: 'gray',
-                                            pointerEvents: 'none',
-                                        }
-                                    } else if (
-                                        startDate &&
-                                        firstBookedDate &&
-                                        $date > firstBookedDate
-                                    ) {
-                                        return {
-                                            color: 'gray',
-                                            textDecoration: 'line-through',
-                                            pointerEvents: 'none',
-                                        }
-                                    } else if (
-                                        startDate &&
-                                        firstUnavailableDate &&
-                                        $date > firstUnavailableDate
-                                    ) {
-                                        return {
-                                            color: 'gray',
-                                            pointerEvents: 'none',
-                                            textDecoration: 'line-through',
-                                        }
-                                    }
-                                    return {}
+                                        return {}
+                                    },
                                 },
-                            },
-                            MonthYearSelectStatefulMenu: {
-                                component: () => null,
-                            },
-                        }}
-                    />
+                                MonthYearSelectStatefulMenu: {
+                                    component: () => null,
+                                },
+                            }}
+                            
+                        />
 
-                    {errorMessage && (
-                        <div className="error-message">{errorMessage}</div>
-                    )}
-                    <div className="stay-length ">
-                        <div className="misl">
-                            Minimum Stay Length : 3 Nights
+                       {errorMessage && (
+                            <div className="error-message">{errorMessage} 
+                            </div>
+                        )}
+                        <div className="stay-length ">
+                            <div className="misl">
+                                Minimum Stay Length : 3 Nights
+                            </div>
+                            <div className="masl">
+                                Maximum Stay Length : 14 Nights
+                            </div>
+                            <div className="season">
+                                Peak-Season Nights: June 1 - September 30
+                            </div>
                         </div>
-                        <div className="masl">
-                            Maximum Stay Length : 14 Nights
-                        </div>
-                        <div className="season">
-                            Peak-Season Nights: June 1 - September 30
-                        </div>
-                    </div>
-                </Paper>
-            </Popover>
-        </div>
+
+
+
+                    </Paper>
+                </Popover>
+            </div>
+        </Box>
     )
 }
 

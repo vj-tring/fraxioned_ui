@@ -27,8 +27,8 @@
 }
 .image-container > .card-img-top {
     border-radius: 20px;
-    height: 270px;
-    width: 270px;
+    height: 240px;
+    width: 240px;
 }
 
 .card-body {
