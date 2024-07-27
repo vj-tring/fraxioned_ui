@@ -13,12 +13,12 @@ const engine = new Styletron()
 
 // Render your application
 ReactDOM.render(
-    <React.StrictMode>
-        <StyletronProvider value={engine}>
-            <BaseProvider theme={LightTheme}>
-                <App /> {/* Render your Calendar component */}
-            </BaseProvider>
-        </StyletronProvider>
-    </React.StrictMode>,
-    document.getElementById('root')
+  <React.StrictMode>
+    <StyletronProvider value={engine}>
+      <BaseProvider theme={LightTheme}>
+        <App /> {/* Render your Calendar component */}
+      </BaseProvider>
+    </StyletronProvider>
+  </React.StrictMode>,
+  document.getElementById('root')
 )

@@ -1,111 +1,111 @@
 .user-details-container {
-    padding: 20px;
+  padding: 20px;
 }
 
 .edit {
-    height: 30px;
-    margin-bottom: 30px;
+  height: 30px;
+  margin-bottom: 30px;
 }
 
 .user-header {
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    background-color: #f9f9f9;
-    text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  text-transform: uppercase;
 }
 
 .user-image {
-    border-radius: 50%;
-    margin-right: 20px;
+  border-radius: 50%;
+  margin-right: 20px;
 }
 
 .edit-icon {
-    margin-left: auto;
-    cursor: pointer;
-    color: blue;
+  margin-left: auto;
+  cursor: pointer;
+  color: blue;
 }
 
 .user-info {
-    background-color: #d9a85f;
-    padding: 20px;
-    margin-top: 20px;
-    display: flex;
-    flex-wrap: wrap;
+  background-color: #d9a85f;
+  padding: 20px;
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .info-box {
-    flex: 1 0 50%;
+  flex: 1 0 50%;
 }
 
 .email-phone {
-    display: flex;
+  display: flex;
 }
 
 .email-phone p {
-    flex: 1;
+  flex: 1;
 }
 
 .info-box p {
-    margin: 0;
-    font-size: 16px;
-    color: white;
+  margin: 0;
+  font-size: 16px;
+  color: white;
 }
 
 .user-documents {
-    margin-top: 40px;
+  margin-top: 40px;
 }
 
 .user-documents h3 {
-    font-size: 24px;
-    margin-bottom: 20px;
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 
 .user-documents table .user-table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 .user-table {
-    width: 100% !important;
-    margin: 0 !important;
+  width: 100% !important;
+  margin: 0 !important;
 }
 .user-documents th,
 .user-documents td {
-    border: 1px solid #ccc;
-    padding: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
 }
 
 .user-documents th {
-    background-color: #f9f9f9;
-    text-align: left;
+  background-color: #f9f9f9;
+  text-align: left;
 }
 
 .user-documents td {
-    word-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .info-box.secondary-info {
-    display: flex;
-    flex-direction: column;
-    margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
 }
 .SecPhone {
-    padding-left: 130px;
+  padding-left: 130px;
 }
 @media (min-width: 768px) {
-    .info-box.secondary-info {
-        flex-direction: row;
-    }
+  .info-box.secondary-info {
+    flex-direction: row;
+  }
 }
 
 h6 {
-    text-transform: lowercase;
+  text-transform: lowercase;
 }
 .View-btn {
-    background-color: #0c888c;
+  background-color: #0c888c;
 }
 
 .View-btn:hover {
-    background-color: #0b6569;
+  background-color: #0b6569;
 }

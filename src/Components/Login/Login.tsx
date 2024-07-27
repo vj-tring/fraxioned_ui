@@ -1,105 +1,137 @@
-import { Button } from '@mui/material'
-import React from 'react'
-import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars'
-import './Login.css'
-import useLoginHandler from './LoginFunction'
-import { Link } from 'react-router-dom'
-import ResponsiveAppBar from '../NavbarMUI/NavbarUI'
-import Loader from '../Loader/Loader'
+import React, { useState } from 'react'
+import styles from './Login.module.css'
+import { Link, useNavigate } from 'react-router-dom'
+import logo from './fraxioned.png'
+import axios from 'axios'
+import { ApiUrl } from 'Components/config'
 
 const Login: React.FC = () => {
-    const {
-        formik,
-        openSnackbar,
-        snackbarMessage,
-        snackbarSeverity,
-        handleSnackbarClose,
-        loading,
-    } = useLoginHandler()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [emailError, setEmailError] = useState('')
+  const [passwordError, setPasswordError] = useState(false)
+  const [apiError, setApiError] = useState('')
+  const navigate = useNavigate()
 
-    return (
-        <div>
-            <ResponsiveAppBar />
-            <div className="container1">
-                <div className="login-main-container d-flex">
-                    <div className="login-image-container1"> </div>
+  const validateEmail = (email: string) => {
+    const re =
+      /^[a-zA-Z0-9]+([._@][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/
+    return re.test(String(email).toLowerCase())
+  }
 
-                    <div className="login-container d-flex flex-column align-items-center justify-content-center">
-                        <CustomizedSnackbars
-                            open={openSnackbar}
-                            handleClose={handleSnackbarClose}
-                            message={snackbarMessage}
-                            severity={snackbarSeverity}
-                        />
-                        <div className="login-box">
-                            <h1 className="Hello">Hello,</h1>
-                            {/* <p className='Welcome'>Welcome Back!</p> */}
-                            {/* <p className='Welcome'>The faster you fill up, the faster you get a house</p> */}
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email.trim()) {
+      setEmailError('Please fill in the Email ID')
+      setPasswordError(false)
+    } else if (!validateEmail(email)) {
+      setEmailError('Please enter a valid email ID')
+      setPasswordError(false)
+    } else if (!password.trim()) {
+      setPasswordError(true)
+      setEmailError('')
+    } else {
+      setEmailError('')
+      setPasswordError(false)
+      setApiError('')
+      try {
+        const response = await axios.post(`${ApiUrl}/authentication/login`, {
+          email,
+          password,
+        })
 
-                            {/* <h2 className="text-center mt-1">Login</h2> */}
+        const { user, session } = response.data
+        localStorage.setItem(
+          'userData',
+          JSON.stringify({
+            ...user,
+          })
+        )
+        localStorage.setItem('token', session.token)
+        localStorage.setItem('expiredAt', session.expires_at)
+        navigate('/dashboard')
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+          setApiError(error.response.data.message || 'Login failed')
+        } else {
+          setApiError('An error occurred. Please try again.')
+        }
+      }
+    }
+  }
 
-                            <form
-                                onSubmit={formik.handleSubmit}
-                                className="Login-form"
-                            >
-                                <div className="form-group1 position-relative">
-                                    {formik.touched.email &&
-                                        formik.errors.email && (
-                                            <div className="invalid-feedback d-block">
-                                                {formik.errors.email}
-                                            </div>
-                                        )}
-                                    <input
-                                        name="email"
-                                        type="email"
-                                        placeholder="youremail@gmail.com"
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        value={formik.values.email}
-                                        className={`form-control ${formik.touched.email && formik.errors.email ? 'is-invalid' : ''}`}
-                                    />
-                                </div>
-                                <div className="form-group1 position-relative">
-                                    {formik.touched.password &&
-                                        formik.errors.password && (
-                                            <div className=" invalid-feedback d-block">
-                                                {formik.errors.password}
-                                            </div>
-                                        )}
-                                    <input
-                                        id="password"
-                                        name="password"
-                                        type="password"
-                                        placeholder="................"
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        value={formik.values.password}
-                                        className={` passinput form-control ${formik.touched.password && formik.errors.password ? 'is-invalid' : ''}`}
-                                    />
-                                    <Link
-                                        to="/forgot-password"
-                                        className="forgot-password"
-                                    >
-                                        Forgot Password?
-                                    </Link>
-                                </div>
-                                <Button
-                                    type="submit"
-                                    className="w-100 mt-5 loginbtn"
-                                    variant="contained"
-                                    color="primary"
-                                    disabled={loading}
-                                >
-                                    {loading ? 'Loading...' : 'Sign In'}
-                                </Button>
-                            </form>
-                            {loading && <Loader />}
-                        </div>
-                    </div>
-                </div>
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value)
+    setEmailError('')
+  }
+
+  const handleEmailBlur = () => {
+    if (email && !validateEmail(email)) {
+      setEmailError('Please enter a valid email id')
+    }
+  }
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value)
+    setPasswordError(false)
+  }
+
+  return (
+    <div className={styles.outerContainer}>
+      <div className={styles.innerContainer}>
+        <img src={logo} alt="Fraxioned Logo" className={styles.logo} />
+        <div className={styles.formWrapper}>
+          <h2 className={styles.login}>Login here</h2>
+          <p className={styles.loginSubtext}>
+            Please enter your details to sign in
+          </p>
+          {apiError && <div className={styles.errorMessage}>{apiError}</div>}
+          <form onSubmit={handleSubmit} className={styles.form}>
+            <div className={styles.inputGroup}>
+              {emailError && (
+                <div className={styles.errorMessage}>{emailError}</div>
+              )}
+              <input
+                type="text"
+                placeholder="Email"
+                value={email}
+                autoFocus
+                onChange={handleEmailChange}
+                onBlur={handleEmailBlur}
+                className={emailError ? styles.errorInput : ''}
+              />
             </div>
+            <div className={styles.inputGroup}>
+              {passwordError && (
+                <div className={styles.errorMessage}>
+                  Please fill in the Password
+                </div>
+              )}
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={handlePasswordChange}
+                className={passwordError ? styles.errorInput : ''}
+              />
+            </div>
+
+            <div className={styles.formFooter}>
+              <label className={styles.remember}>
+                <input type="checkbox" /> Remember me
+              </label>
+              <Link to="/forgot-password" className={styles.forgotPassword}>
+                Forgot password?
+              </Link>
+            </div>
+            <button type="submit" className={styles.signInButton}>
+              Sign in
+            </button>
+          </form>
         </div>
-    )
+      </div>
+    </div>
+  )
 }
 
 export default Login

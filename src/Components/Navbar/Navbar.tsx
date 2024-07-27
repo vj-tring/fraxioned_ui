@@ -16,7 +16,7 @@ import ConfirmationModal from '../ConfirmationModal/ConfirmationModal'
 import FormDialog from '../RegisterFormPopUp/RegisterForm'
 import '../Navbar/Navbar.css'
 import useNavbarHandler from './NavbarFunction'
-import {  Typography } from '@mui/material';
+import { Typography } from '@mui/material'
 
 interface CustomNavbarProps {
     logo: string
@@ -30,11 +30,9 @@ interface CustomNavbarProps {
     userName: string
     onUserImageClick?: () => void
 }
-    const firstName= 'John';
-    const lastName= 'Doe';
-   const email= 'john.doe@example.com'
-
-
+const firstName = 'John'
+const lastName = 'Doe'
+const email = 'john.doe@example.com'
 
 const CustomNavbar: React.FC<CustomNavbarProps> = ({
     logo,
@@ -44,7 +42,6 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
     onUserImageClick,
 }) => {
     const {
-        
         showInviteModal,
         showLogoutModal,
         handleOpenInviteModal,
@@ -103,56 +100,63 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
 
                 <Nav className="ml-auto">
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Tooltip  title="Account settings">
+                        <Tooltip title="Account settings">
                             <IconButton
                                 onClick={handleClick}
                                 size="small"
                                 sx={{ ml: 2 }}
-                                aria-controls={open ? 'account-menu' : undefined}
+                                aria-controls={
+                                    open ? 'account-menu' : undefined
+                                }
                                 aria-haspopup="true"
                                 aria-expanded={open ? 'true' : undefined}
                             >
- <Box display="flex" alignItems="center" 
- sx={{
-    borderRadius:1,
- }}
- >
-                    <Box 
-                     
-                     >
-                        <Typography variant="body2" color="textPrimary" >
-                            {firstName} {lastName}
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                            {email}
-                        </Typography>
-                    </Box>
-                                <Avatar 
+                                <Box
+                                    display="flex"
+                                    alignItems="center"
                                     sx={{
-                                        width: 32,
-                                        height: 32,
-                                        cursor: 'pointer',
+                                        borderRadius: 1,
                                     }}
                                 >
-                                    {userImage ? (
-                                        <img
-                                            src={userImage}
-                                            alt="User"
-                                            style={{
-                                                width: '100%',
-                                                height: '100%',
-                                                objectFit: 'cover',
-                                                borderRadius: '50%',
-                                            }}
-                                        />
-                                    ) : userName ? (
-                                        userName.charAt(0).toUpperCase()
-                                    ) : (
-                                        'M'
-                                    )}
-                                </Avatar>
+                                    <Box>
+                                        <Typography
+                                            variant="body2"
+                                            color="textPrimary"
+                                        >
+                                            {firstName} {lastName}
+                                        </Typography>
+                                        <Typography
+                                            variant="body2"
+                                            color="textSecondary"
+                                        >
+                                            {email}
+                                        </Typography>
+                                    </Box>
+                                    <Avatar
+                                        sx={{
+                                            width: 32,
+                                            height: 32,
+                                            cursor: 'pointer',
+                                        }}
+                                    >
+                                        {userImage ? (
+                                            <img
+                                                src={userImage}
+                                                alt="User"
+                                                style={{
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    objectFit: 'cover',
+                                                    borderRadius: '50%',
+                                                }}
+                                            />
+                                        ) : userName ? (
+                                            userName.charAt(0).toUpperCase()
+                                        ) : (
+                                            'M'
+                                        )}
+                                    </Avatar>
                                 </Box>
-
                             </IconButton>
                         </Tooltip>
                     </Box>
@@ -187,8 +191,14 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                                 },
                             },
                         }}
-                        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                        transformOrigin={{
+                            horizontal: 'right',
+                            vertical: 'top',
+                        }}
+                        anchorOrigin={{
+                            horizontal: 'right',
+                            vertical: 'bottom',
+                        }}
                     >
                         <MenuItem onClick={onUserImageClick}>
                             <Avatar /> Profile
