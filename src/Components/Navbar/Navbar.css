@@ -9,6 +9,9 @@
   z-index: 1000;
   position: fixed;
   width: 100vw;
+  box-shadow:
+    rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 
 /* .user {
@@ -166,9 +169,8 @@
   padding-right: 10px;
 }
 
-.css-137ul40-MuiButtonBase-root-MuiIconButton-root{
-    border-radius: 0% !important;
-    background: none !important;
-    animation: none !important;
+.css-137ul40-MuiButtonBase-root-MuiIconButton-root {
+  border-radius: 0% !important;
+  background: none !important;
+  animation: none !important;
 }
-

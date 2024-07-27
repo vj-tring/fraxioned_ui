@@ -19,229 +19,219 @@ import useNavbarHandler from './NavbarFunction'
 import { Typography } from '@mui/material'
 
 interface CustomNavbarProps {
-    logo: string
-    links: {
-        disabled: boolean | undefined
-        name: string
-        href: string
-        onClick?: () => void
-    }[]
-    userImage?: string
-    userName: string
-    onUserImageClick?: () => void
+  logo: string
+  links: {
+    disabled: boolean | undefined
+    name: string
+    href: string
+    onClick?: () => void
+  }[]
+  userImage?: string
+  userName: string
+  onUserImageClick?: () => void
 }
 const firstName = 'John'
 const lastName = 'Doe'
-const email = 'john.doe@example.com'
+// const email = 'john.doe@example.com'
 
 const CustomNavbar: React.FC<CustomNavbarProps> = ({
-    logo,
-    links,
-    userImage,
-    userName,
-    onUserImageClick,
+  logo,
+  links,
+  userImage,
+  userName,
+  onUserImageClick,
 }) => {
-    const {
-        showInviteModal,
-        showLogoutModal,
-        handleOpenInviteModal,
-        handleCloseInviteModal,
-        handleCloseLogoutModal,
-        handleShowLogoutModal,
-    } = useNavbarHandler()
+  const {
+    showInviteModal,
+    showLogoutModal,
+    handleOpenInviteModal,
+    handleCloseInviteModal,
+    handleCloseLogoutModal,
+    handleShowLogoutModal,
+  } = useNavbarHandler()
 
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-    const [openNewAccountDialog, setOpenNewAccountDialog] = useState(false)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [openNewAccountDialog, setOpenNewAccountDialog] = useState(false)
 
-    const open = Boolean(anchorEl)
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget)
-    }
-    const handleClose = () => {
-        setAnchorEl(null)
-    }
+  const open = Boolean(anchorEl)
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
 
-    const handleOpenNewAccountModal = () => {
-        setOpenNewAccountDialog(true)
-    }
+  const handleOpenNewAccountModal = () => {
+    setOpenNewAccountDialog(true)
+  }
 
-    const handleCloseNewAccountModal = () => {
-        setOpenNewAccountDialog(false)
-    }
+  const handleCloseNewAccountModal = () => {
+    setOpenNewAccountDialog(false)
+  }
 
-    return (
-        <>
-            <Navbar bg="light" expand="lg" className="p-2">
-                <Navbar.Brand href="#home" className="p-2">
-                    <img
-                        src={logo}
-                        height="40"
-                        width="160"
-                        className="d-inline-block align-top"
-                        alt="Logo"
-                    />
-                </Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="mr-auto">
-                        {links.map((link, index) => (
-                            <Nav.Link
-                                key={index}
-                                href={link.href}
-                                onClick={link.onClick}
-                                className="nav-link-with-margin"
-                                disabled={link.disabled}
-                            >
-                                {link.name}
-                            </Nav.Link>
-                        ))}
-                    </Nav>
-                </Navbar.Collapse>
+  return (
+    <>
+      <Navbar bg="light" expand="lg" className="p-2">
+        <Navbar.Brand href="#home" className="p-2">
+          <img
+            src={logo}
+            height="40"
+            width="160"
+            className="d-inline-block align-top"
+            alt="Logo"
+          />
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mr-auto">
+            {links.map((link, index) => (
+              <Nav.Link
+                key={index}
+                href={link.href}
+                onClick={link.onClick}
+                className="nav-link-with-margin"
+                disabled={link.disabled}
+              >
+                {link.name}
+              </Nav.Link>
+            ))}
+          </Nav>
+        </Navbar.Collapse>
 
-                <Nav className="ml-auto">
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Tooltip title="Account settings">
-                            <IconButton
-                                onClick={handleClick}
-                                size="small"
-                                sx={{ ml: 2 }}
-                                aria-controls={
-                                    open ? 'account-menu' : undefined
-                                }
-                                aria-haspopup="true"
-                                aria-expanded={open ? 'true' : undefined}
-                            >
-                                <Box
-                                    display="flex"
-                                    alignItems="center"
-                                    sx={{
-                                        borderRadius: 1,
-                                    }}
-                                >
-                                    <Box>
-                                        <Typography
-                                            variant="body2"
-                                            color="textPrimary"
-                                        >
-                                            {firstName} {lastName}
-                                        </Typography>
-                                        <Typography
-                                            variant="body2"
-                                            color="textSecondary"
-                                        >
-                                            {email}
-                                        </Typography>
-                                    </Box>
-                                    <Avatar
-                                        sx={{
-                                            width: 32,
-                                            height: 32,
-                                            cursor: 'pointer',
-                                        }}
-                                    >
-                                        {userImage ? (
-                                            <img
-                                                src={userImage}
-                                                alt="User"
-                                                style={{
-                                                    width: '100%',
-                                                    height: '100%',
-                                                    objectFit: 'cover',
-                                                    borderRadius: '50%',
-                                                }}
-                                            />
-                                        ) : userName ? (
-                                            userName.charAt(0).toUpperCase()
-                                        ) : (
-                                            'M'
-                                        )}
-                                    </Avatar>
-                                </Box>
-                            </IconButton>
-                        </Tooltip>
-                    </Box>
-                    <Menu
-                        anchorEl={anchorEl}
-                        id="account-menu"
-                        open={open}
-                        onClose={handleClose}
-                        PaperProps={{
-                            elevation: 0,
-                            sx: {
-                                overflow: 'visible',
-                                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                                mt: 1.5,
-                                '& .MuiAvatar-root': {
-                                    width: 32,
-                                    height: 32,
-                                    ml: -0.5,
-                                    mr: 1,
-                                },
-                                '&::before': {
-                                    content: '""',
-                                    display: 'block',
-                                    position: 'absolute',
-                                    top: 0,
-                                    right: 14,
-                                    width: 10,
-                                    height: 10,
-                                    bgcolor: 'background.paper',
-                                    transform: 'translateY(-50%) rotate(45deg)',
-                                    zIndex: 0,
-                                },
-                            },
+        <Nav className="ml-auto">
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Tooltip title="Account settings">
+              <IconButton
+                onClick={handleClick}
+                size="small"
+                sx={{ ml: 2 }}
+                aria-controls={open ? 'account-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+              >
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  sx={{
+                    borderRadius: 1,
+                  }}
+                >
+                  <Box>
+                    <Typography variant="body2" color="textPrimary">
+                      {firstName} {lastName}
+                    </Typography>
+                    {/* <Typography variant="body2" color="textSecondary">
+                      {email}
+                    </Typography> */}
+                  </Box>
+                  <Avatar
+                    sx={{
+                      width: 32,
+                      height: 32,
+                      cursor: 'pointer',
+                      marginLeft: 1,
+                    }}
+                  >
+                    {userImage ? (
+                      <img
+                        src={userImage}
+                        alt="User"
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          borderRadius: '50%',
                         }}
-                        transformOrigin={{
-                            horizontal: 'right',
-                            vertical: 'top',
-                        }}
-                        anchorOrigin={{
-                            horizontal: 'right',
-                            vertical: 'bottom',
-                        }}
-                    >
-                        <MenuItem onClick={onUserImageClick}>
-                            <Avatar /> Profile
-                        </MenuItem>
-                        <MenuItem onClick={handleOpenInviteModal}>
-                            <Avatar /> Send Invite
-                        </MenuItem>
-                        <Divider />
-                        <MenuItem onClick={handleOpenNewAccountModal}>
-                            <ListItemIcon>
-                                <PersonAddIcon fontSize="small" />
-                            </ListItemIcon>
-                            Add another account
-                        </MenuItem>
-                        <MenuItem onClick={handleShowLogoutModal}>
-                            <ListItemIcon>
-                                <LogoutIcon fontSize="small" />
-                            </ListItemIcon>
-                            Logout
-                        </MenuItem>
-                    </Menu>
-                </Nav>
-            </Navbar>
+                      />
+                    ) : userName ? (
+                      userName.charAt(0).toUpperCase()
+                    ) : (
+                      'M'
+                    )}
+                  </Avatar>
+                </Box>
+              </IconButton>
+            </Tooltip>
+          </Box>
+          <Menu
+            anchorEl={anchorEl}
+            id="account-menu"
+            open={open}
+            onClose={handleClose}
+            PaperProps={{
+              elevation: 0,
+              sx: {
+                overflow: 'visible',
+                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                mt: 1.5,
+                '& .MuiAvatar-root': {
+                  width: 32,
+                  height: 32,
+                  ml: -0.5,
+                  mr: 1,
+                },
+                '&::before': {
+                  content: '""',
+                  display: 'block',
+                  position: 'absolute',
+                  top: 0,
+                  right: 14,
+                  width: 10,
+                  height: 10,
+                  bgcolor: 'background.paper',
+                  transform: 'translateY(-50%) rotate(45deg)',
+                  zIndex: 0,
+                },
+              },
+            }}
+            transformOrigin={{
+              horizontal: 'right',
+              vertical: 'top',
+            }}
+            anchorOrigin={{
+              horizontal: 'right',
+              vertical: 'bottom',
+            }}
+          >
+            <MenuItem onClick={onUserImageClick}>
+              <Avatar /> Profile
+            </MenuItem>
+            <MenuItem onClick={handleOpenInviteModal}>
+              <Avatar /> Send Invite
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={handleOpenNewAccountModal}>
+              <ListItemIcon>
+                <PersonAddIcon fontSize="small" />
+              </ListItemIcon>
+              Add another account
+            </MenuItem>
+            <MenuItem onClick={handleShowLogoutModal}>
+              <ListItemIcon>
+                <LogoutIcon fontSize="small" />
+              </ListItemIcon>
+              Logout
+            </MenuItem>
+          </Menu>
+        </Nav>
+      </Navbar>
 
-            <InviteModal
-                show={showInviteModal}
-                onHide={handleCloseInviteModal}
-            />
-            <ConfirmationModal
-                show={showLogoutModal}
-                onHide={handleCloseLogoutModal}
-                onConfirm={handleShowLogoutModal}
-                title="Confirm Logout"
-                message="Are you sure you want to log out?"
-                confirmLabel="Logout"
-                cancelLabel="Cancel"
-            />
-            <FormDialog
-                open={openNewAccountDialog}
-                handleClose={handleCloseNewAccountModal}
-            />
-        </>
-    )
+      <InviteModal show={showInviteModal} onHide={handleCloseInviteModal} />
+      <ConfirmationModal
+        show={showLogoutModal}
+        onHide={handleCloseLogoutModal}
+        onConfirm={handleShowLogoutModal}
+        title="Confirm Logout"
+        message="Are you sure you want to log out?"
+        confirmLabel="Logout"
+        cancelLabel="Cancel"
+      />
+      <FormDialog
+        open={openNewAccountDialog}
+        handleClose={handleCloseNewAccountModal}
+      />
+    </>
+  )
 }
 
 export default CustomNavbar

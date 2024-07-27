@@ -3,7 +3,7 @@ import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
 import CustomNavbar from '../Navbar/Navbar'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-import fraxionedLogo from '../../assets/images/BB - Owners.png';
+import fraxionedLogo from '../../assets/images/BB - Owners.png'
 import Footer from '../../Footer/Footer'
 import userImage from '../../assets/profile.jpeg'
 import './Dashboard.css'
@@ -11,6 +11,7 @@ import Home from '../Home/Home'
 import CustomizedAccordions from '../CustomizedAccordions/CustomizedAccordions'
 import Contact from '../ContactUs/Contact'
 import UserDetails from '../UserDetails/UserDetails'
+import ComingSoon from '../Comingsoon/ComingSoon'
 import { isAuthenticated } from '../../authService'
 
 const Dashboard: React.FC = () => {
@@ -18,7 +19,7 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!isAuthenticated()) {
+    if (isAuthenticated()) {
       navigate('/login')
     } else {
       const storedUserData = localStorage.getItem('userData')
@@ -33,10 +34,10 @@ const Dashboard: React.FC = () => {
 
   const links = [
     { name: 'HOME', href: '/dashboard', disabled: false },
-    { name: 'BOOKING', href: '/dashboard/booking', disabled: true },
-    { name: 'PEAK SEASON', href: '/dashboard/services', disabled: true },
-    { name: 'PAYEMENTS', href: '/dashboard/payements', disabled: true },
-    { name: 'FAQ', href: '/faq', disabled: false },
+    { name: 'BOOKING', href: '/dashboard/booking', disabled: false },
+    { name: 'PEAK SEASON', href: '/dashboard/peak-season', disabled: false },
+    { name: 'PAYEMENTS', href: '/dashboard/payements', disabled: false },
+    { name: 'FAQ', href: '/dashboard/faq', disabled: false },
   ]
 
   return (
@@ -46,7 +47,7 @@ const Dashboard: React.FC = () => {
         links={links}
         userImage={userImage}
         userName={userEmail}
-        onUserImageClick={() => navigate('/user-details')}
+        onUserImageClick={() => navigate('/dashboard/user-details')}
       />
 
       <div className="content-container">
@@ -56,7 +57,9 @@ const Dashboard: React.FC = () => {
             <Route path="/faq" element={<CustomizedAccordions />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/user-details" element={<UserDetails />} />
-
+            <Route path="/booking" element={<ComingSoon />} />
+            <Route path="/peak-season" element={<ComingSoon />} />
+            <Route path="/payements" element={<ComingSoon />} />
             <Route path="*" element={<Navigate to="/dashboard" />} />
           </Routes>
         </div>
@@ -67,6 +70,4 @@ const Dashboard: React.FC = () => {
   )
 }
 
-export default Dashboard;
-
-
+export default Dashboard

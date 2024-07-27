@@ -12,170 +12,153 @@ import '../DatesContainer/Multiselect.css'
 // import { relative } from 'path';
 
 const names = [
-    { label: 'Adults', description: 'Ages 13 or above', icon: <PeopleIcon /> },
-    {
-        label: 'Children',
-        description: 'Ages 2 to 12',
-        icon: <ChildFriendlyIcon />,
-    },
-    { label: 'Infants', description: 'Under 2', icon: <PeopleIcon /> },
-    { label: 'Pets', description: 'Bringing a service?', icon: <PetsIcon /> },
+  { label: 'Adults', description: 'Ages 13 or above', icon: <PeopleIcon /> },
+  {
+    label: 'Children',
+    description: 'Ages 2 to 12',
+    icon: <ChildFriendlyIcon />,
+  },
+  { label: 'Infants', description: 'Under 2', icon: <PeopleIcon /> },
+  { label: 'Pets', description: 'Bringing a service?', icon: <PetsIcon /> },
 ]
 
 const MultipleSelect: React.FC = () => {
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
-    const open = Boolean(anchorEl)
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const open = Boolean(anchorEl)
 
-    const [counts, setCounts] = useState<{ [key: string]: number }>({
-        Adults: 1,
-        Children: 0,
-        Infants: 0,
-        Pets: 0,
-    })
+  const [counts, setCounts] = useState<{ [key: string]: number }>({
+    Adults: 1,
+    Children: 0,
+    Infants: 0,
+    Pets: 0,
+  })
 
-    // const [menuTop, setMenuTop] = useState(0) // State to keep track of menu top position
+  // const [menuTop, setMenuTop] = useState(0) // State to keep track of menu top position
 
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget)
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
+  const handleCountChange = (name: string, action: 'increase' | 'decrease') => {
+    setCounts((prevCounts) => ({
+      ...prevCounts,
+      [name]:
+        action === 'increase'
+          ? prevCounts[name] + 1
+          : Math.max(prevCounts[name] - 1, 0),
+    }))
+  }
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (open) {
+        handleClose() // Close menu on scroll
+      }
     }
 
-    const handleClose = () => {
-        setAnchorEl(null)
+    window.addEventListener('scroll', handleScroll)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
     }
+  }, [open])
 
-    const handleCountChange = (
-        name: string,
-        action: 'increase' | 'decrease'
-    ) => {
-        setCounts((prevCounts) => ({
-            ...prevCounts,
-            [name]:
-                action === 'increase'
-                    ? prevCounts[name] + 1
-                    : Math.max(prevCounts[name] - 1, 0),
-        }))
-    }
+  return (
+    <Box sx={{ width: '30%' }}>
+      <Button
+        aria-controls="basic-menu"
+        aria-haspopup="true"
+        onClick={handleClick}
+        variant="outlined"
+        className="PropertyBtn"
+        sx={{
+          borderRadius: 10,
+          width: 275,
+          height: 70,
+          border: 'none',
+          cursor: 'pointer',
+        }}
+      >
+        <div className="d-flex flex-column pt-3 text-align-center">
+          <span className="DateHead1">Who</span>
+          <p className="property1"> Add guests</p>
+        </div>
+      </Button>
 
-    useEffect(() => {
-        const handleScroll = () => {
-            if (open) {
-                handleClose() // Close menu on scroll
-            }
-        }
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        // PaperProps={MenuProps.PaperProps}
 
-        window.addEventListener('scroll', handleScroll)
+        PaperProps={{
+          style: {
+            width: 380,
+            borderRadius: '8px',
+            // marginTop: '8px',
+            overflow: 'hidden',
 
-        return () => {
-            window.removeEventListener('scroll', handleScroll)
-        }
-    }, [open])
-
-    return (
-        <Box sx={{ width: '30%' }}>
-              <Button
-            
-            aria-controls="basic-menu"
-            aria-haspopup="true"
-            onClick={handleClick}
-            variant="outlined"
-            className="PropertyBtn"
+            // top: menuTop + 'px', // Dynamically set the top position of the menu
+            position: 'fixed', // Ensure the menu stays fixed when scrolling
+          },
+        }}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+      >
+        {names.map((item) => (
+          <MenuItem
+            key={item.label}
             sx={{
-                borderRadius: 10,
-                width: 275,
-                height: 70,
-                border: 'none',
-                cursor: 'pointer',
+              borderRadius: 0,
             }}
-        >
-                <div className="d-flex flex-column pt-3 text-align-center">
-                    <span className="DateHead1">Who</span>
-                    <p className="property1"> Add guests</p>
-                </div>
-            </Button>
-
-            <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-                // PaperProps={MenuProps.PaperProps}
-
-                PaperProps={{
-                    style: {
-                        width: 380,
-                        borderRadius: '8px',
-                        marginTop: '8px',
-                        overflow: 'hidden',
-
-                        // top: menuTop + 'px', // Dynamically set the top position of the menu
-                        position: 'fixed', // Ensure the menu stays fixed when scrolling
-                    },
+            disableRipple
+          >
+            <div className="d-flex justify-content-between w-100 MultiItems">
+              <Avatar
+                sx={{
+                  backgroundColor: '#df9526',
+                  marginRight: '12px',
                 }}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                }}
-            >
-                {names.map((item) => (
-                    <MenuItem
-                        key={item.label}
-                        sx={{
-                            borderRadius: 32,
-                        }}
-                        disableRipple
-                    >
-                        <div className="d-flex justify-content-between w-100 MultiItems">
-                            <Avatar
-                                sx={{
-                                    backgroundColor: '#df9526',
-                                    marginRight: '12px',
-                                }}
-                            >
-                                {item.icon}
-                            </Avatar>
-                            <div className=" w-50 ">
-                                <b className="itemLabel">{item.label}</b>
-                                <p className="DescFont">{item.description}</p>
-                            </div>
-                            <div className="d-flex justify-content-around w-50 pb-2">
-                                <button
-                                    className="Dec-circle"
-                                    disabled={counts[item.label] === 0}
-                                    onClick={() =>
-                                        handleCountChange(
-                                            item.label,
-                                            'decrease'
-                                        )
-                                    }
-                                >
-                                    -
-                                </button>
-                                <p className="Ad-count ">
-                                    {counts[item.label]}
-                                </p>
-                                <button
-                                    className="Inc-circle"
-                                    onClick={() =>
-                                        handleCountChange(
-                                            item.label,
-                                            'increase'
-                                        )
-                                    }
-                                >
-                                    +
-                                </button>
-                            </div>
-                        </div>
-                    </MenuItem>
-                ))}
-            </Menu>
-        </Box>
-    )
+              >
+                {item.icon}
+              </Avatar>
+              <div className=" w-50 ">
+                <b className="itemLabel">{item.label}</b>
+                <p className="DescFont">{item.description}</p>
+              </div>
+              <div className="d-flex justify-content-around w-50 pb-2">
+                <button
+                  className="Dec-circle"
+                  disabled={counts[item.label] === 0}
+                  onClick={() => handleCountChange(item.label, 'decrease')}
+                >
+                  -
+                </button>
+                <p className="Ad-count ">{counts[item.label]}</p>
+                <button
+                  className="Inc-circle"
+                  onClick={() => handleCountChange(item.label, 'increase')}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          </MenuItem>
+        ))}
+      </Menu>
+    </Box>
+  )
 }
 
 export default MultipleSelect
-

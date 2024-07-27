@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Modal, Image } from 'react-bootstrap'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit } from '@fortawesome/free-solid-svg-icons'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FaEdit } from 'react-icons/fa'
 
 interface UserDetailsModalProps {
   show: boolean
@@ -82,7 +82,7 @@ const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
                   }}
                   onClick={handleEditIconClick}
                 >
-                  <FontAwesomeIcon icon={faEdit} color="white" size="lg" />
+                  <FaEdit color="white" size="lg" />
                 </span>
               )}
             </div>

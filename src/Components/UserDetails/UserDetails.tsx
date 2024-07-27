@@ -82,7 +82,7 @@ const UserDetails: React.FC = () => {
         <img src={userImage} alt="User" className="user-image" />
         <div className="name">
           <h5>{userDetails.name}</h5>
-          <h6>{userDetails.email}</h6>
+          <h6 className="userEmail">{userDetails.email}</h6>
         </div>
         <div className="edit-icon">
           <img className="edit" src={EditIcon} alt="Edit" />

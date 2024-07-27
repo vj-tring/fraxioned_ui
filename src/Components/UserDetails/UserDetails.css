@@ -98,8 +98,7 @@
     flex-direction: row;
   }
 }
-
-h6 {
+.userEmail {
   text-transform: lowercase;
 }
 .View-btn {
