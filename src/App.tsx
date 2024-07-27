@@ -11,7 +11,7 @@ import ForgotPassword from './Components/ForgetPassword/ForgotPassword'
 import ResetPassword from './Components/ResetPassword/ResetPassword'
 import Dashboard from './Components/Dashboard/Dashboard'
 import ResponsiveAppBar from './Components/NavbarMUI/NavbarUI'
-import Booking from 'Components/Booking/Booking'
+import PropertyListing from 'Components/PropertyListing/propertyListing'
 // import { resetPassword } from 'Api/Reset';
 import Date from 'Components/Home/DatesContainer/Date'
 import MultipleSelect from 'Components/Home/DatesContainer/MultipleSelect'
@@ -43,10 +43,11 @@ const App: FC = () => {
         <Route path="/change" element={<Change />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/booking" element={<Booking />} />
+        <Route path="/propertyListing" element={<PropertyListing />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/ResponsiveAppBar" element={<ResponsiveAppBar />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/home" element={<Dashboard />} />
         <Route path="/menu" element={<AccountMenu />} />
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/date" element={<Date />} />

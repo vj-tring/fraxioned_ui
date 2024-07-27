@@ -1,4 +1,4 @@
-.Book-heading {
+.prop-name {
   font-family: sans-serif;
   font-weight: 700;
 }
@@ -12,14 +12,12 @@
   display: flex;
   width: 100%;
 }
+
+
 .img1 {
   height: 400px;
 }
 
-/* .col-md-3{
-    padding-left: 7px;
-    width: 25%;
-  } */
 .image {
   height: 198px;
 }
@@ -42,11 +40,6 @@
   margin-top: 10px;
 }
 
-.document {
-  /* display: flex; */
-  /* justify-content: space-between; */
-  /* padding-left: 100px; */
-}
 .user-table {
   text-align: center;
 }

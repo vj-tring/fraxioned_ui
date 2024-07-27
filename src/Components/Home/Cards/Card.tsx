@@ -2,20 +2,13 @@ import React from 'react'
 import '../../Home/Cards/Card.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { PropertyCardProps } from 'commons/interfaces/PropertyCardProps'
 
-interface CardProps {
-  imageUrl: string
-  text: string
-  title: string
-  share?: string
-  id?: number // Add id property
-}
-
-const Card: React.FC<CardProps> = ({ imageUrl, text, title, share, id }) => {
+const Card: React.FC<PropertyCardProps> = ({ imageUrl, text, title, share, id, onClick }) => {
   const cardStyle = id ? 'card3 blur-effect' : 'card3'
 
   return (
-    <div className={cardStyle}>
+    <div className={cardStyle} onClick={onClick}>
       <div className="image-container">
         <img src={imageUrl} className="card-img-top" alt="..." />
 

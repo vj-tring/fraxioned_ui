@@ -1,11 +1,10 @@
-import React, { useState } from 'react'
-import './Booking.css' // Assuming your custom styles are defined here
+import { useState } from 'react'
+import './propertyListing.css'
 import buildingImage from '../../assets/building.jpg'
 import unsplashImage1 from '../../assets/building1.jpg'
 import unsplashImage2 from '../../assets/building2.jpg'
 import unsplashImage3 from '../../assets/buildingnew.jpg'
 import unsplashImage4 from '../../assets/buildingnew.jpg'
-import LocationOnIcon from '@mui/icons-material/LocationOn'
 
 const images = [
   {
@@ -30,20 +29,11 @@ const images = [
   },
 ]
 
-const Booking = () => {
+const PropertyListing = () => {
   const [currentImage, setCurrentImage] = useState(0)
 
   return (
     <div className="container mt-5">
-      <div className="Booking-row">
-        <div className="col d-flex justify-content-between">
-          <h1 className="Book-heading">BLUE BEAR LAKE</h1>
-          <h4 className="location">
-            <LocationOnIcon /> GARDEN CITY, UT
-          </h4>
-        </div>
-      </div>
-
       <div className="img-row mt-4">
         <div className="col-md-6">
           <img
@@ -83,8 +73,7 @@ const Booking = () => {
         </div>
       </div>
 
-      <h4 className="mt-4">BLUE BEAR LAKE</h4>
-
+      <h4 className="pt-3 pb-3">BLUE BEAR LAKE</h4>
       <div className="Blue-row mt-3">
         <div>
           <p>9 guests</p>
@@ -162,4 +151,4 @@ const Booking = () => {
   )
 }
 
-export default Booking
+export default PropertyListing;

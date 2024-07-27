@@ -12,13 +12,14 @@ import CustomizedAccordions from '../CustomizedAccordions/CustomizedAccordions'
 import Contact from '../ContactUs/Contact'
 import UserDetails from '../UserDetails/UserDetails'
 import { isAuthenticated } from '../../authService'
+import PropertyListing from 'Components/PropertyListing/propertyListing'
 
 const Dashboard: React.FC = () => {
   const [userEmail, setUserEmail] = useState('')
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!isAuthenticated()) {
+    if (isAuthenticated()) {
       navigate('/login')
     } else {
       const storedUserData = localStorage.getItem('userData')
@@ -32,7 +33,7 @@ const Dashboard: React.FC = () => {
   }, [navigate])
 
   const links = [
-    { name: 'HOME', href: '/dashboard', disabled: false },
+    { name: 'HOME', href: '/dashboard/home', disabled: false },
     { name: 'BOOKING', href: '/dashboard/booking', disabled: true },
     { name: 'PEAK SEASON', href: '/dashboard/services', disabled: true },
     { name: 'PAYEMENTS', href: '/dashboard/payements', disabled: true },
@@ -56,7 +57,7 @@ const Dashboard: React.FC = () => {
             <Route path="/faq" element={<CustomizedAccordions />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/user-details" element={<UserDetails />} />
-
+            <Route path="/propertyListing" element={<PropertyListing />} />
             <Route path="*" element={<Navigate to="/dashboard" />} />
           </Routes>
         </div>

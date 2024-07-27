@@ -5,6 +5,7 @@ import imag1 from '../../assets/images/BC - Bookings Page Banner.jpg'
 import imag2 from '../../assets/images/BC - Home Page Banner.jpg'
 import Date from './DatesContainer/Date'
 import Card from '../../Components/Home/Cards/Card'
+import { useNavigate } from 'react-router-dom'
 // import HomeCard from '../../Components/Home/HomeCard';
 // import OffSeasonCard from '../../Components/Home/OffSeasonCard';
 // import PeakSeasonCard from '../../Components/Home/PeakSeasonCard';
@@ -12,6 +13,7 @@ import Card from '../../Components/Home/Cards/Card'
 // import {  CombinedData } from './types';
 
 const Home: React.FC = () => {
+  const navigate = useNavigate()
   // const [combinedData, setCombinedData] = useState<CombinedData[]>([]);
 
   // useEffect(() => {
@@ -43,6 +45,10 @@ const Home: React.FC = () => {
 
   //   fetchData();
   // }, []);
+
+  const handlePropertyClick = () => {
+    navigate('/propertyListing')
+  }
 
   return (
     <div className="home-content">
@@ -151,7 +157,8 @@ const Home: React.FC = () => {
       <hr></hr>
 
       <div className="Cardcontainer">
-        <Card
+      <Card
+          onClick={handlePropertyClick}
           imageUrl={imag1}
           title="Blue Bear Lake "
           text="537 Blue Lake St. Garden City"
@@ -168,8 +175,7 @@ const Home: React.FC = () => {
         <Card
           imageUrl={imag1}
           title="Adventure Awaits."
-          text="Discovered your next Fraxioned home 
-                at fraxioned.com"
+          text="Discovered your next Fraxioned home at fraxioned.com"
           id={1}
         />
       </div>
