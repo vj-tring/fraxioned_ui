@@ -3,8 +3,8 @@ import styles from './Login.module.css'
 import { Link, useNavigate } from 'react-router-dom'
 import logo from './fraxioned.png'
 import axios from 'axios'
-import background from '../../assets/Login_image/villa-elevation-850x570.jpeg';
-import { ApiUrl } from 'Components/config'
+import background from '../../assets/Login_image/login_image.jpg';
+import { ApiUrl } from '../config'
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('')
@@ -114,11 +114,7 @@ const Login: React.FC = () => {
               />
             </div>
             <div className={styles.inputGroup}>
-              {passwordError && (
-                <div className={styles.errorMessage}>
-                  Please fill in the Password
-                </div>
-              )}
+              {passwordError && (<div className={styles.errorMessage}>Please fill in the Password</div>)}
               <input
                 type="password"
                 placeholder="Password"

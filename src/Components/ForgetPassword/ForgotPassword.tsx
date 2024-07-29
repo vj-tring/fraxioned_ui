@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from './ForgotPassword.module.css'
 import { Link } from 'react-router-dom'
-import { ApiUrl } from 'Components/config'
+import { ApiUrl } from '../config'
 import logo from '../Login/fraxioned.png'
 import axios from 'axios'
 

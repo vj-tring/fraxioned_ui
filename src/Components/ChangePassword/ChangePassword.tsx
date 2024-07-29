@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import styles from './ChangePassword.module.css';
 import logo from '../Login/fraxioned.png';
-import { ApiUrl } from 'Components/config';
+import { ApiUrl } from '../config';
 
 const Change: React.FC = () => {
   const [newPassword, setNewPassword] = useState('');
@@ -14,7 +14,6 @@ const Change: React.FC = () => {
   const [resetToken, setResetToken] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [generalError, setGeneralError] = useState('');
-
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -24,7 +23,7 @@ const Change: React.FC = () => {
     if (token) {
       setResetToken(token);
     } else {
-      setGeneralError('Invalid reset link. Please request a new password reset.');
+      setGeneralError('Invalid reset link. Please request a new passwowrd reset link.');
     }
   }, [location]);
 

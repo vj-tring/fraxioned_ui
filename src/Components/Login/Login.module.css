@@ -7,7 +7,7 @@
 }
 
 .leftContainer {
-  flex: 2;
+  flex: 2.5;
   position: relative;
   overflow: hidden;
 }
@@ -41,6 +41,7 @@
 .rightContainer {
   flex: 1;
   display: flex;
+  margin-bottom: 148px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -86,7 +87,7 @@
 }
 
 .inputGroup {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 input[type='text'],
@@ -94,6 +95,7 @@ input[type='password'] {
   width: 100%;
   padding: 12px;
   border: 1px solid #e1e1e1;
+  margin-bottom: 0px;
   border-radius: 8px;
   font-size: 14px;
   transition: border-color 0.3s ease;
