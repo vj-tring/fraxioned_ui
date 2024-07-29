@@ -50,9 +50,19 @@ describe('Change Component', () => {
         expect(screen.getByRole('button', { name: /Submit/i })).toBeInTheDocument();
     });
 
+    // test('displays error message with invalid token', () => {
+    //     renderWithRouter(<Change />, { route: '/' });
+    //     expect(screen.getAllByText('Invalid reset link. Please request a new passwowrd reset link.')).toBeInTheDocument();
+    // });
+
+
     test('displays error message with invalid token', () => {
         renderWithRouter(<Change />, { route: '/' });
-        expect(screen.getAllByText('Invalid reset link. Please request a new passwowrd reset link.')).toBeInTheDocument();
+        const errorMessages = screen.getAllByText('Invalid reset link. Please request a new passwowrd reset link.');
+        expect(errorMessages.length).toBeGreaterThan(0);
+        errorMessages.forEach(message => {
+            expect(message).toBeInTheDocument();
+        });
     });
 
     test('shows error when new password is empty', async () => {
