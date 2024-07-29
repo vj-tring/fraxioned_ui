@@ -47,18 +47,18 @@ const SendInvite: React.FC = () => {
 
   const [roles, setRoles] = useState<{ id: number; roleName: string }[]>([])
 
-  // useEffect(() => {
-  //   const fetchRoles = async () => {
-  //     try {
-  //       const response = await axios.get(`${ApiUrl}/roles`)
-  //       setRoles(response.data)
-  //     } catch (error) {
-  //       console.error('Failed to fetch roles:', error)
-  //     }
-  //   }
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const response = await axios.get(`${ApiUrl}/roles`)
+        setRoles(response.data)
+      } catch (error) {
+        console.error('Failed to fetch roles:', error)
+      }
+    }
 
-  //   fetchRoles()
-  // }, [])
+    fetchRoles()
+  }, [])
 
   return (
     <form onSubmit={handleSubmit}>

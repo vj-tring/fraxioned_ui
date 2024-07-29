@@ -119,10 +119,9 @@ describe('Login Component', () => {
         fireEvent.change(emailInput, { target: { value: 'test.example.com' } })
         fireEvent.change(passwordInput, { target: { value: 'wrongpassword' } })
 
-        // Mock the axios post request to simulate an error
-        mockedAxios.post.mockRejectedValueOnce({
-            // response: { data: { message: 'Invalid credentials' } },
-        })
+        // mockedAxios.post.mockRejectedValueOnce({
+        //     // response: { data: { message: 'Invalid credentials' } },
+        // })
 
         fireEvent.click(submitButton)
     })

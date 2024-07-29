@@ -56,7 +56,7 @@ const Change: React.FC = () => {
         console.log('Password change successful:', response.data);
         navigate('/login');
       } catch (error) {
-        console.error('Error changing password:', error);
+        // console.error('Error changing password:', error);
         setGeneralError('Failed to change password. Please try again.');
       } finally {
         setIsLoading(false);
