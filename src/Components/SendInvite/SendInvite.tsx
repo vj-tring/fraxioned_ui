@@ -12,8 +12,8 @@ import {
 import { styled } from '@mui/system'
 import useSendInviteHandler from './SendInviteFunction'
 import axios from 'axios'
-import { ApiUrl } from '../config'
-import './sendInvite.css'
+import './SendInvite.css'
+import { ApiUrl } from '../../config/config'
 
 const StyledButton = styled('button')({
   backgroundColor: '#ffffff',

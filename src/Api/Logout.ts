@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { ApiUrl } from '../Components/config'
+import { ApiUrl } from '../config/config'
 export const logout = async () => {
   try {
     const response = await axios.post(`${ApiUrl}/authentication/logout`)
