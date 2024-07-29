@@ -48,11 +48,12 @@
   z-index: 1000;
 }
 
-.content-wrapper {
-  /* max-width: 1200px; 
+
+/* .content-wrapper {
   margin-top: 25px;
-  margin-left: 7%; */
-}
+  width: 90vw;
+  margin-left: 75px;
+} */
 
 .dashboard-container .navbar-link.disabled {
   color: #999;
