@@ -23,7 +23,6 @@
   transform: scale(1.05);
 }
 
-
 .overlay {
   position: absolute;
   top: 0;
@@ -177,7 +176,6 @@ input[type='password']:focus {
 .signupLink:hover {
   text-decoration: underline;
 }
-
 
 @keyframes fadeIn {
   from {

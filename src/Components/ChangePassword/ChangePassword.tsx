@@ -1,80 +1,87 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
-import styles from './ChangePassword.module.css';
-import logo from '../Login/fraxioned.png';
-import { ApiUrl } from '../config';
+import React, { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import axios from 'axios'
+import styles from './ChangePassword.module.css'
+import logo from '../Login/fraxioned.png'
+import { ApiUrl } from '../config'
 
 const Change: React.FC = () => {
-  const [newPassword, setNewPassword] = useState('');
-  const [newPasswordError, setNewPasswordError] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [confirmPasswordError, setConfirmPasswordError] = useState(false);
-  const [passwordMismatch, setPasswordMismatch] = useState(false);
-  const [resetToken, setResetToken] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [generalError, setGeneralError] = useState('');
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [newPassword, setNewPassword] = useState('')
+  const [newPasswordError, setNewPasswordError] = useState(false)
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [confirmPasswordError, setConfirmPasswordError] = useState(false)
+  const [passwordMismatch, setPasswordMismatch] = useState(false)
+  const [resetToken, setResetToken] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [generalError, setGeneralError] = useState('')
+  const navigate = useNavigate()
+  const location = useLocation()
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const token = searchParams.get('token');
+    const searchParams = new URLSearchParams(location.search)
+    const token = searchParams.get('token')
     if (token) {
-      setResetToken(token);
+      setResetToken(token)
     } else {
-      setGeneralError('Invalid reset link. Please request a new passwowrd reset link.');
+      setGeneralError(
+        'Invalid reset link. Please request a new passwowrd reset link.'
+      )
     }
-  }, [location]);
+  }, [location])
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     if (!newPassword.trim()) {
-      setNewPasswordError(true);
-      setConfirmPasswordError(false);
-      setPasswordMismatch(false);
+      setNewPasswordError(true)
+      setConfirmPasswordError(false)
+      setPasswordMismatch(false)
     } else if (!confirmPassword.trim()) {
-      setNewPasswordError(false);
-      setConfirmPasswordError(true);
-      setPasswordMismatch(false);
+      setNewPasswordError(false)
+      setConfirmPasswordError(true)
+      setPasswordMismatch(false)
     } else if (newPassword !== confirmPassword) {
-      setNewPasswordError(false);
-      setConfirmPasswordError(false);
-      setPasswordMismatch(true);
+      setNewPasswordError(false)
+      setConfirmPasswordError(false)
+      setPasswordMismatch(true)
     } else {
-      setNewPasswordError(false);
-      setConfirmPasswordError(false);
-      setPasswordMismatch(false);
-      setIsLoading(true);
+      setNewPasswordError(false)
+      setConfirmPasswordError(false)
+      setPasswordMismatch(false)
+      setIsLoading(true)
 
       try {
-        const response = await axios.post(`${ApiUrl}/authentication/recover/password`, {
-          resetToken,
-          newPassword
-        });
+        const response = await axios.post(
+          `${ApiUrl}/authentication/recover/password`,
+          {
+            resetToken,
+            newPassword,
+          }
+        )
 
-        console.log('Password change successful:', response.data);
-        navigate('/login');
+        console.log('Password change successful:', response.data)
+        navigate('/login')
       } catch (error) {
         // console.error('Error changing password:', error);
-        setGeneralError('Failed to change password. Please try again.');
+        setGeneralError('Failed to change password. Please try again.')
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
     }
-  };
+  }
 
   const handleNewPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewPassword(e.target.value);
-    setNewPasswordError(false);
-    setPasswordMismatch(false);
-  };
+    setNewPassword(e.target.value)
+    setNewPasswordError(false)
+    setPasswordMismatch(false)
+  }
 
-  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setConfirmPassword(e.target.value);
-    setConfirmPasswordError(false);
-    setPasswordMismatch(false);
-  };
+  const handleConfirmPasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setConfirmPassword(e.target.value)
+    setConfirmPasswordError(false)
+    setPasswordMismatch(false)
+  }
 
   if (!resetToken) {
     return (
@@ -83,7 +90,7 @@ const Change: React.FC = () => {
           <div className={styles.errorMessage}>{generalError}</div>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -139,7 +146,7 @@ const Change: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Change;
+export default Change

@@ -3,7 +3,7 @@ import styles from './Login.module.css'
 import { Link, useNavigate } from 'react-router-dom'
 import logo from './fraxioned.png'
 import axios from 'axios'
-import background from '../../assets/Login_image/login_image.jpg';
+import background from '../../assets/Login_image/login_image.jpg'
 import { ApiUrl } from '../config'
 
 const Login: React.FC = () => {
@@ -54,7 +54,7 @@ const Login: React.FC = () => {
         console.log('localStorage items set:', {
           userData: localStorage.getItem('userData'),
           token: localStorage.getItem('token'),
-          expiredAt: localStorage.getItem('expiredAt')
+          expiredAt: localStorage.getItem('expiredAt'),
         })
         console.log('Navigating to dashboard')
         navigate('/dashboard')
@@ -87,7 +87,11 @@ const Login: React.FC = () => {
   return (
     <div className={styles.outerContainer}>
       <div className={styles.leftContainer}>
-        <img src={background} alt="Background" className={styles.backgroundImage} />
+        <img
+          src={background}
+          alt="Background"
+          className={styles.backgroundImage}
+        />
         <div className={styles.overlay}></div>
       </div>
       <div className={styles.rightContainer}>
@@ -114,7 +118,11 @@ const Login: React.FC = () => {
               />
             </div>
             <div className={styles.inputGroup}>
-              {passwordError && (<div className={styles.errorMessage}>Please fill in the Password</div>)}
+              {passwordError && (
+                <div className={styles.errorMessage}>
+                  Please fill in the Password
+                </div>
+              )}
               <input
                 type="password"
                 placeholder="Password"
