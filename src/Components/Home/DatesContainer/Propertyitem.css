@@ -92,10 +92,9 @@
 }
 
 .CardItem {
-  /* border-radius: 32px; */
   width: 430px;
   height: 240px;
-  overflow: hidden; /* Ensure content does not overflow outside the card */
+  overflow: hidden;
 }
 
 .css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root:hover {
@@ -103,6 +102,5 @@
 }
 
 .IconArrow {
-  /* background-color: rgb(247, 249, 251); */
   border-radius: 10px;
 }

@@ -1,78 +1,93 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import styles from './ForgotPassword.module.css'
-import { Link } from 'react-router-dom'
-import { ApiUrl } from 'Components/config'
-import logo from '../Login/fraxioned.png'
-import axios from 'axios'
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
+import styles from './ForgotPassword.module.css';
+import logo from '../Login/fraxioned.png';
+import {
+  forgotPassword,
+  clearState,
+} from '../../Redux/slice/auth/forgotPasswordSlice';
+import { RootState } from '../../Redux/reducers';
+import { AppDispatch } from '../../Redux/store';
+import SnackbarComponent from '../Snackbar/Snackbar';
 
 const ForgetPassword: React.FC = () => {
-  const [email, setEmail] = useState('')
-  const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const navigate = useNavigate()
+  const [email, setEmail] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'error' | 'success'>('error');
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+
+  const { loading, successMessage, errorMessage } = useSelector(
+    (state: RootState) => state.forgotPassword
+  );
+
+  useEffect(() => {
+    if (successMessage) {
+      setSnackbarMessage(successMessage);
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
+      const timer = setTimeout(() => {
+        dispatch(clearState());
+        navigate('/');
+      }, 3000);
+      return () => clearTimeout(timer);
+    } else if (errorMessage) {
+      setSnackbarMessage(errorMessage);
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+    }
+  }, [successMessage, errorMessage, dispatch, navigate]);
 
   const validateEmail = (email: string) => {
     const re =
-      /^[a-zA-Z0-9]+([.@][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/
-    return re.test(String(email).toLowerCase())
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!email.trim()) {
-      setError('Please fill in the Email ID')
-    } else if (!validateEmail(email)) {
-      setError('Please enter a valid email ID')
-    } else {
-      setError('')
-      setIsLoading(true)
-      try {
-        const response = await axios.post(
-          `${ApiUrl}/authentication/forgotPassword`,
-          { email }
-        )
-        console.log('Password reset requested for:', email)
-        console.log('Server response:', response.data)
-        navigate('/')
-      } catch (error) {
-        console.error('Error requesting password reset:', error)
-        setError('Failed to request password reset. Please try again.')
-      } finally {
-        setIsLoading(false)
-      }
-    }
-  }
+      /^[a-zA-Z0-9]+([.@][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
+    return re.test(String(email).toLowerCase());
+  };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value)
-    setError('')
-  }
+    setEmail(e.target.value);
+  };
 
-  const handleEmailBlur = () => {
-    if (email && !validateEmail(email)) {
-      setError('Please enter a valid email ID')
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!email.trim()) {
+      setSnackbarMessage('Please fill in the Email ID');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+      return;
     }
-  }
+    if (!validateEmail(email)) {
+      setSnackbarMessage('Please enter a valid email ID');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+      return;
+    }
+    dispatch(forgotPassword(email));
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+    dispatch(clearState());
+  };
 
   return (
     <div className={styles.outerContainer}>
       <div className={styles.innerContainer}>
         <img src={logo} alt="Fraxioned Logo" className={styles.logo} />
         <div className={styles.formWrapper}>
-          <h2 className={styles.login}>Forget password</h2>
+          <h2 className={styles.login}>Forget Password</h2>
           <p className={styles.loginSubtext}>Recover your password here</p>
           <form onSubmit={handleSubmit} className={styles.form}>
-            <div className={styles.inputGroup}>
-              {error && <div className={styles.errorMessage}>{error}</div>}
+            <div className={styles.inputGroup1}>
               <input
                 type="text"
                 placeholder="Email"
                 value={email}
                 autoFocus
                 onChange={handleEmailChange}
-                onBlur={handleEmailBlur}
-                className={`${styles.input} ${error ? styles.errorInput : ''}`}
+                className={styles.input}
               />
             </div>
             <div className={styles.formFooter}>
@@ -86,15 +101,22 @@ const ForgetPassword: React.FC = () => {
             <button
               type="submit"
               className={styles.signInButton}
-              disabled={isLoading}
+              disabled={loading}
             >
-              {isLoading ? 'Submitting...' : 'Submit'}
+              {loading ? 'Submitting...' : 'Submit'}
             </button>
           </form>
         </div>
       </div>
+      <SnackbarComponent
+        open={snackbarOpen}
+        message={snackbarMessage}
+        onClose={handleSnackbarClose}
+        severity={snackbarSeverity}
+        style={{ backgroundColor: snackbarSeverity === 'success' ? '#54B471' : '#DE5242', color: '#FEF9FD' }}
+      />
     </div>
-  )
-}
+  );
+};
 
-export default ForgetPassword
+export default ForgetPassword;

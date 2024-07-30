@@ -26,7 +26,6 @@ const useForgotHandler = () => {
       setLoading(true)
 
       try {
-        // const response = await forgotPassword(values);
         await forgotPassword(values)
         setSnackbarMessage('Password reset email sent successfully!')
         setSnackbarSeverity('success')

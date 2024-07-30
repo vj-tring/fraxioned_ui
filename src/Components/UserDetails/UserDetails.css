@@ -2,6 +2,14 @@
   padding: 20px;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+  font-family: 'Montserrat', sans-serif !important;
+  font-optical-sizing: auto;
+}
+
+
 .edit {
   height: 30px;
   margin-bottom: 30px;
@@ -35,7 +43,7 @@
 }
 
 .info-box {
-  flex: 1 0 50%;
+  flex: 1 0 52%;
 }
 
 .email-phone {

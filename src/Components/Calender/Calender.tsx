@@ -1,14 +1,12 @@
 //@ts-nocheck
 import React, { useState, useEffect } from 'react'
 import { Popover, Paper } from '@mui/material'
-// import Menu from '@mui/material/Menu'
-// import MenuItem from '@mui/material/MenuItem'
+
 import {
   ORIENTATION,
   StatefulCalendar as StatefulCalendarType,
 } from 'baseui/datepicker'
 import Box from '@mui/material/Box'
-// import Button from '@mui/material/Button'
 
 import '../Calender/Calender.css'
 
@@ -55,7 +53,6 @@ const Calendar: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const open = Boolean(anchorEl)
 
-  // const [menuTop, setMenuTop] = useState(0) // State to keep track of menu top position
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -65,7 +62,6 @@ const Calendar: React.FC = () => {
     setAnchorEl(null)
   }
 
-  // const open = Boolean(anchorEl)
   const id = open ? 'calendar-popover' : undefined
 
   const bookedDates = [
@@ -204,7 +200,7 @@ const Calendar: React.FC = () => {
   useEffect(() => {
     const handleScroll = () => {
       if (open) {
-        handleClose() // Close menu on scroll
+        handleClose() 
       }
     }
 
@@ -225,12 +221,9 @@ const Calendar: React.FC = () => {
 
         <Popover
           sx={{
-            // maxWidth: 700,
-            // maxHeight: 500,
-            // overflowX:'scroll',
+        
             position: 'relative',
-            // right:300,
-            // paddingTop:500,
+       
           }}
           id={id}
           open={open}
@@ -239,7 +232,6 @@ const Calendar: React.FC = () => {
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'left',
-            // marginTop:100
           }}
           transformOrigin={{
             vertical: 'top',
@@ -248,13 +240,10 @@ const Calendar: React.FC = () => {
           PaperProps={{
             style: {
               borderRadius: 10,
-              // top: menuTop + 'px',
               position: 'fixed',
               marginTop: 20,
-              // marginRight:100,
               marginLeft: -300,
-              // left:200
-              // right:300,
+        
             },
           }}
         >

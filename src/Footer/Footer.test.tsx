@@ -16,7 +16,7 @@ describe('Footer Component', () => {
     renderFooter()
     const homeLink = screen.getByText('Home')
     expect(homeLink).toBeInTheDocument()
-    // expect(homeLink).toHaveAttribute('href', '/');
+
   })
 
   test('renders Booking link', () => {
@@ -68,9 +68,4 @@ describe('Footer Component', () => {
     expect(contactLink).toHaveAttribute('href', '/contact')
   })
 
-  // test('renders Contact Us button', () => {
-  //   renderFooter();
-  //   const contactUsButton = screen.getByText('Contact Us');
-  //   expect(contactUsButton).toBeInTheDocument();
-  // });
 })

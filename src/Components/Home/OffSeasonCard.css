@@ -2,7 +2,6 @@
   text-align: center;
   color: #0c888c;
   width: 80%;
-  /* margin-left: 2%; */
 }
 
 .season-card > h3 {
@@ -18,7 +17,6 @@ tr,
 td {
   color: #0c888c;
   margin-left: 50px;
-  /* width: 10px; */
 }
 
 .offseason > tr > td {
@@ -28,7 +26,7 @@ td {
 }
 
 .season-card > table {
-  border: 1px solid #0c888c; /* Specify the border style */
+  border: 1px solid #0c888c;
 }
 
 .offseason > tr > td.nights {

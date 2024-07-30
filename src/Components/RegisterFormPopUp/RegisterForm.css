@@ -1,0 +1,13 @@
+
+.RegisterCancel{
+    background: linear-gradient(68deg, rgb(227, 153, 62) 0%, rgba(226,153,66,1) 35%, rgba(239,165,75,1) 100%);    
+    color: white !important;
+    
+}
+
+
+.RegisterSubmit{
+    background: rgb(30,139,149);
+    background: linear-gradient(68deg, rgb(30, 134, 144) 0%, rgba(44,157,167,1) 35%, rgb(47, 158, 168) 100%);      
+      color: white !important;
+}

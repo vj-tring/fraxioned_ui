@@ -2,8 +2,8 @@
   background-color: #edf5f5;
   bottom: 0;
   width: 100%;
-  color: #333; /* Adjust text color for better readability */
-  padding: 30px 20px; /* Increased padding for better spacing */
+  color: #333; 
+  padding: 30px 20px; 
   text-align: center;
 }
 
@@ -11,27 +11,27 @@
   background-image: url('../assets/Fraxioned.png');
   background-size: contain;
   background-repeat: no-repeat;
-  width: 180px; /* Adjust width of the logo */
-  height: 80px; /* Adjust height of the logo */
-  margin-top: 10px; /* Adjust margin for spacing */
+  width: 180px; 
+  height: 80px; 
+  margin-top: 10px; 
 }
 
 .container {
-  max-width: 1200px; /* Increased maximum width for better layout control */
+  max-width: 1200px; 
   margin: 0 auto;
 }
 
 .row {
   display: flex;
-  justify-content: space-around; /* Adjusted to evenly distribute columns */
-  align-items: flex-start; /* Align items at the top */
-  padding: 10px 0; /* Adjusted vertical padding */
+  justify-content: space-around; 
+  align-items: flex-start; 
+  padding: 10px 0; 
 }
 
 .col-md-3,
 .col-md-2 {
-  flex: 1; /* Allow columns to grow flexibly */
-  text-align: left; /* Align text to the left */
+  flex: 1; 
+  text-align: left; 
 }
 
 ul {
@@ -41,35 +41,35 @@ ul {
 
 .no-underline {
   text-decoration: none;
-  color: #23527c; /* Adjust link color */
-  font-weight: 600; /* Increased font weight for better readability */
-  transition: color 0.3s; /* Smooth color transition */
+  color: #23527c; 
+  font-weight: 600; 
+  transition: color 0.3s; 
 }
 
 .no-underline:hover {
-  color: #f7981d; /* Hover color */
+  color: #f7981d; 
 }
 
 .contact-us {
   width: 100%;
-  max-width: 300px; /* Adjusted maximum width for the button */
-  height: 50px; /* Adjusted height for the button */
+  max-width: 300px; 
+  height: 50px; 
   background-color: #0c888c;
-  border-radius: 25px; /* Rounded button */
+  border-radius: 25px; 
   border: none;
-  margin-top: 20px; /* Adjusted top margin */
+  margin-top: 20px; 
   position: relative;
   overflow: hidden;
   transition: background-color 0.3s;
   color: white;
-  font-size: 16px; /* Adjusted font size */
+  font-size: 16px; 
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .contact-us .arrow {
-  margin-left: 10px; /* Adjusted margin for arrow */
+  margin-left: 10px; 
   transition: transform 0.3s;
 }
 
@@ -78,23 +78,23 @@ ul {
 }
 
 .contact-us:hover .arrow {
-  transform: translateX(5px); /* Adjusted arrow movement */
+  transform: translateX(5px); 
 }
 
 @media (max-width: 768px) {
   .row {
-    flex-direction: column; /* Stack columns on smaller screens */
+    flex-direction: column; 
 
-    align-items: center; /* Center items vertically */
+    align-items: center; 
   }
 
   .col-md-3,
   .col-md-2 {
-    width: 100%; /* Full width for columns on smaller screens */
-    margin-bottom: 20px; /* Adjusted bottom margin */
+    width: 100%; 
+    margin-bottom: 20px; 
   }
 
   .logo {
-    margin-bottom: 20px; /* Adjusted bottom margin */
+    margin-bottom: 20px; 
   }
 }

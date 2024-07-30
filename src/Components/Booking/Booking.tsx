@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import './Booking.css' // Assuming your custom styles are defined here
+import './Booking.css' 
 import buildingImage from '../../assets/building.jpg'
 import unsplashImage1 from '../../assets/building1.jpg'
 import unsplashImage2 from '../../assets/building2.jpg'

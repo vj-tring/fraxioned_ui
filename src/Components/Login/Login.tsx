@@ -3,7 +3,12 @@ import styles from './Login.module.css'
 import { Link, useNavigate } from 'react-router-dom'
 import logo from './fraxioned.png'
 import axios from 'axios'
-import { ApiUrl } from 'Components/config'
+// import { ApiUrl } from 'Components/config'
+
+
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../Redux/store';
+import { login } from '../../Redux/slice/auth/authSlice';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('')
@@ -12,6 +17,7 @@ const Login: React.FC = () => {
   const [passwordError, setPasswordError] = useState(false)
   const [apiError, setApiError] = useState('')
   const navigate = useNavigate()
+  const dispatch = useDispatch<AppDispatch>();
 
   const validateEmail = (email: string) => {
     const re =
@@ -35,21 +41,14 @@ const Login: React.FC = () => {
       setPasswordError(false)
       setApiError('')
       try {
-        const response = await axios.post(`${ApiUrl}/authentication/login`, {
-          email,
-          password,
-        })
-
-        const { user, session } = response.data
-        localStorage.setItem(
-          'userData',
-          JSON.stringify({
-            ...user,
-          })
-        )
-        localStorage.setItem('token', session.token)
-        localStorage.setItem('expiredAt', session.expires_at)
-        navigate('/dashboard')
+        dispatch(login({ email, password })).then((result) => {
+          if (login.fulfilled.match(result)) {
+            navigate('/dashboard');
+          } else {
+            // const error:any = result.payload
+          
+          }
+        });
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
           setApiError(error.response.data.message || 'Login failed')

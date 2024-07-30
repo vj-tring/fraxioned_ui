@@ -77,15 +77,7 @@ const Contact: React.FC = () => {
                 onChange={(event) => setSubject(event.target.value)}
               />
             </Form.Group>
-            {/* <Form.Group controlId="formEmail" className="contact-form-group">
-              <Form.Control
-                type="email"
-                placeholder="EMAIL"
-                className="contact-form-control"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-              />
-            </Form.Group> */}
+          
             <Form.Group controlId="formMessage" className="contact-form-group">
               <Form.Control
                 as="textarea"

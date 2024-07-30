@@ -14,6 +14,8 @@ import ResponsiveAppBar from './Components/NavbarMUI/NavbarUI'
 import Booking from 'Components/Booking/Booking'
 import Contact from 'Components/ContactUs/Contact'
 import CustomizedAccordions from 'Components/CustomizedAccordions/CustomizedAccordions'
+import { Provider } from 'react-redux';
+import store from "../src/Redux/store/index";
 
 interface PrivateRouteProps {
   element: React.ComponentType
@@ -26,6 +28,8 @@ const PrivateRoute: FC<PrivateRouteProps> = ({ element: Element }) => {
 
 const App: FC = () => {
   return (
+    <Provider store={store}>
+
     <Router>
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
@@ -43,6 +47,8 @@ const App: FC = () => {
         />
       </Routes>
     </Router>
+    </Provider>
+
   )
 }
 

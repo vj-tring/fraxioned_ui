@@ -8,7 +8,7 @@ interface CardProps {
   text: string
   title: string
   share?: string
-  id?: number // Add id property
+  id?: number 
 }
 
 const Card: React.FC<CardProps> = ({ imageUrl, text, title, share, id }) => {

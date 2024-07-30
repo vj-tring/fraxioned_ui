@@ -11,8 +11,8 @@
 }
 
 .loader {
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #ecac21; /* Blue */
+  border: 16px solid #f3f3f3; 
+  border-top: 16px solid #ecac21; 
   border-radius: 50%;
   width: 10px;
   height: 10px;

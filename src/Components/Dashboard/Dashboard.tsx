@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
-import CustomNavbar from '../Navbar/Navbar'
+import { Routes, Route, useNavigate } from 'react-router-dom'
+import CustomNavbar from 'Components/Navbar/Navbar'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 import fraxionedLogo from '../../assets/images/BB - Owners.png'
@@ -60,7 +60,7 @@ const Dashboard: React.FC = () => {
             <Route path="/booking" element={<ComingSoon />} />
             <Route path="/peak-season" element={<ComingSoon />} />
             <Route path="/payements" element={<ComingSoon />} />
-            <Route path="*" element={<Navigate to="/dashboard" />} />
+
           </Routes>
         </div>
       </div>

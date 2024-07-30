@@ -31,7 +31,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
         <button className="success" onClick={onHide}>
           {cancelLabel}
         </button>
-        <button className="primary" onClick={onConfirm}>
+        <button className="primary"  onClick={onConfirm}>
           {confirmLabel}
         </button>
       </Modal.Footer>

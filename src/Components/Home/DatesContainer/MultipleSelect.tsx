@@ -1,4 +1,3 @@
-// import * as React from 'react'
 import React, { useState, useEffect } from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import Box from '@mui/material/Box'
@@ -9,7 +8,6 @@ import PeopleIcon from '@mui/icons-material/People'
 import ChildFriendlyIcon from '@mui/icons-material/ChildFriendly'
 import PetsIcon from '@mui/icons-material/Pets'
 import '../DatesContainer/Multiselect.css'
-// import { relative } from 'path';
 
 const names = [
   { label: 'Adults', description: 'Ages 13 or above', icon: <PeopleIcon /> },
@@ -33,7 +31,6 @@ const MultipleSelect: React.FC = () => {
     Pets: 0,
   })
 
-  // const [menuTop, setMenuTop] = useState(0) // State to keep track of menu top position
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -56,7 +53,7 @@ const MultipleSelect: React.FC = () => {
   useEffect(() => {
     const handleScroll = () => {
       if (open) {
-        handleClose() // Close menu on scroll
+        handleClose() 
       }
     }
 
@@ -94,17 +91,13 @@ const MultipleSelect: React.FC = () => {
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
-        // PaperProps={MenuProps.PaperProps}
 
         PaperProps={{
           style: {
             width: 380,
             borderRadius: '8px',
-            // marginTop: '8px',
             overflow: 'hidden',
-
-            // top: menuTop + 'px', // Dynamically set the top position of the menu
-            position: 'fixed', // Ensure the menu stays fixed when scrolling
+            position: 'fixed', 
           },
         }}
         anchorOrigin={{

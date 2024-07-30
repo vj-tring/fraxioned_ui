@@ -1,5 +1,4 @@
 .DropItems {
-  /* background-color: aqua; */
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   padding: 3px;
   background-color: white;
@@ -34,20 +33,12 @@
   justify-content: center;
 }
 
-/* 
-.AD-count{
-    font-size: 16px;
-    font-weight: 600;
-    text-align-last: left;
-    width: 200px;
-
-
-} */
 
 .Ad-count {
   font-size: 16px;
   margin-top: 6px;
   width: 20px;
+  padding-left: 7px;
 }
 
 .list-Age {

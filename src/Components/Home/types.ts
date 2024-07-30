@@ -1,13 +1,11 @@
-// Update HomeData interface to reflect new structure
 export interface HomeData {
   id: number
   image: string
   title: string
-  address: string // Updated to a single string for address
-  share: string // Added for share information
+  address: string
+  share: string 
 }
 
-// Define OffSeasonData and PeakSeasonData interfaces as needed
 export interface OffSeasonData {
   ownerId: number
   totalNights: number
@@ -28,7 +26,6 @@ export interface PeakSeasonData {
   nightsRenting: number
 }
 
-// Define CombinedData interface if needed
 export interface CombinedData {
   id: number
   homeData: HomeData

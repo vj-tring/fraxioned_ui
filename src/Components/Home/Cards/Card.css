@@ -1,4 +1,3 @@
-/* Card.css */
 
 .card3 {
   width: 250px;
@@ -11,7 +10,6 @@
 }
 
 .blur-effect > .image-container {
-  /* filter: blur(5px); */
   opacity: 50%;
 }
 
@@ -46,7 +44,6 @@
 
 .share {
   color: #7c7875;
-  /* align-items: first baseline; */
   font-size: smaller;
 }
 

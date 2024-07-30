@@ -1,7 +1,5 @@
-// src/Components/ComingSoon/ComingSoon.tsx
 import React from 'react'
-import './ComingSoon.css' // Import CSS for styling
-
+import './ComingSoon.css'
 const ComingSoon: React.FC = () => {
   return (
     <div className="coming-soon-fullscreen">

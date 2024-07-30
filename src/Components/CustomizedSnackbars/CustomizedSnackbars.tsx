@@ -20,8 +20,8 @@ const CustomizedSnackbars: React.FC<CustomizedSnackbarsProps> = ({
       open={open}
       autoHideDuration={6000}
       onClose={handleClose}
-      anchorOrigin={{ vertical: 'top', horizontal: 'center' }} // Change to top center
-      sx={{ width: '80%', maxWidth: '800px' }} // Set the width and maximum width
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }} 
+      sx={{ width: '80%', maxWidth: '800px' }} 
     >
       <Alert
         onClose={handleClose}

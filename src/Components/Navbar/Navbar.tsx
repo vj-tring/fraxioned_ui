@@ -48,6 +48,8 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
     handleCloseInviteModal,
     handleCloseLogoutModal,
     handleShowLogoutModal,
+    handleLogout,
+
   } = useNavbarHandler()
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -220,7 +222,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
       <ConfirmationModal
         show={showLogoutModal}
         onHide={handleCloseLogoutModal}
-        onConfirm={handleShowLogoutModal}
+        onConfirm={handleLogout}
         title="Confirm Logout"
         message="Are you sure you want to log out?"
         confirmLabel="Logout"

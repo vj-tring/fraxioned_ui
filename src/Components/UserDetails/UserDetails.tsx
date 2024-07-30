@@ -89,7 +89,7 @@ const UserDetails: React.FC = () => {
         </div>
       </div>
       <div className="user-info">
-        <div className="info-box email-phone">
+        <div className="info-box ">
           <p>
             <strong>EMAIL</strong>
             <br />
@@ -100,14 +100,13 @@ const UserDetails: React.FC = () => {
             <br />
             {userDetails.phone}
           </p>
-        </div>
-        <div className="info-box">
           <p>
             <strong>MAILING ADDRESS</strong>
             <br />
             {userDetails.address1}
           </p>
         </div>
+       
         <div className="info-box secondary-info">
           <p>
             <strong>SECONDARY EMAIL</strong>
