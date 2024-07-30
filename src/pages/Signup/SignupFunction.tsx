@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import { useFormik } from 'formik'
-import validationSchema from '../Login/ValidationSchema'
 import { registerUser } from '../../api/Register'
 
 
@@ -32,8 +31,6 @@ const useSignupHandler = () => {
       email: '',
       role: '',
     },
-
-    validationSchema: validationSchema,
 
     onSubmit: async (values) => {
       setLoading(true)

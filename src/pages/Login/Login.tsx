@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import styles from './Login.module.css'
 import { Link, useNavigate } from 'react-router-dom'
-import logo from './fraxioned.png'
+import logo from '../../assets/fraxioned.png'
 import axios from 'axios'
 import background from '../../assets/Login_image/login_image.jpg'
-import { ApiUrl } from '../config'
+import { ApiUrl } from '../../config/config'
+
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('')
