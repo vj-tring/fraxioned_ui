@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styles from './ResetPassword.module.css'
 import axios from 'axios'
 import logo from '../Login/fraxioned.png'
-import { ApiUrl } from 'Components/config'
+import { ApiUrl } from '../config'
 
 const ResetPassword: React.FC = () => {
   const [oldPassword, setOldPassword] = useState('')

@@ -3,12 +3,11 @@ import styles from './Login.module.css'
 import { Link, useNavigate } from 'react-router-dom'
 import logo from './fraxioned.png'
 import axios from 'axios'
-// import { ApiUrl } from 'Components/config'
-
-
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../Redux/store';
 import { login } from '../../Redux/slice/auth/authSlice';
+
+import background from '../../assets/Login_image/login_image.jpg'
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('')
@@ -49,6 +48,8 @@ const Login: React.FC = () => {
           
           }
         });
+
+       
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
           setApiError(error.response.data.message || 'Login failed')
@@ -77,7 +78,15 @@ const Login: React.FC = () => {
 
   return (
     <div className={styles.outerContainer}>
-      <div className={styles.innerContainer}>
+      <div className={styles.leftContainer}>
+        <img
+          src={background}
+          alt="Background"
+          className={styles.backgroundImage}
+        />
+        <div className={styles.overlay}></div>
+      </div>
+      <div className={styles.rightContainer}>
         <img src={logo} alt="Fraxioned Logo" className={styles.logo} />
         <div className={styles.formWrapper}>
           <h2 className={styles.login}>Login here</h2>

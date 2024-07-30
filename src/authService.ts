@@ -1,8 +1,8 @@
 export const isAuthenticated = () => {
   const userData = localStorage.getItem('userData')
   const token = localStorage.getItem('token')
-  const expiresAt = localStorage.getItem('expiresAt')
+  const expiredAt = localStorage.getItem('expiredAt')
 
   // Check if the user data, token, and expiration date exist and are valid
-  return userData && token && expiresAt && new Date(expiresAt) > new Date()
+  return userData && token && expiredAt && new Date(expiredAt) > new Date()
 }
