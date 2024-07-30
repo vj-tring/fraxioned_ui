@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import styles from './Login.module.css'
 import { Link, useNavigate } from 'react-router-dom'
-import logo from '../../assets/fraxioned.png'
+import logo from './fraxioned.png'
 import axios from 'axios'
-import { ApiUrl } from '../../config/config'
+import background from '../../assets/Login_image/login_image.jpg'
+import { ApiUrl } from '../config'
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('')
@@ -49,6 +50,13 @@ const Login: React.FC = () => {
         )
         localStorage.setItem('token', session.token)
         localStorage.setItem('expiredAt', session.expires_at)
+
+        console.log('localStorage items set:', {
+          userData: localStorage.getItem('userData'),
+          token: localStorage.getItem('token'),
+          expiredAt: localStorage.getItem('expiredAt'),
+        })
+        console.log('Navigating to dashboard')
         navigate('/dashboard')
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
@@ -78,7 +86,15 @@ const Login: React.FC = () => {
 
   return (
     <div className={styles.outerContainer}>
-      <div className={styles.innerContainer}>
+      <div className={styles.leftContainer}>
+        <img
+          src={background}
+          alt="Background"
+          className={styles.backgroundImage}
+        />
+        <div className={styles.overlay}></div>
+      </div>
+      <div className={styles.rightContainer}>
         <img src={logo} alt="Fraxioned Logo" className={styles.logo} />
         <div className={styles.formWrapper}>
           <h2 className={styles.login}>Login here</h2>

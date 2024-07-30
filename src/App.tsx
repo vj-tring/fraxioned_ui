@@ -16,7 +16,7 @@ interface PrivateRouteProps {
 
 const PrivateRoute: FC<PrivateRouteProps> = ({ element: Element }) => {
   const token = localStorage.getItem('token')
-  return token ? <Element /> : <Navigate to="/login" />
+  return token ? <Element /> : <Navigate to="/dashboard" />
 }
 
 
