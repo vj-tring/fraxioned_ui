@@ -1,125 +1,118 @@
-import React from 'react'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import ResetPassword from './ResetPassword'
-import '@testing-library/jest-dom'
-import axios from 'axios'
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import ResetPassword from './ResetPassword';
+import '@testing-library/jest-dom';
+import axios from 'axios';
+import { BrowserRouter } from 'react-router-dom';
 
-jest.mock('../Login/fraxioned.png', () => 'logo')
+jest.mock('../Login/fraxioned.png', () => 'logo');
+jest.mock('axios');
+jest.mock('../config', () => ({
+    ApiUrl: 'http://mock-api-url.com',
+}));
 
-// Mock the axios module
-jest.mock('axios')
+const mockedAxios = axios as jest.Mocked<typeof axios>;
+const mockNavigate = jest.fn();
 
-//APiurl mock
-jest.mock('../../Components/config', () => ({
-  ApiUrl: 'http://mock-api-url.com',
-}))
-
-// Reset the mocks test before each test
-beforeEach(() => {
-  jest.clearAllMocks()
-})
-
-const mockedAxios = axios as jest.Mocked<typeof axios>
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),
+    useNavigate: () => mockNavigate,
+}));
 
 describe('ResetPassword Component', () => {
-  beforeEach(() => {
-    localStorage.clear()
-    localStorage.setItem('userData', JSON.stringify({ id: 1 }))
-  })
+    const mockOnClose = jest.fn();
 
-  afterEach(() => {
-    jest.clearAllMocks()
-  })
+    beforeEach(() => {
+        localStorage.clear();
+        localStorage.setItem('userData', JSON.stringify({ id: 1 }));
+    });
 
-  test('renders ResetPassword component', () => {
-    render(<ResetPassword />)
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
 
-    expect(screen.getByPlaceholderText('Old Password')).toBeInTheDocument()
-    expect(screen.getByPlaceholderText('New Password')).toBeInTheDocument()
-    expect(
-      screen.getByPlaceholderText('Confirm New Password')
-    ).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /Submit/i })).toBeInTheDocument()
-  })
+    const renderComponent = () => render(
+        <BrowserRouter>
+            <ResetPassword onClose={mockOnClose} />
+        </BrowserRouter>
+    );
 
-  test('displays error messages for empty fields', async () => {
-    render(<ResetPassword />)
+    test('renders ResetPassword component', () => {
+        renderComponent();
 
-    fireEvent.click(screen.getByRole('button', { name: /Submit/i }))
+        expect(screen.getByPlaceholderText('Old Password')).toBeInTheDocument();
+        expect(screen.getByPlaceholderText('New Password')).toBeInTheDocument();
+        expect(screen.getByPlaceholderText('Confirm New Password')).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /Submit/i })).toBeInTheDocument();
+    });
 
-    await waitFor(() => {
-      expect(
-        screen.getByText('Please enter your old password')
-      ).toBeInTheDocument()
-    })
-  })
+    test('displays error messages for empty fields', async () => {
+        renderComponent();
 
-  test('displays error message for password mismatch', async () => {
-    render(<ResetPassword />)
+        fireEvent.click(screen.getByRole('button', { name: /Submit/i }));
 
-    fireEvent.change(screen.getByPlaceholderText('Old Password'), {
-      target: { value: 'oldpass' },
-    })
-    fireEvent.change(screen.getByPlaceholderText('New Password'), {
-      target: { value: 'newpass' },
-    })
-    fireEvent.change(screen.getByPlaceholderText('Confirm New Password'), {
-      target: { value: 'mismatch' },
-    })
+        await waitFor(() => {
+            expect(screen.getByText('Please enter your old password')).toBeInTheDocument();
+        });
+    });
 
-    fireEvent.click(screen.getByRole('button', { name: /Submit/i }))
+    test('displays error message for password mismatch', async () => {
+        renderComponent();
 
-    await waitFor(() => {
-      expect(screen.getByText('New passwords do not match')).toBeInTheDocument()
-    })
-  })
+        fireEvent.change(screen.getByPlaceholderText('Old Password'), {
+            target: { value: 'oldpass' },
+        });
+        fireEvent.change(screen.getByPlaceholderText('New Password'), {
+            target: { value: 'newpass' },
+        });
+        fireEvent.change(screen.getByPlaceholderText('Confirm New Password'), {
+            target: { value: 'mismatch' },
+        });
 
-  test('calls API and displays success message on successful password reset', async () => {
-    mockedAxios.post.mockResolvedValueOnce({ data: {} })
+        fireEvent.click(screen.getByRole('button', { name: /Submit/i }));
 
-    render(<ResetPassword />)
+        await waitFor(() => {
+            expect(screen.getByText('New passwords do not match')).toBeInTheDocument();
+        });
+    });
 
-    fireEvent.change(screen.getByPlaceholderText('Old Password'), {
-      target: { value: 'oldpass' },
-    })
-    fireEvent.change(screen.getByPlaceholderText('New Password'), {
-      target: { value: 'newpass' },
-    })
-    fireEvent.change(screen.getByPlaceholderText('Confirm New Password'), {
-      target: { value: 'newpass' },
-    })
+    test('calls API and displays success message on successful password reset', async () => {
+        mockedAxios.post.mockResolvedValueOnce({ data: {} });
 
-    fireEvent.click(screen.getByRole('button', { name: /Submit/i }))
+        renderComponent();
 
-    await waitFor(() => {
-      expect(
-        screen.getByText('Password reset successfully!')
-      ).toBeInTheDocument()
-    })
+        fireEvent.change(screen.getByPlaceholderText('Old Password'), {
+            target: { value: 'oldpass' },
+        });
+        fireEvent.change(screen.getByPlaceholderText('New Password'), {
+            target: { value: 'newpass' },
+        });
+        fireEvent.change(screen.getByPlaceholderText('Confirm New Password'), {
+            target: { value: 'newpass' },
+        });
 
-    expect(mockedAxios.post).toHaveBeenCalledWith(
-      expect.stringContaining('/authentication/resetPassword'),
-      expect.objectContaining({
-        oldPassword: 'oldpass',
-        newPassword: 'newpass',
-        userId: 1,
-      })
-    )
-  })
+        fireEvent.click(screen.getByRole('button', { name: /Submit/i }));
 
-  test('displays API error message on failed password reset', async () => {
-    render(<ResetPassword />)
+        await waitFor(() => {
+            expect(screen.getByText('Password reset successfully!')).toBeInTheDocument();
+        });
 
-    fireEvent.change(screen.getByPlaceholderText('Old Password'), {
-      target: { value: 'oldpass' },
-    })
-    fireEvent.change(screen.getByPlaceholderText('New Password'), {
-      target: { value: 'newpass' },
-    })
-    fireEvent.change(screen.getByPlaceholderText('Confirm New Password'), {
-      target: { value: 'newpass' },
-    })
+        expect(mockedAxios.post).toHaveBeenCalledWith(
+            expect.stringContaining('/authentication/resetPassword'),
+            expect.objectContaining({
+                oldPassword: 'oldpass',
+                newPassword: 'newpass',
+                userId: 1,
+            })
+        );
+    });
 
-    fireEvent.click(screen.getByRole('button', { name: /Submit/i }))
-  })
-})
+    test('calls onClose when close icon is clicked', () => {
+        renderComponent();
+
+        fireEvent.click(screen.getByTestId('close-icon'));
+
+        expect(mockOnClose).toHaveBeenCalled();
+        expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
+    });
+});

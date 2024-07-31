@@ -47,8 +47,10 @@ const App: FC = () => {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/booking" element={<Booking />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/ResponsiveAppBar" element={<ResponsiveAppBar />} />
+          <Route
+            path="/reset-password"
+            element={<ResetPassword onClose={() => {/* Handle navigation */ }} />}
+          />          <Route path="/ResponsiveAppBar" element={<ResponsiveAppBar />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/menu" element={<AccountMenu />} />
           <Route path="/calendar" element={<Calendar />} />

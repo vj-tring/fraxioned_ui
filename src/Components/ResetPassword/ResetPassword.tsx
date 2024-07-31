@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import styles from './ResetPassword.module.css'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import logo from '../Login/fraxioned.png'
 import { ApiUrl } from '../config'
-import { IoMdClose } from 'react-icons/io' // Import close icon
+import { IoMdClose } from 'react-icons/io'
 
 interface ResetPasswordProps {
   onClose: () => void;
@@ -20,6 +20,8 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
   const [userId, setUserId] = useState<number | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [apiError, setApiError] = useState<string | null>(null)
+  const navigate = useNavigate()
+
 
   useEffect(() => {
     const userData = localStorage.getItem('userData')
@@ -79,6 +81,11 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
     setPasswordMismatch(false)
   }
 
+  const handleClose = () => {
+    onClose()
+    navigate('/dashboard')  // Navigate to dashboard after closing
+  }
+
   const handleConfirmPasswordChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -90,7 +97,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
   return (
     <div className={styles.modalContent}>
       <div className={styles.closeIconContainer}>
-        <IoMdClose className={styles.closeIcon} onClick={onClose} />
+        <IoMdClose data-testid="close-icon" className={styles.closeIcon} onClick={handleClose} />
       </div>
       {successMessage && (
         <div className={styles.successMessage}>{successMessage}</div>
