@@ -181,7 +181,6 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
         show={showResetPasswordModal}
         onHide={handleCloseResetPasswordModal}
       />
-
     </>
   )
 }
