@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { ApiUrl } from '../Components/config'
-import { Login } from 'Components/Types/Login'
+import { Login } from '../Components/Types/Login'
 
 export const login = async (payload: Login) => {
   try {

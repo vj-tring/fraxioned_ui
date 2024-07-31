@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './UserDetails.css'
 import userImage from '../../assets/profile.jpeg'
 import EditIcon from '../../assets/edit-icon.png'
-import { ApiUrl } from 'Components/config'
+import { ApiUrl } from '../../Components/config'
 
 interface Document {
   title: string

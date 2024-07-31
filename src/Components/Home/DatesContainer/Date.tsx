@@ -3,7 +3,7 @@ import '../../Home/DatesContainer/Date.css'
 import Region from '../../Home/DatesContainer/Region'
 import BasicSelect from './PropertyItem'
 import MultipleSelect from './MultipleSelect'
-import Calendar from 'Components/Calender/Calender'
+import Calendar from '../../Calender/Calender';
 
 const Date: React.FC = () => {
   return (

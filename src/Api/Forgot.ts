@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { ApiUrl } from '../Components/config'
-import { ForgotPassword } from 'Components/Types/Forgot'
+import { ForgotPassword } from '../Components/Types/Forgot'
 
 export const forgotPassword = async (payload: ForgotPassword) => {
   try {

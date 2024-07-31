@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { ApiUrl } from 'Components/config';
+import { ApiUrl } from '../../../Components/config';
 
 interface RegisterState {
   token: string | null;
@@ -35,9 +35,11 @@ export const registerUser = createAsyncThunk(
       } catch (error: any) {
         // Log the error for debugging purposes
         console.error('Registration Error:', error);
+        
         if (error.response && error.response.data) {
           return rejectWithValue(error.response.data.message);
         }
+
         return rejectWithValue('Registration failed. Please try again.');
       }
     }

@@ -11,9 +11,9 @@ import ForgotPassword from './Components/ForgetPassword/ForgotPassword'
 import ResetPassword from './Components/ResetPassword/ResetPassword'
 import Dashboard from './Components/Dashboard/Dashboard'
 import ResponsiveAppBar from './Components/NavbarMUI/NavbarUI'
-import Booking from 'Components/Booking/Booking'
-import Contact from 'Components/ContactUs/Contact'
-import CustomizedAccordions from 'Components/CustomizedAccordions/CustomizedAccordions'
+import Booking from './Components/Booking/Booking'
+import Contact from './Components/ContactUs/Contact'
+import CustomizedAccordions from './Components/CustomizedAccordions/CustomizedAccordions'
 import { Provider } from 'react-redux';
 import store from "../src/Redux/store/index";
 

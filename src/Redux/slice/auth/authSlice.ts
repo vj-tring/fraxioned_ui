@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from "../../reducers";
-import { ApiUrl } from 'Components/config';
+import { ApiUrl } from '../../../Components/config';
 
 interface User {
   roleId: number;
@@ -62,7 +62,7 @@ const loadStateFromLocalStorage = (): AuthState => {
 const initialState: AuthState = loadStateFromLocalStorage();
 
 export const login = createAsyncThunk(
-  'auth/login',
+  'authentication/login',
   async (
     { email, password }: { email: string; password: string },
     { rejectWithValue }

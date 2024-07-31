@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Routes, Route, useNavigate } from 'react-router-dom'
-import CustomNavbar from 'Components/Navbar/Navbar'
+import CustomNavbar from '../../Components/Navbar/Navbar'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 import fraxionedLogo from '../../assets/images/BB - Owners.png'
