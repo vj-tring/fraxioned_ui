@@ -7,7 +7,7 @@ import fraxionedLogo from '../../assets/images/BB - Owners.png'
 import Footer from '../../Footer/Footer'
 import userImage from '../../assets/profile.jpeg'
 import './Dashboard.css'
-import Home from '../Home/Home'
+// import Home from '../Home/Home'
 import CustomizedAccordions from '../CustomizedAccordions/CustomizedAccordions'
 import Contact from '../ContactUs/Contact'
 import UserDetails from '../UserDetails/UserDetails'
@@ -20,7 +20,7 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (isAuthenticated()) {
+    if (!isAuthenticated()) {
       navigate('/login')
     }
   }, [navigate])
