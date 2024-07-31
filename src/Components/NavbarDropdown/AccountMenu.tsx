@@ -34,9 +34,10 @@ export default function AccountMenu() {
         {/* <Typography sx={{ minWidth: 100 }}>Profile</Typography> */}
         <Tooltip title="Account settings">
           <IconButton
+            disableRipple
             onClick={handleClick}
             size="small"
-            sx={{ ml: 2 }}
+            sx={{ ml: 2, background: 'none' }}
             aria-controls={open ? 'account-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
