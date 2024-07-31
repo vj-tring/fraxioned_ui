@@ -1,17 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-export const isAuthenticated = (): boolean => {
-  const token = localStorage.getItem('accessToken')
-  const session = localStorage.getItem('session')
-
-  if (token && session) {
-    try {
-      const { expiresAt } = JSON.parse(session)
-      return true
-    } catch (error) {
-      console.error('Failed to parse session data:', error)
-      return false
-    }
-  }
-
-  return false
+export const isAuthenticated = () => {
+  const userData = localStorage.getItem('userData')
+  const token = localStorage.getItem('token')
+  const expiredAt = localStorage.getItem('expiredAt')
+  console.log(userData)
+  console.log(token)
+  console.log(expiredAt)
+  // Check if the user data, token, and expiration date exist and are valid
+  return userData && token && expiredAt
 }
