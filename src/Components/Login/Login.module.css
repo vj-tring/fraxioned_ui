@@ -2,35 +2,51 @@
 
 .outerContainer {
   display: flex;
-  justify-content: center;
-  align-items: center;
   height: 100vh;
-  width: 100vw;
-  background-image: url('./background.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: relative;
+  background-color: #f4f7fa;
 }
 
-.outerContainer::before {
-  content: '';
+.leftContainer {
+  flex: 2;
+  position: relative;
+  overflow: hidden;
+}
+
+.backgroundImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease-in-out;
+}
+
+.leftContainer:hover .backgroundImage {
+  transform: scale(1.05);
+}
+
+.overlay {
   position: absolute;
   top: 0;
+  left: 0;
   right: 0;
   bottom: 0;
-  left: 0;
+  background: rgba(0, 0, 0, 0.3);
+  transition: background-color 0.6s ease-in-out;
 }
 
-.innerContainer {
+.leftContainer:hover .overlay {
+  background: rgba(75, 75, 75, 0.2);
+}
+
+.rightContainer {
+  flex: 1;
+  display: flex;
+  margin-bottom: 148px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  max-width: 480px;
   padding: 40px;
   position: relative;
-  z-index: 1;
 }
 
 .logo {
@@ -42,7 +58,8 @@
 }
 
 .formWrapper {
-  margin-top: 32px;
+  width: 100%;
+  max-width: 400px;
 }
 
 .login {
@@ -69,21 +86,22 @@
 }
 
 .inputGroup {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
-input[type='text'],
-input[type='password'] {
+.inputGroup input[type='text'],
+.inputGroup input[type='password'] {
   width: 100%;
   padding: 12px;
   border: 1px solid #e1e1e1;
+  margin-bottom: 0px;
   border-radius: 8px;
   font-size: 14px;
   transition: border-color 0.3s ease;
 }
 
-input[type='text']:focus,
-input[type='password']:focus {
+.inputGroup input[type='text']:focus,
+.inputGroup input[type='password']:focus {
   border-color: #e8aa6c;
   outline: none;
 }
@@ -123,7 +141,7 @@ input[type='password']:focus {
 }
 
 .signInButton {
-  background: #dc9751;
+  background: #e8aa6c;
   /* background: #00636d;
     background: #88cdd4; */
   color: white;
@@ -138,6 +156,8 @@ input[type='password']:focus {
 
 .signInButton:hover {
   background: #e49f63;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .signupPrompt {
@@ -148,11 +168,36 @@ input[type='password']:focus {
 }
 
 .signupLink {
-  color: #dc9751;
+  color: #e8aa6c;
   text-decoration: none;
   font-weight: 600;
 }
 
 .signupLink:hover {
   text-decoration: underline;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.formWrapper {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+input[type='text'],
+input[type='password'] {
+  transition: all 0.3s ease;
+}
+
+input[type='text']:focus,
+input[type='password']:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }

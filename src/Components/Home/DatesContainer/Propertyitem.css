@@ -28,7 +28,7 @@
 
 .box {
   border: 1px solid grey;
-  width: 410px;
+  width: 415px;
   height: 53px;
   text-align: center;
   align-items: center;
@@ -41,6 +41,19 @@
   font-weight: bold;
 }
 
+.BlueHead1 {
+  border: none;
+  font-weight: 400;
+  width: 167px;
+  height: 23px;
+  font-size: small;
+  border-radius: 45px;
+  padding: 4px;
+  text-align: center;
+  background-color: #ffa852;
+  color: white;
+  margin: auto;
+}
 .BlueFont {
   font-size: small;
 }
@@ -79,12 +92,15 @@
 }
 
 .CardItem {
-  border-radius: 32px;
   width: 430px;
-  height: 255px;
-  overflow: hidden; /* Ensure content does not overflow outside the card */
+  height: 240px;
+  overflow: hidden;
 }
 
 .css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root:hover {
   background-color: white !important;
+}
+
+.IconArrow {
+  border-radius: 10px;
 }

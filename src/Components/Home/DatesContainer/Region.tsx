@@ -1,4 +1,3 @@
-import React from 'react'
 import '../DatesContainer/Card-item.css'
 const Region = () => {
   return (

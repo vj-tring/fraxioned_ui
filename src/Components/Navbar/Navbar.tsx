@@ -1,18 +1,22 @@
 import React, { useState } from 'react'
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
-import Dropdown from 'react-bootstrap/Dropdown'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import useNavbarHandler from './NavbarFunction'
+import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
+import Divider from '@mui/material/Divider'
+import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import LogoutIcon from '@mui/icons-material/Logout'
 import InviteModal from './SentInviteModal'
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal'
-import ResetPasswordModal from './ResetPasswordModal'
 import FormDialog from '../RegisterFormPopUp/RegisterForm'
 import '../Navbar/Navbar.css'
+import useNavbarHandler from './NavbarFunction'
+import { Typography } from '@mui/material'
 
 interface CustomNavbarProps {
   logo: string
@@ -26,32 +30,36 @@ interface CustomNavbarProps {
   userName: string
   onUserImageClick?: () => void
 }
+const firstName = 'John'
+const lastName = 'Doe'
+// const email = 'john.doe@example.com'
 
 const CustomNavbar: React.FC<CustomNavbarProps> = ({
   logo,
   links,
   userImage,
   userName,
+  onUserImageClick,
 }) => {
   const {
     showInviteModal,
     showLogoutModal,
-    showResetPasswordModal,
     handleOpenInviteModal,
     handleCloseInviteModal,
-    handleShowLogoutModal,
     handleCloseLogoutModal,
-    handleOpenResetPasswordModal,
-    handleCloseResetPasswordModal,
-    handleShowUserDetailsModal,
+    handleShowLogoutModal,
     handleLogout,
   } = useNavbarHandler()
 
-  const [open, setOpen] = useState(false)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [openNewAccountDialog, setOpenNewAccountDialog] = useState(false)
 
-  const handleToggle = () => {
-    setOpen(!open)
+  const open = Boolean(anchorEl)
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleClose = () => {
+    setAnchorEl(null)
   }
 
   const handleOpenNewAccountModal = () => {
@@ -92,74 +100,120 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
         </Navbar.Collapse>
 
         <Nav className="ml-auto">
-          <Dropdown show={open} onToggle={handleToggle}>
-            <Dropdown.Toggle
-              variant="light"
-              id="dropdown-basic"
-              className="username-dropdown-toggle"
-            >
-              <h6 className="username ">
-                {userName ? userName : 'siva@tringapps.com'}
-              </h6>
-              <Avatar
-                sx={{
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Tooltip title="Account settings">
+              <IconButton
+                onClick={handleClick}
+                size="small"
+                sx={{ ml: 2 }}
+                aria-controls={open ? 'account-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+              >
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  sx={{
+                    borderRadius: 1,
+                  }}
+                >
+                  <Box>
+                    <Typography variant="body2" color="textPrimary">
+                      {firstName} {lastName}
+                    </Typography>
+                    {/* <Typography variant="body2" color="textSecondary">
+                      {email}
+                    </Typography> */}
+                  </Box>
+                  <Avatar
+                    sx={{
+                      width: 32,
+                      height: 32,
+                      cursor: 'pointer',
+                      marginLeft: 1,
+                    }}
+                  >
+                    {userImage ? (
+                      <img
+                        src={userImage}
+                        alt="User"
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          borderRadius: '50%',
+                        }}
+                      />
+                    ) : userName ? (
+                      userName.charAt(0).toUpperCase()
+                    ) : (
+                      'M'
+                    )}
+                  </Avatar>
+                </Box>
+              </IconButton>
+            </Tooltip>
+          </Box>
+          <Menu
+            anchorEl={anchorEl}
+            id="account-menu"
+            open={open}
+            onClose={handleClose}
+            PaperProps={{
+              elevation: 0,
+              sx: {
+                overflow: 'visible',
+                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                mt: 1.5,
+                '& .MuiAvatar-root': {
                   width: 32,
                   height: 32,
-                  cursor: 'pointer',
-                  marginLeft: 1,
-                }}
-              >
-                {userImage ? (
-                  <img
-                    src={userImage}
-                    alt="User"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      borderRadius: '50%',
-                      marginLeft: 3,
-                    }}
-                  />
-                ) : userName ? (
-                  userName.charAt(0).toUpperCase()
-                ) : (
-                  'M'
-                )}
-              </Avatar>
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu className="Drop-menu">
-              <Dropdown.Item onClick={handleShowUserDetailsModal}>
-                <ListItemIcon>
-                  <Avatar /> <span className="profile">Profile</span>
-                </ListItemIcon>
-              </Dropdown.Item>
-              <Dropdown.Item onClick={handleOpenInviteModal}>
-                <ListItemIcon>
-                  <Avatar /> <span className="profile">Send Invite</span>
-                </ListItemIcon>
-              </Dropdown.Item>
-              <Dropdown.Item onClick={handleOpenResetPasswordModal}>
-                <ListItemIcon>
-                  <Avatar /> <span className="profile">Reset Password</span>
-                </ListItemIcon>
-              </Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item onClick={handleOpenNewAccountModal}>
-                <ListItemIcon>
-                  <PersonAddIcon fontSize="small" />
-                </ListItemIcon>
-                <span className="profile1">Add another account</span>
-              </Dropdown.Item>
-              <Dropdown.Item onClick={handleShowLogoutModal}>
-                <ListItemIcon>
-                  <LogoutIcon fontSize="small" />
-                </ListItemIcon>
-                <span className="profile1">Logout</span>
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+                  ml: -0.5,
+                  mr: 1,
+                },
+                '&::before': {
+                  content: '""',
+                  display: 'block',
+                  position: 'absolute',
+                  top: 0,
+                  right: 14,
+                  width: 10,
+                  height: 10,
+                  bgcolor: 'background.paper',
+                  transform: 'translateY(-50%) rotate(45deg)',
+                  zIndex: 0,
+                },
+              },
+            }}
+            transformOrigin={{
+              horizontal: 'right',
+              vertical: 'top',
+            }}
+            anchorOrigin={{
+              horizontal: 'right',
+              vertical: 'bottom',
+            }}
+          >
+            <MenuItem onClick={onUserImageClick}>
+              <Avatar /> Profile
+            </MenuItem>
+            <MenuItem onClick={handleOpenInviteModal}>
+              <Avatar /> Send Invite
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={handleOpenNewAccountModal}>
+              <ListItemIcon>
+                <PersonAddIcon fontSize="small" />
+              </ListItemIcon>
+              Add another account
+            </MenuItem>
+            <MenuItem onClick={handleShowLogoutModal}>
+              <ListItemIcon>
+                <LogoutIcon fontSize="small" />
+              </ListItemIcon>
+              Logout
+            </MenuItem>
+          </Menu>
         </Nav>
       </Navbar>
 
@@ -176,10 +230,6 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
       <FormDialog
         open={openNewAccountDialog}
         handleClose={handleCloseNewAccountModal}
-      />
-      <ResetPasswordModal
-        show={showResetPasswordModal}
-        onHide={handleCloseResetPasswordModal}
       />
     </>
   )

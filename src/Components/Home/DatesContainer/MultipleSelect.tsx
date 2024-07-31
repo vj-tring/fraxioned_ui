@@ -1,5 +1,4 @@
-import * as React from 'react'
-import { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -9,17 +8,6 @@ import PeopleIcon from '@mui/icons-material/People'
 import ChildFriendlyIcon from '@mui/icons-material/ChildFriendly'
 import PetsIcon from '@mui/icons-material/Pets'
 import '../DatesContainer/Multiselect.css'
-// import { relative } from 'path';
-const MenuProps = {
-  PaperProps: {
-    style: {
-      width: 380,
-      borderRadius: '8px',
-      marginTop: '8px',
-      overflow: 'hidden',
-    },
-  },
-}
 
 const names = [
   { label: 'Adults', description: 'Ages 13 or above', icon: <PeopleIcon /> },
@@ -34,6 +22,8 @@ const names = [
 
 const MultipleSelect: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const open = Boolean(anchorEl)
+
   const [counts, setCounts] = useState<{ [key: string]: number }>({
     Adults: 1,
     Children: 0,
@@ -59,31 +49,34 @@ const MultipleSelect: React.FC = () => {
     }))
   }
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (open) {
+        handleClose()
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [open])
+
   return (
     <Box sx={{ width: '30%' }}>
       <Button
-        disableRipple
-        disableTouchRipple
-        className="MutliselectBtn"
         aria-controls="basic-menu"
         aria-haspopup="true"
-        variant="outlined"
         onClick={handleClick}
-        type="button" // Add this prop
+        variant="outlined"
+        className="PropertyBtn"
         sx={{
-          borderRadius: '32px',
-          width: '98%',
-          // height: '70px',
+          borderRadius: 10,
+          width: 275,
+          height: 70,
           border: 'none',
-          // textTransform: 'none',
-          // justifyContent: 'flex-start',
-          // paddingLeft: '16px',
-          // paddingRight: '16px',
-          '&:hover': {
-            // backgroundColor: '#f0f0f0',
-            height: '70px',
-            border: 'none',
-          },
+          cursor: 'pointer',
         }}
       >
         <div className="d-flex flex-column pt-3 text-align-center">
@@ -91,12 +84,20 @@ const MultipleSelect: React.FC = () => {
           <p className="property1"> Add guests</p>
         </div>
       </Button>
+
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
-        PaperProps={MenuProps.PaperProps}
+        PaperProps={{
+          style: {
+            width: 380,
+            borderRadius: '8px',
+            overflow: 'hidden',
+            position: 'fixed',
+          },
+        }}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'left',
@@ -110,7 +111,7 @@ const MultipleSelect: React.FC = () => {
           <MenuItem
             key={item.label}
             sx={{
-              borderRadius: 32,
+              borderRadius: 0,
             }}
             disableRipple
           >
@@ -124,7 +125,7 @@ const MultipleSelect: React.FC = () => {
                 {item.icon}
               </Avatar>
               <div className=" w-50 ">
-                <b>{item.label}</b>
+                <b className="itemLabel">{item.label}</b>
                 <p className="DescFont">{item.description}</p>
               </div>
               <div className="d-flex justify-content-around w-50 pb-2">
@@ -135,7 +136,7 @@ const MultipleSelect: React.FC = () => {
                 >
                   -
                 </button>
-                <span className="Ad-count">{counts[item.label]}</span>
+                <p className="Ad-count ">{counts[item.label]}</p>
                 <button
                   className="Inc-circle"
                   onClick={() => handleCountChange(item.label, 'increase')}
