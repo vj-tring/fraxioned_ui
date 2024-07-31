@@ -40,7 +40,7 @@ const App: FC = () => {
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Signup />} />
-        <Route path="/change" element={<Change />} />
+        <Route path="/recover" element={<Change />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/booking" element={<Booking />} />
