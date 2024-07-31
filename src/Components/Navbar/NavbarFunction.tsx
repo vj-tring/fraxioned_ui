@@ -6,7 +6,8 @@ function useNavbarHandler() {
   const [showInviteModal, setShowInviteModal] = useState(false)
   const [showLogoutModal, setShowLogoutModal] = useState(false)
   const [showUserDetailsModal, setShowUserDetailsModal] = useState(false)
-  const [showResetPasswordModal, setShowResetPasswordModal] = useState(false)
+  const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
+
 
   const navigate = useNavigate()
 
@@ -19,14 +20,14 @@ function useNavbarHandler() {
   const handleShowUserDetailsModal = () => setShowUserDetailsModal(true)
   const handleCloseUserDetailsModal = () => setShowUserDetailsModal(false)
 
-  const handleOpenResetPasswordModal = () => setShowResetPasswordModal(true)
+  const handleOpenResetPasswordModal = () => setShowResetPasswordModal(true);
   const handleCloseResetPasswordModal = () => setShowResetPasswordModal(false)
 
   const handleLogout = async () => {
     try {
       const response = await logout()
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         console.log('User logged out successfully')
         handleCloseLogoutModal()
         localStorage.clear()

@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import styles from './ResetPassword.module.css'
 import axios from 'axios'
+import logo from '../Login/fraxioned.png'
 import { ApiUrl } from '../config'
+import { IoMdClose } from 'react-icons/io' // Import close icon
 
-const ResetPassword: React.FC = () => {
+interface ResetPasswordProps {
+  onClose: () => void;
+}
+
+const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
   const [oldPassword, setOldPassword] = useState('')
   const [oldPasswordError, setOldPasswordError] = useState(false)
   const [newPassword, setNewPassword] = useState('')
@@ -83,6 +89,9 @@ const ResetPassword: React.FC = () => {
 
   return (
     <div className={styles.modalContent}>
+      <div className={styles.closeIconContainer}>
+        <IoMdClose className={styles.closeIcon} onClick={onClose} />
+      </div>
       {successMessage && (
         <div className={styles.successMessage}>{successMessage}</div>
       )}
@@ -95,9 +104,7 @@ const ResetPassword: React.FC = () => {
         )}
         <div className={styles.inputGroup}>
           {oldPasswordError && (
-            <div className={styles.errorMessage}>
-              Please enter your old password
-            </div>
+            <div className={styles.errorMessage}>Please enter your old password</div>
           )}
           <input
             id="oldPassword"
@@ -110,9 +117,7 @@ const ResetPassword: React.FC = () => {
         </div>
         <div className={styles.inputGroup}>
           {newPasswordError && (
-            <div className={styles.errorMessage}>
-              Please enter a new password
-            </div>
+            <div className={styles.errorMessage}>Please enter a new password</div>
           )}
           <input
             id="newPassword"
@@ -125,9 +130,7 @@ const ResetPassword: React.FC = () => {
         </div>
         <div className={styles.inputGroup}>
           {confirmPasswordError && (
-            <div className={styles.errorMessage}>
-              Please confirm your new password
-            </div>
+            <div className={styles.errorMessage}>Please confirm your new password</div>
           )}
           <input
             id="confirmPassword"
@@ -143,7 +146,7 @@ const ResetPassword: React.FC = () => {
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default ResetPassword
+export default ResetPassword;

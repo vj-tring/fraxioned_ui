@@ -23,6 +23,8 @@ import Calendar from 'Components/Calender/Calender'
 
 // import Carosuel from 'Components/Home/DatesContainer/Carosuel'
 import Change from 'Components/ChangePassword/ChangePassword'
+import { Provider } from 'react-redux'
+import store from '../src/Redux/store/index'
 // import Reset from 'Components/ChangePassword/ChangePassword'
 interface PrivateRouteProps {
   element: React.ComponentType
@@ -35,34 +37,36 @@ const PrivateRoute: FC<PrivateRouteProps> = ({ element: Element }) => {
 
 const App: FC = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Signup />} />
-        <Route path="/recover" element={<Change />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/booking" element={<Booking />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/ResponsiveAppBar" element={<ResponsiveAppBar />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/menu" element={<AccountMenu />} />
-        <Route path="/calendar" element={<Calendar />} />
-        <Route path="/date" element={<Date />} />
-        {/* <Route path="/carosel" element={<Carosuel />} /> */}
-        <Route
-          path="/dashboard"
-          element={<PrivateRoute element={Dashboard} />}
-        />
-        {/* Use PrivateRoute for all other routes that need to be protected */}
-        {/* <Route path="/*" element={<PrivateRoute element={Dashboard} />} /> */}
+    <Provider store={store}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Signup />} />
+          <Route path="/recover" element={<Change />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/booking" element={<Booking />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/ResponsiveAppBar" element={<ResponsiveAppBar />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/menu" element={<AccountMenu />} />
+          <Route path="/calendar" element={<Calendar />} />
+          <Route path="/date" element={<Date />} />
+          {/* <Route path="/carosel" element={<Carosuel />} /> */}
+          <Route
+            path="/dashboard"
+            element={<PrivateRoute element={Dashboard} />}
+          />
+          {/* Use PrivateRoute for all other routes that need to be protected */}
+          {/* <Route path="/*" element={<PrivateRoute element={Dashboard} />} /> */}
 
-        <Route path="/multiselect" element={<MultipleSelect />} />
-        <Route path="/basicselect" element={<BasicSelect />} />
-        {/* <Route path="/RegisterForm" element={<FormDialog />} /> */}
-      </Routes>
-    </Router>
+          <Route path="/multiselect" element={<MultipleSelect />} />
+          <Route path="/basicselect" element={<BasicSelect />} />
+          {/* <Route path="/RegisterForm" element={<FormDialog />} /> */}
+        </Routes>
+      </Router>
+    </Provider>
   )
 }
 
