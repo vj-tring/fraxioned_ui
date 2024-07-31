@@ -7,7 +7,7 @@ import fraxionedLogo from '../../assets/images/BB - Owners.png'
 import Footer from '../../Footer/Footer'
 import userImage from '../../assets/profile.jpeg'
 import './Dashboard.css'
-// import Home from '../Home/Home'
+import Home from '../Home/Home'
 import CustomizedAccordions from '../CustomizedAccordions/CustomizedAccordions'
 import Contact from '../ContactUs/Contact'
 import UserDetails from '../UserDetails/UserDetails'
@@ -34,10 +34,10 @@ const Dashboard: React.FC = () => {
 
   const links = [
     { name: 'HOME', href: '/dashboard', disabled: false },
-    { name: 'BOOKING', href: '/dashboard', disabled: false },
-    { name: 'PEAK SEASON', href: '/dashboard', disabled: false },
-    { name: 'PAYEMENTS', href: '/dashboard', disabled: false },
-    { name: 'FAQ', href: '/dashboard', disabled: false },
+    { name: 'BOOKING', href: '/dashboard/booking', disabled: true },
+    { name: 'PEAK SEASON', href: '/dashboard/services', disabled: true },
+    { name: 'PAYEMENTS', href: '/dashboard/payements', disabled: true },
+    { name: 'FAQ', href: '/faq', disabled: false },
   ]
 
   return (
@@ -53,7 +53,7 @@ const Dashboard: React.FC = () => {
       <div className="content-container">
         <div className="content-wrapper">
           <Routes>
-            <Route path="/" element={<ComingSoon />} />
+            <Route path="/" element={<Home />} />
             <Route path="/faq" element={<CustomizedAccordions />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/user-details" element={<UserDetails />} />
