@@ -275,10 +275,10 @@ describe('Login Component', () => {
     expect(screen.getByText('Please fill in the Email ID')).toBeInTheDocument()
   })
 
-//   test('background image is rendered', () => {
-//     renderLogin()
-//     expect(screen.getByAltText('background')).toBeInTheDocument()
-//   })
+  //   test('background image is rendered', () => {
+  //     renderLogin()
+  //     expect(screen.getByAltText('background')).toBeInTheDocument()
+  //   })
 
   test('email input has autofocus', () => {
     renderLogin()

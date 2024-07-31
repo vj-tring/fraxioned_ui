@@ -10,6 +10,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import LogoutIcon from '@mui/icons-material/Logout'
 import InviteModal from './SentInviteModal'
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal'
+import ResetPasswordModal from './ResetPasswordModal'
 import FormDialog from '../RegisterFormPopUp/RegisterForm'
 import '../Navbar/Navbar.css'
 
@@ -35,10 +36,13 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
   const {
     showInviteModal,
     showLogoutModal,
+    showResetPasswordModal,
     handleOpenInviteModal,
     handleCloseInviteModal,
     handleShowLogoutModal,
     handleCloseLogoutModal,
+    handleOpenResetPasswordModal,
+    handleCloseResetPasswordModal,
     handleShowUserDetailsModal,
     handleLogout,
   } = useNavbarHandler()
@@ -136,6 +140,11 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                   <Avatar /> <span className="profile">Send Invite</span>
                 </ListItemIcon>
               </Dropdown.Item>
+              <Dropdown.Item onClick={handleOpenResetPasswordModal}>
+                <ListItemIcon>
+                  <Avatar /> <span className="profile">Reset Password</span>
+                </ListItemIcon>
+              </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item onClick={handleOpenNewAccountModal}>
                 <ListItemIcon>
@@ -167,6 +176,10 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
       <FormDialog
         open={openNewAccountDialog}
         handleClose={handleCloseNewAccountModal}
+      />
+      <ResetPasswordModal
+        show={showResetPasswordModal}
+        onHide={handleCloseResetPasswordModal}
       />
     </>
   )
