@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styles from './ResetPassword.module.css'
 import axios from 'axios'
-import logo from '../Login/fraxioned.png'
 import { ApiUrl } from '../config'
 
 const ResetPassword: React.FC = () => {
@@ -83,77 +82,66 @@ const ResetPassword: React.FC = () => {
   }
 
   return (
-    <div className={styles.outerContainer}>
-      <div className={styles.innerContainer}>
-        <img src={logo} alt="Fraxioned Logo" className={styles.logo} />
-        <div className={styles.formWrapper}>
-          {successMessage && (
-            <div className={styles.successMessage}>{successMessage}</div>
+    <div className={styles.modalContent}>
+      {successMessage && (
+        <div className={styles.successMessage}>{successMessage}</div>
+      )}
+      <h2 className={styles.login}>Reset password</h2>
+      <p className={styles.loginSubtext}>Set your new password here</p>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        {apiError && <div className={styles.errorMessage}>{apiError}</div>}
+        {passwordMismatch && (
+          <div className={styles.errorMessage}>New passwords do not match</div>
+        )}
+        <div className={styles.inputGroup}>
+          {oldPasswordError && (
+            <div className={styles.errorMessage}>
+              Please enter your old password
+            </div>
           )}
-          <h2 className={styles.login}>Reset password</h2>
-          <p className={styles.loginSubtext}>Set your new password here</p>
-          <form onSubmit={handleSubmit} className={styles.form}>
-            {apiError && <div className={styles.errorMessage}>{apiError}</div>}
-
-            {passwordMismatch && (
-              <div className={styles.errorMessage}>
-                New passwords do not match
-              </div>
-            )}
-            <div className={styles.inputGroup}>
-              {oldPasswordError && (
-                <div className={styles.errorMessage}>
-                  Please enter your old password
-                </div>
-              )}
-              <label htmlFor="oldPassword"></label>
-              <input
-                id="oldPassword"
-                type="password"
-                placeholder="Old Password"
-                value={oldPassword}
-                onChange={handleOldPasswordChange}
-                className={oldPasswordError ? styles.errorInput : ''}
-              />
-            </div>
-            <div className={styles.inputGroup}>
-              {newPasswordError && (
-                <div className={styles.errorMessage}>
-                  Please enter a new password
-                </div>
-              )}
-              <label htmlFor="newPassword"></label>
-              <input
-                id="newPassword"
-                type="password"
-                placeholder="New Password"
-                value={newPassword}
-                onChange={handleNewPasswordChange}
-                className={newPasswordError ? styles.errorInput : ''}
-              />
-            </div>
-            <div className={styles.inputGroup}>
-              {confirmPasswordError && (
-                <div className={styles.errorMessage}>
-                  Please confirm your new password
-                </div>
-              )}
-              <label htmlFor="confirmPassword"></label>
-              <input
-                id="confirmPassword"
-                type="password"
-                placeholder="Confirm New Password"
-                value={confirmPassword}
-                onChange={handleConfirmPasswordChange}
-                className={confirmPasswordError ? styles.errorInput : ''}
-              />
-            </div>
-            <button type="submit" className={styles.signInButton}>
-              Submit
-            </button>
-          </form>
+          <input
+            id="oldPassword"
+            type="password"
+            placeholder="Old Password"
+            value={oldPassword}
+            onChange={handleOldPasswordChange}
+            className={oldPasswordError ? styles.errorInput : ''}
+          />
         </div>
-      </div>
+        <div className={styles.inputGroup}>
+          {newPasswordError && (
+            <div className={styles.errorMessage}>
+              Please enter a new password
+            </div>
+          )}
+          <input
+            id="newPassword"
+            type="password"
+            placeholder="New Password"
+            value={newPassword}
+            onChange={handleNewPasswordChange}
+            className={newPasswordError ? styles.errorInput : ''}
+          />
+        </div>
+        <div className={styles.inputGroup}>
+          {confirmPasswordError && (
+            <div className={styles.errorMessage}>
+              Please confirm your new password
+            </div>
+          )}
+          <input
+            id="confirmPassword"
+            type="password"
+            placeholder="Confirm New Password"
+            value={confirmPassword}
+            onChange={handleConfirmPasswordChange}
+            className={confirmPasswordError ? styles.errorInput : ''}
+          />
+        </div>
+        <button type="submit" className={styles.signInButton}>
+          Submit
+        </button>
+      </form>
     </div>
   )
 }
