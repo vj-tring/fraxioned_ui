@@ -2,17 +2,25 @@ import React, { useState } from 'react'
 import styles from './Login.module.css'
 import { Link, useNavigate } from 'react-router-dom'
 import logo from './fraxioned.png'
-import axios from 'axios'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '../../Redux/store'
+import { login } from '../../Redux/slice/auth/authSlice'
+import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars'
 import background from '../../assets/Login_image/login_image.jpg'
-import { ApiUrl } from '../config'
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState(false)
-  const [apiError, setApiError] = useState('')
+  const [showSnackbar, setShowSnackbar] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>(
+    'success'
+  )
+
   const navigate = useNavigate()
+  const dispatch = useDispatch<AppDispatch>()
 
   const validateEmail = (email: string) => {
     const re =
@@ -22,6 +30,7 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
     if (!email.trim()) {
       setEmailError('Please fill in the Email ID')
       setPasswordError(false)
@@ -34,36 +43,26 @@ const Login: React.FC = () => {
     } else {
       setEmailError('')
       setPasswordError(false)
-      setApiError('')
+
       try {
-        const response = await axios.post(`${ApiUrl}/authentication/login`, {
-          email,
-          password,
-        })
+        const resultAction = await dispatch(login({ email, password }))
+        // navigate('/dashboard')
 
-        const { user, session } = response.data
-        localStorage.setItem(
-          'userData',
-          JSON.stringify({
-            ...user,
-          })
-        )
-        localStorage.setItem('token', session.token)
-        localStorage.setItem('expiredAt', session.expires_at)
-
-        console.log('localStorage items set:', {
-          userData: localStorage.getItem('userData'),
-          token: localStorage.getItem('token'),
-          expiredAt: localStorage.getItem('expiredAt'),
-        })
-        console.log('Navigating to dashboard')
-        navigate('/dashboard')
-      } catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
-          setApiError(error.response.data.message || 'Login failed')
+        if (login.fulfilled.match(resultAction)) {
+          // Login was successful
+          navigate('/dashboard')
         } else {
-          setApiError('An error occurred. Please try again.')
+          // Handle the case where the login is rejected
+          const message = resultAction.payload as string
+          setSnackbarMessage(message || 'Login failed. Please try again.')
+          setSnackbarSeverity('error')
+          setShowSnackbar(true)
         }
+      } catch (error) {
+        // Handle unexpected errors
+        setSnackbarMessage('An error occurred. Please try again.')
+        setSnackbarSeverity('error')
+        setShowSnackbar(true)
       }
     }
   }
@@ -75,7 +74,7 @@ const Login: React.FC = () => {
 
   const handleEmailBlur = () => {
     if (email && !validateEmail(email)) {
-      setEmailError('Please enter a valid email id')
+      setEmailError('Please enter a valid email ID')
     }
   }
 
@@ -101,12 +100,11 @@ const Login: React.FC = () => {
           <p className={styles.loginSubtext}>
             Please enter your details to sign in
           </p>
-          {apiError && <div className={styles.errorMessage}>{apiError}</div>}
           <form onSubmit={handleSubmit} className={styles.form}>
+            {emailError && (
+              <div className={styles.errorMessage}>{emailError}</div>
+            )}
             <div className={styles.inputGroup}>
-              {emailError && (
-                <div className={styles.errorMessage}>{emailError}</div>
-              )}
               <input
                 type="text"
                 placeholder="Email"
@@ -117,12 +115,12 @@ const Login: React.FC = () => {
                 className={emailError ? styles.errorInput : ''}
               />
             </div>
+            {passwordError && (
+              <div className={styles.errorMessage}>
+                Please fill in the Password
+              </div>
+            )}
             <div className={styles.inputGroup}>
-              {passwordError && (
-                <div className={styles.errorMessage}>
-                  Please fill in the Password
-                </div>
-              )}
               <input
                 type="password"
                 placeholder="Password"
@@ -131,7 +129,6 @@ const Login: React.FC = () => {
                 className={passwordError ? styles.errorInput : ''}
               />
             </div>
-
             <div className={styles.formFooter}>
               <label className={styles.remember}>
                 <input type="checkbox" /> Remember me
@@ -146,6 +143,12 @@ const Login: React.FC = () => {
           </form>
         </div>
       </div>
+      <CustomizedSnackbars
+        open={showSnackbar}
+        handleClose={() => setShowSnackbar(false)}
+        message={snackbarMessage}
+        severity={snackbarSeverity}
+      />
     </div>
   )
 }

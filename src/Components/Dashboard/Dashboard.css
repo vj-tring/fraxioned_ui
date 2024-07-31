@@ -48,12 +48,6 @@
   z-index: 1000;
 }
 
-.content-wrapper {
-  /* max-width: 1200px; 
-  margin-top: 25px;
-  margin-left: 7%; */
-}
-
 .dashboard-container .navbar-link.disabled {
   color: #999;
   cursor: not-allowed;

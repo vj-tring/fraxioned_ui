@@ -8,9 +8,7 @@
 .home-image-container {
   width: 100%;
 }
-.home-items {
-  /* background-color: #ffab3c; */
-}
+
 .home-image {
   width: 100%;
   height: auto;
@@ -27,12 +25,12 @@
 .home-details h3 {
   color: #0d7477;
   display: flex;
-  align-items: flex-start; /* Center vertically with icon */
+  align-items: flex-start;
 }
 
 .home-details p {
   color: #f7981d;
-  margin: 5px 0; /* Adjust margin for spacing */
+  margin: 5px 0;
 }
 
 .book-stay-btn {
@@ -59,7 +57,7 @@
   font-weight: 600;
 }
 .imagetxt {
-  margin-left: 10px; /* Adjust margin for spacing */
+  margin-left: 10px;
 }
 
 svg {

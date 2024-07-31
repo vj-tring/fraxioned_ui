@@ -1,11 +1,13 @@
 .MultiItems {
   display: flex;
   align-items: center;
-  /* padding: 5px; */
 }
-
+.MutliselectBtn:hover {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  background-color: rgb(236, 235, 235) !important;
+  border: none !important;
+}
 .MultiHead {
-  /* padding: 6px; */
   flex-direction: column;
   display: flex;
 }
@@ -15,10 +17,12 @@
 
 .DescFont {
   font-size: 13px;
+  margin-top: -3px;
 }
 
 .w-50 {
   width: 43% !important;
+  padding-top: 11px !important;
 }
 
 .MultiIte {
@@ -28,18 +32,12 @@
 .css-1tzgs8d-MuiAvatar-root {
   background: none !important;
   background-color: orange !important;
-  margin-bottom: 12px !important;
 }
-
-.MutliselectBtn {
-  /* height: 70px; */
-}
-
-/* .css-1ndhmnb-MuiButtonBase-root-MuiButton-root{
-height: 50px !important;
-} */
 
 .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper {
   border-radius: 10px !important;
-  margin-top: 10px !important;
+}
+
+.itemLabel {
+  padding-top: 13px !important;
 }

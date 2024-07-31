@@ -9,11 +9,15 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
-import useSignupHandler from '../Signup/SignupFunction'
-import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars'
-import CloseIcon from '@mui/icons-material/Close' // Import Close icon
-import IconButton from '@mui/material/IconButton' // Import IconButton
+import IconButton from '@mui/material/IconButton'
+import CloseIcon from '@mui/icons-material/Close'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars'
+import '../RegisterFormPopUp/RegisterForm.css'
+import { SelectChangeEvent } from '@mui/material/Select'
+import { useDispatch } from 'react-redux'
+import { registerUser } from '../../Redux/slice/auth/registerSlice'
+import { AppDispatch } from '../../Redux/store'
 
 interface FormDialogProps {
   open: boolean
@@ -21,20 +25,141 @@ interface FormDialogProps {
 }
 
 const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
-  const {
-    formik,
-    openSnackbar,
-    snackbarMessage,
-    snackbarSeverity,
-    handleSnackbarClose,
-  } = useSignupHandler()
+  const [formValues, setFormValues] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    addressLine1: '',
+    phoneNumber: '',
+    roleId: 0,
+    propertyID: 0,
+  })
+
+  const dispatch = useDispatch<AppDispatch>()
+
+  const [errors, setErrors] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    addressLine1: '',
+    phoneNumber: '',
+    roleId: '',
+    propertyID: '',
+  })
 
   const [showSnackbar, setShowSnackbar] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>(
+    'success'
+  )
+
+  const handleTextFieldChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = event.target
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    })
+  }
+
+  const handleSelectChange = (event: SelectChangeEvent<number>) => {
+    const { name, value } = event.target
+    setFormValues({
+      ...formValues,
+      [name]: parseInt(value.toString(), 10),
+    })
+  }
+
+  const validate = () => {
+    let hasErrors = false
+    const newErrors: any = {}
+
+    if (!formValues.firstName) {
+      newErrors.firstName = 'First name is required'
+      hasErrors = true
+    }
+    if (!formValues.lastName) {
+      newErrors.lastName = 'Last name is required'
+      hasErrors = true
+    }
+    if (!formValues.email) {
+      newErrors.email = 'Email is required'
+      hasErrors = true
+    }
+    if (!formValues.addressLine1) {
+      newErrors.addressLine1 = 'Address Line 1 is required'
+      hasErrors = true
+    }
+    if (!formValues.phoneNumber) {
+      newErrors.phoneNumber = 'Phone number is required'
+      hasErrors = true
+    }
+    if (formValues.roleId === 0) {
+      newErrors.roleId = 'Role is required'
+      hasErrors = true
+    }
+    if (formValues.propertyID === 0) {
+      newErrors.propertyID = 'Property ID is required'
+      hasErrors = true
+    }
+
+    setErrors(newErrors)
+    return !hasErrors
+  }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    await formik.handleSubmit() // Ensure formik's handleSubmit completes
-    setShowSnackbar(true) // Show Snackbar after form submission
+    if (validate()) {
+      const payload = {
+        email: formValues.email.trim().toLowerCase(),
+        firstName: formValues.firstName.trim(),
+        lastName: formValues.lastName.trim(),
+        addressLine1: formValues.addressLine1.trim(),
+        addressLine2: '', // Default value
+        state: 'Tamil Nadu', // Default value
+        country: 'India', // Default value
+        city: 'Salem', // Default value
+        zipcode: '123456', // Default value
+        phoneNumber: formValues.phoneNumber.trim(),
+        roleId: formValues.roleId,
+        updated_by: 0, // Default value
+        created_by: 0, // Default value
+        userPropertyDetails: {
+          propertyID: formValues.propertyID,
+          noOfShares: '', // Default value
+          acquisitionDate: new Date().toISOString(), // Default to current date
+        },
+      }
+
+      try {
+        await dispatch(registerUser(payload)).unwrap()
+        setSnackbarMessage('Registration successful')
+        setSnackbarSeverity('success')
+        setShowSnackbar(true)
+        // Clear the form fields
+        setFormValues({
+          firstName: '',
+          lastName: '',
+          email: '',
+          addressLine1: '',
+          phoneNumber: '',
+          roleId: 0,
+          propertyID: 0,
+        })
+        // Close the dialog after a short delay to ensure the snackbar is displayed
+        setTimeout(() => handleClose(), 1000)
+      } catch (error) {
+        console.error('Registration Error:', error)
+        setSnackbarMessage('Registration failed. Please try again.')
+        setSnackbarSeverity('error')
+        setShowSnackbar(true)
+      }
+    } else {
+      setSnackbarMessage('Please correct the errors')
+      setSnackbarSeverity('error')
+      setShowSnackbar(true)
+    }
   }
 
   const theme = createTheme({
@@ -46,6 +171,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
   return (
     <ThemeProvider theme={theme}>
       <Dialog
+        className="DialogRegister"
         open={open}
         onClose={handleClose}
         PaperProps={{
@@ -53,7 +179,13 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
           onSubmit: handleSubmit,
         }}
       >
-        <DialogTitle>
+        <DialogTitle
+          sx={{
+            background:
+              'linear-gradient(68deg, rgb(30, 134, 144) 0%, rgba(44,157,167,1) 35%, rgb(47, 158, 168) 100%)',
+            color: 'white',
+          }}
+        >
           Create a New Account
           <IconButton
             aria-label="close"
@@ -65,10 +197,10 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
               color: (theme) => theme.palette.grey[500],
             }}
           >
-            <CloseIcon />
+            <CloseIcon sx={{ color: 'white' }} />
           </IconButton>
         </DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{ marginTop: '10px' }}>
           <TextField
             autoFocus
             required
@@ -78,10 +210,10 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             label="First Name"
             type="text"
             fullWidth
-            value={formik.values.firstName}
-            onChange={formik.handleChange}
-            error={formik.touched.firstName && Boolean(formik.errors.firstName)}
-            helperText={formik.touched.firstName && formik.errors.firstName}
+            value={formValues.firstName}
+            onChange={handleTextFieldChange}
+            error={Boolean(errors.firstName)}
+            helperText={errors.firstName}
           />
           <TextField
             required
@@ -91,10 +223,10 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             label="Last Name"
             type="text"
             fullWidth
-            value={formik.values.lastName}
-            onChange={formik.handleChange}
-            error={formik.touched.lastName && Boolean(formik.errors.lastName)}
-            helperText={formik.touched.lastName && formik.errors.lastName}
+            value={formValues.lastName}
+            onChange={handleTextFieldChange}
+            error={Boolean(errors.lastName)}
+            helperText={errors.lastName}
           />
           <TextField
             required
@@ -104,49 +236,77 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             label="Email Address"
             type="email"
             fullWidth
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            error={formik.touched.email && Boolean(formik.errors.email)}
-            helperText={formik.touched.email && formik.errors.email}
+            value={formValues.email}
+            onChange={handleTextFieldChange}
+            error={Boolean(errors.email)}
+            helperText={errors.email}
           />
           <TextField
             required
             margin="dense"
-            id="phone"
-            name="phone"
+            id="addressLine1"
+            name="addressLine1"
+            label="Address Line 1"
+            type="text"
+            fullWidth
+            value={formValues.addressLine1}
+            onChange={handleTextFieldChange}
+            error={Boolean(errors.addressLine1)}
+            helperText={errors.addressLine1}
+          />
+          <TextField
+            margin="dense"
+            id="phoneNumber"
+            name="phoneNumber"
             label="Phone Number"
             type="text"
             fullWidth
-            value={formik.values.phone}
-            onChange={formik.handleChange}
-            error={formik.touched.phone && Boolean(formik.errors.phone)}
-            helperText={formik.touched.phone && formik.errors.phone}
+            value={formValues.phoneNumber}
+            onChange={handleTextFieldChange}
+            error={Boolean(errors.phoneNumber)}
+            helperText={errors.phoneNumber}
           />
           <FormControl fullWidth sx={{ marginTop: 3 }}>
-            <InputLabel id="role-label">Role</InputLabel>
+            <InputLabel id="roleId-label">Role</InputLabel>
             <Select
-              labelId="role-label"
-              id="role"
-              name="role"
-              value={formik.values.role}
-              onChange={formik.handleChange}
+              labelId="roleId-label"
+              id="roleId"
+              name="roleId"
+              value={formValues.roleId}
+              onChange={handleSelectChange}
               label="Role"
             >
-              <MenuItem value="Admin">Admin</MenuItem>
-              <MenuItem value="User">User</MenuItem>
+              <MenuItem value={1}>Admin</MenuItem>
+              <MenuItem value={2}>User</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl fullWidth sx={{ marginTop: 3 }}>
+            <InputLabel id="propertyID-label">Property</InputLabel>
+            <Select
+              labelId="propertyID-label"
+              id="propertyID"
+              name="propertyID"
+              value={formValues.propertyID}
+              onChange={handleSelectChange}
+              label="Property"
+            >
+              <MenuItem value={1}>House</MenuItem>
+              <MenuItem value={2}>Apartment</MenuItem>
+              <MenuItem value={3}>Condo</MenuItem>
             </Select>
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Register</Button>
+          <Button onClick={handleClose} className="RegisterCancel">
+            Cancel
+          </Button>
+          <Button type="submit" className="RegisterSubmit">
+            Register
+          </Button>
         </DialogActions>
         <CustomizedSnackbars
-          open={showSnackbar && openSnackbar}
-          handleClose={() => {
-            handleSnackbarClose()
-            setShowSnackbar(false)
-          }}
+          open={showSnackbar}
+          handleClose={() => setShowSnackbar(false)}
           message={snackbarMessage}
           severity={snackbarSeverity}
         />
