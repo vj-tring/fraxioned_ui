@@ -6,7 +6,7 @@ import { ApiUrl } from '../config'
 import { IoMdClose } from 'react-icons/io'
 
 interface ResetPasswordProps {
-  onClose: () => void;
+  onClose: () => void
 }
 
 const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
@@ -21,7 +21,6 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [apiError, setApiError] = useState<string | null>(null)
   const navigate = useNavigate()
-
 
   useEffect(() => {
     const userData = localStorage.getItem('userData')
@@ -83,7 +82,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
 
   const handleClose = () => {
     onClose()
-    navigate('/dashboard')  // Navigate to dashboard after closing
+    navigate('/dashboard') // Navigate to dashboard after closing
   }
 
   const handleConfirmPasswordChange = (
@@ -97,7 +96,11 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
   return (
     <div className={styles.modalContent}>
       <div className={styles.closeIconContainer}>
-        <IoMdClose data-testid="close-icon" className={styles.closeIcon} onClick={handleClose} />
+        <IoMdClose
+          data-testid="close-icon"
+          className={styles.closeIcon}
+          onClick={handleClose}
+        />
       </div>
       {successMessage && (
         <div className={styles.successMessage}>{successMessage}</div>
@@ -111,7 +114,9 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
         )}
         <div className={styles.inputGroup}>
           {oldPasswordError && (
-            <div className={styles.errorMessage}>Please enter your old password</div>
+            <div className={styles.errorMessage}>
+              Please enter your old password
+            </div>
           )}
           <input
             id="oldPassword"
@@ -124,7 +129,9 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
         </div>
         <div className={styles.inputGroup}>
           {newPasswordError && (
-            <div className={styles.errorMessage}>Please enter a new password</div>
+            <div className={styles.errorMessage}>
+              Please enter a new password
+            </div>
           )}
           <input
             id="newPassword"
@@ -137,7 +144,9 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
         </div>
         <div className={styles.inputGroup}>
           {confirmPasswordError && (
-            <div className={styles.errorMessage}>Please confirm your new password</div>
+            <div className={styles.errorMessage}>
+              Please confirm your new password
+            </div>
           )}
           <input
             id="confirmPassword"
@@ -153,7 +162,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
         </button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default ResetPassword;
+export default ResetPassword

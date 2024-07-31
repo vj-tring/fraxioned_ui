@@ -49,8 +49,15 @@ const App: FC = () => {
           <Route path="/booking" element={<Booking />} />
           <Route
             path="/reset-password"
-            element={<ResetPassword onClose={() => {/* Handle navigation */ }} />}
-          />          <Route path="/ResponsiveAppBar" element={<ResponsiveAppBar />} />
+            element={
+              <ResetPassword
+                onClose={() => {
+                  /* Handle navigation */
+                }}
+              />
+            }
+          />{' '}
+          <Route path="/ResponsiveAppBar" element={<ResponsiveAppBar />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/menu" element={<AccountMenu />} />
           <Route path="/calendar" element={<Calendar />} />
@@ -62,7 +69,6 @@ const App: FC = () => {
           />
           {/* Use PrivateRoute for all other routes that need to be protected */}
           {/* <Route path="/*" element={<PrivateRoute element={Dashboard} />} /> */}
-
           <Route path="/multiselect" element={<MultipleSelect />} />
           <Route path="/basicselect" element={<BasicSelect />} />
           {/* <Route path="/RegisterForm" element={<FormDialog />} /> */}
