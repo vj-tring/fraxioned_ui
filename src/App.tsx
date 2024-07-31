@@ -16,14 +16,14 @@ import Contact from './Components/ContactUs/Contact'
 import CustomizedAccordions from './Components/CustomizedAccordions/CustomizedAccordions'
 import { Provider } from 'react-redux'
 import store from '../src/Redux/store/index'
+
 interface PrivateRouteProps {
   element: React.ComponentType
 }
 
 const PrivateRoute: FC<PrivateRouteProps> = ({ element: Element }) => {
-  const token = localStorage.getItem('accessToken')
-
-  return token ? <Element /> : <Navigate to="/login" />
+  const token = localStorage.getItem('token')
+  return token ? <Element /> : <Navigate to="/dashboard" />
 }
 
 const App: FC = () => {
@@ -38,11 +38,15 @@ const App: FC = () => {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/booking" element={<Booking />} />
+
           <Route path="/faq" element={<CustomizedAccordions />} />
-          <Route path="/ResponsiveAppBar" element={<ResponsiveAppBar />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route
-            path="/dashboard"
+            path="/dashboard/*"
+            element={<PrivateRoute element={Dashboard} />}
+          />
+          <Route
+            path="/dashboard/*"
             element={<PrivateRoute element={Dashboard} />}
           />
         </Routes>
