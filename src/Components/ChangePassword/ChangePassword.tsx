@@ -19,12 +19,13 @@ const Change: React.FC = () => {
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search)
-    const token = searchParams.get('token')
+    const token = searchParams.get('resetToken')
     if (token) {
       setResetToken(token)
+      console.log(token)
     } else {
       setGeneralError(
-        'Invalid reset link. Please request a new passwowrd reset link.'
+        'Invalid reset link. Please request a new password reset link.'
       )
     }
   }, [location])
@@ -51,17 +52,20 @@ const Change: React.FC = () => {
 
       try {
         const response = await axios.post(
-          `${ApiUrl}/authentication/recover/password`,
+          `${ApiUrl}/authentication/recoverPassword`,
           {
-            resetToken,
             newPassword,
+          },
+          {
+            headers: {
+              resetToken: resetToken,
+            },
           }
         )
-
         console.log('Password change successful:', response.data)
         navigate('/login')
       } catch (error) {
-        // console.error('Error changing password:', error);
+        console.error('Error changing password:', error)
         setGeneralError('Failed to change password. Please try again.')
       } finally {
         setIsLoading(false)
