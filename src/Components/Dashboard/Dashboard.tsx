@@ -20,7 +20,7 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     if (!isAuthenticated()) {
       console.log('Is authenticated:', isAuthenticated())
-      navigate('/login')
+      navigate('/dashboard')
     } else {
       const storedUserData = localStorage.getItem('userData')
       if (storedUserData) {
