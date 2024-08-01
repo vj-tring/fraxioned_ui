@@ -1,17 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import Dropdown from 'react-bootstrap/Dropdown'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import useNavbarHandler from './NavbarFunction'
 import Avatar from '@mui/material/Avatar'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import LogoutIcon from '@mui/icons-material/Logout'
+import useNavbarHandler from './NavbarFunction'
 import InviteModal from './SentInviteModal'
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal'
 import ResetPasswordModal from './ResetPasswordModal'
 import FormDialog from '../RegisterFormPopUp/RegisterForm'
+
 import '../Navbar/Navbar.css'
 
 interface CustomNavbarProps {
@@ -49,6 +49,19 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
 
   const [open, setOpen] = useState(false)
   const [openNewAccountDialog, setOpenNewAccountDialog] = useState(false)
+  const [storedName, setStoredName] = useState('')
+
+  useEffect(() => {
+    // Retrieve userData from localStorage
+    const userDataString = localStorage.getItem('userData')
+    const userData = userDataString ? JSON.parse(userDataString) : null
+    // Access the firstName and lastName
+    const firstName = userData.firstName
+    const lastName = userData.lastName
+
+    // Set the first name and last name to state variables
+    setStoredName(`${firstName} ${lastName}`)
+  }, [])
 
   const handleToggle = () => {
     setOpen(!open)
@@ -99,7 +112,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               className="username-dropdown-toggle"
             >
               <h6 className="username ">
-                {userName ? userName : 'siva@tringapps.com'}
+                {storedName ? storedName : 'Default Name'}
               </h6>
               <Avatar
                 sx={{
@@ -121,8 +134,8 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                       marginLeft: 3,
                     }}
                   />
-                ) : userName ? (
-                  userName.charAt(0).toUpperCase()
+                ) : storedName ? (
+                  storedName.charAt(0).toUpperCase()
                 ) : (
                   'M'
                 )}
@@ -150,6 +163,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                 <ListItemIcon>
                   <PersonAddIcon fontSize="small" />
                 </ListItemIcon>
+
                 <span className="profile1">Add another account</span>
               </Dropdown.Item>
               <Dropdown.Item onClick={handleShowLogoutModal}>

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { logout } from '../../Api/Logout'
+// import { logout } from '../../Api/Logout'
 
 function useNavbarHandler() {
   const [showInviteModal, setShowInviteModal] = useState(false)
@@ -23,20 +23,10 @@ function useNavbarHandler() {
   const handleCloseResetPasswordModal = () => setShowResetPasswordModal(false)
 
   const handleLogout = async () => {
-    try {
-      const response = await logout()
-
-      if (response.status === 201) {
-        console.log('User logged out successfully')
-        handleCloseLogoutModal()
-        localStorage.clear()
-        navigate('/login')
-      } else {
-        console.error('Error logging out:', response.status)
-      }
-    } catch (error) {
-      console.error('Error logging out:', error)
-    }
+    console.log('User logged out successfully')
+    handleCloseLogoutModal()
+    localStorage.clear()
+    navigate('/login')
   }
 
   return {
