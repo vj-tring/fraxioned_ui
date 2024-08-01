@@ -41,6 +41,7 @@ const Login: React.FC = () => {
           password,
         })
 
+<<<<<<< Updated upstream
         const { user, session } = response.data
         localStorage.setItem(
           'userData',
@@ -51,6 +52,31 @@ const Login: React.FC = () => {
         localStorage.setItem('token', session.token)
         localStorage.setItem('expiredAt', session.expires_at)
         navigate('/dashboard')
+=======
+        if(response.data.message === ''){
+          const { user, session } = response.data
+          localStorage.setItem(
+            'userData',
+            JSON.stringify({
+              ...user,
+            })
+          )
+          localStorage.setItem('token', session.token)
+          localStorage.setItem('expiredAt', session.expires_at)
+          setSnackbarMessage('Login successful')
+          setSnackbarSeverity('success')
+          setShowSnackbar(true)
+          setTimeout(() => navigate('/dashboard'), 1000)
+        }
+        else {
+          setSnackbarSeverity('error')
+          setSnackbarMessage(response.data.message);
+          setShowSnackbar(true)
+
+        }
+
+        
+>>>>>>> Stashed changes
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
           setApiError(error.response.data.message || 'Login failed')
