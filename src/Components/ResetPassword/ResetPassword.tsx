@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import styles from './ResetPassword.module.css'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { ApiUrl } from '../config'
+import { IoMdClose } from 'react-icons/io'
 
-const ResetPassword: React.FC = () => {
+interface ResetPasswordProps {
+  onClose: () => void
+}
+
+const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
   const [oldPassword, setOldPassword] = useState('')
   const [oldPasswordError, setOldPasswordError] = useState(false)
   const [newPassword, setNewPassword] = useState('')
@@ -14,6 +20,7 @@ const ResetPassword: React.FC = () => {
   const [userId, setUserId] = useState<number | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [apiError, setApiError] = useState<string | null>(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const userData = localStorage.getItem('userData')
@@ -73,6 +80,11 @@ const ResetPassword: React.FC = () => {
     setPasswordMismatch(false)
   }
 
+  const handleClose = () => {
+    onClose()
+    navigate('/dashboard') // Navigate to dashboard after closing
+  }
+
   const handleConfirmPasswordChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -83,6 +95,13 @@ const ResetPassword: React.FC = () => {
 
   return (
     <div className={styles.modalContent}>
+      <div className={styles.closeIconContainer}>
+        <IoMdClose
+          data-testid="close-icon"
+          className={styles.closeIcon}
+          onClick={handleClose}
+        />
+      </div>
       {successMessage && (
         <div className={styles.successMessage}>{successMessage}</div>
       )}

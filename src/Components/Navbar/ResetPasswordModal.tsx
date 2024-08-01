@@ -13,11 +13,8 @@ const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
 }) => {
   return (
     <Modal show={show} onHide={onHide} centered>
-      <Modal.Header closeButton>
-        <Modal.Title>Reset Password</Modal.Title>
-      </Modal.Header>
       <Modal.Body>
-        <ResetPassword />
+        <ResetPassword onClose={onHide} />
       </Modal.Body>
     </Modal>
   )

@@ -3,25 +3,25 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import ResetPassword from './ResetPassword'
 import '@testing-library/jest-dom'
 import axios from 'axios'
+import { BrowserRouter } from 'react-router-dom'
 
 jest.mock('../Login/fraxioned.png', () => 'logo')
-
-// Mock the axios module
 jest.mock('axios')
-
-//APiurl mock
-jest.mock('../../Components/config', () => ({
+jest.mock('../config', () => ({
   ApiUrl: 'http://mock-api-url.com',
 }))
 
-// Reset the mocks test before each test
-beforeEach(() => {
-  jest.clearAllMocks()
-})
-
 const mockedAxios = axios as jest.Mocked<typeof axios>
+const mockNavigate = jest.fn()
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}))
 
 describe('ResetPassword Component', () => {
+  const mockOnClose = jest.fn()
+
   beforeEach(() => {
     localStorage.clear()
     localStorage.setItem('userData', JSON.stringify({ id: 1 }))
@@ -31,8 +31,15 @@ describe('ResetPassword Component', () => {
     jest.clearAllMocks()
   })
 
+  const renderComponent = () =>
+    render(
+      <BrowserRouter>
+        <ResetPassword onClose={mockOnClose} />
+      </BrowserRouter>
+    )
+
   test('renders ResetPassword component', () => {
-    render(<ResetPassword />)
+    renderComponent()
 
     expect(screen.getByPlaceholderText('Old Password')).toBeInTheDocument()
     expect(screen.getByPlaceholderText('New Password')).toBeInTheDocument()
@@ -43,7 +50,7 @@ describe('ResetPassword Component', () => {
   })
 
   test('displays error messages for empty fields', async () => {
-    render(<ResetPassword />)
+    renderComponent()
 
     fireEvent.click(screen.getByRole('button', { name: /Submit/i }))
 
@@ -55,7 +62,7 @@ describe('ResetPassword Component', () => {
   })
 
   test('displays error message for password mismatch', async () => {
-    render(<ResetPassword />)
+    renderComponent()
 
     fireEvent.change(screen.getByPlaceholderText('Old Password'), {
       target: { value: 'oldpass' },
@@ -77,7 +84,7 @@ describe('ResetPassword Component', () => {
   test('calls API and displays success message on successful password reset', async () => {
     mockedAxios.post.mockResolvedValueOnce({ data: {} })
 
-    render(<ResetPassword />)
+    renderComponent()
 
     fireEvent.change(screen.getByPlaceholderText('Old Password'), {
       target: { value: 'oldpass' },
@@ -107,19 +114,12 @@ describe('ResetPassword Component', () => {
     )
   })
 
-  test('displays API error message on failed password reset', async () => {
-    render(<ResetPassword />)
+  test('calls onClose when close icon is clicked', () => {
+    renderComponent()
 
-    fireEvent.change(screen.getByPlaceholderText('Old Password'), {
-      target: { value: 'oldpass' },
-    })
-    fireEvent.change(screen.getByPlaceholderText('New Password'), {
-      target: { value: 'newpass' },
-    })
-    fireEvent.change(screen.getByPlaceholderText('Confirm New Password'), {
-      target: { value: 'newpass' },
-    })
+    fireEvent.click(screen.getByTestId('close-icon'))
 
-    fireEvent.click(screen.getByRole('button', { name: /Submit/i }))
+    expect(mockOnClose).toHaveBeenCalled()
+    expect(mockNavigate).toHaveBeenCalledWith('/dashboard')
   })
 })

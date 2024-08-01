@@ -26,7 +26,7 @@ function useNavbarHandler() {
     try {
       const response = await logout()
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         console.log('User logged out successfully')
         handleCloseLogoutModal()
         localStorage.clear()
