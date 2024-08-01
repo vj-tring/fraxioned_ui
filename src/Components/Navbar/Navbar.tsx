@@ -43,7 +43,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
     handleCloseLogoutModal,
     handleOpenResetPasswordModal,
     handleCloseResetPasswordModal,
-    handleShowUserDetailsModal,
+    // handleShowUserDetailsModal,
     handleLogout,
   } = useNavbarHandler()
 
