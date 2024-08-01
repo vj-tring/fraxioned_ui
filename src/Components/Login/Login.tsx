@@ -5,7 +5,7 @@ import logo from './fraxioned.png'
 import axios from 'axios'
 import background from './background.jpg'
 import { ApiUrl } from '../config'
-import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars' // Import the Snackbar component
+import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars'
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('')
@@ -43,7 +43,7 @@ const Login: React.FC = () => {
           password,
         })
 
-        if(response.data.message === ''){
+        if(response.data.message === 'Login successful'){
           const { user, session } = response.data
           localStorage.setItem(
             'userData',
@@ -53,17 +53,15 @@ const Login: React.FC = () => {
           )
           localStorage.setItem('token', session.token)
           localStorage.setItem('expiredAt', session.expires_at)
-          setSnackbarMessage('Login successful')
           setSnackbarSeverity('success')
+          setSnackbarMessage('Login successful')
           setShowSnackbar(true)
           setTimeout(() => navigate('/dashboard'), 1000)
         }
         else {
           setSnackbarSeverity('error')
-
-          setSnackbarMessage(response.data.message);
           setShowSnackbar(true)
-
+          setSnackbarMessage(response.data.message);
         }
 
         
