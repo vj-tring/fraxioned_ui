@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Dialog from '@mui/material/Dialog'
@@ -18,7 +18,8 @@ import { SelectChangeEvent } from '@mui/material/Select'
 import { useDispatch } from 'react-redux'
 import { registerUser } from '../../Redux/slice/auth/registerSlice'
 import { AppDispatch } from '../../Redux/store'
-
+import axios from 'axios' // Add axios or your preferred HTTP client
+import { ApiUrl } from 'Components/config'
 interface FormDialogProps {
   open: boolean
   handleClose: () => void
@@ -35,8 +36,9 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
     propertyID: 0,
   })
 
-  const dispatch = useDispatch<AppDispatch>()
-
+  // States for dynamically fetched data
+  const [roles, setRoles] = useState<[]>([])
+  const [properties, setProperties] = useState<[]>([])
   const [errors, setErrors] = useState({
     firstName: '',
     lastName: '',
@@ -52,6 +54,38 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>(
     'success'
   )
+
+  const dispatch = useDispatch<AppDispatch>()
+
+  useEffect(() => {
+    // Fetch roles from API
+    const fetchProperties = async () => {
+      try {
+        const response = await axios.get(`${ApiUrl}/v1/properties`)
+        const property = response.data.map((property: any) => {
+          return property
+        })
+        setProperties(property)
+      } catch (error) {
+        console.error('Failed to fetch roles', error)
+      }
+    }
+
+    const fetchRoles = async () => {
+      try {
+        const response = await axios.get(`${ApiUrl}/roles`)
+        const roles = response.data.roles.map((roles: any) => {
+          return roles
+        })
+        setRoles(roles)
+      } catch (error) {
+        console.error('Failed to fetch properties', error)
+      }
+    }
+
+    fetchRoles()
+    fetchProperties()
+  }, [])
 
   const handleTextFieldChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -133,22 +167,26 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
       }
 
       try {
-        await dispatch(registerUser(payload)).unwrap()
-        setSnackbarMessage('Registration successful')
-        setSnackbarSeverity('success')
-        setShowSnackbar(true)
-        // Clear the form fields
-        setFormValues({
-          firstName: '',
-          lastName: '',
-          email: '',
-          addressLine1: '',
-          phoneNumber: '',
-          roleId: 0,
-          propertyID: 0,
-        })
-        // Close the dialog after a short delay to ensure the snackbar is displayed
-        setTimeout(() => handleClose(), 1000)
+        const register = await dispatch(registerUser(payload)).unwrap()
+        if (register.message === 'Invite sent successfully') {
+          setSnackbarMessage(register.message)
+          setSnackbarSeverity('success')
+          setShowSnackbar(true)
+          setFormValues({
+            firstName: '',
+            lastName: '',
+            email: '',
+            addressLine1: '',
+            phoneNumber: '',
+            roleId: 0,
+            propertyID: 0,
+          })
+          setTimeout(() => handleClose(), 1000)
+        } else {
+          setSnackbarMessage(register.message)
+          setSnackbarSeverity('error')
+          setShowSnackbar(true)
+        }
       } catch (error) {
         console.error('Registration Error:', error)
         setSnackbarMessage('Registration failed. Please try again.')
@@ -276,8 +314,11 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
               onChange={handleSelectChange}
               label="Role"
             >
-              <MenuItem value={1}>Admin</MenuItem>
-              <MenuItem value={2}>User</MenuItem>
+              {roles.map((role: any) => (
+                <MenuItem key={role.id} value={role.id}>
+                  {role.roleName}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
           <FormControl fullWidth sx={{ marginTop: 3 }}>
@@ -290,9 +331,11 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
               onChange={handleSelectChange}
               label="Property"
             >
-              <MenuItem value={1}>House</MenuItem>
-              <MenuItem value={2}>Apartment</MenuItem>
-              <MenuItem value={3}>Condo</MenuItem>
+              {properties.map((property: any) => (
+                <MenuItem key={property.id} value={property.id}>
+                  {property.propertyName}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </DialogContent>
