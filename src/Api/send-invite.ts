@@ -5,7 +5,7 @@ import { SendInvite } from '../Components/Types/Send-invite'
 export const sendInvite = async (payload: SendInvite) => {
   try {
     const response = await axios.post(
-      `${ApiUrl}/authentication/invite`,
+      `${ApiUrl}/v1/authentication/invite`,
       payload
     )
     return response
