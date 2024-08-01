@@ -72,8 +72,8 @@
   margin-bottom: 20px;
 }
 
-input[type='text'],
-input[type='password'] {
+.inputGroup input[type='text'],
+.inputGroup input[type='password'] {
   width: 100%;
   padding: 12px;
   border: 1px solid #e1e1e1;
@@ -82,8 +82,8 @@ input[type='password'] {
   transition: border-color 0.3s ease;
 }
 
-input[type='text']:focus,
-input[type='password']:focus {
+.inputGroup input[type='text']:focus,
+.inputGroup input[type='password']:focus {
   border-color: #e8aa6c;
   outline: none;
 }

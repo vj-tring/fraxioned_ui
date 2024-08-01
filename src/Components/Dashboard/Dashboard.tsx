@@ -20,7 +20,7 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (isAuthenticated()) {
+    if (!isAuthenticated()) {
       navigate('/login')
     }
   }, [navigate])
