@@ -13,6 +13,9 @@ jest.mock('react-router-dom', () => ({
   }),
 }))
 
+jest.mock('../Login/background.jpg', () => 'background')
+
+
 jest.mock('../Login/fraxioned.png', () => 'logo')
 jest.mock('axios')
 jest.mock('../config', () => ({

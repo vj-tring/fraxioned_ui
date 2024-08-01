@@ -11,6 +11,7 @@ jest.mock('react-router-dom', () => ({
 }))
 
 //image mock
+jest.mock('../Login/background.jpg', () => 'background')
 jest.mock('../Login/fraxioned.png', () => 'logo')
 
 // Mock the axios module
@@ -95,7 +96,7 @@ describe('ForgetPassword Component', () => {
   })
 
   test('displays loading state while submitting', async () => {
-    mockedAxios.post.mockImplementationOnce(() => new Promise(() => {}))
+    mockedAxios.post.mockImplementationOnce(() => new Promise(() => { }))
 
     render(
       <MemoryRouter>
