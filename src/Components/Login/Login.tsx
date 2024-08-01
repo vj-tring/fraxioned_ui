@@ -43,7 +43,7 @@ const Login: React.FC = () => {
           password,
         })
 
-        if(response.data.message === 'Login successful'){
+        if (response.data.message === 'Login successful') {
           const { user, session } = response.data
           localStorage.setItem(
             'userData',
@@ -64,7 +64,7 @@ const Login: React.FC = () => {
           setSnackbarMessage(response.data.message);
         }
 
-        
+
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
           setSnackbarMessage(error.response.data.message || 'Login failed')
