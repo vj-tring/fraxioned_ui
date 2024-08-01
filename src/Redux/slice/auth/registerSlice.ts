@@ -30,7 +30,7 @@ export const registerUser = createAsyncThunk(
   async (userData: any, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `${ApiUrl}/v1/authentication/invite`,
+        `${ApiUrl}/authentication/invite`,
         userData
       )
       return response.data

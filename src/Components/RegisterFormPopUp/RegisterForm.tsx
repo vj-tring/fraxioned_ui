@@ -73,7 +73,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
 
     const fetchRoles = async () => {
       try {
-        const response = await axios.get(`${ApiUrl}/v1/roles`)
+        const response = await axios.get(`${ApiUrl}/roles`)
         const roles = response.data.roles.map((roles: any) => {
           return roles
         })

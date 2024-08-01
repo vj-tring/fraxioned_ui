@@ -30,7 +30,7 @@ const ForgetPassword: React.FC = () => {
       setIsLoading(true)
       try {
         const response = await axios.post(
-          `${ApiUrl}/v1/authentication/forgotPassword`,
+          `${ApiUrl}/authentication/forgotPassword`,
           { email }
         )
         console.log('Password reset requested for:', email)
