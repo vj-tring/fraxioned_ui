@@ -5,13 +5,16 @@ import logo from './fraxioned.png'
 import axios from 'axios'
 import background from './background.jpg'
 import { ApiUrl } from '../config'
+import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars' // Import the Snackbar component
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState(false)
-  const [apiError, setApiError] = useState('')
+  const [showSnackbar, setShowSnackbar] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
   const navigate = useNavigate()
 
   const validateEmail = (email: string) => {
@@ -34,25 +37,12 @@ const Login: React.FC = () => {
     } else {
       setEmailError('')
       setPasswordError(false)
-      setApiError('')
       try {
         const response = await axios.post(`${ApiUrl}/authentication/login`, {
           email,
           password,
         })
 
-<<<<<<< Updated upstream
-        const { user, session } = response.data
-        localStorage.setItem(
-          'userData',
-          JSON.stringify({
-            ...user,
-          })
-        )
-        localStorage.setItem('token', session.token)
-        localStorage.setItem('expiredAt', session.expires_at)
-        navigate('/dashboard')
-=======
         if(response.data.message === ''){
           const { user, session } = response.data
           localStorage.setItem(
@@ -70,19 +60,21 @@ const Login: React.FC = () => {
         }
         else {
           setSnackbarSeverity('error')
+
           setSnackbarMessage(response.data.message);
           setShowSnackbar(true)
 
         }
 
         
->>>>>>> Stashed changes
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
-          setApiError(error.response.data.message || 'Login failed')
+          setSnackbarMessage(error.response.data.message || 'Login failed')
         } else {
-          setApiError('An error occurred. Please try again.')
+          setSnackbarMessage('An error occurred. Please try again.')
         }
+        setSnackbarSeverity('error')
+        setShowSnackbar(true)
       }
     }
   }
@@ -103,6 +95,10 @@ const Login: React.FC = () => {
     setPasswordError(false)
   }
 
+  const handleSnackbarClose = () => {
+    setShowSnackbar(false)
+  }
+
   return (
     <div
       className={styles.outerContainer}
@@ -115,12 +111,9 @@ const Login: React.FC = () => {
           <p className={styles.loginSubtext}>
             Please enter your details to sign in
           </p>
-          {apiError && <div className={styles.errorMessage}>{apiError}</div>}
+          {emailError && <div className={styles.errorMessage}>{emailError}</div>}
           <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.inputGroup}>
-              {emailError && (
-                <div className={styles.errorMessage}>{emailError}</div>
-              )}
               <input
                 type="text"
                 placeholder="Email"
@@ -160,6 +153,13 @@ const Login: React.FC = () => {
           </form>
         </div>
       </div>
+
+      <CustomizedSnackbars
+        open={showSnackbar}
+        handleClose={handleSnackbarClose}
+        message={snackbarMessage}
+        severity={snackbarSeverity}
+      />
     </div>
   )
 }
