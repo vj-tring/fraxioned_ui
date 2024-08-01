@@ -148,11 +148,11 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                   <Avatar /> <span className="profile">Profile</span>
                 </ListItemIcon>
               </Dropdown.Item>
-              <Dropdown.Item onClick={handleOpenInviteModal}>
+              {/* <Dropdown.Item onClick={handleOpenInviteModal}>
                 <ListItemIcon>
                   <Avatar /> <span className="profile">Send Invite</span>
                 </ListItemIcon>
-              </Dropdown.Item>
+              </Dropdown.Item> */}
               <Dropdown.Item onClick={handleOpenResetPasswordModal}>
                 <ListItemIcon>
                   <Avatar /> <span className="profile">Reset Password</span>
