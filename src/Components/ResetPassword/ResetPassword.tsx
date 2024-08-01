@@ -19,6 +19,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
   const [passwordMismatch, setPasswordMismatch] = useState(false)
   const [userId, setUserId] = useState<number | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [errorMessage, setErrorMessagee] = useState<string | null>(null)
   const [apiError, setApiError] = useState<string | null>(null)
   const navigate = useNavigate()
 
@@ -55,10 +56,19 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
           }
         )
         console.log(response)
-        setSuccessMessage('Password reset successfully!')
-        setOldPassword('')
-        setNewPassword('')
-        setConfirmPassword('')
+
+        if(response.data.message === 'Password reset successfully'){
+          setSuccessMessage('Password reset successfully!')
+          setOldPassword('')
+          setNewPassword('')
+          setConfirmPassword('')
+          setTimeout(() => {
+          setSuccessMessage('');
+          },3000);
+        }
+        else {
+          setErrorMessagee(response.data.message || 'Password reset failed')
+        }       
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
           setApiError(error.response.data.message || 'Password reset failed')
@@ -104,6 +114,9 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
       </div>
       {successMessage && (
         <div className={styles.successMessage}>{successMessage}</div>
+      )}
+      {errorMessage && (
+        <div className={styles.errorMessage1}>{errorMessage}</div>
       )}
       <h2 className={styles.login}>Reset password</h2>
       <p className={styles.loginSubtext}>Set your new password here</p>
