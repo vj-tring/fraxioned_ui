@@ -6,17 +6,27 @@ import { Link } from 'react-router-dom'
 import { ApiUrl } from '../config'
 import logo from '../Login/fraxioned.png'
 import axios from 'axios'
+import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars'
 
 const ForgetPassword: React.FC = () => {
   const [email, setEmail] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'info' | 'warning' | 'error'>('info')
   const navigate = useNavigate()
 
   const validateEmail = (email: string) => {
-    const re =
-      /^[a-zA-Z0-9]+([.@][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/
+    const re = /^[a-zA-Z0-9]+([.@][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/
     return re.test(String(email).toLowerCase())
+  }
+
+  const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    setSnackbarOpen(false)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,12 +43,34 @@ const ForgetPassword: React.FC = () => {
           `${ApiUrl}/authentication/forgotPassword`,
           { email }
         )
-        console.log('Password reset requested for:', email)
-        console.log('Server response:', response.data)
-        navigate('/')
+        if(response.data.message=== 'Password reset email sent successfully'){
+          console.log('Password reset requested for:', email)
+          console.log('Server response:', response.data)
+          setSnackbarMessage('Password reset link sent successfully!')
+          setSnackbarSeverity('success')
+          setSnackbarOpen(true)
+          setTimeout(() => navigate('/'), 3000) // Navigate after 3 seconds
+        }
+        else{
+          setSnackbarMessage( response.data.message||'Password reset failed')
+          setSnackbarOpen(true)
+          setSnackbarSeverity('error')
+
+        }
+      
       } catch (error) {
         console.error('Error requesting password reset:', error)
-        setError('Failed to request password reset. Please try again.')
+        if (axios.isAxiosError(error) && error.response) {
+          if (error.response.status === 404 && error.response.data.message === "The account associated with this user was not found") {
+            setSnackbarMessage('User unauthorized')
+          } else {
+            setSnackbarMessage(error.response.data.message || 'Failed to request password reset. Please try again.')
+          }
+        } else {
+          setSnackbarMessage('An error occurred. Please try again.')
+        }
+        setSnackbarSeverity('error')
+        setSnackbarOpen(true)
       } finally {
         setIsLoading(false)
       }
@@ -60,7 +92,8 @@ const ForgetPassword: React.FC = () => {
     <div
       className={styles.outerContainer}
       style={{ backgroundImage: `url(${background})` }}
-    >      <div className={styles.innerContainer}>
+    >
+      <div className={styles.innerContainer}>
         <img src={logo} alt="Fraxioned Logo" className={styles.logo} />
         <div className={styles.formWrapper}>
           <h2 className={styles.login}>Forget password</h2>
@@ -96,6 +129,12 @@ const ForgetPassword: React.FC = () => {
           </form>
         </div>
       </div>
+      <CustomizedSnackbars
+        open={snackbarOpen}
+        handleClose={handleSnackbarClose}
+        message={snackbarMessage}
+        severity={snackbarSeverity}
+      />
     </div>
   )
 }

@@ -114,7 +114,7 @@ const Change: React.FC = () => {
             {generalError && (
               <div className={styles.errorMessage}>{generalError}</div>
             )}
-            <div className={styles.inputGroup}>
+            <div className={styles.inputGroup3}>
               {newPasswordError && (
                 <div className={styles.errorMessage}>
                   Please enter a new password
@@ -128,7 +128,7 @@ const Change: React.FC = () => {
                 className={newPasswordError ? styles.errorInput : ''}
               />
             </div>
-            <div className={styles.inputGroup}>
+            <div className={styles.inputGroup3}>
               {confirmPasswordError && (
                 <div className={styles.errorMessage}>
                   Please confirm your new password
