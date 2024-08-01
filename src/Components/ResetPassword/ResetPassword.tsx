@@ -1,49 +1,50 @@
-import React, { useState, useEffect } from 'react'
-import styles from './ResetPassword.module.css'
-import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import { ApiUrl } from '../config'
-import { IoMdClose } from 'react-icons/io'
+import React, { useState, useEffect } from "react";
+import styles from "./ResetPassword.module.css";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { ApiUrl } from "../config";
+import { IoMdClose } from "react-icons/io";
 
 interface ResetPasswordProps {
-  onClose: () => void
+  onClose: () => void;
 }
 
 const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
-  const [oldPassword, setOldPassword] = useState('')
-  const [oldPasswordError, setOldPasswordError] = useState(false)
-  const [newPassword, setNewPassword] = useState('')
-  const [newPasswordError, setNewPasswordError] = useState(false)
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [confirmPasswordError, setConfirmPasswordError] = useState(false)
-  const [passwordMismatch, setPasswordMismatch] = useState(false)
-  const [userId, setUserId] = useState<number | null>(null)
-  const [successMessage, setSuccessMessage] = useState<string | null>(null)
-  const [apiError, setApiError] = useState<string | null>(null)
-  const navigate = useNavigate()
+  const [oldPassword, setOldPassword] = useState("");
+  const [oldPasswordError, setOldPasswordError] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [newPasswordError, setNewPasswordError] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState(false);
+  const [passwordMismatch, setPasswordMismatch] = useState(false);
+  const [userId, setUserId] = useState<number | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessagee] = useState<string | null>(null);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const userData = localStorage.getItem('userData')
+    const userData = localStorage.getItem("userData");
     if (userData) {
-      const user = JSON.parse(userData)
-      setUserId(user.id)
+      const user = JSON.parse(userData);
+      setUserId(user.id);
     }
-  }, [])
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setApiError(null)
+    e.preventDefault();
+    setApiError(null);
 
     if (!oldPassword.trim()) {
-      setOldPasswordError(true)
+      setOldPasswordError(true);
     } else if (!newPassword.trim()) {
-      setNewPasswordError(true)
+      setNewPasswordError(true);
     } else if (!confirmPassword.trim()) {
-      setConfirmPasswordError(true)
+      setConfirmPasswordError(true);
     } else if (newPassword !== confirmPassword) {
-      setPasswordMismatch(true)
+      setPasswordMismatch(true);
     } else if (userId === null) {
-      setApiError('User ID not found.')
+      setApiError("User ID not found.");
     } else {
       try {
         const response = await axios.post(
@@ -53,45 +54,59 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
             newPassword,
             userId,
           }
-        )
-        console.log(response)
-        setSuccessMessage('Password reset successfully!')
-        setOldPassword('')
-        setNewPassword('')
-        setConfirmPassword('')
-      } catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
-          setApiError(error.response.data.message || 'Password reset failed')
+        );
+        console.log(response);
+
+        if (response.data.message === "Password reset successfully") {
+          setSuccessMessage("Password reset successfully!");
+          setTimeout(() => {
+            setSuccessMessage("");
+            setOldPassword("");
+            setNewPassword("");
+            setConfirmPassword("");
+          }, 3000);
         } else {
-          setApiError('An error occurred. Please try again.')
+          setErrorMessagee(response.data.message || "Password reset failed");
+          setTimeout(() => {
+            setErrorMessagee("");
+          }, 2000);
+        }
+      } catch (error) {
+        setSuccessMessage("");
+        if (axios.isAxiosError(error) && error.response) {
+          setErrorMessagee(
+            error.response.data.message || "Password reset failed"
+          );
+        } else {
+          setErrorMessagee("An error occurred. Please try again.");
         }
       }
     }
-  }
+  };
 
   const handleOldPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setOldPassword(e.target.value)
-    setOldPasswordError(false)
-  }
+    setOldPassword(e.target.value);
+    setOldPasswordError(false);
+  };
 
   const handleNewPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewPassword(e.target.value)
-    setNewPasswordError(false)
-    setPasswordMismatch(false)
-  }
+    setNewPassword(e.target.value);
+    setNewPasswordError(false);
+    setPasswordMismatch(false);
+  };
 
   const handleClose = () => {
-    onClose()
-    navigate('/dashboard') // Navigate to dashboard after closing
-  }
+    onClose();
+    navigate("/dashboard"); // Navigate to dashboard after closing
+  };
 
   const handleConfirmPasswordChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setConfirmPassword(e.target.value)
-    setConfirmPasswordError(false)
-    setPasswordMismatch(false)
-  }
+    setConfirmPassword(e.target.value);
+    setConfirmPasswordError(false);
+    setPasswordMismatch(false);
+  };
 
   return (
     <div className={styles.modalContent}>
@@ -104,6 +119,9 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
       </div>
       {successMessage && (
         <div className={styles.successMessage}>{successMessage}</div>
+      )}
+      {errorMessage && (
+        <div className={styles.errorMessage1}>{errorMessage}</div>
       )}
       <h2 className={styles.login}>Reset password</h2>
       <p className={styles.loginSubtext}>Set your new password here</p>
@@ -124,7 +142,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
             placeholder="Old Password"
             value={oldPassword}
             onChange={handleOldPasswordChange}
-            className={oldPasswordError ? styles.errorInput : ''}
+            className={oldPasswordError ? styles.errorInput : ""}
           />
         </div>
         <div className={styles.inputGroup}>
@@ -139,7 +157,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
             placeholder="New Password"
             value={newPassword}
             onChange={handleNewPasswordChange}
-            className={newPasswordError ? styles.errorInput : ''}
+            className={newPasswordError ? styles.errorInput : ""}
           />
         </div>
         <div className={styles.inputGroup}>
@@ -154,7 +172,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
             placeholder="Confirm New Password"
             value={confirmPassword}
             onChange={handleConfirmPasswordChange}
-            className={confirmPasswordError ? styles.errorInput : ''}
+            className={confirmPasswordError ? styles.errorInput : ""}
           />
         </div>
         <button type="submit" className={styles.signInButton}>
@@ -162,7 +180,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default ResetPassword
+export default ResetPassword;
