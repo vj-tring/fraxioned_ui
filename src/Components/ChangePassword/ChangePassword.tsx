@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
 import styles from './ChangePassword.module.css'
+import background from '../Login/background.jpg'
 import logo from '../Login/fraxioned.png'
 import { ApiUrl } from '../config'
 
@@ -98,8 +99,10 @@ const Change: React.FC = () => {
   }
 
   return (
-    <div className={styles.outerContainer}>
-      <div className={styles.innerContainer}>
+    <div
+      className={styles.outerContainer}
+      style={{ backgroundImage: `url(${background})` }}
+    >      <div className={styles.innerContainer}>
         <img src={logo} alt="Fraxioned Logo" className={styles.logo} />
         <div className={styles.formWrapper}>
           <h2 className={styles.login}>Change password</h2>

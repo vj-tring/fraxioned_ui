@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import styles from './ForgotPassword.module.css'
 import { Link } from 'react-router-dom'
 import { ApiUrl } from '../config'
+import background from '../Login/background.jpg'
 import logo from '../Login/fraxioned.png'
 import axios from 'axios'
 
@@ -56,7 +57,10 @@ const ForgetPassword: React.FC = () => {
   }
 
   return (
-    <div className={styles.outerContainer}>
+    <div
+      className={styles.outerContainer}
+      style={{ backgroundImage: `url(${background})` }}
+    >
       <div className={styles.innerContainer}>
         <img src={logo} alt="Fraxioned Logo" className={styles.logo} />
         <div className={styles.formWrapper}>
