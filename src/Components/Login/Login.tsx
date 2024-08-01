@@ -36,7 +36,7 @@ const Login: React.FC = () => {
       setPasswordError(false)
       setApiError('')
       try {
-        const response = await axios.post(`${ApiUrl}/authentication/login`, {
+        const response = await axios.post(`${ApiUrl}/v1/authentication/login`, {
           email,
           password,
         })
