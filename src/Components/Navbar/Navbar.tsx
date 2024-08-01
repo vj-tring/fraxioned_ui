@@ -37,7 +37,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
     showInviteModal,
     showLogoutModal,
     showResetPasswordModal,
-    handleOpenInviteModal,
+    // handleOpenInviteModal,
     handleCloseInviteModal,
     handleShowLogoutModal,
     handleCloseLogoutModal,
