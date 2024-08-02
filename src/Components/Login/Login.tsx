@@ -5,6 +5,7 @@ import logo from './fraxioned.png'
 import axios from 'axios'
 import background from './background.jpg'
 import { ApiUrl } from '../config'
+import Loader from '../Loader/Loader'
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars'
 
 const Login: React.FC = () => {
@@ -14,6 +15,7 @@ const Login: React.FC = () => {
   const [passwordError, setPasswordError] = useState(false)
   const [showSnackbar, setShowSnackbar] = useState(false)
   const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
   const navigate = useNavigate()
 
@@ -37,6 +39,7 @@ const Login: React.FC = () => {
     } else {
       setEmailError('')
       setPasswordError(false)
+      setIsLoading(true)
       try {
         const response = await axios.post(`${ApiUrl}/authentication/login`, {
           email,
@@ -56,15 +59,18 @@ const Login: React.FC = () => {
           setSnackbarSeverity('success')
           setSnackbarMessage('Login successful')
           setShowSnackbar(true)
-          setTimeout(() => navigate('/dashboard'), 1000)
+          setIsLoading(true)
+          setTimeout(() => {
+            navigate('/dashboard')
+            setIsLoading(false)
+          }, 2000)
         }
         else {
           setSnackbarSeverity('error')
           setShowSnackbar(true)
           setSnackbarMessage(response.data.message);
+          setIsLoading(false)
         }
-
-
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
           setSnackbarMessage(error.response.data.message || 'Login failed')
@@ -73,6 +79,7 @@ const Login: React.FC = () => {
         }
         setSnackbarSeverity('error')
         setShowSnackbar(true)
+        setIsLoading(false)
       }
     }
   }
@@ -103,6 +110,7 @@ const Login: React.FC = () => {
       style={{ backgroundImage: `url(${background})` }}
     >
       <div className={styles.innerContainer}>
+        {isLoading && <div data-testid="loader"><Loader /></div>}
         <img src={logo} alt="Fraxioned Logo" className={styles.logo} />
         <div className={styles.formWrapper}>
           <h2 className={styles.login}>Login here</h2>
