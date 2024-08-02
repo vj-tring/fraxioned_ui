@@ -7,7 +7,6 @@ import Loader from '../Loader/Loader'
 import { IoMdClose } from "react-icons/io";
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars'
 
-
 interface ResetPasswordProps {
   onClose: () => void;
 }
@@ -16,17 +15,15 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
   const [oldPassword, setOldPassword] = useState("");
   const [oldPasswordError, setOldPasswordError] = useState(false);
   const [newPassword, setNewPassword] = useState("");
-  const [showSnackbar, setShowSnackbar] = useState(false)
+  const [showSnackbar, setShowSnackbar] = useState(false);
   const [newPasswordError, setNewPasswordError] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('')
+  const [snackbarMessage, setSnackbarMessage] = useState('');
   const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState(false);
   const [passwordMismatch, setPasswordMismatch] = useState(false);
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [userId, setUserId] = useState<number | null>(null);
-  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [errorMessage, setErrorMessagee] = useState<string | null>(null);
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
   const [apiError, setApiError] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -41,8 +38,6 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setApiError(null);
-    setErrorMessagee(null);
-    setSuccessMessage(null);
 
     if (!oldPassword.trim()) {
       setOldPasswordError(true);
@@ -67,35 +62,31 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
         );
 
         if (response.data.message === "Password reset successfully") {
-          setSnackbarSeverity('success')
-          setSnackbarMessage('Password reset successfully')
-          setShowSnackbar(true)
+          setSnackbarSeverity('success');
+          setSnackbarMessage('Password reset successfully');
+          setShowSnackbar(true);
           setTimeout(() => {
-            setSuccessMessage("");
             setOldPassword("");
             setNewPassword("");
             setConfirmPassword("");
-            setIsLoading(false);  // Stop loading after success
-            handleClose();  // Close the modal and navigate
+            setIsLoading(false);
+            handleClose();
           }, 3000);
         } else {
-          setSnackbarSeverity('error')
-          setShowSnackbar(true)
+          setSnackbarSeverity('error');
+          setShowSnackbar(true);
           setSnackbarMessage(response.data.message);
-          setIsLoading(false)
+          setIsLoading(false);
         }
       } catch (error) {
-        setSuccessMessage("");
         if (axios.isAxiosError(error) && error.response) {
-          setErrorMessagee(
-            error.response.data.message || "Password reset failed"
-          );
+          setSnackbarMessage(error.response.data.message || "Password reset failed");
         } else {
-          setErrorMessagee("An error occurred. Please try again.");
+          setSnackbarMessage("An error occurred. Please try again.");
         }
-        setSnackbarSeverity('error')
-        setShowSnackbar(true)
-        setIsLoading(false)
+        setSnackbarSeverity('error');
+        setShowSnackbar(true);
+        setIsLoading(false);
       }
     }
   };
@@ -113,20 +104,22 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
 
   const handleClose = () => {
     onClose();
-    setShowSnackbar(false)
-    setIsLoading(true)
+    setShowSnackbar(false);
+    setIsLoading(true);
     setTimeout(() => {
-      navigate('/dashboard')
-      setIsLoading(false)
-    }, 2000)
+      navigate('/dashboard');
+      setIsLoading(false);
+    }, 2000);
   };
 
-  const handleConfirmPasswordChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setConfirmPassword(e.target.value);
     setConfirmPasswordError(false);
     setPasswordMismatch(false);
+  };
+
+  const handleSnackbarClose = () => {
+    setShowSnackbar(false);
   };
 
   return (
@@ -139,12 +132,6 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
           onClick={handleClose}
         />
       </div>
-      {successMessage && (
-        <div className={styles.successMessage}>{successMessage}</div>
-      )}
-      {errorMessage && (
-        <div className={styles.errorMessage1}>{errorMessage}</div>
-      )}
       <h2 className={styles.login}>Reset password</h2>
       <p className={styles.loginSubtext}>Set your new password here</p>
       <form onSubmit={handleSubmit} className={styles.form}>
@@ -201,6 +188,12 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
           Submit
         </button>
       </form>
+      <CustomizedSnackbars
+        open={showSnackbar}
+        handleClose={handleSnackbarClose}
+        message={snackbarMessage}
+        severity={snackbarSeverity}
+      />
     </div>
   );
 };
