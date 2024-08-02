@@ -5,6 +5,7 @@ import background from '../Login/background.jpg'
 import { Link } from 'react-router-dom'
 import { ApiUrl } from '../config'
 import logo from '../Login/fraxioned.png'
+import Loader from '../Loader/Loader'
 import axios from 'axios'
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars'
 
@@ -43,21 +44,26 @@ const ForgetPassword: React.FC = () => {
           `${ApiUrl}/authentication/forgotPassword`,
           { email }
         )
-        if(response.data.message=== 'Password reset email sent successfully'){
+        if (response.data.message === 'Password reset email sent successfully') {
           console.log('Password reset requested for:', email)
           console.log('Server response:', response.data)
           setSnackbarMessage('Password reset link sent successfully!')
           setSnackbarSeverity('success')
           setSnackbarOpen(true)
-          setTimeout(() => navigate('/'), 3000) // Navigate after 3 seconds
+          setIsLoading(true)
+          setTimeout(() => {
+            navigate('/')
+            setIsLoading(false)
+          }, 2000)
         }
-        else{
-          setSnackbarMessage( response.data.message||'Password reset failed')
+        else {
+          setSnackbarMessage(response.data.message || 'Password reset failed')
           setSnackbarOpen(true)
+          setIsLoading(false)
           setSnackbarSeverity('error')
 
         }
-      
+
       } catch (error) {
         console.error('Error requesting password reset:', error)
         if (axios.isAxiosError(error) && error.response) {
@@ -94,6 +100,7 @@ const ForgetPassword: React.FC = () => {
       style={{ backgroundImage: `url(${background})` }}
     >
       <div className={styles.innerContainer}>
+        {isLoading && <Loader />}
         <img src={logo} alt="Fraxioned Logo" className={styles.logo} />
         <div className={styles.formWrapper}>
           <h2 className={styles.login}>Forget password</h2>

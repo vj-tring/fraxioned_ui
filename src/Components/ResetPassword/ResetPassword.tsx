@@ -3,7 +3,10 @@ import styles from "./ResetPassword.module.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ApiUrl } from "../config";
+import Loader from '../Loader/Loader'
 import { IoMdClose } from "react-icons/io";
+import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars'
+
 
 interface ResetPasswordProps {
   onClose: () => void;
@@ -13,11 +16,15 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
   const [oldPassword, setOldPassword] = useState("");
   const [oldPasswordError, setOldPasswordError] = useState(false);
   const [newPassword, setNewPassword] = useState("");
+  const [showSnackbar, setShowSnackbar] = useState(false)
   const [newPasswordError, setNewPasswordError] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('')
   const [confirmPassword, setConfirmPassword] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState(false);
   const [passwordMismatch, setPasswordMismatch] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
   const [userId, setUserId] = useState<number | null>(null);
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success')
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessagee] = useState<string | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
@@ -34,6 +41,8 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setApiError(null);
+    setErrorMessagee(null);
+    setSuccessMessage(null);
 
     if (!oldPassword.trim()) {
       setOldPasswordError(true);
@@ -46,6 +55,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
     } else if (userId === null) {
       setApiError("User ID not found.");
     } else {
+      setIsLoading(true);
       try {
         const response = await axios.post(
           `${ApiUrl}/authentication/resetPassword`,
@@ -55,21 +65,24 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
             userId,
           }
         );
-        console.log(response);
 
         if (response.data.message === "Password reset successfully") {
-          setSuccessMessage("Password reset successfully!");
+          setSnackbarSeverity('success')
+          setSnackbarMessage('Password reset successfully')
+          setShowSnackbar(true)
           setTimeout(() => {
             setSuccessMessage("");
             setOldPassword("");
             setNewPassword("");
             setConfirmPassword("");
+            setIsLoading(false);  // Stop loading after success
+            handleClose();  // Close the modal and navigate
           }, 3000);
         } else {
-          setErrorMessagee(response.data.message || "Password reset failed");
-          setTimeout(() => {
-            setErrorMessagee("");
-          }, 2000);
+          setSnackbarSeverity('error')
+          setShowSnackbar(true)
+          setSnackbarMessage(response.data.message);
+          setIsLoading(false)
         }
       } catch (error) {
         setSuccessMessage("");
@@ -80,6 +93,9 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
         } else {
           setErrorMessagee("An error occurred. Please try again.");
         }
+        setSnackbarSeverity('error')
+        setShowSnackbar(true)
+        setIsLoading(false)
       }
     }
   };
@@ -97,7 +113,12 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
 
   const handleClose = () => {
     onClose();
-    navigate("/dashboard"); // Navigate to dashboard after closing
+    setShowSnackbar(false)
+    setIsLoading(true)
+    setTimeout(() => {
+      navigate('/dashboard')
+      setIsLoading(false)
+    }, 2000)
   };
 
   const handleConfirmPasswordChange = (
@@ -110,6 +131,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
 
   return (
     <div className={styles.modalContent}>
+      {isLoading && <Loader />}
       <div className={styles.closeIconContainer}>
         <IoMdClose
           data-testid="close-icon"
