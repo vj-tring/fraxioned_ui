@@ -269,11 +269,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
           onChange={handleTextFieldChange}
           error={Boolean(errors.firstName)}
           helperText={errors.firstName}
-          sx={{
-            '& .MuiInputBase-root': {
-              height: '50px', // Adjust the height as needed
-            },
-          }}
+      
         />
           <TextField
             required
@@ -287,11 +283,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             onChange={handleTextFieldChange}
             error={Boolean(errors.lastName)}
             helperText={errors.lastName}
-            sx={{
-              '& .MuiInputBase-root': {
-                height: '50px', // Adjust the height as needed
-              },
-            }}
+          
           />
           <TextField
             required
@@ -305,11 +297,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             onChange={handleTextFieldChange}
             error={Boolean(errors.email)}
             helperText={errors.email}
-            sx={{
-              '& .MuiInputBase-root': {
-                height: '50px', // Adjust the height as needed
-              },
-            }}
+          
           />
           <TextField
             required
@@ -323,11 +311,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             onChange={handleTextFieldChange}
             error={Boolean(errors.addressLine1)}
             helperText={errors.addressLine1}
-            sx={{
-              '& .MuiInputBase-root': {
-                height: '50px', // Adjust the height as needed
-              },
-            }}
+          
           />
           <TextField
             margin="dense"
@@ -340,11 +324,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             onChange={handleTextFieldChange}
             error={Boolean(errors.phoneNumber)}
             helperText={errors.phoneNumber}
-            sx={{
-              '& .MuiInputBase-root': {
-                height: '50px', // Adjust the height as needed
-              },
-            }}
+          
           />
           <FormControl fullWidth sx={{ marginTop: 3,
             '& .MuiInputBase-root': {
