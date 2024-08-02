@@ -18,6 +18,7 @@ import { SelectChangeEvent } from '@mui/material/Select'
 import { useDispatch } from 'react-redux'
 import { registerUser } from '../../Redux/slice/auth/registerSlice'
 import { AppDispatch } from '../../Redux/store'
+import Loader from '../Loader/Loader'
 import axios from 'axios' // Add axios or your preferred HTTP client
 import { ApiUrl } from 'Components/config'
 interface FormDialogProps {
@@ -26,6 +27,7 @@ interface FormDialogProps {
 }
 
 const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
+  const [isLoading, setIsLoading] = useState(false)
   const [formValues, setFormValues] = useState({
     firstName: '',
     lastName: '',
@@ -145,6 +147,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (validate()) {
+      setIsLoading(true)
       const payload = {
         email: formValues.email.trim().toLowerCase(),
         firstName: formValues.firstName.trim(),
@@ -168,6 +171,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
 
       try {
         const register = await dispatch(registerUser(payload)).unwrap()
+        setIsLoading(false)
         if (register.message === 'Invite sent successfully') {
           setSnackbarMessage(register.message)
           setSnackbarSeverity('success')
@@ -181,13 +185,18 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             roleId: 0,
             propertyID: 0,
           })
-          setTimeout(() => handleClose(), 1000)
+          setTimeout(() => {
+            setIsLoading(true)
+            handleClose()
+            setIsLoading(false)
+          }, 1000)
         } else {
           setSnackbarMessage(register.message)
           setSnackbarSeverity('error')
           setShowSnackbar(true)
         }
       } catch (error) {
+        setIsLoading(false)
         console.error('Registration Error:', error)
         setSnackbarMessage('Registration failed. Please try again.')
         setSnackbarSeverity('error')
@@ -243,7 +252,10 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             <CloseIcon sx={{ color: 'white' }} />
           </IconButton>
         </DialogTitle>
+
         <DialogContent sx={{ marginTop: '10px' }}>
+
+          {isLoading && <Loader/>}
                 <TextField
           autoFocus
           required

@@ -4,6 +4,7 @@ import background from '../Login/background.jpg'
 import axios from 'axios'
 import styles from './ChangePassword.module.css'
 import logo from '../Login/fraxioned.png'
+import Loader from '../Loader/Loader'
 import { ApiUrl } from '../config'
 
 const Change: React.FC = () => {
@@ -64,6 +65,7 @@ const Change: React.FC = () => {
           }
         )
         console.log('Password change successful:', response.data)
+        setIsLoading(false)
         navigate('/login')
       } catch (error) {
         console.error('Error changing password:', error)
@@ -103,6 +105,7 @@ const Change: React.FC = () => {
   return (
     <div className={styles.outerContainer}>
       <div className={styles.innerContainer}>
+        {isLoading && <Loader />}
         <img src={logo} alt="Fraxioned Logo" className={styles.logo} />
         <div className={styles.formWrapper}>
           <h2 className={styles.login}>Change password</h2>

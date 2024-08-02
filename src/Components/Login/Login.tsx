@@ -6,6 +6,8 @@ import { login } from '../../Redux/slice/auth/authSlice';
 import styles from './Login.module.css';
 import logo from './fraxioned.png';
 import background from './background.jpg';
+import Loader from '../Loader/Loader'
+
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
 
 const Login: React.FC = () => {
@@ -18,6 +20,8 @@ const Login: React.FC = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const [isLoading, setIsLoading] = useState(false)
+
 
   const validateEmail = (email: string) => {
     const re = /^[a-zA-Z0-9]+([._@][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
@@ -39,6 +43,8 @@ const Login: React.FC = () => {
     } else {
       setEmailError('');
       setPasswordError(false);
+      setIsLoading(true)
+
 
       try {
         const resultAction = await dispatch(login({ email, password })).unwrap();
@@ -47,11 +53,16 @@ const Login: React.FC = () => {
           setSnackbarSeverity('success');
           setShowSnackbar(true);
           navigate('/dashboard');
+          setIsLoading(false)
+
         }
       } catch (error) {
         setSnackbarMessage(error as string || 'Login failed. Please try again.');
         setSnackbarSeverity('error');
         setShowSnackbar(true);
+        setIsLoading(false)
+
+
       }
     }
   };
@@ -79,6 +90,7 @@ const Login: React.FC = () => {
   return (
     <div className={styles.outerContainer} style={{ backgroundImage: `url(${background})` }}>
       <div className={styles.innerContainer}>
+        {isLoading && <div data-testid="loader"><Loader /></div>}
         <img src={logo} alt="Fraxioned Logo" className={styles.logo} />
         <div className={styles.formWrapper}>
           <h2 className={styles.login}>Login here</h2>
