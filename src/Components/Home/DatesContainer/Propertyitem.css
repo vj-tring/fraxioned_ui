@@ -30,6 +30,11 @@
   color: #212121 !important;
 }
 
+.card-btn1.active {
+  border-color: black !important;
+  color: #212121 !important;
+}
+
 .box {
   border: 1px solid grey;
   height: 53px;
