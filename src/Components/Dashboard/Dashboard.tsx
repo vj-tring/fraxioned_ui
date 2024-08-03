@@ -21,7 +21,7 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     if (!isAuthenticated()) {
-      navigate('/login')
+      navigate('/dashboard')
     }
   }, [navigate])
 

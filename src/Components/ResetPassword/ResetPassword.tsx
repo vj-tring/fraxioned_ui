@@ -53,7 +53,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
       setIsLoading(true);
       try {
         const response = await axios.post(
-          `${ApiUrl}/authentication/resetPassword`,
+          `${ApiUrl}/v1/authentication/resetPassword`,
           {
             oldPassword,
             newPassword,

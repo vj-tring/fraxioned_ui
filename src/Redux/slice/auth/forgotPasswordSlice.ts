@@ -66,7 +66,7 @@ export const forgotPassword =
   async (dispatch: Dispatch) => {
     try {
       dispatch(forgotPasswordStart())
-      const response = await axios.post('/authentication/forgotPassword', {
+      const response = await axios.post('/v1/authentication/forgotPassword', {
         email,
       })
       const data = response.data
