@@ -218,6 +218,9 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
   return (
     <ThemeProvider theme={theme}>
       <Dialog
+      sx={{
+        borderRadius:10
+      }}
         className="DialogRegister"
         open={open}
         onClose={handleClose}
@@ -231,6 +234,8 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             background:
               'linear-gradient(68deg, rgb(30, 134, 144) 0%, rgba(44,157,167,1) 35%, rgb(47, 158, 168) 100%)',
             color: 'white',
+          //   textAlign:'center',
+          //  fontWeight:'bold'
           }}
         >
           Create a New Account
@@ -247,22 +252,25 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             <CloseIcon sx={{ color: 'white' }} />
           </IconButton>
         </DialogTitle>
+
         <DialogContent sx={{ marginTop: '10px' }}>
-          {isLoading && <Loader />}
-          <TextField
-            autoFocus
-            required
-            margin="dense"
-            id="firstName"
-            name="firstName"
-            label="First Name"
-            type="text"
-            fullWidth
-            value={formValues.firstName}
-            onChange={handleTextFieldChange}
-            error={Boolean(errors.firstName)}
-            helperText={errors.firstName}
-          />
+
+          {isLoading && <Loader/>}
+                <TextField
+          autoFocus
+          required
+          margin="dense"
+          id="firstName"
+          name="firstName"
+          label="First Name"
+          type="text"
+          fullWidth
+          value={formValues.firstName}
+          onChange={handleTextFieldChange}
+          error={Boolean(errors.firstName)}
+          helperText={errors.firstName}
+      
+        />
           <TextField
             required
             margin="dense"
@@ -275,6 +283,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             onChange={handleTextFieldChange}
             error={Boolean(errors.lastName)}
             helperText={errors.lastName}
+          
           />
           <TextField
             required
@@ -288,6 +297,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             onChange={handleTextFieldChange}
             error={Boolean(errors.email)}
             helperText={errors.email}
+          
           />
           <TextField
             required
@@ -301,6 +311,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             onChange={handleTextFieldChange}
             error={Boolean(errors.addressLine1)}
             helperText={errors.addressLine1}
+          
           />
           <TextField
             margin="dense"
@@ -313,8 +324,13 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             onChange={handleTextFieldChange}
             error={Boolean(errors.phoneNumber)}
             helperText={errors.phoneNumber}
+          
           />
-          <FormControl fullWidth sx={{ marginTop: 3 }}>
+          <FormControl fullWidth sx={{ marginTop: 3,
+            '& .MuiInputBase-root': {
+                height: '50px', // Adjust the height as needed
+              },
+           }} >
             <InputLabel id="roleId-label">Role</InputLabel>
             <Select
               labelId="roleId-label"
@@ -323,6 +339,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
               value={formValues.roleId}
               onChange={handleSelectChange}
               label="Role"
+              
             >
               {roles.map((role: any) => (
                 <MenuItem key={role.id} value={role.id}>
@@ -331,7 +348,9 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
               ))}
             </Select>
           </FormControl>
-          <FormControl fullWidth sx={{ marginTop: 3 }}>
+          <FormControl fullWidth sx={{ marginTop: 3,'& .MuiInputBase-root': {
+                height: '50px', // Adjust the height as needed
+              }, }}>
             <InputLabel id="propertyID-label">Property</InputLabel>
             <Select
               labelId="propertyID-label"
@@ -349,7 +368,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             </Select>
           </FormControl>
         </DialogContent>
-        <DialogActions>
+        <DialogActions className='d-flex '>
           <Button onClick={handleClose} className="RegisterCancel">
             Cancel
           </Button>
