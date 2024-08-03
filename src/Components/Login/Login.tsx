@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../Redux/store/index'; // Adjust the import path as needed
+import { AppDispatch } from '../../Redux/store/index'; 
 import { login } from '../../Redux/slice/auth/authSlice';
 import styles from './Login.module.css';
 import logo from './fraxioned.png';

@@ -22,19 +22,23 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   cancelLabel,
 }) => {
   return (
-    <Modal show={show} onHide={onHide} centered className="modal">
-      <Modal.Header closeButton  >
-        <Modal.Title >{title}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body className="message">{message}</Modal.Body>
-      <Modal.Footer className="modal-footer-custom">
-        <button className="success1" onClick={onHide}>
-          {cancelLabel}
-        </button>
-        <button className="primary1" onClick={onConfirm}>
-          {confirmLabel}
-        </button>
-      </Modal.Footer>
+    <Modal show={show} onHide={onHide} centered className="confirmation-modal">
+      <div className="modal-content">
+        <Modal.Header closeButton>
+          <Modal.Title>{title}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p className="modal-message">{message}</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <button className="btn-cancel" onClick={onHide}>
+            {cancelLabel}
+          </button>
+          <button className="btn-confirm" onClick={onConfirm}>
+            {confirmLabel}
+          </button>
+        </Modal.Footer>
+      </div>
     </Modal>
   );
 };
