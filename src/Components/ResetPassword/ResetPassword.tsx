@@ -5,7 +5,7 @@ import axios from "axios";
 import Loader from '../Loader/Loader'
 import { IoMdClose } from "react-icons/io";
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars'
-import { resetPasswordApi } from "utils/api";
+import { resetPasswordApi } from "../../utils/api";
 
 interface ResetPasswordProps {
   onClose: () => void;

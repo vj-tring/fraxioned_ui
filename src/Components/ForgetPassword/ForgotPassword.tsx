@@ -7,7 +7,7 @@ import logo from '../Login/fraxioned.png'
 import Loader from '../Loader/Loader'
 import axios from 'axios'
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars'
-import { forgetPasswordApi } from 'utils/api'
+import { forgetPasswordApi } from '../../utils/api'
 
 const ForgetPassword: React.FC = () => {
   const [email, setEmail] = useState('')
@@ -47,20 +47,14 @@ const ForgetPassword: React.FC = () => {
           setSnackbarMessage('Password reset link sent successfully!')
           setSnackbarSeverity('success')
           setSnackbarOpen(true)
-          setIsLoading(true)
           setTimeout(() => {
             navigate('/')
-            setIsLoading(false)
           }, 2000)
-        }
-        else {
+        } else {
           setSnackbarMessage(response.data.message || 'Password reset failed')
-          setSnackbarOpen(true)
-          setIsLoading(false)
           setSnackbarSeverity('error')
-
+          setSnackbarOpen(true)
         }
-
       } catch (error) {
         console.error('Error requesting password reset:', error)
         if (axios.isAxiosError(error) && error.response) {
@@ -92,10 +86,7 @@ const ForgetPassword: React.FC = () => {
   }
 
   return (
-    <div
-      className={styles.outerContainer}
-      style={{ backgroundImage: `url(${background})` }}
-    >
+    <div className={styles.outerContainer} style={{ backgroundImage: `url(${background})` }}>
       <div className={styles.innerContainer}>
         {isLoading && <Loader />}
         <img src={logo} alt="Fraxioned Logo" className={styles.logo} />
@@ -123,11 +114,7 @@ const ForgetPassword: React.FC = () => {
                 Login here!
               </Link>
             </div>
-            <button
-              type="submit"
-              className={styles.signInButton}
-              disabled={isLoading}
-            >
+            <button type="submit" className={styles.signInButton} disabled={isLoading}>
               {isLoading ? 'Submitting...' : 'Submit'}
             </button>
           </form>

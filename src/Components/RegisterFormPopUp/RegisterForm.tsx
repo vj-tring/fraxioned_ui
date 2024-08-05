@@ -19,7 +19,7 @@ import { useDispatch } from 'react-redux'
 import { registerUser } from '../../Redux/slice/auth/registerSlice'
 import { AppDispatch } from '../../Redux/store'
 import Loader from '../Loader/Loader'
-import { getProperties, getRoles } from 'utils/api'
+import { getProperties, getRoles } from '../../utils/api';
 interface FormDialogProps {
   open: boolean
   handleClose: () => void
