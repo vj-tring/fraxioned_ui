@@ -10,9 +10,8 @@ import useNavbarHandler from './NavbarFunction'
 import InviteModal from './SentInviteModal'
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal'
 import ResetPasswordModal from './ResetPasswordModal'
-import FormDialog from '../RegisterFormPopUp/RegisterForm'
-
 import '../Navbar/Navbar.css'
+import FormDialog from './RegisterFormModal'
 
 interface CustomNavbarProps {
   logo: string

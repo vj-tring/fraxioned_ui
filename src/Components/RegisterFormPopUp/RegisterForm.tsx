@@ -1,32 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import FormControl from '@mui/material/FormControl'
-import Select from '@mui/material/Select'
-import IconButton from '@mui/material/IconButton'
-import CloseIcon from '@mui/icons-material/Close'
-import { createTheme, ThemeProvider } from '@mui/material/styles'
+import styles from './RegisterForm.module.css'
+import { IoMdClose } from "react-icons/io"
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars'
-import '../RegisterFormPopUp/RegisterForm.css'
-import { SelectChangeEvent } from '@mui/material/Select'
+import Loader from '../Loader/Loader'
+import axios from 'axios'
+import { ApiUrl } from 'Components/config'
 import { useDispatch } from 'react-redux'
 import { registerUser } from '../../Redux/slice/auth/registerSlice'
 import { AppDispatch } from '../../Redux/store'
-import Loader from '../Loader/Loader'
-import axios from 'axios' // Add axios or your preferred HTTP client
-import { ApiUrl } from 'Components/config'
-interface FormDialogProps {
-  open: boolean
-  handleClose: () => void
+interface RegisterFormContentProps {
+  onClose: () => void
 }
 
-const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
+const RegisterFormContent: React.FC<RegisterFormContentProps> = ({ onClose }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [formValues, setFormValues] = useState({
     firstName: '',
@@ -99,13 +85,13 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
     })
   }
 
-  const handleSelectChange = (event: SelectChangeEvent<number>) => {
-    const { name, value } = event.target
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = event.target;
     setFormValues({
       ...formValues,
-      [name]: parseInt(value.toString(), 10),
-    })
-  }
+      [name]: parseInt(value, 10),
+    });
+  };
 
   const validate = () => {
     let hasErrors = false
@@ -115,27 +101,27 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
       newErrors.firstName = 'First name is required'
       hasErrors = true
     }
-    if (!formValues.lastName) {
+    else if (!formValues.lastName) {
       newErrors.lastName = 'Last name is required'
       hasErrors = true
     }
-    if (!formValues.email) {
+    else if (!formValues.email) {
       newErrors.email = 'Email is required'
       hasErrors = true
     }
-    if (!formValues.addressLine1) {
+    else if (!formValues.addressLine1) {
       newErrors.addressLine1 = 'Address Line 1 is required'
       hasErrors = true
     }
-    if (!formValues.phoneNumber) {
+    else if (!formValues.phoneNumber) {
       newErrors.phoneNumber = 'Phone number is required'
       hasErrors = true
     }
-    if (formValues.roleId === 0) {
+    else if (formValues.roleId === 0) {
       newErrors.roleId = 'Role is required'
       hasErrors = true
     }
-    if (formValues.propertyID === 0) {
+    else if (formValues.propertyID === 0) {
       newErrors.propertyID = 'Property ID is required'
       hasErrors = true
     }
@@ -187,7 +173,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
           })
           setTimeout(() => {
             setIsLoading(true)
-            handleClose()
+            onClose()
             setIsLoading(false)
           }, 1000)
         } else {
@@ -209,163 +195,138 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
     }
   }
 
-  const theme = createTheme({
-    typography: {
-      fontFamily: 'Montserrat, sans-serif',
-    },
-  })
-
+  // const theme = createTheme({
+  //   typography: {
+  //     fontFamily: 'Montserrat, sans-serif',
+  //   },
+  // })
+  // if (!open) return null;
   return (
-    <ThemeProvider theme={theme}>
-      <Dialog
-        className="DialogRegister"
-        open={open}
-        onClose={handleClose}
-        PaperProps={{
-          component: 'form',
-          onSubmit: handleSubmit,
-        }}
-      >
-        <DialogTitle
-          sx={{
-            background:
-              'linear-gradient(68deg, rgb(30, 134, 144) 0%, rgba(44,157,167,1) 35%, rgb(47, 158, 168) 100%)',
-            color: 'white',
-          }}
-        >
-          Create a New Account
-          <IconButton
-            aria-label="close"
-            onClick={handleClose}
-            sx={{
-              position: 'absolute',
-              right: 8,
-              top: 8,
-              color: (theme) => theme.palette.grey[500],
-            }}
-          >
-            <CloseIcon sx={{ color: 'white' }} />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent sx={{ marginTop: '10px' }}>
-          {isLoading && <Loader />}
-          <TextField
-            autoFocus
-            required
-            margin="dense"
-            id="firstName"
-            name="firstName"
-            label="First Name"
-            type="text"
-            fullWidth
-            value={formValues.firstName}
-            onChange={handleTextFieldChange}
-            error={Boolean(errors.firstName)}
-            helperText={errors.firstName}
+    <>
+      
+      <div className={styles.modalOverlay}>
+      <div className={styles.modalContent}>
+        {isLoading && <Loader />}
+        <div className={styles.closeIconContainer}>
+          <IoMdClose
+            data-testid="close-icon"
+            className={styles.closeIcon}
+            onClick={onClose}
           />
-          <TextField
-            required
-            margin="dense"
-            id="lastName"
-            name="lastName"
-            label="Last Name"
-            type="text"
-            fullWidth
-            value={formValues.lastName}
-            onChange={handleTextFieldChange}
-            error={Boolean(errors.lastName)}
-            helperText={errors.lastName}
-          />
-          <TextField
-            required
-            margin="dense"
-            id="email"
-            name="email"
-            label="Email Address"
-            type="email"
-            fullWidth
-            value={formValues.email}
-            onChange={handleTextFieldChange}
-            error={Boolean(errors.email)}
-            helperText={errors.email}
-          />
-          <TextField
-            required
-            margin="dense"
-            id="addressLine1"
-            name="addressLine1"
-            label="Address Line 1"
-            type="text"
-            fullWidth
-            value={formValues.addressLine1}
-            onChange={handleTextFieldChange}
-            error={Boolean(errors.addressLine1)}
-            helperText={errors.addressLine1}
-          />
-          <TextField
-            margin="dense"
-            id="phoneNumber"
-            name="phoneNumber"
-            label="Phone Number"
-            type="text"
-            fullWidth
-            value={formValues.phoneNumber}
-            onChange={handleTextFieldChange}
-            error={Boolean(errors.phoneNumber)}
-            helperText={errors.phoneNumber}
-          />
-          <FormControl fullWidth sx={{ marginTop: 3 }}>
-            <InputLabel id="roleId-label">Role</InputLabel>
-            <Select
-              labelId="roleId-label"
-              id="roleId"
-              name="roleId"
-              value={formValues.roleId}
-              onChange={handleSelectChange}
-              label="Role"
-            >
-              {roles.map((role: any) => (
-                <MenuItem key={role.id} value={role.id}>
-                  {role.roleName}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl fullWidth sx={{ marginTop: 3 }}>
-            <InputLabel id="propertyID-label">Property</InputLabel>
-            <Select
-              labelId="propertyID-label"
-              id="propertyID"
-              name="propertyID"
-              value={formValues.propertyID}
-              onChange={handleSelectChange}
-              label="Property"
-            >
-              {properties.map((property: any) => (
-                <MenuItem key={property.id} value={property.id}>
-                  {property.propertyName}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} className="RegisterCancel">
-            Cancel
-          </Button>
-          <Button type="submit" className="RegisterSubmit">
-            Register
-          </Button>
-        </DialogActions>
-        <CustomizedSnackbars
-          open={showSnackbar}
-          handleClose={() => setShowSnackbar(false)}
-          message={snackbarMessage}
-          severity={snackbarSeverity}
-        />
-      </Dialog>
-    </ThemeProvider>
+        </div>
+        <h2 className={styles.title}>Create New Account</h2>
+        <p className={styles.subtitle}>Fill in the details below</p>
+        <form onSubmit={handleSubmit} className={styles.form}>
+              {/* Replace TextField components with regular inputs */}
+              <div className={styles.inputGroup}>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  placeholder="First Name"
+                  value={formValues.firstName}
+                  onChange={handleTextFieldChange}
+                  className={errors.firstName ? styles.errorInput : ""}
+                />
+                {errors.firstName && <div className={styles.errorMessage}>{errors.firstName}</div>}
+              </div>
+              <div className={styles.inputGroup}>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  placeholder="Last Name"
+                  value={formValues.lastName}
+                  onChange={handleTextFieldChange}
+                  className={errors.lastName ? styles.errorInput : ""}
+                />
+                {errors.lastName && <div className={styles.errorMessage}>{errors.lastName}</div>}
+              </div>
+              <div className={styles.inputGroup}>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Email Address"
+                  value={formValues.email}
+                  onChange={handleTextFieldChange}
+                  className={errors.email ? styles.errorInput : ""}
+                />
+                {errors.email && <div className={styles.errorMessage}>{errors.email}</div>}
+              </div>
+              <div className={styles.inputGroup}>
+                <input
+                  type="text"
+                  id="addressLine1"
+                  name="addressLine1"
+                  placeholder="Address Line 1"
+                  value={formValues.addressLine1}
+                  onChange={handleTextFieldChange}
+                  className={errors.addressLine1 ? styles.errorInput : ""}
+                />
+                {errors.addressLine1 && <div className={styles.errorMessage}>{errors.addressLine1}</div>}
+              </div>
+              <div className={styles.inputGroup}>
+                <input
+                  type="number"
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  placeholder="Phone Number"
+                  value={formValues.phoneNumber}
+                  onChange={handleTextFieldChange}
+                  className={errors.phoneNumber ? styles.errorInput : ""}
+                />
+                {errors.phoneNumber && <div className={styles.errorMessage}>{errors.phoneNumber}</div>}
+              </div>
+              <div className={styles.inputGroup}>
+                <select
+                  id="roleId"
+                  name="roleId"
+                  value={formValues.roleId}
+                  onChange={handleSelectChange}
+                  className={errors.roleId ? styles.errorInput : ""}
+                >
+                  <option value={0}>Select Role</option>
+                  {roles.map((role: any) => (
+                    <option key={role.id} value={role.id}>
+                      {role.roleName}
+                    </option>
+                  ))}
+                </select>
+                {errors.roleId && <div className={styles.errorMessage}>{errors.roleId}</div>}
+              </div>
+              <div className={styles.inputGroup}>
+                <select
+                  id="propertyID"
+                  name="propertyID"
+                  value={formValues.propertyID}
+                  onChange={handleSelectChange}
+                  className={errors.propertyID ? styles.errorInput : ""}
+                >
+                  <option value={0}>Select Property</option>
+                  {properties.map((property: any) => (
+                    <option key={property.id} value={property.id}>
+                      {property.propertyName}
+                    </option>
+                  ))}
+                </select>
+                {errors.propertyID && <div className={styles.errorMessage}>{errors.propertyID}</div>}
+              </div>
+              <button type="submit" className={styles.submitButton}>
+                Register
+              </button>
+            </form>
+          </div>
+        </div>
+      
+      <CustomizedSnackbars
+        open={showSnackbar}
+        handleClose={() => setShowSnackbar(false)}
+        message={snackbarMessage}
+        severity={snackbarSeverity}
+      />
+    </>
   )
 }
 
-export default FormDialog
+export default RegisterFormContent
