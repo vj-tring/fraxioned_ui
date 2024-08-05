@@ -23,7 +23,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
 }) => {
   return (
     <Modal show={show} onHide={onHide} centered className="confirmation-modal">
-      <div className="modal-content">
+      {/* <div className="modal-content"> */}
         <Modal.Header closeButton>
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
@@ -38,7 +38,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             {confirmLabel}
           </button>
         </Modal.Footer>
-      </div>
+      {/* </div> */}
     </Modal>
   );
 };

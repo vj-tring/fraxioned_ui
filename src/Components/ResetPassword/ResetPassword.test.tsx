@@ -99,7 +99,7 @@ describe('ResetPassword Component', () => {
     });
 
     expect(mockedAxios.post).toHaveBeenCalledWith(
-      'http://mock-api-url.com/authentication/resetPassword',
+      'http://mock-api-url.com/v1/authentication/resetPassword',
       expect.objectContaining({
         oldPassword: 'oldpass',
         newPassword: 'newpass',
