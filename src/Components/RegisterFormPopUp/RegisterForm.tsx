@@ -3,8 +3,6 @@ import styles from './RegisterForm.module.css'
 import { IoMdClose } from "react-icons/io"
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars'
 import Loader from '../Loader/Loader'
-import axios from 'axios'
-import { ApiUrl } from 'Components/config'
 import { useDispatch } from 'react-redux'
 import { registerUser } from '../../Redux/slice/auth/registerSlice'
 import { AppDispatch } from '../../Redux/store'
