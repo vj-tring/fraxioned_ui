@@ -13,6 +13,7 @@ import Contact from '../ContactUs/Contact'
 import UserDetails from '../UserDetails/UserDetails'
 import ComingSoon from '../ComingSoon/ComingSoon'
 import { isAuthenticated } from '../../authService'
+import PermanentDrawerLeft from 'Components/UserRoles/adminSidebar'
 
 const Dashboard: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -35,6 +36,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="dashboard-container">
+      <PermanentDrawerLeft/>
       <CustomNavbar
         logo={fraxionedLogo}
         links={links}
@@ -42,6 +44,7 @@ const Dashboard: React.FC = () => {
         userName={userEmail}
         onUserImageClick={() => navigate('/dashboard/user-details')}
       />
+      
 
       <div className="content-container">
         <div className="content-wrapper">
