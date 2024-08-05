@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { sendInvite } from '../../Api/send-invite'
+import { sendInvite } from '../../utils/api';
 
 const useSendInviteHandler = () => {
   const [email, setEmail] = useState('')
@@ -17,7 +17,7 @@ const useSendInviteHandler = () => {
     setErrorMessage('')
 
     try {
-      const userString = localStorage.getItem('userData')
+      const userString = localStorage.getItem('user')
       if (userString) {
         const userObject = JSON.parse(userString)
         const invitedBy = userObject.id

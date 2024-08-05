@@ -8,6 +8,8 @@ import { ApiUrl } from 'Components/config'
 import { useDispatch } from 'react-redux'
 import { registerUser } from '../../Redux/slice/auth/registerSlice'
 import { AppDispatch } from '../../Redux/store'
+import { getProperties, getRoles } from '../../utils/api';
+
 interface RegisterFormContentProps {
   onClose: () => void
 }
@@ -49,7 +51,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({ onClose }) =>
     // Fetch roles from API
     const fetchProperties = async () => {
       try {
-        const response = await axios.get(`${ApiUrl}/properties`)
+        const response = await getProperties()
         const property = response.data.map((property: any) => {
           return property
         })
@@ -61,7 +63,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({ onClose }) =>
 
     const fetchRoles = async () => {
       try {
-        const response = await axios.get(`${ApiUrl}/roles`)
+        const response = await getRoles()
         const roles = response.data.roles.map((roles: any) => {
           return roles
         })
@@ -146,8 +148,8 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({ onClose }) =>
         zipcode: '123456', // Default value
         phoneNumber: formValues.phoneNumber.trim(),
         roleId: formValues.roleId,
-        updated_by: 0, // Default value
-        created_by: 0, // Default value
+        updatedBy: 0, // Default value
+        createdBy: 0, // Default value
         userPropertyDetails: {
           propertyID: formValues.propertyID,
           noOfShares: '', // Default value
