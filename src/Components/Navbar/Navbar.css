@@ -83,8 +83,8 @@
 .modal-header {
   align-items: center;
   padding-left: 38%;
-  height: 7px;
-  /* background-color: darkorange; */
+  height: 55px !important;
+  background-color: #0c7882;
   color: white;
 }
 
@@ -172,4 +172,8 @@
 
 .css-137ul40-MuiButtonBase-root-MuiIconButton-root:hover {
   background: none !important;
+}
+
+.NavbarUSer{
+  color: black;
 }

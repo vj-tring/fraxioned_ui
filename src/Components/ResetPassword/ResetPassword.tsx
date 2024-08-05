@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import styles from "./ResetPassword.module.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ApiUrl } from "../config";
 import Loader from '../Loader/Loader'
 import { IoMdClose } from "react-icons/io";
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars'
+import { resetPasswordApi } from "../../utils/api";
 
 interface ResetPasswordProps {
   onClose: () => void;
@@ -28,7 +28,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userData = localStorage.getItem("userData");
+    const userData = localStorage.getItem("user");
     if (userData) {
       const user = JSON.parse(userData);
       setUserId(user.id);
@@ -52,14 +52,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
     } else {
       setIsLoading(true);
       try {
-        const response = await axios.post(
-          `${ApiUrl}/authentication/resetPassword`,
-          {
-            oldPassword,
-            newPassword,
-            userId,
-          }
-        );
+        const response = await resetPasswordApi(oldPassword,newPassword,userId);
 
         if (response.data.message === "Password reset successfully") {
           setSnackbarSeverity('success');

@@ -11,9 +11,8 @@ import {
 } from '@mui/material'
 import { styled } from '@mui/system'
 import useSendInviteHandler from './SendInviteFunction'
-import axios from 'axios'
-import { ApiUrl } from '../config'
 import './sendInvite.css'
+import { getRoles } from '../../utils/api'
 
 const StyledButton = styled('button')({
   backgroundColor: '#ffffff',
@@ -50,7 +49,7 @@ const SendInvite: React.FC = () => {
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const response = await axios.get(`${ApiUrl}/roles`)
+        const response = await getRoles()
         setRoles(response.data)
       } catch (error) {
         console.error('Failed to fetch roles:', error)
