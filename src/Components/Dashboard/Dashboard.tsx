@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Routes, Route, useNavigate } from 'react-router-dom'
+import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import CustomNavbar from '../../Components/Navbar/Navbar'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -14,6 +14,9 @@ import UserDetails from '../UserDetails/UserDetails'
 import ComingSoon from '../ComingSoon/ComingSoon'
 import { isAuthenticated } from '../../authService'
 import PermanentDrawerLeft from 'Components/UserRoles/adminSidebar'
+import Home from 'Components/Home/Home'
+import Booking from 'Components/Booking/Booking'
+// import PeakSeasonCard from 'Components/Home/PeakSeasonCard'
 
 const Dashboard: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -28,10 +31,11 @@ const Dashboard: React.FC = () => {
 
   const links = [
     { name: 'HOME', href: '/dashboard', disabled: false },
-    { name: 'BOOKING', href: '/dashboard', disabled: false },
-    { name: 'PEAK SEASON', href: '/dashboard', disabled: false },
-    { name: 'PAYEMENTS', href: '/dashboard', disabled: false },
-    { name: 'FAQ', href: '/dashboard', disabled: false },
+    { name: 'BOOKING', href: '/booking', disabled: false },
+    { name: 'PEAK SEASON', href: '/peak-season', disabled: false },
+    { name: 'PAYEMENTS', href: '/payements', disabled: false },
+    { name: 'FAQ', href: '/faq', disabled: false }, 
+    
   ]
 
   return (
@@ -42,20 +46,22 @@ const Dashboard: React.FC = () => {
         links={links}
         userImage={userImage}
         userName={userEmail}
-        onUserImageClick={() => navigate('/dashboard/user-details')}
+        onUserImageClick={() => navigate('/user-details')}
       />
       
 
       <div className="content-container">
         <div className="content-wrapper">
           <Routes>
-            <Route path="/" element={<ComingSoon />} />
+            <Route path="/dashboard" element={<Home />} />
             <Route path="/faq" element={<CustomizedAccordions />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/user-details" element={<UserDetails />} />
-            <Route path="/booking" element={<ComingSoon />} />
-            <Route path="/peak-season" element={<ComingSoon />} />
+            <Route path="/booking" element={<Booking />} />
+            <Route path="/peak-season" element={<ComingSoon/>} />
             <Route path="/payements" element={<ComingSoon />} />
+            <Route path="*" element={<Navigate to="/dashboard" />} />
+
           </Routes>
         </div>
       </div>

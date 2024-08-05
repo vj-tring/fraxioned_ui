@@ -24,8 +24,8 @@
   padding: 20px;
 }
 
-.primary {
-  background-color: #007bff;
+.primary1 {
+  background-color: #0c7882;
   border: none;
   height: 40px;
   width: 100px;
@@ -38,8 +38,8 @@
   background-color: #0056b3;
 }
 
-.success {
-  background-color: #6c757d;
+.success1 {
+  background-color: #f39863;
   border: none;
   height: 40px;
   width: 100px;
@@ -48,5 +48,14 @@
 }
 
 .success:hover {
-  background-color: #5a6268;
+  background-color: #e9c17d;
+}
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  font-optical-sizing: auto;
 }
