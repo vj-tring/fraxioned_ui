@@ -10,14 +10,11 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => jest.fn(),
 }))
 
-//image mock
 jest.mock('../Login/background.jpg', () => 'background')
 jest.mock('../Login/fraxioned.png', () => 'logo')
 
-// Mock the axios module
 jest.mock('axios')
 
-//APiurl mock
 jest.mock('../../Components/config', () => ({
   ApiUrl: 'http://mock-api-url.com',
 }))
@@ -56,105 +53,105 @@ describe('ForgetPassword Component', () => {
     ).toBeInTheDocument()
   })
 
-  // test('displays error message for invalid email', async () => {
-  //   render(
-  //     <MemoryRouter>
-  //       <ForgetPassword />
-  //     </MemoryRouter>
-  //   )
+  test('displays error message for invalid email', async () => {
+    render(
+      <MemoryRouter>
+        <ForgetPassword />
+      </MemoryRouter>
+    )
 
-  //   fireEvent.change(screen.getByPlaceholderText('Email'), {
-  //     target: { value: 'invalid-email' },
-  //   })
-  //   fireEvent.click(screen.getByRole('button', { name: 'Submit' }))
+    fireEvent.change(screen.getByPlaceholderText('Email'), {
+      target: { value: 'invalid-email' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Submit' }))
 
-  //   expect(
-  //     await screen.findByText('Please enter a valid email ID')
-  //   ).toBeInTheDocument()
-  // })
+    expect(
+      await screen.findByText('Please enter a valid email ID')
+    ).toBeInTheDocument()
+  })
 
-  // test('submits form with valid email', async () => {
-  //   mockedAxios.post.mockResolvedValueOnce({ data: 'Success' })
+  test('submits form with valid email', async () => {
+    mockedAxios.post.mockResolvedValueOnce({ data: 'Success' })
 
-  //   render(
-  //     <MemoryRouter>
-  //       <ForgetPassword />
-  //     </MemoryRouter>
-  //   )
+    render(
+      <MemoryRouter>
+        <ForgetPassword />
+      </MemoryRouter>
+    )
 
-  //   fireEvent.change(screen.getByPlaceholderText('Email'), {
-  //     target: { value: 'test@example.com' },
-  //   })
-  //   fireEvent.click(screen.getByRole('button', { name: 'Submit' }))
+    fireEvent.change(screen.getByPlaceholderText('Email'), {
+      target: { value: 'test@example.com' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Submit' }))
 
-  //   await waitFor(() => {
-  //     expect(mockedAxios.post).toHaveBeenCalledWith(
-  //       expect.stringContaining('/authentication/forgotPassword'),
-  //       { email: 'test@example.com' }
-  //     )
-  //   })
-  // })
+    await waitFor(() => {
+      expect(mockedAxios.post).toHaveBeenCalledWith(
+        expect.stringContaining('/authentication/forgotPassword'),
+        { email: 'test@example.com' }
+      )
+    })
+  })
 
-  // test('displays loading state while submitting', async () => {
-  //   mockedAxios.post.mockImplementationOnce(() => new Promise(() => { }))
+  test('displays loading state while submitting', async () => {
+    mockedAxios.post.mockImplementationOnce(() => new Promise(() => { }))
 
-  //   render(
-  //     <MemoryRouter>
-  //       <ForgetPassword />
-  //     </MemoryRouter>
-  //   )
+    render(
+      <MemoryRouter>
+        <ForgetPassword />
+      </MemoryRouter>
+    )
 
-  //   fireEvent.change(screen.getByPlaceholderText('Email'), {
-  //     target: { value: 'test@example.com' },
-  //   })
-  //   fireEvent.click(screen.getByRole('button', { name: 'Submit' }))
+    fireEvent.change(screen.getByPlaceholderText('Email'), {
+      target: { value: 'test@example.com' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Submit' }))
 
-  //   expect(await screen.findByText('Submitting...')).toBeInTheDocument()
-  // })
+    expect(await screen.findByText('Submitting...')).toBeInTheDocument()
+  })
 
-  // test('displays error message on API failure', async () => {
-  //   mockedAxios.post.mockRejectedValueOnce(new Error('API Error'))
+  test('displays error message on API failure', async () => {
+    mockedAxios.post.mockRejectedValueOnce(new Error('API Error'))
 
-  //   render(
-  //     <MemoryRouter>
-  //       <ForgetPassword />
-  //     </MemoryRouter>
-  //   )
+    render(
+      <MemoryRouter>
+        <ForgetPassword />
+      </MemoryRouter>
+    )
 
-  //   fireEvent.change(screen.getByPlaceholderText('Email'), {
-  //     target: { value: 'test@example.com' },
-  //   })
-  //   fireEvent.click(screen.getByRole('button', { name: 'Submit' }))
+    fireEvent.change(screen.getByPlaceholderText('Email'), {
+      target: { value: 'test@example.com' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Submit' }))
 
-  //   expect(
-  //     await screen.findByText(
-  //       'Failed to request password reset. Please try again.'
-  //     )
-  //   ).toBeInTheDocument()
-  // })
+    expect(
+      await screen.findByText(
+        'Failed to request password reset. Please try again.'
+      )
+    ).toBeInTheDocument()
+  })
 
-  // test('clears error message on valid email input', async () => {
-  //   render(
-  //     <MemoryRouter>
-  //       <ForgetPassword />
-  //     </MemoryRouter>
-  //   )
+  test('clears error message on valid email input', async () => {
+    render(
+      <MemoryRouter>
+        <ForgetPassword />
+      </MemoryRouter>
+    )
 
-  //   fireEvent.change(screen.getByPlaceholderText('Email'), {
-  //     target: { value: 'invalid-email' },
-  //   })
-  //   fireEvent.blur(screen.getByPlaceholderText('Email'))
+    fireEvent.change(screen.getByPlaceholderText('Email'), {
+      target: { value: 'invalid-email' },
+    })
+    fireEvent.blur(screen.getByPlaceholderText('Email'))
 
-  //   expect(
-  //     await screen.findByText('Please enter a valid email ID')
-  //   ).toBeInTheDocument()
+    expect(
+      await screen.findByText('Please enter a valid email ID')
+    ).toBeInTheDocument()
 
-  //   fireEvent.change(screen.getByPlaceholderText('Email'), {
-  //     target: { value: 'valid@email.com' },
-  //   })
+    fireEvent.change(screen.getByPlaceholderText('Email'), {
+      target: { value: 'valid@email.com' },
+    })
 
-  //   expect(
-  //     screen.queryByText('Please enter a valid email ID')
-  //   ).not.toBeInTheDocument()
-  // })
+    expect(
+      screen.queryByText('Please enter a valid email ID')
+    ).not.toBeInTheDocument()
+  })
 })

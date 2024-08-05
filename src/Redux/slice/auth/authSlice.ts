@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
 import { RootState } from '../../reducers';
-import { ApiUrl } from '../../../Components/config';
+import { loginUser, logoutUserApi } from 'utils/api';
 
 interface User {
   roleId: number;
@@ -68,7 +67,7 @@ export const login = createAsyncThunk<
   'authentication/login',
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${ApiUrl}/authentication/login`, { email, password });
+      const response = await loginUser(email, password);
       const data = response.data;
 
       if (response.data.status === 200 && data.message === 'Login successful') {
@@ -86,6 +85,7 @@ export const login = createAsyncThunk<
     }
   }
 );
+
 export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
   'authentication/logout',
   async (_, { getState, rejectWithValue }) => {
@@ -94,7 +94,7 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
       const sessionToken = state.auth.session?.token;
 
       if (sessionToken) {
-        await axios.post('/authentication/logout', { sessionToken });
+        await logoutUserApi(sessionToken);
         localStorage.clear();
       }
     } catch (error: any) {
@@ -118,9 +118,6 @@ const authSlice = createSlice({
       state.user = null;
       state.session = null;
       state.isAdmin = false;
-      localStorage.removeItem('user');
-      localStorage.removeItem('session');
-      localStorage.removeItem('accessToken');
       localStorage.clear();
     },
   },
@@ -145,9 +142,6 @@ const authSlice = createSlice({
         state.user = null;
         state.session = null;
         state.isAdmin = false;
-        localStorage.removeItem('user');
-        localStorage.removeItem('session');
-        localStorage.removeItem('accessToken');
         localStorage.clear();
       })
       .addCase(logoutUser.rejected, (state, action) => {
@@ -163,5 +157,4 @@ export const selectCurrentUser = (state: { auth: AuthState }) => state.auth.user
 export const selectIsAdmin = (state: { auth: AuthState }) => state.auth.isAdmin;
 export const selectAuthLoading = (state: { auth: AuthState }) => state.auth.loading;
 export const selectAuthError = (state: { auth: AuthState }) => state.auth.error;
-
 export default authSlice.reducer;

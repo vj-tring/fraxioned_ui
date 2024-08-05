@@ -24,7 +24,7 @@ describe('ResetPassword Component', () => {
 
   beforeEach(() => {
     localStorage.clear();
-    localStorage.setItem('userData', JSON.stringify({ id: 1 }));
+    localStorage.setItem('user', JSON.stringify({ id: 1 }));
   });
 
   afterEach(() => {
@@ -54,6 +54,8 @@ describe('ResetPassword Component', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Please enter your old password')).toBeInTheDocument();
+      expect(screen.getByText('Please enter a new password')).toBeInTheDocument();
+      expect(screen.getByText('Please confirm your new password')).toBeInTheDocument();
     });
   });
 
@@ -125,9 +127,9 @@ describe('ResetPassword Component', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /Submit/i }));
 
-    // await waitFor(() => {
-    //   expect(screen.getByText('Password reset failed')).toBeInTheDocument();
-    // });
+    await waitFor(() => {
+      expect(screen.getByText('Password reset failed')).toBeInTheDocument();
+    });
   });
 
   test('calls onClose when close icon is clicked', async () => {
@@ -137,7 +139,7 @@ describe('ResetPassword Component', () => {
 
     await waitFor(() => {
       expect(mockOnClose).toHaveBeenCalled();
-      // expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
+      expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
     });
   });
 
@@ -193,7 +195,7 @@ describe('ResetPassword Component', () => {
       expect(screen.getByText('Password reset successfully')).toBeInTheDocument();
     });
 
-    // Simulate snackbar close (you might need to adjust this based on how your CustomizedSnackbars component works)
+    // Simulate snackbar close
     fireEvent.click(screen.getByRole('button', { name: /Close/i }));
 
     await waitFor(() => {

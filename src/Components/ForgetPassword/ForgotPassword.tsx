@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import styles from './ForgotPassword.module.css'
 import background from '../Login/background.jpg'
 import { Link } from 'react-router-dom'
-import { ApiUrl } from '../config'
 import logo from '../Login/fraxioned.png'
 import Loader from '../Loader/Loader'
 import axios from 'axios'
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars'
+import { forgetPasswordApi } from 'utils/api'
 
 const ForgetPassword: React.FC = () => {
   const [email, setEmail] = useState('')
@@ -40,10 +40,7 @@ const ForgetPassword: React.FC = () => {
       setError('')
       setIsLoading(true)
       try {
-        const response = await axios.post(
-          `${ApiUrl}/authentication/forgotPassword`,
-          { email }
-        )
+        const response = await forgetPasswordApi(email)
         if (response.data.message === 'Password reset email sent successfully') {
           console.log('Password reset requested for:', email)
           console.log('Server response:', response.data)
