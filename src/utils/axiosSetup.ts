@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { useAuthHelpers } from './useAuthHelper';
+
 
 // Create an Axios instance
 const axiosInstance = axios.create({
@@ -51,10 +53,8 @@ axiosInstance.interceptors.response.use(
         // Any status codes that falls outside the range of 2xx causes this function to trigger
         // You can handle specific errors here (e.g., refresh token on 401, show notifications on error, etc.)
         if (error.response.status === 401) {
-            // Handle unauthorized error (e.g., redirect to login)
-            // Optionally, you can remove the token from local storage and navigate to the login page
-            localStorage.removeItem('accessToken');
-            window.location.href = '/login';
+            const { handleUnauthorized } = useAuthHelpers();
+            handleUnauthorized();
         }
         return Promise.reject(error);
     }
