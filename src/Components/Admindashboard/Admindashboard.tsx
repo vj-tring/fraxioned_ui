@@ -1,16 +1,21 @@
-import React from 'react';
+import React, {useEffect } from 'react'
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import SidePanel from 'Components/Sidepanel/Sidepanel';
 import Calendar from 'Components/BigCalender/BigCalender';
 import userImage from '../../assets/profile.jpeg'
 import CustomNavbar from 'Components/Navbar/Navbar';
+import { isAuthenticated } from 'authService';
 import UserDetails from 'Components/UserDetails/UserDetails';
 import fraxionedLogo from '../../assets/images/BB - Owners.png'
 import './Admindashboard.css'
 
 const AdminDashboard: React.FC = () => {
     const navigate = useNavigate()
-
+    useEffect(() => {
+        if (!isAuthenticated()) {
+            navigate('/login')
+        }
+    }, [navigate])
 
     return (
         <div className="admin-dashboard-container">

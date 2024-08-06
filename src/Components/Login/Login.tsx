@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../Redux/store/index'; // Adjust the import path as needed
+import { AppDispatch } from '../../Redux/store/index';
 import { login } from '../../Redux/slice/auth/authSlice';
 import styles from './Login.module.css';
 import logo from './fraxioned.png';
 import background from './background.jpg';
 import Loader from '../Loader/Loader'
-
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
 
 const Login: React.FC = () => {
@@ -52,17 +51,20 @@ const Login: React.FC = () => {
           setSnackbarMessage('Login Successful');
           setSnackbarSeverity('success');
           setShowSnackbar(true);
-          navigate('/dashboard');
-          setIsLoading(false)
 
+          if (resultAction.user.role.id === 1) {
+            navigate('/admin/dashboard');
+          } else {
+            navigate('/dashboard');
+          }
+
+          setIsLoading(false);
         }
       } catch (error) {
         setSnackbarMessage(error as string || 'Login failed. Please try again.');
         setSnackbarSeverity('error');
         setShowSnackbar(true);
-        setIsLoading(false)
-
-
+        setIsLoading(false);
       }
     }
   };

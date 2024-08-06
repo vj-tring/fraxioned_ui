@@ -27,12 +27,23 @@ import { Provider } from 'react-redux'
 import store from '../src/Redux/store/index'
 interface PrivateRouteProps {
   element: React.ComponentType
+  allowedRoles: number[];
 }
 
-const PrivateRoute: FC<PrivateRouteProps> = ({ element: Element }) => {
+const PrivateRoute: FC<PrivateRouteProps> = ({ element: Element, allowedRoles }) => {
   const token = localStorage.getItem('session')
-  return token ? <Element /> : <Navigate to="/dashboard" />
-}
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
+
+  if (allowedRoles.includes(user.role.id)) {
+    return <Element />;
+  }
+
+  return <Navigate to="/dashboard" />;
+};
+
 
 const App: FC = () => {
   return (
@@ -62,8 +73,15 @@ const App: FC = () => {
           <Route path="/menu" element={<AccountMenu />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/date" element={<Date />} />
-          <Route path="/*" element={<PrivateRoute element={Dashboard} />} />
-          <Route path="/admin/*" element={<PrivateRoute element={AdminDashboard} />} />
+          <Route
+            path="/dashboard"
+            element={<PrivateRoute element={Dashboard} allowedRoles={[2, 3]} />}
+          />
+          <Route
+            path="/admin/*"
+            element={<PrivateRoute element={AdminDashboard} allowedRoles={[1]} />}
+          />
+
 
           {/* <Route path="/multiselect" element={<MultipleSelect />} />
           <Route path="/basicselect" element={<BasicSelect />} /> */}

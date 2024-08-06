@@ -11,6 +11,10 @@ interface User {
   mobile: string;
   address: string;
   city: string;
+  role: {
+    id: number;
+    roleName: string;
+  };
   state: string;
   isAdmin: boolean;
   country: string;
