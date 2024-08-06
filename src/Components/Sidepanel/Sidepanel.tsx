@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
-    FaCalendar, FaInbox, FaFileAlt, FaComments, FaUsers,
-    FaStar, FaChartBar, FaUser
+    FaCalendar, FaPlane, FaUser, FaFile,
+    FaUserTag, FaChartBar, FaGavel
 } from 'react-icons/fa';
 import styles from './Sidepanel.module.css';
 
@@ -14,28 +14,26 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
     { icon: <FaCalendar />, label: 'Bookings', path: '/admin/bookings' },
-    { icon: <FaInbox />, label: 'Inbox', path: '/inbox' },
-    { icon: <FaFileAlt />, label: 'Quotes', path: '/quotes' },
-    { icon: <FaComments />, label: 'Inquiries', path: '/inquiries' },
-    { icon: <FaUsers />, label: 'Contacts', path: '/contacts' },
-    { icon: <FaStar />, label: 'Reviews', path: '/reviews' },
+    { icon: <FaPlane />, label: 'Holidays', path: '/holidays' },
+    { icon: <FaUser />, label: 'User', path: '/user' },
+    { icon: <FaFile />, label: 'Documents', path: '/documents' },
+    { icon: <FaUserTag />, label: 'Role', path: '/role' },
     { icon: <FaChartBar />, label: 'Reports', path: '/reports' },
-    { icon: <FaUser />, label: 'PM', path: '/pm' }
+    { icon: <FaGavel />, label: 'Rules', path: '/rules' }
 ];
 
 const SidePanel: React.FC = () => {
+    const location = useLocation();
     return (
         <nav className={styles.sidePanel}>
             <ul className={styles.menu}>
                 {menuItems.map((item, index) => (
-                    <React.Fragment key={index}>
-                        <li className={styles.menuItem}>
-                            <Link to={item.path} className={styles.menuLink}>
-                                <span className={styles.icon}>{item.icon}</span>
-                                <span className={styles.label}>{item.label}</span>
-                            </Link>
-                        </li>
-                    </React.Fragment>
+                    <li key={index} className={styles.menuItem}>
+                        <Link to={item.path} className={`${styles.menuLink} ${location.pathname === item.path ? styles.active : ''}`}>
+                            <span className={styles.icon}>{item.icon}</span>
+                            <span className={styles.label}>{item.label}</span>
+                        </Link>
+                    </li>
                 ))}
             </ul>
         </nav>

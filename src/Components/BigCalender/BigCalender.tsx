@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Calendar as BigCalendar, momentLocalizer } from 'react-big-calendar';
 import moment from "moment";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from "@mui/material"; import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from "@mui/material";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -10,14 +11,39 @@ import './BigCalender.css'
 const localizer = momentLocalizer(moment);
 
 interface Event {
+    id?: number;
     title: string;
     start: Date;
     end: Date;
     desc: string;
 }
 
+const bookedDates: Event[] = [
+    {
+        id: 1,
+        title: "Booked",
+        start: new Date("2024-08-01T10:00:00"),
+        end: new Date("2024-08-03T11:00:00"),
+        desc: "Booked"
+    },
+    {
+        id: 2,
+        title: "Booked",
+        start: new Date("2024-08-06T18:00:00"),
+        end: new Date("2024-08-06T22:00:00"),
+        desc: "Party"
+    },
+    {
+        id: 3,
+        title: "Booked",
+        start: new Date("2024-08-09T17:00:00"),
+        end: new Date("2024-08-13T18:30:00"),
+        desc: "Personal training"
+    }
+];
+
 const Calendar: React.FC = () => {
-    const [events, setEvents] = useState<Event[]>([]);
+    const [events, setEvents] = useState<Event[]>((bookedDates));
     const [title, setTitle] = useState("");
     const [start, setStart] = useState<Date | null>(null);
     const [end, setEnd] = useState<Date | null>(null);
@@ -99,7 +125,7 @@ const Calendar: React.FC = () => {
             <BigCalendar
                 localizer={localizer}
                 events={events}
-                views={["month", "week", "day", "agenda"]}
+                views={["month", "week", "day"]}
                 timeslots={2}
                 defaultView="month"
                 defaultDate={new Date()}
@@ -173,8 +199,6 @@ const Calendar: React.FC = () => {
                         id="description"
                         label="Description"
                         fullWidth
-                        multiline
-                        rows={4}
                         defaultValue={desc}
                         onChange={e => setDesc(e.target.value)}
                     />
@@ -183,11 +207,13 @@ const Calendar: React.FC = () => {
                             label="Start Time"
                             value={moment(start)}
                             onChange={handleStartTime}
+                            className="time-picker"
                         />
                         <TimePicker
                             label="End Time"
                             value={moment(end)}
                             onChange={handleEndTime}
+                            className="custom-time-picker"
                         />
                     </LocalizationProvider>
                 </DialogContent>

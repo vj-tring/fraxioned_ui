@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    overflow-x: hidden;
+    overflow: hidden;
     background-color: #f5f7fa;
 }
 
@@ -10,15 +10,13 @@
     display: flex;
     flex: 1;
     margin-top: 60px;
-    /* Adjust based on your navbar height */
 }
 
 .content {
     flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    background-color: transparent;
+    padding: 0;
+    overflow: hidden;
+    background-color: #ffffff;
 }
 
 .custom-navbar {
@@ -30,19 +28,10 @@
 
 .side-panel {
     width: 250px;
-    /* Adjust based on your design */
     position: fixed;
     left: 0;
     top: 60px;
-    /* Adjust based on your navbar height */
     height: calc(100% - 60px);
-    /* Adjust based on your navbar height */
     background-color: #ffffff;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.content {
-    padding-bottom: 30px;
-    background-color: #fff;
-    /* Example background color */
 }

@@ -39,7 +39,7 @@ interface CustomNavbarProps {
 
 const CustomNavbar: React.FC<CustomNavbarProps> = ({
   logo,
-  links = [], // Provide a default empty array
+  links = [], 
   userImage,
   userName,
   onUserImageClick,

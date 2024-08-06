@@ -8,6 +8,7 @@ import {
 import Login from './Components/Login/Login'
 import Signup from './Components/Signup/Signup'
 import ForgotPassword from './Components/ForgetPassword/ForgotPassword'
+import UserDetails from 'Components/UserDetails/UserDetails'
 import ResetPassword from './Components/ResetPassword/ResetPassword'
 import SidePanel from 'Components/Sidepanel/Sidepanel'
 import Dashboard from './Components/Dashboard/Dashboard'
@@ -40,6 +41,7 @@ const App: FC = () => {
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/userdetails" element={<UserDetails />} />
           <Route path="/sidepanel" element={<SidePanel />} />
           <Route path="/register" element={<Signup />} />
           <Route path="/recover" element={<Change />} />
