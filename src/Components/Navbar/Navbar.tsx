@@ -21,7 +21,7 @@ import ResetPasswordModal from './ResetPasswordModal';
 
 interface CustomNavbarProps {
   logo: string
-  links: {
+  links?: {
     disabled: boolean | undefined
     name: string
     href: string
@@ -39,7 +39,7 @@ interface CustomNavbarProps {
 
 const CustomNavbar: React.FC<CustomNavbarProps> = ({
   logo,
-  links,
+  links = [], // Provide a default empty array
   userImage,
   userName,
   onUserImageClick,
@@ -55,9 +55,9 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
     handleLogout,
 
     showResetPasswordModal,
-  
+
     handleCloseResetPasswordModal,
-    
+
 
   } = useNavbarHandler()
 
@@ -74,7 +74,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
     setStoredName(`${firstName} ${lastName}`);
   }, []);
 
-  
+
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -90,7 +90,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
   const handleCloseNewAccountModal = () => {
     setOpenNewAccountDialog(false)
   }
- 
+
   return (
     <>
       <Navbar bg="light" expand="lg" className="p-2">
@@ -122,7 +122,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
 
         <Nav className="ml-auto">
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Tooltip  title="Account settings">
+            <Tooltip title="Account settings">
               <IconButton
                 onClick={handleClick}
                 size="small"
@@ -130,7 +130,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                 aria-controls={open ? 'account-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
-                  disableRipple
+                disableRipple
 
               >
                 <Box
@@ -221,7 +221,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               <Avatar /> Profile
             </MenuItem>
             <MenuItem onClick={handleOpenResetPasswordModal}>
-              <Avatar /> Reset 
+              <Avatar /> Reset
             </MenuItem>
             <Divider />
             <MenuItem onClick={handleOpenNewAccountModal}>
@@ -254,13 +254,13 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
         open={openNewAccountDialog}
         handleClose={handleCloseNewAccountModal}
       />
-      
+
       <ResetPasswordModal
         show={showResetPasswordModal}
         onHide={handleCloseResetPasswordModal}
       />
 
-      
+
     </>
   )
 }

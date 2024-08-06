@@ -33,8 +33,8 @@ const Dashboard: React.FC = () => {
     { name: 'BOOKING', href: '/booking', disabled: false },
     { name: 'PEAK SEASON', href: '/peak-season', disabled: false },
     { name: 'PAYEMENTS', href: '/payements', disabled: false },
-    { name: 'FAQ', href: '/faq', disabled: false }, 
-    
+    { name: 'FAQ', href: '/faq', disabled: false },
+
   ]
 
   return (
@@ -55,7 +55,7 @@ const Dashboard: React.FC = () => {
             <Route path="/contact" element={<Contact />} />
             <Route path="/user-details" element={<UserDetails />} />
             <Route path="/booking" element={<Booking />} />
-            <Route path="/peak-season" element={<ComingSoon/>} />
+            <Route path="/peak-season" element={<ComingSoon />} />
             <Route path="/payements" element={<ComingSoon />} />
             <Route path="*" element={<Navigate to="/dashboard" />} />
 

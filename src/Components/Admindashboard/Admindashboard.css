@@ -1,0 +1,48 @@
+.admin-dashboard-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-color: #f5f7fa;
+}
+
+.dashboard-content {
+    display: flex;
+    flex: 1;
+    margin-top: 60px;
+    /* Adjust based on your navbar height */
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: transparent;
+}
+
+.custom-navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.side-panel {
+    width: 250px;
+    /* Adjust based on your design */
+    position: fixed;
+    left: 0;
+    top: 60px;
+    /* Adjust based on your navbar height */
+    height: calc(100% - 60px);
+    /* Adjust based on your navbar height */
+    background-color: #ffffff;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.content {
+    padding-bottom: 30px;
+    background-color: #fff;
+    /* Example background color */
+}

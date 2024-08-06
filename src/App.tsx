@@ -9,8 +9,10 @@ import Login from './Components/Login/Login'
 import Signup from './Components/Signup/Signup'
 import ForgotPassword from './Components/ForgetPassword/ForgotPassword'
 import ResetPassword from './Components/ResetPassword/ResetPassword'
+import SidePanel from 'Components/Sidepanel/Sidepanel'
 import Dashboard from './Components/Dashboard/Dashboard'
 import ResponsiveAppBar from './Components/NavbarMUI/NavbarUI'
+import AdminDashboard from 'Components/Admindashboard/Admindashboard'
 // import Booking from 'Components/Booking/Booking'
 import Date from 'Components/Home/DatesContainer/Date'
 // import MultipleSelect from 'Components/Home/DatesContainer/MultipleSelect'
@@ -38,6 +40,7 @@ const App: FC = () => {
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/sidepanel" element={<SidePanel />} />
           <Route path="/register" element={<Signup />} />
           <Route path="/recover" element={<Change />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -58,6 +61,7 @@ const App: FC = () => {
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/date" element={<Date />} />
           <Route path="/*" element={<PrivateRoute element={Dashboard} />} />
+          <Route path="/admin/*" element={<PrivateRoute element={AdminDashboard} />} />
 
           {/* <Route path="/multiselect" element={<MultipleSelect />} />
           <Route path="/basicselect" element={<BasicSelect />} /> */}
