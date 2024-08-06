@@ -1,0 +1,55 @@
+describe("Login & Dashboard Navigation",()=>{
+    describe.skip("Unsuccessful Login",()=>{
+        it("Empty Email",()=>{
+            cy.visit("http://localhost:3002/login")
+            .get("button").contains("Sign in").click()
+            cy.get("div").contains("Please fill in the Email ID")
+        })
+        it("Invalid Email",()=>{
+            cy.visit("http://localhost:3002/login")
+            cy.get("input[placeholder='Email']").type("email")
+            cy.get("button").contains("Sign in").click()
+            cy.get("div").contains("Please enter a valid email ID")
+        })
+        it("Empty Password",()=>{
+            cy.visit("http://localhost:3002/login")
+            cy.get("input[placeholder='Email']").type("email@email.com")
+            cy.get("button").contains("Sign in").click()
+            .wait(2000)
+            cy.get("div").contains("Please fill in the Password")
+        })
+        it("User Not Found",()=>{
+            cy.visit("http://localhost:3002/login")
+            cy.get("input[placeholder='Email']").type("email@email.com")
+            cy.get("input[placeholder='Password']").type("Password")
+            cy.get("button").contains("Sign in").click()
+            .wait(2000)
+            .get("div").contains("User not found")
+        })
+        it("Invalid Credentials",()=>{
+            cy.visit("http://localhost:3002/login")
+            cy.get("input[placeholder='Email']").type("dharshanramk@gmail.com")
+            cy.get("input[placeholder='Password']").type("Password")
+            cy.get("button").contains("Sign in").click()
+            .wait(2000)
+            .get("div").contains("Invalid credentials")
+        })
+    })
+    describe("Successful Login",()=>{
+        it("Login With Valid Credentials",()=>{
+            cy.visit("http://localhost:3002/login")
+            cy.get("input[placeholder='Email']").type("dharshanramk@gmail.com")
+            cy.get("input[placeholder='Password']").type("Admin@123")
+            cy.get("input[type='checkbox']").check().should('be.checked')
+            cy.get("input[type='checkbox']").uncheck().should('not.be.checked')
+            cy.get("input[type='checkbox']").check().should('be.checked')
+            cy.get("button").contains("Sign in").click()
+            .wait(2000)
+            .get("img[alt='Logo']")
+            cy.get("nav")
+            .get("img[alt='User']").click()
+            .get('li').contains("Logout").click()
+        })    
+
+    })
+})
