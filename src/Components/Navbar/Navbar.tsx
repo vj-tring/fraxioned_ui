@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
@@ -18,11 +19,12 @@ import { NavLink } from 'react-router-dom'; // Import NavLink
 import useNavbarHandler from './NavbarFunction';
 import { Typography } from '@mui/material';
 import './Navbar.css';
-import { Nav } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+import { RootState } from 'Redux/reducers';
 
 interface CustomNavbarProps {
   logo: string;
-  links: {
+  links?: {
     disabled: boolean | undefined;
     name: string;
     href: string;
@@ -35,7 +37,7 @@ interface CustomNavbarProps {
 
 const CustomNavbar: React.FC<CustomNavbarProps> = ({
   logo,
-  links,
+  links = [],
   userImage,
   userName,
   onUserImageClick,
@@ -55,6 +57,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [openNewAccountDialog, setOpenNewAccountDialog] = useState(false);
   const [storedName, setStoredName] = useState('');
+  const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
 
   useEffect(() => {
     const userDataString = localStorage.getItem('user');
@@ -70,6 +73,27 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+
+  const handleProfileClick = () => {
+    onUserImageClick?.();
+    handleClose();
+  };
+
+  const handleResetPasswordClick = () => {
+    handleOpenResetPasswordModal();
+    handleClose();
+  };
+
+  const handleAddAccountClick = () => {
+    handleOpenNewAccountModal();
+    handleClose();
+  };
+
+  const handleLogoutClick = () => {
+    handleShowLogoutModal();
+    handleClose();
   };
 
   const handleOpenNewAccountModal = () => {
@@ -180,6 +204,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               elevation: 0,
               sx: {
                 overflow: 'visible',
+                width: '210px',
                 filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
                 mt: 1.5,
                 '& .MuiAvatar-root': {
@@ -211,20 +236,22 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               vertical: 'bottom',
             }}
           >
-            <MenuItem onClick={onUserImageClick}>
+            <MenuItem onClick={handleProfileClick}>
               <Avatar /> Profile
             </MenuItem>
-            <MenuItem onClick={handleOpenResetPasswordModal}>
-              <Avatar /> Reset 
+            <MenuItem onClick={handleResetPasswordClick}>
+              <Avatar /> Reset
             </MenuItem>
             <Divider />
-            <MenuItem onClick={handleOpenNewAccountModal}>
-              <ListItemIcon>
-                <PersonAddIcon fontSize="small" />
-              </ListItemIcon>
-              Add another account
-            </MenuItem>
-            <MenuItem onClick={handleShowLogoutModal}>
+            {isAdmin && (
+              <MenuItem onClick={handleAddAccountClick}>
+                <ListItemIcon>
+                  <PersonAddIcon fontSize="small" />
+                </ListItemIcon>
+                Add another account
+              </MenuItem>
+            )}
+            <MenuItem onClick={handleLogoutClick}>
               <ListItemIcon>
                 <LogoutIcon fontSize="small" />
               </ListItemIcon>

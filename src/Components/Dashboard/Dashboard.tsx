@@ -29,6 +29,7 @@ const Dashboard: React.FC = () => {
   }, [navigate]);
   const links = [
     { name: 'HOME', href: '/dashboard', disabled: false },
+
     { name: 'BOOKINGS', href: '/booking', disabled: false },
     { name: 'PAYMENTS', href: '/peak-season', disabled: false },
     { name: 'DOCUMENTS', href: '/payements', disabled: false },
