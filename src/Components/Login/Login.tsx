@@ -6,8 +6,9 @@ import { login } from '../../Redux/slice/auth/authSlice';
 import styles from './Login.module.css';
 import logo from './fraxioned.png';
 import background from './background.jpg';
-import Loader from '../Loader/Loader'
+import Loader from '../Loader/Loader';
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
+import { selectIsAdmin } from '../../Redux/slice/auth/authSlice';
 
 
 const Login: React.FC = () => {
@@ -20,7 +21,8 @@ const Login: React.FC = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const isAdmin = useSelector(selectIsAdmin);
 
 
   const validateEmail = (email: string) => {
@@ -43,8 +45,7 @@ const Login: React.FC = () => {
     } else {
       setEmailError('');
       setPasswordError(false);
-      setIsLoading(true)
-
+      setIsLoading(true);
 
       try {
         const resultAction = await dispatch(login({ email, password })).unwrap();
@@ -62,7 +63,7 @@ const Login: React.FC = () => {
           setIsLoading(false);
         }
       } catch (error) {
-        setSnackbarMessage(error as string || 'Login failed. Please try again.');
+        setSnackbarMessage((error as string) || 'Login failed. Please try again.');
         setSnackbarSeverity('error');
         setShowSnackbar(true);
         setIsLoading(false);

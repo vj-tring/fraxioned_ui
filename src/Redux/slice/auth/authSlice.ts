@@ -70,8 +70,6 @@ const loadStateFromLocalStorage = (): AuthState => {
   };
 };
 const initialState: AuthState = loadStateFromLocalStorage();
-
-
 export const login = createAsyncThunk<
   { user: User; session: Session },
   { email: string; password: string },
