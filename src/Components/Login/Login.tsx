@@ -8,7 +8,6 @@ import logo from './fraxioned.png';
 import background from './background.jpg';
 import Loader from '../Loader/Loader';
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
-import { selectIsAdmin } from '../../Redux/slice/auth/authSlice';
 
 
 const Login: React.FC = () => {
