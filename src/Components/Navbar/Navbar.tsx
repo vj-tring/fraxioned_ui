@@ -75,6 +75,26 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
     setAnchorEl(null);
   };
 
+  const handleProfileClick = () => {
+    onUserImageClick?.();
+    handleClose();
+  };
+
+  const handleResetPasswordClick = () => {
+    handleOpenResetPasswordModal();
+    handleClose();
+  };
+
+  const handleAddAccountClick = () => {
+    handleOpenNewAccountModal();
+    handleClose();
+  };
+
+  const handleLogoutClick = () => {
+    handleShowLogoutModal();
+    handleClose();
+  };
+
   const handleOpenNewAccountModal = () => {
     setOpenNewAccountDialog(true);
   };
@@ -206,22 +226,22 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               vertical: 'bottom',
             }}
           >
-            <MenuItem onClick={onUserImageClick}>
+            <MenuItem onClick={handleProfileClick}>
               <Avatar /> Profile
             </MenuItem>
-            <MenuItem onClick={handleOpenResetPasswordModal}>
+            <MenuItem onClick={handleResetPasswordClick}>
               <Avatar /> Reset
             </MenuItem>
             <Divider />
             {isAdmin && (
-              <MenuItem onClick={handleOpenNewAccountModal}>
+              <MenuItem onClick={handleAddAccountClick}>
                 <ListItemIcon>
                   <PersonAddIcon fontSize="small" />
                 </ListItemIcon>
                 Add another account
               </MenuItem>
             )}
-            <MenuItem onClick={handleShowLogoutModal}>
+            <MenuItem onClick={handleLogoutClick}>
               <ListItemIcon>
                 <LogoutIcon fontSize="small" />
               </ListItemIcon>
