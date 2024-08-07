@@ -53,7 +53,7 @@ const Login: React.FC = () => {
           setShowSnackbar(true);
 
           if (resultAction.user.role.id === 1) {
-            navigate('/admin/dashboard');
+            navigate('/admin/bookings');
           } else {
             navigate('/*');
           }

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import SidePanel from '../Sidepanel/Sidepanel'
 import Calendar from '../BigCalender/BigCalender';
 import userImage from '../../assets/profile.jpeg'
@@ -29,6 +29,7 @@ const AdminDashboard: React.FC = () => {
                 <SidePanel />
                 <div className="content">
                     <Routes>
+                        <Route path="/" element={<Navigate to="/admin/bookings" replace />} />
                         <Route path="/bookings" element={<Calendar />} />
                         <Route path="/userdetails" element={<UserDetails />} />
                     </Routes>
@@ -39,3 +40,5 @@ const AdminDashboard: React.FC = () => {
 };
 
 export default AdminDashboard;
+
+
