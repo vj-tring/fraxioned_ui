@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Typography, Button } from '@material-ui/core';
+import { Grid, Typography, Button } from '@mui/material'; // Updated import for Material-UI components
 import './ThingstoKnow.css';
 const HouseRules = () => {
   const [showMore, setShowMore] = useState(false);

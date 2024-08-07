@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {  Typography, Button } from '@material-ui/core';
+import {  Typography, Button } from '@mui/material'; // Updated import for Material-UI components
 
 
 const MapEmbed = () => {
