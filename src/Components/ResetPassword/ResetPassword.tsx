@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styles from "./ResetPassword.module.css";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Loader from '../Loader/Loader'
 import { IoMdClose } from "react-icons/io";
@@ -25,7 +24,6 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
   const [userId, setUserId] = useState<number | null>(null);
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
   const [apiError, setApiError] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const userData = localStorage.getItem("user");
