@@ -12,15 +12,12 @@ import Contact from '../ContactUs/Contact';
 import UserDetails from '../UserDetails/UserDetails';
 import ComingSoon from '../ComingSoon/ComingSoon';
 import { isAuthenticated } from '../../authService';
-import PermanentDrawerLeft from 'Components/UserRoles/adminSidebar';
 import Home from 'Components/Home/Home';
 import Booking from 'Components/Booking/Booking';
-import { selectIsAdmin } from '../../Redux/slice/auth/authSlice';
 const Dashboard: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [userEmail, setUserEmail] = useState('');
   const navigate = useNavigate();
-  const isAdmin = useSelector(selectIsAdmin);
   useEffect(() => {
     if (!isAuthenticated()) {
       navigate('/login');
@@ -35,7 +32,6 @@ const Dashboard: React.FC = () => {
   ];
   return (
     <div className="dashboard-container">
-      {isAdmin && <PermanentDrawerLeft />}
       <CustomNavbar
         logo={fraxionedLogo}
         links={links}
