@@ -16,6 +16,23 @@ import { isAuthenticated } from '../../authService';
 import Home from 'Components/Home/Home';
 import Booking from 'Components/Booking/Booking';
 // import { selectIsAdmin } from '../../Redux/slice/auth/authSlice';
+
+import CustomNavbar from '../../Components/Navbar/Navbar'
+import 'bootstrap/dist/css/bootstrap.min.css'
+
+import fraxionedLogo from '../../assets/images/BB - Owners.png'
+import Footer from '../../Footer/Footer'
+import userImage from '../../assets/profile.jpeg'
+import './Dashboard.css'
+import Home from '../Home/Home'
+import CustomizedAccordions from '../CustomizedAccordions/CustomizedAccordions'
+import Contact from '../ContactUs/Contact'
+import UserDetails from '../UserDetails/UserDetails'
+import ComingSoon from '../ComingSoon/ComingSoon'
+import { isAuthenticated } from '../../authService'
+import Booking from 'Components/Booking/Booking'
+// import PeakSeasonCard from 'Components/Home/PeakSeasonCard'
+
 const Dashboard: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [userEmail, setUserEmail] = useState('');
