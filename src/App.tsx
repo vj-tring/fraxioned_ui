@@ -36,11 +36,9 @@ const PrivateRoute: FC<PrivateRouteProps> = ({ element: Element, allowedRoles })
   if (!token) {
     return <Navigate to="/login" />;
   }
-
   if (allowedRoles.includes(user.role.id)) {
     return <Element />;
   }
-
   return <Navigate to="/dashboard" />;
 };
 
@@ -74,17 +72,13 @@ const App: FC = () => {
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/date" element={<Date />} />
           <Route
-            path="/dashboard"
+            path="/*"
             element={<PrivateRoute element={Dashboard} allowedRoles={[2, 3]} />}
           />
           <Route
             path="/admin/*"
             element={<PrivateRoute element={AdminDashboard} allowedRoles={[1]} />}
           />
-
-
-          {/* <Route path="/multiselect" element={<MultipleSelect />} />
-          <Route path="/basicselect" element={<BasicSelect />} /> */}
         </Routes>
       </Router>
     </Provider>
