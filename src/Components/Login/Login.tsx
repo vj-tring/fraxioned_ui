@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../Redux/store/index';
 import { login } from '../../Redux/slice/auth/authSlice';
-import { RootState } from 'Redux/reducers';
 import styles from './Login.module.css';
 import logo from './fraxioned.png';
 import background from './background.jpg';
@@ -21,7 +20,6 @@ const Login: React.FC = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
   const [isLoading, setIsLoading] = useState(false)
 
 
@@ -55,10 +53,10 @@ const Login: React.FC = () => {
           setSnackbarSeverity('success');
           setShowSnackbar(true);
 
-          if (isAdmin) {
+          if (resultAction.user.role.id === 1) {
             navigate('/admin/dashboard');
           } else {
-            navigate('/dashboard');
+            navigate('/*');
           }
 
           setIsLoading(false);
