@@ -11,7 +11,6 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import LogoutIcon from '@mui/icons-material/Logout';
-import AdminDashboard from 'Components/Admindashboard/Admindashboard';
 import InviteModal from './SentInviteModal';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import FormDialog from '../RegisterFormPopUp/RegisterForm';
