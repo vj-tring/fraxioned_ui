@@ -1,20 +1,20 @@
 describe("Forget password",()=>{
     describe("Unsuccessfull",()=>{
         it("Check empty email ",()=>{
-            cy.visit("http://localhost:3002/login")
+            cy.visit("/login")
             .get("a").contains("Forgot password?").click()
             .get("button[type='submit']").contains("Submit").click()
             .get("div").contains("Please fill in the Email ID")
         })
         it("Invalid Email",()=>{
-            cy.visit("http://localhost:3002/login")
+            cy.visit("/login")
             .get("a").contains("Forgot password?").click()
             .get("input[placeholder='Email']").type("email")
             .get("button[type='submit']").contains("Submit").click()
             .get("div").contains("Please enter a valid email ID")
         })
         it("User Not Found",()=>{
-            cy.visit("http://localhost:3002/login")
+            cy.visit("/login")
             .get("a").contains("Forgot password?").click()
             .get("input[placeholder='Email']").type("email@email.com")
             .get("button[type='submit']").contains("Submit").click({ force: true })
@@ -24,7 +24,7 @@ describe("Forget password",()=>{
     })
     describe("Successfull",()=>{
         it("Successfully sended reset email",()=>{
-            cy.visit("http://localhost:3002/login")
+            cy.visit("/login")
             .get("a").contains("Forgot password?").click()
             .get("input[placeholder='Email']").type("dharshanramk@gmail.com")
             .get("input[type='checkbox']").check().should('be.checked')
