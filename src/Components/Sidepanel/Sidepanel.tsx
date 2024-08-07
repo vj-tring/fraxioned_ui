@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import fraxionedLogo from '../../assets/images/fraxioned_logo.png'
 import {
     FaCalendar, FaPlane, FaUser, FaFile,
     FaUserTag, FaChartBar, FaGavel
 } from 'react-icons/fa';
+
 import styles from './Sidepanel.module.css';
 
 interface MenuItem {
@@ -26,6 +28,10 @@ const SidePanel: React.FC = () => {
     const location = useLocation();
     return (
         <nav className={styles.sidePanel}>
+            <div className={styles.logoContainer}>
+                <img src={fraxionedLogo} alt="BB - Owners" className={styles.logo} />
+            </div>
+            <hr className={styles.hr} />
             <ul className={styles.menu}>
                 {menuItems.map((item, index) => (
                     <li key={index} className={styles.menuItem}>
