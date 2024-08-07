@@ -5,7 +5,7 @@ import { AppDispatch } from '../../Redux/store/index';
 import { login } from '../../Redux/slice/auth/authSlice';
 import styles from './Login.module.css';
 import logo from './fraxioned.png';
-import background from './background.jpg';
+import background from './background.png';
 import Loader from '../Loader/Loader';
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
 
