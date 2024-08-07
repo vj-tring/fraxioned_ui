@@ -1,10 +1,9 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { BrowserRouter, MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import SidePanel from './Sidepanel';
 
-// Utility function to render the SidePanel component
 const renderSidePanel = (initialEntries = ['/']) => {
     render(
         <MemoryRouter initialEntries={initialEntries}>

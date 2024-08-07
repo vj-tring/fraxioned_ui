@@ -1,11 +1,11 @@
-import React, {useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Routes, Route, useNavigate } from 'react-router-dom';
-import SidePanel from 'Components/Sidepanel/Sidepanel';
-import Calendar from 'Components/BigCalender/BigCalender';
+import SidePanel from '../Sidepanel/Sidepanel'
+import Calendar from '../BigCalender/BigCalender';
 import userImage from '../../assets/profile.jpeg'
-import CustomNavbar from 'Components/Navbar/Navbar';
+import CustomNavbar from '../Navbar/Navbar';
 import { isAuthenticated } from 'authService';
-import UserDetails from 'Components/UserDetails/UserDetails';
+import UserDetails from '../UserDetails/UserDetails';
 import fraxionedLogo from '../../assets/images/BB - Owners.png'
 import './Admindashboard.css'
 

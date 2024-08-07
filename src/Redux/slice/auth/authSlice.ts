@@ -1,7 +1,10 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../../reducers';
 import { loginUser, logoutUserApi } from 'utils/api';
-
+interface Role {
+  id: number;
+  roleName: string;
+}
 interface User {
   roleId: number;
   id: number;
@@ -11,21 +14,28 @@ interface User {
   mobile: string;
   address: string;
   city: string;
-  role: {
-    id: number;
-    roleName: string;
-  };
   state: string;
   isAdmin: boolean;
   country: string;
   zipcode: string;
+  password: string;
+  imageURL: string | null;
+  isActive: number;
+  addressLine1: string | null;
+  addressLine2: string | null;
+  resetToken: string;
+  resetTokenExpires: string | null;
+  lastLoginTime: string;
+  createdBy: number;
+  updatedBy: number;
+  createdAt: string;
+  updatedAt: string;
+  role: Role;
 }
-
 interface Session {
   token: string;
   expiresAt: string;
 }
-
 interface AuthState {
   user: User | null;
   session: Session | null;
@@ -33,14 +43,13 @@ interface AuthState {
   error: string | null;
   isAdmin: boolean;
 }
-
 const loadStateFromLocalStorage = (): AuthState => {
   try {
     const user = localStorage.getItem('user');
     const session = localStorage.getItem('session');
     if (user && session) {
       const parsedUser = JSON.parse(user);
-      const isAdmin = parsedUser.roleId === 1;
+      const isAdmin = parsedUser.role.id === 1;
       return {
         user: parsedUser,
         session: JSON.parse(session),
@@ -60,9 +69,7 @@ const loadStateFromLocalStorage = (): AuthState => {
     isAdmin: false,
   };
 };
-
 const initialState: AuthState = loadStateFromLocalStorage();
-
 export const login = createAsyncThunk<
   { user: User; session: Session },
   { email: string; password: string },
@@ -73,7 +80,6 @@ export const login = createAsyncThunk<
     try {
       const response = await loginUser(email, password);
       const data = response.data;
-
       if (response.data.status === 200 && data.message === 'Login successful') {
         const { session, user } = data;
         localStorage.setItem('user', JSON.stringify(user));
@@ -89,14 +95,12 @@ export const login = createAsyncThunk<
     }
   }
 );
-
 export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
   'authentication/logout',
   async (_, { getState, rejectWithValue }) => {
     try {
       const state = getState() as RootState;
       const sessionToken = state.auth.session?.token;
-
       if (sessionToken) {
         await logoutUserApi(sessionToken);
         localStorage.clear();
@@ -106,7 +110,6 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
     }
   }
 );
-
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -114,7 +117,7 @@ const authSlice = createSlice({
     setCredentials: (state, action: PayloadAction<{ user: User; session: Session }>) => {
       state.user = action.payload.user;
       state.session = action.payload.session;
-      state.isAdmin = action.payload.user.roleId === 1;
+      state.isAdmin = action.payload.user.role.id === 1;
       localStorage.setItem('user', JSON.stringify(action.payload.user));
       localStorage.setItem('session', JSON.stringify(action.payload.session));
     },
@@ -134,7 +137,7 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action: PayloadAction<{ user: User; session: Session }>) => {
         state.user = action.payload.user;
         state.session = action.payload.session;
-        state.isAdmin = action.payload.user.roleId === 1;
+        state.isAdmin = action.payload.user.role.id === 1;
         state.loading = false;
         state.error = null;
       })
@@ -153,9 +156,7 @@ const authSlice = createSlice({
       });
   },
 });
-
 export const { logout, setCredentials } = authSlice.actions;
-
 // Selectors
 export const selectCurrentUser = (state: { auth: AuthState }) => state.auth.user;
 export const selectIsAdmin = (state: { auth: AuthState }) => state.auth.isAdmin;

@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../Redux/store/index';
 import { login } from '../../Redux/slice/auth/authSlice';
+import { RootState } from 'Redux/reducers';
 import styles from './Login.module.css';
 import logo from './fraxioned.png';
 import background from './background.jpg';
 import Loader from '../Loader/Loader'
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
+
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -19,6 +21,7 @@ const Login: React.FC = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
   const [isLoading, setIsLoading] = useState(false)
 
 
@@ -52,7 +55,7 @@ const Login: React.FC = () => {
           setSnackbarSeverity('success');
           setShowSnackbar(true);
 
-          if (resultAction.user.role.id === 1) {
+          if (isAdmin) {
             navigate('/admin/dashboard');
           } else {
             navigate('/dashboard');
