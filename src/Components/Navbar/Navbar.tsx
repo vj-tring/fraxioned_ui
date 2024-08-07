@@ -20,7 +20,6 @@ import { Typography } from '@mui/material';
 import ResetPasswordModal from './ResetPasswordModal';
 import { useSelector } from 'react-redux';
 import { RootState } from 'Redux/reducers';
-import { useLocation } from 'react-router-dom';
 
 interface CustomNavbarProps {
   logo?: string;
@@ -42,9 +41,6 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
   userName,
   onUserImageClick,
 }) => {
-  const location = useLocation();
-  const isAdminDashboard = location.pathname.startsWith('/admin');
-
   const {
     showInviteModal,
     showLogoutModal,
@@ -110,17 +106,15 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
   return (
     <>
       <Navbar bg="light" expand="lg" className="p-2">
-        {!isAdminDashboard && (
-          <Navbar.Brand href="#home" className="p-2">
-            <img
-              src={logo}
-              height="40"
-              width="160"
-              className="d-inline-block align-top"
-              alt="Logo"
-            />
-          </Navbar.Brand>
-        )}
+        <Navbar.Brand href="#home" className="p-2">
+          <img
+            src={logo}
+            height="40"
+            width="160"
+            className="d-inline-block align-top"
+            alt="Logo"
+          />
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
