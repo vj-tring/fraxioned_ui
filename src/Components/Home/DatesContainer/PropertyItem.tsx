@@ -191,6 +191,7 @@ export default function BasicSelect() {
   return (
     <Box sx={{ width: 280, borderRadius: 32 }}>
       <Button
+      disableRipple
         aria-controls="basic-menu"
         aria-haspopup="true"
         onClick={handleClick}
@@ -228,35 +229,24 @@ export default function BasicSelect() {
       >
         {cards.length > 0 && (
           <MenuItem disableRipple>
-            <div className="CardItem">
+            <div className="CardItem py-2">
               <div className="d-flex justify-content-between IconArrow">
-                <Button
-                  onClick={handlePrevCard}
-                  disabled={selectedCardIndex === 0}
-                >
-                  <FontAwesomeIcon icon={faArrowLeft} />
-                </Button>
-
-                <h4 className="BlueHead1">{selectedCard?.name}</h4>
-                <Button
-                  onClick={handleNextCard}
-                  disabled={selectedCardIndex === cards.length - 1}
-                >
-                  <FontAwesomeIcon icon={faArrowRight} />
-                </Button>
+                <Button className="currentproperty" onClick={handlePrevCard} disabled={selectedCardIndex === 0}>{selectedCard?.name}</Button>
+                <Button className="nextproperty"  onClick={handleNextCard} disabled={selectedCardIndex === cards.length - 1}>{!(selectedCardIndex === cards.length - 1)?cards[(selectedCardIndex + 1) % cards.length].name:'Completed'}</Button>
               </div>
 
               {selectedCard && (
                 <div className="card-content">
-                  <div className="d-flex justify-content-between mt-1 p-2">
+                  <div className="card-name d-flex justify-content-between mt-1 py-2 align-items-center">
                     <span>
                       <h4 className="BlueHead">{selectedCard.name}</h4>
                       <p className="BlueFont">{selectedCard.address}</p>
                     </span>
                     <span className="image1"></span>
                   </div>
-                  <div className="d-flex justify-content-around p-2">
+                  <div className="d-flex justify-content-between py-2 align-items-center pt-0">
                     <p className="Available">My Available Nights</p>
+                    <div className="d-flex justify-content-between align-items-center gap-2">
                     {years.map((year) => (
                       <button
                         key={year}
@@ -266,30 +256,31 @@ export default function BasicSelect() {
                         {year}
                       </button>
                     ))}
+                    </div>                   
                   </div>
 
-                  <div className="box d-flex justify-content-around p-3">
-                    <div className="d-flex flex-column">
+                  <div className="box d-flex justify-content-around py-2 ">
+                    <div className="d-flex flex-column night-count">
                       <li>
                         {selectedCard.details[selectedYear]?.offSeason || 'N/A'}
                       </li>
                       <li className="Box-list">Off-Season Nights</li>
                     </div>
-                    <div className="d-flex flex-column">
+                    <div className="d-flex flex-column night-count">
                       <li>
                         {selectedCard.details[selectedYear]?.peakSeason ||
                           'N/A'}
                       </li>
                       <li className="Box-list">Peak-Season Nights</li>
                     </div>
-                    <div className="d-flex flex-column">
+                    <div className="d-flex flex-column night-count">
                       <li>
                         {selectedCard.details[selectedYear]?.peakHoliday ||
                           'N/A'}
                       </li>
                       <li className="Box-list">Peak-Season Holiday</li>
                     </div>
-                    <div className="d-flex flex-column">
+                    <div className="d-flex flex-column night-count">
                       <li>
                         {selectedCard.details[selectedYear]?.offSeasonHoliday ||
                           'N/A'}
