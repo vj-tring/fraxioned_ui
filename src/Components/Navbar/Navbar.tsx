@@ -23,7 +23,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'Redux/reducers';
 
 interface CustomNavbarProps {
-  logo: string;
+  logo?: string;
   links?: {
     disabled: boolean | undefined;
     name: string;
