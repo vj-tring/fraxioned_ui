@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import CustomNavbar from '../../Components/Navbar/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import fraxionedLogo from '../../assets/images/BB - Owners.png';
