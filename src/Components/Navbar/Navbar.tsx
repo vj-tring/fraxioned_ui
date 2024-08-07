@@ -14,10 +14,11 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import InviteModal from './SentInviteModal';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import FormDialog from '../RegisterFormPopUp/RegisterForm';
-import '../Navbar/Navbar.css';
+import ResetPasswordModal from './ResetPasswordModal';
+import { NavLink } from 'react-router-dom'; // Import NavLink
 import useNavbarHandler from './NavbarFunction';
 import { Typography } from '@mui/material';
-import ResetPasswordModal from './ResetPasswordModal';
+import './Navbar.css';
 import { useSelector } from 'react-redux';
 import { RootState } from 'Redux/reducers';
 import { useLocation } from 'react-router-dom';
@@ -62,7 +63,6 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
   const [storedName, setStoredName] = useState('');
   const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
 
-
   useEffect(() => {
     const userDataString = localStorage.getItem('user');
     const userData = userDataString ? JSON.parse(userDataString) : null;
@@ -78,6 +78,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
   const handleClose = () => {
     setAnchorEl(null);
   };
+
 
   const handleProfileClick = () => {
     onUserImageClick?.();
@@ -109,6 +110,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
 
   return (
     <>
+
       <Navbar bg="light" expand="lg" className="p-2">
         {!isAdminDashboard && (
           <Navbar.Brand href="#home" className="p-2">
@@ -119,21 +121,26 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               className="d-inline-block align-top"
               alt="Logo"
             />
-          </Navbar.Brand>
+        </Navbar.Brand>
+
         )}
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
             {links.map((link, index) => (
-              <Nav.Link
+              <NavLink
                 key={index}
-                href={link.href}
-                onClick={link.onClick}
-                className="nav-link-with-margin"
-                disabled={link.disabled}
+                to={link.href}
+                onClick={(e) => {
+                  if (link.disabled) {
+                    e.preventDefault(); 
+                  }
+                }}                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                style={{ textDecoration: 'none' }}
+                aria-disabled={link.disabled ? 'true' : 'false'}
               >
                 {link.name}
-              </Nav.Link>
+              </NavLink>
             ))}
           </Nav>
         </Navbar.Collapse>
@@ -155,10 +162,16 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                   alignItems="center"
                   sx={{
                     borderRadius: 1,
+                    
                   }}
                 >
                   <Box>
-                    <Typography variant="body2" color="textPrimary">
+                    <Typography variant="body2" color="textPrimary " className="monsterrat p-2  " sx={{
+                      fontWeight:600,
+                      color:'#00636D',
+                      textTransform:'uppercase'
+
+                    }}>
                       {storedName}
                     </Typography>
                   </Box>

@@ -47,6 +47,7 @@
 .BlueHead {
   margin: 0 !important;
   font-weight: bold;
+  padding-top: 5px;
 }
 .card-name {
   height: 5rem;
@@ -70,6 +71,7 @@
   width: 11.2rem;
   padding: .22rem 2rem !important;
   border-radius: 1rem !important;
+  text-transform: capitalize !important;
 }
 
 .currentproperty {
@@ -107,18 +109,23 @@
 .property1 {
   text-transform: capitalize;
   color: grey;
+  font-size: small;
+
 }
 
 .DateHead1 {
   text-transform: capitalize;
   color: black;
-  font-weight: 500 !important;
+  font-weight: 550 !important;
+  font-size: small;
+  height: 1.1rem;
 }
 
 .PropertyBtn:hover {
-  background-color: rgb(236, 235, 235) !important;
+  background-color: none !important;
   border: none !important;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  box-shadow: none !important;
+  background: none !important;
 }
 
 .CardItem {
@@ -128,7 +135,7 @@
 }
 
 .css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root:hover {
-  background-color: white !important;
+  background-color: none !important;
 }
 
 .IconArrow {

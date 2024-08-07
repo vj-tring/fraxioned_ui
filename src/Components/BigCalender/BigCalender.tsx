@@ -12,7 +12,7 @@ const localizer = momentLocalizer(moment);
 
 interface Event {
     id?: number;
-    title: string;
+    title: string;  
     start: Date;
     end: Date;
     desc: string;

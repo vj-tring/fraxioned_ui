@@ -18,17 +18,22 @@ const Dashboard: React.FC = () => {
   const [userEmail, setUserEmail] = useState('');
   const navigate = useNavigate();
   useEffect(() => {
-    if (!isAuthenticated()) {
-      navigate('/login');
+
+    if (!isAuthenticated()) { 
+      navigate('/login')
     }
   }, [navigate]);
+
+
   const links = [
     { name: 'HOME', href: '/dashboard', disabled: false },
-    { name: 'BOOKING', href: '/booking', disabled: false },
-    { name: 'PEAK SEASON', href: '/peak-season', disabled: false },
-    { name: 'PAYEMENTS', href: '/payements', disabled: false },
-    { name: 'FAQ', href: '/faq', disabled: false },
+    { name: 'BOOKINGS', href: '/booking', disabled: true },
+    { name: 'PAYMENTS', href: '/peak-season', disabled: true },
+    { name: 'DOCUMENTS', href: '/payements', disabled: true },
+    { name: 'MORE', href: '/faq', disabled: true }, 
+    
   ]
+
   return (
     <div className="dashboard-container">
       <CustomNavbar
@@ -54,6 +59,7 @@ const Dashboard: React.FC = () => {
       </div>
       <Footer />
     </div>
+  
   );
 };
 export default Dashboard;
