@@ -22,7 +22,6 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = useState(false);
-  const isAdmin = useSelector(selectIsAdmin);
 
 
   const validateEmail = (email: string) => {
