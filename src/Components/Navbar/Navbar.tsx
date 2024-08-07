@@ -11,6 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import LogoutIcon from '@mui/icons-material/Logout';
+import AdminDashboard from 'Components/Admindashboard/Admindashboard';
 import InviteModal from './SentInviteModal';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import FormDialog from '../RegisterFormPopUp/RegisterForm';
@@ -20,9 +21,10 @@ import { Typography } from '@mui/material';
 import ResetPasswordModal from './ResetPasswordModal';
 import { useSelector } from 'react-redux';
 import { RootState } from 'Redux/reducers';
+import { useLocation } from 'react-router-dom';
 
 interface CustomNavbarProps {
-  logo: string;
+  logo?: string;
   links?: {
     disabled: boolean | undefined;
     name: string;
@@ -41,6 +43,9 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
   userName,
   onUserImageClick,
 }) => {
+  const location = useLocation();
+  const isAdminDashboard = location.pathname.startsWith('/admin');
+
   const {
     showInviteModal,
     showLogoutModal,
@@ -106,15 +111,17 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
   return (
     <>
       <Navbar bg="light" expand="lg" className="p-2">
-        <Navbar.Brand href="#home" className="p-2">
-          <img
-            src={logo}
-            height="40"
-            width="160"
-            className="d-inline-block align-top"
-            alt="Logo"
-          />
-        </Navbar.Brand>
+        {!isAdminDashboard && (
+          <Navbar.Brand href="#home" className="p-2">
+            <img
+              src={logo}
+              height="40"
+              width="160"
+              className="d-inline-block align-top"
+              alt="Logo"
+            />
+          </Navbar.Brand>
+        )}
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
