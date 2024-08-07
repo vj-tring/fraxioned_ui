@@ -1,0 +1,61 @@
+.modal-header {
+  padding-left: 5% !important;
+}
+
+.modal {
+  border: none;
+}
+
+.modal-footer-custom {
+  display: flex;
+  justify-content: flex-end;
+  padding: 15px 20px;
+  border-top: 1px solid #dee2e6;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.message {
+  font-size: 16px;
+  line-height: 1.5;
+  padding: 20px;
+}
+
+.primary1 {
+  background-color: #0c7882;
+  border: none;
+  height: 40px;
+  width: 100px;
+  color: white;
+  border-radius: 5px;
+  margin-left: 10px;
+}
+
+.primary:hover {
+  background-color: #0056b3;
+}
+
+.success1 {
+  background-color: #f39863;
+  border: none;
+  height: 40px;
+  width: 100px;
+  color: white;
+  border-radius: 5px;
+}
+
+.success:hover {
+  background-color: #e9c17d;
+}
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  font-optical-sizing: auto;
+}

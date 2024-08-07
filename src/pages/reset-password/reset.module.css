@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+.modalContent {
+  font-family: 'Poppins', sans-serif;
+  padding: 20px;
+}
+
+.successMessage {
+  background-color: #b4e4b5;
+  color: #333;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.errorMessage1 {
+  background-color: #d55241;
+  color: #ffffff;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.login {
+  font-weight: 600;
+  font-size: 24px;
+  color: #333;
+  margin: 0 0 10px;
+  text-align: center;
+}
+
+.loginSubtext {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 20px;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputGroup {
+  margin-bottom: 15px;
+}
+
+.inputGroup input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+  font-family: inherit;
+  max-width: -webkit-fill-available;
+}
+
+.inputGroup input:focus {
+  border-color: #e8aa6c;
+  outline: none;
+}
+
+.errorInput {
+  border-color: #ff6b6b !important;
+}
+
+.errorMessage {
+  color: #ff6b6b;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.signInButton {
+  background: #e8aa6c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+  height: 42px;
+}
+
+.signInButton:hover {
+  background: #e49f63;
+}
+
+.closeIconContainer {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.closeIcon {
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+
+.closeIcon:hover {
+  color: #333;
+}

@@ -5,6 +5,7 @@ import axios from 'axios'
 // import { axiosInstance } from '../../../AxiosInterceptor/AxiosInterceptor';
 import { RootState } from '../../reducers'
 import { ThunkAction } from 'redux-thunk'
+import { ForgotPasswordState } from '../../model'
 
 type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
@@ -13,11 +14,7 @@ type AppThunk<ReturnType = void> = ThunkAction<
   Action<string>
 >
 
-interface ForgotPasswordState {
-  loading: boolean
-  successMessage: string | null
-  errorMessage: string | null
-}
+
 
 const initialState: ForgotPasswordState = {
   loading: false,

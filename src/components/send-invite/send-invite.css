@@ -1,0 +1,20 @@
+.send-invite-btn {
+  background-color: #ffffff;
+  color: #f7981d;
+  border: 2px solid #f7981d;
+  border-radius: 5px;
+  width: 100%;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.send-invite-btn:hover {
+  background-color: #f7981d;
+  color: #ffffff;
+}
+
+.css-hma4bw {
+  width: 600px !important;
+  border-radius: 8px;
+}

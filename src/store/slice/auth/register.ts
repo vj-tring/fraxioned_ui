@@ -1,17 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios'
-import { ApiUrl } from '../../../api/config'
+import { sendInvite } from '../../../api'
+import { RegisterState } from '../../model'
 
-interface RegisterState {
-  token: string | null
-  userId: string | null
-  email: string | null
-  registering: boolean
-  error: string | null
-  resettingPassword: boolean
-  resetPasswordSuccess: boolean
-  resetPasswordError: string | null
-}
 
 const initialState: RegisterState = {
   token: null,
@@ -29,10 +19,7 @@ export const registerUser = createAsyncThunk(
   'register/registerUser',
   async (userData: any, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${ApiUrl}/authentication/invite`,
-        userData
-      )
+      const response = await sendInvite(userData)
       return response.data
     } catch (error: any) {
       if (error.response && error.response.data) {
