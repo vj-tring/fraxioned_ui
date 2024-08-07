@@ -28,7 +28,7 @@ const Dashboard: React.FC = () => {
     { name: 'PEAK SEASON', href: '/peak-season', disabled: false },
     { name: 'PAYEMENTS', href: '/payements', disabled: false },
     { name: 'FAQ', href: '/faq', disabled: false },
-  ];
+  ]
   return (
     <div className="dashboard-container">
       <CustomNavbar
