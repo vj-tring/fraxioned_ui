@@ -1,5 +1,5 @@
 describe("Login & Dashboard Navigation",()=>{
-    describe.skip("Unsuccessful Login",()=>{
+    describe("Unsuccessful Login",()=>{
         it("Empty Email",()=>{
             cy.visit("http://localhost:3002/login")
             .get("button").contains("Sign in").click()
