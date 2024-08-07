@@ -19,8 +19,7 @@ import { useDispatch } from 'react-redux'
 import { registerUser } from '../../Redux/slice/auth/registerSlice'
 import { AppDispatch } from '../../Redux/store'
 import Loader from '../Loader/Loader'
-import axios from 'axios' // Add axios or your preferred HTTP client
-import { ApiUrl } from 'Components/config'
+import { getProperties, getRoles } from '../../utils/api';
 interface FormDialogProps {
   open: boolean
   handleClose: () => void
@@ -63,7 +62,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
     // Fetch roles from API
     const fetchProperties = async () => {
       try {
-        const response = await axios.get(`${ApiUrl}/properties`)
+        const response = await getProperties()
         const property = response.data.map((property: any) => {
           return property
         })
@@ -75,7 +74,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
 
     const fetchRoles = async () => {
       try {
-        const response = await axios.get(`${ApiUrl}/roles`)
+        const response = await getRoles()
         const roles = response.data.roles.map((roles: any) => {
           return roles
         })
@@ -160,8 +159,8 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
         zipcode: '123456', // Default value
         phoneNumber: formValues.phoneNumber.trim(),
         roleId: formValues.roleId,
-        updated_by: 0, // Default value
-        created_by: 0, // Default value
+        updatedBy: 0, // Default value
+        createdBy: 0, // Default value
         userPropertyDetails: {
           propertyID: formValues.propertyID,
           noOfShares: '', // Default value
@@ -218,6 +217,9 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
   return (
     <ThemeProvider theme={theme}>
       <Dialog
+        sx={{
+          borderRadius: 10
+        }}
         className="DialogRegister"
         open={open}
         onClose={handleClose}
@@ -231,6 +233,8 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             background:
               'linear-gradient(68deg, rgb(30, 134, 144) 0%, rgba(44,157,167,1) 35%, rgb(47, 158, 168) 100%)',
             color: 'white',
+            //   textAlign:'center',
+            //  fontWeight:'bold'
           }}
         >
           Create a New Account
@@ -247,7 +251,9 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             <CloseIcon sx={{ color: 'white' }} />
           </IconButton>
         </DialogTitle>
+
         <DialogContent sx={{ marginTop: '10px' }}>
+
           {isLoading && <Loader />}
           <TextField
             autoFocus
@@ -262,6 +268,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             onChange={handleTextFieldChange}
             error={Boolean(errors.firstName)}
             helperText={errors.firstName}
+
           />
           <TextField
             required
@@ -275,6 +282,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             onChange={handleTextFieldChange}
             error={Boolean(errors.lastName)}
             helperText={errors.lastName}
+
           />
           <TextField
             required
@@ -288,6 +296,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             onChange={handleTextFieldChange}
             error={Boolean(errors.email)}
             helperText={errors.email}
+
           />
           <TextField
             required
@@ -301,6 +310,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             onChange={handleTextFieldChange}
             error={Boolean(errors.addressLine1)}
             helperText={errors.addressLine1}
+
           />
           <TextField
             margin="dense"
@@ -313,8 +323,14 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             onChange={handleTextFieldChange}
             error={Boolean(errors.phoneNumber)}
             helperText={errors.phoneNumber}
+
           />
-          <FormControl fullWidth sx={{ marginTop: 3 }}>
+          <FormControl fullWidth sx={{
+            marginTop: 3,
+            '& .MuiInputBase-root': {
+              height: '50px', // Adjust the height as needed
+            },
+          }} >
             <InputLabel id="roleId-label">Role</InputLabel>
             <Select
               labelId="roleId-label"
@@ -323,6 +339,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
               value={formValues.roleId}
               onChange={handleSelectChange}
               label="Role"
+
             >
               {roles.map((role: any) => (
                 <MenuItem key={role.id} value={role.id}>
@@ -331,7 +348,11 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
               ))}
             </Select>
           </FormControl>
-          <FormControl fullWidth sx={{ marginTop: 3 }}>
+          <FormControl fullWidth sx={{
+            marginTop: 3, '& .MuiInputBase-root': {
+              height: '50px', // Adjust the height as needed
+            },
+          }}>
             <InputLabel id="propertyID-label">Property</InputLabel>
             <Select
               labelId="propertyID-label"
@@ -349,7 +370,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
             </Select>
           </FormControl>
         </DialogContent>
-        <DialogActions>
+        <DialogActions className='d-flex '>
           <Button onClick={handleClose} className="RegisterCancel">
             Cancel
           </Button>

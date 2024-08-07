@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import background from '../Login/background.jpg'
-import axios from 'axios'
 import styles from './ChangePassword.module.css'
 import logo from '../Login/fraxioned.png'
 import Loader from '../Loader/Loader'
-import { ApiUrl } from '../config'
+import { recoverPasswordApi } from '../../utils/api'
 
 const Change: React.FC = () => {
   const [newPassword, setNewPassword] = useState('')
@@ -53,17 +52,7 @@ const Change: React.FC = () => {
       setIsLoading(true)
 
       try {
-        const response = await axios.post(
-          `${ApiUrl}/authentication/recoverPassword`,
-          {
-            newPassword,
-          },
-          {
-            headers: {
-              resetToken: resetToken,
-            },
-          }
-        )
+        const response = await recoverPasswordApi(newPassword)
         console.log('Password change successful:', response.data)
         setIsLoading(false)
         navigate('/login')
