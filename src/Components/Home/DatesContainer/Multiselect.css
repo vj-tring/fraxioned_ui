@@ -41,3 +41,15 @@
 .itemLabel {
   padding-top: 13px !important;
 }
+
+.DateHead1{
+  margin-right: 48px !important;
+  /* font-weight: 600 !important; */
+}
+
+.DateHead4{
+  text-transform: capitalize;
+  color: black;
+  margin-right: 48px !important;
+  font-weight: 600 !important;
+}

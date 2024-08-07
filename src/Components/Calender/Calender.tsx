@@ -213,9 +213,10 @@ const Calendar: React.FC = () => {
   return (
     <Box>
       <div className="calendar ">
-        <div className="card-item " onClick={handleClick}>
-          <span className="DateHead">Check in</span>
-          <p className="property">Add Dates</p>
+        
+        <div className="d-flex align-items-start flex-column pt-3  " onClick={handleClick}>
+          <span className="DateHead1 monsterrat">Check in</span>
+          <p className="property1 monsterrat">Add Dates</p>
         </div>
 
         <Popover

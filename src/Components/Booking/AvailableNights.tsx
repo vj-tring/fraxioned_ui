@@ -1,13 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect } from 'react'
 import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
-import '../DatesContainer/Propertyitem.css'
-
+import './AvailableNight.css';
+import userImage from '../../assets/profile.jpeg'
 interface Card {
   id: number
   name: string
@@ -22,7 +18,7 @@ interface Card {
   }
 }
 
-export default function BasicSelect() {
+export default function AvailableNights() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const [selectedCardIndex, setSelectedCardIndex] = useState<number>(0)
@@ -152,103 +148,35 @@ export default function BasicSelect() {
     }
   }, [selectedCardIndex, cards])
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
 
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
-
-  const handleNextCard = () => {
-    setSelectedCardIndex((prevIndex) => (prevIndex + 1) % cards.length)
-  }
-
-  const handlePrevCard = () => {
-    setSelectedCardIndex(
-      (prevIndex) => (prevIndex - 1 + cards.length) % cards.length
-    )
-  }
 
   const handleYearClick = (year: number) => {
     setSelectedYear(year)
   }
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (open) {
-        handleClose()
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll)
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [open])
 
   return (
+    <Box >
+    
 
-
-    <Box  sx={{ width: 280, borderRadius: 32, border:'none' }}>
-      <Button disableRipple
-        aria-controls="basic-menu"
-        aria-haspopup="true"
-        onClick={handleClick}
-        // variant="outlined"
-        className="PropertyBtn"
-        sx={{
-          borderRadius: 10,
-          width: 275,
-          height: 70,
-          border: 'none',
-          cursor: 'pointer',
-          paddingRight:10
-        }}
-      >
-        <div className="d-flex align-items-start flex-column pt-3 card-item">
-          <span className="DateHead1  monsterrat ">My Home(s)</span>
-          <p className="property1 monsterrat ">
-            {selectedCard ? selectedCard.name : 'Select Property'}
-          </p>
-        </div>
-      </Button>
-
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        PaperProps={{
-          style: {
-            position: 'fixed',
-          },
-        }}
-        sx={{
-          borderRadius: 32,
-        }}
-      >
-        {cards.length > 0 && (
+      
           <MenuItem disableRipple>
-            <div className="CardItem py-2">
-              <div className="d-flex justify-content-between IconArrow">
-                <Button className="currentproperty" onClick={handlePrevCard} disabled={selectedCardIndex === 0}>{selectedCard?.name}</Button>
-                <Button className="nextproperty"  onClick={handleNextCard} disabled={selectedCardIndex === cards.length - 1}>{!(selectedCardIndex === cards.length - 1)?cards[(selectedCardIndex + 1) % cards.length].name:'Completed'}</Button>
-              </div>
-
+            <div className="CardItem1 monsterrat ">
               {selectedCard && (
                 <div className="card-content">
-                  <div className="card-name d-flex justify-content-between mt-1 py-2 align-items-center">
+                  <div className="d-flex justify-content-between   mb-2">
                     <span>
-                      <h4 className="BlueHead">{selectedCard.name}</h4>
-                      <p className="BlueFont">{selectedCard.address}</p>
+                      <h4 className="BlueHead2">Your 1/4 share</h4>
                     </span>
-                    <span className="image1"></span>
-                  </div>
-                  <div className="d-flex justify-content-between py-2 align-items-center pt-0">
+                    <div className="ProfileImageContainer">
+              <img
+                src={userImage} 
+                alt="Profile"
+                className="ProfileImage"
+              />
+            </div>                  </div>
+                  <div className="d-flex justify-content-around p-2">
                     <p className="Available">My Available Nights</p>
-                    <div className="d-flex justify-content-between align-items-center gap-2">
                     {years.map((year) => (
                       <button
                         key={year}
@@ -258,44 +186,42 @@ export default function BasicSelect() {
                         {year}
                       </button>
                     ))}
-                    </div>                   
                   </div>
 
-                  <div className="box d-flex justify-content-around py-2 ">
-                    <div className="d-flex flex-column night-count">
+                  <div className="box1 d-flex justify-content-around p-3 mb-3">
+                    <div className="d-flex flex-column">
                       <li>
                         {selectedCard.details[selectedYear]?.offSeason || 'N/A'}
                       </li>
-                      <li className="Box-list">Off-Season Nights</li>
+                      <li className="Box-list1">Off-Season Nights</li>
                     </div>
-                    <div className="d-flex flex-column night-count">
+                    <div className="d-flex flex-column">
                       <li>
                         {selectedCard.details[selectedYear]?.peakSeason ||
                           'N/A'}
                       </li>
-                      <li className="Box-list">Peak-Season Nights</li>
+                      <li className="Box-list1">Peak-Season Nights</li>
                     </div>
-                    <div className="d-flex flex-column night-count">
+                    <div className="d-flex flex-column">
                       <li>
                         {selectedCard.details[selectedYear]?.peakHoliday ||
                           'N/A'}
                       </li>
-                      <li className="Box-list">Peak-Season Holiday</li>
+                      <li className="Box-list1">Peak-Season Holiday</li>
                     </div>
-                    <div className="d-flex flex-column night-count">
+                    <div className="d-flex flex-column">
                       <li>
                         {selectedCard.details[selectedYear]?.offSeasonHoliday ||
                           'N/A'}
                       </li>
-                      <li className="Box-list">Off-Season Holiday</li>
+                      <li className="Box-list1">Off-Season Holiday</li>
                     </div>
                   </div>
                 </div>
               )}
             </div>
           </MenuItem>
-        )}
-      </Menu>
+ 
     </Box>
   )
 }

@@ -22,17 +22,20 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const isAdmin = useSelector(selectIsAdmin);
   useEffect(() => {
-    if (!isAuthenticated()) {
-      navigate('/login');
+
+    if (!isAuthenticated()) { 
+      navigate('/login')
     }
   }, [navigate]);
   const links = [
     { name: 'HOME', href: '/dashboard', disabled: false },
-    { name: 'BOOKING', href: '/booking', disabled: false },
-    { name: 'PEAK SEASON', href: '/peak-season', disabled: false },
-    { name: 'PAYEMENTS', href: '/payements', disabled: false },
-    { name: 'FAQ', href: '/faq', disabled: false },
-  ];
+    { name: 'BOOKINGS', href: '/booking', disabled: false },
+    { name: 'PAYMENTS', href: '/peak-season', disabled: false },
+    { name: 'DOCUMENTS', href: '/payements', disabled: false },
+    { name: 'MORE', href: '/faq', disabled: false }, 
+    
+  ]
+
   return (
     <div className="dashboard-container">
       {isAdmin && <PermanentDrawerLeft />}
