@@ -71,6 +71,7 @@
   width: 11.2rem;
   padding: .22rem 2rem !important;
   border-radius: 1rem !important;
+  text-transform: capitalize !important;
 }
 
 .currentproperty {

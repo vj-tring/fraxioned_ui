@@ -51,9 +51,6 @@ ul {
   transition: color 0.3s; /* Smooth color transition */
 }
 
-.no-underline:hover {
-  color: #f7981d; /* Hover color */
-}
 
 .contact-us {
   width: 100%;
@@ -102,4 +99,9 @@ ul {
   .logo {
     margin-bottom: 20px; /* Adjusted bottom margin */
   }
+}
+
+.disabled
+{
+  pointer-events: none;
 }

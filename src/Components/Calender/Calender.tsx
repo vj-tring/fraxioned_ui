@@ -53,9 +53,9 @@ const Calendar: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const open = Boolean(anchorEl)
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
+  // const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  //   setAnchorEl(event.currentTarget)
+  // }
 
   const handleClose = () => {
     setAnchorEl(null)
@@ -214,7 +214,7 @@ const Calendar: React.FC = () => {
     <Box>
       <div className="calendar ">
         
-        <div className="d-flex align-items-start flex-column pt-3  " onClick={handleClick}>
+        <div className="d-flex align-items-start flex-column pt-3  " >
           <span className="DateHead1 monsterrat">Check in</span>
           <p className="property1 monsterrat">Add Dates</p>
         </div>

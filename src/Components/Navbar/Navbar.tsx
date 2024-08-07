@@ -125,8 +125,11 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               <NavLink
                 key={index}
                 to={link.href}
-                onClick={link.onClick}
-                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                onClick={(e) => {
+                  if (link.disabled) {
+                    e.preventDefault(); 
+                  }
+                }}                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
                 style={{ textDecoration: 'none' }}
                 aria-disabled={link.disabled ? 'true' : 'false'}
               >

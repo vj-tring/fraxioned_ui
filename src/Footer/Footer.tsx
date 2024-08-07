@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
         <div className="col-md-2 mt-3">
           <ul>
             <li>
-              <Link to="/dashboard" className="no-underline">
+              <Link to="/dashboard" className="no-underline disabled">
                 Home
               </Link>
             </li>
@@ -36,7 +36,7 @@ const Footer: React.FC = () => {
               </Link>
             </li>
             <li>
-              <Link to="/faq" className="no-underline">
+              <Link to="/faq" className="no-underline disabled">
                 Tickets
               </Link>
             </li>
@@ -55,12 +55,12 @@ const Footer: React.FC = () => {
               </Link>
             </li>
             <li>
-              <Link to="/contact" className="no-underline">
+              <Link to="/contact" className="no-underline disabled">
                 Contact Us
               </Link>
             </li>
             <li>
-              <a href="https://www.fraxioned.com/" className="no-underline">
+              <a href="https://www.fraxioned.com/" className="no-underline disabled ">
                My Account
               </a>
             </li>
@@ -69,9 +69,9 @@ const Footer: React.FC = () => {
         <div className="col-md-2 mt-3">
           <ul>
             <li>
-              <Link to="/fraxioned" className="no-underline disabled">
+              <a href="https://www.fraxioned.com/"  target='_blank' className="no-underline " rel="noreferrer">
                 fraxioned.com
-              </Link>
+              </a>
             </li>
         
           </ul>
