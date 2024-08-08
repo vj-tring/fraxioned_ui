@@ -16,6 +16,7 @@ import ConfirmationModal from '../ConfirmationModal/ConfirmationModal'
 import ResetPasswordModal from './ResetPasswordModal'
 import '../Navbar/Navbar.css'
 import FormDialog from './RegisterFormModal'
+
 import useNavbarHandler from './NavbarFunction'
 import { Typography } from '@mui/material'
 
@@ -31,10 +32,6 @@ interface CustomNavbarProps {
   userName: string
   onUserImageClick?: () => void
 }
-// const firstName = 'John'
-// const lastName = 'Doe'
-// const email = 'john.doe@example.com'
-
 
 
 const CustomNavbar: React.FC<CustomNavbarProps> = ({
