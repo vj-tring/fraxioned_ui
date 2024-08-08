@@ -47,29 +47,18 @@
 .BlueHead {
   margin: 0 !important;
   font-weight: bold;
-}
-.card-name {
-  height: 5rem;
-}
-
-.BlueHead1 {
-  border: none !important;
-  font-weight: 400 !important;
-  width: 167px !important;
-  height: 23px !important;
-  font-size: small !important;
-  border-radius: 45px !important;
-  padding: 4px !important;
-  text-align: center !important;
-  background-color: #ffa852 !important;
-  color: white !important;
-  margin: auto !important;
+  padding-top: 5px;
+  font-size: 1.28rem;
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
 }
 
 .currentproperty, .nextproperty {
   width: 11.2rem;
   padding: .22rem 2rem !important;
   border-radius: 1rem !important;
+  text-transform: capitalize !important;
 }
 
 .currentproperty {
@@ -83,14 +72,24 @@
 }
 
 .BlueFont {
-  margin: 0;
-  font-size: .7rem;
-  opacity: .7;
+  margin: 0 !important;
+  font-size: .7rem !important;
+  opacity: .7 !important;
+  text-wrap: wrap;
+  font-weight: 500 !important;
 }
+
 .image1 {
   background: url('../../../assets//BC\ -\ Home\ Page\ Banner.jpg');
   width: 70px;
   height: 2.5rem;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.CardImage img {
+  width: 65px;
+  height: 100%;
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -107,18 +106,23 @@
 .property1 {
   text-transform: capitalize;
   color: grey;
+  font-size: small;
+
 }
 
 .DateHead1 {
   text-transform: capitalize;
   color: black;
-  font-weight: 500 !important;
+  font-weight: 550 !important;
+  font-size: small;
+  height: 1.1rem;
 }
 
 .PropertyBtn:hover {
-  background-color: rgb(236, 235, 235) !important;
+  background-color: none !important;
   border: none !important;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  box-shadow: none !important;
+  background: none !important;
 }
 
 .CardItem {
@@ -127,8 +131,9 @@
   font-family: 'Montserrat', sans-serif !important;
 }
 
+
 .css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root:hover {
-  background-color: white !important;
+  background-color: none !important;
 }
 
 .IconArrow {
@@ -140,4 +145,10 @@
 }
 .night-count li:nth-child(2){
   opacity: .8;
+}
+
+.property-image {
+  width: 100px; 
+  height: 60px;
+  border-radius: 1px; /* Optional: rounded corners */
 }

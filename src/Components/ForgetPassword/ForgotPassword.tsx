@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from './ForgotPassword.module.css'
-import background from '../Login/background.jpg'
+import background from '../Login/background.png'
 import { Link } from 'react-router-dom'
 import logo from '../Login/fraxioned.png'
 import Loader from '../Loader/Loader'
