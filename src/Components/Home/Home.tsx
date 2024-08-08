@@ -1,7 +1,7 @@
 import React from 'react'
 import './Home.css'
-import imag1 from '../../assets/images/BC - Bookings Page Banner.jpg'
-import imag2 from '../../assets/images/BC - Home Page Banner.jpg'
+import imag1 from '../../assets/Property_Images/Blue bear lake.jpg';
+import imag2 from '../../assets/Property_Images/crown jewel.jpg';
 import Date from './DatesContainer/Date'
 import Card from '../../Components/Home/Cards/Card'
 
