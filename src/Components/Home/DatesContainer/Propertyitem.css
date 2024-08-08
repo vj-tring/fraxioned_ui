@@ -48,23 +48,10 @@
   margin: 0 !important;
   font-weight: bold;
   padding-top: 5px;
-}
-.card-name {
-  height: 5rem;
-}
-
-.BlueHead1 {
-  border: none !important;
-  font-weight: 400 !important;
-  width: 167px !important;
-  height: 23px !important;
-  font-size: small !important;
-  border-radius: 45px !important;
-  padding: 4px !important;
-  text-align: center !important;
-  background-color: #ffa852 !important;
-  color: white !important;
-  margin: auto !important;
+  font-size: 1.28rem;
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
 }
 
 .currentproperty, .nextproperty {
@@ -85,18 +72,24 @@
 }
 
 .BlueFont {
-  margin: 0;
-  font-size: .7rem;
-  opacity: .7;
-}
-.CardFont{
-  width: 50%;
+  margin: 0 !important;
+  font-size: .7rem !important;
+  opacity: .7 !important;
+  text-wrap: wrap;
+  font-weight: 500 !important;
 }
 
 .image1 {
   background: url('../../../assets//BC\ -\ Home\ Page\ Banner.jpg');
   width: 70px;
   height: 2.5rem;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.CardImage img {
+  width: 65px;
+  height: 100%;
   background-repeat: no-repeat;
   background-size: cover;
 }

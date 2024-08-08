@@ -194,9 +194,10 @@ export default function BasicSelect() {
   }, [open]);
 
   return (
+
+
     <Box sx={{ width: 280, borderRadius: 32, border: 'none' }}>
-      <Button
-        disableRipple
+      <Button disableRipple
         aria-controls="basic-menu"
         aria-haspopup="true"
         onClick={handleClick}
@@ -207,7 +208,7 @@ export default function BasicSelect() {
           height: 70,
           border: 'none',
           cursor: 'pointer',
-          paddingRight: 10,
+          paddingRight: 10
         }}
       >
         <div className="d-flex align-items-start flex-column pt-3 card-item">
@@ -233,20 +234,20 @@ export default function BasicSelect() {
         }}
       >
         {cards.length > 0 && (
-          <MenuItem disableRipple>
+          <MenuItem disableRipple sx={{
+            '&:hover': {
+              backgroundColor: 'white !important'
+            }
+          }}>
             <div className="CardItem py-2">
               <div className="d-flex justify-content-between IconArrow">
-                <Button className="currentproperty" onClick={handlePrevCard} disabled={selectedCardIndex === 0}>
-                  {selectedCard?.name}
-                </Button>
-                <Button className="nextproperty" onClick={handleNextCard} disabled={selectedCardIndex === cards.length - 1}>
-                  {!(selectedCardIndex === cards.length - 1) ? cards[(selectedCardIndex + 1) % cards.length].name : 'Completed'}
-                </Button>
+                <Button disableRipple className="currentproperty" onClick={handlePrevCard} disabled={selectedCardIndex === 0}>{selectedCard?.name}</Button>
+                <Button disableRipple className="nextproperty" onClick={handleNextCard} disabled={selectedCardIndex === cards.length - 1}>{!(selectedCardIndex === cards.length - 1) ? cards[(selectedCardIndex + 1) % cards.length].name : 'Completed'}</Button>
               </div>
 
               {selectedCard && (
                 <div className="card-content">
-                  <div className="card-name d-flex justify-content-between mt-1 py-2 align-items-center">
+                  <div className="card-name d-flex justify-content-between mt-1 py-2 align-items-center gy-1">
                     <span className='CardFont'>
                       <h4 className="BlueHead">{selectedCard.name}</h4>
                       <p className="BlueFont">{selectedCard.address}</p>
