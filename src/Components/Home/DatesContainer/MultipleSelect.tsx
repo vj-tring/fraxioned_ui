@@ -64,7 +64,7 @@ const MultipleSelect: React.FC = () => {
   }, [open])
 
   return (
-    <Box sx={{ width: '30%' }}>
+    <Box sx={{ width: '30%' }} >
       <Button
       disableRipple
         aria-controls="basic-menu"

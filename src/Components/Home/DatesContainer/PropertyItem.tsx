@@ -90,7 +90,7 @@ export default function BasicSelect() {
         {
           id: 3,
           name: 'Bear Lake Bluffs',
-          address:'732 Spruce Drive, Garden City, Utah, United States, 84028',
+          address: '732 Spruce Drive, Garden City, Utah, United States, 84028',
           details: {
             2024: {
               offSeason: '22/30',
@@ -192,7 +192,7 @@ export default function BasicSelect() {
   return (
 
 
-    <Box  sx={{ width: 280, borderRadius: 32, border:'none' }}>
+    <Box sx={{ width: 280, borderRadius: 32, border: 'none' }}>
       <Button disableRipple
         aria-controls="basic-menu"
         aria-haspopup="true"
@@ -205,7 +205,7 @@ export default function BasicSelect() {
           height: 70,
           border: 'none',
           cursor: 'pointer',
-          paddingRight:10
+          paddingRight: 10
         }}
       >
         <div className="d-flex align-items-start flex-column pt-3 card-item">
@@ -231,35 +231,37 @@ export default function BasicSelect() {
         }}
       >
         {cards.length > 0 && (
-          <MenuItem disableRipple>
+          <MenuItem disableRipple sx={{
+            '&:hover': {
+              backgroundColor: 'white !important'
+            }
+          }}>
             <div className="CardItem py-2">
               <div className="d-flex justify-content-between IconArrow">
-                <Button className="currentproperty" onClick={handlePrevCard} disabled={selectedCardIndex === 0}>{selectedCard?.name}</Button>
-                <Button className="nextproperty"  onClick={handleNextCard} disabled={selectedCardIndex === cards.length - 1}>{!(selectedCardIndex === cards.length - 1)?cards[(selectedCardIndex + 1) % cards.length].name:'Completed'}</Button>
+                <Button disableRipple className="currentproperty" onClick={handlePrevCard} disabled={selectedCardIndex === 0}>{selectedCard?.name}</Button>
+                <Button disableRipple className="nextproperty" onClick={handleNextCard} disabled={selectedCardIndex === cards.length - 1}>{!(selectedCardIndex === cards.length - 1) ? cards[(selectedCardIndex + 1) % cards.length].name : 'Completed'}</Button>
               </div>
 
               {selectedCard && (
                 <div className="card-content">
-                  <div className="card-name d-flex justify-content-between mt-1 py-2 align-items-center">
-                    <span>
-                      <h4 className="BlueHead">{selectedCard.name}</h4>
-                      <p className="BlueFont">{selectedCard.address}</p>
-                    </span>
-                    <span className="image1"></span>
+                  <div className="card-name d-flex flex-row justify-content-between mt-1 align-items-center mb-1">
+                    <p className='m-0 BlueHead'>{selectedCard.name}<br/><span className="BlueFont">{selectedCard.address}</span></p>
+                    <p className="image1 m-0"></p>
+
                   </div>
                   <div className="d-flex justify-content-between py-2 align-items-center pt-0">
                     <p className="Available">My Available Nights</p>
                     <div className="d-flex justify-content-between align-items-center gap-2">
-                    {years.map((year) => (
-                      <button
-                        key={year}
-                        className={`card-btn1 ${selectedYear === year ? 'active' : ''}`}
-                        onClick={() => handleYearClick(year)}
-                      >
-                        {year}
-                      </button>
-                    ))}
-                    </div>                   
+                      {years.map((year) => (
+                        <button
+                          key={year}
+                          className={`card-btn1 ${selectedYear === year ? 'active' : ''}`}
+                          onClick={() => handleYearClick(year)}
+                        >
+                          {year}
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
                   <div className="box d-flex justify-content-around py-2 ">
