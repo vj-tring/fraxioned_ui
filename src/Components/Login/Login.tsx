@@ -47,19 +47,23 @@ const Login: React.FC = () => {
 
       try {
         const resultAction = await dispatch(login({ email, password })).unwrap();
+        setTimeout(() => {
+
         if (resultAction.user && resultAction.session) {
           setSnackbarMessage('Login Successful');
           setSnackbarSeverity('success');
           setShowSnackbar(true);
 
           if (resultAction.user.role.id === 1) {
-            navigate('/admin/dashboard');
+            navigate('/admin/bookings');
           } else {
             navigate('/*');
           }
 
           setIsLoading(false);
         }
+      }, 1000);
+
       } catch (error) {
         setSnackbarMessage((error as string) || 'Login failed. Please try again.');
         setSnackbarSeverity('error');

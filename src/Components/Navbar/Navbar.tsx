@@ -8,14 +8,14 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+// import Tooltip from '@mui/material/Tooltip';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import LogoutIcon from '@mui/icons-material/Logout';
 import InviteModal from './SentInviteModal';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import FormDialog from '../RegisterFormPopUp/RegisterForm';
 import ResetPasswordModal from './ResetPasswordModal';
-import { NavLink } from 'react-router-dom'; // Import NavLink
+import { NavLink } from 'react-router-dom';
 import useNavbarHandler from './NavbarFunction';
 import { Typography } from '@mui/material';
 import './Navbar.css';
@@ -79,11 +79,10 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
     setAnchorEl(null);
   };
 
-
-  const handleProfileClick = () => {
-    onUserImageClick?.();
-    handleClose();
-  };
+  // const handleProfileClick = () => {
+  //   onUserImageClick?.();
+  //   handleClose();
+  // };
 
   const handleResetPasswordClick = () => {
     handleOpenResetPasswordModal();
@@ -108,10 +107,11 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
     setOpenNewAccountDialog(false);
   };
 
+  const navbarStyle = isAdmin ? { minHeight: '50px' } : {};
+
   return (
     <>
-
-      <Navbar bg="light" expand="lg" className="p-2">
+      <Navbar bg="light" expand="lg" className="p-2" style={navbarStyle}>
         {!isAdminDashboard && (
           <Navbar.Brand href="#home" className="p-2">
             <img
@@ -121,8 +121,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               className="d-inline-block align-top"
               alt="Logo"
             />
-        </Navbar.Brand>
-
+          </Navbar.Brand>
         )}
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -133,9 +132,10 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                 to={link.href}
                 onClick={(e) => {
                   if (link.disabled) {
-                    e.preventDefault(); 
+                    e.preventDefault();
                   }
-                }}                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                }}
+                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
                 style={{ textDecoration: 'none' }}
                 aria-disabled={link.disabled ? 'true' : 'false'}
               >
@@ -147,7 +147,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
 
         <Nav className="ml-auto">
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Tooltip title="Account settings">
+          
               <IconButton
                 onClick={handleClick}
                 size="small"
@@ -162,15 +162,13 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                   alignItems="center"
                   sx={{
                     borderRadius: 1,
-                    
                   }}
                 >
                   <Box>
-                    <Typography variant="body2" color="textPrimary " className="monsterrat p-2  " sx={{
-                      fontWeight:600,
-                      color:'#00636D',
-                      textTransform:'uppercase'
-
+                    <Typography variant="body2" color="textPrimary" className="monsterrat p-2" sx={{
+                      fontWeight: 600,
+                      color: '#00636D',
+                      textTransform: 'uppercase'
                     }}>
                       {storedName}
                     </Typography>
@@ -202,8 +200,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                   </Avatar>
                 </Box>
               </IconButton>
-            </Tooltip>
-          </Box>
+                      </Box>
           <Menu
             anchorEl={anchorEl}
             id="account-menu"
@@ -213,9 +210,10 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               elevation: 0,
               sx: {
                 overflow: 'visible',
-                width: '210px',
+                width: '230px',
                 filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
                 mt: 1.5,
+                padding:1,
                 '& .MuiAvatar-root': {
                   width: 32,
                   height: 32,
@@ -245,24 +243,26 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               vertical: 'bottom',
             }}
           >
-            <MenuItem onClick={handleProfileClick}>
+            {/* <MenuItem onClick={handleProfileClick}>
               <Avatar /> Profile
-            </MenuItem>
-            <MenuItem onClick={handleResetPasswordClick}>
-              <Avatar /> Reset
+            </MenuItem> */}
+            <MenuItem onClick={handleResetPasswordClick} >
+              <Avatar sx={{
+                fontSize:'medium'
+              }} /> Reset
             </MenuItem>
             <Divider />
             {isAdmin && (
               <MenuItem onClick={handleAddAccountClick}>
                 <ListItemIcon>
-                  <PersonAddIcon fontSize="small" />
+                  <PersonAddIcon fontSize="medium" />
                 </ListItemIcon>
                 Add another account
               </MenuItem>
             )}
             <MenuItem onClick={handleLogoutClick}>
-              <ListItemIcon>
-                <LogoutIcon fontSize="small" />
+              <ListItemIcon className='mt-1 p-1'>
+                <LogoutIcon fontSize="medium" />
               </ListItemIcon>
               Logout
             </MenuItem>

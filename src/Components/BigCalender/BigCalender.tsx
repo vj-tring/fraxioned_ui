@@ -12,7 +12,7 @@ const localizer = momentLocalizer(moment);
 
 interface Event {
     id?: number;
-    title: string;  
+    title: string;
     start: Date;
     end: Date;
     desc: string;
@@ -42,7 +42,7 @@ const bookedDates: Event[] = [
     }
 ];
 
-const Calendar: React.FC = () => {
+const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     const [events, setEvents] = useState<Event[]>((bookedDates));
     const [title, setTitle] = useState("");
     const [start, setStart] = useState<Date | null>(null);
@@ -121,7 +121,7 @@ const Calendar: React.FC = () => {
     ];
 
     return (
-        <div className="calendar-container">
+        <div className={`calendar-container ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
             <BigCalendar
                 localizer={localizer}
                 events={events}
