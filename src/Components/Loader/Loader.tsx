@@ -1,11 +1,18 @@
-import React from 'react'
-import './Loader.css'
+
+import React from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import './Loader.css';
+
 const Loader = () => {
   return (
-    <div className="loader-container">
-      <div className="loader"></div>
-    </div>
-  )
-}
+    
+    <Box className='loading-spinner'>
+  
+      <CircularProgress color='primary'  className='spinner' />
+      
+    </Box>
+  );
+};
 
-export default Loader
+export default Loader;

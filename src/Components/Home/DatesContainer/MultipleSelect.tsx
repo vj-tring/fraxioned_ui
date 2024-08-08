@@ -64,24 +64,26 @@ const MultipleSelect: React.FC = () => {
   }, [open])
 
   return (
-    <Box sx={{ width: '30%' }}>
+    <Box sx={{ width: '30%' }} >
       <Button
+      disableRipple
         aria-controls="basic-menu"
         aria-haspopup="true"
         onClick={handleClick}
-        variant="outlined"
+        // variant="outlined"
         className="PropertyBtn"
         sx={{
           borderRadius: 10,
-          width: 275,
+          width: 348,
           height: 70,
           border: 'none',
           cursor: 'pointer',
+          paddingRight:30
         }}
       >
-        <div className="d-flex flex-column pt-3 text-align-center">
-          <span className="DateHead1">Who</span>
-          <p className="property1"> Add guests</p>
+        <div className="d-flex align-items-start flex-column pt-3 ">
+          <span className="DateHead1 monsterrat ">Who</span>
+          <p className="property1 monsterrat"> Add guests</p>
         </div>
       </Button>
 
@@ -115,30 +117,31 @@ const MultipleSelect: React.FC = () => {
             }}
             disableRipple
           >
-            <div className="d-flex justify-content-between w-100 MultiItems">
+            <div className="d-flex justify-content-between w-100 MultiItems monsterrat">
               <Avatar
                 sx={{
                   backgroundColor: '#df9526',
                   marginRight: '12px',
                 }}
+                className='monsterrat'
               >
                 {item.icon}
               </Avatar>
               <div className=" w-50 ">
-                <b className="itemLabel">{item.label}</b>
-                <p className="DescFont">{item.description}</p>
+                <b className="itemLabel monsterrat">{item.label}</b>
+                <p className="DescFont monsterrat">{item.description}</p>
               </div>
               <div className="d-flex justify-content-around w-50 pb-2">
                 <button
-                  className="Dec-circle"
+                  className="Dec-circle monsterrat"
                   disabled={counts[item.label] === 0}
                   onClick={() => handleCountChange(item.label, 'decrease')}
                 >
                   -
                 </button>
-                <p className="Ad-count ">{counts[item.label]}</p>
+                <p className="Ad-count monsterrat ">{counts[item.label]}</p>
                 <button
-                  className="Inc-circle"
+                  className="Inc-circle monsterrat"
                   onClick={() => handleCountChange(item.label, 'increase')}
                 >
                   +
