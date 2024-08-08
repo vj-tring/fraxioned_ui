@@ -72,6 +72,7 @@
 }
 
 .BlueFont {
+  height: 2rem;
   margin: 0 !important;
   font-size: .7rem !important;
   opacity: .7 !important;
