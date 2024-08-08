@@ -1,16 +1,33 @@
+export interface Role {
+  id: number;
+  roleName: string;
+}
 export interface User {
-    roleId: number;
-    id: number;
-    email: string;
-    firstName: string;
-    lastName: string;
-    mobile: string;
-    address: string;
-    city: string;
-    state: string;
-    isAdmin: boolean;
-    country: string;
-    zipcode: string;
+  roleId: number;
+  id: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  mobile: string;
+  address: string;
+  city: string;
+  state: string;
+  isAdmin: boolean;
+  country: string;
+  zipcode: string;
+  password: string;
+  imageURL: string | null;
+  isActive: number;
+  addressLine1: string | null;
+  addressLine2: string | null;
+  resetToken: string;
+  resetTokenExpires: string | null;
+  lastLoginTime: string;
+  createdBy: number;
+  updatedBy: number;
+  createdAt: string;
+  updatedAt: string;
+  role: Role;
 }
 
 export interface Session {
@@ -42,3 +59,5 @@ export interface RegisterState {
     resetPasswordSuccess: boolean
     resetPasswordError: string | null
   }
+
+  

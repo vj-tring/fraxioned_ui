@@ -5,7 +5,7 @@ import { AppDispatch } from '../../store/index'; // Adjust the import path as ne
 import { login } from '../../store/slice/auth/authentication';
 import styles from './login.module.css';
 import logo from '../../assets/images/fraxioned.png';
-// import background from '../../assets/background.jpg';
+// import background from '../../assets/background.png';
 import Loader from '../../components/loader/index'
 import CustomizedSnackbars from '../../components/customized-snackbar';
 
@@ -42,24 +42,32 @@ const Login: React.FC = () => {
     } else {
       setEmailError('');
       setPasswordError(false);
-      setIsLoading(true)
+      setIsLoading(true);
 
 
       try {
         const resultAction = await dispatch(login({ email, password })).unwrap();
-        if (resultAction.user && resultAction.session) {
-          setSnackbarMessage('Login Successful');
-          setSnackbarSeverity('success');
-          setShowSnackbar(true);
-          navigate('/dashboard');
-          setIsLoading(false)
+        setTimeout(() => {
 
-        }
+          if (resultAction.user && resultAction.session) {
+            setSnackbarMessage('Login Successful');
+            setSnackbarSeverity('success');
+            setShowSnackbar(true);
+  
+            if (resultAction.user.role.id === 1) {
+              navigate('/admin/bookings');
+            } else {
+              navigate('/dashboard');
+            }
+  
+            setIsLoading(false);
+          }
+        }, 1000);
       } catch (error) {
-        setSnackbarMessage(error as string || 'Login failed. Please try again.');
+        setSnackbarMessage((error as string) || 'Login failed. Please try again.');
         setSnackbarSeverity('error');
         setShowSnackbar(true);
-        setIsLoading(false)
+        setIsLoading(false);
 
 
       }

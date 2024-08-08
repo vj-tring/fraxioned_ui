@@ -1,20 +1,17 @@
 // Date.test.tsx
-import React from 'react'
+// import React from 'react'
 import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import Date from './index' // adjust the import path as needed
+import  from './index' // adjust the import path as needed
 
-// Optionally mock child components if they have complex logic
-jest.mock('../../Home/DatesContainer/Region', () => () => (
-  <div>Region Component</div>
-))
-jest.mock('./PropertyItem', () => () => <div>BasicSelect Component</div>)
-jest.mock('./MultipleSelect', () => () => <div>MultipleSelect Component</div>)
-jest.mock('../../Calender/Calender', () => () => <div>Calendar Component</div>)
+
+jest.mock('../property-carousel', () => () => <div>BasicSelect Component</div>)
+jest.mock('../guest-selector', () => () => <div>MultipleSelect Component</div>)
+jest.mock('../calender', () => () => <div>Calendar Component</div>)
 
 describe('Date Component', () => {
   test('renders without crashing', () => {
-    render(<Date />)
+    render(< />)
 
     // Check if the child components are rendered
     expect(screen.getByText('BasicSelect Component')).toBeInTheDocument()

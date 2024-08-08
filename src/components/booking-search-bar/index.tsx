@@ -10,9 +10,9 @@ const BookingSearchBar: React.FC = () => {
     <div className="MainCard">
       <div className="card">
         <PropertyCarousel />
-        <div className="vl"></div>
+        <div className="vl p-2"></div>
         <Calendar />
-        <div className="vl"></div>
+        <div className="vl p-2"></div>
         <Region />
         <div className="vl"></div>
         <GuestSelector />

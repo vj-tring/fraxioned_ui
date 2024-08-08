@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import {
   Navigate,
   Route,
@@ -13,6 +13,7 @@ import ForgetPassword from './pages/forgot-password'
 import Change from './pages/recover-password'
 import ResetPassword from './pages/reset-password'
 import Dashboard from './pages/dashboard'
+import AdminDashboard from './pages/admin-dashboard'
 
 interface PrivateRouteProps {
   element: React.ComponentType
@@ -43,7 +44,18 @@ function App() {
             <Route path="/forgotPassword" element={<ForgetPassword />} />
             <Route path="/recoverPassword" element={<Change />} />
             <Route path="/resetPassword" element={<ResetPassword onClose={()=>{}} />} />
-            <Route path="/dashboard/*" element={<Dashboard />} />
+            <Route
+              path="/dashboard/*"
+              element={<PrivateRoute element={Dashboard} allowedRoles={[2, 3]} />}
+            />
+            {/* <Route
+              path="/dashboard/*"
+              element={<Dashboard/>}
+            /> */}
+            <Route
+              path="/admin/*"
+              element={<PrivateRoute element={AdminDashboard} allowedRoles={[1]} />}
+            />
           </Routes>
         </Router>
       </Provider>

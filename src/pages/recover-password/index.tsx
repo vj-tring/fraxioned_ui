@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import background from '../../assets/images/background.jpg'
+import background from '../../assets/images/background.png'
 import styles from './recover.module.css'
 import logo from '../../assets/images/fraxioned.png'
 import Loader from '../../components/loader'

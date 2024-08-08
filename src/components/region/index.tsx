@@ -1,13 +1,11 @@
-// import '../DatesContainer/Card-item.css'
+import './region.css';
 const Region = () => {
   return (
-    <div className="card-item d-flex justify-content-around">
-      <div className="card-item mb-2">
-        <span className="DateHead">Check out</span>
+      <div className="d-flex align-items-start flex-column pt-3 ">
+        <span className="DateHead1 monsterrat">Check out</span>
 
-        <p className="property">Add Dates</p>
+        <p className="property1 monsterrat">Add Dates</p>
       </div>
-    </div>
   )
 }
 

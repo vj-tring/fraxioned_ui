@@ -3,7 +3,9 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #333;
+  background: linear-gradient(to top, #ffffff 0%, #ffffff 100%) !important;
+
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px !important;   /* opacity: 95% !important; */
   color: #fff;
   top: 0;
   z-index: 1000;
@@ -11,9 +13,6 @@
   width: 100vw;
 }
 
-/* .user {
-  padding-left: 20px;
-} */
 
 .username {
   padding-left: 30px;
@@ -27,13 +26,15 @@
 
 .navbar-links {
   display: flex;
-  gap: 20px;
+  gap: 25px !important;
 }
 
 .navbar-link {
   color: #fff;
   text-decoration: none;
   transition: color 0.3s ease;
+  gap: 25px !important;
+
 }
 
 .navbar-link:hover {
@@ -60,6 +61,14 @@
   width: 30px;
   border-radius: 50%;
 } */
+
+.mr-auto
+{
+  font-size:14px;
+  letter-spacing: 1px;
+  gap: 10px;
+  /* padding-left: 30px; */
+}
 
 .username-dropdown-toggle {
   background: none !important;
@@ -92,9 +101,7 @@
   color: #0c7882;
   text-transform: uppercase;
   padding: 0;
-  /* font-family: Montserrat, sans-serif; */
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
-    'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-family: Montserrat, sans-serif;
 
   font-size: 14px;
   font-weight: 600;
@@ -176,4 +183,15 @@
 
 .NavbarUSer{
   color: black;
+}
+
+/* Dashboard.css */
+.nav-link {
+  color: #015962 !important; /* Default link color */
+  text-decoration: none;
+}
+
+.nav-link.active {
+  font-weight: bold;
+  color: #00636D !important; /* Active link   */
 }

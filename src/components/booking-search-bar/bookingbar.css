@@ -5,10 +5,10 @@
 .card {
   display: flex;
   flex-direction: row;
-  width: 60%;
-  height: 70px;
+  width: 70%;
+  height: 65px;
   border-radius: 100px;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   box-shadow:
     rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
@@ -16,6 +16,7 @@
   position: relative;
   margin-top: -47px;
   font-size: small;
+  padding: 10px !important;
 }
 
 .property {
@@ -24,9 +25,10 @@
 }
 
 .card-item {
-  align-content: inherit;
-  padding-top: 11px;
+  /* align-content: inherit; */
+  /* padding-top: 11px; */
   text-transform: capitalize !important;
+  padding-right: 26px;
 }
 
 .vl {
@@ -53,8 +55,9 @@
   margin-left: 30px;
 }
 
-.DateHead {
-  font-weight: 500;
+.DateHead2 {
+  font-weight: 600;
+  margin-right: 7px ;
 }
 
 .whoGuest {

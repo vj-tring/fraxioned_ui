@@ -1,10 +1,10 @@
-import React from 'react'
+// import React from 'react'
 import { render, fireEvent, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import Contact from './index'
 
-jest.mock('../../assets/Fraxioned-icon.png', () => 'Fraxioned-icon.png')
-
+// jest.mock('../../assets/images/fraxioned-icon.png', () => 'fraxioned-icon.png')
+jest.mock('../../assets/images/fraxioned-icon.png', () => 'mock-image.png');
 describe('Contact component', () => {
   it('renders contact form inputs correctly', () => {
     render(<Contact />)

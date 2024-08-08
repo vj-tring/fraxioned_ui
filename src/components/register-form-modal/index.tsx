@@ -159,8 +159,8 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
         zipcode: '123456', // Default value
         phoneNumber: formValues.phoneNumber.trim(),
         roleId: formValues.roleId,
-        updatedBy: 0, // Default value
-        createdBy: 0, // Default value
+        updatedBy: 1, // Default value
+        createdBy: 1, // Default value
         userPropertyDetails: {
           propertyID: formValues.propertyID,
           noOfShares: '', // Default value

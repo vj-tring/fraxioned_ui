@@ -23,49 +23,49 @@ describe('Footer Component', () => {
     renderFooter()
     const bookingLink = screen.getByText('Booking')
     expect(bookingLink).toBeInTheDocument()
-    expect(bookingLink).toHaveAttribute('href', '/booking')
+    expect(bookingLink).toHaveAttribute('href', '/dashboard/booking')
   })
 
   test('renders Peak Season link', () => {
     renderFooter()
     const peakSeasonLink = screen.getByText('Peak Season')
     expect(peakSeasonLink).toBeInTheDocument()
-    expect(peakSeasonLink).toHaveAttribute('href', '/peak-season')
+    expect(peakSeasonLink).toHaveAttribute('href', '/dashboard/peak-season')
   })
 
   test('renders Payments link', () => {
     renderFooter()
     const paymentsLink = screen.getByText('Payments')
     expect(paymentsLink).toBeInTheDocument()
-    expect(paymentsLink).toHaveAttribute('href', '/payments')
+    expect(paymentsLink).toHaveAttribute('href', '/dashboard/payments')
   })
 
   test('renders FAQ link', () => {
     renderFooter()
     const faqLink = screen.getByText('FAQ')
     expect(faqLink).toBeInTheDocument()
-    expect(faqLink).toHaveAttribute('href', '/faq')
+    expect(faqLink).toHaveAttribute('href', '/dashboard/faq')
   })
 
   test('renders Account link', () => {
     renderFooter()
     const accountLink = screen.getByText('Account')
     expect(accountLink).toBeInTheDocument()
-    expect(accountLink).toHaveAttribute('href', '/account')
+    expect(accountLink).toHaveAttribute('href', '/dashboard/account')
   })
 
   test('renders Documents link', () => {
     renderFooter()
     const documentsLink = screen.getByText('Documents')
     expect(documentsLink).toBeInTheDocument()
-    expect(documentsLink).toHaveAttribute('href', '/documents')
+    expect(documentsLink).toHaveAttribute('href', '/dashboard/documents')
   })
 
   test('renders Contact link', () => {
     renderFooter()
     const contactLink = screen.getByText('Contact')
     expect(contactLink).toBeInTheDocument()
-    expect(contactLink).toHaveAttribute('href', '/contact')
+    expect(contactLink).toHaveAttribute('href', '/dashboard/contact')
   })
 
   // test('renders Contact Us button', () => {

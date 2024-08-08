@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from './forgot.module.css'
-import background from '../../assets/images/background.jpg'
+import background from '../../assets/images/background.png'
 import { Link } from 'react-router-dom'
 import logo from '../../assets/images/fraxioned.png'
 import Loader from '../../components/loader'

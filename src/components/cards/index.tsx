@@ -23,8 +23,8 @@ const Card: React.FC<CardProps> = ({ imageUrl, text, title, share, id }) => {
       </div>
       <div className="card-body">
         <h4 className="card-title">{title}</h4>
-        <span className="card-text mt-2">{text}</span>
-        <h6 className="share mt-1">{share}</h6>
+        <span className="card-text mt-0">{text}</span>
+        <h6 className="share mt-0">{share}</h6>
       </div>
     </div>
   )

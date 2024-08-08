@@ -1,37 +1,36 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
-import CustomNavbar from '../../components/navbar'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import fraxionedLogo from '../../assets/images/BB - Owners.png'
-import userImage from '../../assets/images/profile.jpeg'
-import './dashboard.css'
-import Contact from '../contact-us'
-import UserDetails from '../user-details'
-import ComingSoon from '../../components/coming-soon'
-import { isAuthenticated } from '../../authService'
+import CustomNavbar from '../../components/navbar';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import fraxionedLogo from '../../assets/images/BB - Owners.png';
 import Footer from '../../components/footer';
-import Home from '../home'
+import userImage from '../../assets/images/profile.jpeg';
+import './Dashboard.css';
 import CustomizedAccordions from '../../components/customized-accordians';
-import Booking from '../booking'
-// import PeakSeasonCard from 'Components/Home/PeakSeasonCard'
-
+import Contact from '../../pages/contact-us';
+import UserDetails from '../../pages/user-details';
+import ComingSoon from '../../components/coming-soon';
+import { isAuthenticated } from '../../authService';
+import Home from '../../pages/home';
+import Booking from '../../pages/booking';
 const Dashboard: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [userEmail, setUserEmail] = useState('')
-  const navigate = useNavigate()
-
+  const [userEmail, setUserEmail] = useState('');
+  const navigate = useNavigate();
   useEffect(() => {
-    if (!isAuthenticated()) {
+
+    if (!isAuthenticated()) { 
       navigate('/login')
     }
-  }, [navigate])
+  }, [navigate]);
+
 
   const links = [
     { name: 'HOME', href: '/dashboard', disabled: false },
-    { name: 'BOOKING', href: '/dashboard/booking', disabled: false },
-    { name: 'PEAK SEASON', href: '/dashboard/peak-season', disabled: false },
-    { name: 'PAYMENTS', href: '/dashboard/payements', disabled: false },
-    { name: 'FAQ', href: '/dashboard/faq', disabled: false }, 
+    { name: 'BOOKINGS', href: '/dashboard/booking', disabled: true },
+    { name: 'DOCUMENTS', href: '/dashboard/peak-season', disabled: true },
+    { name: 'PAYMENTS', href: '/dashboard/payments', disabled: true },
+    { name: 'MORE', href: '/dashboard/faq', disabled: true }, 
     
   ]
 
@@ -42,28 +41,25 @@ const Dashboard: React.FC = () => {
         links={links}
         userImage={userImage}
         userName={userEmail}
-        onUserImageClick={() => navigate('/dashboard/profile')}
+        onUserImageClick={() => navigate('/user-details')}
       />
-
       <div className="content-container">
         <div className="content-wrapper">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/faq" element={<CustomizedAccordions />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/profile" element={<UserDetails />} />
+            <Route path="/user-details" element={<UserDetails />} />
             <Route path="/booking" element={<Booking />} />
-            <Route path="/peak-season" element={<ComingSoon/>} />
-            <Route path="/payments" element={<ComingSoon />} /> 
+            <Route path="/peak-season" element={<ComingSoon />} />
+            <Route path="/payments" element={<ComingSoon />} />
             <Route path="*" element={<Navigate to="/dashboard" />} />
-
           </Routes>
         </div>
       </div>
-
       <Footer />
     </div>
-  )
-}
-
-export default Dashboard
+  
+  );
+};
+export default Dashboard;
