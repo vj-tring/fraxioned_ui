@@ -89,6 +89,10 @@
   font-size: .7rem;
   opacity: .7;
 }
+.CardFont{
+  width: 50%;
+}
+
 .image1 {
   background: url('../../../assets//BC\ -\ Home\ Page\ Banner.jpg');
   width: 70px;
@@ -134,6 +138,7 @@
   font-family: 'Montserrat', sans-serif !important;
 }
 
+
 .css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root:hover {
   background-color: none !important;
 }
@@ -147,4 +152,10 @@
 }
 .night-count li:nth-child(2){
   opacity: .8;
+}
+
+.property-image {
+  width: 100px; 
+  height: 60px;
+  border-radius: 1px; /* Optional: rounded corners */
 }
