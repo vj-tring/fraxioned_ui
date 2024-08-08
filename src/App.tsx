@@ -16,12 +16,20 @@ import Dashboard from './pages/dashboard'
 
 interface PrivateRouteProps {
   element: React.ComponentType
+  allowedRoles: number[];
 }
 
-const PrivateRoute: FC<PrivateRouteProps> = ({ element: Element }) => {
+const PrivateRoute: FC<PrivateRouteProps> = ({ element: Element, allowedRoles }) => {
   const token = localStorage.getItem('session')
-  return token ? <Element /> : <Navigate to="/dashboard" />
-}
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
+  if (allowedRoles.includes(user.role.id)) {
+    return <Element />;
+  }
+  return <Navigate to="/dashboard" />;
+};
 
 function App() {
 
@@ -35,7 +43,7 @@ function App() {
             <Route path="/forgotPassword" element={<ForgetPassword />} />
             <Route path="/recoverPassword" element={<Change />} />
             <Route path="/resetPassword" element={<ResetPassword onClose={()=>{}} />} />
-            <Route path="/*" element={<Dashboard />} />
+            <Route path="/dashboard/*" element={<Dashboard />} />
           </Routes>
         </Router>
       </Provider>

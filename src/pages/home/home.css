@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+.home-content {
+  text-align: center;
+
+  font-family: 'Montserrat', sans-serif;
+  font-optical-sizing: auto;
+  position: relative;
+}
+
+.welcome-section {
+  text-align: left;
+  margin-bottom: 20px;
+  border-bottom: 3px solid #daf1f2;
+}
+
+.welcome-owner {
+  font-size: 2rem;
+  color: #f7981d;
+}
+
+.your-homes {
+  font-size: 1.5rem;
+  color: #f7981d;
+}
+
+.home-cards-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-card {
+  padding: 20px;
+  border: none;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  border-bottom: 3px solid #daf1f2;
+}
+
+@media only screen and (max-width: 776px) {
+  .home-cards-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .home-card {
+    padding: 20px;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-bottom: 3px solid #daf1f2;
+  }
+}
+
+.HomeImg {
+  width: 100%;
+  height: 180px;
+  background: url('../../assets/images/homePage.jpg');
+  background-size: cover;
+  background-position: center;
+
+  opacity: 60%;
+}
+
+.icons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  height: 60px;
+}
+.icon-container {
+  margin-bottom: 10px;
+}
+
+.Cardcontainer {
+  display: flex;
+  padding-left: 60px;
+  padding-top: 10px;
+  background: white !important;
+}
+
+.card1 {
+  background: url('../../assets//building1.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+hr {
+  color: black !important;
+}

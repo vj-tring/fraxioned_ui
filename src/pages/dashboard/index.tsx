@@ -2,19 +2,17 @@ import React, { useState, useEffect } from 'react'
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import CustomNavbar from '../../components/navbar'
 import 'bootstrap/dist/css/bootstrap.min.css'
-
 import fraxionedLogo from '../../assets/images/BB - Owners.png'
-// import Footer from '../../Footer/Footer'
 import userImage from '../../assets/images/profile.jpeg'
 import './dashboard.css'
-// import Home from '../Home/Home'
-// import CustomizedAccordions from '../CustomizedAccordions/CustomizedAccordions'
-// import Contact from '../ContactUs/Contact'
-// import UserDetails from '../UserDetails/UserDetails'
-// import ComingSoon from '../ComingSoon/ComingSoon'
+import Contact from '../contact-us'
+import UserDetails from '../user-details'
+import ComingSoon from '../../components/coming-soon'
 import { isAuthenticated } from '../../authService'
-// import Home from 'Components/Home/Home'
-// import Booking from 'Components/Booking/Booking'
+import Footer from '../../components/footer';
+import Home from '../home'
+import CustomizedAccordions from '../../components/customized-accordians';
+import Booking from '../booking'
 // import PeakSeasonCard from 'Components/Home/PeakSeasonCard'
 
 const Dashboard: React.FC = () => {
@@ -30,10 +28,10 @@ const Dashboard: React.FC = () => {
 
   const links = [
     { name: 'HOME', href: '/dashboard', disabled: false },
-    { name: 'BOOKING', href: '/booking', disabled: false },
-    { name: 'PEAK SEASON', href: '/peak-season', disabled: false },
-    { name: 'PAYEMENTS', href: '/payements', disabled: false },
-    { name: 'FAQ', href: '/faq', disabled: false }, 
+    { name: 'BOOKING', href: '/dashboard/booking', disabled: false },
+    { name: 'PEAK SEASON', href: '/dashboard/peak-season', disabled: false },
+    { name: 'PAYMENTS', href: '/dashboard/payements', disabled: false },
+    { name: 'FAQ', href: '/dashboard/faq', disabled: false }, 
     
   ]
 
@@ -44,26 +42,26 @@ const Dashboard: React.FC = () => {
         links={links}
         userImage={userImage}
         userName={userEmail}
-        onUserImageClick={() => navigate('/user-details')}
+        onUserImageClick={() => navigate('/dashboard/profile')}
       />
 
-      {/* <div className="content-container">
+      <div className="content-container">
         <div className="content-wrapper">
           <Routes>
-            <Route path="/dashboard" element={<Home />} />
+            <Route path="/" element={<Home />} />
             <Route path="/faq" element={<CustomizedAccordions />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/user-details" element={<UserDetails />} />
+            <Route path="/profile" element={<UserDetails />} />
             <Route path="/booking" element={<Booking />} />
             <Route path="/peak-season" element={<ComingSoon/>} />
-            <Route path="/payements" element={<ComingSoon />} />
+            <Route path="/payments" element={<ComingSoon />} /> 
             <Route path="*" element={<Navigate to="/dashboard" />} />
 
           </Routes>
         </div>
       </div>
 
-      <Footer /> */}
+      <Footer />
     </div>
   )
 }
