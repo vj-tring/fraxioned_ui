@@ -39,16 +39,16 @@ describe("Login & Dashboard Navigation",()=>{
         it("Login With Valid Credentials",()=>{
             cy.visit("/login")
             cy.get("input[placeholder='Email']").type("dharshanramk@gmail.com")
-            cy.get("input[placeholder='Password']").type("Admin@123")
+            cy.get("input[placeholder='Password']").type("Admin@12")
             cy.get("input[type='checkbox']").check().should('be.checked')
             cy.get("input[type='checkbox']").uncheck().should('not.be.checked')
             cy.get("input[type='checkbox']").check().should('be.checked')
             cy.get("button").contains("Sign in").click()
             .wait(2000)
-            .get("img[alt='Logo']")
             cy.get("nav")
             .get("img[alt='User']").click()
             .get('li').contains("Logout").click()
+            .get(".btn-confirm").contains("Logout").click()
         })    
 
     })
