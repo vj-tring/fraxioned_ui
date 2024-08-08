@@ -210,9 +210,10 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               elevation: 0,
               sx: {
                 overflow: 'visible',
-                width: '210px',
+                width: '230px',
                 filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
                 mt: 1.5,
+                padding:1,
                 '& .MuiAvatar-root': {
                   width: 32,
                   height: 32,
@@ -245,21 +246,23 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
             {/* <MenuItem onClick={handleProfileClick}>
               <Avatar /> Profile
             </MenuItem> */}
-            <MenuItem onClick={handleResetPasswordClick}>
-              <Avatar /> Reset
+            <MenuItem onClick={handleResetPasswordClick} >
+              <Avatar sx={{
+                fontSize:'medium'
+              }} /> Reset
             </MenuItem>
             <Divider />
             {isAdmin && (
               <MenuItem onClick={handleAddAccountClick}>
                 <ListItemIcon>
-                  <PersonAddIcon fontSize="small" />
+                  <PersonAddIcon fontSize="medium" />
                 </ListItemIcon>
                 Add another account
               </MenuItem>
             )}
             <MenuItem onClick={handleLogoutClick}>
-              <ListItemIcon>
-                <LogoutIcon fontSize="small" />
+              <ListItemIcon className='mt-1 p-1'>
+                <LogoutIcon fontSize="medium" />
               </ListItemIcon>
               Logout
             </MenuItem>
