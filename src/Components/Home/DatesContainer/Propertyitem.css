@@ -78,10 +78,18 @@
   text-wrap: wrap;
   font-weight: 500 !important;
 }
+
 .image1 {
   background: url('../../../assets//BC\ -\ Home\ Page\ Banner.jpg');
   width: 70px;
   height: 2.5rem;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.CardImage img {
+  width: 65px;
+  height: 100%;
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -123,6 +131,7 @@
   font-family: 'Montserrat', sans-serif !important;
 }
 
+
 .css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root:hover {
   background-color: none !important;
 }
@@ -136,4 +145,10 @@
 }
 .night-count li:nth-child(2){
   opacity: .8;
+}
+
+.property-image {
+  width: 100px; 
+  height: 60px;
+  border-radius: 1px; /* Optional: rounded corners */
 }

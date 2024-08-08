@@ -47,6 +47,8 @@ const Login: React.FC = () => {
 
       try {
         const resultAction = await dispatch(login({ email, password })).unwrap();
+        setTimeout(() => {
+
         if (resultAction.user && resultAction.session) {
           setSnackbarMessage('Login Successful');
           setSnackbarSeverity('success');
@@ -60,6 +62,8 @@ const Login: React.FC = () => {
 
           setIsLoading(false);
         }
+      }, 1000);
+
       } catch (error) {
         setSnackbarMessage((error as string) || 'Login failed. Please try again.');
         setSnackbarSeverity('error');

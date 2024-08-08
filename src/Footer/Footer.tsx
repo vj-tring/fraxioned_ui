@@ -66,10 +66,10 @@ const Footer: React.FC = () => {
             </li>
           </ul>
         </div>
-        <div className="col-md-2 mt-3">
+        <div className="col-md-7 mt-5 Footlink ">
           <ul>
             <li>
-              <a href="https://www.fraxioned.com/"  target='_blank' className="no-underline " rel="noreferrer">
+              <a href="https://www.fraxioned.com/"  target='_blank' className="no-underline" rel="noreferrer">
                 fraxioned.com
               </a>
             </li>
