@@ -8,7 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+// import Tooltip from '@mui/material/Tooltip';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import LogoutIcon from '@mui/icons-material/Logout';
 import InviteModal from './SentInviteModal';
@@ -79,10 +79,10 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
     setAnchorEl(null);
   };
 
-  const handleProfileClick = () => {
-    onUserImageClick?.();
-    handleClose();
-  };
+  // const handleProfileClick = () => {
+  //   onUserImageClick?.();
+  //   handleClose();
+  // };
 
   const handleResetPasswordClick = () => {
     handleOpenResetPasswordModal();
@@ -147,7 +147,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
 
         <Nav className="ml-auto">
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Tooltip title="Account settings">
+          
               <IconButton
                 onClick={handleClick}
                 size="small"
@@ -200,8 +200,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                   </Avatar>
                 </Box>
               </IconButton>
-            </Tooltip>
-          </Box>
+                      </Box>
           <Menu
             anchorEl={anchorEl}
             id="account-menu"
@@ -243,9 +242,9 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               vertical: 'bottom',
             }}
           >
-            <MenuItem onClick={handleProfileClick}>
+            {/* <MenuItem onClick={handleProfileClick}>
               <Avatar /> Profile
-            </MenuItem>
+            </MenuItem> */}
             <MenuItem onClick={handleResetPasswordClick}>
               <Avatar /> Reset
             </MenuItem>
