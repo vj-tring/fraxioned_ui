@@ -1,71 +1,118 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
 
 .sidePanel {
     position: fixed;
     top: 0;
     left: 0;
-    width: 215px;
     height: 100vh;
-    background-color: #1e1e1e;
+    background-color: #222222;
     color: #ffffff;
-    padding: 20px 0;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
     z-index: 1000;
+    font-family: 'Roboto', sans-serif;
+    transition: width 0.3s ease;
+}
+
+.sidePanel.open {
+    width: 220px;
+}
+
+.sidePanel.closed {
+    width: 60px;
 }
 
 .logoContainer {
+    padding: 10px;
+    background-color: #222222;
     text-align: center;
-    margin-bottom: 20px;
-    margin-right: -5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
 }
 
 .logo {
-    width: 80%;
-    margin-right: 16px;
-    max-width: 180px;
+    max-width: 156px;
+    height: auto;
+}
+
+.toggleButton {
+    background: none;
+    border: none;
+    color: #a39f9f;
+    font-size: 1.0em;
+    cursor: pointer;
+    padding: 14px;
 }
 
 .menu {
     list-style-type: none;
     padding: 0;
-    margin-right: 20px;
     margin: 0;
 }
 
 .menuItem {
-    margin-bottom: 5px;
-}
-
-.hr {
-    border-color: #ffffff;
+    margin: 0;
 }
 
 .menuLink {
     display: flex;
     align-items: center;
-    padding: 9px 48px;
+    margin-top: 12px;
+    padding: 10px 20px;
     text-decoration: none;
-    color: #ffffff;
-    transition: background-color 0.3s;
+    color: #e0e0e0;
+    transition: all 0.3s ease;
 }
 
 .menuLink:hover {
-    background-color: #333333;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .menuLink.active {
-    background-color: #333333;
+    /* background-color: rgba(255, 255, 255, 0.15); */
+    border-left: 4px solid #3498db;
+    color: aliceblue;
 }
 
 .icon {
-    margin-right: 15px;
     font-size: 1.2em;
     width: 20px;
     text-align: center;
+    margin-right: 15px;
 }
 
 .label {
     font-size: 16px;
-    font-family: Arial, sans-serif;
+    font-weight: 400;
+}
+
+.closed.toggleButton {
+    background: none;
+    border: none;
+    color: #a39f9f;
+    font-size: 1.0em;
+    cursor: pointer;
+    padding: 17px;
+
+}
+
+.closed .menuLink {
+    justify-content: center;
+    margin-top: 12px;
+    padding: 10px 20px;
+}
+
+.closed .label {
+    display: none;
+}
+
+.closed .icon {
+    margin-right: 0;
+}
+
+.closed .active {
+    border-left: none;
+    background-color: rgba(255, 255, 255, 0.1);
 }

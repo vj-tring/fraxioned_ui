@@ -1,17 +1,21 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import fraxionedLogo from '../../assets/images/fraxioned_logo.png'
+import fraxionedLogo from '../../assets/images/fraxioned_logo.png';
 import {
     FaCalendar, FaPlane, FaUser, FaFile,
-    FaUserTag, FaChartBar, FaGavel
+    FaUserTag, FaChartBar, FaGavel, FaBars
 } from 'react-icons/fa';
-
 import styles from './Sidepanel.module.css';
 
 interface MenuItem {
     icon: React.ReactElement;
     label: string;
     path: string;
+}
+
+interface SidePanelProps {
+    isOpen: boolean;
+    toggleSidebar: () => void;
 }
 
 const menuItems: MenuItem[] = [
@@ -24,20 +28,27 @@ const menuItems: MenuItem[] = [
     { icon: <FaGavel />, label: 'Rules', path: '/rules' }
 ];
 
-const SidePanel: React.FC = () => {
+const SidePanel: React.FC<SidePanelProps> = ({ isOpen, toggleSidebar }) => {
     const location = useLocation();
+
+
     return (
-        <nav className={styles.sidePanel}>
+        <nav className={`${styles.sidePanel} ${isOpen ? styles.open : styles.closed}`}>
             <div className={styles.logoContainer}>
-                <img src={fraxionedLogo} alt="BB - Owners" className={styles.logo} />
+                {isOpen && <img src={fraxionedLogo} alt="Fraxioned Owners' Portal" className={styles.logo} />}
+                <button className={styles.toggleButton} onClick={toggleSidebar}>
+                    <FaBars />
+                </button>
             </div>
-            <hr className={styles.hr} />
             <ul className={styles.menu}>
                 {menuItems.map((item, index) => (
                     <li key={index} className={styles.menuItem}>
-                        <Link to={item.path} className={`${styles.menuLink} ${location.pathname === item.path ? styles.active : ''}`}>
+                        <Link
+                            to={item.path}
+                            className={`${styles.menuLink} ${location.pathname === item.path ? styles.active : ''}`}
+                        >
                             <span className={styles.icon}>{item.icon}</span>
-                            <span className={styles.label}>{item.label}</span>
+                            {isOpen && <span className={styles.label}>{item.label}</span>}
                         </Link>
                     </li>
                 ))}
