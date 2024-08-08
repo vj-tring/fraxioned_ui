@@ -3,19 +3,15 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%) !important;
+  background: linear-gradient(to top, #ffffff 0%, #ffffff 100%) !important;
 
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px!important;
-  /* opacity: 95% !important; */
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px !important;   /* opacity: 95% !important; */
   color: #fff;
   top: 0;
   z-index: 1000;
   position: fixed;
   width: 100vw;
 }
-
-
-
 
 
 .username {
