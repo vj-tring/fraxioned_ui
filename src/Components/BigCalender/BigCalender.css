@@ -1,0 +1,123 @@
+.calendar-container {
+    margin-top: 45px;
+    margin-left: 260px;
+    height: calc(100vh - 145px);
+    width: 1226px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
+}
+
+.rbc-calendar {
+    font-family: 'Roboto', sans-serif;
+    color: #333333;
+}
+
+.rbc-header {
+    padding: 12px 0;
+    font-weight: 500;
+    background-color: #f5f7fa;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.rbc-month-view {
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.rbc-day-bg {
+    transition: background-color 0.3s ease;
+}
+
+.rbc-day-bg:hover {
+    background-color: rgba(0, 120, 212, 0.05);
+}
+
+.rbc-off-range-bg {
+    background-color: #f8f9fa;
+}
+
+.rbc-today {
+    background-color: rgba(0, 120, 212, 0.1);
+}
+
+.rbc-event {
+    background-color: rgba(0, 120, 212, 0.8);
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+}
+
+.rbc-event:hover {
+    background-color: rgba(0, 120, 212, 1);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.rbc-event-content {
+    font-size: 0.85em;
+    font-weight: 500;
+}
+
+.rbc-toolbar {
+    margin-bottom: 20px;
+}
+
+.rbc-toolbar button {
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.rbc-toolbar button:hover {
+    background-color: #f0f0f0;
+    border-color: #bfbfbf;
+}
+
+.rbc-toolbar button.rbc-active {
+    background-color: rgba(61, 61, 61, 0.1);
+}
+
+.rbc-date-cell {
+    padding: 4px;
+    font-weight: 500;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.rbc-date-cell:hover {
+    opacity: 1;
+}
+
+.rbc-date-cell.rbc-now {
+    font-weight: 700;
+    color: #0078d4;
+}
+
+.rbc-row-segment {
+    padding: 2px 4px;
+}
+
+.rbc-show-more {
+    background-color: transparent;
+    color: #0078d4;
+    font-weight: 500;
+}
+
+.rbc-show-more:hover {
+    background-color: rgba(0, 120, 212, 0.1);
+}
+
+.rbc-current-time-indicator {
+    background-color: #e74c3c;
+    height: 2px;
+}

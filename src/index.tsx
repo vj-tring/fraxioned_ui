@@ -19,7 +19,7 @@ if (rootElement) {
         <BaseProvider theme={LightTheme}>
           <SnackbarProvider>
             <App />
-          </SnackbarProvider>,
+          </SnackbarProvider>
         </BaseProvider>
       </StyletronProvider>
     </React.StrictMode>

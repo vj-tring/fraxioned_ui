@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import '../DatesContainer/Propertyitem.css'
@@ -37,102 +38,102 @@ export default function BasicSelect() {
         {
           id: 1,
           name: 'Blue Bear Lake',
-          address: '537 Blue Lake St. Garden City, UT 84078',
+          address: '537 Blue Lake St, Garden City, Utah, United States, 84028',
           details: {
             2024: {
-              offSeason: '12/20',
-              peakSeason: '13/4',
-              peakHoliday: '5/34',
-              offSeasonHoliday: '33/13',
+              offSeason: '12/30',
+              peakSeason: '1/14',
+              peakHoliday: '0/1',
+              offSeasonHoliday: '0/1',
             },
             2025: {
-              offSeason: '11/15',
-              peakSeason: '12/5',
-              peakHoliday: '4/25',
-              offSeasonHoliday: '30/10',
+              offSeason: '12/30',
+              peakSeason: '1/14',
+              peakHoliday: '0/1',
+              offSeasonHoliday: '0/1',
             },
             2026: {
-              offSeason: '10/10',
-              peakSeason: '11/1',
-              peakHoliday: '6/20',
-              offSeasonHoliday: '28/12',
+              offSeason: '12/30',
+              peakSeason: '1/14',
+              peakHoliday: '0/1',
+              offSeasonHoliday: '0/1',
             },
           },
         },
 
         {
           id: 2,
-          name: 'Crown Jewel',
-          address: '123 Main Street, City, State 12345',
+          name: 'The Crown Jewel',
+          address: '5409 South Aquamarine Lane, St. George, Utah, United States, 84790',
           details: {
             2024: {
-              offSeason: '10/10',
-              peakSeason: '11/1',
-              peakHoliday: '6/20',
-              offSeasonHoliday: '28/12',
+              offSeason: '10/30',
+              peakSeason: '11/14',
+              peakHoliday: '0/1',
+              offSeasonHoliday: '0/1',
             },
             2025: {
-              offSeason: '12/20',
-              peakSeason: '13/4',
-              peakHoliday: '5/34',
-              offSeasonHoliday: '33/13',
+              offSeason: '10/30',
+              peakSeason: '11/14',
+              peakHoliday: '0/1',
+              offSeasonHoliday: '0/1',
             },
             2026: {
-              offSeason: '11/15',
-              peakSeason: '12/5',
-              peakHoliday: '4/25',
-              offSeasonHoliday: '30/10',
+              offSeason: '10/30',
+              peakSeason: '11/14',
+              peakHoliday: '0/1',
+              offSeasonHoliday: '0/1',
             },
           },
         },
 
         {
           id: 3,
-          name: 'Crown Blue',
-          address: '432 Crown BLue St. Garden City, UT 84078',
+          name: 'Bear Lake Bluffs',
+          address:'732 Spruce Drive, Garden City, Utah, United States, 84028',
           details: {
             2024: {
               offSeason: '22/30',
-              peakSeason: '13/2',
-              peakHoliday: '5/44',
-              offSeasonHoliday: '23/33',
+              peakSeason: '13/14',
+              peakHoliday: '0/1',
+              offSeasonHoliday: '0/1',
             },
             2025: {
-              offSeason: '11/15',
-              peakSeason: '12/5',
-              peakHoliday: '4/25',
-              offSeasonHoliday: '30/10',
+              offSeason: '22/30',
+              peakSeason: '13/14',
+              peakHoliday: '0/1',
+              offSeasonHoliday: '0/1',
             },
             2026: {
-              offSeason: '10/10',
-              peakSeason: '11/1',
-              peakHoliday: '6/20',
-              offSeasonHoliday: '28/12',
+              offSeason: '22/30',
+              peakSeason: '13/14',
+              peakHoliday: '0/1',
+              offSeasonHoliday: '0/1',
             },
           },
         },
         {
           id: 4,
-          name: 'Jewel Blue',
+          name: 'Lake Escape',
           address: '432 Crown BLue St. Garden City, UT 84078',
           details: {
             2024: {
               offSeason: '22/30',
-              peakSeason: '13/2',
-              peakHoliday: '5/44',
-              offSeasonHoliday: '23/33',
+              peakSeason: '13/14',
+              peakHoliday: '0/1',
+              offSeasonHoliday: '0/1',
             },
             2025: {
-              offSeason: '11/15',
-              peakSeason: '12/5',
-              peakHoliday: '4/25',
-              offSeasonHoliday: '30/10',
+              offSeason: '22/30',
+              peakSeason: '13/14',
+              peakHoliday: '0/1',
+              offSeasonHoliday: '0/1',
             },
             2026: {
-              offSeason: '10/10',
-              peakSeason: '11/1',
-              peakHoliday: '6/20',
-              offSeasonHoliday: '28/12',
+              offSeason: '22/30',
+              peakSeason: '13/14',
+              peakHoliday: '0/1',
+              offSeasonHoliday: '0/1',
             },
           },
         },
@@ -189,12 +190,14 @@ export default function BasicSelect() {
   }, [open])
 
   return (
-    <Box sx={{ width: 280, borderRadius: 32 }}>
-      <Button
+
+
+    <Box  sx={{ width: 280, borderRadius: 32, border:'none' }}>
+      <Button disableRipple
         aria-controls="basic-menu"
         aria-haspopup="true"
         onClick={handleClick}
-        variant="outlined"
+        // variant="outlined"
         className="PropertyBtn"
         sx={{
           borderRadius: 10,
@@ -202,11 +205,12 @@ export default function BasicSelect() {
           height: 70,
           border: 'none',
           cursor: 'pointer',
+          paddingRight:10
         }}
       >
-        <div className="d-flex flex-column pt-3">
-          <span className="DateHead1">My Home(s)</span>
-          <p className="property1">
+        <div className="d-flex align-items-start flex-column pt-3 card-item">
+          <span className="DateHead1  monsterrat ">My Home(s)</span>
+          <p className="property1 monsterrat ">
             {selectedCard ? selectedCard.name : 'Select Property'}
           </p>
         </div>
@@ -228,35 +232,24 @@ export default function BasicSelect() {
       >
         {cards.length > 0 && (
           <MenuItem disableRipple>
-            <div className="CardItem">
+            <div className="CardItem py-2">
               <div className="d-flex justify-content-between IconArrow">
-                <Button
-                  onClick={handlePrevCard}
-                  disabled={selectedCardIndex === 0}
-                >
-                  <FontAwesomeIcon icon={faArrowLeft} />
-                </Button>
-
-                <h4 className="BlueHead1">{selectedCard?.name}</h4>
-                <Button
-                  onClick={handleNextCard}
-                  disabled={selectedCardIndex === cards.length - 1}
-                >
-                  <FontAwesomeIcon icon={faArrowRight} />
-                </Button>
+                <Button className="currentproperty" onClick={handlePrevCard} disabled={selectedCardIndex === 0}>{selectedCard?.name}</Button>
+                <Button className="nextproperty"  onClick={handleNextCard} disabled={selectedCardIndex === cards.length - 1}>{!(selectedCardIndex === cards.length - 1)?cards[(selectedCardIndex + 1) % cards.length].name:'Completed'}</Button>
               </div>
 
               {selectedCard && (
                 <div className="card-content">
-                  <div className="d-flex justify-content-between mt-1 p-2">
+                  <div className="card-name d-flex justify-content-between mt-1 py-2 align-items-center">
                     <span>
                       <h4 className="BlueHead">{selectedCard.name}</h4>
                       <p className="BlueFont">{selectedCard.address}</p>
                     </span>
                     <span className="image1"></span>
                   </div>
-                  <div className="d-flex justify-content-around p-2">
+                  <div className="d-flex justify-content-between py-2 align-items-center pt-0">
                     <p className="Available">My Available Nights</p>
+                    <div className="d-flex justify-content-between align-items-center gap-2">
                     {years.map((year) => (
                       <button
                         key={year}
@@ -266,30 +259,31 @@ export default function BasicSelect() {
                         {year}
                       </button>
                     ))}
+                    </div>                   
                   </div>
 
-                  <div className="box d-flex justify-content-around p-3">
-                    <div className="d-flex flex-column">
+                  <div className="box d-flex justify-content-around py-2 ">
+                    <div className="d-flex flex-column night-count">
                       <li>
                         {selectedCard.details[selectedYear]?.offSeason || 'N/A'}
                       </li>
                       <li className="Box-list">Off-Season Nights</li>
                     </div>
-                    <div className="d-flex flex-column">
+                    <div className="d-flex flex-column night-count">
                       <li>
                         {selectedCard.details[selectedYear]?.peakSeason ||
                           'N/A'}
                       </li>
                       <li className="Box-list">Peak-Season Nights</li>
                     </div>
-                    <div className="d-flex flex-column">
+                    <div className="d-flex flex-column night-count">
                       <li>
                         {selectedCard.details[selectedYear]?.peakHoliday ||
                           'N/A'}
                       </li>
                       <li className="Box-list">Peak-Season Holiday</li>
                     </div>
-                    <div className="d-flex flex-column">
+                    <div className="d-flex flex-column night-count">
                       <li>
                         {selectedCard.details[selectedYear]?.offSeasonHoliday ||
                           'N/A'}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import background from '../Login/background.jpg'
+import background from '../Login/background.png'
 import styles from './ChangePassword.module.css'
 import logo from '../Login/fraxioned.png'
 import Loader from '../Loader/Loader'

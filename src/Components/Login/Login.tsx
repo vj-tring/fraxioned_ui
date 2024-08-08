@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../Redux/store/index'; // Adjust the import path as needed
+import { AppDispatch } from '../../Redux/store/index';
 import { login } from '../../Redux/slice/auth/authSlice';
 import styles from './Login.module.css';
 import logo from './fraxioned.png';
-import background from './background.jpg';
-import Loader from '../Loader/Loader'
-
+import background from './background.png';
+import Loader from '../Loader/Loader';
 import CustomizedSnackbars from '../CustomizedSnackbars/CustomizedSnackbars';
+
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -20,7 +20,7 @@ const Login: React.FC = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
 
   const validateEmail = (email: string) => {
@@ -43,8 +43,7 @@ const Login: React.FC = () => {
     } else {
       setEmailError('');
       setPasswordError(false);
-      setIsLoading(true)
-
+      setIsLoading(true);
 
       try {
         const resultAction = await dispatch(login({ email, password })).unwrap();
@@ -52,17 +51,20 @@ const Login: React.FC = () => {
           setSnackbarMessage('Login Successful');
           setSnackbarSeverity('success');
           setShowSnackbar(true);
-          navigate('/dashboard');
-          setIsLoading(false)
 
+          if (resultAction.user.role.id === 1) {
+            navigate('/admin/dashboard');
+          } else {
+            navigate('/*');
+          }
+
+          setIsLoading(false);
         }
       } catch (error) {
-        setSnackbarMessage(error as string || 'Login failed. Please try again.');
+        setSnackbarMessage((error as string) || 'Login failed. Please try again.');
         setSnackbarSeverity('error');
         setShowSnackbar(true);
-        setIsLoading(false)
-
-
+        setIsLoading(false);
       }
     }
   };
