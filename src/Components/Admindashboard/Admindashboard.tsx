@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import SidePanel from '../Sidepanel/Sidepanel'
 import Calendar from '../BigCalender/BigCalender';
 import userImage from '../../assets/profile.jpeg'
@@ -11,11 +11,19 @@ import './Admindashboard.css'
 
 const AdminDashboard: React.FC = () => {
     const navigate = useNavigate()
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+
+
     useEffect(() => {
         if (!isAuthenticated()) {
             navigate('/login')
         }
     }, [navigate])
+
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
 
     return (
         <div className="admin-dashboard-container">
@@ -26,10 +34,11 @@ const AdminDashboard: React.FC = () => {
                 onUserImageClick={() => navigate('/admin/userdetails')}
             />
             <div className="dashboard-content">
-                <SidePanel />
-                <div className="content">
+                <SidePanel isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+                <div className={`content ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
                     <Routes>
-                        <Route path="/bookings" element={<Calendar />} />
+                        <Route path="/" element={<Navigate to="/admin/bookings" replace />} />
+                        <Route path="/bookings" element={<Calendar isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/userdetails" element={<UserDetails />} />
                     </Routes>
                 </div>
@@ -39,3 +48,5 @@ const AdminDashboard: React.FC = () => {
 };
 
 export default AdminDashboard;
+
+

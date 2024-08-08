@@ -1,16 +1,24 @@
 .calendar-container {
     margin-top: 45px;
-    margin-left: 260px;
     height: calc(100vh - 145px);
-    width: 1226px;
-    margin-right: 20px;
-    margin-bottom: 20px;
     padding: 20px;
     background-color: #ffffff;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
+    transition: margin-left 0.3s ease, width 0.3s ease;
 }
+
+.calendar-container.sidebar-open {
+    margin-left: 60px;
+    width: calc(100% - 120px);
+}
+
+.calendar-container.sidebar-closed {
+    margin-left: 80px;
+    width: calc(100% - 120px);
+}
+
 
 .rbc-calendar {
     font-family: 'Roboto', sans-serif;

@@ -15,7 +15,7 @@ import InviteModal from './SentInviteModal';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import FormDialog from '../RegisterFormPopUp/RegisterForm';
 import ResetPasswordModal from './ResetPasswordModal';
-import { NavLink } from 'react-router-dom'; // Import NavLink
+import { NavLink } from 'react-router-dom';
 import useNavbarHandler from './NavbarFunction';
 import { Typography } from '@mui/material';
 import './Navbar.css';
@@ -79,7 +79,6 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
     setAnchorEl(null);
   };
 
-
   // const handleProfileClick = () => {
   //   onUserImageClick?.();
   //   handleClose();
@@ -108,10 +107,11 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
     setOpenNewAccountDialog(false);
   };
 
+  const navbarStyle = isAdmin ? { minHeight: '50px' } : {};
+
   return (
     <>
-
-      <Navbar bg="light" expand="lg" className="p-2">
+      <Navbar bg="light" expand="lg" className="p-2" style={navbarStyle}>
         {!isAdminDashboard && (
           <Navbar.Brand href="#home" className="p-2">
             <img
@@ -121,8 +121,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               className="d-inline-block align-top"
               alt="Logo"
             />
-        </Navbar.Brand>
-
+          </Navbar.Brand>
         )}
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -133,9 +132,10 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                 to={link.href}
                 onClick={(e) => {
                   if (link.disabled) {
-                    e.preventDefault(); 
+                    e.preventDefault();
                   }
-                }}                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                }}
+                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
                 style={{ textDecoration: 'none' }}
                 aria-disabled={link.disabled ? 'true' : 'false'}
               >
@@ -162,15 +162,13 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                   alignItems="center"
                   sx={{
                     borderRadius: 1,
-                    
                   }}
                 >
                   <Box>
-                    <Typography variant="body2" color="textPrimary " className="monsterrat p-2  " sx={{
-                      fontWeight:600,
-                      color:'#00636D',
-                      textTransform:'uppercase'
-
+                    <Typography variant="body2" color="textPrimary" className="monsterrat p-2" sx={{
+                      fontWeight: 600,
+                      color: '#00636D',
+                      textTransform: 'uppercase'
                     }}>
                       {storedName}
                     </Typography>

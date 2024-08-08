@@ -10,7 +10,6 @@ import Signup from './Components/Signup/Signup'
 import ForgotPassword from './Components/ForgetPassword/ForgotPassword'
 import UserDetails from 'Components/UserDetails/UserDetails'
 import ResetPassword from './Components/ResetPassword/ResetPassword'
-import SidePanel from 'Components/Sidepanel/Sidepanel'
 import Dashboard from './Components/Dashboard/Dashboard'
 import ResponsiveAppBar from './Components/NavbarMUI/NavbarUI'
 import AdminDashboard from 'Components/Admindashboard/Admindashboard'
@@ -43,6 +42,7 @@ const PrivateRoute: FC<PrivateRouteProps> = ({ element: Element, allowedRoles })
 
 
 const App: FC = () => {
+
   return (
     <Provider store={store}>
       <Router>
@@ -50,7 +50,6 @@ const App: FC = () => {
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<Login />} />
           <Route path="/userdetails" element={<UserDetails />} />
-          <Route path="/sidepanel" element={<SidePanel />} />
           <Route path="/register" element={<Signup />} />
           <Route path="/recover" element={<Change />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />

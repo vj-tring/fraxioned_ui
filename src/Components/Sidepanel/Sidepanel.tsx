@@ -1,43 +1,61 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import fraxionedLogo from '../../assets/images/fraxioned_logo.png'
+import fraxionedLogo from '../../assets/images/fraxioned_logo.png';
 import {
     FaCalendar, FaPlane, FaUser, FaFile,
-    FaUserTag, FaChartBar, FaGavel
+    FaUserTag, FaChartBar, FaGavel, FaBars
 } from 'react-icons/fa';
-
 import styles from './Sidepanel.module.css';
 
 interface MenuItem {
     icon: React.ReactElement;
     label: string;
     path: string;
+    disabled: boolean;
+}
+
+interface SidePanelProps {
+    isOpen: boolean;
+    toggleSidebar: () => void;
 }
 
 const menuItems: MenuItem[] = [
-    { icon: <FaCalendar />, label: 'Bookings', path: '/admin/bookings' },
-    { icon: <FaPlane />, label: 'Holidays', path: '/holidays' },
-    { icon: <FaUser />, label: 'User', path: '/user' },
-    { icon: <FaFile />, label: 'Documents', path: '/documents' },
-    { icon: <FaUserTag />, label: 'Role', path: '/role' },
-    { icon: <FaChartBar />, label: 'Reports', path: '/reports' },
-    { icon: <FaGavel />, label: 'Rules', path: '/rules' }
+    { icon: <FaCalendar />, label: 'Bookings', path: '/admin/bookings', disabled: false },
+    { icon: <FaPlane />, label: 'Holidays', path: '/holidays', disabled: true },
+    { icon: <FaUser />, label: 'User', path: '/user', disabled: true },
+    { icon: <FaFile />, label: 'Documents', path: '/documents', disabled: true },
+    { icon: <FaUserTag />, label: 'Role', path: '/role', disabled: true },
+    { icon: <FaChartBar />, label: 'Reports', path: '/reports', disabled: true },
+    { icon: <FaGavel />, label: 'Rules', path: '/rules', disabled: true }
 ];
 
-const SidePanel: React.FC = () => {
+const SidePanel: React.FC<SidePanelProps> = ({ isOpen, toggleSidebar }) => {
     const location = useLocation();
+
+    const handleItemClick = (e: React.MouseEvent, disabled: boolean) => {
+        if (disabled) {
+            e.preventDefault();
+        }
+    };
+
     return (
-        <nav className={styles.sidePanel}>
+        <nav className={`${styles.sidePanel} ${isOpen ? styles.open : styles.closed}`}>
             <div className={styles.logoContainer}>
-                <img src={fraxionedLogo} alt="BB - Owners" className={styles.logo} />
+                {isOpen && <img src={fraxionedLogo} alt="Fraxioned Owners' Portal" className={styles.logo} />}
+                <button className={styles.toggleButton} onClick={toggleSidebar}>
+                    <FaBars />
+                </button>
             </div>
-            <hr className={styles.hr} />
             <ul className={styles.menu}>
                 {menuItems.map((item, index) => (
                     <li key={index} className={styles.menuItem}>
-                        <Link to={item.path} className={`${styles.menuLink} ${location.pathname === item.path ? styles.active : ''}`}>
+                        <Link
+                            to={item.path}
+                            className={`${styles.menuLink} ${location.pathname === item.path ? styles.active : ''} ${item.disabled ? styles.disabled : ''}`}
+                            onClick={(e) => handleItemClick(e, item.disabled)}
+                        >
                             <span className={styles.icon}>{item.icon}</span>
-                            <span className={styles.label}>{item.label}</span>
+                            {isOpen && <span className={styles.label}>{item.label}</span>}
                         </Link>
                     </li>
                 ))}
