@@ -11,6 +11,7 @@ interface MenuItem {
     icon: React.ReactElement;
     label: string;
     path: string;
+    disabled: boolean;
 }
 
 interface SidePanelProps {
@@ -19,18 +20,23 @@ interface SidePanelProps {
 }
 
 const menuItems: MenuItem[] = [
-    { icon: <FaCalendar />, label: 'Bookings', path: '/admin/bookings' },
-    { icon: <FaPlane />, label: 'Holidays', path: '/holidays' },
-    { icon: <FaUser />, label: 'User', path: '/user' },
-    { icon: <FaFile />, label: 'Documents', path: '/documents' },
-    { icon: <FaUserTag />, label: 'Role', path: '/role' },
-    { icon: <FaChartBar />, label: 'Reports', path: '/reports' },
-    { icon: <FaGavel />, label: 'Rules', path: '/rules' }
+    { icon: <FaCalendar />, label: 'Bookings', path: '/admin/bookings', disabled: false },
+    { icon: <FaPlane />, label: 'Holidays', path: '/holidays', disabled: true },
+    { icon: <FaUser />, label: 'User', path: '/user', disabled: true },
+    { icon: <FaFile />, label: 'Documents', path: '/documents', disabled: true },
+    { icon: <FaUserTag />, label: 'Role', path: '/role', disabled: true },
+    { icon: <FaChartBar />, label: 'Reports', path: '/reports', disabled: true },
+    { icon: <FaGavel />, label: 'Rules', path: '/rules', disabled: true }
 ];
 
 const SidePanel: React.FC<SidePanelProps> = ({ isOpen, toggleSidebar }) => {
     const location = useLocation();
 
+    const handleItemClick = (e: React.MouseEvent, disabled: boolean) => {
+        if (disabled) {
+            e.preventDefault();
+        }
+    };
 
     return (
         <nav className={`${styles.sidePanel} ${isOpen ? styles.open : styles.closed}`}>
@@ -45,7 +51,8 @@ const SidePanel: React.FC<SidePanelProps> = ({ isOpen, toggleSidebar }) => {
                     <li key={index} className={styles.menuItem}>
                         <Link
                             to={item.path}
-                            className={`${styles.menuLink} ${location.pathname === item.path ? styles.active : ''}`}
+                            className={`${styles.menuLink} ${location.pathname === item.path ? styles.active : ''} ${item.disabled ? styles.disabled : ''}`}
+                            onClick={(e) => handleItemClick(e, item.disabled)}
                         >
                             <span className={styles.icon}>{item.icon}</span>
                             {isOpen && <span className={styles.label}>{item.label}</span>}

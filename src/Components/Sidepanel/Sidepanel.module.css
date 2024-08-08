@@ -71,7 +71,6 @@
 }
 
 .menuLink.active {
-    /* background-color: rgba(255, 255, 255, 0.15); */
     border-left: 4px solid #3498db;
     color: aliceblue;
 }
@@ -95,7 +94,6 @@
     font-size: 1.0em;
     cursor: pointer;
     padding: 17px;
-
 }
 
 .closed .menuLink {
@@ -115,4 +113,14 @@
 .closed .active {
     border-left: none;
     background-color: rgba(255, 255, 255, 0.1);
+}
+
+.menuLink.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.menuLink.disabled:hover {
+    background-color: transparent;
 }
