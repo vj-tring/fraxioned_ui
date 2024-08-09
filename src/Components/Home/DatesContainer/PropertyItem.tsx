@@ -8,10 +8,10 @@ import MenuItem from '@mui/material/MenuItem';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import '../DatesContainer/Propertyitem.css';
-import image1 from '../../../assets/images/BC - Bookings Page Banner.jpg';
-import image2 from '../../../assets/images/BC - Home Page Banner.jpg';
-import image3 from '../../../assets/bedroom1.jpg';
-import image4 from '../../../assets/images/BC - Bookings Page Banner.jpg';
+import image1 from '../../../assets/Property_Images/Blue bear lake.jpg';
+import image2 from '../../../assets/Property_Images/crown jewel.jpg';
+import image3 from '../../../assets/Property_Images/lake escape.jpg';
+import image4 from '../../../assets/Property_Images/Bear Lake bluffs.jpg';
 interface Card {
   id: number;
   name: string;
