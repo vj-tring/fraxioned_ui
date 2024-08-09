@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { Calendar as BigCalendar, momentLocalizer } from 'react-big-calendar';
 import moment from "moment";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from "@mui/material";
+import Dialog  from "@mui/material/Dialog";
+import DialogTitle  from "@mui/material/DialogTitle";
+import DialogContent  from "@mui/material/DialogContent";
+import DialogActions  from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";

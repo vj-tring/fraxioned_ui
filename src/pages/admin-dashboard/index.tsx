@@ -6,7 +6,7 @@ import userImage from '../../assets/images/profile.jpeg'
 import CustomNavbar from '../../components/navbar';
 import { isAuthenticated } from '../../authService';
 import UserDetails from '../user-details';
-import fraxionedLogo from '../../assets/images/BB - Owners.png'
+import fraxionedLogo from '../../assets/images/fraxioned-owners.png'
 import './admin-dashboard.css'
 
 const AdminDashboard: React.FC = () => {

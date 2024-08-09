@@ -1,6 +1,7 @@
 //@ts-nocheck
 import React, { useState, useEffect } from 'react'
-import { Popover, Paper } from '@mui/material'
+import Popover from '@mui/material/Popover';
+import Paper  from '@mui/material/Paper'
 
 import {
   ORIENTATION,

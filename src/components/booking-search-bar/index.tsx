@@ -11,7 +11,7 @@ const BookingSearchBar: React.FC = () => {
       <div className="card">
         <PropertyCarousel />
         <div className="vl p-2"></div>
-        <Calendar />
+        {/* <Calendar /> */}
         <div className="vl p-2"></div>
         <Region />
         <div className="vl"></div>

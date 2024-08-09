@@ -1,27 +1,27 @@
 import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { BaseProvider, LightTheme } from 'baseui'
-import { Provider as StyletronProvider } from 'styletron-react'
+import { createRoot } from 'react-dom/client';
+// import { BaseProvider, LightTheme } from 'baseui'
+// import { Provider as StyletronProvider } from 'styletron-react'
 import {SnackbarProvider} from './components/snackbar-provider'; // Adjust the path as necessary
 import App from './App.tsx'
-import { Client as Styletron } from 'styletron-engine-atomic'
+// import { Client as Styletron } from 'styletron-engine-atomic'
 import './index.css'
 
-const engine = new Styletron()
+// const engine = new Styletron()
 const rootElement = document.getElementById('root')
 
 if (rootElement) {
-  const root = ReactDOM.createRoot(rootElement)
+  const root = createRoot(rootElement)
 
   root.render(
     <React.StrictMode>
-      <StyletronProvider value={engine}>
-        <BaseProvider theme={LightTheme}>
+      {/* <StyletronProvider value={engine}> */}
+        {/* <BaseProvider theme={LightTheme}> */}
           <SnackbarProvider>
             <App />
           </SnackbarProvider>
-        </BaseProvider>
-      </StyletronProvider>
+        {/* </BaseProvider> */}
+      {/* </StyletronProvider> */}
     </React.StrictMode>
   )
 } else {

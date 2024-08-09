@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import CustomNavbar from '../../components/navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import fraxionedLogo from '../../assets/images/BB - Owners.png';
+import fraxionedLogo from '../../assets/images/fraxioned-owners.png';
 import Footer from '../../components/footer';
 import userImage from '../../assets/images/profile.jpeg';
 import './Dashboard.css';

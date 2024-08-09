@@ -17,7 +17,7 @@ import FormDialog from '../register-form-modal';
 import ResetPasswordModal from '../reset-password-modal';
 import { NavLink } from 'react-router-dom';
 import useNavbarHandler from './navbar-handler';
-import { Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
 import './navbar.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/reducers';

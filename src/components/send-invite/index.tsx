@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import {
-  TextField,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
-  Alert,
-  CircularProgress,
-  Box,
-} from '@mui/material'
-import { styled } from '@mui/system'
+import Box from '@mui/material/Box'
+import CircularProgress from '@mui/material/CircularProgress'
+import FormControl from '@mui/material/FormControl'
+import Alert from '@mui/material/Alert'
+import InputLabel from '@mui/material/InputLabel'
+import Select from '@mui/material/Select'
+import TextField from '@mui/material/TextField'
+import MenuItem from '@mui/material/MenuItem'
+
+import styled  from '@mui/system/styled'
 import useSendInviteHandler from './send-invite-handler'
 import './send-invite.css'
 import { getRoles } from '../../api'

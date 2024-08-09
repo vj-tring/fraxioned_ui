@@ -1,13 +1,13 @@
-// import React from 'react'
+import React from 'react'
 import { render, fireEvent, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import Contact from './index'
 
-// jest.mock('../../assets/images/fraxioned-icon.png', () => 'fraxioned-icon.png')
-jest.mock('../../assets/images/fraxioned-icon.png', () => 'mock-image.png');
+// jest.mock('\.(jpg|jpeg|png|gif|svg)$', () => 'mocked-image');
+// jest.mock('../../assets/images/fraxioned-icon.png', () => 'mock-image');
 describe('Contact component', () => {
   it('renders contact form inputs correctly', () => {
-    render(<Contact />)
+    render(React.createElement(Contact));
     expect(screen.getByPlaceholderText('NAME')).toBeInTheDocument()
     expect(screen.getByPlaceholderText('SUBJECT')).toBeInTheDocument()
     expect(
@@ -17,7 +17,7 @@ describe('Contact component', () => {
   })
 
   it('updates form input values correctly', () => {
-    render(<Contact />)
+    render(React.createElement(Contact));
 
     const nameInput = screen.getByPlaceholderText('NAME')
     const subjectInput = screen.getByPlaceholderText('SUBJECT')
@@ -31,7 +31,7 @@ describe('Contact component', () => {
   })
 
   it('submits form with correct values', async () => {
-    render(<Contact />)
+    render(React.createElement(Contact));
 
     const nameInput = screen.getByPlaceholderText('NAME')
     const subjectInput = screen.getByPlaceholderText('SUBJECT')

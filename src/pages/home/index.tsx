@@ -1,7 +1,7 @@
 import React from 'react'
 import './home.css'
-import imag1 from '../../assets/images/BC - Bookings Page Banner.jpg'
-import imag2 from '../../assets/images/BC - Home Page Banner.jpg'
+import imag1 from '../../assets/images/bookings-page-banner.jpg'
+import imag2 from '../../assets/images/home-page-banner.jpg'
 import BookingSearchBar from '../../components/booking-search-bar'
 import Card from '../../components/cards'
 

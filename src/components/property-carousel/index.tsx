@@ -8,10 +8,10 @@ import MenuItem from '@mui/material/MenuItem';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import './propertycarousel.css';
-import image1 from '../../assets/images/BC - Bookings Page Banner.jpg';
-import image2 from '../../assets/images/BC - Home Page Banner.jpg';
+import image1 from '../../assets/images/bookings-page-banner.jpg';
+import image2 from '../../assets/images/home-page-banner.jpg';
 import image3 from '../../assets/images/bedroom1.jpg';
-import image4 from '../../assets/images/BC - Bookings Page Banner.jpg';
+import image4 from '../../assets/images/bookings-page-banner.jpg';
 interface Card {
   id: number;
   name: string;
