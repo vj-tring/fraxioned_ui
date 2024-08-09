@@ -1,9 +1,11 @@
-describe("Navigation Bar Test",()=>{
-    it("navigate and popup check",()=>{
+describe("Navigation Bar and Side Bar Test", () => {
+    it("popup and sidebar check", () => {
         cy.visit("/login")
-        .get("input[placeholder='Email']").type("dharshanramk@gmail.com")
-        .get("input[placeholder='Password']").type("Admin@12")
-        .get("button").contains("Sign in").click()
-        .get(".MuiBox-root.css-1hg4z9e").click()
+            .get("input[placeholder='Email']").type("dharshanramk@gmail.com")
+            .get("input[placeholder='Password']").type("Admin@12")
+            .get("button").contains("Sign in").click()
+            .get(".Sidepanel_toggleButton__57ppM").click()
+            .get("button[class='Sidepanel_toggleButton__57ppM'] svg").click()
+            .get(".MuiBox-root.css-1hg4z9e").click()
     })
 })
