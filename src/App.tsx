@@ -6,7 +6,7 @@ import {
   Navigate,
 } from 'react-router-dom'
 import Login from './Components/Login/Login'
-import Signup from './Components/Signup/Signup'
+// import Signup from './Components/Signup/Signup'
 import ForgotPassword from './Components/ForgetPassword/ForgotPassword'
 import UserDetails from 'Components/UserDetails/UserDetails'
 import ResetPassword from './Components/ResetPassword/ResetPassword'
@@ -50,7 +50,7 @@ const App: FC = () => {
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<Login />} />
           <Route path="/userdetails" element={<UserDetails />} />
-          <Route path="/register" element={<Signup />} />
+          {/* <Route path="/register" element={<Signup />} /> */}
           <Route path="/recover" element={<Change />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           {/* <Route path="/contact" element={<Contact />} /> */}

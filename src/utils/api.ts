@@ -31,3 +31,7 @@ export const sendInvite = async (payload: any) =>
 //logout api
 export const logoutUserApi = (token: string) =>
   axiosInstance.post('/v1/authentication/logout', { sessionToken: token });
+
+// holidays api
+export const fetchHolidaysApi = () => 
+    axiosInstance.get('/v1/holidays/holiday');

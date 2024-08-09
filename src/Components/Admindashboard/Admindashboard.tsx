@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import SidePanel from '../Sidepanel/Sidepanel'
+import Holidays from 'Components/Grids/HolidayGrid/HolidayGrid';
 import Calendar from '../BigCalender/BigCalender';
 import userImage from '../../assets/profile.jpeg'
 import CustomNavbar from '../Navbar/Navbar';
-import { isAuthenticated } from 'authService';
 import UserDetails from '../UserDetails/UserDetails';
 import fraxionedLogo from '../../assets/images/BB - Owners.png'
 import './Admindashboard.css'
@@ -12,14 +12,6 @@ import './Admindashboard.css'
 const AdminDashboard: React.FC = () => {
     const navigate = useNavigate()
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-
-
-
-    useEffect(() => {
-        if (!isAuthenticated()) {
-            navigate('/login')
-        }
-    }, [navigate])
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -39,6 +31,7 @@ const AdminDashboard: React.FC = () => {
                     <Routes>
                         <Route path="/" element={<Navigate to="/admin/bookings" replace />} />
                         <Route path="/bookings" element={<Calendar isSidebarOpen={isSidebarOpen} />} />
+                        <Route path="/holidays" element={<Holidays />} />
                         <Route path="/userdetails" element={<UserDetails />} />
                     </Routes>
                 </div>
