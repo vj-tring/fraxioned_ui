@@ -36,7 +36,7 @@ describe("Login & Logout", () => {
         })
     })
     describe("Successful Login", () => {
-        it("Login With Valid Credentials", () => {
+        it("Login With Valid Credentials and logout", () => {
             cy.visit("/login")
             cy.get("input[placeholder='Email']").type("dharshanramkumar23@gmail.com")
             cy.get("input[placeholder='Password']").type("Admin@12")
