@@ -11,20 +11,20 @@ describe("Reset Password", () => {
         it("Empty Old Password", () => {
             login();
             cy.get("button[type='submit']").click()
-                .get(".ResetPassword_errorMessage__W8ojI").contains("Please enter your old password");
+                .get(".ResetPassword_errorMessage__W8ojI").contains("Please enter your old password").wait(2000);
         })
         it("Empty New Password", () => {
             login();
             cy.get("#oldPassword").type("Password")
                 .get("button[type='submit']").click()
-                .get(".ResetPassword_errorMessage__W8ojI").contains("Please enter a new password");
+                .get(".ResetPassword_errorMessage__W8ojI").contains("Please enter a new password").wait(2000);
         })
         it("Empty Confirm New Password", () => {
             login();
             cy.get("#oldPassword").type("Password")
                 .get("#newPassword").type("Password")
                 .get("button[type='submit']").click()
-                .get(".ResetPassword_errorMessage__W8ojI").contains("Please confirm your new password");
+                .get(".ResetPassword_errorMessage__W8ojI").contains("Please confirm your new password").wait(2000);
         })
         it("Old Password is incorrect", () => {
             login();
@@ -32,7 +32,7 @@ describe("Reset Password", () => {
                 .get("#newPassword").type("Admin@12")
                 .get("#confirmPassword").type("Admin@12")
                 .get("button[type='submit']").click()
-                .get("div[role='alert']").contains("The provided old password is incorrect");
+                .get("div[role='alert']").contains("The provided old password is incorrect").wait(2000);
         })
         it("Password does not match", () => {
             login();
@@ -40,7 +40,7 @@ describe("Reset Password", () => {
                 .get("#newPassword").type("Admin@1")
                 .get("#confirmPassword").type("Admin@12")
                 .get("button[type='submit']").click()
-                .get(".ResetPassword_errorMessage__W8ojI").contains("New passwords do not match");
+                .get(".ResetPassword_errorMessage__W8ojI").contains("New passwords do not match").wait(2000);
         })
     })
     describe("Successful Reset Password", () => {
@@ -49,7 +49,7 @@ describe("Reset Password", () => {
             cy.get("#oldPassword").type("Admin@12")
                 .get("#newPassword").type("Admin@12")
                 .get("#confirmPassword").type("Admin@12")
-                .get("button[type='submit']").click();
+                .get("button[type='submit']").click().wait(2000);
         })
     })
 })
