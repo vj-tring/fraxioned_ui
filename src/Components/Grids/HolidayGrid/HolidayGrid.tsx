@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { fetchHolidaysApi } from 'utils/api';
 import styles from './Holiday.module.css';
+import NewForm from 'Components/NewForm/Newform';
+import PropertyImage from 'Components/PropertyImage/PropertyImage';
+import { Dialog, DialogContent, Button } from '@mui/material';
 
 interface Holiday {
     id: number;
@@ -30,6 +33,15 @@ const columns: GridColDef[] = [
 const Holidays: React.FC = () => {
     const [holidays, setHolidays] = useState<Holiday[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const [openForm, setOpenForm] = useState(false);
+
+    const handleOpenForm = () => {
+        setOpenForm(true);
+    };
+
+    const handleClose = () => {
+        setOpenForm(false);
+    };
 
     useEffect(() => {
         const getHolidays = async () => {
@@ -59,7 +71,13 @@ const Holidays: React.FC = () => {
 
     return (
         <div className={styles.holidaysContainer}>
-            <h1 className={styles.title}>Holidays</h1>
+            <div className={styles.titleContainer}>
+                <h1 className={styles.title}>Holidays</h1>
+                <Button variant="contained" color="primary" onClick={handleOpenForm}>
+                    Add Holiday
+                </Button>
+            </div>
+            <PropertyImage />
             {error && <div className={styles.error}>{error}</div>}
             <div className={styles.dataGridWrapper}>
                 <DataGrid
@@ -76,6 +94,12 @@ const Holidays: React.FC = () => {
                     className={styles.dataGrid}
                 />
             </div>
+
+            <Dialog open={openForm} onClose={handleClose}>
+                <DialogContent sx={{ padding: 0 }}>
+                    <NewForm onClose={handleClose} />
+                </DialogContent>
+            </Dialog>
         </div>
     );
 };

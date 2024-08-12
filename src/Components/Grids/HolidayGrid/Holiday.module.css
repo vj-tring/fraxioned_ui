@@ -2,15 +2,25 @@
     padding: 24px;
     background-color: #f5f5f5;
     height: calc(100vh - 64px);
-    /* Adjust based on your navbar height */
     display: flex;
     flex-direction: column;
 }
 
+.titleContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
 .title {
-    font-size: 24px;
+    font-size: 28px;
+    font-weight: bold;
     color: #333;
-    margin-bottom: 20px;
+}
+
+.css-ypiqx9-MuiDialogContent-root {
+    padding: 0px;
 }
 
 .dataGridWrapper {

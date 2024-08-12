@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom'
 import Login from './Components/Login/Login'
 // import Signup from './Components/Signup/Signup'
+import PropertyImage from 'Components/PropertyImage/PropertyImage'
 import ForgotPassword from './Components/ForgetPassword/ForgotPassword'
 import UserDetails from 'Components/UserDetails/UserDetails'
 import ResetPassword from './Components/ResetPassword/ResetPassword'
@@ -53,6 +54,7 @@ const App: FC = () => {
           {/* <Route path="/register" element={<Signup />} /> */}
           <Route path="/recover" element={<Change />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/image" element={<PropertyImage />} />
           {/* <Route path="/contact" element={<Contact />} /> */}
           {/* <Route path="/booking" element={<Booking />} /> */}
           <Route

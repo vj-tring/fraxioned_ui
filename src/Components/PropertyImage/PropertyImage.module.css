@@ -1,0 +1,33 @@
+.propertyImageContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+}
+
+.propertyType {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.colorBox {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    border-radius: 4px;
+}
+
+.propertyName {
+    cursor: pointer;
+    color: #333;
+}
+
+.propertyName:hover {
+    cursor: pointer;
+    color: #683131;
+    font-weight: bold;
+}
