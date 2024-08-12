@@ -12,10 +12,6 @@ export default defineConfig({
   plugins: [
     react({
       jsxRuntime: 'automatic',
-      babel: {
-        // babelrc: true,
-        // configFile: true
-      }
     }),
     // commonjs(),
     
@@ -31,13 +27,13 @@ export default defineConfig({
       generateScopedName: '[name]__[local]___[hash:base64:5]'
     }
   },
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: ['./src/setupTests.ts']
-  },
+  // test: {
+  //   globals: true,
+  //   environment: 'jsdom',
+  //   setupFiles: ['./src/setupTests.ts']
+  // },
   build: {
-    sourcemap: true,
+    sourcemap: false,
     minify: 'terser',
   },
   optimizeDeps: {
