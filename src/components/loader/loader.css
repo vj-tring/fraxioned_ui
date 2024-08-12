@@ -1,18 +1,21 @@
-.loader-container {
-  position: absolute;
+.loading-spinner {
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  bottom: 0;
+  right: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(242, 237, 237, 0.5);
+  z-index: 9999;
+  background-color: rgba(255, 255, 255, 0.7); 
 }
-
+.loading-spinner .MuiCircularProgress-colorPrimary {
+  color: #DC9751; 
+}
 /* HTML: <div class="loader"></div> */
 /* HTML: <div class="loader"></div> */
-.loader {
+/* .loader {
   width: 50px;
   --b: 8px; 
   aspect-ratio: 1;
@@ -26,4 +29,4 @@
           mask-composite: intersect;
   animation:l4 1s infinite steps(10);
 }
-@keyframes l4 {to{transform: rotate(1turn)}}
+@keyframes l4 {to{transform: rotate(1turn)}} */
