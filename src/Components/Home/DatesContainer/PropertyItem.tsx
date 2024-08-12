@@ -1,22 +1,22 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import IconButton from '@mui/material/IconButton';
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import '../DatesContainer/Propertyitem.css';
 import image1 from '../../../assets/Property_Images/Blue bear lake.jpg';
 import image2 from '../../../assets/Property_Images/crown jewel.jpg';
 import image3 from '../../../assets/Property_Images/lake escape.jpg';
 import image4 from '../../../assets/Property_Images/Bear Lake bluffs.jpg';
+
 interface Card {
   id: number;
   name: string;
   address: string;
-  image: string; // Added image property
+  image: string;
   details: {
     [year: number]: {
       offSeason: string;
@@ -33,8 +33,10 @@ export default function BasicSelect() {
   const [selectedCardIndex, setSelectedCardIndex] = useState<number>(0);
   const [cards, setCards] = useState<Card[]>([]);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
-  const [years, setYears] = useState<number[]>([2024, 2025, 2026]);
+  const [years] = useState<number[]>([2024, 2025, 2026]);
   const [selectedYear, setSelectedYear] = useState<number>(2024);
+  const carouselRef = useRef<HTMLDivElement>(null);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,104 +45,44 @@ export default function BasicSelect() {
           id: 1,
           name: 'Blue Bear Lake',
           address: '537 Blue Lake St, Garden City, Utah, United States, 84028',
-          image: image1, // Added image URL
+          image: image1,
           details: {
-            2024: {
-              offSeason: '12/30',
-              peakSeason: '1/14',
-              peakHoliday: '0/1',
-              offSeasonHoliday: '0/1',
-            },
-            2025: {
-              offSeason: '8/30',
-              peakSeason: '14/14',
-              peakHoliday: '1/1',
-              offSeasonHoliday: '0/1',
-            },
-            2026: {
-              offSeason: '8/30',
-              peakSeason: '3/14',
-              peakHoliday: '1/1',
-              offSeasonHoliday: '1/1',
-            },
+            2024: { offSeason: '12/30', peakSeason: '1/14', peakHoliday: '0/1', offSeasonHoliday: '0/1' },
+            2025: { offSeason: '8/30', peakSeason: '14/14', peakHoliday: '1/1', offSeasonHoliday: '0/1' },
+            2026: { offSeason: '8/30', peakSeason: '3/14', peakHoliday: '1/1', offSeasonHoliday: '1/1' },
           },
         },
         {
           id: 2,
           name: 'The Crown Jewel',
           address: '5409 South Aquamarine Lane, St. George, Utah, United States, 84790',
-          image:image2, // Added image URL
+          image: image2,
           details: {
-            2024: {
-              offSeason: '10/30',
-              peakSeason: '11/14',
-              peakHoliday: '0/1',
-              offSeasonHoliday: '0/1',
-            },
-            2025: {
-              offSeason: '7/30',
-              peakSeason: '8/14',
-              peakHoliday: '1/1',
-              offSeasonHoliday: '0/1',
-            },
-            2026: {
-              offSeason: '23/30',
-              peakSeason: '2/14',
-              peakHoliday: '0/1',
-              offSeasonHoliday: '1/1',
-            },
+            2024: { offSeason: '10/30', peakSeason: '11/14', peakHoliday: '0/1', offSeasonHoliday: '0/1' },
+            2025: { offSeason: '7/30', peakSeason: '8/14', peakHoliday: '1/1', offSeasonHoliday: '0/1' },
+            2026: { offSeason: '23/30', peakSeason: '2/14', peakHoliday: '0/1', offSeasonHoliday: '1/1' },
           },
         },
         {
           id: 3,
           name: 'Bear Lake Bluffs',
           address: '732 Spruce Drive, Garden City, Utah, United States, 84028',
-          image: image3, // Added image URL
+          image: image3,
           details: {
-            2024: {
-              offSeason: '25/30',
-              peakSeason: '1/14',
-              peakHoliday: '1/1',
-              offSeasonHoliday: '0/1',
-            },
-            2025: {
-              offSeason: '22/30',
-              peakSeason: '13/14',
-              peakHoliday: '0/1',
-              offSeasonHoliday: '0/1',
-            },
-            2026: {
-              offSeason: '25/30',
-              peakSeason: '12/14',
-              peakHoliday: '1/1',
-              offSeasonHoliday: '0/1',
-            },
+            2024: { offSeason: '25/30', peakSeason: '1/14', peakHoliday: '1/1', offSeasonHoliday: '0/1' },
+            2025: { offSeason: '22/30', peakSeason: '13/14', peakHoliday: '0/1', offSeasonHoliday: '0/1' },
+            2026: { offSeason: '25/30', peakSeason: '12/14', peakHoliday: '1/1', offSeasonHoliday: '0/1' },
           },
         },
         {
           id: 4,
           name: 'Lake Escape',
           address: '432 Crown Blue St, Garden City, UT 84078',
-          image: image4, // Added image URL
+          image: image4,
           details: {
-            2024: {
-              offSeason: '11/30',
-              peakSeason: '13/14',
-              peakHoliday: '1/1',
-              offSeasonHoliday: '0/1',
-            },
-            2025: {
-              offSeason: '21/30',
-              peakSeason: '3/14',
-              peakHoliday: '0/1',
-              offSeasonHoliday: '1/1',
-            },
-            2026: {
-              offSeason: '23/30',
-              peakSeason: '3/14',
-              peakHoliday: '1/1',
-              offSeasonHoliday: '0/1',
-            },
+            2024: { offSeason: '11/30', peakSeason: '13/14', peakHoliday: '1/1', offSeasonHoliday: '0/1' },
+            2025: { offSeason: '21/30', peakSeason: '3/14', peakHoliday: '0/1', offSeasonHoliday: '1/1' },
+            2026: { offSeason: '23/30', peakSeason: '3/14', peakHoliday: '1/1', offSeasonHoliday: '0/1' },
           },
         },
       ];
@@ -151,6 +93,7 @@ export default function BasicSelect() {
     fetchData();
   }, []);
 
+
   useEffect(() => {
     if (cards.length > 0 && selectedCardIndex >= 0) {
       setSelectedCard(cards[selectedCardIndex]);
@@ -159,24 +102,39 @@ export default function BasicSelect() {
     }
   }, [selectedCardIndex, cards]);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  useEffect(() => {
+    if (carouselRef.current) {
+      const selectedElement = carouselRef.current.children[selectedCardIndex] as HTMLElement;
+      if (selectedElement) {
+        selectedElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center',
+        });
+      }
+    }
+  }, [selectedCardIndex]);
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleNextCard = () => {
-    setSelectedCardIndex((prevIndex) => (prevIndex + 1) % cards.length);
-  };
-
-  const handlePrevCard = () => {
-    setSelectedCardIndex((prevIndex) => (prevIndex - 1 + cards.length) % cards.length);
+  const handleCardClick = (index: number) => {
+    setSelectedCardIndex(index);
   };
 
   const handleYearClick = (year: number) => {
     setSelectedYear(year);
+  };
+
+  const handlePrevious = () => {
+    const newIndex = Math.max(selectedCardIndex - 1, 0);
+    setSelectedCardIndex(newIndex);
+  };
+
+  const handleNext = () => {
+    const newIndex = Math.min(selectedCardIndex + 1, cards.length - 1);
+    setSelectedCardIndex(newIndex);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   useEffect(() => {
@@ -193,14 +151,20 @@ export default function BasicSelect() {
     };
   }, [open]);
 
+  // Determine if the carousel should be shown
+  const showCarousel = cards.length >1;
+  const showCarouselControls = cards.length > 1;
+
+  // Set the width of CardItem based on the number of cards
+  const cardItemWidth = cards.length === 2 ? '370px' : '460px';
+
   return (
-
-
-    <Box sx={{ width: 280, borderRadius: 32, border: 'none' }}>
-      <Button disableRipple
+    <Box sx={{ width: 300, borderRadius: 32, border: 'none' }}>
+      <Button
+        disableRipple
         aria-controls="basic-menu"
         aria-haspopup="true"
-        onClick={handleClick}
+        onClick={(event) => setAnchorEl(event.currentTarget)}
         className="PropertyBtn"
         sx={{
           borderRadius: 10,
@@ -208,7 +172,8 @@ export default function BasicSelect() {
           height: 70,
           border: 'none',
           cursor: 'pointer',
-          paddingRight: 10
+          paddingRight: 10,
+          position: 'relative',
         }}
       >
         <div className="d-flex align-items-start flex-column pt-3 card-item">
@@ -218,15 +183,16 @@ export default function BasicSelect() {
           </p>
         </div>
       </Button>
-
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
+        open={Boolean(anchorEl)}
+        onClose={() => setAnchorEl(null)}
         PaperProps={{
           style: {
             position: 'fixed',
+            maxHeight: '60vh',
+            overflowY: 'auto',
           },
         }}
         sx={{
@@ -239,23 +205,64 @@ export default function BasicSelect() {
               backgroundColor: 'white !important'
             }
           }}>
-            <div className="CardItem py-2">
-              <div className="d-flex justify-content-between IconArrow">
-                <Button disableRipple className="currentproperty" onClick={handlePrevCard} disabled={selectedCardIndex === 0}>{selectedCard?.name}</Button>
-                <Button disableRipple className="nextproperty" onClick={handleNextCard} disabled={selectedCardIndex === cards.length - 1}>{!(selectedCardIndex === cards.length - 1) ? cards[(selectedCardIndex + 1) % cards.length].name : 'Completed'}</Button>
-              </div>
+            <div className="CardItem py-2" style={{ width: cardItemWidth }}>
+              {showCarousel && (
+                <div className="card-container">
+                  <div className="d-flex flex-row">
+                    {showCarouselControls && (
+                      <IconButton onClick={handlePrevious} disableRipple sx={{ padding: 0 }} disabled={selectedCardIndex === 0}>
+                        <NavigateBeforeIcon />
+                      </IconButton>
+                    )}
+                    <div className="d-flex flex-row w-100 " style={{ overflowX: 'auto', whiteSpace: 'nowrap',justifyContent:'space-evenly' }} ref={carouselRef}>
+                      {cards.map((card, index) => (
+                        <Button
+                          key={card.id}
+                          disableRipple
+                          className={`additionalproperty ${selectedCardIndex === index ? 'active' : ''}`}
+                          onClick={() => handleCardClick(index)}
+                          sx={{
+                            flex: '0 0 auto',
+                            margin: '4px',
+                            padding: '8px',
+                          }}
+                        >
+                          <div className="d-flex flex-column align-items-center">
+                            <span className="property-name">{card.name}</span>
+                          </div>
+                        </Button>
+                      ))}
+                    </div>
+                    {showCarouselControls && (
+                      <IconButton onClick={handleNext} disableRipple disabled={selectedCardIndex === cards.length - 1} sx={{ padding: 0 }}>
+                        <NavigateNextIcon />
+                      </IconButton>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {selectedCard && (
                 <div className="card-content">
-                  <div className="card-name d-flex justify-content-between mt-1 py-2 align-items-center gy-1">
+                  {cards.length > 1 && showCarousel && (
+                    <div className="dots-container">
+                      {cards.map((_, index) => (
+                        <div
+                          key={index}
+                          className={`dot ${index === selectedCardIndex ? 'active' : ''}`}
+                          onClick={() => handleCardClick(index)}
+                        ></div>
+                      ))}
+                    </div>
+                  )}
+                  <div className="card-name d-flex justify-content-between py-2 align-items-center gy-1">
                     <span className='CardFont'>
                       <h4 className="BlueHead">{selectedCard.name}</h4>
                       <p className="BlueFont">{selectedCard.address}</p>
                     </span>
-                   <span className='CardImage'>
-                   <img src={selectedCard.image} alt={selectedCard.name} className="property-image" />
-                   </span>
-                  
+                    <span className='CardImage'>
+                      <img src={selectedCard.image} alt={selectedCard.name} className="property-image" />
+                    </span>
                   </div>
                   <div className="d-flex justify-content-between py-2 align-items-center pt-0">
                     <p className="Available">My Available Nights</p>
@@ -272,29 +279,21 @@ export default function BasicSelect() {
                     </div>
                   </div>
 
-                  <div className="box d-flex justify-content-around py-2 ">
+                  <div className="box d-flex justify-content-around py-1 ">
                     <div className="d-flex flex-column night-count">
-                      <li>
-                        {selectedCard.details[selectedYear]?.offSeason || 'N/A'}
-                      </li>
+                      <li>{selectedCard.details[selectedYear]?.offSeason || 'N/A'}</li>
                       <li className="Box-list">Off-Season Nights</li>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li>
-                        {selectedCard.details[selectedYear]?.peakSeason || 'N/A'}
-                      </li>
+                      <li>{selectedCard.details[selectedYear]?.peakSeason || 'N/A'}</li>
                       <li className="Box-list">Peak-Season Nights</li>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li>
-                        {selectedCard.details[selectedYear]?.peakHoliday || 'N/A'}
-                      </li>
+                      <li>{selectedCard.details[selectedYear]?.peakHoliday || 'N/A'}</li>
                       <li className="Box-list">Peak-Season Holiday</li>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li>
-                        {selectedCard.details[selectedYear]?.offSeasonHoliday || 'N/A'}
-                      </li>
+                      <li>{selectedCard.details[selectedYear]?.offSeasonHoliday || 'N/A'}</li>
                       <li className="Box-list">Off-Season Holiday</li>
                     </div>
                   </div>
