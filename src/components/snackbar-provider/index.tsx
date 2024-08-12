@@ -1,6 +1,7 @@
 // SnackbarProvider.tsx
 import React, { createContext, useState, useContext, ReactNode } from 'react';
-import { Snackbar, Alert } from '@mui/material';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 interface SnackbarContextType {
     showSnackbar: (message: string, severity?: 'success' | 'error' | 'info' | 'warning') => void;
@@ -27,6 +28,7 @@ export const SnackbarProvider: React.FC<{ children: ReactNode }> = ({ children }
         <SnackbarContext.Provider value={{ showSnackbar }}>
             {children}
             <Snackbar
+                
                 open={snackbar.open}
                 autoHideDuration={6000}
                 onClose={handleClose}

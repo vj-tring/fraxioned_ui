@@ -13,12 +13,18 @@ export default defineConfig({
     react({
       jsxRuntime: 'automatic',
       babel: {
-        babelrc: true,
+        // babelrc: true,
         // configFile: true
       }
     }),
-    commonjs(),
+    // commonjs(),
+    
   ],
+  resolve: {
+    alias: {
+      '@': '/src',
+    },
+  },
   css: {
     modules: {
       localsConvention: 'camelCaseOnly',
@@ -35,6 +41,6 @@ export default defineConfig({
     minify: 'terser',
   },
   optimizeDeps: {
-    include: ['@mui/material', 'react', 'react-dom'],
+    include: ['react', 'react-dom','@mui/utils', '@mui/material', '@mui/system', '@emotion/react', '@emotion/styled','@mui/utils/formatMuiErrorMessage'],
   },
 })
