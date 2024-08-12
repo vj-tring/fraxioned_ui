@@ -1,0 +1,155 @@
+.card-btn {
+  border: none;
+  text-transform: none;
+  height: 35px;
+  border: 1px solid lightgrey;
+  border-radius: 38px;
+  margin-left: 10px;
+  width: 240px;
+  background: white;
+  box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+}
+
+.card-btn.active {
+  background-color: #e0e0e0;
+}
+
+.card-btn1 {
+  text-transform: none;
+  height: 19px;
+  width: 3.7rem;
+  border: 1px solid lightgrey;
+  border-radius: 18px;
+  background: white;
+  font-size: .64rem;
+  color: #7c7875;
+}
+
+.card-btn1:focus {
+  border-color: black !important;
+  color: #212121 !important;
+}
+
+.card-btn1.active {
+  border-color: black !important;
+  color: #212121 !important;
+}
+
+.box {
+  border: 1px solid grey;
+  height: 53px;
+  text-align: center;
+  align-items: center;
+  font-weight: 500;
+  font-size: x-large;
+}
+
+.BlueHead {
+  margin: 0 !important;
+  font-weight: bold;
+  padding-top: 5px;
+  font-size: 1.28rem;
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+}
+
+.currentproperty, .nextproperty {
+  width: 11.2rem;
+  padding: .22rem 2rem !important;
+  border-radius: 1rem !important;
+  text-transform: capitalize !important;
+}
+
+.currentproperty {
+  border: 1px solid #212121 !important;
+  color: #212121 !important;
+}
+.nextproperty {
+  border: 1px solid #7c7875 !important;
+  color: #7c7875 !important;
+  opacity: .7 !important;
+}
+
+.BlueFont {
+  height: 2rem;
+  margin: 0 !important;
+  font-size: .7rem !important;
+  opacity: .7 !important;
+  text-wrap: wrap;
+  font-weight: 500 !important;
+}
+
+.image1 {
+  background: url('../../../assets//BC\ -\ Home\ Page\ Banner.jpg');
+  width: 70px;
+  height: 2.5rem;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.CardImage img {
+  width: 65px;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.Available {
+  font-weight: 500;
+  margin: 0 !important;
+}
+
+.Box-list {
+  font-size: 7px;
+}
+
+.property1 {
+  text-transform: capitalize;
+  color: grey;
+  font-size: small;
+
+}
+
+.DateHead1 {
+  text-transform: capitalize;
+  color: black;
+  font-weight: 550 !important;
+  font-size: small;
+  height: 1.1rem;
+}
+
+.PropertyBtn:hover {
+  background-color: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: none !important;
+}
+
+.CardItem {
+  width: 380px;
+  overflow: hidden;
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+
+.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root:hover {
+  background-color: none !important;
+}
+
+.IconArrow {
+  border-radius: 10px;
+}
+.night-count li:nth-child(1) {
+  letter-spacing: .14rem;
+  font-size: 1rem;
+}
+.night-count li:nth-child(2){
+  opacity: .8;
+}
+
+.property-image {
+  width: 100px; 
+  height: 60px;
+  border-radius: 1px; /* Optional: rounded corners */
+}

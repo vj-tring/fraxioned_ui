@@ -1,19 +1,21 @@
 .footer {
-  background-color: #edf5f5;
+  background-color: #E6F4F6;
   bottom: 0;
   width: 100%;
-  color: #333; /* Adjust text color for better readability */
-  padding: 30px 20px; /* Increased padding for better spacing */
+  color: #333; 
   text-align: center;
+  height: 106px;
 }
 
 .logo {
   background-image: url('../../assets/images/fraxioned.png');
   background-size: contain;
   background-repeat: no-repeat;
-  width: 180px; /* Adjust width of the logo */
-  height: 80px; /* Adjust height of the logo */
-  margin-top: 10px; /* Adjust margin for spacing */
+  height: 65px;
+  width:300px !important;
+  margin: 13px;
+  margin-left: 80px;
+  margin-top: 15px;
 }
 
 .container {
@@ -23,32 +25,32 @@
 
 .row {
   display: flex;
-  justify-content: space-around; /* Adjusted to evenly distribute columns */
-  align-items: flex-start; /* Align items at the top */
-  padding: 10px 0; /* Adjusted vertical padding */
+  /* justify-content: space-evenly !important;  */
 }
 
-.col-md-3,
+/* .col-md-3, */
 .col-md-2 {
-  flex: 1; /* Allow columns to grow flexibly */
-  text-align: left; /* Align text to the left */
+  text-align: left; 
+  width: 10%;
+
 }
+
 
 ul {
   list-style: none;
-  padding: 0;
+  padding: 0 !important;
+  font-size: medium;
+  font-weight: 200 !important;
 }
 
 .no-underline {
   text-decoration: none;
-  color: #23527c; /* Adjust link color */
-  font-weight: 600; /* Increased font weight for better readability */
+  font-size: 15px;
+  color: #025D67; /* Adjust link color */
+  font-weight: 400; /* Increased font weight for better readability */
   transition: color 0.3s; /* Smooth color transition */
 }
 
-.no-underline:hover {
-  color: #f7981d; /* Hover color */
-}
 
 .contact-us {
   width: 100%;
@@ -97,4 +99,13 @@ ul {
   .logo {
     margin-bottom: 20px; /* Adjusted bottom margin */
   }
+}
+
+.disabled
+{
+  pointer-events: none;
+}
+
+.Footlink{
+  margin-top: 2.5rem !important;
 }

@@ -21,42 +21,42 @@ describe('Footer Component', () => {
 
   test('renders Booking link', () => {
     renderFooter()
-    const bookingLink = screen.getByText('Booking')
+    const bookingLink = screen.getByText('Bookings')
     expect(bookingLink).toBeInTheDocument()
     expect(bookingLink).toHaveAttribute('href', '/dashboard/booking')
   })
 
   test('renders Peak Season link', () => {
     renderFooter()
-    const peakSeasonLink = screen.getByText('Peak Season')
+    const peakSeasonLink = screen.getByText('Payments')
     expect(peakSeasonLink).toBeInTheDocument()
     expect(peakSeasonLink).toHaveAttribute('href', '/dashboard/peak-season')
   })
 
   test('renders Payments link', () => {
     renderFooter()
-    const paymentsLink = screen.getByText('Payments')
+    const paymentsLink = screen.getByText('Documents')
     expect(paymentsLink).toBeInTheDocument()
     expect(paymentsLink).toHaveAttribute('href', '/dashboard/payments')
   })
 
   test('renders FAQ link', () => {
     renderFooter()
-    const faqLink = screen.getByText('FAQ')
+    const faqLink = screen.getByText('Tickets')
     expect(faqLink).toBeInTheDocument()
     expect(faqLink).toHaveAttribute('href', '/dashboard/faq')
   })
 
   test('renders Account link', () => {
     renderFooter()
-    const accountLink = screen.getByText('Account')
+    const accountLink = screen.getByText('GuideBooks')
     expect(accountLink).toBeInTheDocument()
     expect(accountLink).toHaveAttribute('href', '/dashboard/account')
   })
 
   test('renders Documents link', () => {
     renderFooter()
-    const documentsLink = screen.getByText('Documents')
+    const documentsLink = screen.getByText('FAQs')
     expect(documentsLink).toBeInTheDocument()
     expect(documentsLink).toHaveAttribute('href', '/dashboard/documents')
   })
