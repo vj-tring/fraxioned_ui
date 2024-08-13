@@ -3,7 +3,6 @@ import './bookingbar.css'
 import Region from '../region'
 import PropertyCarousel from '../property-carousel'
 import GuestSelector from '../guest-selector'
-import Calendar from '../calender'
 
 const BookingSearchBar: React.FC = () => {
   return (
@@ -11,9 +10,12 @@ const BookingSearchBar: React.FC = () => {
       <div className="card">
         <PropertyCarousel />
         <div className="vl p-2"></div>
-        {/* <Calendar /> */}
-        <div className="vl p-2"></div>
         <Region />
+        <div className="vl p-2"></div>
+        <div className="d-flex align-items-start flex-column pt-3 ">
+        <span className="DateHead1 monsterrat">Check Out</span>
+        <p className="property1 monsterrat">Add Dates</p>
+        </div>
         <div className="vl"></div>
         <GuestSelector />
       </div>
