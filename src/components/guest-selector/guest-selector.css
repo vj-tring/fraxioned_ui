@@ -53,3 +53,21 @@
   margin-right: 48px !important;
   font-weight: 600 !important;
 }
+.Dec-circle,
+.Inc-circle {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  border: 1px solid grey;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Ad-count {
+  font-size: 16px;
+  margin-top: 6px;
+  width: 20px;
+  padding-left: 7px;
+}

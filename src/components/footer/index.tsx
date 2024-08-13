@@ -17,32 +17,13 @@ const Footer: React.FC = () => {
               </Link>
             </li>
             <li>
-              <Link to="/dashboard/booking" className="no-underline disabled">
-                Booking
+              <Link to="/booking" className="no-underline disabled">
+                Bookings
               </Link>
             </li>
             <li>
-              <Link to="/dashboard/peak-season" className="no-underline disabled">
-                Peak Season
-              </Link>
-            </li>
-          </ul>
-        </div>
-        <div className="col-md-2">
-          <ul>
-            <li>
-              <Link to="/dashboard/payments" className="no-underline disabled">
+              <Link to="/peak-season" className="no-underline disabled">
                 Payments
-              </Link>
-            </li>
-            <li>
-              <Link to="/dashboard/faq" className="no-underline">
-                FAQ
-              </Link>
-            </li>
-            <li>
-              <Link to="/dashboard/account" className="no-underline disabled">
-                Account
               </Link>
             </li>
           </ul>
@@ -50,13 +31,13 @@ const Footer: React.FC = () => {
         <div className="col-md-2 mt-3">
           <ul>
             <li>
-              <Link to="/dashboard/documents" className="no-underline disabled">
+              <Link to="/payments" className="no-underline disabled">
                 Documents
               </Link>
             </li>
             <li>
-              <Link to="/dashboard/contact" className="no-underline">
-                Contact
+              <Link to="/faq" className="no-underline disabled">
+                Tickets
               </Link>
             </li>
             <li>

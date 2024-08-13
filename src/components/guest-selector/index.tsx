@@ -20,7 +20,7 @@ const names = [
   { label: 'Pets', description: 'Bringing a service?', icon: <PetsIcon /> },
 ]
 
-const MultipleSelect: React.FC = () => {
+const GuestSelector: React.FC = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
@@ -155,4 +155,4 @@ const MultipleSelect: React.FC = () => {
   )
 }
 
-export default MultipleSelect
+export default GuestSelector

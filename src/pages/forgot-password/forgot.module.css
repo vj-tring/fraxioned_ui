@@ -27,7 +27,7 @@
   border-radius: 20px;
   box-shadow: 1px 10px 10px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 400px;
+  max-width: 480px;
   padding: 40px;
   position: relative;
 }
@@ -49,7 +49,7 @@
   font-weight: 600;
   font-size: 24px;
   color: #333;
-  margin: 0 0 10px;
+  margin-bottom: 10px;
   text-align: center;
 }
 
@@ -57,7 +57,7 @@
   font-family: 'Poppins', sans-serif;
   font-size: 14px;
   color: #666;
-  margin: 0 0 16px;
+  margin-bottom: 16px;
   text-align: center;
 }
 
@@ -79,9 +79,6 @@
   font-size: 14px;
   transition: border-color 0.3s ease;
   background-color: white;
-  max-width: -webkit-fill-available;
-  font-family: inherit;
-  
 }
 
 .inputGroup input[type='text']:focus,
@@ -104,7 +101,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin : 12px 0
+  margin-bottom: 20px;
+  margin-top: 12px;
 }
 
 .remember {
@@ -134,8 +132,6 @@
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  font-family: inherit;
-  height: 42px;
 }
 
 .signInButton:hover {
