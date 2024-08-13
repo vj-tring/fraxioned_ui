@@ -1,16 +1,13 @@
 .formContainer {
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    padding: 40px;
-    width: 600px;
+    padding: 24px;
+    max-width: 500px;
     margin: 0 auto;
 }
 
 .form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 16px;
 }
 
 .inputField {
@@ -28,24 +25,19 @@
 
 .checkboxGroup {
     margin-top: 16px;
-    padding: 16px;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    max-height: 200px;
-    overflow-y: auto;
 }
 
 .buttonContainer {
     display: flex;
     justify-content: flex-end;
     gap: 16px;
-    margin-top: 32px;
+    margin-top: 24px;
 }
 
-.addButton {
-    min-width: 120px;
+.updateButton {
+    min-width: 100px;
 }
 
 .cancelButton {
-    min-width: 120px;
+    min-width: 100px;
 }

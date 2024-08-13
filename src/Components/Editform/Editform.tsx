@@ -12,8 +12,8 @@ import {
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import styles from './Newform.module.css';
-import { getProperties, addHolidayApi } from 'utils/api';
+import styles from './Editform.module.css'
+import { getProperties, updateHolidaysApi } from 'utils/api';
 import { useSelector } from 'react-redux';
 import Loader from 'Components/Loader/Loader';
 import { RootState } from 'Redux/reducers';
@@ -23,18 +23,26 @@ interface Property {
     propertyName: string;
 }
 
-interface NewFormProps {
+interface EditFormProps {
     onClose: () => void;
-    onHolidayAdded: () => void;
+    onHolidayUpdated: () => void;
+    holidayData: {
+        id: number;
+        name: string;
+        year: number;
+        startDate: string;
+        endDate: string;
+        properties: number[];
+    };
 }
 
-const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
-    const [name, setName] = useState('');
-    const [year, setYear] = useState<number | ''>('');
-    const [startDate, setStartDate] = useState<Date | null>(null);
-    const [endDate, setEndDate] = useState<Date | null>(null);
+const EditForm: React.FC<EditFormProps> = ({ onClose, onHolidayUpdated, holidayData }) => {
+    const [name, setName] = useState(holidayData.name);
+    const [year, setYear] = useState<number>(holidayData.year);
+    const [startDate, setStartDate] = useState<Date | null>(new Date(holidayData.startDate));
+    const [endDate, setEndDate] = useState<Date | null>(new Date(holidayData.endDate));
     const [properties, setProperties] = useState<Property[]>([]);
-    const [selectedProperties, setSelectedProperties] = useState<number[]>([]);
+    const [selectedProperties, setSelectedProperties] = useState<number[]>(holidayData.properties);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -62,25 +70,26 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
             return;
         }
         try {
-            const holidayData = {
+            const updatedHolidayData: any = {
                 name,
                 year: Number(year),
                 startDate: startDate?.toISOString().split('T')[0],
                 endDate: endDate?.toISOString().split('T')[0],
-                properties: selectedProperties.map(id => ({ id })),
-                createdBy: {
+                updatedBy: {
                     id: userId
                 }
             };
-            await addHolidayApi(holidayData);
-            onHolidayAdded();
+
+            console.log(holidayData.id);
+            await updateHolidaysApi(holidayData.id, updatedHolidayData);
+            onHolidayUpdated();
+            console.log(updatedHolidayData);
             onClose();
         } catch (err) {
-            console.error('Error adding holiday:', err);
-            setError('Failed to add holiday. Please try again.');
+            console.error('Error updating holiday:', err);
+            setError('Failed to update holiday. Please try again.');
         }
     };
-
     const handlePropertyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = event.target;
         const propertyId = parseInt(name);
@@ -89,10 +98,6 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
         } else {
             setSelectedProperties(selectedProperties.filter(id => id !== propertyId));
         }
-    };
-
-    const handleCancel = () => {
-        onClose();
     };
 
     if (loading) {
@@ -106,7 +111,7 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
     return (
         <div className={styles.formContainer}>
             <Typography variant="h4" component="h2" gutterBottom>
-                Add Holiday
+                Edit Holiday
             </Typography>
             <form onSubmit={handleSubmit} className={styles.form}>
                 <TextField
@@ -121,7 +126,7 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
                     label="Year"
                     type="number"
                     value={year}
-                    onChange={(e) => setYear(parseInt(e.target.value) || '')}
+                    onChange={(e) => setYear(parseInt(e.target.value) || 0)}
                     fullWidth
                     required
                     className={styles.inputField}
@@ -167,14 +172,14 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
                         type="submit"
                         variant="contained"
                         color="primary"
-                        className={styles.addButton}
+                        className={styles.updateButton}
                     >
-                        Add
+                        Update
                     </Button>
                     <Button
                         variant="outlined"
                         color="secondary"
-                        onClick={handleCancel}
+                        onClick={onClose}
                         className={styles.cancelButton}
                     >
                         Cancel
@@ -185,4 +190,4 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
     );
 };
 
-export default NewForm;
+export default EditForm;

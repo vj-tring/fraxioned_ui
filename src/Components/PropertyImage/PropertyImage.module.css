@@ -31,3 +31,13 @@
     color: #683131;
     font-weight: bold;
 }
+
+.propertyName:active {
+    cursor: pointer;
+    color: #683131;
+    font-weight: bold;
+}
+
+.selected {
+    font-weight: bold;
+}
