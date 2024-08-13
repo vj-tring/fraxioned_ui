@@ -1,133 +1,48 @@
 .calendar {
-  border-radius: 32px !important;
-  cursor: pointer;
-  
-}
-.b3.au.c3 svg {
-  display: none;
-  width: 100% !important;
-  max-width: 60 !important;
-}
-
-button.ae.ax.ay.az.b3.bc.bd.be.bf.bg.ai.bw.au.bx.by.bz.c0.c1.bq.c2 {
-  padding-left: 0;
-  padding-right: 0;
-}
-.DateHead1 {
-  text-transform: capitalize;
-  color: black;
-  font-weight: 550 !important;
-  font-size: small;
-  height: 1.1rem;
-}
-.error-message {
-  margin-left: 27px;
-  color: red;
-  background-color: #ffe6e6;
-  border: 1px solid #bc3737;
-  border-radius: 4px;
-  text-align: center;
-  display: block;
-  width: 35%;
-  font-size: small;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  margin-top: 10px;
 }
 
 .stay-length {
   display: flex;
   align-items: center;
-  font-family: UberMoveText, system-ui, 'Helvetica Neue', Helvetica, Arial,
-    sans-serif;
-  font-size: 10px;
+  font-family: UberMoveText, system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
   color: gray;
-  padding: 5px;
-  padding-right: 10px;
-  padding-bottom: 20px;
 }
 
-.misl {
-  margin-top: 5px;
-  padding-left: 27px;
+.end-calendar{
+  margin-bottom: 10px;
+}
+
+.btn-clear {
+  cursor: pointer;
+  font-family: UberMoveText, system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  margin-right: 20px;
+}
+
+.misl{
+  /* margin-top: 20px; */
+  padding-left: 20px;
   padding-right: 30px;
 }
 
-.masl {
-  margin-top: 5px;
+.misl2{
+  padding-right: 30px;
+
+}
+
+.masl{
+  /* margin-top: 20px; */
   padding-left: 27px;
 }
 
-.season {
-  margin-top: 5px;
-  padding-left: 27px;
-  font-family: UberMoveText, system-ui, 'Helvetica Neue', Helvetica, Arial,
-    sans-serif;
-  font-size: 10px;
-  color: gray;
+.error-msg{
+  font-size: 13px; 
 }
 
-.b9 {
-  width: 380px !important;
-}
-
-.aw {
-  gap: 26px !important;
-}
-.ce {
-  height: 50px !important;
-}
-
-.ca {
-  font-size: 13px !important;
-}
-
-.ak {
-  text-align: center;
-  width: 100% !important;
-}
-.cq {
-  padding-right: 0px !important;
-}
-.c1 {
-  margin-bottom: 6px !important;
-}
-
-.cm {
-  line-height: 36px !important;
-}
-
-.css-1nf5r1-MuiButtonBase-root-MuiMenuItem-root:hover {
-  background-color: white !important;
-}
-.cp {
-  padding-left: 1px !important;
-}
-.b9 {
-  width: 392px;
-  height: 5px;
-}
-.ax {
-  font-size: 13px !important;
-}
-.cl {
-  margin-bottom: -5px !important;
-}
-
-.e5::after {
-  content: '';
-  height: 35px !important;
-  width: 35px !important;
-  margin: 6px !important;
-}
-
-.e6::before {
-  height: 35px !important;
-
-  margin-top: 6px !important;
-}
-
-.cf {
-  padding-top: 1px !important;
-}
-
-.DateHead2{
-  
-}
+/* .calendar{
+    margin-right: 50%;
+} */

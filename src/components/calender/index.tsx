@@ -1,91 +1,45 @@
 //@ts-nocheck
-import React, { useState, useEffect } from 'react'
-import Popover from '@mui/material/Popover';
-import Paper  from '@mui/material/Paper'
+import * as React from "react"
+import { addDays, format, addYears } from "date-fns"
+import { Calendar as CalendarIcon } from "lucide-react"
+import { DateRange } from "react-day-picker"
 
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
 import {
-  ORIENTATION,
-  StatefulCalendar as StatefulCalendarType,
-} from 'baseui/datepicker'
-import Box from '@mui/material/Box'
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import './calender.css';
+import calendarData from './calendarData.json';
 
-import './calender.css'
-
-interface DatepickerProps {
-  onChange: ({ date }: { date: Date | Date[] }) => void
-  orientation: typeof ORIENTATION.horizontal
-  monthsShown: number
-  range: boolean
-  filterDate: (date: Date) => boolean
-  minDate: Date
-  maxDate: Date
-  overrides: {
-    Day: {
-      style: ({ $date }: { $date: Date }) => {
-        color?: string
-        textDecoration?: string
-        pointerEvents?: string
-        tooltip?: string
-      }
-    }
-    MonthYearSelectStatefulMenu: {
-      component: () => null
-    }
-  }
-}
-
-const StatefulCalendar: React.FC<DatepickerProps> = ({ ...props }) => {
-  return <StatefulCalendarType {...props} />
-}
-
-const Calendar: React.FC = () => {
+export function DatePickerWithRange({
+  className,
+}: React.HTMLAttributes<HTMLDivElement>) {
   const today = new Date()
-  today.setHours(0, 0, 0, 0)
+  const endDate = new Date(today.getFullYear() + 5 , 11, 31); 
+  const checkInEndDate = addDays(today, 730);
+  const checkOutEndDate = addYears(today, 5); 
+  const [date, setDate] = React.useState<DateRange | undefined>({
+    from: today,
+    to: addDays(today, 0),
+  })
+  const [startDate, setStartDate] = React.useState<Date | null>(null)
+  const [startDateSelected, setStartDateSelected] = React.useState<boolean>(false)
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
 
-  const twoYearsFromToday = new Date()
-  twoYearsFromToday.setFullYear(today.getFullYear() + 2)
-  twoYearsFromToday.setMonth(11)
-  twoYearsFromToday.setDate(31)
-  twoYearsFromToday.setHours(0, 0, 0, 0)
+  const bookedDates = calendarData.bookedDates.map(date => new Date(date));
+  const unavailableDates = calendarData.unavailableDates.map(date => new Date(date));
+  const blueDates = calendarData.blueDates.map(date => new Date(date));
 
-  const [startDate, setStartDate] = useState<Date | null>(null)
-  const [endDate, setEndDate] = useState<Date | null>(null)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
-  const open = Boolean(anchorEl)
-
-  // const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-  //   setAnchorEl(event.currentTarget)
-  // }
-
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
-
-  const id = open ? 'calendar-popover' : undefined
-
-  const bookedDates = [
-    new Date(2024, 9, 15),
-    new Date(2024, 9, 16),
-    new Date(2024, 9, 17),
-    new Date(2024, 8, 25),
-    new Date(2024, 8, 26),
-    new Date(2024, 8, 27),
-  ]
-
-  const unavailableDates = [
-    new Date(2024, 7, 4),
-    new Date(2024, 7, 2),
-    new Date(2024, 7, 3),
-  ]
-
-  const colorCodes = {
-    '2024-08-12': '#F4B76A',
-    '2024-08-13': '#F4B76A',
-    '2024-08-22': '#C7EAEE',
-    '2024-08-23': '#C7EAEE',
-    '2024-08-24': '#C7EAEE',
-  }
+  const clearDates = () => {
+    setDate(undefined);
+    setStartDate(null);
+    setStartDateSelected(false);
+    setErrorMessage(null);
+  };
 
   const isBookedDate = (date: Date) => {
     return bookedDates.some(
@@ -93,8 +47,8 @@ const Calendar: React.FC = () => {
         date.getFullYear() === bookedDate.getFullYear() &&
         date.getMonth() === bookedDate.getMonth() &&
         date.getDate() === bookedDate.getDate()
-    )
-  }
+    );
+  };
 
   const isUnavailableDate = (date: Date) => {
     return unavailableDates.some(
@@ -102,8 +56,24 @@ const Calendar: React.FC = () => {
         date.getFullYear() === unavailableDate.getFullYear() &&
         date.getMonth() === unavailableDate.getMonth() &&
         date.getDate() === unavailableDate.getDate()
-    )
-  }
+    );
+  };
+
+  const isDayBeforeUnavailableDate = (date: Date) => {
+  return unavailableDates.some(
+    (unavailableDate) =>
+      date.getFullYear() === unavailableDate.getFullYear() &&
+      date.getMonth() === unavailableDate.getMonth() &&
+      date.getDate() === unavailableDate.getDate() - 1
+  );
+};
+
+const isAfterUnavailableDate = (date: Date) => {
+  return unavailableDates.some(
+    (unavailableDate) =>
+      date.getTime() > unavailableDate.getTime()
+  );
+};
 
   const isDayBeforeBookedDate = (date: Date) => {
     return bookedDates.some(
@@ -111,258 +81,297 @@ const Calendar: React.FC = () => {
         date.getFullYear() === bookedDate.getFullYear() &&
         date.getMonth() === bookedDate.getMonth() &&
         date.getDate() === bookedDate.getDate() - 1
-    )
-  }
+    );
+  };
 
-  const isDayBeforeUnavailableDate = (date: Date) => {
-    return unavailableDates.some(
-      (unavailableDate) =>
-        date.getFullYear() === unavailableDate.getFullYear() &&
-        date.getMonth() === unavailableDate.getMonth() &&
-        date.getDate() === unavailableDate.getDate() - 1
-    )
-  }
+  const isAfterBookedDate = (date: Date) => {
+    return bookedDates.some(
+      (bookedDate) =>
+        date.getTime() > bookedDate.getTime()
+    );
+  };
 
-  const getFirstBookedDateAfterCheckIn = (checkInDate: Date) => {
-    return bookedDates.find((bookedDate) => bookedDate > checkInDate)
-  }
+  const disableDates = (date: Date) => {
+    if (startDateSelected && startDate) {
+      const nextBookedDate = bookedDates.find(bookedDate => bookedDate > startDate);
+      const nextUnavailableDate = unavailableDates.find(unavailableDate => unavailableDate > startDate);
+      return date < startDate || isBookedDate(date) || isUnavailableDate(date) || date > checkOutEndDate || 
+               (nextBookedDate && date > nextBookedDate) ||
+               (nextUnavailableDate && date > nextUnavailableDate);
+    } else {
+      return (date < today && date.toDateString() !== today.toDateString()) || 
+             date > checkInEndDate || 
+             isBookedDate(date) || 
+             isUnavailableDate(date) || 
+             (!meetsConsecutiveStayRule(date) && date.toDateString() !== today.toDateString());
+    }
+  };
 
-  const getFirstUnavailableDateAfterCheckIn = (checkInDate: Date) => {
-    return unavailableDates.find(
-      (unavailableDate) => unavailableDate > checkInDate
-    )
-  }
-
-  const getLastCheckOutDate = (checkInDate: Date) => {
-    const sortedBookedDates = bookedDates
-      .slice()
-      .sort((a, b) => b.getTime() - a.getTime())
-    return sortedBookedDates.find((bookedDate) => bookedDate < checkInDate)
+  const isDateSpanningBookedDates = (start: Date, end: Date) => {
+    return bookedDates.some(bookedDate => 
+      bookedDate > start && bookedDate < end
+    );
   }
 
   const isLastMinuteBooking = (checkInDate: Date) => {
-    const diffInDays =
-      (checkInDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
-    return diffInDays <= 3
+    const diffInDays = (checkInDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
+    return diffInDays <= calendarData.bookingRules.lastMinuteBooking.maxDays;
   }
 
-  const handleDateChange = ({ date }: { date: Date | Date[] }) => {
-    if (Array.isArray(date)) {
-      const [start, end] = date
-      setStartDate(start)
-      setEndDate(end)
+  const meetsConsecutiveStayRule = (date: Date) => {
+    if (date.toDateString() === today.toDateString()) {
+      return true;
+    }
+    const previousCheckOutDate = bookedDates.reduce((latest, bookedDate) => {
+      return bookedDate < date && bookedDate > latest ? bookedDate : latest;
+    }, new Date(0));
+    
+    const nightsBetween = Math.floor((date.getTime() - previousCheckOutDate.getTime()) / (1000 * 60 * 60 * 24));
+    return nightsBetween >= 5;
+  };
 
-      if (isDayBeforeBookedDate(start)) {
-        setErrorMessage('Checkout only')
-      } else if (isDayBeforeUnavailableDate(start)) {
-        setErrorMessage('Checkout only')
-      } else if (end) {
-        const nightsSelected =
-          (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
-        const lastMinute = isLastMinuteBooking(start)
+  const handleDateChange = (range: DateRange | undefined) => {
+    if (range?.from) {
+      const newStartDate = range.from;
+      let newEndDate = range.to;
 
-        const lastCheckOutDate = getLastCheckOutDate(start)
-        const minNightsBetween = lastCheckOutDate
-          ? (start.getTime() - lastCheckOutDate.getTime()) /
-            (1000 * 60 * 60 * 24)
-          : null
+      if (!meetsConsecutiveStayRule(newStartDate)) {
+        setErrorMessage('Minimum 5 nights required between bookings');
+        setDate(undefined);
+        setStartDate(null);
+        setStartDateSelected(false);
+        return;
+      }
+  
+      setStartDate(newStartDate);
+      setStartDateSelected(true);
+  
+      const lastMinuteBooking = isLastMinuteBooking(newStartDate);
 
-        if (lastCheckOutDate && minNightsBetween < 5) {
-          setErrorMessage(
-            'Minimum 5 nights required between previous check-out and current check-in'
-          )
-        } else if (lastMinute) {
-          if (nightsSelected < 1 || nightsSelected > 3) {
-            setErrorMessage(
-              'Minimum 1 night is required for Last-Minute Booking'
-            )
-          } else {
-            setErrorMessage(null)
-          }
+      if (newEndDate) {
+        const nextBookedDate = bookedDates.find(bookedDate => bookedDate > newStartDate);
+        const nextUnavailableDate = unavailableDates.find(unavailableDate => unavailableDate > newStartDate);
+        if ((nextBookedDate && newEndDate > nextBookedDate) || (nextUnavailableDate && newEndDate > nextUnavailableDate)) {
+          newEndDate = undefined;
+          setErrorMessage('Cannot select over booked dates. Please clear and try again.');
         } else {
-          if (nightsSelected < 3) {
-            setErrorMessage('Minimum three nights required')
-          } else if (nightsSelected >= 14) {
-            setErrorMessage('Maximum nights exceeded')
+          const nightsSelected = (newEndDate.getTime() - newStartDate.getTime()) / (1000 * 60 * 60 * 24);
+          if (lastMinuteBooking) {
+            if (nightsSelected < calendarData.bookingRules.lastMinuteBooking.minNights) {
+              setErrorMessage(`Minimum ${calendarData.bookingRules.lastMinuteBooking.minNights} night(s) required for last-minute bookings`);
+            } else if (nightsSelected > calendarData.bookingRules.lastMinuteBooking.maxNights) {
+              setErrorMessage(`Maximum ${calendarData.bookingRules.lastMinuteBooking.maxNights} nights allowed for last-minute bookings`);
+            } else {
+              setErrorMessage(null);
+            }
           } else {
-            setErrorMessage(null)
+            if (nightsSelected < calendarData.bookingRules.regularBooking.minNights) {
+              setErrorMessage(`Minimum ${calendarData.bookingRules.regularBooking.minNights} nights required`);
+            } else if (nightsSelected > calendarData.bookingRules.regularBooking.maxNights) {
+              setErrorMessage('Maximum nights exceeded');
+            } else {
+              setErrorMessage(null);
+            }
           }
         }
+        setStartDateSelected(false);
       } else {
-        setErrorMessage(null)
+        if (isDayBeforeBookedDate(newStartDate) || isDayBeforeUnavailableDate(newStartDate)) {
+          setErrorMessage('Check out only');
+        } else {
+          setErrorMessage(null);
+        }
       }
+  
+      setDate({ from: newStartDate, to: newEndDate });
     } else {
-      setStartDate(date)
-      setEndDate(null)
+      setDate(undefined);
+      setStartDate(null);
+      setStartDateSelected(false);
+      setErrorMessage(null);
     }
   }
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (open) {
-        handleClose()
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll)
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [open])
+  const customLocale = {
+    code: calendarData.locale.code,
+    localize: {
+      day: (n) => calendarData.locale.days[n],
+      month: (n) => calendarData.locale.months[n],
+    },
+    formatLong: {
+      date: () => calendarData.locale.dateFormat,
+    },
+  }
 
   return (
-    <Box >
-      <div className="calendar ">
-      <div className="d-flex align-items-start flex-column pt-3  " >
-          <span className="DateHead1 monsterrat">Check in</span>
-          <p className="property1 monsterrat">Add Dates</p>
-        </div>
-
-        <Popover
-          sx={{
-            position: 'relative',
+    <div className={cn("grid gap-2 flex", className)}>
+      {/* First Calendar */}
+      <div className="calendar">
+        <Calendar
+          initialFocus
+          mode="range"
+          defaultMonth={date?.from}
+          selected={date}
+          onSelect={handleDateChange}
+          numberOfMonths={2}
+          fromDate={today}
+          toDate={endDate}
+          disabled={disableDates}
+          locale={customLocale}
+          modifiers={{
+            booked: bookedDates,
+            unavailable: unavailableDates,
+            blue: blueDates,
           }}
-          id={id}
-          open={open}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
+          modifiersClassNames={{
+            booked: 'booked-date',
+            unavailable: 'unavailable-date',
+            blue: 'blue-date',
           }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-          }}
-          PaperProps={{
-            style: {
-              borderRadius: 10,
-              position: 'fixed',
-              marginTop: 20,
-              marginLeft: -300,
-            },
-          }}
-        >
-          <Paper
-            disableRipple
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              background: 'white',
-              backgroundColor: 'white',
-            }}
-          >
-            <StatefulCalendar
-              onChange={handleDateChange}
-              orientation={ORIENTATION.horizontal}
-              monthsShown={2}
-              range
-              filterDate={(date) => {
-                if (startDate && !endDate) {
-                  const firstBookedDate =
-                    getFirstBookedDateAfterCheckIn(startDate)
-                  const lastMinute = isLastMinuteBooking(startDate)
-
-                  return (
-                    date >= startDate &&
-                    date <= twoYearsFromToday &&
-                    !isBookedDate(date) &&
-                    !isUnavailableDate(date) &&
-                    (!firstBookedDate || date <= firstBookedDate) &&
-                    (!lastMinute ||
-                      (lastMinute &&
-                        date <=
-                          new Date(
-                            startDate.getTime() + 3 * 24 * 60 * 60 * 1000
-                          )))
-                  )
-                }
-                return (
-                  date >= today &&
-                  date <= twoYearsFromToday &&
-                  !isBookedDate(date) &&
-                  !isUnavailableDate(date)
-                )
-              }}
-              minDate={today}
-              maxDate={twoYearsFromToday}
-              overrides={{
-                Day: {
-                  style: ({ $date }) => {
-                    const dateString = `${$date.getFullYear()}-${String($date.getMonth() + 1).padStart(2, '0')}-${String(
-                      $date.getDate()
-                    ).padStart(2, '0')}`
-                    const firstBookedDate =
-                      startDate && !endDate
-                        ? getFirstBookedDateAfterCheckIn(startDate)
-                        : null
-                    const firstUnavailableDate =
-                      startDate && !endDate
-                        ? getFirstUnavailableDateAfterCheckIn(startDate)
-                        : null
-
-                    if (colorCodes[dateString]) {
-                      return {
-                        backgroundColor: colorCodes[dateString],
-                        pointerEvents: 'none',
-                      }
-                    } else if (isBookedDate($date)) {
-                      return {
-                        color: 'gray',
-                        textDecoration: 'line-through',
-                        pointerEvents: 'none',
-                      }
-                    } else if (isUnavailableDate($date)) {
-                      return {
-                        color: 'gray',
-                        pointerEvents: 'none',
-                      }
-                    } else if (
-                      startDate &&
-                      firstBookedDate &&
-                      $date > firstBookedDate
-                    ) {
-                      return {
-                        color: 'gray',
-                        textDecoration: 'line-through',
-                        pointerEvents: 'none',
-                      }
-                    } else if (
-                      startDate &&
-                      firstUnavailableDate &&
-                      $date > firstUnavailableDate
-                    ) {
-                      return {
-                        color: 'gray',
-                        pointerEvents: 'none',
-                        textDecoration: 'line-through',
-                      }
-                    }
-                    return {}
-                  },
-                },
-                MonthYearSelectStatefulMenu: {
-                  component: () => null,
-                },
-              }}
-            />
-
-            {errorMessage && (
-              <div className="error-message">{errorMessage}</div>
-            )}
-            <div className="stay-length ">
-              <div className="misl">Minimum Stay Length : 3 Nights</div>
-              <div className="masl">Maximum Stay Length : 14 Nights</div>
-              <div className="season">
-                Peak-Season Nights: June 1 - September 30
-              </div>
+        />
+          <div className="error-msg-container ml-5 flex justify-start">
+            <div className="error-msg">
+              {errorMessage && (
+                <div className="text-red-600">
+                  {errorMessage}
+                </div>
+              )}
             </div>
-          </Paper>
-        </Popover>
+          </div>
+          <style>{`
+            .booked-date {
+              color: gray;
+              text-decoration: line-through;
+            }
+
+            .unavailable-date {
+              color: gray;
+              text-decoration: line-through;
+            }
+
+            .blue-date {
+              background-color: #F4B76A;
+              color: white;
+            }
+
+            .after-booked-date {
+              color: gray;
+              text-decoration: line-through;
+            }
+
+            .checkout-only-date {
+              color: gray;
+              text-decoration: line-through;
+            }
+          `}</style>
+        <div className="flex items-center justify-end end-calendar">
+        <div className='stay-length'>
+            <div className='misl'>Minimum Stay Length : {calendarData.bookingRules.regularBooking.minNights} Nights</div>
+            <div className='masl'>Maximum Stay Length : {calendarData.bookingRules.regularBooking.maxNights} Nights</div>
+        </div>
+        <div onClick={clearDates} className="ml-auto btn-clear">
+            Clear
+          </div>
+        </div>
       </div>
-    </Box>
+      {/* Second Calendar */}
+      {/* <div className="calendar2">  
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              id="date"
+              variant={"outline"}
+              className={cn(
+                "w-[300px] justify-start text-left font-normal",
+                !date && "text-muted-foreground"
+              )}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4" />
+              {date?.from ? (
+                date.to ? (
+                  <>
+                    {format(date.from, "LLL dd, y")} -{" "}
+                    {format(date.to, "LLL dd, y")}
+                  </>
+                ) : (
+                  format(date.from, "LLL dd, y")
+                )
+              ) : (
+                <span>Pick a date</span>
+              )}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              initialFocus
+              mode="range"
+              defaultMonth={date?.from}
+              selected={date}
+              onSelect={handleDateChange}
+              numberOfMonths={2}
+              fromDate={today}
+              toDate={endDate}
+              disabled={disableDates}
+              locale={customLocale}
+              modifiers={{
+                booked: bookedDates,
+                unavailable: unavailableDates,
+                blue: blueDates,
+              }}
+              modifiersClassNames={{
+                booked: 'booked-date',
+                unavailable: 'unavailable-date',
+                blue: 'blue-date',
+              }}
+            /> 
+          <div className="error-msg-container ml-5 flex justify-start">
+            <div className="error-msg">
+              {errorMessage && (
+                <div className="text-red-600">
+                  {errorMessage}
+                </div>
+              )}
+            </div>
+          </div>
+            <style>{`
+              .booked-date {
+                color: gray;
+                text-decoration: line-through;
+              }
+  
+              .unavailable-date {
+                color: gray;
+                text-decoration: line-through;
+              }
+  
+              .blue-date {
+                background-color: #F4B76A;
+                color: white;
+              }
+  
+              .after-booked-date {
+                color: gray;
+                text-decoration: line-through;
+              }
+  
+              .checkout-only-date {
+                color: gray;
+                text-decoration: line-through;
+              }
+            `}</style>
+          <div className="flex items-center justify-end ml-5">
+         
+          <div className='stay-length'>
+              <div className='misl2'>Minimum Stay Length : {calendarData.bookingRules.regularBooking.minNights} Nights</div>
+              <div className='masl'>Maximum Stay Length : {calendarData.bookingRules.regularBooking.maxNights} Nights</div>
+          </div>
+          <Button onClick={clearDates} className="ml-auto mr-2">
+              Clear
+            </Button>
+          </div>
+          </PopoverContent>
+        </Popover>
+      </div>  */}
+    </div>
   )
 }
-
-export default Calendar
