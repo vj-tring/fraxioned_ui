@@ -1,6 +1,6 @@
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
-import './loader.css'
+import './index.css'
 const Loader = () => {
   return (
     <Box className='loading-spinner'>
