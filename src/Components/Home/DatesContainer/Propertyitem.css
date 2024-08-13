@@ -2,36 +2,41 @@
     border: none;
     text-transform: none;
     height: 35px;
-    border: 1px solid lightgrey;
+    border: 1px solid lightgrey !important;
     border-radius: 38px;
     margin-left: 10px;
     width: 240px;
-    background: white;
-    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+    background: white !important;
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px ;
   }
 
   .card-btn.active {
     background-color: #e0e0e0;
+    
   }
 
   .card-btn1 {
     text-transform: none;
-    height: 19px;
-    width: 3.7rem;
-    border: 1px solid lightgrey;
-    border-radius: 18px;
-    background: white;
-    font-size: .64rem;
-    color: #7c7875;
+    /* height: 19px !important; */
+    /* width: 3.7rem !important; */
+    border: 1px solid lightgrey !important;
+    border-radius: 18px !important;
+    background: white !important;
+    font-size: .64rem !important;
+    color: #7c7875 !important;
   }
 
+  /* Style for active button */
+
+
+
   .card-btn1:focus {
-    border-color: black !important;
+    border-color: #6e6d6d !important;
     color: #212121 !important;
   }
 
   .card-btn1.active {
-    border-color: black !important;
+    border-color: #6e6d6d !important;
     color: #212121 !important;
   }
 
@@ -71,6 +76,7 @@
     opacity: .7 !important;
   }
 
+
   .BlueFont {
     height: 2rem;
     margin: 0 !important;
@@ -87,13 +93,26 @@
     background-repeat: no-repeat;
     background-size: cover;
   }
+/* Propertyitem.css */
 
-  .CardImage img {
-    width: 65px;
-    height: 100%;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
+/* Base styles for images */
+.CardImage img {
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Style for single card (or general style) */
+.CardImage.single-card img {
+  width: 60px;
+}
+
+/* Style for multiple cards */
+.CardImage.multiple-cards img {
+  width: 90px;
+}
+
+
 
   .Available {
     font-weight: 500;
@@ -126,7 +145,7 @@
   }
 
   .CardItem {
-    width: 460px; /* Adjust this value to reduce the width of the container */
+    /* width: 460px; Adjust this value to reduce the width of the container */
     overflow: hidden;
     font-family: 'Montserrat', sans-serif !important;
   }
@@ -155,16 +174,19 @@
   }
 
   .additionalproperty {
-    width: 8rem;
-    padding: .22rem 2rem !important;
-    
+    width: 9rem !important;
+    padding: .10rem 2rem !important;
+    /* padding-top: 1px !important; */
     border-radius: 1rem !important;
     text-transform: capitalize !important;
     border: 1px solid #7c7875 !important;
     color: #7c7875 !important;
     margin-left: 0.5rem;
   }
-
+.property-name{
+  font-size: 0.8rem !important;
+  padding-top: 5px;
+}
   .dots-container {
     display: flex;
     justify-content: center;
@@ -181,17 +203,19 @@
   }
 
   .dot.active {
-    background-color: #000;
+    background-color: #6e6d6d;
   }
 
   .additionalproperty.active {
     background-color: #ffffff; /* or any color you prefer */
-    border: 2px solid #000000 !important; /* example border color for active state */
+    border: 2px solid #6e6d6d !important; /* example border color for active state */
   }
 
-
+  
+  
   .CardItem[data-single-card="true"] {
-    width: 300px; /* Reduced width for single card */
+    width: 300px; 
   }
+  
 
   

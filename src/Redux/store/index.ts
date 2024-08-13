@@ -1,26 +1,22 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
-import { useDispatch as useReduxDispatch } from 'react-redux'
-import rootReducer, { RootState } from '../reducers'
+// src/Redux/store/index.ts
+import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import { useDispatch as useReduxDispatch } from 'react-redux';
+import rootReducer from '../reducers'; // Adjust this path as needed
 
 const store = configureStore({
-  devTools: process.env.NODE_ENV !== 'production',
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      thunk: {
-        extraArgument: {},
-      },
-    }),
-})
+  devTools: process.env.NODE_ENV !== 'production',
+});
 
-export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
   unknown,
   Action<string>
->
+>;
 
-export const useDispatch = () => useReduxDispatch<AppDispatch>()
+export const useDispatch = () => useReduxDispatch<AppDispatch>();
 
-export default store
+export default store;
