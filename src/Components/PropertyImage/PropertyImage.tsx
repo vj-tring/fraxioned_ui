@@ -15,14 +15,12 @@ interface PropertyImageProps {
 
 const PropertyImage: React.FC<PropertyImageProps> = ({ onPropertySelect, selectedPropertyId }) => {
     const [propertyTypes, setPropertyTypes] = useState<PropertyType[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    const colors = [
-        '#FF9999', '#9999FF', '#99FF99', '#FFB266', '#FF6666', '#FF99FF', '#999999', '#66FFB2', '#FFA07A', '#20B2AA', '#99FF99', '#FFB266'
-    ];
 
     useEffect(() => {
+        const colors = [
+            '#FF9999', '#9999FF', '#99FF99', '#FFB266', '#FF6666', '#FF99FF', '#999999', '#66FFB2', '#FFA07A', '#20B2AA', '#99FF99', '#FFB266'
+        ];
+
         const fetchProperties = async () => {
             try {
                 const response = await getProperties();
@@ -40,11 +38,8 @@ const PropertyImage: React.FC<PropertyImageProps> = ({ onPropertySelect, selecte
                 };
 
                 setPropertyTypes([allHolidaysProperty, ...fetchedProperties]);
-                setLoading(false);
             } catch (err) {
                 console.error('Error fetching properties:', err);
-                setError('Failed to load properties. Please try again later.');
-                setLoading(false);
             }
         };
 
