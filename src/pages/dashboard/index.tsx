@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import fraxionedLogo from '../../assets/images/fraxioned-owners.png';
 import Footer from '../../components/footer';
 import userImage from '../../assets/images/profile.jpeg';
-import './Dashboard.css';
+import './dashboard.css';
 import CustomizedAccordions from '../../components/customized-accordians';
 import Contact from '../../pages/contact-us';
 import UserDetails from '../../pages/user-details';
