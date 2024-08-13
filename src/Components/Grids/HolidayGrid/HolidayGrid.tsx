@@ -19,11 +19,12 @@ interface Holiday {
     updated_at: string;
     created_by: string;
     updated_by: string | null;
+    propertyId: number;
 }
 
 const Holidays: React.FC = () => {
     const [holidays, setHolidays] = useState<Holiday[]>([]);
-    const [displayedHolidays, setDisplayedHolidays] = useState<Holiday[]>([]);
+    const [filteredHolidays, setFilteredHolidays] = useState<Holiday[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [openNewForm, setOpenNewForm] = useState(false);
     const [openEditForm, setOpenEditForm] = useState(false);
@@ -45,9 +46,10 @@ const Holidays: React.FC = () => {
                 updated_at: holiday.updatedAt,
                 created_by: holiday.createdBy ? holiday.createdBy.id : 'N/A',
                 updated_by: holiday.updatedBy ? holiday.updatedBy.id : 'N/A',
+                propertyId: holiday.propertyId,
             }));
             setHolidays(mappedData);
-            setDisplayedHolidays(mappedData);
+            setFilteredHolidays(mappedData);
         } catch (err) {
             console.error('Error fetching holidays:', err);
             setError('Failed to fetch holidays. Please try again.');
@@ -97,9 +99,10 @@ const Holidays: React.FC = () => {
     const handlePropertySelect = (propertyId: number | string) => {
         setSelectedPropertyId(propertyId);
         if (propertyId === 'all') {
-            setDisplayedHolidays(holidays);
+            setFilteredHolidays(holidays);
         } else {
-            setDisplayedHolidays([]);
+            const filtered = holidays.filter(holiday => holiday.propertyId === propertyId);
+            setFilteredHolidays(filtered);
         }
     };
 
@@ -150,7 +153,7 @@ const Holidays: React.FC = () => {
             {error && <div className={styles.error}>{error}</div>}
             <div className={styles.dataGridWrapper}>
                 <DataGrid
-                    rows={displayedHolidays}
+                    rows={filteredHolidays}
                     columns={columns}
                     initialState={{
                         pagination: {
