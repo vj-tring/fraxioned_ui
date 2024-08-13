@@ -211,7 +211,7 @@ export default function BasicSelect() {
           paddingRight: 10
         }}
       >
-        <div className="d-flex align-items-start flex-column pt-3 card-item">
+        <div className="d-flex align-items-start flex-column card-item">
           <span className="DateHead1 monsterrat">My Home(s)</span>
           <p className="property1 monsterrat">
             {selectedCard ? selectedCard.name : 'Select Property'}

@@ -12,7 +12,7 @@ const BookingSearchBar: React.FC = () => {
         <div className="vl p-2"></div>
         <Region />
         <div className="vl p-2"></div>
-        <div className="d-flex align-items-start flex-column pt-3 ">
+        <div className="d-flex align-items-start flex-column">
         <span className="DateHead1 monsterrat">Check Out</span>
         <p className="property1 monsterrat">Add Dates</p>
         </div>

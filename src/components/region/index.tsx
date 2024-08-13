@@ -19,7 +19,7 @@ const Region = () => {
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>
           <div 
-            className="d-flex align-items-start flex-column pt-3 cursor-pointer"
+            className="d-flex align-items-start flex-column cursor-pointer"
             onClick={() => setIsOpen(true)}
           >
             <span className="DateHead1 monsterrat">Check In</span>

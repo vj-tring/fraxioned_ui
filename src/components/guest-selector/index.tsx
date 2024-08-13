@@ -81,7 +81,7 @@ const GuestSelector: React.FC = () => {
           paddingRight:30
         }}
       >
-        <div className="d-flex align-items-start flex-column pt-3 ">
+        <div className="d-flex align-items-start flex-column">
           <span className="DateHead1 monsterrat ">Who</span>
           <p className="property1 monsterrat"> Add guests</p>
         </div>
