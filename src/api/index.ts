@@ -31,3 +31,8 @@ export const sendInvite = async (payload: any) =>
 //logout api
 export const logoutUserApi = (token: string) =>
   axiosInstance.post('/v1/authentication/logout', { sessionToken: token });
+
+
+
+export const propertywithDetails = () =>
+    axiosInstance.get('/v1/properties/properties-with-details');
