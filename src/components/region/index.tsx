@@ -28,10 +28,8 @@ const Region = () => {
             </p>
           </div>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
-          <DatePickerWithRange 
-            className="w-[300px]"
-          />
+        <PopoverContent className="w-auto mt-3 p-0 border-radius-10" align="start">
+          <DatePickerWithRange />
         </PopoverContent>
       </Popover>
     </div>
