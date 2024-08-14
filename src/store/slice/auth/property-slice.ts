@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { propertywithDetails } from '../../../api/index';
-import imageParadiseShores from '../../../assests/bear-lake-bluffs.jpg'
-import imageBlueBearLake from '../../../assests/blue-bear-lake.jpg'
-import imageCrownJewel from '../../../assests/crown-jewel.jpg'
-import imageLakeEscape from '../../../assests/lake-escape.jpg'
+import imageParadiseShores from '../../../assets/images/property-images/bear-lake-bluffs.jpg'
+import imageBlueBearLake from '../../../assets/images/property-images/blue-bear-lake.jpg'
+import imageCrownJewel from '../../../assets/images/property-images/crown-jewel.jpg'
+import imageLakeEscape from '../../../assets/images/property-images/lake-escape.jpg'
 
 
 
