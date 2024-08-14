@@ -249,11 +249,6 @@ const isAfterUnavailableDate = (date: Date) => {
               text-decoration: line-through;
             }
 
-            .blue-date {
-              background-color: #F4B76A;
-              color: white;
-            }
-
             .after-booked-date {
               color: gray;
               text-decoration: line-through;
