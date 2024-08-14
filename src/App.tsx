@@ -43,7 +43,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/forgotPassword" element={<ForgetPassword />} />
             <Route path="/recoverPassword" element={<Change />} />
-            <Route path="/resetPassword" element={<ResetPassword onClose={()=>{}} />} />
+            <Route path="/resetPassword" element={<ResetPassword onClose={() => { }} />} />
             <Route
               path="/dashboard/*"
               element={<PrivateRoute element={Dashboard} allowedRoles={[2, 3]} />}

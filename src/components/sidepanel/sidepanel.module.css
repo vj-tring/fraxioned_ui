@@ -37,6 +37,11 @@
     height: auto;
 }
 
+.logotwo {
+    width: 0px;
+    height: 0px;
+}
+
 .toggleButton {
     background: none;
     border: none;

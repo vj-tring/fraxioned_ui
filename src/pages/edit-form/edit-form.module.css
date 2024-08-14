@@ -1,0 +1,43 @@
+.formContainer {
+    padding: 24px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.inputField {
+    width: 100%;
+}
+
+.datePickerContainer {
+    display: flex;
+    gap: 16px;
+}
+
+.datePicker {
+    flex: 1;
+}
+
+.checkboxGroup {
+    margin-top: 16px;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.updateButton {
+    min-width: 100px;
+}
+
+.cancelButton {
+    min-width: 100px;
+}

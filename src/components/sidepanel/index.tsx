@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import fraxionedLogo from '../../assets/images/fraxioned_logo.png';
+import logo from '../../assets/images/fraxioned_logo.png'
 import {
     FaCalendar, FaPlane, FaUser, FaFile,
     FaUserTag, FaChartBar, FaGavel, FaBars
 } from 'react-icons/fa';
-import styles from './sidepanel.module.css';
+import styles from './sidepanel.module.css'
 
 interface MenuItem {
     icon: React.ReactElement;
@@ -21,7 +22,7 @@ interface SidePanelProps {
 
 const menuItems: MenuItem[] = [
     { icon: <FaCalendar />, label: 'Bookings', path: '/admin/bookings', disabled: false },
-    { icon: <FaPlane />, label: 'Holidays', path: '/holidays', disabled: true },
+    { icon: <FaPlane />, label: 'Holidays', path: '/admin/holidays', disabled: false },
     { icon: <FaUser />, label: 'User', path: '/user', disabled: true },
     { icon: <FaFile />, label: 'Documents', path: '/documents', disabled: true },
     { icon: <FaUserTag />, label: 'Role', path: '/role', disabled: true },
@@ -38,10 +39,25 @@ const SidePanel: React.FC<SidePanelProps> = ({ isOpen, toggleSidebar }) => {
         }
     };
 
+    const handleLogoClick = () => {
+        toggleSidebar();
+    };
+
     return (
         <nav className={`${styles.sidePanel} ${isOpen ? styles.open : styles.closed}`}>
             <div className={styles.logoContainer}>
-                {isOpen && <img src={fraxionedLogo} alt="Fraxioned Owners' Portal" className={styles.logo} />}
+                {isOpen ? (
+                    <img src={fraxionedLogo} alt="Fraxioned Owners' Portal" className={styles.logo} />
+                ) : (
+                    <img
+                        src={logo}
+                        alt="Fraxioned Owners' Portal"
+                        className={styles.logotwo}
+                        onClick={handleLogoClick}
+                        style={{ cursor: 'pointer' }}
+                    />
+                )}
+
                 <button className={styles.toggleButton} onClick={toggleSidebar}>
                     <FaBars />
                 </button>
