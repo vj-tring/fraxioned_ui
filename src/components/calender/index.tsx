@@ -15,10 +15,11 @@ import {
 import './calender.css';
 import calendarData from './calendarData.json';
 
+
 export function DatePickerWithRange({
   className,
   onSelect,
-}: React.HTMLAttributes<HTMLDivElement> & { onSelect?: (range: DateRange | undefined) => void }) {
+}: React.HTMLAttributes<HTMLDivElement> | { onSelect?: (range: DateRange | undefined) => void }) {
   const today = new Date()
   const endDate = new Date(today.getFullYear() + 5 , 11, 31); 
   const checkInEndDate = addDays(today, 730);

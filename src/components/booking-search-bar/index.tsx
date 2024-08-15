@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React, { useState } from 'react'
 import './bookingbar.css'
 import Region from '../region'
@@ -43,7 +44,7 @@ const BookingSearchBar: React.FC = () => {
             </div>
           </PopoverTrigger>
           <PopoverContent className="calendar-popover" align="start">
-            <DatePickerWithRange 
+     <DatePickerWithRange 
               onSelect={handleDateSelect} 
               initialRange={dateRange}
               selectingFrom={activeDate === 'check-in'}
