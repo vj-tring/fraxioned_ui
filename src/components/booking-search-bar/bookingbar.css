@@ -63,3 +63,18 @@
 .whoGuest {
   padding-top: 5px;
 }
+
+.calendar-popover {
+  width: auto;
+  padding: 0;
+  margin-top: 13px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.active1 {
+  background-color: #f0f0f0;
+  border-radius: 25px;
+  padding: 10px;
+}
