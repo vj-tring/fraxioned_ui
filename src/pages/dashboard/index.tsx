@@ -13,6 +13,7 @@ import ComingSoon from '../../components/coming-soon';
 import { isAuthenticated } from '../../authService';
 import Home from '../../pages/home';
 import Booking from '../../pages/booking';
+
 const Dashboard: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [userEmail, setUserEmail] = useState('');
@@ -27,10 +28,10 @@ const Dashboard: React.FC = () => {
 
   const links = [
     { name: 'HOME', href: '/dashboard', disabled: false },
-    { name: 'BOOKINGS', href: '/dashboard/booking', disabled: true },
+    { name: 'BOOKINGS', href: '/dashboard/booking', disabled: false },
     { name: 'DOCUMENTS', href: '/dashboard/peak-season', disabled: true },
     { name: 'PAYMENTS', href: '/dashboard/payments', disabled: true },
-    { name: 'MORE', href: '/dashboard/faq', disabled: true }, 
+    { name: 'MORE', href: '/dashboard/faq', disabled: false }, 
     
   ]
 
@@ -50,7 +51,7 @@ const Dashboard: React.FC = () => {
             <Route path="/faq" element={<CustomizedAccordions />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/user-details" element={<UserDetails />} />
-            <Route path="/booking" element={<Booking />} />
+            <Route path="/booking" element={<Booking />} /> 
             <Route path="/peak-season" element={<ComingSoon />} />
             <Route path="/payments" element={<ComingSoon />} />
             <Route path="*" element={<Navigate to="/dashboard" />} />

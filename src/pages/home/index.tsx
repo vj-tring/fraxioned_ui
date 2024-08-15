@@ -1,11 +1,41 @@
-import React from 'react'
-import './home.css'
-import imag1 from '../../assets/images/property-images/blue-bear-lake.jpg'
-import imag2 from '../../assets/images/property-images/crown-jewel.jpg'
-import BookingSearchBar from '../../components/booking-search-bar'
-import Card from '../../components/cards'
+import React from 'react';
+import './home.css';
+import BookingSearchBar from '../../components/booking-search-bar';
+import Card from '../../components/cards';
+import { useSelector } from 'react-redux';
+
+import image1 from '../../assests/bear-lake-bluffs.jpg';
+import { mockProperties } from './mockData'; // Import the mock data
+
+interface Property {
+  id: number;
+  propertyName?: string;
+  address?: string;
+  propertyShare?: string;
+}
+
+interface RootState {
+  properties: {
+    cards: Property[];
+    loading: boolean;
+    error: string | null;
+  };
+}
+
 
 const Home: React.FC = () => {
+
+
+ 
+
+  const { cards: properties, loading, error } = useSelector((state: RootState) => state.properties);
+
+
+const displayProperties = properties.length ? properties : mockProperties;
+
+
+
+
   return (
     <div className="home-content">
       <div className="HomeImg"></div>
@@ -117,28 +147,22 @@ const Home: React.FC = () => {
 
       <hr className='mt-3'/>
 
+    
+      {loading && <p>Loading...</p>}
+      {error && <p>{error}</p>}
+
       <div className="Cardcontainer">
-        <Card
-          imageUrl={imag1}
-          title="Blue Bear Lake "
-          text="537 Blue Lake St. Garden City"
-          share="You Own 1/8th share"
-        />
-
-        <Card
-          imageUrl={imag2}
-          title="Crown Jewel"
-          text="537 Blue Lake St. Garden City"
-          share="You Own 1/8th share"
-        />
-
-        <Card
-          imageUrl={imag1}
-          title="Adventure Awaits."
-          text="Discovered your next Fraxioned home 
-                at fraxioned.com"
-          id={1}
-        />
+        {displayProperties.map((property, index) => (
+          <Card
+            key={property.id}
+            imageUrl={property.image || image1}
+            title={property.name || 'No Title'}
+            text={property.address || 'Address not available'}
+            share={property.share ? `You Own ${property.share}/8th share` : 'Share information not available'}
+            id={property.id}
+            showPlusIcon={index === displayProperties.length - 1}  // Show plus icon only for the last card
+          />
+        ))}
       </div>
     </div>
   )

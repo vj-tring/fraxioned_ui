@@ -1,12 +1,9 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { propertywithDetails } from '../../../api/index';
-import imageParadiseShores from '../../../assests/bear-lake-bluffs.jpg'
-import imageBlueBearLake from '../../../assests/blue-bear-lake.jpg'
-import imageCrownJewel from '../../../assests/crown-jewel.jpg'
-import imageLakeEscape from '../../../assests/lake-escape.jpg'
-
-
-
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { getUserProperties } from '../../../api/index';
+import imageParadiseShores from '../../../assests/bear-lake-bluffs.jpg';
+import imageBlueBearLake from '../../../assests/blue-bear-lake.jpg';
+import imageCrownJewel from '../../../assests/crown-jewel.jpg';
+import imageLakeEscape from '../../../assests/lake-escape.jpg';
 
 interface Card {
   id: number;
@@ -21,20 +18,20 @@ interface Card {
       offSeasonHoliday: string;
     };
   };
+  maxGuestsAllowed: number;
+  maxPetsAllowed: number;
 }
 
 interface PropertyState {
   cards: Card[];
   loading: boolean;
   error: string | null;
+  selectedPropertyId: number | null;
+  selectedPropertyLimits: {
+    noOfGuestsAllowed: number;
+    noOfPetsAllowed: number;
+  } | null;
 }
-
-const initialState: PropertyState = {
-  cards: [],
-  loading: false,
-  error: null,
-};
-
 
 const mockData: Card[] = [
   {
@@ -62,6 +59,8 @@ const mockData: Card[] = [
         offSeasonHoliday: "0",
       },
     },
+    maxGuestsAllowed: 10,  // Example mock data
+    maxPetsAllowed: 2,     // Example mock data
   },
   {
     id: 2,
@@ -88,6 +87,8 @@ const mockData: Card[] = [
         offSeasonHoliday: "0",
       },
     },
+    maxGuestsAllowed: 10,  // Example mock data
+    maxPetsAllowed: 2,  
   },
 
     {
@@ -115,6 +116,8 @@ const mockData: Card[] = [
           offSeasonHoliday: "0",
         },
       },
+      maxGuestsAllowed: 10,  // Example mock data
+      maxPetsAllowed: 2,  
     },
     {
       id: 4,
@@ -140,32 +143,40 @@ const mockData: Card[] = [
           peakHoliday: "0",
           offSeasonHoliday: "0",
         },
+        
       },
+      maxGuestsAllowed: 10,  // Example mock data
+      maxPetsAllowed: 2,  
     },
+  
+  // Add mock data for other properties if needed
 ];
 
-// Async thunk for fetching properties
+const initialState: PropertyState = {
+  cards: [],
+  loading: false,
+  error: null,
+  selectedPropertyId: null,
+  selectedPropertyLimits: null,
+};
+
 export const fetchProperties = createAsyncThunk(
   'properties/fetchProperties',
-  async (_, { rejectWithValue }) => {
+  async (userId: number, { rejectWithValue }) => {
     try {
-      const response = await propertywithDetails();
-
+      const response = await getUserProperties(userId);
+      console.log("response", response);
       if (!Array.isArray(response.data)) {
         throw new Error("Unexpected data format");
       }
 
-      if (response.data.length === 0) {
-        return mockData;
-      }
-
       const combinedData: Card[] = response.data.map((property: any) => {
-        // Map property to Card format
         return {
           id: property.propertyId,
           name: property.propertyName || 'Unknown Property',
           address: `${property.address || 'Unknown'}, ${property.city || 'Unknown'}, ${property.state || 'Unknown'}, ${property.country || 'Unknown'}, ${property.zipcode || 'Unknown'}`,
-          image: getImageForProperty(property.propertyId),
+          image: getRandomImage(),
+          share:property.propertyShare.toString(),
           details: {
             2024: {
               offSeason: (property.offSeasonAllottedNights || '0/0').toString(),
@@ -186,38 +197,47 @@ export const fetchProperties = createAsyncThunk(
               offSeasonHoliday: (property.offSeasonAllottedHolidayNights || '0/0').toString(),
             },
           },
+          maxGuestsAllowed: property.noOfGuestsAllowed || 0,
+          maxPetsAllowed: property.noOfPetsAllowed
+          || 0,
         };
       });
 
       return combinedData;
     } catch (error) {
       console.error("Fetching properties failed:", error);
-      return mockData;  // Fallback to mock data
+      return mockData;  
     }
   }
 );
-
-// Helper function to determine image for property
-const getImageForProperty = (propertyId: number): string => {
-  switch (propertyId) {
-    case 1:
-      return imageParadiseShores;
-    case 2:
-      return imageBlueBearLake;
-    case 3:
-      return imageLakeEscape;
-    case 4:
-      return imageCrownJewel;
-    default:
-      return imageLakeEscape; // Default image
-  }
+const getRandomImage = (): string => {
+  const images = [
+    imageParadiseShores,
+    imageBlueBearLake,
+    imageCrownJewel,
+    imageLakeEscape
+  ];
+  const randomIndex = Math.floor(Math.random() * images.length);
+  return images[randomIndex];
 };
 
-// Create slice
 const propertySlice = createSlice({
   name: 'properties',
   initialState,
-  reducers: {},
+  reducers: {
+    selectProperty: (state, action: PayloadAction<number>) => {
+      state.selectedPropertyId = action.payload;
+      const selectedProperty = state.cards.find(card => card.id === action.payload);
+      if (selectedProperty) {
+        state.selectedPropertyLimits = {
+          noOfGuestsAllowed: selectedProperty.maxGuestsAllowed,
+          noOfPetsAllowed: selectedProperty.maxPetsAllowed,
+        };
+      } else {
+        state.selectedPropertyLimits = null;
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProperties.pending, (state) => {
@@ -235,4 +255,5 @@ const propertySlice = createSlice({
   },
 });
 
+export const { selectProperty } = propertySlice.actions;
 export default propertySlice.reducer;

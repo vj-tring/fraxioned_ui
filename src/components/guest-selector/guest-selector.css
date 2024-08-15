@@ -88,6 +88,11 @@
   align-items: center;
   justify-content: center;
 }
+.Inc-circle.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
 
 .Ad-count {
   font-size: 16px;
