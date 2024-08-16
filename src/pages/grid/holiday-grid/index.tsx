@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { fetchHolidaysApi, deleteHolidayApi, propertyseasonholiday } from '@/api';
+import { fetchHolidaysApi, propertyseasonholiday, propertyseasonholidaydelete } from '@/api';
 import styles from './holiday.module.css';
 import NewForm from '@/pages/grid/new-form';
 import EditForm from '@/pages/grid/edit-form';
@@ -20,7 +20,7 @@ interface Holiday {
     created_by: string;
     updated_by: string | null;
     propertyId: number;
-    propertySeasonHolidayId?: number;
+    propertySeasonHolidayId: number;
 }
 
 const Holidays: React.FC = () => {
@@ -30,7 +30,7 @@ const Holidays: React.FC = () => {
     const [openNewForm, setOpenNewForm] = useState(false);
     const [openEditForm, setOpenEditForm] = useState(false);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-    const [holidayToDelete, setHolidayToDelete] = useState<number | null>(null);
+    const [holidayToDelete, setHolidayToDelete] = useState<Holiday | null>(null);
     const [selectedHoliday, setSelectedHoliday] = useState<Holiday | null>(null);
     const [selectedPropertyId, setSelectedPropertyId] = useState<number | string>('all');
 
@@ -46,7 +46,7 @@ const Holidays: React.FC = () => {
             const mappedData = response.data.data.map((item: any) => {
                 const holiday = item.holiday || item;
                 return {
-                    id: holiday.id, // Use the holiday ID instead of property-season holiday ID
+                    id: holiday.id,
                     name: holiday.name,
                     year: holiday.year,
                     start_date: holiday.startDate,
@@ -84,8 +84,8 @@ const Holidays: React.FC = () => {
         }
     };
 
-    const handleDeleteClick = (id: number) => {
-        setHolidayToDelete(id);
+    const handleDeleteClick = (holiday: Holiday) => {
+        setHolidayToDelete(holiday);
         setOpenDeleteDialog(true);
     };
 
@@ -93,7 +93,7 @@ const Holidays: React.FC = () => {
         if (holidayToDelete === null) return;
 
         try {
-            await deleteHolidayApi(holidayToDelete);
+            await propertyseasonholidaydelete(holidayToDelete.propertySeasonHolidayId);
             await fetchHolidays(selectedPropertyId);
             setOpenDeleteDialog(false);
             setHolidayToDelete(null);
@@ -139,7 +139,7 @@ const Holidays: React.FC = () => {
                     <IconButton
                         aria-label="delete"
                         color="secondary"
-                        onClick={() => handleDeleteClick(params.row.id)}
+                        onClick={() => handleDeleteClick(params.row)}
                     >
                         <DeleteIcon />
                     </IconButton>
@@ -205,7 +205,7 @@ const Holidays: React.FC = () => {
                 <DialogTitle>Confirm Delete</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Are you sure you want to delete this holiday?
+                        Are you sure you want to delete this holiday mapping?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
