@@ -62,4 +62,5 @@ export const propertyseasonholiday = () =>
 export const propertyseasonholidaydelete = (id: number) =>
     axiosInstance.delete(`/v1/property-season-holidays/property-season-holiday/${id}`);
 
-
+export const getUserProperties = (id: number) =>
+    axiosInstance.get(`/v1/properties/${id}/properties-with-details`);
