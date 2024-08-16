@@ -112,7 +112,7 @@ export default function BasicSelect() {
 
   const showCarousel = cards.length > 0;
   const showCarouselControls = cards.length > 0;
-  const cardItemWidth = cards.length === 2 ? '370px' : '470px';
+  const cardItemWidth = cards.length === 2 ? '380px' : '480px';
   const buttonSize = {
     width: cards.length === 2 ? '3.7rem' : '5rem',
     height: cards.length === 2 ? '19px' : '25px',
