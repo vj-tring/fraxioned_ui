@@ -28,10 +28,10 @@ const Dashboard: React.FC = () => {
 
   const links = [
     { name: 'HOME', href: '/dashboard', disabled: false },
-    { name: 'BOOKINGS', href: '/dashboard/booking', disabled: false },
+    { name: 'BOOKINGS', href: '/dashboard/booking', disabled: true },
     { name: 'DOCUMENTS', href: '/dashboard/peak-season', disabled: true },
     { name: 'PAYMENTS', href: '/dashboard/payments', disabled: true },
-    { name: 'MORE', href: '/dashboard/faq', disabled: false }, 
+    { name: 'MORE', href: '/dashboard/faq', disabled: true }, 
     
   ]
 
