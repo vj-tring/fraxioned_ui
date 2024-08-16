@@ -8,16 +8,18 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import {
-  Popover,
+  Popover,  
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import './calender.css';
 import calendarData from './calendarData.json';
 
+
 export function DatePickerWithRange({
   className,
-}: React.HTMLAttributes<HTMLDivElement>) {
+  onSelect,
+}: React.HTMLAttributes<HTMLDivElement> | { onSelect?: (range: DateRange | undefined) => void }) {
   const today = new Date()
   const endDate = new Date(today.getFullYear() + 5 , 11, 31); 
   const checkInEndDate = addDays(today, 730);
@@ -29,6 +31,7 @@ export function DatePickerWithRange({
   const [startDate, setStartDate] = React.useState<Date | null>(null)
   const [startDateSelected, setStartDateSelected] = React.useState<boolean>(false)
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
+  const [isCalendarOpen, setIsCalendarOpen] = React.useState(false)
 
   const bookedDates = calendarData.bookedDates.map(date => new Date(date));
   const unavailableDates = calendarData.unavailableDates.map(date => new Date(date));
@@ -39,6 +42,8 @@ export function DatePickerWithRange({
     setStartDate(null);
     setStartDateSelected(false);
     setErrorMessage(null);
+    setIsCalendarOpen(false);
+    if (onSelect) onSelect(undefined);
   };
 
   const isBookedDate = (date: Date) => {
@@ -60,20 +65,20 @@ export function DatePickerWithRange({
   };
 
   const isDayBeforeUnavailableDate = (date: Date) => {
-  return unavailableDates.some(
-    (unavailableDate) =>
-      date.getFullYear() === unavailableDate.getFullYear() &&
-      date.getMonth() === unavailableDate.getMonth() &&
-      date.getDate() === unavailableDate.getDate() - 1
-  );
-};
+    return unavailableDates.some(
+      (unavailableDate) =>
+        date.getFullYear() === unavailableDate.getFullYear() &&
+        date.getMonth() === unavailableDate.getMonth() &&
+        date.getDate() === unavailableDate.getDate() - 1
+    );
+  };
 
-const isAfterUnavailableDate = (date: Date) => {
-  return unavailableDates.some(
-    (unavailableDate) =>
-      date.getTime() > unavailableDate.getTime()
-  );
-};
+  const isAfterUnavailableDate = (date: Date) => {
+    return unavailableDates.some(
+      (unavailableDate) =>
+        date.getTime() > unavailableDate.getTime()
+    );
+  };
 
   const isDayBeforeBookedDate = (date: Date) => {
     return bookedDates.some(
@@ -102,8 +107,8 @@ const isAfterUnavailableDate = (date: Date) => {
       return (date < today && date.toDateString() !== today.toDateString()) || 
              date > checkInEndDate || 
              isBookedDate(date) || 
-             isUnavailableDate(date) || 
-             (!meetsConsecutiveStayRule(date) && date.toDateString() !== today.toDateString());
+             isUnavailableDate(date) 
+            //  (!meetsConsecutiveStayRule(date) && date.toDateString() !== today.toDateString());
     }
   };
 
@@ -134,12 +139,13 @@ const isAfterUnavailableDate = (date: Date) => {
     if (range?.from) {
       const newStartDate = range.from;
       let newEndDate = range.to;
-
+  
       if (!meetsConsecutiveStayRule(newStartDate)) {
         setErrorMessage('Minimum 5 nights required between bookings');
         setDate(undefined);
         setStartDate(null);
         setStartDateSelected(false);
+        if (onSelect) onSelect(undefined);
         return;
       }
   
@@ -147,7 +153,7 @@ const isAfterUnavailableDate = (date: Date) => {
       setStartDateSelected(true);
   
       const lastMinuteBooking = isLastMinuteBooking(newStartDate);
-
+  
       if (newEndDate) {
         const nextBookedDate = bookedDates.find(bookedDate => bookedDate > newStartDate);
         const nextUnavailableDate = unavailableDates.find(unavailableDate => unavailableDate > newStartDate);
@@ -183,15 +189,25 @@ const isAfterUnavailableDate = (date: Date) => {
         }
       }
   
-      setDate({ from: newStartDate, to: newEndDate });
+      const newDateRange = { from: newStartDate, to: newEndDate };
+      setDate(newDateRange);
+      if (onSelect) onSelect(newDateRange);
+  
+      // Keep the calendar open if only the start or end date is selected
+      if (newStartDate && !newEndDate) {
+        setIsCalendarOpen(true);
+      } else if (newStartDate && newEndDate) {
+        setIsCalendarOpen(false);
+      }
     } else {
       setDate(undefined);
       setStartDate(null);
       setStartDateSelected(false);
       setErrorMessage(null);
+      if (onSelect) onSelect(undefined);
     }
   }
-
+  
   const customLocale = {
     code: calendarData.locale.code,
     localize: {
