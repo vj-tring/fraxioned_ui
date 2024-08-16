@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { fetchHolidaysApi, deleteHolidayApi } from '@/api';
-import styles from './holiday.module.css'
-import NewForm from '@/pages/new-form';
-import EditForm from '@/pages/edit-form';
+import { fetchHolidaysApi, deleteHolidayApi, propertyseasonholiday } from '@/api';
+import styles from './holiday.module.css';
+import NewForm from '@/pages/grid/new-form';
+import EditForm from '@/pages/grid/edit-form';
 import PropertyImage from '@/pages/property-image';
 import { Dialog, DialogContent, Button, IconButton, DialogTitle, DialogContentText, DialogActions } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -20,6 +20,7 @@ interface Holiday {
     created_by: string;
     updated_by: string | null;
     propertyId: number;
+    propertySeasonHolidayId?: number;
 }
 
 const Holidays: React.FC = () => {
@@ -33,23 +34,34 @@ const Holidays: React.FC = () => {
     const [selectedHoliday, setSelectedHoliday] = useState<Holiday | null>(null);
     const [selectedPropertyId, setSelectedPropertyId] = useState<number | string>('all');
 
-    const fetchHolidays = useCallback(async () => {
+    const fetchHolidays = useCallback(async (propertyId: number | string = 'all') => {
         try {
-            const response = await fetchHolidaysApi();
-            const mappedData = response.data.data.map((holiday: any) => ({
-                id: holiday.id,
-                name: holiday.name,
-                year: holiday.year,
-                start_date: holiday.startDate,
-                end_date: holiday.endDate,
-                created_at: holiday.createdAt,
-                updated_at: holiday.updatedAt,
-                created_by: holiday.createdBy ? holiday.createdBy.id : 'N/A',
-                updated_by: holiday.updatedBy ? holiday.updatedBy.id : 'N/A',
-                propertyId: holiday.propertyId,
-            }));
+            let response;
+            if (propertyId === 'all') {
+                response = await fetchHolidaysApi();
+            } else {
+                response = await propertyseasonholiday();
+            }
+
+            const mappedData = response.data.data.map((item: any) => {
+                const holiday = item.holiday || item;
+                return {
+                    id: holiday.id, // Use the holiday ID instead of property-season holiday ID
+                    name: holiday.name,
+                    year: holiday.year,
+                    start_date: holiday.startDate,
+                    end_date: holiday.endDate,
+                    created_at: holiday.createdAt,
+                    updated_at: holiday.updatedAt,
+                    created_by: holiday.createdBy ? holiday.createdBy.id : 'N/A',
+                    updated_by: holiday.updatedBy ? holiday.updatedBy.id : 'N/A',
+                    propertyId: item.property ? item.property.id : item.propertyId,
+                    propertySeasonHolidayId: item.id,
+                };
+            });
+
             setHolidays(mappedData);
-            setFilteredHolidays(mappedData);
+            setFilteredHolidays(propertyId === 'all' ? mappedData : mappedData.filter((h: { propertyId: string | number; }) => h.propertyId === propertyId));
         } catch (err) {
             console.error('Error fetching holidays:', err);
             setError('Failed to fetch holidays. Please try again.');
@@ -61,7 +73,7 @@ const Holidays: React.FC = () => {
     }, [fetchHolidays]);
 
     const handleHolidayAdded = () => {
-        fetchHolidays();
+        fetchHolidays(selectedPropertyId);
     };
 
     const handleEditClick = (id: number) => {
@@ -82,7 +94,7 @@ const Holidays: React.FC = () => {
 
         try {
             await deleteHolidayApi(holidayToDelete);
-            await fetchHolidays();
+            await fetchHolidays(selectedPropertyId);
             setOpenDeleteDialog(false);
             setHolidayToDelete(null);
         } catch (err) {
@@ -98,16 +110,11 @@ const Holidays: React.FC = () => {
 
     const handlePropertySelect = (propertyId: number | string) => {
         setSelectedPropertyId(propertyId);
-        if (propertyId === 'all') {
-            setFilteredHolidays(holidays);
-        } else {
-            const filtered = holidays.filter(holiday => holiday.propertyId === propertyId);
-            setFilteredHolidays(filtered);
-        }
+        fetchHolidays(propertyId);
     };
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'ID', width: 100 },
+        { field: 'id', headerName: 'Holiday ID', width: 100 },
         { field: 'name', headerName: 'Name', minWidth: 100 },
         { field: 'year', headerName: 'Year', width: 120 },
         { field: 'start_date', headerName: 'Start Date', width: 120 },
@@ -185,7 +192,6 @@ const Holidays: React.FC = () => {
                                 year: selectedHoliday.year,
                                 startDate: selectedHoliday.start_date,
                                 endDate: selectedHoliday.end_date,
-                                properties: [],
                             }}
                         />
                     )}
