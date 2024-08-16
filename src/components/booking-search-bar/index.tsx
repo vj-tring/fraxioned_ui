@@ -11,14 +11,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 const BookingSearchBar: React.FC = () => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined)
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
-  const [activeDate, setActiveDate] = useState<'check-in' | 'check-out'>('check-in')
+  const [activeDate, setActiveDate] = useState<'check-in' | 'check-out' | null>(null)
 
   const handleDateSelect = (range: DateRange | undefined) => {
     setDateRange(range)
     if (range?.from && !range.to) {
-      setActiveDate('check-out')
-    } else if (range?.from && range?.to) {
       setActiveDate('check-in')
+    } else if (range?.from && range?.to) {
+      setActiveDate('check-out')
     }
   }
 
@@ -39,12 +39,12 @@ const BookingSearchBar: React.FC = () => {
                 label="Check In"
                 date={dateRange?.from}
                 onClick={() => handleRegionClick('check-in')}
-                isActive={activeDate === 'check-in'}
+                isActive={isCalendarOpen && activeDate === 'check-in'}
               />
             </div>
           </PopoverTrigger>
           <PopoverContent className="calendar-popover" align="start">
-     <DatePickerWithRange 
+            <DatePickerWithRange 
               onSelect={handleDateSelect} 
               initialRange={dateRange}
               selectingFrom={activeDate === 'check-in'}
@@ -59,7 +59,7 @@ const BookingSearchBar: React.FC = () => {
                 label="Check Out"
                 date={dateRange?.to}
                 onClick={() => handleRegionClick('check-out')}
-                isActive={activeDate === 'check-out'}
+                isActive={isCalendarOpen && activeDate === 'check-out'}
               />
             </div>
           </PopoverTrigger>
