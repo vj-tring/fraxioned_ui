@@ -142,11 +142,11 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
                         />
                     </Box>
                 </LocalizationProvider>
-                <FormControl component="fieldset" className={styles.checkboxGroup}>
-                    <Typography variant="subtitle1" gutterBottom>
+                <FormControl component="fieldset" className={styles.checkboxGroupContainer}>
+                    <Typography variant="subtitle1" className={styles.checkboxGroupLabel}>
                         Select Properties
                     </Typography>
-                    <FormGroup>
+                    <FormGroup className={styles.checkboxGroup}>
                         {properties.map((property) => (
                             <FormControlLabel
                                 key={property.id}
@@ -158,6 +158,7 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
                                     />
                                 }
                                 label={property.propertyName}
+                                className={styles.formControlLabel}
                             />
                         ))}
                     </FormGroup>

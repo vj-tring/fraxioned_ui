@@ -10,7 +10,7 @@
 .form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
 }
 
 .inputField {
@@ -26,13 +26,29 @@
     flex: 1;
 }
 
-.checkboxGroup {
-    margin-top: 16px;
-    padding: 16px;
-    border: 1px solid #e0e0e0;
+.checkboxGroupContainer {
+    border: 1px solid #bdbdbd;
     border-radius: 4px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.checkboxGroupLabel {
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.checkboxGroup {
     max-height: 200px;
     overflow-y: auto;
+    padding-right: 8px;
+}
+
+.formControlLabel {
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .buttonContainer {
@@ -42,10 +58,7 @@
     margin-top: 32px;
 }
 
-.addButton {
-    min-width: 120px;
-}
-
+.addButton,
 .cancelButton {
     min-width: 120px;
 }
