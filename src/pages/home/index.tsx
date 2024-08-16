@@ -158,7 +158,7 @@ const displayProperties = properties.length ? properties : mockProperties;
             imageUrl={property.image || image1}
             title={property.name || 'No Title'}
             text={property.address || 'Address not available'}
-            share={property.share ? `You Own ${property.share} share` : 'Share information not available'}
+            share={property.share ? `You Own ${property.share}/${property.propertyShare}th share` : 'Share information not available'}
             id={property.id}
             showPlusIcon={index === displayProperties.length - 1}  // Show plus icon only for the last card
           />
