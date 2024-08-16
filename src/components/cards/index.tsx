@@ -1,6 +1,5 @@
-// Card.tsx
 import React from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import './card.css';
 import { FaPlus } from 'react-icons/fa';
 
@@ -14,25 +13,25 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ imageUrl, text, title, share, id, showPlusIcon }) => {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleClick = () => {
-  
-      navigate('/dashboard/booking'); // Navigate to booking page with property ID
-    
+    navigate('/dashboard/booking');
   };
 
-  const cardStyle = id ? 'card3 blur-effect' : 'card3';
-
   return (
-    <div className={cardStyle} onClick={handleClick}> {/* Add onClick handler */}
+    <div className='card3' onClick={handleClick}>
       <div className="image-container">
-        <img src={imageUrl} className="card-img-top" alt={title} />
+        <img
+          src={imageUrl}
+          className={`card-img-top ${showPlusIcon ? 'blur-effect' : ''}`}
+          alt={title}
+        />
         {showPlusIcon && <FaPlus className="plus-icon" />}
       </div>
       <div className="card-body">
         <h4 className="card-title">{title}</h4>
-        <span className="card-text mt-0">{text}</span>
+        <span className="card-text ">{text}</span>
         <h6 className="share mt-0">{share}</h6>
       </div>
     </div>
