@@ -9,7 +9,7 @@ import unsplashImage4 from '../../assets/images/buildingnew.jpg';
 // import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { Card, Button, Typography, Grid, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import Logo from '../../assets/images/fraxioned.png';
+import Logo from '../../assets/images/fraxionedpng.png';
 import AvailableNights from '../../components/available-nights';
 import BasicRangeShortcuts from '../../components/basic-range-shortcuts';
 import SingleDevice from '../../components/single-device';
@@ -19,7 +19,7 @@ import ThingsToKnow from '../../components/things-to-know';
 import DatePickerCard from '../../components/date-picker-card';
 import { Element, Link } from 'react-scroll';
 
-const images = [
+const images = [  
   { src: buildingImage, alt: 'Exterior of Blue Bear Lake home' },
   { src: unsplashImage1, alt: 'Aerial view of Blue Bear Lake home' },
   { src: unsplashImage2, alt: 'Living room in Blue Bear Lake home' },
@@ -138,14 +138,14 @@ const Booking = () => {
 
         <hr />
 
-        <div className="row mt-3">
+        <div className="d-flex ">
           <Grid item xs={12} md={7} sx={{ Height: '40' }}>
             <Element name="myShare">
               <Showmore />
             </Element>
             <hr style={{ width: '110%' }} />
-            <Element name="availableNights">
-              <AvailableNights />
+            <Element  name="availableNights">
+              <AvailableNights  />
             </Element>
             <hr style={{ width: '110%' }} />
             <Element name="basicRangeShortcuts">

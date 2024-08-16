@@ -1,27 +1,27 @@
-import { FC } from 'react'
+// App.tsx
+import React from 'react';
 import {
-  Navigate,
-  Route,
   BrowserRouter as Router,
+  Route,
   Routes,
-} from 'react-router-dom'
-import Login from './pages/login/index'
-import { Provider } from 'react-redux'
-import './App.css'
+  Navigate,
+} from 'react-router-dom';
+import { Provider } from 'react-redux';
 import store from './store/index';
-import ForgetPassword from './pages/forgot-password'
-import Change from './pages/recover-password'
-import ResetPassword from './pages/reset-password'
-import Dashboard from './pages/dashboard'
-import AdminDashboard from './pages/admin-dashboard'
+import Login from './pages/login/index';
+import ForgetPassword from './pages/forgot-password';
+import Change from './pages/recover-password';
+import ResetPassword from './pages/reset-password';
+import Dashboard from './pages/dashboard';
+import AdminDashboard from './pages/admin-dashboard';
 
 interface PrivateRouteProps {
-  element: React.ComponentType
+  element: React.ComponentType;
   allowedRoles: number[];
 }
 
-const PrivateRoute: FC<PrivateRouteProps> = ({ element: Element, allowedRoles }) => {
-  const token = localStorage.getItem('session')
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ element: Element, allowedRoles }) => {
+  const token = localStorage.getItem('session');
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   if (!token) {
     return <Navigate to="/login" />;
@@ -33,34 +33,21 @@ const PrivateRoute: FC<PrivateRouteProps> = ({ element: Element, allowedRoles })
 };
 
 function App() {
-
   return (
-    <>
-      <Provider store={store}>
-        <Router>
-          <Routes>
-            <Route path="/" element={<Navigate to="/login" />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/forgotPassword" element={<ForgetPassword />} />
-            <Route path="/recoverPassword" element={<Change />} />
-            <Route path="/resetPassword" element={<ResetPassword onClose={() => { }} />} />
-            <Route
-              path="/dashboard/*"
-              element={<PrivateRoute element={Dashboard} allowedRoles={[2, 3]} />}
-            />
-            {/* <Route
-              path="/dashboard/*"
-              element={<Dashboard/>}
-            /> */}
-            <Route
-              path="/admin/*"
-              element={<PrivateRoute element={AdminDashboard} allowedRoles={[1]} />}
-            />
-          </Routes>
-        </Router>
-      </Provider>
-    </>
-  )
+    <Provider store={store}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/forgotPassword" element={<ForgetPassword />} />
+          <Route path="/recoverPassword" element={<Change />} />
+          <Route path="/resetPassword" element={<ResetPassword onClose={() => {}} />} />
+          <Route path="/dashboard/*" element={<PrivateRoute element={Dashboard} allowedRoles={[2, 3]} />} />
+          <Route path="/admin/*" element={<PrivateRoute element={AdminDashboard} allowedRoles={[1]} />} />
+        </Routes>
+      </Router>
+    </Provider>
+  );
 }
 
-export default App
+export default App;

@@ -3,6 +3,10 @@ import React, { useState, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import MenuItem from '@mui/material/MenuItem'
 import './available-night.css';
+import image1 from '../../assests/blue-bear-lake.jpg';
+import image2 from '../../assests/bear-lake-bluffs.jpg';
+import image3 from '../../assests/crown-jewel.jpg';
+import image4 from '../../assests/lake-escape.jpg';
 import userImage from '../../assets/images/profile.jpeg'
 interface Card {
   id: number;
@@ -163,7 +167,7 @@ export default function AvailableNights() {
 
       
           <MenuItem disableRipple>
-            <div className="CardItem1 monsterrat ">
+            <div className=" monsterrat " >
               {selectedCard && (
                 <div className="card-content">
                   <div className="d-flex justify-content-between   mb-2">
@@ -177,13 +181,13 @@ export default function AvailableNights() {
                 className="ProfileImage"
               />
             </div>                  </div>
-                  <div className="d-flex justify-content-around p-2">
-                    <p className="Available">My Available Nights</p>
-                    <div className="d-flex justify-content-between align-items-center gap-2">
+                  <div className="d-flex justify-content-between p-2">
+                    <p >My Available Nights</p>
+                    <div className="d-flex justify-content-between align-items-center gap-3">
                       {years.map((year) => (
                         <button
                           key={year}
-                          className={`card-btn1 ${selectedYear === year ? 'active' : ''}`}
+                          className={`card-btn2 ${selectedYear === year ? 'active' : ''}`}
                           onClick={() => handleYearClick(year)}
                         >
                           {year}
@@ -194,25 +198,25 @@ export default function AvailableNights() {
 
                   <div className="box1 d-flex justify-content-around p-3 mb-3">
                     <div className="d-flex flex-column">
-                      <li>
+                      <li className='liststyle'>
                         {selectedCard.details[selectedYear]?.offSeason || 'N/A'}
                       </li>
                       <li className="Box-list1">Off-Season Nights</li>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li>
+                      <li className='liststyle'> 
                         {selectedCard.details[selectedYear]?.peakSeason || 'N/A'}
                       </li>
                       <li className="Box-list1">Peak-Season Nights</li>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li>
+                      <li className='liststyle'>
                         {selectedCard.details[selectedYear]?.peakHoliday || 'N/A'}
                       </li>
                       <li className="Box-list1">Peak-Season Holiday</li>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li>
+                      <li className='liststyle'>
                         {selectedCard.details[selectedYear]?.offSeasonHoliday || 'N/A'}
                       </li>
                       <li className="Box-list1">Off-Season Holiday</li>
