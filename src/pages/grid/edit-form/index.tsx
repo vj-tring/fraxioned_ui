@@ -13,7 +13,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import styles from './edit-form.module.css'
-import { getProperties, updateHolidaysApi } from '@/api';
+import { getProperties, updateHolidaysApi, fetchpropertyHolidaysApi } from '@/api';
 import { useSelector } from 'react-redux';
 import Loader from '@/components/loader';
 import { RootState } from '@/store/reducers';
@@ -32,7 +32,6 @@ interface EditFormProps {
         year: number;
         startDate: string;
         endDate: string;
-        properties: number[];
     };
 }
 
@@ -42,26 +41,36 @@ const EditForm: React.FC<EditFormProps> = ({ onClose, onHolidayUpdated, holidayD
     const [startDate, setStartDate] = useState<Date | null>(new Date(holidayData.startDate));
     const [endDate, setEndDate] = useState<Date | null>(new Date(holidayData.endDate));
     const [properties, setProperties] = useState<Property[]>([]);
-    const [selectedProperties, setSelectedProperties] = useState<number[]>(holidayData.properties);
+    const [selectedProperties, setSelectedProperties] = useState<number[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     const userId = useSelector((state: RootState) => state.auth.user?.id);
 
     useEffect(() => {
-        const fetchProperties = async () => {
+        const fetchData = async () => {
             try {
-                const response = await getProperties();
-                setProperties(response.data);
+                const [propertiesResponse, holidayResponse] = await Promise.all([
+                    getProperties(),
+                    fetchpropertyHolidaysApi(holidayData.id)
+                ]);
+                setProperties(propertiesResponse.data);
+
+                const holidayProperties = holidayResponse.data.data.propertySeasonHolidays.map(
+                    (push: any) => push.property.id
+                );
+                setSelectedProperties(holidayProperties);
+
                 setLoading(false);
             } catch (err) {
-                console.error('Error fetching properties:', err);
+                console.error('Error fetching data:', err);
+                setError('Failed to fetch data. Please try again.');
                 setLoading(false);
             }
         };
 
-        fetchProperties();
-    }, []);
+        fetchData();
+    }, [holidayData.id]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -70,33 +79,33 @@ const EditForm: React.FC<EditFormProps> = ({ onClose, onHolidayUpdated, holidayD
             return;
         }
         try {
-            const updatedHolidayData: any = {
-                name,
-                year: Number(year),
+            const updatedHolidayData = {
                 startDate: startDate?.toISOString().split('T')[0],
                 endDate: endDate?.toISOString().split('T')[0],
                 updatedBy: {
                     id: userId
-                }
+                },
+                properties: selectedProperties.map(id => ({ id })),
+                name,
+                year
             };
 
-            console.log(holidayData.id);
             await updateHolidaysApi(holidayData.id, updatedHolidayData);
             onHolidayUpdated();
-            console.log(updatedHolidayData);
             onClose();
         } catch (err) {
             console.error('Error updating holiday:', err);
             setError('Failed to update holiday. Please try again.');
         }
     };
+
     const handlePropertyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = event.target;
         const propertyId = parseInt(name);
         if (checked) {
-            setSelectedProperties([...selectedProperties, propertyId]);
+            setSelectedProperties(prev => [...prev, propertyId]);
         } else {
-            setSelectedProperties(selectedProperties.filter(id => id !== propertyId));
+            setSelectedProperties(prev => prev.filter(id => id !== propertyId));
         }
     };
 

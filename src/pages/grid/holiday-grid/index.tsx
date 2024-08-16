@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { fetchHolidaysApi, deleteHolidayApi } from '@/api';
-import styles from './holiday.module.css'
-import NewForm from '@/pages/new-form';
-import EditForm from '@/pages/edit-form';
+import styles from './holiday.module.css';
+import NewForm from '@/pages/grid/new-form';
+import EditForm from '@/pages/grid/edit-form';
 import PropertyImage from '@/pages/property-image';
 import { Dialog, DialogContent, Button, IconButton, DialogTitle, DialogContentText, DialogActions } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -185,7 +185,6 @@ const Holidays: React.FC = () => {
                                 year: selectedHoliday.year,
                                 startDate: selectedHoliday.start_date,
                                 endDate: selectedHoliday.end_date,
-                                properties: [],
                             }}
                         />
                     )}

@@ -42,8 +42,13 @@ export const fetchHolidaysApi = () =>
 export const addHolidayApi = (holidayData: { name: string; year: number; startDate: string | undefined; endDate: string | undefined; createdBy: { id: number; }; }) =>
     axiosInstance.post('/v1/holidays/holiday', holidayData);
 
+//updating holiday api
 export const updateHolidaysApi = (id: number, updatedHolidayData: { name: string; year: number; startDate: string | undefined; endDate: string | undefined; properties: { id: number; }[]; updatedBy: { id: number; }; }) =>
     axiosInstance.patch(`/v1/holidays/holiday/${id}`, updatedHolidayData);
 
+//deleting holiday api
 export const deleteHolidayApi = (id: number) =>
     axiosInstance.delete(`/v1/holidays/holiday/${id}`);
+
+export const fetchpropertyHolidaysApi = (id: number) =>
+    axiosInstance.get(`/v1/holidays/holiday/${id}`);
