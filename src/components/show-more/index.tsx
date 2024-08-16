@@ -22,7 +22,7 @@ const Showmore = () => {
     <div >
       <div className="row mt-2  ">
         <Grid container spacing={2} >
-          <Grid item xs={6} md={9}>
+          <Grid item xs={12} md={9}>
             <Typography variant="body1" className='Showmore'>
               {fullContent.slice(0, 300) + '...'} 
             </Typography>

@@ -47,3 +47,11 @@ export const updateHolidaysApi = (id: number, updatedHolidayData: { name: string
 
 export const deleteHolidayApi = (id: number) =>
     axiosInstance.delete(`/v1/holidays/holiday/${id}`);
+
+
+//  properties api as per user
+export const getUserProperties = (id:number) =>
+    axiosInstance.get(`/v1/properties/${id}/properties-with-details`);
+
+
+

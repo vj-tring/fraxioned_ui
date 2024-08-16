@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import './date-picker.css';
 
 interface DatePickerCardProps {
@@ -29,44 +28,26 @@ const DatePickerCard: React.FC<DatePickerCardProps> = ({
   setGuests,
   onCheckAvailability
 }) => {
-  const [openDatePicker, setOpenDatePicker] = useState<'checkIn' | 'checkOut' | null>(null);
-
-  // Handles the date change
-  const handleDateChange = (date: Date | null, type: 'checkIn' | 'checkOut') => {
-    if (type === 'checkIn') {
-      setCheckInDate(date);
-    } else {
-      setCheckOutDate(date);
-    }
-    setOpenDatePicker(null);
-  };
-
   return (
     <Card className="cards bg-light p-4 monsterrat">
       <Typography variant="h5" className='selectDate mb-2 monsterrat'>Select Dates</Typography>
       <Grid container spacing={2} className="DatePicker mt-2">
         <Grid item xs={12} sm={6}>
-          <TextField
-            label="Check in"
-            placeholder="Add Date"
-            fullWidth
-            onClick={() => setOpenDatePicker('checkIn')}
-            value={checkInDate ? checkInDate.toLocaleDateString() : ''}
-            InputProps={{
-              readOnly: true, // Make text field readonly to only open date picker
-            }}
+          <DatePicker
+            selected={checkInDate}
+            onChange={(date) => setCheckInDate(date)}
+            placeholderText="Check in"
+            className="form-control"
+            dateFormat="MM/dd/yyyy"
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <TextField
-            label="Check Out"
-            placeholder="Add Date"
-            fullWidth
-            onClick={() => setOpenDatePicker('checkOut')}
-            value={checkOutDate ? checkOutDate.toLocaleDateString() : ''}
-            InputProps={{
-              readOnly: true, // Make text field readonly to only open date picker
-            }}
+          <DatePicker
+            selected={checkOutDate}
+            onChange={(date) => setCheckOutDate(date)}
+            placeholderText="Check out"
+            className="form-control"
+            dateFormat="MM/dd/yyyy"
           />
         </Grid>
       </Grid>
@@ -76,7 +57,7 @@ const DatePickerCard: React.FC<DatePickerCardProps> = ({
         label="Guests"
         fullWidth
         value={guests}
-        onChange={(e) => setGuests(Number(e.target.value))}  
+        onChange={(e) => setGuests(Number(e.target.value))}
         className='mt-3 monsterrat'
       >
         {[1, 2, 3, 4, 5].map((num) => (
@@ -94,19 +75,6 @@ const DatePickerCard: React.FC<DatePickerCardProps> = ({
       >
         Check Availability
       </Button>
-
-      {/* Date Picker Dialogs */}
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        {openDatePicker && (
-          <DatePicker
-            open={Boolean(openDatePicker)}
-            onClose={() => setOpenDatePicker(null)}
-            value={openDatePicker === 'checkIn' ? checkInDate : checkOutDate}
-            onChange={(date) => handleDateChange(date, openDatePicker)}
-            // renderInput={(params) => <TextField {...params} />}
-          />
-        )}
-      </LocalizationProvider>
     </Card>
   );
 };
