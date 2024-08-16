@@ -50,5 +50,16 @@ export const updateHolidaysApi = (id: number, updatedHolidayData: { name: string
 export const deleteHolidayApi = (id: number) =>
     axiosInstance.delete(`/v1/holidays/holiday/${id}`);
 
+//fetching proeprty in edit 
 export const fetchpropertyHolidaysApi = (id: number) =>
     axiosInstance.get(`/v1/holidays/holiday/${id}`);
+
+//propertyholiday api
+export const propertyseasonholiday = () =>
+    axiosInstance.get('/v1/property-season-holidays/property-season-holiday');
+
+//propertyholiday delete api
+export const propertyseasonholidaydelete = (id: number) =>
+    axiosInstance.delete(`/v1/property-season-holidays/property-season-holiday/${id}`);
+
+

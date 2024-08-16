@@ -8,6 +8,7 @@ import {
     Checkbox,
     Box,
     Typography,
+    Paper,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -119,7 +120,7 @@ const EditForm: React.FC<EditFormProps> = ({ onClose, onHolidayUpdated, holidayD
 
     return (
         <div className={styles.formContainer}>
-            <Typography variant="h4" component="h2" gutterBottom>
+            <Typography variant="h4" component="h2" gutterBottom className={styles.staticHeader}>
                 Edit Holiday
             </Typography>
             <form onSubmit={handleSubmit} className={styles.form}>
@@ -156,26 +157,28 @@ const EditForm: React.FC<EditFormProps> = ({ onClose, onHolidayUpdated, holidayD
                         />
                     </Box>
                 </LocalizationProvider>
-                <FormControl component="fieldset" className={styles.checkboxGroup}>
-                    <Typography variant="subtitle1" gutterBottom>
-                        Select Properties
-                    </Typography>
-                    <FormGroup>
-                        {properties.map((property) => (
-                            <FormControlLabel
-                                key={property.id}
-                                control={
-                                    <Checkbox
-                                        checked={selectedProperties.includes(property.id)}
-                                        onChange={handlePropertyChange}
-                                        name={property.id.toString()}
-                                    />
-                                }
-                                label={property.propertyName}
-                            />
-                        ))}
-                    </FormGroup>
-                </FormControl>
+                <Paper elevation={0} className={styles.propertiesContainer}>
+                    <FormControl component="fieldset" className={styles.checkboxGroup}>
+                        <Typography variant="subtitle1" gutterBottom>
+                            Select Properties
+                        </Typography>
+                        <FormGroup className={styles.propertiesList}>
+                            {properties.map((property) => (
+                                <FormControlLabel
+                                    key={property.id}
+                                    control={
+                                        <Checkbox
+                                            checked={selectedProperties.includes(property.id)}
+                                            onChange={handlePropertyChange}
+                                            name={property.id.toString()}
+                                        />
+                                    }
+                                    label={property.propertyName}
+                                />
+                            ))}
+                        </FormGroup>
+                    </FormControl>
+                </Paper>
                 <Box className={styles.buttonContainer}>
                     <Button
                         type="submit"

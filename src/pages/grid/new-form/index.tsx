@@ -8,6 +8,7 @@ import {
     Checkbox,
     Box,
     Typography,
+    Paper,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -142,27 +143,31 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
                         />
                     </Box>
                 </LocalizationProvider>
-                <FormControl component="fieldset" className={styles.checkboxGroupContainer}>
-                    <Typography variant="subtitle1" className={styles.checkboxGroupLabel}>
-                        Select Properties
-                    </Typography>
-                    <FormGroup className={styles.checkboxGroup}>
-                        {properties.map((property) => (
-                            <FormControlLabel
-                                key={property.id}
-                                control={
-                                    <Checkbox
-                                        checked={selectedProperties.includes(property.id)}
-                                        onChange={handlePropertyChange}
-                                        name={property.id.toString()}
-                                    />
-                                }
-                                label={property.propertyName}
-                                className={styles.formControlLabel}
-                            />
-                        ))}
-                    </FormGroup>
-                </FormControl>
+
+                <Paper elevation={0} className={styles.propertiesContainer}>
+                    <FormControl component="fieldset" className={styles.checkboxGroupContainer}>
+                        <Typography variant="subtitle1" className={styles.checkboxGroupLabel}>
+                            Select Properties
+                        </Typography>
+                        <FormGroup className={styles.checkboxGroup}>
+                            {properties.map((property) => (
+                                <FormControlLabel
+                                    key={property.id}
+                                    control={
+                                        <Checkbox
+                                            checked={selectedProperties.includes(property.id)}
+                                            onChange={handlePropertyChange}
+                                            name={property.id.toString()}
+                                        />
+                                    }
+                                    label={property.propertyName}
+                                    className={styles.formControlLabel}
+                                />
+                            ))}
+                        </FormGroup>
+                    </FormControl>
+                </Paper>
+
                 <Box className={styles.buttonContainer}>
                     <Button
                         type="submit"
