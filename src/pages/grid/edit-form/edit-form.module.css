@@ -2,12 +2,25 @@
     padding: 24px;
     max-width: 500px;
     margin: 0 auto;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.staticHeader {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    padding: 16px 0;
+    z-index: 1;
 }
 
 .form {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    overflow-y: auto;
+    flex-grow: 1;
 }
 
 .inputField {
@@ -23,8 +36,21 @@
     flex: 1;
 }
 
+.propertiesContainer {
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 16px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
 .checkboxGroup {
-    margin-top: 16px;
+    width: 100%;
+}
+
+.propertiesList {
+    max-height: 150px;
+    overflow-y: auto;
 }
 
 .buttonContainer {

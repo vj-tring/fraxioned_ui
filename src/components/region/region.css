@@ -6,3 +6,8 @@
 .custom-pop{
     border-radius: 10px !important;
 }
+
+.active {
+    background-color: #898989;
+    border-radius: 4px;
+  }

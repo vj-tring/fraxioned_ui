@@ -1,12 +1,72 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { propertywithDetails } from '../../../api/index';
-import imageParadiseShores from '../../../assets/images/property-images/bear-lake-bluffs.jpg'
-import imageBlueBearLake from '../../../assets/images/property-images/blue-bear-lake.jpg'
-import imageCrownJewel from '../../../assets/images/property-images/crown-jewel.jpg'
-import imageLakeEscape from '../../../assets/images/property-images/lake-escape.jpg'
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { getUserProperties } from '../../../api/index';
+import imageParadiseShores from '../../../assests/bear-lake-bluffs.jpg';
+import imageBlueBearLake from '../../../assests/crown-jewel.jpg';
+import imageCrownJewel from '../../../assests/blue-bear-lake.jpg';
+import imageLakeEscape from '../../../assests/lake-escape.jpg';
 
-
-
+// Mock data
+const mockData: Card[] = [
+  {
+    id: 1,
+    name: ' Blue Bear ',
+    address: '123 Mock Lane',
+    image: imageParadiseShores,
+    details: {
+      2024: {
+        offSeason: '2/10',
+        peakSeason: '3/15',
+        peakHoliday: '4/20',
+        offSeasonHoliday: '5/25',
+      },
+      2025: {
+        offSeason: '32/10',
+        peakSeason: '32/15',
+        peakHoliday: '43/20',
+        offSeasonHoliday: '5/25',
+      },
+      2026: {
+        offSeason: '2/10',
+        peakSeason: '3/15',
+        peakHoliday: '4/20',
+        offSeasonHoliday: '5/25',
+      },
+    },
+    maxGuestsAllowed: 4,
+    maxPetsAllowed: 2,
+    share: 0,
+  },
+  {
+    id: 1,
+    name: ' The Crown Jewel ',
+    address: '123 Mock Lane',
+    image: imageParadiseShores,
+    details: {
+      2024: {
+        offSeason: '2/10',
+        peakSeason: '3/15',
+        peakHoliday: '4/20',
+        offSeasonHoliday: '5/25',
+      },
+      2025: {
+        offSeason: '1/10',
+        peakSeason: '2/15',
+        peakHoliday: '3/2',
+        offSeasonHoliday: '2/35',
+      },
+      2026: {
+        offSeason: '2/10',
+        peakSeason: '3/15',
+        peakHoliday: '4/20',
+        offSeasonHoliday: '5/25',
+      },
+    },
+    maxGuestsAllowed: 4,
+    maxPetsAllowed: 2,
+    share: 0,
+  },
+  // Add more mock properties if needed
+];
 
 interface Card {
   id: number;
@@ -21,183 +81,111 @@ interface Card {
       offSeasonHoliday: string;
     };
   };
+  maxGuestsAllowed: number;
+  maxPetsAllowed: number;
+  share: number;
 }
 
 interface PropertyState {
   cards: Card[];
   loading: boolean;
   error: string | null;
+  selectedPropertyId: number | null;
+  selectedPropertyLimits: {
+    noOfGuestsAllowed: number;
+    noOfPetsAllowed: number;
+  } | null;
 }
 
 const initialState: PropertyState = {
   cards: [],
   loading: false,
   error: null,
+  selectedPropertyId: null,
+  selectedPropertyLimits: null,
 };
 
-
-const mockData: Card[] = [
-  {
-    id: 1,
-    name: "Paradise Shores (tenths)",
-    address: "5367 S. Cyan Lane, St. George, Utah, United States, 84790",
-    image: imageParadiseShores,
-    details: {
-      2024: {
-        offSeason: "4/10",
-        peakSeason: "2/33",
-        peakHoliday: "1/1",
-        offSeasonHoliday: "0/0",
-      },
-      2025: {
-        offSeason: "0",
-        peakSeason: "0",
-        peakHoliday: "0",
-        offSeasonHoliday: "0",
-      },
-      2026: {
-        offSeason: "0",
-        peakSeason: "0",
-        peakHoliday: "0",
-        offSeasonHoliday: "0",
-      },
-    },
-  },
-  {
-    id: 2,
-    name: "Blue Bear Lake",
-    address: "5367 S. Cyan Lane, St. George, Utah, United States, 84790",
-    image: imageBlueBearLake,
-    details: {
-      2024: {
-        offSeason: "3/10",
-        peakSeason: "2/33",
-        peakHoliday: "1/1",
-        offSeasonHoliday: "0/0",
-      },
-      2025: {
-        offSeason: "0",
-        peakSeason: "0",
-        peakHoliday: "0",
-        offSeasonHoliday: "0",
-      },
-      2026: {
-        offSeason: "0",
-        peakSeason: "0",
-        peakHoliday: "0",
-        offSeasonHoliday: "0",
-      },
-    },
-  },
-
-    {
-      id: 3,
-      name: "Lake Escape",
-      address: "5367 S. Cyan Lane, St. George, Utah, United States, 84790",
-      image: imageLakeEscape,
-      details: {
-        2024: {
-          offSeason: "3/10",
-          peakSeason: "2/33",
-          peakHoliday: "1/1",
-          offSeasonHoliday: "0/0",
-        },
-        2025: {
-          offSeason: "0",
-          peakSeason: "0",
-          peakHoliday: "0",
-          offSeasonHoliday: "0",
-        },
-        2026: {
-          offSeason: "0",
-          peakSeason: "0",
-          peakHoliday: "0",
-          offSeasonHoliday: "0",
-        },
-      },
-    },
-    {
-      id: 4,
-      name: "The Crown Jewel",
-      address: "5367 S. Cyan Lane, St. George, Utah, United States, 84790",
-      image: imageCrownJewel,
-      details: {
-        2024: {
-          offSeason: "3/10",
-          peakSeason: "2/33",
-          peakHoliday: "1/1",
-          offSeasonHoliday: "0/0",
-        },
-        2025: {
-          offSeason: "0",
-          peakSeason: "0",
-          peakHoliday: "0",
-          offSeasonHoliday: "0",
-        },
-        2026: {
-          offSeason: "0",
-          peakSeason: "0",
-          peakHoliday: "0",
-          offSeasonHoliday: "0",
-        },
-      },
-    },
-];
-
-// Async thunk for fetching properties
 export const fetchProperties = createAsyncThunk(
   'properties/fetchProperties',
-  async (_, { rejectWithValue }) => {
+  async (userId: number, { rejectWithValue }) => {
     try {
-      const response = await propertywithDetails();
+      const response = await getUserProperties(userId);
+      console.log("response", response);
 
-      if (!Array.isArray(response.data)) {
-        throw new Error("Unexpected data format");
-      }
-
-      if (response.data.length === 0) {
+      if (!Array.isArray(response.data) || response.data.length === 0) {
+        // Use mock data if API response is empty
+        console.warn("No data from API, using mock data.");
         return mockData;
       }
 
+      // Process the data to include noOfShare and other details
       const combinedData: Card[] = response.data.map((property: any) => {
-        // Map property to Card format
+        // Find all relevant userProperties entries
+        const userProperties = property.userProperties || [];
+        
+        // Create a map for share values by year
+        const shareMap: { [year: number]: number } = {};
+        const details: { [year: number]: any } = {};
+
+        userProperties.map((userProp: any) => {
+          if (userProp.isActive) {
+            shareMap[userProp.year] = userProp.noOfShare;
+
+            // Calculate fraction or formatted string for offSeason, peakSeason, peakHoliday, and offSeasonHoliday
+            const offSeasonNumerator = userProp.offRemainingNights;
+            const offSeasonDenominator = userProp.offAllottedNights;
+
+            const peakSeasonNumerator = userProp.peakRemainingNights;
+            const peakSeasonDenominator = userProp.peakAllottedNights;
+
+            const peakHolidayNumerator = userProp.peakRemainingHolidayNights;
+            const peakHolidayDenominator = userProp.peakAllottedHolidayNights;
+
+            const offSeasonHolidayNumerator = userProp.offRemainingHolidayNights;
+            const offSeasonHolidayDenominator = userProp.offAllottedHolidayNights;
+
+            details[userProp.year] = {
+              offSeason: offSeasonDenominator !== null ? `${offSeasonNumerator}/${offSeasonDenominator}` : 'undefined',
+              peakSeason: peakSeasonDenominator !== null ? `${peakSeasonNumerator}/${peakSeasonDenominator}` : 'undefined',
+              peakHoliday: peakHolidayDenominator !== null ? `${peakHolidayNumerator}/${peakHolidayDenominator}` : 'undefined',
+              offSeasonHoliday: offSeasonHolidayDenominator !== null ? `${offSeasonHolidayNumerator}/${offSeasonHolidayDenominator}` : 'undefined',
+            };
+          }
+        });
+
+        [2024, 2025, 2026].forEach(year => {
+          if (!details[year]) {
+            details[year] = {
+              offSeason: '2',
+              peakSeason: '3',
+              peakHoliday: '4',
+              offSeasonHoliday: '5',
+            };
+          }
+        });
+
         return {
           id: property.propertyId,
           name: property.propertyName || 'Unknown Property',
-          address: `${property.address || 'Unknown'}, ${property.city || 'Unknown'}, ${property.state || 'Unknown'}, ${property.country || 'Unknown'}, ${property.zipcode || 'Unknown'}`,
+          address: `${property.address || 'Unknown'}`,
           image: getImageForProperty(property.propertyId),
-          details: {
-            2024: {
-              offSeason: (property.offSeasonAllottedNights || '0/0').toString(),
-              peakSeason: (property.peakSeasonAllottedNights || '0/0').toString(),
-              peakHoliday: (property.peakSeasonAllottedHolidayNights || '0/0').toString(),
-              offSeasonHoliday: (property.offSeasonAllottedHolidayNights || '0/0').toString(),
-            },
-            2025: {
-              offSeason: (property.offSeasonAllottedNights || '0/0').toString(),
-              peakSeason: (property.peakSeasonAllottedNights || '0/0').toString(),
-              peakHoliday: (property.peakSeasonAllottedHolidayNights || '0/0').toString(),
-              offSeasonHoliday: (property.offSeasonAllottedHolidayNights || '0/0').toString(),
-            },
-            2026: {
-              offSeason: (property.offSeasonAllottedNights || '0/0').toString(),
-              peakSeason: (property.peakSeasonAllottedNights || '0/0').toString(),
-              peakHoliday: (property.peakSeasonAllottedHolidayNights || '0/0').toString(),
-              offSeasonHoliday: (property.offSeasonAllottedHolidayNights || '0/0').toString(),
-            },
-          },
+          share: shareMap[2024] || 0, // Default to 0 if not found
+          details,
+          maxGuestsAllowed: property.noOfGuestsAllowed || 0,
+          maxPetsAllowed: property.noOfPetsAllowed || 0,
         };
       });
 
       return combinedData;
     } catch (error) {
       console.error("Fetching properties failed:", error);
-      return mockData;  // Fallback to mock data
+      // Use mock data in case of error
+      console.warn("Error fetching properties, using mock data.");
+      return mockData;
     }
   }
 );
 
-// Helper function to determine image for property
 const getImageForProperty = (propertyId: number): string => {
   switch (propertyId) {
     case 1:
@@ -209,15 +197,27 @@ const getImageForProperty = (propertyId: number): string => {
     case 4:
       return imageCrownJewel;
     default:
-      return imageLakeEscape; // Default image
+      return imageParadiseShores; 
   }
 };
 
-// Create slice
 const propertySlice = createSlice({
   name: 'properties',
   initialState,
-  reducers: {},
+  reducers: {
+    selectProperty: (state, action: PayloadAction<number>) => {
+      state.selectedPropertyId = action.payload;
+      const selectedProperty = state.cards.find(card => card.id === action.payload);
+      if (selectedProperty) {
+        state.selectedPropertyLimits = {
+          noOfGuestsAllowed: selectedProperty.maxGuestsAllowed,
+          noOfPetsAllowed: selectedProperty.maxPetsAllowed,
+        };
+      } else {
+        state.selectedPropertyLimits = null;
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProperties.pending, (state) => {
@@ -235,4 +235,5 @@ const propertySlice = createSlice({
   },
 });
 
+export const { selectProperty } = propertySlice.actions;
 export default propertySlice.reducer;

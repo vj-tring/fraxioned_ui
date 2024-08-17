@@ -39,7 +39,7 @@ li {
 }
 
 .Box-list1{
-  font-size: 10px;
+  font-size: 10px !important;
   color: grey;
   margin-bottom: 5px;
 }
@@ -51,4 +51,15 @@ li {
   font-weight: bold;
   padding-top: 12px;
   margin-left: 10px;
+}
+.liststyle{
+  font-size: 20px !important;
+}
+
+.card-btn2{
+  border: 1px solid grey;
+  font-size: 7px;
+  padding: 5px;
+  border-radius: 20px;
+  width: 40px;
 }

@@ -30,11 +30,10 @@ const PropertyImage: React.FC<PropertyImageProps> = ({ onPropertySelect, selecte
                     color: colors[index % colors.length]
                 }));
 
-                // Add "All Holidays" as the first item
                 const allHolidaysProperty: PropertyType = {
                     id: 'all',
                     propertyName: 'All Holidays',
-                    color: '#4CAF50' // Green color for "All Holidays"
+                    color: '#4CAF50'
                 };
 
                 setPropertyTypes([allHolidaysProperty, ...fetchedProperties]);
