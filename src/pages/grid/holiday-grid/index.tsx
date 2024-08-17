@@ -23,7 +23,11 @@ interface Holiday {
     propertySeasonHolidayId: number;
 }
 
-const Holidays: React.FC = () => {
+// interface HolidaysProps {
+//     isSidePanelOpen: boolean;
+// }
+
+const Holidays: React.FC<{isSidebarOpen : boolean}> = ({ isSidebarOpen }) => {
     const [holidays, setHolidays] = useState<Holiday[]>([]);
     const [filteredHolidays, setFilteredHolidays] = useState<Holiday[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -114,14 +118,13 @@ const Holidays: React.FC = () => {
     };
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'Holiday ID', width: 100 },
-        { field: 'name', headerName: 'Name', minWidth: 100 },
+        { field: 'name', headerName: 'Name', minWidth: 150 },
         { field: 'year', headerName: 'Year', width: 120 },
-        { field: 'start_date', headerName: 'Start Date', width: 120 },
-        { field: 'end_date', headerName: 'End Date', width: 130 },
-        { field: 'created_at', headerName: 'Created At', width: 130 },
-        { field: 'updated_at', headerName: 'Updated At', width: 150 },
-        { field: 'created_by', headerName: 'Created By', width: 100 },
+        { field: 'start_date', headerName: 'Start Date', width: 150 },
+        { field: 'end_date', headerName: 'End Date', width: 150 },
+        { field: 'created_at', headerName: 'Created At', width: 150 },
+        { field: 'updated_at', headerName: 'Updated At', width: 170 },
+        { field: 'created_by', headerName: 'Created By', width: 120 },
         { field: 'updated_by', headerName: 'Updated By', width: 120 },
         {
             field: 'actions',
@@ -149,7 +152,7 @@ const Holidays: React.FC = () => {
     ];
 
     return (
-        <div className={styles.holidaysContainer}>
+        <div className={`${styles.holidaysContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed}`}>
             <div className={styles.titleContainer}>
                 <h1 className={styles.title}>Holidays</h1>
                 <Button variant="contained" color="primary" onClick={() => setOpenNewForm(true)}>
@@ -164,11 +167,10 @@ const Holidays: React.FC = () => {
                     columns={columns}
                     initialState={{
                         pagination: {
-                            paginationModel: { page: 0, pageSize: 5 },
+                            paginationModel: { page: 0, pageSize: 10 },
                         },
                     }}
                     pageSizeOptions={[5, 10, 25]}
-                    checkboxSelection
                     disableRowSelectionOnClick
                     className={styles.dataGrid}
                 />
