@@ -7,6 +7,7 @@
   padding: 10px;
   margin-right: 35px;
   position: relative;
+  cursor: pointer;
 }
 
 .image-container {
@@ -58,4 +59,8 @@
   color: rgb(173, 172, 172);
   display: flex;
   font-size: small;
-  text-align: -webkit-left;}
+text-align: -webkit-left;}
+
+.plus-icon-container{
+  cursor: pointer;
+}

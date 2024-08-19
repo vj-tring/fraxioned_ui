@@ -35,11 +35,12 @@ export default function BasicSelect() {
   const [selectedYear, setSelectedYear] = useState<number>(2024);
   const carouselRef = useRef<HTMLDivElement>(null);
   const open = Boolean(anchorEl);
+  
 
   const dispatch = useDispatch<AppDispatch>();
   const { cards, loading, error } = useSelector((state: RootState) => state.properties);
-
-  const user = useSelector((state:RootState)=> state.auth.user);
+  const user = useSelector((state: RootState) => state.auth.user);
+  const propertyselectid = useSelector((state: RootState) => state.properties.selectedPropertyId);
 
   useEffect(() => {
     if (user) {
@@ -48,15 +49,12 @@ export default function BasicSelect() {
   }, [dispatch, user]);
 
   useEffect(() => {
-    if (cards.length > 0 && selectedCardIndex >= 0) {
+    if (cards.length >0 ) {
       setSelectedCard(cards[selectedCardIndex]);
     } else {
       setSelectedCard(null);
     }
   }, [selectedCardIndex, cards]);
-
-
-
 
   useEffect(() => {
     if (carouselRef.current) {
@@ -74,7 +72,7 @@ export default function BasicSelect() {
   const handleCardClick = (index: number) => {
     setSelectedCardIndex(index);
     const card = cards[index];
-    dispatch(selectProperty(card.id)); // Dispatch selected property ID to Redux
+    dispatch(selectProperty(card.id));
   };
 
   const handleYearClick = (year: number) => {
@@ -101,10 +99,7 @@ export default function BasicSelect() {
     };
 
     window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [open]);
 
   if (loading) return <p>Loading...</p>;
@@ -122,7 +117,7 @@ export default function BasicSelect() {
   const BoxList = cards.length === 2 ? '7px' : '10px';
   const BoxMargin = cards.length === 2 ? '0px' : '8px';
   const cardItemHeight = cards.length === 2 ? '232px' : '250px';
- const cardName = cards.length===2 ? '600':'600';
+  const cardNameWeight = cards.length === 2 ? '600' : '600';
 
   const formatCardName = (name: string) => {
     return name.replace(/\s+\(.*\)/, '...');
@@ -152,7 +147,7 @@ export default function BasicSelect() {
         <div className="d-flex align-items-start flex-column card-item">
           <span className="DateHead1 monsterrat">My Home(s)</span>
           <p className="property1 monsterrat">
-            {selectedCard ? selectedCard.name : 'Select Property'}
+            {propertyselectid ? selectedCard?.name : 'Select Property'}
           </p>
         </div>
       </Button>
@@ -160,7 +155,7 @@ export default function BasicSelect() {
         id="basic-menu"
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
-        onClose={() => setAnchorEl(null)}
+        onClose={handleClose}
         PaperProps={{
           style: {
             position: 'fixed',
@@ -186,9 +181,7 @@ export default function BasicSelect() {
                   <div className="d-flex flex-row">
                     {showCarouselControls && (
                       <IconButton onClick={handlePrevious} disableRipple sx={{ padding: 0 }} disabled={selectedCardIndex === 0}>
-                        <NavigateBeforeIcon sx={{
-                          fontSize:'2.0rem'
-                        }} />
+                        <NavigateBeforeIcon sx={{ fontSize: '2.0rem' }} />
                       </IconButton>
                     )}
                     <div className="d-flex flex-row w-100" style={{ overflowX: 'auto', whiteSpace: 'nowrap', justifyContent: 'space-evenly' }} ref={carouselRef}>
@@ -199,10 +192,7 @@ export default function BasicSelect() {
                           className={`additionalproperty ${selectedCardIndex === index ? 'active' : ''}`}
                           style={{ padding: additionalPadding }}
                           onClick={() => handleCardClick(index)}
-                          sx={{
-                            flex: '0 0 auto',
-                            margin: '4px',
-                          }}
+                          sx={{ flex: '0 0 auto', margin: '4px' }}
                         >
                           <div className="d-flex flex-column align-items-center">
                             <h4 className="property-name">{formatCardName(card.name)}</h4>
@@ -211,21 +201,13 @@ export default function BasicSelect() {
                       ))}
                     </div>
                     {showCarouselControls && (
-                                 
-
-                      <IconButton onClick={handleNext} disableRipple sx={{ padding: 0,fontSize:'2.0rem'}} disabled={selectedCardIndex === cards.length - 1}>
-                        <NavigateNextIcon  sx={{
-                          fontSize:'2.0rem',
-                          backgroundColor:'transparent'
-                        }}
-                        />
+                      <IconButton onClick={handleNext} disableRipple sx={{ padding: 0, fontSize: '2.0rem' }} disabled={selectedCardIndex === cards.length - 1}>
+                        <NavigateNextIcon sx={{ fontSize: '2.0rem', backgroundColor: 'transparent' }} />
                       </IconButton>
-
                     )}
                   </div>
                 </div>
               )}
-
               {selectedCard && (
                 <div className="card-content">
                   {cards.length > 1 && showCarousel && (
@@ -239,10 +221,9 @@ export default function BasicSelect() {
                       ))}
                     </div>
                   )}
-
                   <div className="card-name d-flex justify-content-between py-2 align-items-center gy-1">
-                    <span className="CardFont " >
-                      <h4 className="BlueHead" style={{ fontWeight:cardName}} >{selectedCard.name}</h4>
+                    <span className="CardFont">
+                      <h4 className="BlueHead" style={{ fontWeight: cardNameWeight }}>{selectedCard.name}</h4>
                       <p className="BlueFont">{selectedCard.address}</p>
                     </span>
                     <span className={`CardImage ${imageClass}`}>
