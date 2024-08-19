@@ -171,7 +171,6 @@ export const fetchProperties = createAsyncThunk(
           image: getImageForProperty(property.propertyId),
           share: shareMap[2024] || 0, // Default to 0 if not found
           details,
-          propertyShare:property.propertyShare,
           maxGuestsAllowed: property.noOfGuestsAllowed || 0,
           maxPetsAllowed: property.noOfPetsAllowed || 0,
         };

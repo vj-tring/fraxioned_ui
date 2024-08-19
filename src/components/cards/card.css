@@ -7,6 +7,7 @@
   padding: 10px;
   margin-right: 35px;
   position: relative;
+  cursor: pointer;
 }
 
 .image-container {
@@ -59,3 +60,7 @@
   display: flex;
   font-size: small;
 text-align: -webkit-left;}
+
+.plus-icon-container{
+  cursor: pointer;
+}
