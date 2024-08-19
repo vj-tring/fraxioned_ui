@@ -2,12 +2,13 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { fetchHolidaysApi, propertyseasonholiday, propertyseasonholidaydelete } from '@/api';
 import styles from './holiday.module.css';
-import NewForm from '@/pages/grid/new-form';
-import EditForm from '@/pages/grid/edit-form';
+import NewForm from '@/pages/grid/holiday-grid/new-form';
+import EditForm from '@/pages/grid/holiday-grid/edit-form';
 import PropertyImage from '@/pages/property-image';
-import { Dialog, DialogContent, Button, IconButton, DialogTitle, DialogContentText, DialogActions } from '@mui/material';
+import { Dialog, DialogContent, Button, IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ConfirmationModal from '@/components/confirmation-modal';
 
 interface Holiday {
     id: number;
@@ -15,6 +16,7 @@ interface Holiday {
     year: number;
     start_date: string;
     end_date: string;
+
     created_at: string;
     updated_at: string;
     created_by: string;
@@ -23,20 +25,17 @@ interface Holiday {
     propertySeasonHolidayId: number;
 }
 
-// interface HolidaysProps {
-//     isSidePanelOpen: boolean;
-// }
-
-const Holidays: React.FC<{isSidebarOpen : boolean}> = ({ isSidebarOpen }) => {
+const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     const [holidays, setHolidays] = useState<Holiday[]>([]);
     const [filteredHolidays, setFilteredHolidays] = useState<Holiday[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [openNewForm, setOpenNewForm] = useState(false);
     const [openEditForm, setOpenEditForm] = useState(false);
-    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [holidayToDelete, setHolidayToDelete] = useState<Holiday | null>(null);
     const [selectedHoliday, setSelectedHoliday] = useState<Holiday | null>(null);
     const [selectedPropertyId, setSelectedPropertyId] = useState<number | string>('all');
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
 
     const fetchHolidays = useCallback(async (propertyId: number | string = 'all') => {
         try {
@@ -88,9 +87,11 @@ const Holidays: React.FC<{isSidebarOpen : boolean}> = ({ isSidebarOpen }) => {
         }
     };
 
+
+
     const handleDeleteClick = (holiday: Holiday) => {
         setHolidayToDelete(holiday);
-        setOpenDeleteDialog(true);
+        setShowDeleteConfirmation(true);
     };
 
     const handleConfirmDelete = async () => {
@@ -99,7 +100,7 @@ const Holidays: React.FC<{isSidebarOpen : boolean}> = ({ isSidebarOpen }) => {
         try {
             await propertyseasonholidaydelete(holidayToDelete.propertySeasonHolidayId);
             await fetchHolidays(selectedPropertyId);
-            setOpenDeleteDialog(false);
+            setShowDeleteConfirmation(false);
             setHolidayToDelete(null);
         } catch (err) {
             console.error('Error deleting holiday:', err);
@@ -115,6 +116,11 @@ const Holidays: React.FC<{isSidebarOpen : boolean}> = ({ isSidebarOpen }) => {
     const handlePropertySelect = (propertyId: number | string) => {
         setSelectedPropertyId(propertyId);
         fetchHolidays(propertyId);
+    };
+
+    const handleCancelDelete = () => {
+        setShowDeleteConfirmation(false);
+        setHolidayToDelete(null);
     };
 
     const columns: GridColDef[] = [
@@ -172,7 +178,7 @@ const Holidays: React.FC<{isSidebarOpen : boolean}> = ({ isSidebarOpen }) => {
                     }}
                     pageSizeOptions={[5, 10, 25]}
                     disableRowSelectionOnClick
-                    className={styles.dataGrid}
+                    className={`${styles.dataGrid} ${styles.dataGridPadding}`}
                 />
             </div>
 
@@ -200,23 +206,15 @@ const Holidays: React.FC<{isSidebarOpen : boolean}> = ({ isSidebarOpen }) => {
                 </DialogContent>
             </Dialog>
 
-            <Dialog
-                open={openDeleteDialog}
-                onClose={() => setOpenDeleteDialog(false)}
-            >
-                <DialogTitle>Confirm Delete</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Are you sure you want to delete this holiday mapping?
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setOpenDeleteDialog(false)}>Cancel</Button>
-                    <Button onClick={handleConfirmDelete} color="secondary">
-                        Delete
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <ConfirmationModal
+                show={showDeleteConfirmation}
+                onHide={handleCancelDelete}
+                onConfirm={handleConfirmDelete}
+                title="Confirm Delete"
+                message="Are you sure you want to delete this holiday?"
+                confirmLabel="Delete"
+                cancelLabel="Cancel"
+            />
         </div>
     );
 };

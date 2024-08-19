@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import SidePanel from '@/components/sidepanel';
 import Holidays from '../grid/holiday-grid';
 import Calendar from '@/components/big-calendar';
+import Property from '../grid/property-grid';
 import userImage from '../../assets/images/profile.jpeg'
 import CustomNavbar from '@/components/navbar';
 import fraxionedLogo from '../../assets/images/property-images/fraxioned-main.png'
@@ -31,6 +32,8 @@ const AdminDashboard: React.FC = () => {
                         <Route path="/" element={<Navigate to="/admin/bookings" replace />} />
                         <Route path="/bookings" element={<Calendar isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/holidays" element={<Holidays isSidebarOpen={isSidebarOpen} />} />
+                        <Route path="/property" element={<Property isSidebarOpen={isSidebarOpen} />} />
+
                     </Routes>
                 </div>
             </div>
