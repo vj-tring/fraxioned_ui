@@ -3,13 +3,28 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Button, IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { getProperties } from '@/api';
+import { getProperties, deletePropertyApi } from '@/api';
 import styles from './property.module.css';
 import NewPropertyForm from './NewPropertyForm';
+import ConfirmationModal from '@/components/confirmation-modal';
+
+interface PropertyData {
+    id: number;
+    name: string;
+    address: string;
+    city: string;
+    state: string;
+    Property_share: string;
+    country: string;
+    created_by: string;
+}
 
 const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
-    const [properties, setProperties] = useState([]);
+    const [properties, setProperties] = useState<PropertyData[]>([]);
     const [isNewFormOpen, setIsNewFormOpen] = useState(false);
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+    const [propertyToDelete, setPropertyToDelete] = useState<PropertyData | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         fetchProperties();
@@ -18,8 +33,6 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     const fetchProperties = async () => {
         try {
             const response = await getProperties();
-            console.log(response
-            )
             const fetchedProperties = response.data.map((property: any) => ({
                 id: property?.id,
                 name: property.propertyName,
@@ -31,9 +44,9 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                 created_by: property.createdBy.id,
             }));
             setProperties(fetchedProperties);
-            console.log(properties);
         } catch (err) {
             console.error('Error fetching properties:', err);
+            setError('Failed to fetch properties. Please try again.');
         }
     };
 
@@ -41,8 +54,28 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
         console.log('Edit clicked for property id:', id);
     };
 
-    const handleDeleteClick = (id: number) => {
-        console.log('Delete clicked for property id:', id);
+    const handleDeleteClick = (property: PropertyData) => {
+        setPropertyToDelete(property);
+        setShowDeleteConfirmation(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (propertyToDelete === null) return;
+
+        try {
+            await deletePropertyApi(propertyToDelete.id);
+            await fetchProperties();
+            setShowDeleteConfirmation(false);
+            setPropertyToDelete(null);
+        } catch (err) {
+            console.error('Failed to delete property. Please try again.', err);
+            setError('Failed to delete property. Please try again.');
+        }
+    };
+
+    const handleCancelDelete = () => {
+        setShowDeleteConfirmation(false);
+        setPropertyToDelete(null);
     };
 
     const columns: GridColDef[] = [
@@ -71,7 +104,7 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                     <IconButton
                         aria-label="delete"
                         color="secondary"
-                        onClick={() => handleDeleteClick(params.row.id)}
+                        onClick={() => handleDeleteClick(params.row)}
                     >
                         <DeleteIcon />
                     </IconButton>
@@ -88,6 +121,7 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                     Add Property
                 </Button>
             </div>
+            {error && <div className={styles.error}>{error}</div>}
             <div className={styles.dataGridWrapper}>
                 <DataGrid
                     rows={properties}
@@ -112,10 +146,17 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                     </div>
                 </div>
             )}
+            <ConfirmationModal
+                show={showDeleteConfirmation}
+                onHide={handleCancelDelete}
+                onConfirm={handleConfirmDelete}
+                title="Confirm Delete"
+                message="Are you sure you want to delete this property?"
+                confirmLabel="Delete"
+                cancelLabel="Cancel"
+            />
         </div>
     );
 };
 
 export default Property;
-
-

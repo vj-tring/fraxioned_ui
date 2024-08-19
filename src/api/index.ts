@@ -81,8 +81,10 @@ export const addPropertyApi = (propertyData: {
     longitude: number;
     isActive: boolean;
     displayOrder: number;
-  }) => axiosInstance.post('/v1/properties/property', propertyData);
+}) => axiosInstance.post('/v1/properties/property', propertyData);
 
+export const deletePropertyApi = (id: number) =>
+    axiosInstance.delete(`/v1/properties/property/${id}`);
 
 
 
