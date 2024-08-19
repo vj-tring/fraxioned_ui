@@ -87,8 +87,6 @@ describe('DatePickerWithRange', () => {
     render(<DatePickerWithRange />);
     expect(screen.getByText('Clear')).toBeInTheDocument();
   });
-
-  it('rende')
   
   it('displays error message for invalid date selections', () => {
     render(<DatePickerWithRange />);    
