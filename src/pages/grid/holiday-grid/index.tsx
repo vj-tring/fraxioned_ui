@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { fetchHolidaysApi, deleteHolidayApi, propertyseasonholiday } from '@/api';
+import { fetchHolidaysApi, propertyseasonholiday, propertyseasonholidaydelete } from '@/api';
 import styles from './holiday.module.css';
-import NewForm from '@/pages/grid/new-form';
-import EditForm from '@/pages/grid/edit-form';
+import NewForm from '@/pages/grid/holiday-grid/new-form';
+import EditForm from '@/pages/grid/holiday-grid/edit-form';
 import PropertyImage from '@/pages/property-image';
-import { Dialog, DialogContent, Button, IconButton, DialogTitle, DialogContentText, DialogActions } from '@mui/material';
+import { Dialog, DialogContent, Button, IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ConfirmationModal from '@/components/confirmation-modal';
 
 interface Holiday {
     id: number;
@@ -15,24 +16,26 @@ interface Holiday {
     year: number;
     start_date: string;
     end_date: string;
+
     created_at: string;
     updated_at: string;
     created_by: string;
     updated_by: string | null;
     propertyId: number;
-    propertySeasonHolidayId?: number;
+    propertySeasonHolidayId: number;
 }
 
-const Holidays: React.FC = () => {
+const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     const [holidays, setHolidays] = useState<Holiday[]>([]);
     const [filteredHolidays, setFilteredHolidays] = useState<Holiday[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [openNewForm, setOpenNewForm] = useState(false);
     const [openEditForm, setOpenEditForm] = useState(false);
-    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-    const [holidayToDelete, setHolidayToDelete] = useState<number | null>(null);
+    const [holidayToDelete, setHolidayToDelete] = useState<Holiday | null>(null);
     const [selectedHoliday, setSelectedHoliday] = useState<Holiday | null>(null);
     const [selectedPropertyId, setSelectedPropertyId] = useState<number | string>('all');
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+
 
     const fetchHolidays = useCallback(async (propertyId: number | string = 'all') => {
         try {
@@ -46,7 +49,7 @@ const Holidays: React.FC = () => {
             const mappedData = response.data.data.map((item: any) => {
                 const holiday = item.holiday || item;
                 return {
-                    id: holiday.id, // Use the holiday ID instead of property-season holiday ID
+                    id: holiday.id,
                     name: holiday.name,
                     year: holiday.year,
                     start_date: holiday.startDate,
@@ -84,18 +87,20 @@ const Holidays: React.FC = () => {
         }
     };
 
-    const handleDeleteClick = (id: number) => {
-        setHolidayToDelete(id);
-        setOpenDeleteDialog(true);
+
+
+    const handleDeleteClick = (holiday: Holiday) => {
+        setHolidayToDelete(holiday);
+        setShowDeleteConfirmation(true);
     };
 
     const handleConfirmDelete = async () => {
         if (holidayToDelete === null) return;
 
         try {
-            await deleteHolidayApi(holidayToDelete);
+            await propertyseasonholidaydelete(holidayToDelete.propertySeasonHolidayId);
             await fetchHolidays(selectedPropertyId);
-            setOpenDeleteDialog(false);
+            setShowDeleteConfirmation(false);
             setHolidayToDelete(null);
         } catch (err) {
             console.error('Error deleting holiday:', err);
@@ -113,15 +118,19 @@ const Holidays: React.FC = () => {
         fetchHolidays(propertyId);
     };
 
+    const handleCancelDelete = () => {
+        setShowDeleteConfirmation(false);
+        setHolidayToDelete(null);
+    };
+
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'Holiday ID', width: 100 },
-        { field: 'name', headerName: 'Name', minWidth: 100 },
+        { field: 'name', headerName: 'Name', minWidth: 150 },
         { field: 'year', headerName: 'Year', width: 120 },
-        { field: 'start_date', headerName: 'Start Date', width: 120 },
-        { field: 'end_date', headerName: 'End Date', width: 130 },
-        { field: 'created_at', headerName: 'Created At', width: 130 },
-        { field: 'updated_at', headerName: 'Updated At', width: 150 },
-        { field: 'created_by', headerName: 'Created By', width: 100 },
+        { field: 'start_date', headerName: 'Start Date', width: 150 },
+        { field: 'end_date', headerName: 'End Date', width: 150 },
+        { field: 'created_at', headerName: 'Created At', width: 150 },
+        { field: 'updated_at', headerName: 'Updated At', width: 170 },
+        { field: 'created_by', headerName: 'Created By', width: 120 },
         { field: 'updated_by', headerName: 'Updated By', width: 120 },
         {
             field: 'actions',
@@ -139,7 +148,7 @@ const Holidays: React.FC = () => {
                     <IconButton
                         aria-label="delete"
                         color="secondary"
-                        onClick={() => handleDeleteClick(params.row.id)}
+                        onClick={() => handleDeleteClick(params.row)}
                     >
                         <DeleteIcon />
                     </IconButton>
@@ -149,7 +158,7 @@ const Holidays: React.FC = () => {
     ];
 
     return (
-        <div className={styles.holidaysContainer}>
+        <div className={`${styles.holidaysContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed}`}>
             <div className={styles.titleContainer}>
                 <h1 className={styles.title}>Holidays</h1>
                 <Button variant="contained" color="primary" onClick={() => setOpenNewForm(true)}>
@@ -164,13 +173,12 @@ const Holidays: React.FC = () => {
                     columns={columns}
                     initialState={{
                         pagination: {
-                            paginationModel: { page: 0, pageSize: 5 },
+                            paginationModel: { page: 0, pageSize: 10 },
                         },
                     }}
                     pageSizeOptions={[5, 10, 25]}
-                    checkboxSelection
                     disableRowSelectionOnClick
-                    className={styles.dataGrid}
+                    className={`${styles.dataGrid} ${styles.dataGridPadding}`}
                 />
             </div>
 
@@ -198,23 +206,15 @@ const Holidays: React.FC = () => {
                 </DialogContent>
             </Dialog>
 
-            <Dialog
-                open={openDeleteDialog}
-                onClose={() => setOpenDeleteDialog(false)}
-            >
-                <DialogTitle>Confirm Delete</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Are you sure you want to delete this holiday?
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setOpenDeleteDialog(false)}>Cancel</Button>
-                    <Button onClick={handleConfirmDelete} color="secondary">
-                        Delete
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <ConfirmationModal
+                show={showDeleteConfirmation}
+                onHide={handleCancelDelete}
+                onConfirm={handleConfirmDelete}
+                title="Confirm Delete"
+                message="Are you sure you want to delete this holiday?"
+                confirmLabel="Delete"
+                cancelLabel="Cancel"
+            />
         </div>
     );
 };
