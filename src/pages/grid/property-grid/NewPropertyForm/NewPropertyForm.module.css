@@ -1,0 +1,151 @@
+.formContainer {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    z-index: 1000;
+    width: 80%;
+    max-width: 800px;
+    height: 80%;
+    height: 600px;
+    overflow-y: auto;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.formTitle {
+    font-size: 26px !important;
+    margin-top: 10px !important;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    font-family: Georgia, 'Times New Roman', Times, serif !important;
+}
+
+.formPaper {
+    padding: 24px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 100%;
+}
+
+.inputField {
+    margin-bottom: 8px;
+}
+
+.inputField input {
+    font-size: 16px;
+    padding: 13px 12px;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: auto;
+}
+
+.addButton,
+.cancelButton {
+    min-width: 100px;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px 16px;
+    text-transform: uppercase;
+}
+
+.addButton {
+    background-color: #1976d2;
+    color: white;
+}
+
+.cancelButton {
+    color: #9c27b0;
+    border-color: #9c27b0;
+}
+
+/* Override MUI styles */
+.MuiTypography-h4 {
+    font-size: 26px !important;
+    font-weight: bold !important;
+    margin-bottom: 16px;
+    color: #333;
+    font-family: Georgia, 'Times New Roman', Times, serif !important;
+}
+
+.MuiFormControl-root {
+    margin-bottom: 0;
+}
+
+.MuiInputBase-root {
+    border-radius: 4px;
+}
+
+.MuiOutlinedInput-notchedOutline {
+    border-color: #e0e0e0;
+}
+
+.MuiCheckbox-root {
+    color: #1976d2;
+}
+
+.MuiButton-root {
+    border-radius: 4px;
+}
+
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.modalContent {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 80%;
+    max-height: 80%;
+    overflow-y: auto;
+    animation: slideIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

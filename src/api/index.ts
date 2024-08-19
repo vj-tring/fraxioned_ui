@@ -65,4 +65,24 @@ export const propertyseasonholidaydelete = (id: number) =>
 export const getUserProperties = (id: number) =>
     axiosInstance.get(`/v1/properties/${id}/properties-with-details`);
 
+export const addPropertyApi = (propertyData: {
+    createdBy: { id: number };
+    propertyName: string;
+    ownerRezPropId: number;
+    address: string;
+    city: string;
+    state: string;
+    country: string;
+    zipcode: number;
+    houseDescription: string;
+    isExclusive: boolean;
+    propertyShare: number;
+    latitude: number;
+    longitude: number;
+    isActive: boolean;
+    displayOrder: number;
+  }) => axiosInstance.post('/v1/properties/property', propertyData);
+
+
+
 
