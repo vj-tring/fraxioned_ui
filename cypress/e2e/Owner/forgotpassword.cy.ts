@@ -26,7 +26,7 @@ describe("Forget password", () => {
         it("Successfully sended reset email", () => {
             cy.visit("/login")
                 .get("a").contains("Forgot password?").click()
-                .get("input[placeholder='Email']").type("dharshanramk@gmail.com")
+                .get("input[placeholder='Email']").type("owner@fraxioned.com")
                 .get("input[type='checkbox']").check().should('be.checked')
                 .get("input[type='checkbox']").uncheck().should('not.be.checked')
                 .get("input[type='checkbox']").check().should('be.checked')

@@ -1,11 +1,12 @@
 describe("Navigation Bar and Side Bar Test", () => {
     it("popup and sidebar check", () => {
         cy.visit("/login")
-            .get("input[placeholder='Email']").type("dharshanramk@gmail.com")
-            .get("input[placeholder='Password']").type("Admin@12")
+            .get("input[placeholder='Email']").type("owner@fraxioned.com")
+            .get("input[placeholder='Password']").type("Owner@123")
             .get("button").contains("Sign in").click()
-            .get(".Sidepanel_toggleButton__57ppM").click()
-            .get("button[class='Sidepanel_toggleButton__57ppM'] svg").click()
-            .get(".MuiBox-root.css-1hg4z9e").click()
+            .get(".MuiTypography-root.MuiTypography-body2.monsterrat.p-2.css-4ugksh-MuiTypography-root").click()
+            .get("div[id='account-menu'] li:nth-child(1)").contains("Reset")
+            .get("div").contains("Logout").click()
+            .get(".btn-confirm").contains("Logout").click()
     })
 })

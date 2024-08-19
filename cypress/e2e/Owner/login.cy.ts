@@ -28,7 +28,7 @@ describe("Login & Logout", () => {
         })
         it("Invalid Credentials", () => {
             cy.visit("/login")
-            cy.get("input[placeholder='Email']").type("dharshanramk@gmail.com")
+            cy.get("input[placeholder='Email']").type("owner@fraxioned.com")
             cy.get("input[placeholder='Password']").type("Password")
             cy.get("button").contains("Sign in").click()
                 .wait(2000)
@@ -38,8 +38,8 @@ describe("Login & Logout", () => {
     describe("Successful Login", () => {
         it("Login With Valid Credentials and logout", () => {
             cy.visit("/login")
-            cy.get("input[placeholder='Email']").type("dharshanramk@gmail.com")
-            cy.get("input[placeholder='Password']").type("Admin@12")
+            cy.get("input[placeholder='Email']").type("owner@fraxioned.com")
+            cy.get("input[placeholder='Password']").type("Owner@123")
             cy.get("input[type='checkbox']").check().should('be.checked')
             cy.get("input[type='checkbox']").uncheck().should('not.be.checked')
             cy.get("input[type='checkbox']").check().should('be.checked')
