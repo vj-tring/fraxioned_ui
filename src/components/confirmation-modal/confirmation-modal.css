@@ -1,0 +1,80 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+.confirmation-modal .modal-content {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: none;
+  font-family: "Poppins", sans-serif;
+}
+
+.confirmation-modal .modal-header {
+  border-bottom: none;
+  padding: 30px 30px 0;
+  background-color: #00000000;
+  border-radius: 10px !important;
+}
+
+.confirmation-modal .modal-title {
+  font-weight: 600;
+  font-size: 24px;
+  color: #333;
+}
+
+.confirmation-modal .modal-body {
+  padding: 20px 30px;
+}
+
+.confirmation-modal .modal-message {
+  font-size: 16px;
+  color: #666;
+  line-height: 1;
+}
+
+.confirmation-modal .modal-footer {
+  border-top: none;
+  padding: 0 30px 30px;
+  justify-content: flex-end;
+  border-radius: 10px !important;
+}
+
+.confirmation-modal .btn-cancel,
+.confirmation-modal .btn-confirm {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.confirmation-modal .btn-cancel {
+  background-color: #f1f3f5;
+  color: #495057;
+  border: none;
+  margin-right: 10px;
+}
+
+.confirmation-modal .btn-cancel:hover {
+  background-color: #e9ecef;
+}
+
+.confirmation-modal .btn-confirm {
+  background-color: #dc9751;
+  color: white;
+  border: none;
+}
+
+.confirmation-modal .btn-confirm:hover {
+  background-color: #e49f63;
+}
+
+.confirmation-modal .close {
+  font-size: 28px;
+  font-weight: 300;
+  color: #adb5bd;
+  opacity: 1;
+}
+
+.confirmation-modal .close:hover {
+  color: #495057;
+}

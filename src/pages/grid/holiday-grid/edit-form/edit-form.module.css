@@ -1,0 +1,135 @@
+.formContainer {
+    max-width: 800px;
+    margin: 0 auto;
+    height: 610px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.formTitle {
+    font-size: 26px !important;
+    margin-top: 10px !important;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    font-family: Georgia, 'Times New Roman', Times, serif !important;
+}
+
+.formPaper {
+    padding: 24px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: 100%;
+}
+
+.inputField {
+    margin-bottom: 8px;
+}
+
+.inputField input,
+.datePicker input {
+    font-size: 16px;
+    padding: 13px 12px;
+}
+
+.datePicker {
+    width: 100%;
+}
+
+.checkboxGroupLabel {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.checkboxGroup {
+    width: 100%;
+    margin-top: -8px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.scrollableContainer {
+    overflow-y: auto;
+    max-height: 200px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 8px;
+    margin-bottom: 16px;
+}
+
+.formControlLabel {
+    margin-bottom: 0;
+    margin-left: -9px;
+}
+
+.formControlLabel span {
+    font-size: 15px;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: auto;
+}
+
+.addButton,
+.cancelButton {
+    min-width: 100px;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px 16px;
+    text-transform: uppercase;
+}
+
+.addButton {
+    background-color: #1976d2;
+    color: white;
+}
+
+.cancelButton {
+    color: #9c27b0;
+    border-color: #9c27b0;
+}
+
+/* Override MUI styles */
+.MuiTypography-h4 {
+    font-size: 26px !important;
+    font-weight: bold !important;
+    margin-bottom: 16px;
+    color: #333;
+    font-family: Georgia, 'Times New Roman', Times, serif !important;
+}
+
+.MuiFormControl-root {
+    margin-bottom: 0;
+}
+
+.MuiInputBase-root {
+    border-radius: 4px;
+}
+
+.MuiOutlinedInput-notchedOutline {
+    border-color: #e0e0e0;
+}
+
+.MuiCheckbox-root {
+    color: #1976d2;
+}
+
+.MuiButton-root {
+    border-radius: 4px;
+}

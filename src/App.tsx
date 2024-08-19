@@ -1,35 +1,27 @@
-import React, { FC } from 'react'
+// App.tsx
+import React from 'react';
 import {
   BrowserRouter as Router,
   Route,
   Routes,
   Navigate,
-} from 'react-router-dom'
-import Login from './Components/Login/Login'
-import Signup from './Components/Signup/Signup'
-import ForgotPassword from './Components/ForgetPassword/ForgotPassword'
-import UserDetails from 'Components/UserDetails/UserDetails'
-import ResetPassword from './Components/ResetPassword/ResetPassword'
-import Dashboard from './Components/Dashboard/Dashboard'
-import ResponsiveAppBar from './Components/NavbarMUI/NavbarUI'
-import AdminDashboard from 'Components/Admindashboard/Admindashboard'
-// import Booking from 'Components/Booking/Booking'
-import Date from 'Components/Home/DatesContainer/Date'
-// import MultipleSelect from 'Components/Home/DatesContainer/MultipleSelect'
-// import Contact from 'Components/ContactUs/Contact'
-// import BasicSelect from 'Components/Home/DatesContainer/PropertyItem'
-import AccountMenu from 'Components/NavbarDropdown/AccountMenu'
-import Calendar from 'Components/Calender/Calender'
-import Change from 'Components/ChangePassword/ChangePassword'
-import { Provider } from 'react-redux'
-import store from '../src/Redux/store/index'
+} from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './store/index';
+import Login from './pages/login/index';
+import ForgetPassword from './pages/forgot-password';
+import Change from './pages/recover-password';
+import ResetPassword from './pages/reset-password';
+import Dashboard from './pages/dashboard';
+import AdminDashboard from './pages/admin-dashboard';
+
 interface PrivateRouteProps {
-  element: React.ComponentType
+  element: React.ComponentType;
   allowedRoles: number[];
 }
 
-const PrivateRoute: FC<PrivateRouteProps> = ({ element: Element, allowedRoles }) => {
-  const token = localStorage.getItem('session')
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ element: Element, allowedRoles }) => {
+  const token = localStorage.getItem('session');
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   if (!token) {
     return <Navigate to="/login" />;
@@ -40,47 +32,22 @@ const PrivateRoute: FC<PrivateRouteProps> = ({ element: Element, allowedRoles })
   return <Navigate to="/dashboard" />;
 };
 
-
-const App: FC = () => {
-
+function App() {
   return (
     <Provider store={store}>
       <Router>
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/userdetails" element={<UserDetails />} />
-          <Route path="/register" element={<Signup />} />
-          <Route path="/recover" element={<Change />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          {/* <Route path="/contact" element={<Contact />} /> */}
-          {/* <Route path="/booking" element={<Booking />} /> */}
-          <Route
-            path="/reset-password"
-            element={
-              <ResetPassword
-                onClose={() => {
-                }}
-              />
-            }
-          />{' '}
-          <Route path="/ResponsiveAppBar" element={<ResponsiveAppBar />} />
-          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
-          <Route path="/menu" element={<AccountMenu />} />
-          <Route path="/calendar" element={<Calendar />} />
-          <Route path="/date" element={<Date />} />
-          <Route
-            path="/*"
-            element={<PrivateRoute element={Dashboard} allowedRoles={[2, 3]} />}
-          />
-          <Route
-            path="/admin/*"
-            element={<PrivateRoute element={AdminDashboard} allowedRoles={[1]} />}
-          />
+          <Route path="/forgotPassword" element={<ForgetPassword />} />
+          <Route path="/recoverPassword" element={<Change />} />
+          <Route path="/resetPassword" element={<ResetPassword onClose={() => { }} />} />
+          <Route path="/dashboard/*" element={<PrivateRoute element={Dashboard} allowedRoles={[2, 3]} />} />
+          <Route path="/admin/*" element={<PrivateRoute element={AdminDashboard} allowedRoles={[1]} />} />
         </Routes>
       </Router>
     </Provider>
-  )
+  );
 }
 
-export default App
+export default App;

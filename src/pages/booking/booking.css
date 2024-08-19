@@ -1,0 +1,162 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+  font-family: 'Montserrat', sans-serif !important;
+  font-optical-sizing: auto;
+}
+
+.Book-heading {
+  font-family: sans-serif;
+  font-weight: 700;
+}
+
+.no-border .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border: none !important;
+}
+
+
+.Blue-row {
+  display: flex;
+  width: 45%;
+  justify-content: space-between;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif !important;
+} 
+
+.Blue-rowshare{
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+
+
+
+}
+.img-row {
+  display: flex;
+  width: 100%;
+}
+
+.img1 {
+  height: 400px;
+  width: 800px;
+}
+
+.image {
+  height: 198px;
+}
+
+.container {
+  width: 100%;
+}
+
+.cornerbottomright {
+  border-bottom-right-radius: 5px;
+}
+
+.cornertopright {
+  border-top-right-radius: 5px;
+}
+
+.cornertop {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.location {
+  margin-top: 10px;
+}
+
+.cards {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px !important;
+    border-radius: 20px !important;
+  background-color: white !important;
+  width: 70%;
+  margin-left: 160px;
+  margin-top: 30px;
+  /* height: 300px; */
+  
+}
+
+.selectDate {
+  font-weight: 600;
+  /* text-align: center; */
+  font-weight: 600 !important;
+}
+
+.Select {
+  height: 40px;
+  width: 200px;
+  border-radius: 10px;
+  text-align: center;
+  padding: 5px;
+  border: 1px solid white;
+}
+
+.availability {
+  width: 200px;  
+  height: 50px;
+  text-align: center;
+  border-radius: 50px !important;
+  background-color: #88CDD4!important;
+  border: none;
+}
+
+.availability:hover {
+  background-color: #88CDD4;
+  border: none;
+}
+
+.DatePicker {
+  padding: 0;
+  white-space: normal;
+}
+
+.show-more-overlay {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  color: black;
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.show-more-text {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+img {
+  /* border-radius: 8px; */
+}
+
+
+.PropertyName{
+  text-transform:capitalize !important;
+  font-weight: 600 !important;
+}
+.PropertyAddress{
+  font-size: small !important;
+}
+
+.ThingstoHead{
+  font-weight: 500 !important;
+  margin-right: 100px;
+}
+
+
+.ThingstoHead1{
+  font-weight: 500 !important;
+  font-size: x-large !important;
+}
+
+.monsterrat{
+  font-family: 'Montserrat', sans-serif !important;
+
+}
+
+.css-z3c6am-MuiFormControl-root-MuiTextField-root{
+
+  /* position: relative; */
+}
