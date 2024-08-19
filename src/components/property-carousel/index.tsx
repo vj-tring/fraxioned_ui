@@ -40,7 +40,7 @@ export default function BasicSelect() {
   const dispatch = useDispatch<AppDispatch>();
   const { cards, loading, error } = useSelector((state: RootState) => state.properties);
   const user = useSelector((state: RootState) => state.auth.user);
-  const propertyselectid = useSelector((state: RootState) => state.properties.selectedPropertyId);
+  // const propertyselectid = useSelector((state: RootState) => state.properties.selectedPropertyId);
 
   useEffect(() => {
     if (user) {
@@ -49,8 +49,12 @@ export default function BasicSelect() {
   }, [dispatch, user]);
 
   useEffect(() => {
-    if (cards.length >0 ) {
+    if (cards.length > 0 ) {
       setSelectedCard(cards[selectedCardIndex]);
+      setSelectedCardIndex(selectedCardIndex);
+      const card = cards[selectedCardIndex];
+      dispatch(selectProperty(card.id));
+
     } else {
       setSelectedCard(null);
     }
@@ -147,7 +151,7 @@ export default function BasicSelect() {
         <div className="d-flex align-items-start flex-column card-item">
           <span className="DateHead1 monsterrat">My Home(s)</span>
           <p className="property1 monsterrat">
-            {propertyselectid ? selectedCard?.name : 'Select Property'}
+            {selectedCard ? selectedCard?.name : 'Select Property'}
           </p>
         </div>
       </Button>

@@ -18,6 +18,7 @@ const names = [
   { label: 'Pets', description: 'Bringing a service?', icon: <PetsIcon /> },
 ];
 
+
 const MultipleSelect: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -33,6 +34,8 @@ const MultipleSelect: React.FC = () => {
   });
   const [validationMessage, setValidationMessage] = useState<string>('');
 
+
+ 
   useEffect(() => {
     validateCounts();
   }, [selectedPropertyLimits, counts]);
@@ -84,6 +87,12 @@ const MultipleSelect: React.FC = () => {
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+    setCountsLocal({
+      Adults: 1,
+      Children: 0,
+      Infants: 0,
+      Pets: 0,
+  });
   };
 
   const handleClose = () => {
@@ -153,7 +162,11 @@ const MultipleSelect: React.FC = () => {
         {names.map((item) => (
           <MenuItem
             key={item.label}
-            sx={{ borderRadius: 0 }}
+            sx={{ borderRadius: 0,
+               borderBottom: "1px solid #E8E8E8",
+               width:"90%",
+               marginLeft:"20px"
+              }}
             disableRipple
           >
             <div className="d-flex justify-content-between w-100 MultiItems monsterrat">
@@ -161,6 +174,7 @@ const MultipleSelect: React.FC = () => {
                 sx={{
                   backgroundColor: '#df9526',
                   marginRight: '12px',
+                  marginTop: '12px'
                 }}
                 className='monsterrat'
               >
@@ -169,7 +183,10 @@ const MultipleSelect: React.FC = () => {
               <div className="w-50">
                 <b className="itemLabel monsterrat">{item.label}</b>
                 <p className="DescFont monsterrat">{item.description}</p>
+
               </div>
+            
+
               <div className="d-flex justify-content-around w-50 pb-2">
                 <button
                   className="Dec-circle monsterrat"
@@ -187,9 +204,13 @@ const MultipleSelect: React.FC = () => {
                   +
                 </button>
               </div>
+              
             </div>
+        
           </MenuItem>
+          
         ))}
+        
         <div className='validationMsg monsterrat'>
           {validationMessage && (
             <p style={{ color: 'red', textAlign: 'center' }}>

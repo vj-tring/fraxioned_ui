@@ -173,6 +173,7 @@ export const fetchProperties = createAsyncThunk(
           details,
           maxGuestsAllowed: property.noOfGuestsAllowed || 0,
           maxPetsAllowed: property.noOfPetsAllowed || 0,
+          propertyShare:property.propertyShare 
         };
       });
 

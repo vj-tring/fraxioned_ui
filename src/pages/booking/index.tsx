@@ -143,11 +143,11 @@ const Booking = () => {
             <Element name="myShare">
               <Showmore />
             </Element>
-            <hr style={{ width: '110%' }} />
+            <hr style={{ width: '90%' }} />
             <Element  name="availableNights">
               <AvailableNights  />
             </Element>
-            <hr style={{ width: '110%' }} />
+            <hr style={{ width: '90%' }} />
             <Element name="basicRangeShortcuts">
               <BasicRangeShortcuts />
             </Element>
