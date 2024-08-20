@@ -16,7 +16,7 @@ describe("Forget password", () => {
         it("User Not Found", () => {
             cy.visit("/login")
                 .get("a").contains("Forgot password?").click()
-                .get("input[placeholder='Email']").type("email@email.com")
+                .get("input[placeholder='Email']").type("exmaple@exmaple.com")
                 .get("button[type='submit']").contains("Submit").click({ force: true })
                 .wait(2000)
                 .get("div[role='alert']").contains("The account associated with this user was not found").wait(2000);

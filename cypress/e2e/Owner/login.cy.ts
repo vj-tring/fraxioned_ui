@@ -20,7 +20,7 @@ describe("Login & Logout", () => {
         })
         it("User Not Found", () => {
             cy.visit("/login")
-            cy.get("input[placeholder='Email']").type("email@email.com")
+            cy.get("input[placeholder='Email']").type("example@example.com")
             cy.get("input[placeholder='Password']").type("Password")
             cy.get("button").contains("Sign in").click()
                 .wait(2000)
