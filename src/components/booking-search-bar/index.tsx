@@ -8,7 +8,9 @@ import { DateRange } from "react-day-picker"
 import { DatePickerWithRange } from '../calender'
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
+
 const BookingSearchBar: React.FC = () => {
+  const userId = '2'
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined)
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
   const [activeDate, setActiveDate] = useState<'check-in' | 'check-out' | null>(null)
@@ -48,6 +50,7 @@ const BookingSearchBar: React.FC = () => {
               onSelect={handleDateSelect} 
               initialRange={dateRange}
               selectingFrom={activeDate === 'check-in'}
+              userId={userId}
             />
           </PopoverContent>
         </Popover>
