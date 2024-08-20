@@ -2,8 +2,8 @@
 // import dayjs, { Dayjs } from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { StaticDateRangePicker } from '@mui/x-date-pickers-pro/StaticDateRangePicker';
 import './basic-range-shortcuts.css';
+import { DatePickerWithRange } from '../calender';
 // import { PickersShortcutsItem } from '@mui/x-date-pickers/PickersShortcuts';
 // import { DateRange } from '@mui/x-date-pickers-pro/models';
 
@@ -49,38 +49,20 @@ import './basic-range-shortcuts.css';
 // ];
 
 export default function BasicRangeShortcuts() {
-  return (
+  return (    
   
-    <LocalizationProvider dateAdapter={AdapterDayjs}  
-     
-    >
-              <h6 className='mt-4 basicRangeHead' >Select checkIn date</h6 >
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+<div className="custom-calendar-page">
+<h6 className='mt-4 basicRangeHead' >Select checkIn date</h6 >
 
-      <div className="d-flex justify-content-between " style={{color:'grey'}}>
-      <p>Minimum stay: 3 nights</p>
-      <p>Maximum stay: 14 nights</p>
-
-
-      </div>
-    
-      <StaticDateRangePicker
-      sx={{
-        '.css-gqp4xl-MuiPickersLayout-root .MuiPickersLayout-toolbar': {
-         
-          display: 'none !important' 
-      }
-      
-      }}
-        slotProps={{
-        //   shortcuts: {
-        //     items: shortcutsItems,
-        //   },
-          actionBar: { actions: [] },
-        }}
-        
-        calendars={2}
-        
-      />
+<div className="d-flex  " style={{color:'grey'}}>
+<p className='pr-5'>Minimum stay: 3 nights</p>
+<p className='ml-5'>Maximum stay: 14 nights</p>
+</div>
+<br />
+<DatePickerWithRange />
+<br />
+</div>
     </LocalizationProvider>
   );
 }
