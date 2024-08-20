@@ -13,7 +13,6 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import LogoutIcon from '@mui/icons-material/Logout';
 import InviteModal from '../send-invite-modal';
 import ConfirmationModal from '../confirmation-modal';
-import FormDialog from '../register-form-modal';
 import ResetPasswordModal from '../reset-password-modal';
 import { NavLink } from 'react-router-dom';
 import useNavbarHandler from './navbar-handler';
@@ -22,6 +21,7 @@ import './navbar.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/reducers';
 import { useLocation } from 'react-router-dom';
+import FormDialog from '../register-form-modal';
 
 interface CustomNavbarProps {
   logo?: string;
