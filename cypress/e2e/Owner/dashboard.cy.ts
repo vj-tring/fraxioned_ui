@@ -1,3 +1,17 @@
-describe("Dashboard and Navigation check",()=>{
-    it("")
+describe("Dashboard and Navigation check", () => {
+    it("Navigate to all properties from dashboard", () => {
+        cy.visit("/login")
+            .get("input[placeholder='Email']").type("owner@fraxioned.com")
+            .get("input[placeholder='Password']").type("Owner@123")
+            .get("button").contains("Sign in").click()
+            .get("body > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(6) > div:nth-child(1)")
+            .contains("Paradise Shores (eighths)5367 S. Cyan LaneYou Own 1/undefinedth share").click().wait(1500)
+            .url().should('include','/booking').go(-1)
+            .get("body > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(6) > div:nth-child(2)")
+            .contains("Paradise Shores (tenths)5367 S. Cyan LaneYou Own 1/undefinedth share").click().wait(1500)
+            .url().should('include','/booking').go(-1)
+            .get(".card3.static-card").contains("Crown Jewel5409 S. Aquamarine LaneYou Own 1/undefinedth share").click().wait(1500)
+            .url().should('include','/booking').go(-1)
+            .get(".plus-icon").click()
+    })      
 })
