@@ -4,7 +4,7 @@ describe("Add another account", () => {
             .get("input[placeholder='Email']").type("fraxionedownersportal@gmail.com")
             .get("input[placeholder='Password']").type("Admin@123")
             .get("button").contains("Sign in").click()
-            .get(".MuiTypography-root.MuiTypography-body2.monsterrat.p-2.css-4ugksh-MuiTypography-root").click()
+            .get("img[alt='User']").click()
             .get("body > div:nth-child(3) > div:nth-child(3) > ul:nth-child(1) > li:nth-child(3)").click()
             .get("button").contains("Register").click()
             .get(".register-module__errorMessage___2R1GM").contains("First name is required").wait(1500)

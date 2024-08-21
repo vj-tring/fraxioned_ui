@@ -24,7 +24,6 @@ describe("Check Booking Functionalities", () => {
             .get("button").contains("Back").click().wait(1000)
             .get("button").contains("Next").click().wait(1000)
             .get("button").contains("Today").click().wait(1000)
-            .get(".rbc-day-bg.rbc-today")
             cy.get("nav")
             .get("img[alt='User']").click()
             .get('li').contains("Logout").click().wait(2000)
