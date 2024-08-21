@@ -7,8 +7,9 @@ import {
     Box,
     Typography,
     Paper,
-    Grid,
+    Grid
 } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
 import styles from './NewPropertyForm.module.css';
 import { addPropertyApi } from '@/api';
 import { useSelector } from 'react-redux';
@@ -62,176 +63,171 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
             onPropertyAdded();
             onClose();
         } catch (err) {
-            console.error('Error in adding the :', err);
+            console.error('Error in adding the property:', err);
         }
     };
 
     return (
-        <div className={styles.formContainer}>
-            <Typography variant="h4" className={styles.formTitle}>
-                Add Property
-            </Typography>
-            <Paper elevation={0} className={styles.formPaper}>
-                <form onSubmit={handleSubmit} className={styles.form}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={6}>
-                            <TextField
-                                label="Property Name"
-                                value={propertyName}
-                                onChange={(e) => setPropertyName(e.target.value)}
-                                fullWidth
-                                required
-                                variant="outlined"
-                                size="small"
-                                className={styles.inputField}
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                label="Address"
-                                value={address}
-                                onChange={(e) => setAddress(e.target.value)}
-                                fullWidth
-                                required
-                                variant="outlined"
-                                size="small"
-                                className={styles.inputField}
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                label="City"
-                                value={city}
-                                onChange={(e) => setCity(e.target.value)}
-                                fullWidth
-                                required
-                                variant="outlined"
-                                size="small"
-                                className={styles.inputField}
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                label="State"
-                                value={state}
-                                onChange={(e) => setState(e.target.value)}
-                                fullWidth
-                                required
-                                variant="outlined"
-                                size="small"
-                                className={styles.inputField}
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                label="Country"
-                                value={country}
-                                onChange={(e) => setCountry(e.target.value)}
-                                fullWidth
-                                required
-                                variant="outlined"
-                                size="small"
-                                className={styles.inputField}
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                label="Zipcode"
-                                type="number"
-                                value={zipcode}
-                                onChange={(e) => setZipcode(e.target.value)}
-                                fullWidth
-                                required
-                                variant="outlined"
-                                size="small"
-                                className={styles.inputField}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                label="House Description"
-                                value={houseDescription}
-                                onChange={(e) => setHouseDescription(e.target.value)}
-                                fullWidth
-                                multiline
-                                rows={3}
-                                variant="outlined"
-                                size="small"
-                                className={styles.inputField}
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                label="Property Share"
-                                type="number"
-                                value={propertyShare}
-                                onChange={(e) => setPropertyShare(e.target.value)}
-                                fullWidth
-                                required
-                                variant="outlined"
-                                size="small"
-                                className={styles.inputField}
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                label="Latitude"
-                                type="number"
-                                value={latitude}
-                                onChange={(e) => setLatitude(e.target.value)}
-                                fullWidth
-                                required
-                                variant="outlined"
-                                size="small"
-                                className={styles.inputField}
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                label="Longitude"
-                                type="number"
-                                value={longitude}
-                                onChange={(e) => setLongitude(e.target.value)}
-                                fullWidth
-                                required
-                                variant="outlined"
-                                size="small"
-                                className={styles.inputField}
-                            />
-                        </Grid>
-                        <Grid item xs={6}>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={isActive}
-                                        onChange={(e) => setIsActive(e.target.checked)}
-                                        name="isActive"
-                                    />
-                                }
-                                label="Is Active"
-                            />
-                        </Grid>
-                    </Grid>
-                    <Box className={styles.buttonContainer}>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            className={styles.addButton}
-                        >
-                            ADD
-                        </Button>
-                        <Button
-                            variant="outlined"
-                            color="secondary"
-                            onClick={onClose}
-                            className={styles.cancelButton}
-                        >
-                            CANCEL
-                        </Button>
+        <div className={styles.modalOverlay}>
+            <div className={styles.formContainer}>
+                <Paper elevation={9} className={styles.formPaper}>
+                    <Box className={styles.formHeader}>
+                        <HomeIcon className={styles.headerIcon} />
+                        <Typography variant="h4" className={styles.formTitle}>
+                            Add New Property
+                        </Typography>
                     </Box>
-                </form>
-            </Paper>
+                    <form onSubmit={handleSubmit} className={styles.form}>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    label="Property Name"
+                                    value={propertyName}
+                                    onChange={(e) => setPropertyName(e.target.value)}
+                                    fullWidth
+                                    required
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    label="Address"
+                                    value={address}
+                                    onChange={(e) => setAddress(e.target.value)}
+                                    fullWidth
+                                    required
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <TextField
+                                    label="City"
+                                    value={city}
+                                    onChange={(e) => setCity(e.target.value)}
+                                    fullWidth
+                                    required
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <TextField
+                                    label="State"
+                                    value={state}
+                                    onChange={(e) => setState(e.target.value)}
+                                    fullWidth
+                                    required
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <TextField
+                                    label="Country"
+                                    value={country}
+                                    onChange={(e) => setCountry(e.target.value)}
+                                    fullWidth
+                                    required
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <TextField
+                                    label="Zipcode"
+                                    type="number"
+                                    value={zipcode}
+                                    onChange={(e) => setZipcode(e.target.value)}
+                                    fullWidth
+                                    required
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <TextField
+                                    label="Property Share"
+                                    type="number"
+                                    value={propertyShare}
+                                    onChange={(e) => setPropertyShare(e.target.value)}
+                                    fullWidth
+                                    required
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={isActive}
+                                            onChange={(e) => setIsActive(e.target.checked)}
+                                            name="isActive"
+                                            color="primary"
+                                        />
+                                    }
+                                    label="Is Active"
+                                    className={styles.checkbox}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="House Description"
+                                    value={houseDescription}
+                                    onChange={(e) => setHouseDescription(e.target.value)}
+                                    fullWidth
+                                    multiline
+                                    rows={3}
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    label="Latitude"
+                                    type="number"
+                                    value={latitude}
+                                    onChange={(e) => setLatitude(e.target.value)}
+                                    fullWidth
+                                    required
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    label="Longitude"
+                                    type="number"
+                                    value={longitude}
+                                    onChange={(e) => setLongitude(e.target.value)}
+                                    fullWidth
+                                    required
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                        </Grid>
+                        <Box className={styles.buttonContainer}>
+                            <Button
+                                variant="outlined"
+                                onClick={onClose}
+                                className={styles.cancelButton}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                className={styles.addButton}
+                            >
+                                Add Property
+                            </Button>
+                        </Box>
+                    </form>
+                </Paper>
+            </div>
         </div>
     );
 };

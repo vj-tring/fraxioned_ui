@@ -3,9 +3,10 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Button, IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { getProperties, deletePropertyApi } from '@/api';
+import { getProperties, deletePropertyApi, getPropertyById } from '@/api';
 import styles from './property.module.css';
 import NewPropertyForm from './NewPropertyForm';
+import EditPropertyForm from './EditPropertyForm';
 import ConfirmationModal from '@/components/confirmation-modal';
 
 interface PropertyData {
@@ -19,9 +20,29 @@ interface PropertyData {
     created_by: string;
 }
 
+interface EditPropertyData {
+    id: number;
+    propertyName: string;
+    ownerRezPropId: number;
+    address: string;
+    city: string;
+    state: string;
+    country: string;
+    zipcode: number;
+    houseDescription: string;
+    isExclusive: boolean;
+    propertyShare: number;
+    latitude: number;
+    longitude: number;
+    isActive: boolean;
+    displayOrder: number;
+}
+
 const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     const [properties, setProperties] = useState<PropertyData[]>([]);
     const [isNewFormOpen, setIsNewFormOpen] = useState(false);
+    const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+    const [editPropertyData, setEditPropertyData] = useState<EditPropertyData | null>(null);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [propertyToDelete, setPropertyToDelete] = useState<PropertyData | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -50,8 +71,16 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
         }
     };
 
-    const handleEditClick = (id: number) => {
-        console.log('Edit clicked for property id:', id);
+    const handleEditClick = async (id: number) => {
+        try {
+            const response = await getPropertyById(id);
+            const propertyData = response.data;
+            setEditPropertyData(propertyData);
+            setIsEditFormOpen(true);
+        } catch (err) {
+            console.error('Error fetching property details:', err);
+            setError('Failed to fetch property details. Please try again.');
+        }
     };
 
     const handleDeleteClick = (property: PropertyData) => {
@@ -117,7 +146,7 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
         <div className={`${styles.propertiesContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed}`}>
             <div className={styles.titleContainer}>
                 <h1 className={styles.title}>Properties</h1>
-                <Button variant="contained" color="primary" onClick={() => setIsNewFormOpen(true)}>
+                <Button variant="contained" color="primary" onClick={() => setIsNewFormOpen(true)} sx={{ backgroundColor: '#00b8cc', '&:hover': { backgroundColor: '#00b8cc' } }}>
                     Add Property
                 </Button>
             </div>
@@ -142,6 +171,17 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                         <NewPropertyForm
                             onClose={() => setIsNewFormOpen(false)}
                             onPropertyAdded={fetchProperties}
+                        />
+                    </div>
+                </div>
+            )}
+            {isEditFormOpen && editPropertyData && (
+                <div className={styles.modalOverlay} onClick={() => setIsEditFormOpen(false)}>
+                    <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+                        <EditPropertyForm
+                            onClose={() => setIsEditFormOpen(false)}
+                            onPropertyUpdated={fetchProperties}
+                            propertyData={editPropertyData}
                         />
                     </div>
                 </div>

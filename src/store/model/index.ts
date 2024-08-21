@@ -59,5 +59,33 @@ export interface RegisterState {
     resetPasswordSuccess: boolean
     resetPasswordError: string | null
   }
+  export interface AddPropertyState {
+    loading: boolean
+    successMessage: string | null
+    errorMessage: string | null
+    property: Property | null
+  }
+  
+  export interface Property {
+    createdBy: { id: number }
+    propertyName: string
+    ownerRezPropId: number
+    address: string
+    city: string
+    state: string
+    country: string
+    zipcode: number
+    houseDescription: string
+    isExclusive: boolean
+    propertyShare: number
+    latitude: number
+    longitude: number
+    isActive: boolean
+    displayOrder: number
+  }
+
+
+
+
 
   

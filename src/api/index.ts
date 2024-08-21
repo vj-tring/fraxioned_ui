@@ -86,5 +86,10 @@ export const addPropertyApi = (propertyData: {
 export const deletePropertyApi = (id: number) =>
     axiosInstance.delete(`/v1/properties/property/${id}`);
 
+export const getPropertyById = (id: number) =>
+    axiosInstance.get(`/v1/properties/property/${id}`);
+
+export const updatePropertyapi = (id: number, data: any) =>
+    axiosInstance.patch(`/v1/properties/property/${id}`, data);
 
 
