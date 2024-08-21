@@ -1,7 +1,7 @@
 .MultiItems {
   display: flex;
   align-items: center;
-  margin-top: 7px;
+  margin-top: 15px;
   margin-bottom: 10px;
 }
 
@@ -28,7 +28,7 @@
 
 .w-50 {
   width: 43% !important;
-  padding-top: 11px !important;
+  padding-top: 0px !important;
 }
 
 /* .MultiIte {
@@ -46,6 +46,7 @@
 
 .itemLabel {
   padding-top: 13px !important;
+  color:rgb(74, 74, 74) ;
 }
 
 .DateHead1{
@@ -113,10 +114,10 @@
 
 
 .Ad-count {
-  font-size: 16px;
-  margin-top: 2px;
-  width: 20px;
-  padding-left: 7px;
+  font-size: 14px;
+  margin-top: 6px;
+  width: 21px;
+  padding-left: 4px;
 }
 
 .list-Age {

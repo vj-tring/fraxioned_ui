@@ -111,13 +111,13 @@ export default function BasicSelect() {
 
   const showCarousel = cards.length > 0;
   const showCarouselControls = cards.length > 0;
-  const cardItemWidth = cards.length === 2 ? '370px' : '470px';
+  const cardItemWidth = cards.length === 2 ? '380px' : '508px';
   const buttonSize = {
     width: cards.length === 2 ? '3.7rem' : '5rem',
     height: cards.length === 2 ? '19px' : '25px',
   };
   const imageClass = cards.length === 2 ? 'single-card' : 'multiple-cards';
-  const additionalPadding = cards.length === 2 ? '.45rem 2rem ' : '.40rem 2rem ';
+  // const additionalPadding = cards.length === 2 ? '.45rem 2rem ' : '.40rem 2rem ';
   const BoxList = cards.length === 2 ? '7px' : '10px';
   const BoxMargin = cards.length === 2 ? '0px' : '8px';
   const cardItemHeight = cards.length === 2 ? '232px' : '250px';
@@ -179,24 +179,24 @@ export default function BasicSelect() {
           </MenuItem>
         ) : (
           <MenuItem disableRipple sx={{ '&:hover': { backgroundColor: 'white !important' } }}>
-            <div className="CardItem py-2" style={{ width: cardItemWidth, height: cardItemHeight }}>
+            <div className="CardItem  " style={{ width: cardItemWidth, height: cardItemHeight }}>
               {showCarousel && (
                 <div className="card-container">
                   <div className="d-flex flex-row">
                     {showCarouselControls && (
                       <IconButton onClick={handlePrevious} disableRipple sx={{ padding: 0 }} disabled={selectedCardIndex === 0}>
-                        <NavigateBeforeIcon sx={{ fontSize: '2.0rem' }} />
+                        <NavigateBeforeIcon sx={{ fontSize: '3.0rem', paddingRight:'30px'}} />
                       </IconButton>
                     )}
-                    <div className="d-flex flex-row w-100" style={{ overflowX: 'auto', whiteSpace: 'nowrap', justifyContent: 'space-evenly' }} ref={carouselRef}>
+                    <div className="d-flex flex-row w-100" style={{ overflowX: 'auto', whiteSpace: 'nowrap', justifyContent: 'center' }} ref={carouselRef}>
                       {cards.map((card: Card, index: number) => (
                         <Button
                           key={card.id}
                           disableRipple
                           className={`additionalproperty ${selectedCardIndex === index ? 'active' : ''}`}
-                          style={{ padding: additionalPadding }}
+                          // style={{ padding: additionalPadding }}
                           onClick={() => handleCardClick(index)}
-                          sx={{ flex: '0 0 auto', margin: '4px' }}
+                          sx={{ flex: '0 0 auto', margin: '7px' }}
                         >
                           <div className="d-flex flex-column align-items-center">
                             <h4 className="property-name">{formatCardName(card.name)}</h4>
@@ -206,7 +206,7 @@ export default function BasicSelect() {
                     </div>
                     {showCarouselControls && (
                       <IconButton onClick={handleNext} disableRipple sx={{ padding: 0, fontSize: '2.0rem' }} disabled={selectedCardIndex === cards.length - 1}>
-                        <NavigateNextIcon sx={{ fontSize: '2.0rem', backgroundColor: 'transparent' }} />
+                        <NavigateNextIcon sx={{ fontSize: '3.0rem', backgroundColor: 'transparent', paddingLeft:'30px' }} />
                       </IconButton>
                     )}
                   </div>
