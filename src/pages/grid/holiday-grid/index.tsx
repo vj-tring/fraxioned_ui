@@ -124,14 +124,14 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     };
 
     const columns: GridColDef[] = [
-        { field: 'name', headerName: 'Name', minWidth: 150 },
-        { field: 'year', headerName: 'Year', width: 120 },
-        { field: 'start_date', headerName: 'Start Date', width: 150 },
-        { field: 'end_date', headerName: 'End Date', width: 150 },
-        { field: 'created_at', headerName: 'Created At', width: 150 },
-        { field: 'updated_at', headerName: 'Updated At', width: 170 },
-        { field: 'created_by', headerName: 'Created By', width: 120 },
-        { field: 'updated_by', headerName: 'Updated By', width: 120 },
+        { field: 'name', headerName: 'Name', minWidth: 150, align: 'center', headerAlign: 'center' },
+        { field: 'year', headerName: 'Year', width: 120, align: 'center', headerAlign: 'center' },
+        { field: 'start_date', headerName: 'Start Date', width: 150, align: 'center', headerAlign: 'center' },
+        { field: 'end_date', headerName: 'End Date', width: 150, align: 'center', headerAlign: 'center' },
+        { field: 'created_at', headerName: 'Created At', width: 150, align: 'center', headerAlign: 'center' },
+        { field: 'updated_at', headerName: 'Updated At', width: 170, align: 'center', headerAlign: 'center' },
+        { field: 'created_by', headerName: 'Created By', width: 120, align: 'center', headerAlign: 'center' },
+        { field: 'updated_by', headerName: 'Updated By', width: 120, align: 'center', headerAlign: 'center' },
         {
             field: 'actions',
             headerName: 'Actions',
@@ -161,7 +161,7 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
         <div className={`${styles.holidaysContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed}`}>
             <div className={styles.titleContainer}>
                 <h1 className={styles.title}>Holidays</h1>
-                <Button variant="contained" color="primary" onClick={() => setOpenNewForm(true)}>
+                <Button variant="contained" color="primary" onClick={() => setOpenNewForm(true)} sx={{ backgroundColor: '#00b8cc', '&:hover': { backgroundColor: '#00b8cc' } }}>
                     Add Holiday
                 </Button>
             </div>

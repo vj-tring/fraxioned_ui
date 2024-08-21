@@ -14,8 +14,6 @@ type AppThunk<ReturnType = void> = ThunkAction<
   Action<string>
 >
 
-
-
 const initialState: ForgotPasswordState = {
   loading: false,
   successMessage: null,
