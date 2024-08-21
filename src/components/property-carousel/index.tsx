@@ -40,7 +40,7 @@ export default function BasicSelect() {
 
   const { cards, loading, error } = useSelector((state: RootState) => state.properties);
   const user = useSelector((state: RootState) => state.auth.user);
-  const propertyselectid = useSelector((state: RootState) => state.properties.selectedPropertyId);
+  // const propertyselectid = useSelector((state: RootState) => state.properties.selectedPropertyId);
 
   useEffect(() => {
     if (user) {
@@ -49,8 +49,12 @@ export default function BasicSelect() {
   }, [dispatch, user]);
 
   useEffect(() => {
-    if (cards.length >0 ) {
+    if (cards.length > 0 ) {
       setSelectedCard(cards[selectedCardIndex]);
+      setSelectedCardIndex(selectedCardIndex);
+      const card = cards[selectedCardIndex];
+      dispatch(selectProperty(card.id));
+
     } else {
       setSelectedCard(null);
     }
@@ -107,13 +111,13 @@ export default function BasicSelect() {
 
   const showCarousel = cards.length > 0;
   const showCarouselControls = cards.length > 0;
-  const cardItemWidth = cards.length === 2 ? '370px' : '470px';
+  const cardItemWidth = cards.length === 2 ? '380px' : '508px';
   const buttonSize = {
     width: cards.length === 2 ? '3.7rem' : '5rem',
     height: cards.length === 2 ? '20px' : '25px',
   };
   const imageClass = cards.length === 2 ? 'single-card' : 'multiple-cards';
-  const additionalPadding = cards.length === 2 ? '.45rem 2rem ' : '.40rem 2rem ';
+  // const additionalPadding = cards.length === 2 ? '.45rem 2rem ' : '.40rem 2rem ';
   const BoxList = cards.length === 2 ? '7px' : '10px';
   const BoxMargin = cards.length === 2 ? '0px' : '8px';
   const cardItemHeight = cards.length === 2 ? '232px' : '250px';
@@ -147,7 +151,7 @@ export default function BasicSelect() {
         <div className="d-flex align-items-start flex-column card-item">
           <span className="DateHead1 monsterrat">My Home(s)</span>
           <p className="property1 monsterrat">
-            {propertyselectid ? selectedCard?.name : 'Select Property'}
+            {selectedCard ? selectedCard?.name : 'Select Property'}
           </p>
         </div>
       </Button>
@@ -175,17 +179,13 @@ export default function BasicSelect() {
           </MenuItem>
         ) : (
           <MenuItem disableRipple sx={{ '&:hover': { backgroundColor: 'white !important' } }}>
-            <div className="CardItem py-2" style={{ width: cardItemWidth, height: cardItemHeight }}>
+            <div className="CardItem  " style={{ width: cardItemWidth, height: cardItemHeight }}>
               {showCarousel && (
                 <div className="card-container">
                   <div className="d-flex flex-row">
                     {showCarouselControls && (
                       <IconButton onClick={handlePrevious} disableRipple sx={{ padding: 0 }} disabled={selectedCardIndex === 0}>
-
-                        <NavigateBeforeIcon sx={{ fontSize: '2.0rem' }} />
-
                         <NavigatePreviousOutlinedIcon  />
-
                       </IconButton>
                     )}
                     <div className="d-flex flex-row w-100" style={{ overflowX: 'auto', whiteSpace: 'nowrap', justifyContent: 'space-evenly' }} ref={carouselRef}>
@@ -194,10 +194,9 @@ export default function BasicSelect() {
                           key={card.id}
                           disableRipple
                           className={`additionalproperty ${selectedCardIndex === index ? 'active' : ''}`}
-                          style={{ padding: additionalPadding }}
+                          // style={{ padding: additionalPadding }}
                           onClick={() => handleCardClick(index)}
                           sx={{ flex: '0 0 auto', margin: '7px',padding:'4px' }}
-
                         >
                           <div className="d-flex flex-column align-items-center p-1.5">
                             <h4 className="property-name">{formatCardName(card.name)}</h4>
@@ -206,7 +205,6 @@ export default function BasicSelect() {
                       ))}
                     </div>
                     {showCarouselControls && (
-
                       <IconButton onClick={handleNext} disableRipple sx={{ padding: 0, fontSize: '2.0rem'}} disabled={selectedCardIndex === cards.length - 1}>
                         <NavigateNextOutlinedIcon  />
 
