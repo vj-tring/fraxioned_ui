@@ -197,7 +197,7 @@ export function DatePickerWithRange({
               setErrorMessage(`Minimum ${calendarData.bookingRules.lastMinuteBooking.minNights} night(s) required for last-minute bookings`);
             } else if (nightsSelected > calendarData.bookingRules.lastMinuteBooking.maxNights) {
               setErrorMessage(`Maximum ${calendarData.bookingRules.lastMinuteBooking.maxNights} nights allowed for last-minute bookings`);
-            } else if (nightsSelected > selectedPropertyDetails.lastMinuteRemainingNights) {
+            } else if (selectedPropertyDetails.lastMinuteRemainingNights == 0) {
               setErrorMessage(`You don't have sufficient last-minute remaining nights to select this checkout date`);
             } else  {
               setErrorMessage(null);
