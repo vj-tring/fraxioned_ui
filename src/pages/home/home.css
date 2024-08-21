@@ -1,12 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-.home-content {
-  text-align: center;
 
-  font-family: 'Montserrat', sans-serif;
-  font-optical-sizing: auto;
-  position: relative;
-}
 
 .welcome-section {
   text-align: left;
@@ -54,26 +48,6 @@
   }
 }
 
-.HomeImg {
-  width: 100%;
-  height: 190px;
-  background: url('../../assets/images/homePage.jpg');
-  background-size: cover;
-  background-position: center;
-
-  opacity: 60%;
-}
-
-.icons {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  height: 70px;
-}
-.icon-container {
-  margin-bottom: 10px;
-  font-size: 14px !important;
-}
 
 
 .Cardcontainer {
@@ -98,4 +72,56 @@ hr {
   font-weight: 500;
   font-size: small;
   margin-top: 1px;
+}
+
+svg{
+
+  margin-left: 5px;
+}
+
+.home-content {
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-optical-sizing: auto;
+  position: relative;
+}
+
+.HomeImg {
+  width: 100%;
+  height: 190px;
+  background: url('../../assets/images/homePage.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 60%;
+}
+
+.icons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap; /* Allows wrapping of icons if the viewport is narrow */
+}
+
+.icon-container {
+  display: flex;
+  flex-direction: column; /* Align icon and text vertically */
+  align-items: center; /* Center align items horizontally */
+  /* margin-bottom: 2px; */
+  font-size: 14px !important;
+}
+
+.IconsText {
+  font-weight: 500;
+  font-size: small;
+  margin-top: 2px; /* Space between icon and text */
+}
+
+svg {
+  margin: 0; /* Remove any margin around the SVG */
+}
+
+
+.HomeIcons{
+  width: 50px;
+  height: 50px;
 }

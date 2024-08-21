@@ -4,8 +4,7 @@
   align-items: center;
   padding: 10px 20px;
   background: linear-gradient(to top, #ffffff 0%, #ffffff 100%) !important;
-
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px !important;   /* opacity: 95% !important; */
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px !important;  
   color: #fff;
   top: 0;
   z-index: 1000;
@@ -46,9 +45,12 @@
   align-items: center;
   gap: 10px;
 }
-
+.nav-link{
+  font-weight: 600;
+}
 .nav-link-with-margin {
   margin-right: 20px;
+
 }
 
 .navbar-user-name {
@@ -193,5 +195,5 @@
 
 .nav-link.active {
   font-weight: bold;
-  color: #00636D !important; /* Active link   */
+  color: #023138 !important; /* Active link   */
 }

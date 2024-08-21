@@ -7,6 +7,7 @@ import GuestSelector from '../guest-selector'
 import { DateRange } from "react-day-picker"
 import { DatePickerWithRange } from '../calender'
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { maxWidth } from '@mui/system'
 
 const BookingSearchBar: React.FC = () => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined)
@@ -31,9 +32,9 @@ const BookingSearchBar: React.FC = () => {
     <div className="MainCard">
       <div className="card">
         <PropertyCarousel />
-        <div className="vl p-0"></div>
-        <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-          <PopoverTrigger asChild>
+        <div className="vl p-2"></div>
+        <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen} disableRipple>
+          <PopoverTrigger asChild disableRipple >
             <div>
               <Region 
                 label="Check In"
