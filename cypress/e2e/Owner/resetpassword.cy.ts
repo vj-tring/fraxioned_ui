@@ -7,7 +7,7 @@ describe("Reset Password", () => {
             .get(".MuiBox-root.css-1hg4z9e").click()
             .get("div[id='account-menu'] li:nth-child(1)").click();
     }
-    describe.skip("Unsuccessful Reset Password", () => {
+    describe("Unsuccessful Reset Password", () => {
         it("Empty Old Password", () => {
             login();
             cy.get("button[type='submit']").click()
