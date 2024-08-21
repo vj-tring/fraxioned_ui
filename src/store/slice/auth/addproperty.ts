@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction, Action } from '@reduxjs/toolkit';
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
-import axios from 'axios';
 import { RootState } from '../../reducers';
+import { addPropertyApi } from '@/api';
 
 export interface AddPropertyState {
     loading: boolean;
@@ -80,7 +80,7 @@ export const addProperty =
         async (dispatch: Dispatch) => {
             try {
                 dispatch(addPropertyStart());
-                const response = await axios.post('/v1/properties/property', propertyData);
+                const response = await addPropertyApi(propertyData)
                 const data = response.data;
 
                 if (response.status === 201 || response.status === 200) {

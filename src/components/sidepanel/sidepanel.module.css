@@ -5,14 +5,16 @@
     top: 0;
     left: 0;
     height: 100vh;
-    background-color: #222222;
-    color: #ffffff;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f7fafb;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+    color: #444444;
     overflow-y: auto;
     z-index: 1000;
     font-family: 'Roboto', sans-serif;
     transition: width 0.3s ease;
 }
+
+
 
 .sidePanel.open {
     width: 220px;
@@ -22,18 +24,26 @@
     width: 60px;
 }
 
+
+
 .logoContainer {
-    padding: 10px;
-    background-color: #222222;
+    padding: 11px;
+    background-color: #f7fafb;
     text-align: center;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 60px;
+    height: 62px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    /* Add box-shadow to the logo container */
+    z-index: 1001;
+    /* Ensure the logo container is on top of the side panel */
 }
 
+
+
 .logo {
-    max-width: 156px;
+    max-width: 164px;
     height: auto;
 }
 
@@ -47,10 +57,13 @@
 .toggleButton {
     background: none;
     border: none;
-    color: #a39f9f;
-    font-size: 1.0em;
+    color: #e28f25;
+    font-size: 1.1em;
     cursor: pointer;
-    padding: 14px;
+}
+
+.toggleButton:hover {
+    color: #d27a1e;
 }
 
 .menu {
@@ -69,17 +82,18 @@
     margin-top: 12px;
     padding: 10px 20px;
     text-decoration: none;
-    color: #e0e0e0;
+    color: #444444;
     transition: all 0.3s ease;
 }
 
 .menuLink:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(199, 234, 238, 0.2);
 }
 
 .menuLink.active {
-    border-left: 4px solid #e28f25;
-    color: aliceblue;
+    border-left: 3px solid #d27a1e;
+    width: 2px;
+    color: #e28f25;
 }
 
 .icon {
@@ -90,8 +104,9 @@
 }
 
 .label {
-    font-size: 16px;
-    font-weight: 400;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
 }
 
 .closed .menuLink {
@@ -121,4 +136,18 @@
 
 .menuLink.disabled:hover {
     background-color: transparent;
+}
+
+@media (max-width: 768px) {
+    .sidePanel.open {
+        width: 200px;
+    }
+
+    .sidePanel.closed {
+        width: 60px;
+    }
+
+    .label {
+        font-size: 14px;
+    }
 }
