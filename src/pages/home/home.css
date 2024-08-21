@@ -108,6 +108,7 @@ svg{
   align-items: center; /* Center align items horizontally */
   /* margin-bottom: 2px; */
   font-size: 14px !important;
+  cursor: pointer;
 }
 
 .IconsText {

@@ -4,9 +4,8 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
-import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { useSelector, useDispatch } from 'react-redux';
+import NavigatePreviousOutlinedIcon from '@mui/icons-material/NavigateBefore';
+import NavigateNextOutlinedIcon from '@mui/icons-material/NavigateNextOutlined';import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store/index';
 import { RootState } from '../../store/reducers';
 import { fetchProperties, selectProperty } from '../../store/slice/auth/property-slice';
@@ -38,6 +37,7 @@ export default function BasicSelect() {
   
 
   const dispatch = useDispatch<AppDispatch>();
+
   const { cards, loading, error } = useSelector((state: RootState) => state.properties);
   const user = useSelector((state: RootState) => state.auth.user);
   // const propertyselectid = useSelector((state: RootState) => state.properties.selectedPropertyId);
@@ -114,7 +114,7 @@ export default function BasicSelect() {
   const cardItemWidth = cards.length === 2 ? '380px' : '508px';
   const buttonSize = {
     width: cards.length === 2 ? '3.7rem' : '5rem',
-    height: cards.length === 2 ? '19px' : '25px',
+    height: cards.length === 2 ? '20px' : '25px',
   };
   const imageClass = cards.length === 2 ? 'single-card' : 'multiple-cards';
   // const additionalPadding = cards.length === 2 ? '.45rem 2rem ' : '.40rem 2rem ';
@@ -171,7 +171,7 @@ export default function BasicSelect() {
       >
         {cards.length === 0 ? (
           <MenuItem disableRipple sx={{ '&:hover': { backgroundColor: 'white !important' } }}>
-            <div className="CardItem py-2" style={{ width: cardItemWidth, height: '100px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className="CardItem py-2" style={{ width: cardItemWidth, height: '100px', display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
               <div className="card-content">
                 <h4>No Data Found</h4>
               </div>
@@ -185,10 +185,10 @@ export default function BasicSelect() {
                   <div className="d-flex flex-row">
                     {showCarouselControls && (
                       <IconButton onClick={handlePrevious} disableRipple sx={{ padding: 0 }} disabled={selectedCardIndex === 0}>
-                        <NavigateBeforeIcon sx={{ fontSize: '3.0rem', paddingRight:'30px'}} />
+                        <NavigatePreviousOutlinedIcon  />
                       </IconButton>
                     )}
-                    <div className="d-flex flex-row w-100" style={{ overflowX: 'auto', whiteSpace: 'nowrap', justifyContent: 'center' }} ref={carouselRef}>
+                    <div className="d-flex flex-row w-100" style={{ overflowX: 'auto', whiteSpace: 'nowrap', justifyContent: 'space-evenly' }} ref={carouselRef}>
                       {cards.map((card: Card, index: number) => (
                         <Button
                           key={card.id}
@@ -196,17 +196,19 @@ export default function BasicSelect() {
                           className={`additionalproperty ${selectedCardIndex === index ? 'active' : ''}`}
                           // style={{ padding: additionalPadding }}
                           onClick={() => handleCardClick(index)}
-                          sx={{ flex: '0 0 auto', margin: '7px' }}
+                          sx={{ flex: '0 0 auto', margin: '7px',padding:'4px' }}
                         >
-                          <div className="d-flex flex-column align-items-center">
+                          <div className="d-flex flex-column align-items-center p-1.5">
                             <h4 className="property-name">{formatCardName(card.name)}</h4>
                           </div>
                         </Button>
                       ))}
                     </div>
                     {showCarouselControls && (
-                      <IconButton onClick={handleNext} disableRipple sx={{ padding: 0, fontSize: '2.0rem' }} disabled={selectedCardIndex === cards.length - 1}>
-                        <NavigateNextIcon sx={{ fontSize: '3.0rem', backgroundColor: 'transparent', paddingLeft:'30px' }} />
+                      <IconButton onClick={handleNext} disableRipple sx={{ padding: 0, fontSize: '2.0rem'}} disabled={selectedCardIndex === cards.length - 1}>
+                        <NavigateNextOutlinedIcon  />
+
+                        
                       </IconButton>
                     )}
                   </div>
@@ -243,7 +245,7 @@ export default function BasicSelect() {
                           key={year}
                           onClick={() => handleYearClick(year)}
                           className={`card-btn1 ${selectedYear === year ? 'active' : ''}`}
-                          sx={{ margin: '2px', padding: '4px', borderRadius: 16, ...buttonSize }}
+                          sx={{ margin: '2px', padding: '4px',paddingTop:'5px', borderRadius: 16, ...buttonSize }}
                         >
                           {year}
                         </Button>

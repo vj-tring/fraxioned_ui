@@ -101,7 +101,6 @@ background-size: cover;
 .CardImage.single-card img {
 width: 60px;
 height: 45px;
-border-radius: 3px;
 }
 
 /* Style for multiple cards */
@@ -171,9 +170,9 @@ width: 90px;
 }
 
 .additionalproperty {
-  width: 8rem !important;
+  width: 9rem !important;
   /* padding: .60rem 2rem !important; */
-  border-radius: 1rem !important;
+  border-radius: 2rem !important;
   text-transform: capitalize !important;
   border: 1px solid #7c7875 !important;
   color: #7c7875 !important;

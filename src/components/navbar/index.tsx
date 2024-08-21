@@ -41,7 +41,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
   links = [],
   userImage,
   userName,
-  onUserImageClick,
+  // onUserImageClick,
 }) => {
   const location = useLocation();
   const isAdminDashboard = location.pathname.startsWith('/admin');
