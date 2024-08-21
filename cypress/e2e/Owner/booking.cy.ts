@@ -12,9 +12,9 @@ describe("Owner Booking Check", () => {
             .get("button").contains("2025").click().wait(1500)
             .get("button").contains("2026").click().wait(1500)
             .get("button").contains("2024").click().wait(1500)
-            .get(".MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-1eynsu0-MuiSvgIcon-root").click().wait(1500).get(".BlueHead").contains("Paradise Shores (tenths)")
-            .get(".MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-1eynsu0-MuiSvgIcon-root").click().wait(1500).get(".BlueHead").contains("Crown Jewel")
-            .get(".MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-lkwxxu-MuiSvgIcon-root").click().wait(1500).click().wait(1500)
+            .get(".MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-13dqf2c").click().wait(1500).get(".BlueHead").contains("Paradise Shores (tenths)")
+            .get(".MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-13dqf2c").click().wait(1500).get(".BlueHead").contains("Crown Jewel")
+            .get(".MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-b5mijb").click().wait(1500).click().wait(1500)
             .get("div[class='dots-container'] div:nth-child(2)").click().wait(1500).get(".BlueHead").contains("Paradise Shores (tenths)")
             .get("button").contains("2024").click().wait(1500)
             .get("button").contains("2025").click().wait(1500)
@@ -34,18 +34,18 @@ describe("Owner Booking Check", () => {
             .get(".d-flex.align-items-start.flex-column.card-item").contains("My Home(s)Select Property").click({ scrollBehavior: 'center' }).wait(2000)
             .get("button").contains("Paradise Shores...").click().go(-1).go(+1)
             .get("div[class='d-flex align-items-start flex-column']").contains("WhoAdd guests").click({ scrollBehavior: 'center' })
-            .get("body > div:nth-child(3) > div:nth-child(3) > ul:nth-child(1) > li:nth-child(1) > div:nth-child(1) > div:nth-child(3) > button:nth-child(3)")
+            .get("body > div:nth-child(2) > div:nth-child(3) > ul:nth-child(1) > li:nth-child(1) > div:nth-child(1) > div:nth-child(3) > button:nth-child(3)")
             .then(($button) => {
                 for (let i = 0; i < 24; i++) {
                     cy.wrap($button).click({ force: true })
                 }
             });
-        cy.get("body > div:nth-child(3) > div:nth-child(3) > ul:nth-child(1) > li:nth-child(2) > div:nth-child(1) > div:nth-child(3) > button:nth-child(3)")
+        cy.get("body > div:nth-child(2) > div:nth-child(3) > ul:nth-child(1) > li:nth-child(2) > div:nth-child(1) > div:nth-child(3) > button:nth-child(3)")
             .click().wait(1500)
             .get("div[class='validationMsg monsterrat'] p").contains("The total number of guests cannot exceed 24.")
             .get("li:nth-child(1) div:nth-child(1) div:nth-child(3) button:nth-child(1)").click().click()
-            .get("body > div:nth-child(3) > div:nth-child(3) > ul:nth-child(1) > li:nth-child(3) > div:nth-child(1) > div:nth-child(3) > button:nth-child(3)").click()
-            .get("body > div:nth-child(3) > div:nth-child(3) > ul:nth-child(1) > li:nth-child(4) > div:nth-child(1) > div:nth-child(3) > button:nth-child(3)").click().click()
+            .get("body > div:nth-child(2) > div:nth-child(3) > ul:nth-child(1) > li:nth-child(3) > div:nth-child(1) > div:nth-child(3) > button:nth-child(3)").click()
+            .get("body > div:nth-child(2) > div:nth-child(3) > ul:nth-child(1) > li:nth-child(4) > div:nth-child(1) > div:nth-child(3) > button:nth-child(3)").click().click()
             .get("li:nth-child(1) div:nth-child(1) div:nth-child(3) button:nth-child(1)")
             .then(($button) => {
                 for (let i = 0; i < 22; i++) {

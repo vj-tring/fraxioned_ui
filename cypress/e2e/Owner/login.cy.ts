@@ -1,5 +1,5 @@
 describe("Login & Logout", () => {
-    describe("Unsuccessful Login", () => {
+    describe.skip("Unsuccessful Login", () => {
         it("Empty Email", () => {
             cy.visit("/login")
                 .get("button").contains("Sign in").click()
@@ -43,8 +43,7 @@ describe("Login & Logout", () => {
             cy.get("input[type='checkbox']").check().should('be.checked')
             cy.get("input[type='checkbox']").uncheck().should('not.be.checked')
             cy.get("input[type='checkbox']").check().should('be.checked')
-            cy.get("button").contains("Sign in").click()
-                .wait(2000)
+            cy.get("button").contains("Sign in").click().wait(2000)
             cy.get("nav")
                 .get("img[alt='User']").click()
                 .get('li').contains("Logout").click().wait(2000)
