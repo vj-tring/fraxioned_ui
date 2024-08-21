@@ -114,6 +114,27 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
   };
 
   const addProperty = () => {
+    if (formValues.propertyID === 0) {
+      setSnackbarMessage("Please select a property");
+      setSnackbarSeverity("error");
+      setShowSnackbar(true);
+      return;
+    }
+  
+    if (formValues.noOfShares <= 0) {
+      setSnackbarMessage("Number of shares must be greater than 0");
+      setSnackbarSeverity("error");
+      setShowSnackbar(true);
+      return;
+    }
+  
+    if (!formValues.acquisitionDate) {
+      setSnackbarMessage("Please select an acquisition date");
+      setSnackbarSeverity("error");
+      setShowSnackbar(true);
+      return;
+    }
+  
     if (editIndex !== null) {
       setAddedProperties((prev) => {
         const updatedProperties = [...prev];
