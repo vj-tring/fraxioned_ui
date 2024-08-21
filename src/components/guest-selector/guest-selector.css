@@ -1,6 +1,12 @@
 .MultiItems {
   display: flex;
   align-items: center;
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.MultiItems:hover{
+  background: none !important;
 }
 .MutliselectBtn:hover {
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -17,17 +23,17 @@
 
 .DescFont {
   font-size: 13px;
-  margin-top: -3px;
+  margin-top: -5px;
 }
 
 .w-50 {
   width: 43% !important;
-  padding-top: 11px !important;
+  padding-top: 0px !important;
 }
 
-.MultiIte {
+/* .MultiIte {
   padding-top: 9px;
-}
+} */
 
 .css-1tzgs8d-MuiAvatar-root {
   background: none !important;
@@ -40,6 +46,7 @@
 
 .itemLabel {
   padding-top: 13px !important;
+  color:rgb(74, 74, 74) ;
 }
 
 .DateHead1{
@@ -77,27 +84,24 @@
   background-color: white;
 }
 
-.Dec-circle,
-.Inc-circle {
+.Dec-circle {
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border: 1px solid grey;
-  font-size: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-bottom: 3px;
 }
 .Inc-circle {
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border: 1px solid grey;
-  font-size: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.3s ease, opacity 0.3s ease;
 }
 
 
@@ -110,10 +114,10 @@
 
 
 .Ad-count {
-  font-size: 16px;
+  font-size: 14px;
   margin-top: 6px;
-  width: 20px;
-  padding-left: 7px;
+  width: 21px;
+  padding-left: 4px;
 }
 
 .list-Age {
@@ -134,3 +138,9 @@
  text-align: -webkit-match-parent;
 }
 
+
+.css-ur8j0y-MuiButtonBase-root-MuiMenuItem-root:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background-color:transparent !important;
+}
