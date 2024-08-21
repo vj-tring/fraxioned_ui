@@ -48,7 +48,7 @@ describe("Owner Booking Check", () => {
                     cy.wrap($button).click({ force: true })
                 }
             });
-        cy.get("div[class='validationMsg monsterrat'] p").contains("At least one adult is required.").go(-1).go(+1)
+        cy.get("div[class='validationMsg monsterrat'] p").contains("At least one adult is required.").wait(1000).go(-1).go(+1)
             .get("nav")
             .get("img[alt='User']").click()
             .get('li').contains("Logout").click().wait(2000)

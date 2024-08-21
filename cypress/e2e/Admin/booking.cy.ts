@@ -26,7 +26,7 @@ describe("Check Booking Functionalities", () => {
             .get("button").contains("Today").click().wait(1000)
     })
     it("Check Booking",()=>{
-        cy.visit("/login").reload()
+        cy.visit("/login")
         .get("input[placeholder='Email']").type("fraxionedownersportal@gmail.com")
         .get("input[placeholder='Password']").type("Admin@123")
         .get("button").contains("Sign in").click().wait(1000)
