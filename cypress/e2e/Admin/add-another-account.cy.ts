@@ -73,10 +73,10 @@ describe("Add another account", () => {
             .get("#phoneNumber").type("9876543211").wait(1000)
             .get("#roleId").select("Owner").wait(1000).wait(1000)
             .get("#propertyID").select("Paradise Shores (eighths)").wait(1000).wait(1000)
-            .get("button").contains("Register").click().wait(1500)
-        // .get("div[role='alert']").contains("Invite sent successfully").wait(1000)
+            .get("button").contains("Register").click().wait(2000)
+            .get("div[role='alert']").contains("Invite sent successfully").wait(2000)
     })
-    it.skip("Successful flow for admin invitation", () => {
+    it("Successful flow for admin invitation", () => {
         const email = `user${Math.floor(Math.random() * 10000)}@email.com`;
         cy.visit("/login")
             .get("input[placeholder='Email']").type("fraxionedownersportal@gmail.com")
@@ -91,7 +91,7 @@ describe("Add another account", () => {
             .get("#phoneNumber").type("9876543211").wait(1000)
             .get("#roleId").select("Admin").wait(1000).wait(1000)
             .get("#propertyID").select("Paradise Shores (eighths)").wait(1000).wait(1000)
-            .get("button").contains("Register").click().wait(1500)
-        // .get("div[role='alert']").contains("Invite sent successfully").wait(1000)
+            .get("button").contains("Register").click().wait(2000)
+            .get("div[role='alert']").contains("Invite sent successfully").wait(2000)
     })
 })

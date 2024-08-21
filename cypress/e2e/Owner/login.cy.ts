@@ -1,5 +1,5 @@
 describe("Login & Logout", () => {
-    describe.skip("Unsuccessful Login", () => {
+    describe("Unsuccessful Login", () => {
         it("Empty Email", () => {
             cy.visit("/login")
                 .get("button").contains("Sign in").click()
