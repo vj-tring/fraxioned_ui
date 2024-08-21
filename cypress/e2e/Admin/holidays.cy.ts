@@ -1,9 +1,17 @@
 describe("Check Holiday Functionalities",()=>{
-    it("Should have holiday title and button",()=>{
+    it("Add holiday",()=>{
         cy.visit("/login")
         .get("input[placeholder='Email']").type("fraxionedownersportal@gmail.com")
         .get("input[placeholder='Password']").type("Admin@123")
-        .get("button").contains("Sign in").click()
-        .get(".holiday-module__title___7yD1l")
+        .get("button").contains("Sign in").click().wait(1500)
+        .get("a").contains("Holidays").click()
+        .get("button").contains("Add Holiday").click()
+        .get("body > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > form:nth-child(2) > div:nth-child(1) > div:nth-child(1)")
+        .contains("Name").type("HolidayName")
+        .get("input").contains("Year").type("2024")
+        .get("input").contains("Start Date").type("07072024")
+        .get("input").contains("End Date").type("08072024")
+        .get("input").contains("5").check()
+        .get("button").contains("Add Holiday")
     })
 })
