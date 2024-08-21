@@ -5,7 +5,7 @@
     top: 0;
     left: 0;
     height: 100vh;
-    background-color: #f7fafb;
+    background-color: #fcfcfc;
     box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
     color: #444444;
     overflow-y: auto;
@@ -28,7 +28,7 @@
 
 .logoContainer {
     padding: 11px;
-    background-color: #f7fafb;
+    background-color: #fafafa;
     text-align: center;
     display: flex;
     justify-content: space-between;
