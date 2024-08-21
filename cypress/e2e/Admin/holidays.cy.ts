@@ -8,7 +8,7 @@ describe("Check Holiday Functionalities",()=>{
         .get("button").contains("Add Holiday").click()
         .get("body > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > form:nth-child(2) > div:nth-child(1) > div:nth-child(1)")
         .contains("Name").type("HolidayName")
-        .get("input").contains("Year").type("2024")
+        .get("input").contains("Year").click().type("2024")
         .get("input").contains("Start Date").type("07072024")
         .get("input").contains("End Date").type("08072024")
         .get("input").contains("5").check()
