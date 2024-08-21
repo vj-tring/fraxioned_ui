@@ -10,7 +10,6 @@ import Loader from "@/components/loader";
 import CustomizedSnackbars from "@/components/customized-snackbar";
 import { ChangeEvent } from "react";
 
-
 interface RegisterFormContentProps {
   onClose: () => void;
 }
@@ -28,7 +27,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
     roleId: 0,
     propertyID: 0,
     noOfShares: 1,
-    acquisitionDate: new Date().toISOString().split("T")[0], 
+    acquisitionDate: new Date().toISOString().split("T")[0],
   });
 
   const [roles, setRoles] = useState<any[]>([]);
@@ -42,7 +41,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
     roleId: "",
     propertyID: "",
     noOfShares: "",
-    acquisitionDate:"",
+    acquisitionDate: "",
   });
 
   const [showSnackbar, setShowSnackbar] = useState(false);
@@ -79,7 +78,6 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
         console.error("Failed to fetch roles", error);
       }
     };
-    
 
     fetchRoles();
     fetchProperties();
@@ -157,18 +155,17 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
         i === index ? { ...property, isEditing: !property.isEditing } : property
       )
     );
-    
+
     if (addedProperties[index].isEditing) {
       setSnackbarMessage("Successfully saved");
       setSnackbarSeverity("success");
       setShowSnackbar(true);
     }
   };
-  
+
   const handleDeleteProperty = (index: number) => {
     setAddedProperties((prev) => prev.filter((_, i) => i !== index));
   };
-
 
   const updateShareholderLimits = (propertyId: number) => {
     const selectedProperty = properties.find((prop) => prop.id === propertyId);
@@ -208,21 +205,6 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
       newErrors.roleId = "Role is required";
       hasErrors = true;
     }
-
-    if (formValues.propertyID === 0) {
-      newErrors.propertyID = "Property is required";
-      hasErrors = true;
-    }
-  
-    if (formValues.noOfShares === 0) {
-      newErrors.noOfShares = "Shares are required";
-      hasErrors = true;
-    }
-    if (!formValues.acquisitionDate) {
-      newErrors.acquisitionDate = "Acquisition Date is required";
-      hasErrors = true;
-    }
-  
     setErrors(newErrors);
     return !hasErrors;
   };
@@ -236,26 +218,26 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
         firstName: formValues.firstName.trim(),
         lastName: formValues.lastName.trim(),
         addressLine1: formValues.addressLine1.trim(),
-        addressLine2: "", 
-        state: "Tamil Nadu", 
-        country: "India", 
-        city: "Salem", 
-        zipcode: "123456", 
+        addressLine2: "",
+        state: "Tamil Nadu",
+        country: "India",
+        city: "Salem",
+        zipcode: "123456",
         phoneNumber: formValues.phoneNumber.trim(),
         roleId: formValues.roleId,
-        updatedBy: 1, 
-        createdBy: 1, 
+        updatedBy: 1,
+        createdBy: 1,
         userPropertyDetails: addedProperties.map((property) => ({
           propertyID: property.propertyID,
           noOfShares: property.noOfShares,
           acquisitionDate: property.acquisitionDate,
         })),
       };
-    
-      console.log("Payload:", payload); 
+
+      console.log("Payload:", payload);
       try {
         const register = await dispatch(registerUser(payload)).unwrap();
-        console.log("Register response:", register); 
+        console.log("Register response:", register);
         setIsLoading(false);
         if (register.message === "Invite sent successfully") {
           setSnackbarMessage(register.message);
@@ -294,7 +276,11 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
       setShowSnackbar(true);
     }
   };
-  
+
+  const handleSnackbarClose = () => {
+    setShowSnackbar(false);
+  };
+
   return (
     <>
       <div className={styles.modalOverlay}>
@@ -309,7 +295,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
           <form className={styles.form} onSubmit={handleSubmit}>
             <div className={styles.formContent}>
               <div className={styles.leftContent}>
-              <h3 className={styles.sectionTitle}>Basic Details</h3>
+                <h3 className={styles.sectionTitle}>Basic Details</h3>
                 <div className={styles.inputGroup}>
                   <input
                     type="text"
@@ -393,12 +379,11 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                     <span className={styles.error}>{errors.roleId}</span>
                   )}
                 </div>
-              </div> 
-              <div className={styles.rightContent}>
-              <h3 className={styles.sectionTitle}>Property Details</h3>
-
-              <div className="add-property">
               </div>
+              <div className={styles.rightContent}>
+                <h3 className={styles.sectionTitle}>Property Details</h3>
+
+                <div className="add-property"></div>
                 <div className={styles.addPropertySection}>
                   <button
                     type="button"
@@ -410,166 +395,183 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
 
                   {showPropertyFields && (
                     <div className={styles.propertyFields}>
-                    <div className={styles.inlineInputGroup}>
-                      <div className={styles.inputGroup}>
-                        <select
-                          id="propertyID"
-                          name="propertyID"
-                          value={formValues.propertyID}
-                          onChange={handleSelectChange}
-                        >
-                          <option value={0}>Select Property</option>
-                          {properties.map((property) => (
-                            <option key={property.id} value={property.id}>
-                              {property.propertyName}
-                            </option>
-                          ))}
-                        </select>
+                      <div className={styles.inlineInputGroup}>
+                        <div className={styles.inputGroup}>
+                          <select
+                            id="propertyID"
+                            name="propertyID"
+                            value={formValues.propertyID}
+                            onChange={handleSelectChange}
+                          >
+                            <option value={0}>Select Property</option>
+                            {properties.map((property) => (
+                              <option key={property.id} value={property.id}>
+                                {property.propertyName}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className={styles.inputGroup}>
+                          <select
+                            id="noOfShares"
+                            name="noOfShares"
+                            value={formValues.noOfShares}
+                            onChange={handleSelectChange}
+                          >
+                            {numberstate.map((shareCount) => (
+                              <option key={shareCount} value={shareCount}>
+                                {shareCount}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className={styles.inputGroup}>
+                          <input
+                            type="date"
+                            id="acquisitionDate"
+                            name="acquisitionDate"
+                            value={formValues.acquisitionDate}
+                            onChange={handleDateChange}
+                          />
+                        </div>
                       </div>
-                      <div className={styles.inputGroup}>
-                        <select
-                          id="noOfShares"
-                          name="noOfShares"
-                          value={formValues.noOfShares}
-                          onChange={handleSelectChange}
+                      <div className={styles.propertyButtons}>
+                        <button
+                          type="button"
+                          className={styles.saveButton}
+                          onClick={addProperty}
                         >
-                          {numberstate.map((shareCount) => (
-                            <option key={shareCount} value={shareCount}>
-                              {shareCount}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className={styles.inputGroup}>
-                        <input
-                          type="date"
-                          id="acquisitionDate"
-                          name="acquisitionDate"
-                          value={formValues.acquisitionDate}
-                          onChange={handleDateChange}
-                        />
+                          <FaSave />
+                        </button>
                       </div>
                     </div>
-                    <div className={styles.propertyButtons}>
-                      <button
-                        type="button"
-                        className={styles.saveButton}
-                        onClick={addProperty}
-                      >
-                        <FaSave />
-                      </button>
-                    </div>
-                  </div>            
                   )}
                 </div>
 
                 <div className={styles.addedPropertiesList}>
-  {addedProperties.map((property, index) => (
-    <div key={index} className={styles.propertyItem}>
-      {property.isEditing ? (
-        <>
-          <div className={styles.inlineInputGroup}>
-            <div className={styles.inputGroup}>
-              <select
-                value={property.propertyID}
-                onChange={(e) =>
-                  setAddedProperties((prev) =>
-                    prev.map((prop, i) =>
-                      i === index
-                        ? { ...prop, propertyID: parseInt(e.target.value, 10) }
-                        : prop
-                    )
-                  )
-                }
-              >
-                {properties.map((prop) => (
-                  <option key={prop.id} value={prop.id}>
-                    {prop.propertyName}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className={styles.inputGroup}>
-              <select
-                value={property.noOfShares}                  
-                onChange={(e) =>
-                  setAddedProperties((prev) =>
-                    prev.map((prop, i) =>
-                      i === index
-                        ? { ...prop, noOfShares: parseInt(e.target.value, 10) }
-                        : prop
-                    )
-                  )
-                }
-              >
-                {numberstate.map((shareCount) => (
-                  <option key={shareCount} value={shareCount}>
-                    {shareCount}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className={styles.inputGroup}>
-              <input
-                type="date"
-                value={property.acquisitionDate}
-                onChange={(e) =>
-                  setAddedProperties((prev) =>
-                    prev.map((prop, i) =>
-                      i === index
-                        ? { ...prop, acquisitionDate: e.target.value }
-                        : prop
-                    )
-                  )
-                }
-              />
-            </div>
-          </div>
-          <button
-            type="button"
-            className={styles.saveButton}
-            onClick={() => handleEditProperty(index)}
-          >
-            <FaSave />
-          </button>
-        </>
-      ) : (
-        <>
-          <span>{property.propertyName}</span>
-          <span>{property.noOfShares}</ span>
-          <span>{property.acquisitionDate}</span>
-          <button
-            type="button"
-            className={styles.editButton}
-            onClick={() => handleEditProperty(index)}
-          >
-            <FaEdit />
-            Edit
-          </button>
-          <button
-            type="button"
-            className={styles.deleteButton}
-            onClick={() => handleDeleteProperty(index)}
-          >
-            <FaTrash />
-            Delete
-          </button>
-        </>
-      )}
-    </div>
-  ))}
-</div>
-
+                  {addedProperties.map((property, index) => (
+                    <div key={index} className={styles.propertyItem}>
+                      {property.isEditing ? (
+                        <>
+                          <div className={styles.inlineInputGroup}>
+                            <div className={styles.inputGroup}>
+                              <select
+                                value={property.propertyID}
+                                onChange={(e) =>
+                                  setAddedProperties((prev) =>
+                                    prev.map((prop, i) =>
+                                      i === index
+                                        ? {
+                                            ...prop,
+                                            propertyID: parseInt(
+                                              e.target.value,
+                                              10
+                                            ),
+                                          }
+                                        : prop
+                                    )
+                                  )
+                                }
+                              >
+                                {properties.map((prop) => (
+                                  <option key={prop.id} value={prop.id}>
+                                    {prop.propertyName}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                            <div className={styles.inputGroup}>
+                              <select
+                                value={property.noOfShares}
+                                onChange={(e) =>
+                                  setAddedProperties((prev) =>
+                                    prev.map((prop, i) =>
+                                      i === index
+                                        ? {
+                                            ...prop,
+                                            noOfShares: parseInt(
+                                              e.target.value,
+                                              10
+                                            ),
+                                          }
+                                        : prop
+                                    )
+                                  )
+                                }
+                              >
+                                {numberstate.map((shareCount) => (
+                                  <option key={shareCount} value={shareCount}>
+                                    {shareCount}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                            <div className={styles.inputGroup}>
+                              <input
+                                type="date"
+                                value={property.acquisitionDate}
+                                onChange={(e) =>
+                                  setAddedProperties((prev) =>
+                                    prev.map((prop, i) =>
+                                      i === index
+                                        ? {
+                                            ...prop,
+                                            acquisitionDate: e.target.value,
+                                          }
+                                        : prop
+                                    )
+                                  )
+                                }
+                              />
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            className={styles.saveButton}
+                            onClick={() => handleEditProperty(index)}
+                          >
+                            <FaSave />
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <span>{property.propertyName}</span>
+                          <span>{property.noOfShares}</span>
+                          <span>{property.acquisitionDate}</span>
+                          <button
+                            type="button"
+                            className={styles.editButton}
+                            onClick={() => handleEditProperty(index)}
+                          >
+                            <FaEdit />
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            className={styles.deleteButton}
+                            onClick={() => handleDeleteProperty(index)}
+                          >
+                            <FaTrash />
+                            Delete
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
             <div className={styles.modalFooter}>
-              <button type="submit" className={styles.submitButton} onClick={() =>handleSubmit}>
+              <button
+                type="submit"
+                className={styles.submitButton}
+                onClick={() => handleSubmit}
+              >
                 Register
               </button>
-            
             </div>
             <div className={styles.modalFooter}>
-            <button
+              <button
                 type="button"
                 className={styles.cancelButton}
                 onClick={onClose}
@@ -577,7 +579,6 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                 Cancel
               </button>
             </div>
-
           </form>
         </div>
       </div>
@@ -585,7 +586,8 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
         <CustomizedSnackbars
           message={snackbarMessage}
           severity={snackbarSeverity}
-          onClose={() => setShowSnackbar(false)}
+          handleClose={handleSnackbarClose}
+          open={showSnackbar}
         />
       )}
     </>
