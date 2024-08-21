@@ -1,5 +1,5 @@
 describe("Check Holiday Functionalities",()=>{
-    it("Add holiday",()=>{
+    it("Add holiday(Success Flow)",()=>{
         cy.visit("/login")
         .get("input[placeholder='Email']").type("fraxionedownersportal@gmail.com")
         .get("input[placeholder='Password']").type("Admin@123")
@@ -7,11 +7,14 @@ describe("Check Holiday Functionalities",()=>{
         .get("a").contains("Holidays").click()
         .get("button").contains("Add Holiday").click()
         .get("body > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > form:nth-child(2) > div:nth-child(1) > div:nth-child(1)")
-        .contains("Name").type("HolidayName")
-        .get("input").contains("Year").click().type("2024")
-        .get("input").contains("Start Date").type("07072024")
-        .get("input").contains("End Date").type("08072024")
-        .get("input").contains("5").check()
-        .get("button").contains("Add Holiday")
+        .contains("Name").type("HolidayName").wait(1500)
+        .get("body > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > form:nth-child(2) > div:nth-child(1) > div:nth-child(2)")
+        .click().type("2024").wait(1500)
+        .get("body > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > form:nth-child(2) > div:nth-child(1) > div:nth-child(3)")
+        .click().type("07072024").wait(1500)
+        .get("body > div:nth-child(2) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > form:nth-child(2) > div:nth-child(1) > div:nth-child(4)")
+        .click().type("08072024").wait(1500)
+        .get("input[name='1']").check().wait(1500)
+        .get("button[type='submit']").contains("Add Holiday").click()
     })
 })
