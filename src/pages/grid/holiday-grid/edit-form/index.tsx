@@ -19,6 +19,8 @@ import { getProperties, updateHolidaysApi, fetchpropertyHolidaysApi } from '@/ap
 import { useSelector } from 'react-redux';
 import Loader from '@/components/loader';
 import { RootState } from '@/store/reducers';
+import EventIcon from '@mui/icons-material/Event';
+
 
 interface Property {
     id: number;
@@ -120,102 +122,111 @@ const EditForm: React.FC<EditFormProps> = ({ onClose, onHolidayUpdated, holidayD
     }
 
     return (
-        <div className={styles.formContainer}>
-            <Typography variant="h4" className={styles.formTitle}>
-                Edit Holiday
-            </Typography>
-            <Paper elevation={0} className={styles.formPaper}>
-                <form onSubmit={handleSubmit} className={styles.form}>
-                    <TextField
-                        label="Name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        fullWidth
-                        required
-                        variant="outlined"
-                        size="small"
-                        className={styles.inputField}
-                    />
-                    <TextField
-                        label="Year"
-                        type="number"
-                        value={year}
-                        onChange={(e) => setYear(parseInt(e.target.value) || 0)}
-                        fullWidth
-                        required
-                        variant="outlined"
-                        size="small"
-                        className={styles.inputField}
-                    />
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <DatePicker
-                                    label="Start Date"
-                                    value={startDate}
-                                    onChange={(newValue) => setStartDate(newValue)}
-                                    className={styles.datePicker}
-                                    slotProps={{ textField: { size: 'small', fullWidth: true } }}
+        <div className={styles.modalOverlay}>
+            <div className={styles.formContainer}>
+                <Paper elevation={9} className={styles.formPaper}>
+                    <Box className={styles.formHeader}>
+                        <EventIcon className={styles.headerIcon} />
+                        <Typography variant="h4" className={styles.formTitle}>
+                            Edit Holiday
+                        </Typography>
+                    </Box>
+                    <form onSubmit={handleSubmit} className={styles.form}>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    label="Name"
+                                    autoFocus
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    fullWidth
+                                    required
+                                    variant="outlined"
+                                    className={styles.inputField}
                                 />
                             </Grid>
-                            <Grid item xs={6}>
-                                <DatePicker
-                                    label="End Date"
-                                    value={endDate}
-                                    onChange={(newValue) => setEndDate(newValue)}
-                                    className={styles.datePicker}
-                                    slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    label="Year"
+                                    type="number"
+                                    value={year}
+                                    onChange={(e) => setYear(parseInt(e.target.value) || 0)}
+                                    fullWidth
+                                    required
+                                    variant="outlined"
+                                    className={styles.inputField}
                                 />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <DatePicker
+                                        label="Start Date"
+                                        value={startDate}
+                                        onChange={(newValue) => setStartDate(newValue)}
+                                        className={styles.datePicker}
+                                        slotProps={{ textField: { fullWidth: true, className: styles.inputField } }}
+                                    />
+                                </LocalizationProvider>
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <DatePicker
+                                        label="End Date"
+                                        value={endDate}
+                                        onChange={(newValue) => setEndDate(newValue)}
+                                        className={styles.datePicker}
+                                        slotProps={{ textField: { fullWidth: true, className: styles.inputField } }}
+                                    />
+                                </LocalizationProvider>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography variant="subtitle2" className={styles.checkboxGroupLabel}>
+                                    Select Properties
+                                </Typography>
+                                <FormControl component="fieldset" className={styles.checkboxGroup}>
+                                    <div className={styles.scrollableContainer}>
+                                        <FormGroup>
+                                            <Grid container>
+                                                {properties.map((property) => (
+                                                    <Grid item xs={6} key={property.id}>
+                                                        <FormControlLabel
+                                                            control={
+                                                                <Checkbox
+                                                                    checked={selectedProperties.includes(property.id)}
+                                                                    onChange={handlePropertyChange}
+                                                                    name={property.id.toString()}
+                                                                />
+                                                            }
+                                                            label={property.propertyName}
+                                                            className={styles.formControlLabel}
+                                                        />
+                                                    </Grid>
+                                                ))}
+                                            </Grid>
+                                        </FormGroup>
+                                    </div>
+                                </FormControl>
                             </Grid>
                         </Grid>
-                    </LocalizationProvider>
-                    <Typography variant="subtitle2" className={styles.checkboxGroupLabel}>
-                        Select Properties
-                    </Typography>
-                    <FormControl component="fieldset" className={styles.checkboxGroup}>
-                        <div className={styles.scrollableContainer}>
-                            <FormGroup>
-                                <Grid container>
-                                    {properties.map((property) => (
-                                        <Grid item xs={6} key={property.id}>
-                                            <FormControlLabel
-                                                control={
-                                                    <Checkbox
-                                                        checked={selectedProperties.includes(property.id)}
-                                                        onChange={handlePropertyChange}
-                                                        name={property.id.toString()}
-                                                        size="small"
-                                                    />
-                                                }
-                                                label={property.propertyName}
-                                                className={styles.formControlLabel}
-                                            />
-                                        </Grid>
-                                    ))}
-                                </Grid>
-                            </FormGroup>
-                        </div>
-                    </FormControl>
-                    <Box className={styles.buttonContainer}>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            className={styles.addButton}
-                        >
-                            UPDATE
-                        </Button>
-                        <Button
-                            variant="outlined"
-                            color="secondary"
-                            onClick={onClose}
-                            className={styles.cancelButton}
-                        >
-                            CANCEL
-                        </Button>
-                    </Box>
-                </form>
-            </Paper>
+                        <Box className={styles.buttonContainer}>
+                            <Button
+                                variant="outlined"
+                                onClick={onClose}
+                                className={styles.cancelButton}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                className={styles.addButton}
+                            >
+                                Update Holiday
+                            </Button>
+                        </Box>
+                    </form>
+                </Paper>
+            </div>
         </div>
     );
 };
