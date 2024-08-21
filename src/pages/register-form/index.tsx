@@ -402,13 +402,21 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                             name="propertyID"
                             value={formValues.propertyID}
                             onChange={handleSelectChange}
+                            className={styles.equalWidthSelect}
                           >
                             <option value={0}>Select Property</option>
-                            {properties.map((property) => (
-                              <option key={property.id} value={property.id}>
-                                {property.propertyName}
-                              </option>
-                            ))}
+                            {properties
+                              .filter(
+                                (property) =>
+                                  !addedProperties.some(
+                                    (added) => added.propertyID === property.id
+                                  )
+                              )
+                              .map((property) => (
+                                <option key={property.id} value={property.id}>
+                                  {property.propertyName}
+                                </option>
+                              ))}
                           </select>
                         </div>
                         <div className={styles.inputGroup}>
@@ -417,6 +425,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                             name="noOfShares"
                             value={formValues.noOfShares}
                             onChange={handleSelectChange}
+                            className={styles.equalWidthSelect}
                           >
                             {numberstate.map((shareCount) => (
                               <option key={shareCount} value={shareCount}>
@@ -432,10 +441,9 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                             name="acquisitionDate"
                             value={formValues.acquisitionDate}
                             onChange={handleDateChange}
+                            className={styles.equalWidthSelect}
                           />
                         </div>
-                      </div>
-                      <div className={styles.propertyButtons}>
                         <button
                           type="button"
                           className={styles.saveButton}
@@ -472,6 +480,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                                     )
                                   )
                                 }
+                                className={styles.equalWidthSelect} // Apply equal width class
                               >
                                 {properties.map((prop) => (
                                   <option key={prop.id} value={prop.id}>
@@ -498,6 +507,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                                     )
                                   )
                                 }
+                                className={styles.equalWidthSelect} // Apply equal width class
                               >
                                 {numberstate.map((shareCount) => (
                                   <option key={shareCount} value={shareCount}>
@@ -522,12 +532,13 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                                     )
                                   )
                                 }
+                                className={styles.equalWidthSelect} // Apply equal width class
                               />
                             </div>
                           </div>
                           <button
                             type="button"
-                            className={styles.saveButton}
+                            className={styles.UpdateButton}
                             onClick={() => handleEditProperty(index)}
                           >
                             <FaSave />
@@ -544,7 +555,6 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                             onClick={() => handleEditProperty(index)}
                           >
                             <FaEdit />
-                            Edit
                           </button>
                           <button
                             type="button"
@@ -552,7 +562,6 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                             onClick={() => handleDeleteProperty(index)}
                           >
                             <FaTrash />
-                            Delete
                           </button>
                         </>
                       )}
