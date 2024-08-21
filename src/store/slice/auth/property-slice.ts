@@ -22,6 +22,7 @@ const mockData: Card[] = [
         peakRemainingNights: 10,
         offRemainingNights: 10,
         lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
       2025: {
         offSeason: '32/10',
@@ -31,6 +32,8 @@ const mockData: Card[] = [
         peakRemainingNights: 10,
         offRemainingNights: 10,
         lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
+
       },
       2026: {
         offSeason: '2/10',
@@ -40,6 +43,7 @@ const mockData: Card[] = [
         peakRemainingNights:15,
         offRemainingNights: 10,
         lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
     },
     maxGuestsAllowed: 4,
@@ -62,6 +66,7 @@ const mockData: Card[] = [
         peakRemainingNights: 10,
         offRemainingNights: 10,
         lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
       2025: {
         offSeason: '1/10',
@@ -71,6 +76,7 @@ const mockData: Card[] = [
         peakRemainingNights: 10,
         offRemainingNights: 10,
         lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
       2026: {
         offSeason: '2/10',
@@ -80,6 +86,7 @@ const mockData: Card[] = [
         peakRemainingNights: 10,
         offRemainingNights: 10,
         lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
     },
     maxGuestsAllowed: 4,
@@ -105,6 +112,7 @@ interface Card {
       peakRemainingNights: number;
       offRemainingNights: number;
       lastMinuteRemainingNights: number;
+      maximumStayLength: number;
     };
   };
   maxGuestsAllowed: number;
@@ -182,6 +190,7 @@ export const fetchProperties = createAsyncThunk(
               peakRemainingNights: userProp.peakRemainingNights,
               offRemainingNights: userProp.offRemainingNights,
               lastMinuteRemainingNights: userProp.lastMinuteRemainingNights,
+              maximumStayLength: userProp.maximumStayLength,
             };
           }
         });
@@ -196,6 +205,7 @@ export const fetchProperties = createAsyncThunk(
               peakRemainingNights: 0,
               offRemainingNights: 0,
               lastMinuteRemainingNights: 0,
+              maximumStayLength: 0,
             };
           }
         });

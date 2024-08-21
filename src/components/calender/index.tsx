@@ -205,7 +205,7 @@ export function DatePickerWithRange({
           } else {
             if (nightsSelected < calendarData.bookingRules.regularBooking.minNights) {
               setErrorMessage(`Minimum ${calendarData.bookingRules.regularBooking.minNights} nights required`);
-            } else if (nightsSelected > calendarData.bookingRules.regularBooking.maxNights) {
+            } else if (nightsSelected > selectedPropertyDetails?.maximumStayLength) {
               setErrorMessage('Your booking request has exceeded the maximum stay length');
             } else {
               setErrorMessage(null);
@@ -310,7 +310,7 @@ export function DatePickerWithRange({
         <div className="flex items-center justify-end end-calendar">
         <div className='stay-length'>
             <div className='misl'>Minimum Stay Length : {calendarData.bookingRules.regularBooking.minNights} Nights</div>
-            <div className='masl'>Maximum Stay Length : {calendarData.bookingRules.regularBooking.maxNights} Nights</div>
+            <div className='masl'>Maximum Stay Length : {selectedPropertyDetails?.maximumStayLength} Nights</div>
         </div>
         <div onClick={clearDates} className="ml-auto btn-clear">
             Clear
