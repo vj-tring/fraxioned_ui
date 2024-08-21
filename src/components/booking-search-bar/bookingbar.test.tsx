@@ -8,6 +8,11 @@ jest.mock('@/lib/utils', () => ({
   cn: jest.fn(),
 }));
 
+jest.mock('@/store/slice/auth/property-slice', () => ({
+  fetchProperties: jest.fn(),
+  selectSelectedPropertyDetails: jest.fn(),
+}));
+
 jest.mock('../property-carousel', () => {
   const MockPropertyCarousel = () => React.createElement('div', null, 'BasicSelect Component');
   return MockPropertyCarousel;

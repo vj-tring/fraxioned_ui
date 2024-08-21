@@ -90,31 +90,8 @@
     border-radius: 8px;
 }
 
-.datePicker {
-    width: 100%;
-}
-
-.checkboxGroupLabel {
-    font-size: 16px;
-    font-weight: 500;
-    color: #333;
-    margin-bottom: 8px;
-}
-
-.checkboxGroup {
-    width: 100%;
-}
-
-.scrollableContainer {
-    overflow-y: auto;
-    max-height: 200px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 8px;
-}
-
-.formControlLabel {
-    margin-bottom: 0;
+.checkbox {
+    margin-top: 8px;
 }
 
 .buttonContainer {
@@ -232,7 +209,7 @@
 }
 
 :global(.MuiFormControl-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline) {
-    border-color: #fabf95 !important;
+    border-color: #e28f25 !important;
     box-shadow: 0 4px 20px rgba(246, 169, 97, 0.1);
 
 }

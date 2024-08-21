@@ -4,6 +4,7 @@ import imageParadiseShores from '../../../assests/bear-lake-bluffs.jpg';
 import imageBlueBearLake from '../../../assests/crown-jewel.jpg';
 import imageCrownJewel from '../../../assests/blue-bear-lake.jpg';
 import imageLakeEscape from '../../../assests/lake-escape.jpg';
+import { RootState } from '@/store/reducers';
 
 // Mock data
 const mockData: Card[] = [
@@ -18,23 +19,38 @@ const mockData: Card[] = [
         peakSeason: '3/15',
         peakHoliday: '4/20',
         offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
       2025: {
         offSeason: '32/10',
         peakSeason: '32/15',
         peakHoliday: '43/20',
         offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
+
       },
       2026: {
         offSeason: '2/10',
         peakSeason: '3/15',
         peakHoliday: '4/20',
         offSeasonHoliday: '5/25',
+        peakRemainingNights:15,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
     },
     maxGuestsAllowed: 4,
     maxPetsAllowed: 2,
     share: 0,
+    peakSeasonStartDate: '2024-03-15',
+    peakSeasonEndDate: '2024-11-15',
   },
   {
     id: 1,
@@ -47,23 +63,37 @@ const mockData: Card[] = [
         peakSeason: '3/15',
         peakHoliday: '4/20',
         offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
       2025: {
         offSeason: '1/10',
         peakSeason: '2/15',
         peakHoliday: '3/2',
         offSeasonHoliday: '2/35',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
       2026: {
         offSeason: '2/10',
         peakSeason: '3/15',
         peakHoliday: '4/20',
         offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
     },
     maxGuestsAllowed: 4,
     maxPetsAllowed: 2,
     share: 0,
+    peakSeasonStartDate: '2024-03-15',
+    peakSeasonEndDate: '2024-11-15',
   },
   // Add more mock properties if needed
 ];
@@ -79,17 +109,24 @@ interface Card {
       peakSeason: string;
       peakHoliday: string;
       offSeasonHoliday: string;
+      peakRemainingNights: number;
+      offRemainingNights: number;
+      lastMinuteRemainingNights: number;
+      maximumStayLength: number;
     };
   };
   maxGuestsAllowed: number;
   maxPetsAllowed: number;
   share: number;
+  peakSeasonStartDate: string;
+  peakSeasonEndDate: string;
 }
 
 interface PropertyState {
   cards: Card[];
   loading: boolean;
   error: string | null;
+  selectedYear: number;
   selectedPropertyId: number | null;
   selectedPropertyLimits: {
     noOfGuestsAllowed: number;
@@ -102,6 +139,7 @@ const initialState: PropertyState = {
   loading: false,
   error: null,
   selectedPropertyId: null,
+  selectedYear: new Date().getFullYear(),
   selectedPropertyLimits: null,
 };
 
@@ -149,6 +187,10 @@ export const fetchProperties = createAsyncThunk(
               peakSeason: peakSeasonDenominator !== null ? `${peakSeasonNumerator}/${peakSeasonDenominator}` : 'undefined',
               peakHoliday: peakHolidayDenominator !== null ? `${peakHolidayNumerator}/${peakHolidayDenominator}` : 'undefined',
               offSeasonHoliday: offSeasonHolidayDenominator !== null ? `${offSeasonHolidayNumerator}/${offSeasonHolidayDenominator}` : 'undefined',
+              peakRemainingNights: userProp.peakRemainingNights,
+              offRemainingNights: userProp.offRemainingNights,
+              lastMinuteRemainingNights: userProp.lastMinuteRemainingNights,
+              maximumStayLength: userProp.maximumStayLength,
             };
           }
         });
@@ -160,6 +202,10 @@ export const fetchProperties = createAsyncThunk(
               peakSeason: '3',
               peakHoliday: '4',
               offSeasonHoliday: '5',
+              peakRemainingNights: 0,
+              offRemainingNights: 0,
+              lastMinuteRemainingNights: 0,
+              maximumStayLength: 0,
             };
           }
         });
@@ -173,6 +219,9 @@ export const fetchProperties = createAsyncThunk(
           details,
           maxGuestsAllowed: property.noOfGuestsAllowed || 0,
           maxPetsAllowed: property.noOfPetsAllowed || 0,
+          propertyShare:property.propertyShare,
+          peakSeasonStartDate: property.peakSeasonStartDate,
+          peakSeasonEndDate: property.peakSeasonEndDate,
         };
       });
 
@@ -236,4 +285,15 @@ const propertySlice = createSlice({
 });
 
 export const { selectProperty } = propertySlice.actions;
+export const selectSelectedPropertyDetails = (state: RootState) => {
+  const selectedProperty = state.properties.cards.find(card => card.id === state.properties.selectedPropertyId);
+  if (selectedProperty) {
+    return {
+      ...selectedProperty.details[state.properties.selectedYear],
+      peakSeasonStartDate: selectedProperty.peakSeasonStartDate,
+      peakSeasonEndDate: selectedProperty.peakSeasonEndDate,
+    };
+  }
+  return null;
+};
 export default propertySlice.reducer;
