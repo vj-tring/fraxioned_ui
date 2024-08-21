@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./card.css";
-import { FaPlus } from "react-icons/fa";
-import FraxImg from "../../assets/images/bookings-page-banner.jpg";
+// import { FaPlus } from "react-icons/fa";
+// import FraxImg from "../../assets/images/bookings-page-banner.jpg";
 
 interface CardProps {
   imageUrl: string;
