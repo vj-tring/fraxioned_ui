@@ -10,6 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { maxWidth } from '@mui/system'
 
 const BookingSearchBar: React.FC = () => {
+  const userId = ''
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined)
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
   const [activeDate, setActiveDate] = useState<'check-in' | 'check-out' | null>(null)
@@ -49,6 +50,7 @@ const BookingSearchBar: React.FC = () => {
               onSelect={handleDateSelect} 
               initialRange={dateRange}
               selectingFrom={activeDate === 'check-in'}
+              userId={userId}
             />
           </PopoverContent>
         </Popover>
