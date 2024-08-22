@@ -4,6 +4,7 @@
   border: none !important;
   margin-bottom: 10px;
 }
+
 .card {
   display: flex;
   flex-direction: row;
@@ -61,7 +62,7 @@
 
 .DateHead2 {
   font-weight: 600;
-  margin-right: 7px ;
+  margin-right: 7px;
 }
 
 .whoGuest {
