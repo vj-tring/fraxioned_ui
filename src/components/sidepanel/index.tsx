@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import fraxionedLogo from '../../assets/images/fraxioned.png';
-import logo from '../../assets/images/fraxioned-icon.png'
+import logo from '../../assets/images/fraxionedpng.png'
 import {
     FaCalendar, FaPlane, FaUser, FaFile,
     FaUserTag, FaChartBar, FaGavel, FaBars, FaHome

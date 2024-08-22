@@ -6,7 +6,7 @@ import Calendar from '@/components/big-calendar';
 import Property from '../grid/property-grid';
 import userImage from '../../assets/images/profile.jpeg'
 import CustomNavbar from '@/components/navbar';
-import fraxionedLogo from '../../assets/images/property-images/fraxioned-main.png'
+import fraxionedLogo from '../../assets/images/fraxioned.png'
 import './admin-dashboard.css'
 
 const AdminDashboard: React.FC = () => {

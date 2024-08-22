@@ -10,13 +10,14 @@
     display: flex;
     flex: 1;
     margin-top: 60px;
+    position: relative;
 }
 
 .content {
     flex: 1;
     padding: 0;
     overflow: hidden;
-    background-color: #f9fafa;
+    background-color: #f8f6f6;
     transition: margin-left 0.3s ease, width 0.3s ease;
 }
 
@@ -40,6 +41,17 @@
 
 .custom-navbar .user-image {
     border: 2px solid #c7eaee;
+}
+
+.divider {
+    position: absolute;
+    top: 60px;
+    left: 220px;
+    /* Adjust this value to position the divider */
+    height: calc(100% - 60px);
+    width: 1px;
+    background-color: #e0e0e0;
+    z-index: 1;
 }
 
 .side-panel {
