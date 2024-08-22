@@ -24,7 +24,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 62px;
+    height: 69px;
     z-index: 1001;
     flex-shrink: 0;
 }
@@ -91,7 +91,7 @@
 }
 
 .menuLink:hover {
-    background-color: rgba(199, 234, 238, 0.2);
+    background-color: rgba(226, 246, 248, 0.2);
 }
 
 .menuLink.active {
