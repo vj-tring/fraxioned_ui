@@ -33,10 +33,10 @@ const BookingSearchBar: React.FC = () => {
     <div className="MainCard">
       <div className="card">
         <PropertyCarousel />
-        <div className="vl p-2"></div>
+        <div className="vl p-1"></div>
         <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen} disableRipple>
           <PopoverTrigger asChild disableRipple >
-            <div>
+            <div className='mr-2'>
               <Region 
                 label="Check In"
                 date={dateRange?.from}
@@ -54,10 +54,10 @@ const BookingSearchBar: React.FC = () => {
             />
           </PopoverContent>
         </Popover>
-        <div className="vl p-2"></div>
+        <div className="vl p-1"></div>
         <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
           <PopoverTrigger asChild>
-            <div>
+            <div className='mr-2'>
               <Region 
                 label="Check Out"
                 date={dateRange?.to}
