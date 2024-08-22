@@ -67,6 +67,7 @@ export interface RegisterState {
   }
   
   export interface Property {
+    id: number;
     createdBy: { id: number }
     propertyName: string
     ownerRezPropId: number
@@ -83,7 +84,24 @@ export interface RegisterState {
     isActive: boolean
     displayOrder: number
   }
-
+  export interface UpdateProperty {
+    id: number;
+    updatedBy: { id: number }
+    propertyName: string
+    ownerRezPropId: number
+    address: string
+    city: string
+    state: string
+    country: string
+    zipcode: number
+    houseDescription: string
+    isExclusive: boolean
+    propertyShare: number
+    latitude: number
+    longitude: number
+    isActive: boolean
+    displayOrder: number
+  }
 
 
 
