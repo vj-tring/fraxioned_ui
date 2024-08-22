@@ -140,14 +140,24 @@ width: 90px;
   background: none !important;
 }
 
+.additionalproperty:hover {
+  border : 1px solid #e37c1c !important;
+}
+
 .CardItem {
   /* width: 460px; Adjust this value to reduce the width of the container */
   overflow: hidden;
   font-family: 'Montserrat', sans-serif !important;
 }
 
-.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root:hover {
+.MuiButtonBase-root.MuiMenuItem-root:hover {
   background-color: none !important;
+}
+
+.MuiButtonBase-root.MuiButton-root:hover {
+  text-decoration: none;
+  background-color: #fbfbfb;
+  color: #e37c1c !important;
 }
 
 .IconArrow {
@@ -171,6 +181,7 @@ width: 90px;
 
 .additionalproperty {
   width: 9rem !important;
+  margin: 0px !important;
   /* padding: .60rem 2rem !important; */
   border-radius: 2rem !important;
   text-transform: capitalize !important;
@@ -191,7 +202,7 @@ font-size: 0.8rem !important;
 
 .dot {
   width: 20px;
-  height: 1px;
+  height: 3px;
   background-color: lightgray;
   margin: 0 4px;
   cursor: pointer;
@@ -203,8 +214,8 @@ font-size: 0.8rem !important;
 }
 
 .additionalproperty.active {
-  background-color: #ffffff; /* or any color you prefer */
-  border: 1px solid #b4b4b4 !important; /* example border color for active state */
+  border: 1px solid #df8d24 !important;
+  color: #df8d24 !important;
 }
 
 

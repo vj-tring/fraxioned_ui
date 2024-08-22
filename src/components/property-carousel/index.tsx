@@ -179,7 +179,7 @@ export default function BasicSelect() {
           </MenuItem>
         ) : (
           <MenuItem disableRipple sx={{ '&:hover': { backgroundColor: 'white !important' } }}>
-            <div className="CardItem  " style={{ width: cardItemWidth, height: cardItemHeight }}>
+            <div className="CardItem" style={{ width: cardItemWidth, height: cardItemHeight }}>
               {showCarousel && (
                 <div className="card-container">
                   <div className="d-flex flex-row">

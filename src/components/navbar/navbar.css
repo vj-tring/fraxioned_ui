@@ -175,11 +175,14 @@
   margin-left: 5px;
 }
 
+.card-container {
+  margin-top: 7px;
+}
 .profile1 {
   padding-right: 10px;
 }
 
-.css-137ul40-MuiButtonBase-root-MuiIconButton-root:hover {
+.MuiButtonBase-root.MuiIconButton-root:hover {
   background: none !important;
 }
 
