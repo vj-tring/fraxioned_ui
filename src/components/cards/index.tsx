@@ -41,27 +41,7 @@ const Card: React.FC<CardProps> = ({
         <span className="card-text">{text}</span>
         <h6 className="share mt-0">{share}</h6>
       </div>
-{/* 
-      {showPlusIcon && (
-        <div className="plus-icon-container">
-          <a href="https://www.fraxioned.com/" target="_blank" rel="noopener noreferrer">
-            <div className="image-container">
-              <img
-                src={FraxImg}
-                className={`card-img-top blur-effect`}
-                alt={title}
-              />
-              <FaPlus className="plus-icon" />
-            </div>
-          </a>
-          <div className="card-body">
-            <h4 className="card-title">Adventure Awaits...</h4>
-            <span className="card-text">
-              Discover your next Fraxioned home at fraxioned.com
-            </span>
-          </div>
-        </div>
-      )} */}
+
     </div>
     
   );

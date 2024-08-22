@@ -12,7 +12,6 @@
 
 .image-container {
   position: relative;
-  
 }
 
 .image-container .card-img-top {
@@ -29,7 +28,7 @@
 .plus-icon {
   position: absolute;
   top: 47%; /* Center vertically */
-  left:47%  ; /* Center horizontally */
+  left: 47%; /* Center horizontally */
   transform: translate(-50%, -50%); /* Adjust for exact centering */
   font-weight: bolder;
   color: #f7981d;
@@ -42,7 +41,7 @@
   flex-direction: column;
   align-items: baseline;
   width: 250px;
-  flex:0 0 !important;
+  flex: 0 0 !important;
 }
 
 .card-title {
@@ -59,82 +58,90 @@
   color: rgb(173, 172, 172);
   display: flex;
   font-size: small;
-text-align: -webkit-left;}
+  text-align: -webkit-left;
+}
 
-.plus-icon-container{
+.plus-icon-container {
   cursor: pointer;
   margin-top: 10px;
 }
 /* home.css */
-.PropContainer{
-  
-   margin: 10px;
-   box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
-   border-radius: 10px;
+.PropContainer {
+  margin: 10px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+  border-radius: 10px;
 }
 .Cardcontainer {
   display: flex;
-  width:85%;
+  width: 85%;
   margin: 15px;
-  padding: 0px;
+  padding: 15px;
   overflow-x: auto; /* Allow horizontal scrolling */
   white-space: nowrap; /* Prevent wrapping of items */
-}
+  background-color: #FFFFFF;
+  /* border: 1px solid #c2c2c2; */
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.1  ) 1px 1px 2px 1px; }
 
 .carousel {
   overflow: hidden; /* Hide overflowing content */
 }
 
-
 .carousel-controls {
   display: flex;
   justify-content: space-evenly;
   position: relative;
-  top: 20% ;
-
+  z-index: 9999;
+  top: 20%;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
   /* width: 80%; */
-  transform: translateY(30%);
+  margin-top: 12%;
+  /* transform: translateY(40%); */
 }
 
-.box-shad{
-  /* box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px; */
-}
-
-.PropImg{
+.PropImg {
   margin: 10px;
-  width: 90%;
+  width: 93%;
   margin-left: 5%;
   /* box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px; */
   border-radius: 10px;
-  
 }
 .carousel-control {
   border: none;
   color: rgb(207, 206, 206);
   font-size: 24px;
-  padding: 10px;
   cursor: pointer;
-  border-radius: 50%;
+  border-radius: 5%;
   margin-top: 20%;
-
-  background-color: rgb(255, 255, 255);
-  /* box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px; */
-  transition: background-color 0.3s;
+  height: 60px;
+  width: 20px;
+  /* background-color: rgb(255, 255, 255); */
+  /* box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;  transition: background-color 0.3s; */
 }
-
-
 
 .prev {
   position: absolute;
-  left: -35px;
+  left: -6px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #bab9b8;
+  box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
+  color: #ffffff;
 }
 
 .next {
   position: absolute;
-  right: -30px;
+  right: -9px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #bab9b8;
+  box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
+  color: #ffffff;
 }
 
-.FadeProp{
-  margin-top: 29px;
-
+.FadeProp {
+  margin-top: 42px;
+  margin-left: 20px;
 }

@@ -97,7 +97,7 @@ const mockData: Card[] = [
   },
   {
     id: 3,
-    name: ' The Red Lake ',
+    name: ' Blue Bear ',
     address: '123 Mock Lane',
     image: imageParadiseShores,
     details: {
@@ -106,27 +106,42 @@ const mockData: Card[] = [
         peakSeason: '3/15',
         peakHoliday: '4/20',
         offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
       2025: {
-        offSeason: '1/10',
-        peakSeason: '2/15',
-        peakHoliday: '3/2',
-        offSeasonHoliday: '2/35',
+        offSeason: '32/10',
+        peakSeason: '32/15',
+        peakHoliday: '43/20',
+        offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
+
       },
       2026: {
         offSeason: '2/10',
         peakSeason: '3/15',
         peakHoliday: '4/20',
         offSeasonHoliday: '5/25',
+        peakRemainingNights:15,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
     },
     maxGuestsAllowed: 4,
     maxPetsAllowed: 2,
     share: 0,
+    peakSeasonStartDate: '2024-03-15',
+    peakSeasonEndDate: '2024-11-15',
   },
   {
     id: 4,
-    name: ' The Jewel',
+    name: ' Blue Bear ',
     address: '123 Mock Lane',
     image: imageParadiseShores,
     details: {
@@ -135,27 +150,42 @@ const mockData: Card[] = [
         peakSeason: '3/15',
         peakHoliday: '4/20',
         offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
       2025: {
-        offSeason: '1/10',
-        peakSeason: '2/15',
-        peakHoliday: '3/2',
-        offSeasonHoliday: '2/35',
+        offSeason: '32/10',
+        peakSeason: '32/15',
+        peakHoliday: '43/20',
+        offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
+
       },
       2026: {
         offSeason: '2/10',
         peakSeason: '3/15',
         peakHoliday: '4/20',
         offSeasonHoliday: '5/25',
+        peakRemainingNights:15,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
     },
     maxGuestsAllowed: 4,
     maxPetsAllowed: 2,
     share: 0,
+    peakSeasonStartDate: '2024-03-15',
+    peakSeasonEndDate: '2024-11-15',
   },
   {
     id: 5,
-    name: ' The Jewel1',
+    name: ' Blue Bear ',
     address: '123 Mock Lane',
     image: imageParadiseShores,
     details: {
@@ -164,28 +194,42 @@ const mockData: Card[] = [
         peakSeason: '3/15',
         peakHoliday: '4/20',
         offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
       2025: {
-        offSeason: '1/10',
-        peakSeason: '2/15',
-        peakHoliday: '3/2',
-        offSeasonHoliday: '2/35',
+        offSeason: '32/10',
+        peakSeason: '32/15',
+        peakHoliday: '43/20',
+        offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
+
       },
       2026: {
         offSeason: '2/10',
         peakSeason: '3/15',
         peakHoliday: '4/20',
         offSeasonHoliday: '5/25',
+        peakRemainingNights:15,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
     },
-    
     maxGuestsAllowed: 4,
     maxPetsAllowed: 2,
     share: 0,
+    peakSeasonStartDate: '2024-03-15',
+    peakSeasonEndDate: '2024-11-15',
   },
   {
     id: 6,
-    name: ' The Jewel1',
+    name: ' Blue Bear ',
     address: '123 Mock Lane',
     image: imageParadiseShores,
     details: {
@@ -194,24 +238,38 @@ const mockData: Card[] = [
         peakSeason: '3/15',
         peakHoliday: '4/20',
         offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
       2025: {
-        offSeason: '1/10',
-        peakSeason: '2/15',
-        peakHoliday: '3/2',
-        offSeasonHoliday: '2/35',
+        offSeason: '32/10',
+        peakSeason: '32/15',
+        peakHoliday: '43/20',
+        offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
+
       },
       2026: {
         offSeason: '2/10',
         peakSeason: '3/15',
         peakHoliday: '4/20',
         offSeasonHoliday: '5/25',
+        peakRemainingNights:15,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
     },
-    
     maxGuestsAllowed: 4,
     maxPetsAllowed: 2,
     share: 0,
+    peakSeasonStartDate: '2024-03-15',
+    peakSeasonEndDate: '2024-11-15',
   },
   // Add more mock properties if needed
 ];
@@ -333,7 +391,7 @@ export const fetchProperties = createAsyncThunk(
           name: property.propertyName || 'Unknown Property',
           address: `${property.address || 'Unknown'}`,
           image: getImageForProperty(property.propertyId),
-          share: shareMap[2024] || 0, // Default to 0 if not found
+          share: shareMap[2024] || 0, 
           details,
           maxGuestsAllowed: property.noOfGuestsAllowed || 0,
           maxPetsAllowed: property.noOfPetsAllowed || 0,
@@ -362,9 +420,21 @@ const getImageForProperty = (propertyId: number): string => {
     case 3:
       return imageLakeEscape;
     case 4:
+      return imageBlueBearLake;
+      case 5:
+      return imageParadiseShores;
+      case 6:
       return imageCrownJewel;
+      case 7:
+      return imageParadiseShores;
+      case 8:
+      return imageBlueBearLake;
+      case 9:
+      return imageCrownJewel;
+      case 10:
+      return imageParadiseShores;
     default:
-      return imageParadiseShores; 
+      return imageBlueBearLake ; 
   }
 };
 

@@ -99,72 +99,77 @@ const Home: React.FC = () => {
 
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
-        <div className="">
-          <div className="d-flex flex-row PropImg ">
-            {showCarousel && (
-              <div className="carousel-controls m-3">
-                <button
-                  className="carousel-control prev"
-                  onClick={() => scroll(-250)}
-                >
-                  &#10094;
-                </button>
-              </div>
-            )}
-            <div
-              className={`Cardcontainer  ${showCarousel ? "carousel" : ""}`}
-              ref={carouselRef}
-            >
-              {displayProperties.map((property, index) => (
-                <Card
-                  key={property.id}
-                  imageUrl={property.image || image1}
-                  title={property.name || "No Title"}
-                  text={property.address || "Address not available"}
-                  share={
-                    property.share
-                      ? `You Own ${property.share}/${property.propertyShare}th share`
-                      : "Share information not available"
-                  }
-                  id={property.id}
-                  // showPlusIcon={showCarousel && index === displayProperties.length - 1}
-                />
-              ))}
+      <div>
+        <div className="d-flex flex-row PropImg ">
+          
+          {showCarousel && (
+            <div className="carousel-controls ">
+              <button
+                className="carousel-control prev"
+                onClick={() => scroll(-250)}
+              >
+                &#10094;
+              </button>
             </div>
-
-
-            {showPlusIcon && (
-              <div className=" FadeProp">
-                <div className="image-container   ">
-                  <img
-                    src={PorpImg}
-                    className="card-img-top blur-effect"
-                    alt=""
-                  />
-                  <FaPlus className="plus-icon" />
-                </div>
-
-                <div className="card-body">
-                  <h4 className="card-title">Adventure Awaits...</h4>
-                  <span className="card-text">
-                    Discover your next Fraxioned home at fraxioned.com
-                  </span>
-                </div>
-              </div>
-            )}
-                        {showCarousel && (
-              <div className="carousel-controls m-3">
-                <button
-                  className="carousel-control next"
-                  onClick={() => scroll(250)}
-                >
-                  &#10095;
-                </button>
-              </div>
-            )}
+          )}
+          <div
+            className={`Cardcontainer  ${showCarousel ? "carousel" : ""}`}
+            ref={carouselRef}
+          >
+            {displayProperties.map((property, index) => (
+              <Card
+                key={property.id}
+                imageUrl={property.image || image1}
+                title={property.name || "No Title"}
+                text={property.address || "Address not available"}
+                share={
+                  property.share
+                    ? `You Own ${property.share}/${property.propertyShare}th share`
+                    : "Share information not available"
+                }
+                id={property.id}
+                // showPlusIcon={showCarousel && index === displayProperties.length - 1}
+              />
+            ))}
           </div>
+          {showCarousel && (
+            <div className="carousel-controls ">
+              <button
+                className="carousel-control next"
+                onClick={() => scroll(250)}
+              >
+                &#10095;
+              </button>
+            </div>
+          )}
+
+          {showPlusIcon && (
+            <div className=" FadeProp">
+              <div className="image-container   ">
+                <a href="https://www.fraxioned.com/" target="_blank">
+
+                <img
+                  src={PorpImg}
+                  className="card-img-top blur-effect"
+                  alt=""
+
+                />
+                <FaPlus className="plus-icon" />
+                </a>
+
+              </div>
+
+              <div className="card-body">
+                <h4 className="card-title">Adventure Awaits...</h4>
+                <span className="card-text">
+                  Discover your next Fraxioned home at fraxioned.com
+                </span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
+    </div>
   );
 };
 
