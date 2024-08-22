@@ -84,6 +84,7 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
                                     label="Property Name"
                                     value={propertyName}
                                     onChange={(e) => setPropertyName(e.target.value)}
+                                    autoFocus
                                     fullWidth
                                     required
                                     variant="outlined"

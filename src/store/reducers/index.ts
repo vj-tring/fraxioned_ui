@@ -4,6 +4,7 @@ import registerReducer from '../slice/auth/register';
 import forgotPasswordReducer from '../slice/auth/forget-password';
 import propertyReducer from '../slice/auth/property-slice';
 import limitsReducer from '../slice/auth/propertyGuestSlice';
+import editpropertyReducer from '../slice/auth/editproperty';
 import addpropertyReducer from '../slice/auth/addproperty';
 
 const appReducer = combineReducers({
@@ -12,6 +13,7 @@ const appReducer = combineReducers({
   forgotPassword: forgotPasswordReducer,
   addProperty: addpropertyReducer,
   properties: propertyReducer,
+  editProperty: editpropertyReducer,
   limits: limitsReducer,
 });
 

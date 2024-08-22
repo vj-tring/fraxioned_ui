@@ -3,20 +3,21 @@
     flex-direction: column;
     min-height: 100vh;
     overflow: hidden;
-    background-color: #f5f7fa;
+    background-color: #f7fafb;
 }
 
 .dashboard-content {
     display: flex;
     flex: 1;
     margin-top: 60px;
+    position: relative;
 }
 
 .content {
     flex: 1;
     padding: 0;
     overflow: hidden;
-    background-color: #ffffff;
+    background-color: #f8f6f6;
     transition: margin-left 0.3s ease, width 0.3s ease;
 }
 
@@ -31,10 +32,26 @@
 }
 
 .custom-navbar {
+    background-color: #ebad5c;
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 1000;
+}
+
+.custom-navbar .user-image {
+    border: 2px solid #c7eaee;
+}
+
+.divider {
+    position: absolute;
+    top: 60px;
+    left: 220px;
+    /* Adjust this value to position the divider */
+    height: calc(100% - 60px);
+    width: 1px;
+    background-color: #e0e0e0;
+    z-index: 1;
 }
 
 .side-panel {
@@ -45,4 +62,19 @@
     background-color: #ffffff;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     transition: width 0.3s ease;
+}
+
+
+@media (max-width: 768px) {
+    .sidePanel.open {
+        width: 200px;
+    }
+
+    .sidePanel.closed {
+        width: 60px;
+    }
+
+    .label {
+        font-size: 14px;
+    }
 }

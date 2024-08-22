@@ -1,6 +1,6 @@
 .propertiesContainer {
     padding: 24px;
-    background-color: #f5f5f5;
+    background-color: #f8f6f6;
     margin-left: 2px;
     height: calc(100vh - 64px);
     display: flex;
@@ -50,7 +50,7 @@
 
 .dataGridWrapper {
     flex-grow: 1;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     overflow: hidden;
