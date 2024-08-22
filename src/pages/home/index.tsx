@@ -1,19 +1,20 @@
-import React from 'react';
-import './home.css';
-import BookingSearchBar from '../../components/booking-search-bar';
-import Card from '../../components/cards';
-import { useSelector } from 'react-redux';
-import icon1 from '../../assests/Homeicons/1.png';
-import icon2 from '../../assests/Homeicons/2.png';
-import icon3 from '../../assests/Homeicons/3.png';
-import icon4 from '../../assests/Homeicons/4.png';
-import icon5 from '../../assests/Homeicons/5.png';
-import icon6 from '../../assests/Homeicons/6.png';
-import icon7 from '../../assests/Homeicons/7.png';
+import React, { useRef } from "react";
+import "./home.css";
+import BookingSearchBar from "../../components/booking-search-bar";
+import Card from "../../components/cards";
+import { useSelector } from "react-redux";
+import icon1 from "../../assests/Homeicons/1.png";
+import icon2 from "../../assests/Homeicons/2.png";
+import icon3 from "../../assests/Homeicons/3.png";
+import icon4 from "../../assests/Homeicons/4.png";
+import icon5 from "../../assests/Homeicons/5.png";
+import icon6 from "../../assests/Homeicons/6.png";
+import icon7 from "../../assests/Homeicons/7.png";
+import image1 from "../../assests/bear-lake-bluffs.jpg";
+import { FaPlus } from "react-icons/fa";
 
-import image1 from '../../assests/bear-lake-bluffs.jpg';
-import { mockProperties } from './mockData'; // Import the mock data
-
+import { mockProperties } from "./mockData"; // Import the mock data
+import PorpImg from "../../assests/crown-jewel.jpg";
 interface Property {
   id: number;
   propertyName?: string;
@@ -29,19 +30,25 @@ interface RootState {
   };
 }
 
-
 const Home: React.FC = () => {
+  const {
+    cards: properties,
+    loading,
+    error,
+  } = useSelector((state: RootState) => state.properties);
 
-
- 
-
-  const { cards: properties, loading, error } = useSelector((state: RootState) => state.properties);
-
-
-const displayProperties = properties.length ? properties : mockProperties;
-
-
-
+  const displayProperties = properties.length ? properties : mockProperties;
+  const showCarousel = displayProperties.length > 4;
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const showPlusIcon = true;
+  const scroll = (scrollOffset: number) => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({
+        left: scrollOffset,
+        behavior: "smooth",
+      });
+    }
+  };
 
   return (
     <div className="home-content">
@@ -49,74 +56,121 @@ const displayProperties = properties.length ? properties : mockProperties;
 
       <BookingSearchBar />
 
-      <hr className='mb-1'/>
+      <hr className="mb-1" />
 
-      <div className="icons ">
+      <div className="icons">
         <div className="icon-container">
-           <img className='HomeIcons mb-1 mt-2' src={icon1}></img>
-          <p  className='IconsText'>My Bookings </p>
+          <img className="HomeIcons mb-1 mt-2" src={icon1} alt="My Bookings" />
+          <p className="IconsText">My Bookings</p>
         </div>
 
-
         <div className="icon-container">
-        <img className='HomeIcons mb-1 mt-2' src={icon2}></img>
-          <p  className='IconsText'>Payments</p>
-        </div>
-        
-        <div className="icon-container">
-        <img className='HomeIcons mb-1 mt-2' src={icon3}></img>
-          <p  className='IconsText'>Documents</p>
+          <img className="HomeIcons mb-1 mt-2" src={icon2} alt="Payments" />
+          <p className="IconsText">Payments</p>
         </div>
 
-        
-
         <div className="icon-container">
-        <img className='HomeIcons mb-1 mt-2' src={icon4}></img>
-          <p  className='IconsText'>Tickets</p>
+          <img className="HomeIcons mb-1 mt-2" src={icon3} alt="Documents" />
+          <p className="IconsText">Documents</p>
         </div>
 
-
         <div className="icon-container">
-        <img className='HomeIcons mb-1 mt-2' src={icon5}></img>
-          <p  className='IconsText'>GuideBooks</p>
+          <img className="HomeIcons mb-1 mt-2" src={icon4} alt="Tickets" />
+          <p className="IconsText">Tickets</p>
         </div>
-        
-      
 
         <div className="icon-container">
-        <img className='HomeIcons mb-1 mt-2' src={icon6}></img>
-
-          <p  className='IconsText'>FAQs</p>
+          <img className="HomeIcons mb-1 mt-2" src={icon5} alt="GuideBooks" />
+          <p className="IconsText">GuideBooks</p>
         </div>
-       
 
         <div className="icon-container">
-          <img className='HomeIcons mb-1 mt-2' src={icon7}></img>
-          <p  className='IconsText'>Contact us </p>
+          <img className="HomeIcons mb-1 mt-2" src={icon6} alt="FAQs" />
+          <p className="IconsText">FAQs</p>
+        </div>
+
+        <div className="icon-container">
+          <img className="HomeIcons mb-1 mt-2" src={icon7} alt="Contact us" />
+          <p className="IconsText">Contact us</p>
         </div>
       </div>
 
-      <hr className='mt-3'/>
+      <hr className="mt-3" />
 
-    
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
+      <div>
+        <div className="d-flex flex-row PropImg ">
+          
+          {showCarousel && (
+            <div className="carousel-controls ">
+              <button
+                className="carousel-control prev"
+                onClick={() => scroll(-250)}
+              >
+                &#10094;
+              </button>
+            </div>
+          )}
+          <div
+            className={`Cardcontainer  ${showCarousel ? "carousel" : ""}`}
+            ref={carouselRef}
+          >
+            {displayProperties.map((property, index) => (
+              <Card
+                key={property.id}
+                imageUrl={property.image || image1}
+                title={property.name || "No Title"}
+                text={property.address || "Address not available"}
+                share={
+                  property.share
+                    ? `You Own ${property.share}/${property.propertyShare}th share`
+                    : "Share information not available"
+                }
+                id={property.id}
+                // showPlusIcon={showCarousel && index === displayProperties.length - 1}
+              />
+            ))}
+          </div>
+          {showCarousel && (
+            <div className="carousel-controls ">
+              <button
+                className="carousel-control next"
+                onClick={() => scroll(250)}
+              >
+                &#10095;
+              </button>
+            </div>
+          )}
 
-      <div className="Cardcontainer">
-        {displayProperties.map((property, index) => (
-          <Card
-            key={property.id}
-            imageUrl={property.image || image1}
-            title={property.name || 'No Title'}
-            text={property.address || 'Address not available'}
-            share={property.share ? `You Own ${property.share}/${property.propertyShare}th share` : 'Share information not available'}
-            id={property.id}
-            showPlusIcon={index === displayProperties.length - 1}  // Show plus icon only for the last card
-          />
-        ))}
+          {showPlusIcon && (
+            <div className=" FadeProp">
+              <div className="image-container   ">
+                <a href="https://www.fraxioned.com/" target="_blank">
+
+                <img
+                  src={PorpImg}
+                  className="card-img-top blur-effect"
+                  alt=""
+
+                />
+                <FaPlus className="plus-icon" />
+                </a>
+
+              </div>
+
+              <div className="card-body">
+                <h4 className="card-title">Adventure Awaits...</h4>
+                <span className="card-text">
+                  Discover your next Fraxioned home at fraxioned.com
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
