@@ -19,7 +19,7 @@ const BookingSearchBar: React.FC = () => {
     setDateRange(range)
     if (range?.from && !range.to) {
       setActiveDate('check-in')
-    } else if (range?.from && range?.to) {
+    } else if (range?.to && range?.from) {
       setActiveDate('check-out')
     }
   }
