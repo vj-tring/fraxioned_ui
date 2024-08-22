@@ -109,19 +109,23 @@ export default function BasicSelect() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
-  const showCarousel = cards.length > 0;
-  const showCarouselControls = cards.length > 0;
-  const cardItemWidth = cards.length === 2 ? '380px' : '508px';
+  const showCarousel = cards.length > 0 ;
+  const showCarouselControls = cards.length > 1;
+  const cardItemWidth = cards.length === 1 ? '380px' : 
+                      cards.length === 2 ? '380px' : 
+                      '508px';
   const buttonSize = {
-    width: cards.length === 2 ? '3.7rem' : '5rem',
-    height: cards.length === 2 ? '20px' : '25px',
+    width: cards.length === 1 ? '3.7rem' :cards.length ===2 ? '3.7rem':'5rem',
+
+
+    height: cards.length === 1 ? '20px' : cards.length===2? '20px':'25px',
   };
   const imageClass = cards.length === 2 ? 'single-card' : 'multiple-cards';
-  // const additionalPadding = cards.length === 2 ? '.45rem 2rem ' : '.40rem 2rem ';
-  const BoxList = cards.length === 2 ? '7px' : '10px';
-  const BoxMargin = cards.length === 2 ? '0px' : '8px';
-  const cardItemHeight = cards.length === 2 ? '232px' : '250px';
-  const cardNameWeight = cards.length === 2 ? '600' : '600';
+
+  const BoxList = cards.length === 1 ? '7px' : cards.length===2? '7px':'10px';
+  const BoxMargin = cards.length === 1 ? '0px' : cards.length===2? '0px':'8px';
+  const cardItemHeight = cards.length === 1 ? '232px' : cards.length===2?'232px': '250px';
+  const cardNameWeight = cards.length === 1 ? '600' : cards.length===2?'600': '600';
 
   const formatCardName = (name: string) => {
     return name.replace(/\s+\(.*\)/, '...');
