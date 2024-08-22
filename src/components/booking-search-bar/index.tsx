@@ -37,7 +37,7 @@ const BookingSearchBar: React.FC = () => {
         <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen} disableRipple>
           <PopoverTrigger asChild disableRipple >
             <div>
-              <Region 
+              <Region
                 label="Check In"
                 date={dateRange?.from}
                 onClick={() => handleRegionClick('check-in')}
@@ -46,8 +46,8 @@ const BookingSearchBar: React.FC = () => {
             </div>
           </PopoverTrigger>
           <PopoverContent className="calendar-popover" align="start">
-            <DatePickerWithRange 
-              onSelect={handleDateSelect} 
+            <DatePickerWithRange
+              onSelect={handleDateSelect}
               initialRange={dateRange}
               selectingFrom={activeDate === 'check-in'}
               userId={userId}
@@ -58,7 +58,7 @@ const BookingSearchBar: React.FC = () => {
         <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
           <PopoverTrigger asChild>
             <div>
-              <Region 
+              <Region
                 label="Check Out"
                 date={dateRange?.to}
                 onClick={() => handleRegionClick('check-out')}
@@ -71,7 +71,7 @@ const BookingSearchBar: React.FC = () => {
         <GuestSelector />
       </div>
     </div>
-  ) 
+  )
 }
 
 export default BookingSearchBar
