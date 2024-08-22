@@ -67,9 +67,7 @@
   background-color: white;
   width: 500px;
   display: flex;
-
   flex-direction: column;
-
   border-radius: 32px;
   position: absolute;
   right: -10px;
@@ -141,4 +139,29 @@
   -webkit-text-decoration: none;
   text-decoration: none;
   background-color:transparent !important;
+}
+
+
+/* Styles for the increase button */
+button.monsterrat {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Disabled state for the button */
+button.monsterrat:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.circleplusdisable{
+  color: #c7c7c7;
+  cursor: pointer;
+}
+.circleplus{
+  color: grey;
+  cursor: pointer;
 }

@@ -33,18 +33,21 @@ const MultipleSelect: React.FC = () => {
     Pets: 0,
   });
   const [validationMessage, setValidationMessage] = useState<string>('');
-
+  const [noOfguest, setNoOfGuestsAllowed] = useState<number>(0);
+  const [noOfPets, setNoOfPetsAllowed] = useState<number>(0);
 
 
   useEffect(() => {
     validateCounts();
   }, [selectedPropertyLimits, counts]);
-
+  
   const validateCounts = () => {
     if (!selectedPropertyLimits) return;
 
     const { noOfGuestsAllowed, noOfPetsAllowed } = selectedPropertyLimits;
-    const totalGuests = counts.Adults + counts.Children
+    setNoOfGuestsAllowed(noOfGuestsAllowed);
+    setNoOfPetsAllowed(noOfPetsAllowed);
+    const totalGuests = counts.Adults + counts.Children 
     const totalPets = counts.Pets;
 
     let message = '';
@@ -55,7 +58,8 @@ const MultipleSelect: React.FC = () => {
     } else if (totalPets > noOfPetsAllowed) {
       message = `The number of pets cannot exceed ${noOfPetsAllowed}.`;
     }
-
+ 
+    
     setValidationMessage(message);
     return message === '';
   };
@@ -66,15 +70,24 @@ const MultipleSelect: React.FC = () => {
       return;
     }
 
-    const maxLimit = name === 'Pets' ? selectedPropertyLimits.noOfPetsAllowed : (selectedPropertyLimits.noOfGuestsAllowed - counts.Pets);
+    const maxLimit = name === 'Pets' ? selectedPropertyLimits.noOfPetsAllowed : selectedPropertyLimits.noOfGuestsAllowed ;
     const currentCount = counts[name];
 
-    let newCount: number;
+    let newCount: number= currentCount;
 
     if (action === 'increase') {
-      newCount = currentCount + 1;
-      if (name === 'Pets' && newCount > maxLimit) return;
-      if (name !== 'Pets' && (counts.Adults + counts.Children) > maxLimit) return;
+
+      if (name === 'Pets' && newCount > maxLimit-1) {
+        setValidationMessage(`You can't have more than ${maxLimit} pets.`)
+        return;
+      }
+      else if (name !== 'Pets' && (counts.Adults + counts.Children) > maxLimit-1) {
+        setValidationMessage(`You can't have more than ${maxLimit} guests.`)
+        return;
+      }
+      else{
+        newCount = currentCount + 1;
+      }
     } else {
       newCount = Math.max(currentCount - 1, 0);
     }
@@ -83,6 +96,7 @@ const MultipleSelect: React.FC = () => {
       ...prevCounts,
       [name]: newCount
     }));
+    console.log("function called")
   };
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -194,12 +208,14 @@ const MultipleSelect: React.FC = () => {
 
                   <p className="Ad-count monsterrat">{counts[item.label]}</p>
                   <button
-                    className={` monsterrat ${!selectedPropertyId ? 'disabled' : 'enabled'}`}
-                    disabled={!selectedPropertyId || (selectedPropertyLimits ? counts[item.label] >= (item.label === 'Pets' ? selectedPropertyLimits.noOfPetsAllowed : selectedPropertyLimits.noOfGuestsAllowed - counts.Pets) : true)}
+                    // className={` monsterrat ${!selectedPropertyId ? 'disabled' : 'enabled'}`}
+
+                    // disabled={!selectedPropertyId || (selectedPropertyLimits ? counts[item.label] >= (item.label === 'Pets' ? selectedPropertyLimits.noOfPetsAllowed : selectedPropertyLimits.noOfGuestsAllowed - counts.Pets) : true)}
                     onClick={() => handleCountChange(item.label, 'increase')}
                   >
                     <CirclePlus size={29} strokeWidth={0.75}
-                      color='grey'
+                      // color='grey'
+                      className={`${item.label === 'Pets'  ? counts.Pets === noOfPets ? 'circleplusdisable': 'circleplus' : ''} ${item.label === 'Adults' || item.label === 'Children'  ? counts.Adults === noOfguest ? 'circleplusdisable': 'circleplus': ''} `}
                     />
                   </button>
 
