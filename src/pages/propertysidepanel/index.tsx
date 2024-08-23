@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './PropertySidePanel.module.css';
+import styles from './propertysidepanel.module.css'
 import { FaInfoCircle, FaConciergeBell, FaAlignLeft, FaMapMarkerAlt, FaImages } from 'react-icons/fa';
 
 interface PropertySidePanelProps {
