@@ -4,12 +4,13 @@ import imageParadiseShores from '../../../assests/bear-lake-bluffs.jpg';
 import imageBlueBearLake from '../../../assests/crown-jewel.jpg';
 import imageCrownJewel from '../../../assests/blue-bear-lake.jpg';
 import imageLakeEscape from '../../../assests/lake-escape.jpg';
+import { RootState } from '@/store/reducers';
 
 // Mock data
 const mockData: Card[] = [
   {
     id: 1,
-    name: ' Blue Bear ',
+    name: 'The Lake Escape ',
     address: '123 Mock Lane',
     image: imageParadiseShores,
     details: {
@@ -18,53 +19,275 @@ const mockData: Card[] = [
         peakSeason: '3/15',
         peakHoliday: '4/20',
         offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
       2025: {
         offSeason: '32/10',
         peakSeason: '32/15',
         peakHoliday: '43/20',
         offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
+
       },
       2026: {
         offSeason: '2/10',
         peakSeason: '3/15',
         peakHoliday: '4/20',
         offSeasonHoliday: '5/25',
+        peakRemainingNights:15,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
     },
+    propertyShare:3,
     maxGuestsAllowed: 4,
     maxPetsAllowed: 2,
     share: 0,
+    peakSeasonStartDate: '2024-03-15',
+    peakSeasonEndDate: '2024-11-15',
   },
   {
-    id: 1,
+    id: 2,
     name: ' The Crown Jewel ',
     address: '123 Mock Lane',
-    image: imageParadiseShores,
+    image: imageBlueBearLake,
     details: {
       2024: {
         offSeason: '2/10',
         peakSeason: '3/15',
         peakHoliday: '4/20',
         offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
       2025: {
         offSeason: '1/10',
         peakSeason: '2/15',
         peakHoliday: '3/2',
         offSeasonHoliday: '2/35',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
       2026: {
         offSeason: '2/10',
         peakSeason: '3/15',
         peakHoliday: '4/20',
         offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
       },
+
+
+
     },
+    propertyShare:3,
+
     maxGuestsAllowed: 4,
     maxPetsAllowed: 2,
     share: 0,
+    peakSeasonStartDate: '2024-03-15',
+    peakSeasonEndDate: '2024-11-15',
   },
+
+
+
+  {
+    id: 3,
+    name: ' Blue Bear ',
+    address: '123 Mock Lane',
+    image: imageCrownJewel,
+    details: {
+      2024: {
+        offSeason: '2/10',
+        peakSeason: '3/15',
+        peakHoliday: '4/20',
+        offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
+      },
+      2025: {
+        offSeason: '32/10',
+        peakSeason: '32/15',
+        peakHoliday: '43/20',
+        offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
+
+      },
+      2026: {
+        offSeason: '2/10',
+        peakSeason: '3/15',
+        peakHoliday: '4/20',
+        offSeasonHoliday: '5/25',
+        peakRemainingNights:15,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
+      },
+    },
+    propertyShare:3,
+
+    maxGuestsAllowed: 4,
+    maxPetsAllowed: 2,
+    share: 0,
+    peakSeasonStartDate: '2024-03-15',
+    peakSeasonEndDate: '2024-11-15',
+  },
+  {
+    id: 4,
+    name: ' Adventure Lake ',
+    address: '123 Mock Lane',
+    image: imageBlueBearLake,
+    details: {
+      2024: {
+        offSeason: '2/10',
+        peakSeason: '3/15',
+        peakHoliday: '4/20',
+        offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
+      },
+      2025: {
+        offSeason: '32/10',
+        peakSeason: '32/15',
+        peakHoliday: '43/20',
+        offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
+
+      },
+      2026: {
+        offSeason: '2/10',
+        peakSeason: '3/15',
+        peakHoliday: '4/20',
+        offSeasonHoliday: '5/25',
+        peakRemainingNights:15,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
+      },
+    },
+    propertyShare:3,
+
+    maxGuestsAllowed: 4,
+    maxPetsAllowed: 2,
+    share: 0,
+    peakSeasonStartDate: '2024-03-15',
+    peakSeasonEndDate: '2024-11-15',
+  },
+  {
+    id: 5,
+    name: ' The Paradise Shores ',
+    address: '123 Mock Lane',
+    image: imageCrownJewel,
+    details: {
+      2024: {
+        offSeason: '2/10',
+        peakSeason: '3/15',
+        peakHoliday: '4/20',
+        offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
+      },
+      2025: {
+        offSeason: '32/10',
+        peakSeason: '32/15',
+        peakHoliday: '43/20',
+        offSeasonHoliday: '5/25',
+        peakRemainingNights: 10,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
+
+      },
+      2026: {
+        offSeason: '2/10',
+        peakSeason: '3/15',
+        peakHoliday: '4/20',
+        offSeasonHoliday: '5/25',
+        peakRemainingNights:15,
+        offRemainingNights: 10,
+        lastMinuteRemainingNights: 6,
+        maximumStayLength: 14,
+      },
+    },
+    propertyShare:3,
+
+    maxGuestsAllowed: 4,
+    maxPetsAllowed: 2,
+    share: 0,
+    peakSeasonStartDate: '2024-03-15',
+    peakSeasonEndDate: '2024-11-15',
+  },
+  // {
+  //   id: 6,
+  //   name: ' The Crown Jewel ',
+  //   address: '123 Mock Lane',
+  //   image: imageParadiseShores,
+  //   details: {
+  //     2024: {
+  //       offSeason: '2/10',
+  //       peakSeason: '3/15',
+  //       peakHoliday: '4/20',
+  //       offSeasonHoliday: '5/25',
+  //       peakRemainingNights: 10,
+  //       offRemainingNights: 10,
+  //       lastMinuteRemainingNights: 6,
+  //       maximumStayLength: 14,
+  //     },
+  //     2025: {
+  //       offSeason: '32/10',
+  //       peakSeason: '32/15',
+  //       peakHoliday: '43/20',
+  //       offSeasonHoliday: '5/25',
+  //       peakRemainingNights: 10,
+  //       offRemainingNights: 10,
+  //       lastMinuteRemainingNights: 6,
+  //       maximumStayLength: 14,
+
+  //     },
+  //     2026: {
+  //       offSeason: '2/10',
+  //       peakSeason: '3/15',
+  //       peakHoliday: '4/20',
+  //       offSeasonHoliday: '5/25',
+  //       peakRemainingNights:15,
+  //       offRemainingNights: 10,
+  //       lastMinuteRemainingNights: 6,
+  //       maximumStayLength: 14,
+  //     },
+  //   },
+  //   propertyShare:3,
+
+  //   maxGuestsAllowed: 4,
+  //   maxPetsAllowed: 2,
+  //   share: 0,
+  //   peakSeasonStartDate: '2024-03-15',
+  //   peakSeasonEndDate: '2024-11-15',
+  // },
   // Add more mock properties if needed
 ];
 
@@ -79,17 +302,26 @@ interface Card {
       peakSeason: string;
       peakHoliday: string;
       offSeasonHoliday: string;
+      peakRemainingNights: number;
+      offRemainingNights: number;
+      lastMinuteRemainingNights: number;
+      maximumStayLength: number;
     };
   };
+  propertyShare:number,
+
   maxGuestsAllowed: number;
   maxPetsAllowed: number;
   share: number;
+  peakSeasonStartDate: string;
+  peakSeasonEndDate: string;
 }
 
 interface PropertyState {
   cards: Card[];
   loading: boolean;
   error: string | null;
+  selectedYear: number;
   selectedPropertyId: number | null;
   selectedPropertyLimits: {
     noOfGuestsAllowed: number;
@@ -102,6 +334,7 @@ const initialState: PropertyState = {
   loading: false,
   error: null,
   selectedPropertyId: null,
+  selectedYear: new Date().getFullYear(),
   selectedPropertyLimits: null,
 };
 
@@ -149,6 +382,10 @@ export const fetchProperties = createAsyncThunk(
               peakSeason: peakSeasonDenominator !== null ? `${peakSeasonNumerator}/${peakSeasonDenominator}` : 'undefined',
               peakHoliday: peakHolidayDenominator !== null ? `${peakHolidayNumerator}/${peakHolidayDenominator}` : 'undefined',
               offSeasonHoliday: offSeasonHolidayDenominator !== null ? `${offSeasonHolidayNumerator}/${offSeasonHolidayDenominator}` : 'undefined',
+              peakRemainingNights: userProp.peakRemainingNights,
+              offRemainingNights: userProp.offRemainingNights,
+              lastMinuteRemainingNights: userProp.lastMinuteRemainingNights,
+              maximumStayLength: userProp.maximumStayLength,
             };
           }
         });
@@ -160,6 +397,10 @@ export const fetchProperties = createAsyncThunk(
               peakSeason: '3',
               peakHoliday: '4',
               offSeasonHoliday: '5',
+              peakRemainingNights: 0,
+              offRemainingNights: 0,
+              lastMinuteRemainingNights: 0,
+              maximumStayLength: 0,
             };
           }
         });
@@ -169,10 +410,13 @@ export const fetchProperties = createAsyncThunk(
           name: property.propertyName || 'Unknown Property',
           address: `${property.address || 'Unknown'}`,
           image: getImageForProperty(property.propertyId),
-          share: shareMap[2024] || 0, // Default to 0 if not found
+          share: shareMap[2024] || 0, 
           details,
           maxGuestsAllowed: property.noOfGuestsAllowed || 0,
           maxPetsAllowed: property.noOfPetsAllowed || 0,
+          propertyShare:property.propertyShare,
+          peakSeasonStartDate: property.peakSeasonStartDate,
+          peakSeasonEndDate: property.peakSeasonEndDate,
         };
       });
 
@@ -195,9 +439,21 @@ const getImageForProperty = (propertyId: number): string => {
     case 3:
       return imageLakeEscape;
     case 4:
+      return imageBlueBearLake;
+      case 5:
+      return imageParadiseShores;
+      case 6:
       return imageCrownJewel;
+      case 7:
+      return imageParadiseShores;
+      case 8:
+      return imageBlueBearLake;
+      case 9:
+      return imageCrownJewel;
+      case 10:
+      return imageParadiseShores;
     default:
-      return imageParadiseShores; 
+      return imageBlueBearLake ; 
   }
 };
 
@@ -236,4 +492,15 @@ const propertySlice = createSlice({
 });
 
 export const { selectProperty } = propertySlice.actions;
+export const selectSelectedPropertyDetails = (state: RootState) => {
+  const selectedProperty = state.properties.cards.find(card => card.id === state.properties.selectedPropertyId);
+  if (selectedProperty) {
+    return {
+      ...selectedProperty.details[state.properties.selectedYear],
+      peakSeasonStartDate: selectedProperty.peakSeasonStartDate,
+      peakSeasonEndDate: selectedProperty.peakSeasonEndDate,
+    };
+  }
+  return null;
+};
 export default propertySlice.reducer;

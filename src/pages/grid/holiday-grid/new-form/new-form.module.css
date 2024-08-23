@@ -1,0 +1,237 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.formContainer {
+    width: 90%;
+    max-width: 900px;
+    max-height: 90vh;
+    animation: slideIn 0.3s ease-in-out;
+}
+
+.formPaper {
+    padding: 32px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 99, 109, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.formPaper::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 100px;
+    height: 100px;
+    background-color: #e28f25;
+    border-radius: 50%;
+    opacity: 0.1;
+}
+
+.formPaper::after {
+    content: '';
+    position: absolute;
+    bottom: -50px;
+    right: -50px;
+    width: 100px;
+    height: 100px;
+    background-color: #e28f25;
+    border-radius: 50%;
+    opacity: 0.1;
+}
+
+.formHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 32px;
+    position: relative;
+}
+
+.headerIcon {
+    font-size: 64px;
+    color: #e28f25;
+    margin-right: 24px;
+}
+
+.formTitle {
+    font-size: 32px !important;
+    font-weight: 600 !important;
+    color: #28282B;
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.inputField {
+    margin-bottom: 0 !important;
+}
+
+.inputField input,
+.inputField textarea {
+    font-size: 16px;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.datePicker {
+    width: 100%;
+}
+
+.checkboxGroupLabel {
+    font-size: 16px;
+    font-weight: 500;
+    color: #000000;
+    margin-bottom: 8px;
+}
+
+.checkboxGroup {
+    width: 100%;
+}
+
+.scrollableContainer {
+    overflow-y: auto;
+    max-height: 200px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.formControlLabel {
+    margin-bottom: 0;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 32px;
+}
+
+.addButton,
+.cancelButton {
+    min-width: 140px;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 12px 24px;
+    text-transform: none;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+}
+
+.addButton {
+    background-color: #e28f25 !important;
+    color: white;
+}
+
+.addButton:hover {
+    background-color: rgba(0, 99, 109, 0.04);
+    box-shadow: 0 4px 10px rgba(0, 99, 109, 0.1);
+}
+
+.cancelButton {
+    color: #ffffff !important;
+    border-color: #e28f25 !important;
+    background-color: #e28f25 !important;
+
+}
+
+.cancelButton:hover {
+    background-color: rgba(0, 99, 109, 0.04);
+    box-shadow: 0 4px 10px rgba(0, 99, 109, 0.1);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .formContainer {
+        width: 95%;
+    }
+
+    .formTitle {
+        font-size: 28px !important;
+    }
+
+    .headerIcon {
+        font-size: 48px;
+    }
+
+    .buttonContainer {
+        flex-direction: column-reverse;
+    }
+
+    .addButton,
+    .cancelButton {
+        width: 100%;
+    }
+}
+
+:global(.MuiOutlinedInput-root) {
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+:global(.MuiOutlinedInput-root:hover) {
+    box-shadow: 0 2px 8px rgba(0, 99, 109, 0.1);
+}
+
+:global(.MuiOutlinedInput-root.Mui-focused) {
+    box-shadow: 0 2px 8px rgba(0, 99, 109, 0.2);
+}
+
+:global(.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline) {
+    border-color: #00636d;
+}
+
+:global(.MuiInputLabel-root.Mui-focused) {
+    color: #00636d;
+}
+
+:global(.MuiCheckbox-root) {
+    color: #e28f25;
+}
+
+:global(.MuiCheckbox-root.Mui-checked) {
+    color: #e28f25;
+}
+
+:global(.MuiFormControl-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline) {
+    border-color: #00636d !important;
+    box-shadow: 0 4px 20px rgba(0, 99, 109, 0.1);
+}

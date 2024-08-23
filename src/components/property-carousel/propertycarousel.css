@@ -7,12 +7,11 @@
   margin-left: 10px;
   width: 240px;
   background: white !important;
-  box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px ;
+  box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
 }
 
 .card-btn.active {
   background-color: #e0e0e0;
-  
 }
 
 .card-btn1 {
@@ -22,13 +21,11 @@
   border: 1px solid lightgrey !important;
   border-radius: 18px !important;
   background: white !important;
-  font-size: .64rem !important;
+  font-size: 0.64rem !important;
   color: #7c7875 !important;
 }
 
 /* Style for active button */
-
-
 
 .card-btn1:focus {
   border-color: #6e6d6d !important;
@@ -56,10 +53,8 @@
   font-size: 1.28rem;
   display: flex;
   flex-direction: column;
-  gap: .2rem;
+  gap: 0.2rem;
 }
-
-
 
 .currentproperty {
   border: 1px solid #212121 !important;
@@ -68,21 +63,20 @@
 .nextproperty {
   border: 1px solid #7c7875 !important;
   color: #7c7875 !important;
-  opacity: .7 !important;
+  opacity: 0.7 !important;
 }
-
 
 .BlueFont {
   height: 2rem;
   margin: 0 !important;
-  font-size: .7rem !important;
-  opacity: .7 !important;
+  font-size: 0.7rem !important;
+  opacity: 0.7 !important;
   text-wrap: wrap;
   font-weight: 500 !important;
 }
 
 .image1 {
-  background: url('../../../assets//BC\ -\ Home\ Page\ Banner.jpg');
+  background: url("../../../assets//BC\ -\ Home\ Page\ Banner.jpg");
   width: 70px;
   height: 2.5rem;
   background-repeat: no-repeat;
@@ -92,22 +86,21 @@
 
 /* Base styles for images */
 .CardImage img {
-height: 100%;
-background-repeat: no-repeat;
-background-size: cover;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 /* Style for single card (or general style) */
 .CardImage.single-card img {
-width: 60px;
+  width: 60px;
+  height: 45px;
 }
 
 /* Style for multiple cards */
 .CardImage.multiple-cards img {
-width: 90px;
+  width: 90px;
 }
-
-
 
 .Available {
   font-weight: 500;
@@ -142,7 +135,7 @@ width: 90px;
 .CardItem {
   /* width: 460px; Adjust this value to reduce the width of the container */
   overflow: hidden;
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: "Montserrat", sans-serif !important;
 }
 
 .css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root:hover {
@@ -154,32 +147,33 @@ width: 90px;
 }
 
 .night-count li:nth-child(1) {
-  letter-spacing: .14rem;
+  letter-spacing: 0.14rem;
   font-size: 1rem;
 }
 
 .night-count li:nth-child(2) {
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .property-image {
   width: 100px;
   height: 60px;
-  border-radius: 1px; 
+  border-radius: 1px;
 }
 
 .additionalproperty {
-  width: 8rem !important;
+  width: 9rem !important;
   /* padding: .60rem 2rem !important; */
-  border-radius: 1rem !important;
+  border-radius: 2rem !important;
   text-transform: capitalize !important;
   border: 1px solid #7c7875 !important;
   color: #7c7875 !important;
   margin-left: 0.5rem;
+  /* box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px; */
 }
-.property-name{
-font-size: 0.8rem !important;
-/* padding-top: px; */
+.property-name {
+  font-size: 0.8rem !important;
+  /* padding-top: px; */
 }
 .dots-container {
   display: flex;
@@ -188,8 +182,8 @@ font-size: 0.8rem !important;
 }
 
 .dot {
-  width: 25px;
-  height: 3px;
+  width: 20px;
+  height: 1px;
   background-color: lightgray;
   margin: 0 4px;
   cursor: pointer;
@@ -202,13 +196,9 @@ font-size: 0.8rem !important;
 
 .additionalproperty.active {
   background-color: #ffffff; /* or any color you prefer */
-  border: 2px solid #6e6d6d !important; /* example border color for active state */
+  border: 1px solid #b4b4b4 !important; /* example border color for active state */
 }
-
-
 
 .CardItem[data-single-card="true"] {
-  width: 300px; 
+  width: 300px;
 }
-
-

@@ -1,0 +1,295 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modalContent {
+  background: #fff;
+  font-family: 'Poppins', sans-serif;
+  border-radius: 8px;
+  max-width: 1000px;
+  width: 100%;
+  padding: 20px;
+  position: relative;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modalTitle {
+  font-weight: 400;
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 25px;
+  text-align: left;
+  margin-left: 10px;
+  flex: 1;
+}
+
+.modalCloseButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  margin-top: -25px;
+}
+
+.modalCloseButton:hover {
+  color: #333;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.formContent {
+  display: flex;
+  justify-content: space-between;
+}
+
+.leftContent,
+.rightContent {
+  flex: 1;
+  padding: 0 10px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.inputGroup label {
+  font-weight: 400;
+  margin-bottom: 1px;
+  color: #333;
+
+}
+
+.inputGroup input,
+.inputGroup select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+  gap: 1px;
+}
+
+.inputGroup input:focus,
+.inputGroup select:focus {
+  border-color: #e8aa6c;
+  outline: none;
+}
+
+.inlineInputGroup {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.propertyFields .inputGroup {
+  flex: 1;
+  
+}
+
+.propertyButtons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.addButton {
+  background: #e8aa6c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-bottom: -5px;
+  transition: background-color 0.3s ease;
+}
+.saveButton{
+  background: #e8aa6c;
+  color: white;
+  border: none;
+  padding: 8px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: -15px;
+  transition: background-color 0.3s ease;
+
+}
+
+.addButton {
+  align-self: flex-start;
+  margin-bottom: 20px;
+}
+
+.addButton:hover,
+.saveButton:hover {
+  background: #e49f63;
+}
+
+.addedPropertiesList {
+  margin-top: 20px;
+}
+
+.propertyItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  margin-top: -20px;
+  gap:3px;
+  
+}
+
+.equalWidthSelect {
+  width: 100%;
+  max-width: 150px; 
+}
+
+.inlineInputGroup {
+  display: flex;
+  gap: 8px; 
+  align-items: center;
+}
+
+
+.propertyActions {
+  display: flex;
+  align-items: center;
+}
+
+.editButton,
+.deleteButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.editButton:hover {
+  color: #ffa500;
+}
+
+.deleteButton:hover {
+  color: red;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 20px;
+}
+
+.cancelButton{
+  background: #e8aa6c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 10px 20px;
+  margin-right: 45.5rem;
+  margin-top: -80px ;
+  margin-bottom: 35px;
+  transition: background-color 0.3s ease;
+}
+
+
+.submitButton {
+  background: #e8aa6c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 10px 20px;
+  margin-right: 52.5rem;
+  margin-top: -35px ;
+  transition: background-color 0.3s ease;
+}
+
+.submitButton:hover {
+  background: #e49f63;
+}
+
+.error {
+  color: #ff6b6b;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.customSnackbar {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1001;
+}
+
+.customSnackbar .MuiSnackbarContent-root {
+  background-color: #4caf50; /* Default to success color */
+}
+
+.customSnackbar .MuiSnackbarContent-root.error {
+  background-color: #f44336; /* Error color */
+}
+
+.customSnackbar .MuiSnackbarContent-message {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+.customSnackbar .MuiSnackbarContent-action {
+  margin-left: 10px;
+}
+.sectionTitle{
+  margin-top: -10px;
+  margin-left: 2px;
+  margin-bottom: 10px;
+}
+
+
+.equalWidthSelect {
+  width: 100px; 
+}
+
+
+.propertyItem select,
+.propertyItem input[type="date"] {
+  width: 170px; 
+}
+.UpdateButton{
+  background: #e8aa6c;
+  color: white;
+  border: none;
+  padding: 8px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: -16px;
+  transition: background-color 0.3s ease;
+
+}

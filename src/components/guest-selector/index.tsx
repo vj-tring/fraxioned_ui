@@ -10,13 +10,15 @@ import ChildFriendlyIcon from '@mui/icons-material/ChildFriendly';
 import PetsIcon from '@mui/icons-material/Pets';
 import './guest-selector.css';
 import { RootState } from '@/store/reducers';
+import { CircleMinus, CirclePlus } from 'lucide-react';
 
 const names = [
   { label: 'Adults', description: 'Ages 13 or above', icon: <PeopleIcon /> },
   { label: 'Children', description: 'Ages 2 to 12', icon: <ChildFriendlyIcon /> },
-  { label: 'Infants', description: 'Under 2', icon: <PeopleIcon /> },
+  // { label: 'Infants', description: 'Under 2', icon: <PeopleIcon /> },
   { label: 'Pets', description: 'Bringing a service?', icon: <PetsIcon /> },
 ];
+
 
 const MultipleSelect: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -28,31 +30,36 @@ const MultipleSelect: React.FC = () => {
   const [counts, setCountsLocal] = useState<{ [key: string]: number }>({
     Adults: 1,
     Children: 0,
-    Infants: 0,
     Pets: 0,
   });
   const [validationMessage, setValidationMessage] = useState<string>('');
+  const [noOfguest, setNoOfGuestsAllowed] = useState<number>(0);
+  const [noOfPets, setNoOfPetsAllowed] = useState<number>(0);
+
 
   useEffect(() => {
     validateCounts();
   }, [selectedPropertyLimits, counts]);
-
+  
   const validateCounts = () => {
     if (!selectedPropertyLimits) return;
 
     const { noOfGuestsAllowed, noOfPetsAllowed } = selectedPropertyLimits;
-    const totalGuests = counts.Adults + counts.Children + counts.Infants;
+    setNoOfGuestsAllowed(noOfGuestsAllowed);
+    setNoOfPetsAllowed(noOfPetsAllowed);
+    const totalGuests = counts.Adults + counts.Children 
     const totalPets = counts.Pets;
 
     let message = '';
     if (counts.Adults < 1) {
       message = 'At least one adult is required.';
-    } else if (totalGuests > noOfGuestsAllowed ) {
-      message = `The total number of guests cannot exceed ${noOfGuestsAllowed }.`;
+    } else if (totalGuests > noOfGuestsAllowed) {
+      message = `The total number of guests cannot exceed ${noOfGuestsAllowed}.`;
     } else if (totalPets > noOfPetsAllowed) {
       message = `The number of pets cannot exceed ${noOfPetsAllowed}.`;
     }
-
+ 
+    
     setValidationMessage(message);
     return message === '';
   };
@@ -63,15 +70,24 @@ const MultipleSelect: React.FC = () => {
       return;
     }
 
-    const maxLimit = name === 'Pets' ? selectedPropertyLimits.noOfPetsAllowed : (selectedPropertyLimits.noOfGuestsAllowed - counts.Pets);
+    const maxLimit = name === 'Pets' ? selectedPropertyLimits.noOfPetsAllowed : selectedPropertyLimits.noOfGuestsAllowed ;
     const currentCount = counts[name];
 
-    let newCount: number;
+    let newCount: number= currentCount;
 
     if (action === 'increase') {
-      newCount = currentCount + 1;
-      if (name === 'Pets' && newCount > maxLimit) return;
-      if (name !== 'Pets' && (counts.Adults + counts.Children + counts.Infants) + (name === 'Infants' ? 1 : 0) > maxLimit) return;
+
+      if (name === 'Pets' && newCount > maxLimit-1) {
+        setValidationMessage(`You can't have more than ${maxLimit} pets.`)
+        return;
+      }
+      else if (name !== 'Pets' && (counts.Adults + counts.Children) > maxLimit-1) {
+        setValidationMessage(`You can't have more than ${maxLimit} guests.`)
+        return;
+      }
+      else{
+        newCount = currentCount + 1;
+      }
     } else {
       newCount = Math.max(currentCount - 1, 0);
     }
@@ -80,15 +96,21 @@ const MultipleSelect: React.FC = () => {
       ...prevCounts,
       [name]: newCount
     }));
+    console.log("function called")
   };
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+    setCountsLocal({
+      Adults: 1,
+      Children: 0,
+      Pets: 0,
+    });
   };
 
   const handleClose = () => {
     setAnchorEl(null);
-    setValidationMessage(''); 
+    setValidationMessage('');
   };
 
   useEffect(() => {
@@ -106,7 +128,7 @@ const MultipleSelect: React.FC = () => {
   }, [open]);
 
   return (
-    <Box sx={{ width: '30%' }}>
+    <Box sx={{ width: '30%'}}>
       <Button
         disableRipple
         aria-controls="basic-menu"
@@ -136,67 +158,92 @@ const MultipleSelect: React.FC = () => {
         PaperProps={{
           style: {
             width: 380,
-            borderRadius: '8px',
+            borderRadius: '10px !important',
             maxHeight: '400px',
             overflowY: 'auto',
+            padding: '.2rem 0'
           },
-        }}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
         }}
       >
         {names.map((item) => (
-          <MenuItem
-            key={item.label}
-            sx={{ borderRadius: 0 }}
-            disableRipple
-          >
-            <div className="d-flex justify-content-between w-100 MultiItems monsterrat">
-              <Avatar
-                sx={{
-                  backgroundColor: '#df9526',
-                  marginRight: '12px',
-                }}
-                className='monsterrat'
-              >
-                {item.icon}
-              </Avatar>
-              <div className="w-50">
-                <b className="itemLabel monsterrat">{item.label}</b>
-                <p className="DescFont monsterrat">{item.description}</p>
-              </div>
-              <div className="d-flex justify-content-around w-50 pb-2">
-                <button
-                  className="Dec-circle monsterrat"
-                  disabled={counts[item.label] === 0}
-                  onClick={() => handleCountChange(item.label, 'decrease')}
+          <>
+            <MenuItem
+              key={item.label}
+              sx={{
+                borderRadius: 0,
+                width: "100%",
+                padding: '0 2rem',
+                margin: '.5rem 0',
+                height: '4rem',
+              }}
+              disableRipple
+            >
+              <div className="d-flex justify-content-between align-items-center gap-2.5 w-100 monsterrat">
+                <Avatar
+                  sx={{
+                    backgroundColor: '#df9526',
+                  }}
+                  className='monsterrat'
                 >
-                  -
-                </button>
-                <p className="Ad-count monsterrat">{counts[item.label]}</p>
-                <button
-                  className={`Inc-circle monsterrat ${!selectedPropertyId ? 'disabled' : 'enabled'}`}
-                  disabled={!selectedPropertyId || (selectedPropertyLimits ? counts[item.label] >= (item.label === 'Pets' ? selectedPropertyLimits.noOfPetsAllowed : selectedPropertyLimits.noOfGuestsAllowed - counts.Pets) : true)}
-                  onClick={() => handleCountChange(item.label, 'increase')}
-                >
-                  +
-                </button>
+                  {item.icon}
+                </Avatar>
+                <div className="w-50">
+                  <b>{item.label}</b>
+                  <p className="DescFont monsterrat">{item.description}</p>
+
+                </div>
+
+
+                <div className="d-flex justify-content-around w-50 text-center">
+                  <button
+                    className=" monsterrat"
+                    disabled={counts[item.label] === 0}
+                    onClick={() => handleCountChange(item.label, 'decrease')}
+                  >
+                    <CircleMinus size={29} strokeWidth={0.75}
+                      color='grey'
+
+                    />
+                  </button>
+
+                  <p className="Ad-count monsterrat">{counts[item.label]}</p>
+                  <button
+                    // className={` monsterrat ${!selectedPropertyId ? 'disabled' : 'enabled'}`}
+
+                    // disabled={!selectedPropertyId || (selectedPropertyLimits ? counts[item.label] >= (item.label === 'Pets' ? selectedPropertyLimits.noOfPetsAllowed : selectedPropertyLimits.noOfGuestsAllowed - counts.Pets) : true)}
+                    onClick={() => handleCountChange(item.label, 'increase')}
+                  >
+                    <CirclePlus size={29} strokeWidth={0.75}
+                      // color='grey'
+                      className={`${item.label === 'Pets'  ? counts.Pets === noOfPets ? 'circleplusdisable': 'circleplus' : ''} ${item.label === 'Adults' || item.label === 'Children'  ? counts.Adults === noOfguest ? 'circleplusdisable': 'circleplus': ''} `}
+                    />
+                  </button>
+
+                </div>
+
               </div>
-            </div>
-          </MenuItem>
+
+            </MenuItem>
+            {
+              (!(names.indexOf(item) === names.length - 1)) &&
+              <hr style={{
+                opacity: .08,
+                margin: '0 2.1rem'
+              }} />
+            }
+          </>
+
+
+
         ))}
-        <div className='validationMsg monsterrat'>
-          {validationMessage && (
-            <p style={{ color: 'red', textAlign: 'center' }}>
-              {validationMessage}
-            </p>
-          )}
-        </div>
+
+        {validationMessage && <div className='validationMsg monsterrat'>
+
+          <p style={{ color: 'red', textAlign: 'center' }}>
+            {validationMessage}
+          </p>
+
+        </div>}
       </Menu>
     </Box>
   );

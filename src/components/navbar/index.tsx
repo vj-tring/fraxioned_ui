@@ -6,14 +6,11 @@ import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 // import Tooltip from '@mui/material/Tooltip';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import LogoutIcon from '@mui/icons-material/Logout';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import InviteModal from '../send-invite-modal';
 import ConfirmationModal from '../confirmation-modal';
-import FormDialog from '../register-form-modal';
 import ResetPasswordModal from '../reset-password-modal';
 import { NavLink } from 'react-router-dom';
 import useNavbarHandler from './navbar-handler';
@@ -22,6 +19,12 @@ import './navbar.css';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/reducers';
 import { useLocation } from 'react-router-dom';
+import FormDialog from '../register-form-modal';
+import { ListItemText } from '@mui/material';
+import LockResetOutlinedIcon from '@mui/icons-material/LockResetOutlined';
+import PersonAddAlt1OutlinedIcon from '@mui/icons-material/PersonAddAlt1Outlined';
+
+
 
 interface CustomNavbarProps {
   logo?: string;
@@ -41,7 +44,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
   links = [],
   userImage,
   userName,
-  onUserImageClick,
+  // onUserImageClick,
 }) => {
   const location = useLocation();
   const isAdminDashboard = location.pathname.startsWith('/admin');
@@ -107,11 +110,10 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
     setOpenNewAccountDialog(false);
   };
 
-  const navbarStyle = isAdmin ? { minHeight: '50px' } : {};
 
   return (
     <>
-      <Navbar bg="light" expand="lg" className="p-2" style={navbarStyle}>
+      <Navbar bg="light" expand="lg" className="p-2" style={{ height: '4.3rem' }}>
         {!isAdminDashboard && (
           <Navbar.Brand href="#home" className="p-2">
             <img
@@ -147,60 +149,60 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
 
         <Nav className="ml-auto">
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          
-              <IconButton
-                onClick={handleClick}
-                size="small"
-                sx={{ ml: 2 }}
-                aria-controls={open ? 'account-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                disableRipple
+
+            <IconButton
+              onClick={handleClick}
+              size="small"
+              sx={{ ml: 2 }}
+              aria-controls={open ? 'account-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              disableRipple
+            >
+              <Box
+                display="flex"
+                alignItems="center"
+                sx={{
+                  borderRadius: 1,
+                }}
               >
-                <Box
-                  display="flex"
-                  alignItems="center"
+                <Box>
+                  <Typography variant="body2" color="textPrimary" className="monsterrat p-2" sx={{
+                    fontWeight: 600,
+                    color: '#00636D',
+                    textTransform: 'uppercase'
+                  }}>
+                    {storedName}
+                  </Typography>
+                </Box>
+                <Avatar
                   sx={{
-                    borderRadius: 1,
+                    width: 32,
+                    height: 32,
+                    cursor: 'pointer',
+                    marginLeft: 1,
                   }}
                 >
-                  <Box>
-                    <Typography variant="body2" color="textPrimary" className="monsterrat p-2" sx={{
-                      fontWeight: 600,
-                      color: '#00636D',
-                      textTransform: 'uppercase'
-                    }}>
-                      {storedName}
-                    </Typography>
-                  </Box>
-                  <Avatar
-                    sx={{
-                      width: 32,
-                      height: 32,
-                      cursor: 'pointer',
-                      marginLeft: 1,
-                    }}
-                  >
-                    {userImage ? (
-                      <img
-                        src={userImage}
-                        alt="User"
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                          borderRadius: '50%',
-                        }}
-                      />
-                    ) : userName ? (
-                      userName.charAt(0).toUpperCase()
-                    ) : (
-                      'M'
-                    )}
-                  </Avatar>
-                </Box>
-              </IconButton>
-                      </Box>
+                  {userImage ? (
+                    <img
+                      src={userImage}
+                      alt="User"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        borderRadius: '50%',
+                      }}
+                    />
+                  ) : userName ? (
+                    userName.charAt(0).toUpperCase()
+                  ) : (
+                    'M'
+                  )}
+                </Avatar>
+              </Box>
+            </IconButton>
+          </Box>
           <Menu
             anchorEl={anchorEl}
             id="account-menu"
@@ -212,14 +214,8 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                 overflow: 'visible',
                 width: '230px',
                 filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                mt: 1.5,
-                padding:1,
-                '& .MuiAvatar-root': {
-                  width: 32,
-                  height: 32,
-                  ml: -0.5,
-                  mr: 1,
-                },
+                mt: 2.4,
+                padding: '.5rem 0',
                 '&::before': {
                   content: '""',
                   display: 'block',
@@ -234,38 +230,54 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                 },
               },
             }}
-            transformOrigin={{
-              horizontal: 'right',
-              vertical: 'top',
-            }}
-            anchorOrigin={{
-              horizontal: 'right',
-              vertical: 'bottom',
-            }}
           >
             {/* <MenuItem onClick={handleProfileClick}>
               <Avatar /> Profile
             </MenuItem> */}
-            <MenuItem onClick={handleResetPasswordClick} >
-              <Avatar sx={{
-                fontSize:'medium'
-              }} /> Reset
+            <MenuItem onClick={handleResetPasswordClick} style={{
+              height: '2.4rem'
+            }} >
+              <ListItemIcon>
+                <LockResetOutlinedIcon style={{
+                  width: '80%',
+                }} />
+              </ListItemIcon>
+              <ListItemText>Reset</ListItemText>
             </MenuItem>
-            <Divider />
             {isAdmin && (
-              <MenuItem onClick={handleAddAccountClick}>
+              <MenuItem onClick={handleAddAccountClick} style={{
+                height: '2.4rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
                 <ListItemIcon>
+                  <PersonAddAlt1OutlinedIcon style={{
+                    width: '80%'
+                  }} />
+                </ListItemIcon>
+                <ListItemText>Send Invite</ListItemText>
+                {/* <ListItemIcon>
                   <PersonAddIcon fontSize="medium" />
                 </ListItemIcon>
-                Add another account
+                Add another account */}
               </MenuItem>
             )}
-            <MenuItem onClick={handleLogoutClick}>
-              <ListItemIcon className='mt-1 p-1'>
-                <LogoutIcon fontSize="medium" />
+            <hr style={{
+              margin: '.3rem 0',
+              opacity: .12
+            }} />
+            <MenuItem onClick={handleLogoutClick} style={{
+              height: '2.4rem'
+            }} >
+              <ListItemIcon >
+                <LogoutOutlinedIcon style={{
+                  width: '80%'
+                }} />
               </ListItemIcon>
-              Logout
+              <ListItemText>Logout</ListItemText>
             </MenuItem>
+
           </Menu>
         </Nav>
       </Navbar>
