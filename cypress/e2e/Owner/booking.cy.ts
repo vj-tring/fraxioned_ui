@@ -36,19 +36,21 @@ describe("Owner Booking Check", () => {
                     cy.wrap($button).click({ force: true })
                 }
             });
-        cy.get("body > div:nth-child(2) > div:nth-child(3) > ul:nth-child(1) > li:nth-child(2) > div:nth-child(1) > div:nth-child(3) > button:nth-child(3)")
+        cy.get("div[class='validationMsg monsterrat'] p:nth-child(1)").contains("You can't have more than 24 guests.")
+            .get("li:nth-child(1) div:nth-child(1) div:nth-child(3) button:nth-child(1) svg")
             .click().wait(1500)
-            .get("div[class='validationMsg monsterrat'] p").contains("The total number of guests cannot exceed 24.")
-            .get("li:nth-child(1) div:nth-child(1) div:nth-child(3) button:nth-child(1)").click().click()
-            .get("body > div:nth-child(2) > div:nth-child(3) > ul:nth-child(1) > li:nth-child(3) > div:nth-child(1) > div:nth-child(3) > button:nth-child(3)").click()
             .get("body > div:nth-child(2) > div:nth-child(3) > ul:nth-child(1) > li:nth-child(3) > div:nth-child(1) > div:nth-child(3) > button:nth-child(3) > svg:nth-child(1)").click().click()
+            .get("body > div:nth-child(2) > div:nth-child(3) > ul:nth-child(1) > div:nth-child(6) > p:nth-child(1)").contains("You can't have more than 24 guests.").wait(2000)
             .get("li:nth-child(1) div:nth-child(1) div:nth-child(3) button:nth-child(1)")
             .then(($button) => {
-                for (let i = 0; i < 22; i++) {
+                for (let i = 0; i < 23; i++) {
                     cy.wrap($button).click({ force: true })
                 }
             });
-        cy.get("div[class='validationMsg monsterrat'] p").contains("At least one adult is required.").wait(1000).go(-1).go(+1)
+        cy.get("div[class='validationMsg monsterrat'] p").contains("At least one adult is required.").wait(2000)
+            .get("body > div:nth-child(2) > div:nth-child(3) > ul:nth-child(1) > li:nth-child(5) > div:nth-child(1) > div:nth-child(3) > button:nth-child(3) > svg:nth-child(1)").click().click().click()
+            .get("body > div:nth-child(2) > div:nth-child(3) > ul:nth-child(1) > div:nth-child(6) > p:nth-child(1)").contains("You can't have more than 2 pets.").wait(2000)
+            .go(-1).go(+1)
             .get("nav")
             .get("img[alt='User']").click()
             .get('li').contains("Logout").click().wait(2000)
