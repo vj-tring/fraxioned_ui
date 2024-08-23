@@ -14,6 +14,9 @@ import {
 } from "@/components/ui/popover";
 import './calender.css';
 import calendarData from './calendarData.json';
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProperties, selectSelectedPropertyDetails } from "@/store/slice/auth/property-slice";
+import { useEffect } from "react";
 
 
 export function DatePickerWithRange({
@@ -28,6 +31,8 @@ export function DatePickerWithRange({
     from: today,
     to: addDays(today, 0),
   })
+  const dispatch = useDispatch();
+  const selectedPropertyDetails = useSelector(selectSelectedPropertyDetails);
   const [startDate, setStartDate] = React.useState<Date | null>(null)
   const [startDateSelected, setStartDateSelected] = React.useState<boolean>(false)
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
@@ -36,6 +41,10 @@ export function DatePickerWithRange({
   const bookedDates = calendarData.bookedDates.map(date => new Date(date));
   const unavailableDates = calendarData.unavailableDates.map(date => new Date(date));
   const blueDates = calendarData.blueDates.map(date => new Date(date));
+
+  useEffect(() => {
+    dispatch(fetchProperties); 
+  }, [dispatch]);
 
   const clearDates = () => {
     setDate(undefined);
@@ -153,6 +162,27 @@ export function DatePickerWithRange({
       setStartDateSelected(true);
   
       const lastMinuteBooking = isLastMinuteBooking(newStartDate);
+      const peakSeasonStart = new Date(selectedPropertyDetails.peakSeasonStartDate);
+      const peakSeasonEnd = new Date(selectedPropertyDetails.peakSeasonEndDate);
+      let peakNights = 0;
+      let offNights = 0;
+      for (let d = new Date(newStartDate); d < newEndDate; d.setDate(d.getDate() + 1)) {
+        if (d >= peakSeasonStart && d <= peakSeasonEnd) {
+          peakNights++;
+        } else {
+          offNights++;
+        }
+      }
+
+      if (peakNights > selectedPropertyDetails.peakRemainingNights) {
+        setErrorMessage(`You don't have sufficient peak-season remaining nights to select this checkout date`);
+        return;
+      }
+
+      if (offNights > selectedPropertyDetails.offRemainingNights) {
+        setErrorMessage(`You don't have sufficient off-season remaining nights to select this checkout date`);
+        return;
+      }
   
       if (newEndDate) {
         const nextBookedDate = bookedDates.find(bookedDate => bookedDate > newStartDate);
@@ -167,14 +197,16 @@ export function DatePickerWithRange({
               setErrorMessage(`Minimum ${calendarData.bookingRules.lastMinuteBooking.minNights} night(s) required for last-minute bookings`);
             } else if (nightsSelected > calendarData.bookingRules.lastMinuteBooking.maxNights) {
               setErrorMessage(`Maximum ${calendarData.bookingRules.lastMinuteBooking.maxNights} nights allowed for last-minute bookings`);
-            } else {
+            } else if (selectedPropertyDetails.lastMinuteRemainingNights == 0) {
+              setErrorMessage(`You don't have sufficient last-minute remaining nights to select this checkout date`);
+            } else  {
               setErrorMessage(null);
             }
           } else {
             if (nightsSelected < calendarData.bookingRules.regularBooking.minNights) {
               setErrorMessage(`Minimum ${calendarData.bookingRules.regularBooking.minNights} nights required`);
-            } else if (nightsSelected > calendarData.bookingRules.regularBooking.maxNights) {
-              setErrorMessage('Maximum nights exceeded');
+            } else if (nightsSelected > selectedPropertyDetails?.maximumStayLength) {
+              setErrorMessage('Your booking request has exceeded the maximum stay length');
             } else {
               setErrorMessage(null);
             }
@@ -278,7 +310,7 @@ export function DatePickerWithRange({
         <div className="flex items-center justify-end end-calendar">
         <div className='stay-length'>
             <div className='misl'>Minimum Stay Length : {calendarData.bookingRules.regularBooking.minNights} Nights</div>
-            <div className='masl'>Maximum Stay Length : {calendarData.bookingRules.regularBooking.maxNights} Nights</div>
+            <div className='masl'>Maximum Stay Length : {selectedPropertyDetails?.maximumStayLength} Nights</div>
         </div>
         <div onClick={clearDates} className="ml-auto btn-clear">
             Clear

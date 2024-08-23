@@ -4,15 +4,14 @@
   display: flex;
   flex-direction: column;
   border: none;
-  padding: 10px;
-  margin-right: 35px;
+  padding: 15px;
+  margin-right: 15px;
   position: relative;
   cursor: pointer;
 }
 
 .image-container {
   position: relative;
-  
 }
 
 .image-container .card-img-top {
@@ -28,8 +27,8 @@
 
 .plus-icon {
   position: absolute;
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
+  top: 47%; /* Center vertically */
+  left: 47%; /* Center horizontally */
   transform: translate(-50%, -50%); /* Adjust for exact centering */
   font-weight: bolder;
   color: #f7981d;
@@ -42,7 +41,7 @@
   flex-direction: column;
   align-items: baseline;
   width: 250px;
-  height: 100px;
+  flex: 0 0 !important;
 }
 
 .card-title {
@@ -57,11 +56,99 @@
 
 .card-text {
   color: rgb(173, 172, 172);
+  max-width: 230px !important;
+  width: 100% !important;
   display: flex;
   font-size: small;
-text-align: -webkit-left;}
+  text-wrap: wrap;
+  text-align: left;
+}
 
-.plus-icon-container{
+.plus-icon-container {
   cursor: pointer;
   margin-top: 10px;
+}
+/* home.css */
+.PropContainer {
+  margin: 10px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+  border-radius: 10px;
+}
+.Cardcontainer {
+  display: flex;
+  width: 100%;
+  margin: 15px;
+  /* padding: 15px; */
+  overflow-x: auto !important;
+  white-space: nowrap; /* Prevent wrapping of items */
+  background-color: #ffffff;
+  /* border: 1px solid #c2c2c2; */
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 2px 1px;
+}
+
+.carousel {
+  overflow: hidden; /* Hide overflowing content */
+}
+
+.carousel-controls {
+  display: flex;
+  justify-content: space-evenly;
+  position: relative;
+  z-index: 9999;
+  top: 20%;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+  /* width: 80%; */
+  /* margin-top: 12%; */
+  transform: translateY(40%);
+}
+
+.PropImg {
+  margin: 10px;
+  width: 93%;
+  margin-left: 5%;
+  /* box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px; */
+  border-radius: 10px;
+}
+.carousel-control {
+  border: none;
+  color: rgb(207, 206, 206);
+  font-size: 24px;
+  cursor: pointer;
+  border-radius: 5%;
+  margin-top: 20%;
+  height: 60px;
+  width: 20px;
+  /* background-color: rgb(255, 255, 255); */
+  /* box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;  transition: background-color 0.3s; */
+}
+
+.prev {
+  position: absolute;
+  left: -6px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #bab9b8;
+  box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
+  color: #ffffff;
+}
+
+.next {
+  position: absolute;
+  right: -9px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #bab9b8;
+  box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
+  color: #ffffff;
+}
+
+.FadeProp {
+  margin-top: 15px;
+  margin-left: 20px;
+  /* position: sticky; */
+  /* right: 0; */
+  /* background-color: white; */
 }

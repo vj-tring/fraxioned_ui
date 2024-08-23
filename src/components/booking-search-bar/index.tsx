@@ -10,6 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { maxWidth } from '@mui/system'
 
 const BookingSearchBar: React.FC = () => {
+  const userId = ''
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined)
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
   const [activeDate, setActiveDate] = useState<'check-in' | 'check-out' | null>(null)
@@ -36,7 +37,7 @@ const BookingSearchBar: React.FC = () => {
         <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen} disableRipple>
           <PopoverTrigger asChild disableRipple >
             <div>
-              <Region 
+              <Region
                 label="Check In"
                 date={dateRange?.from}
                 onClick={() => handleRegionClick('check-in')}
@@ -45,10 +46,11 @@ const BookingSearchBar: React.FC = () => {
             </div>
           </PopoverTrigger>
           <PopoverContent className="calendar-popover" align="start">
-            <DatePickerWithRange 
-              onSelect={handleDateSelect} 
+            <DatePickerWithRange
+              onSelect={handleDateSelect}
               initialRange={dateRange}
               selectingFrom={activeDate === 'check-in'}
+              userId={userId}
             />
           </PopoverContent>
         </Popover>
@@ -56,7 +58,7 @@ const BookingSearchBar: React.FC = () => {
         <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
           <PopoverTrigger asChild>
             <div>
-              <Region 
+              <Region
                 label="Check Out"
                 date={dateRange?.to}
                 onClick={() => handleRegionClick('check-out')}
@@ -69,7 +71,7 @@ const BookingSearchBar: React.FC = () => {
         <GuestSelector />
       </div>
     </div>
-  ) 
+  )
 }
 
 export default BookingSearchBar
