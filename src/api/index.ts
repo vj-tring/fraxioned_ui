@@ -92,4 +92,7 @@ export const getPropertyById = (id: number) =>
 export const updatePropertyapi = (id: number, data: any) =>
     axiosInstance.patch(`/v1/properties/property/${id}`, data);
 
+export const userdetails = () =>
+    axiosInstance.get('/v2/users');
+
 

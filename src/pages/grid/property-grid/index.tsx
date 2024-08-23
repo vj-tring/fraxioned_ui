@@ -9,6 +9,8 @@ import NewPropertyForm from './NewPropertyForm';
 import EditPropertyForm from './EditPropertyForm';
 import ConfirmationModal from '@/components/confirmation-modal';
 
+
+
 interface PropertyData {
     id: number;
     name: string;

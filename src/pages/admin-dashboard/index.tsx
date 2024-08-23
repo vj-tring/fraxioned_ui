@@ -4,6 +4,7 @@ import SidePanel from '@/components/sidepanel';
 import Holidays from '../grid/holiday-grid';
 import Calendar from '@/components/big-calendar';
 import Property from '../grid/property-grid';
+import PropertySidePanel from '../propertysidepanel';
 import userImage from '../../assets/images/profile.jpeg'
 import CustomNavbar from '@/components/navbar';
 import fraxionedLogo from '../../assets/images/fraxioned.png'
@@ -33,6 +34,8 @@ const AdminDashboard: React.FC = () => {
                         <Route path="/bookings" element={<Calendar isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/holidays" element={<Holidays isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/property" element={<Property isSidebarOpen={isSidebarOpen} />} />
+                        <Route path="/property/general-info" element={<PropertySidePanel isOpen={false} />} />
+
 
                     </Routes>
                 </div>
