@@ -105,10 +105,6 @@ const PropertyGeneralInfo: React.FC = () => {
           <span className={styles.value}>{propertyData.isActive ? 'Yes' : 'No'}</span>
         </div>
       </div>
-      <div className={styles.description}>
-        <h3>House Description</h3>
-        <p>{propertyData.houseDescription}</p>
-      </div>
     </div>
   );
 };

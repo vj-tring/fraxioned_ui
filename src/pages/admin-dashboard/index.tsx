@@ -11,6 +11,7 @@ import userImage from '../../assets/images/profile.jpeg'
 import CustomNavbar from '@/components/navbar';
 import fraxionedLogo from '../../assets/images/fraxioned.png'
 import './admin-dashboard.css'
+import PropertyRules from '../property-rules';
 
 const AdminDashboard: React.FC = () => {
     const navigate = useNavigate()
@@ -49,6 +50,14 @@ const AdminDashboard: React.FC = () => {
                                 <PropertySidePanel isOpen={true} />
                                 <div className="property-info-content">
                                     <EditPropertyForm />
+                                </div>
+                            </div>
+                        } />
+                        <Route path="/property/:id/rules" element={
+                            <div className="property-details-container">
+                                <PropertySidePanel isOpen={true} />
+                                <div className="property-info-content">
+                                    <PropertyRules />
                                 </div>
                             </div>
                         } />

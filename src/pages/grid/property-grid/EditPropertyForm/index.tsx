@@ -13,6 +13,7 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import { useSelector } from 'react-redux';
 import { updatePropertyapi, getPropertyById } from '@/api';
+import Loader from '@/components/loader';
 import styles from './EditPropertyForm.module.css';
 import { RootState } from '@/store/reducers';
 
@@ -84,7 +85,7 @@ const EditPropertyForm: React.FC = () => {
         }
     };
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <Loader />;
     if (error) return <div>{error}</div>;
     if (!formData) return <div>No property data found.</div>;
 
@@ -101,185 +102,185 @@ const EditPropertyForm: React.FC = () => {
                 </div>
                 <div className={styles.scrollableContent}>
                     <form onSubmit={handleSubmit} className={styles.form}>
-                            <Grid container spacing={3}>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        label="Property Name"
-                                        name="propertyName"
-                                        value={formData.propertyName}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        required
-                                        variant="outlined"
-                                        className={styles.inputField}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        label="OwnerRez Property ID"
-                                        name="ownerRezPropId"
-                                        type="number"
-                                        value={formData.ownerRezPropId}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        variant="outlined"
-                                        className={styles.inputField}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        label="Address"
-                                        name="address"
-                                        value={formData.address}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        required
-                                        variant="outlined"
-                                        className={styles.inputField}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={4}>
-                                    <TextField
-                                        label="City"
-                                        name="city"
-                                        value={formData.city}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        required
-                                        variant="outlined"
-                                        className={styles.inputField}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={4}>
-                                    <TextField
-                                        label="State"
-                                        name="state"
-                                        value={formData.state}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        required
-                                        variant="outlined"
-                                        className={styles.inputField}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={4}>
-                                    <TextField
-                                        label="Country"
-                                        name="country"
-                                        value={formData.country}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        required
-                                        variant="outlined"
-                                        className={styles.inputField}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={4}>
-                                    <TextField
-                                        label="Zipcode"
-                                        name="zipcode"
-                                        type="number"
-                                        value={formData.zipcode}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        required
-                                        variant="outlined"
-                                        className={styles.inputField}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={4}>
-                                    <TextField
-                                        label="Property Share"
-                                        name="propertyShare"
-                                        type="number"
-                                        value={formData.propertyShare}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        required
-                                        variant="outlined"
-                                        className={styles.inputField}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={4}>
-                                    <TextField
-                                        label="Display Order"
-                                        name="displayOrder"
-                                        type="number"
-                                        value={formData.displayOrder}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        variant="outlined"
-                                        className={styles.inputField}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        label="House Description"
-                                        name="houseDescription"
-                                        value={formData.houseDescription}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        multiline
-                                        rows={3}
-                                        variant="outlined"
-                                        className={styles.inputField}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        label="Latitude"
-                                        name="latitude"
-                                        type="number"
-                                        value={formData.latitude}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        variant="outlined"
-                                        className={styles.inputField}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        label="Longitude"
-                                        name="longitude"
-                                        type="number"
-                                        value={formData.longitude}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        variant="outlined"
-                                        className={styles.inputField}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={formData.isExclusive}
-                                                onChange={handleInputChange}
-                                                name="isExclusive"
-                                                color="primary"
-                                            />
-                                        }
-                                        label="Is Exclusive"
-                                        className={styles.checkbox}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={formData.isActive}
-                                                onChange={handleInputChange}
-                                                name="isActive"
-                                                color="primary"
-                                            />
-                                        }
-                                        label="Is Active"
-                                        className={styles.checkbox}
-                                    />
-                                </Grid>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    label="Property Name"
+                                    name="propertyName"
+                                    value={formData.propertyName}
+                                    onChange={handleInputChange}
+                                    fullWidth
+                                    required
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
                             </Grid>
-                            {error && <Typography color="error" className={styles.error}>{error}</Typography>}
-                            <Box className={styles.buttonContainer}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    label="OwnerRez Property ID"
+                                    name="ownerRezPropId"
+                                    type="number"
+                                    value={formData.ownerRezPropId}
+                                    onChange={handleInputChange}
+                                    fullWidth
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="Address"
+                                    name="address"
+                                    value={formData.address}
+                                    onChange={handleInputChange}
+                                    fullWidth
+                                    required
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <TextField
+                                    label="City"
+                                    name="city"
+                                    value={formData.city}
+                                    onChange={handleInputChange}
+                                    fullWidth
+                                    required
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <TextField
+                                    label="State"
+                                    name="state"
+                                    value={formData.state}
+                                    onChange={handleInputChange}
+                                    fullWidth
+                                    required
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <TextField
+                                    label="Country"
+                                    name="country"
+                                    value={formData.country}
+                                    onChange={handleInputChange}
+                                    fullWidth
+                                    required
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <TextField
+                                    label="Zipcode"
+                                    name="zipcode"
+                                    type="number"
+                                    value={formData.zipcode}
+                                    onChange={handleInputChange}
+                                    fullWidth
+                                    required
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <TextField
+                                    label="Property Share"
+                                    name="propertyShare"
+                                    type="number"
+                                    value={formData.propertyShare}
+                                    onChange={handleInputChange}
+                                    fullWidth
+                                    required
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <TextField
+                                    label="Display Order"
+                                    name="displayOrder"
+                                    type="number"
+                                    value={formData.displayOrder}
+                                    onChange={handleInputChange}
+                                    fullWidth
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    label="House Description"
+                                    name="houseDescription"
+                                    value={formData.houseDescription}
+                                    onChange={handleInputChange}
+                                    fullWidth
+                                    multiline
+                                    rows={3}
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    label="Latitude"
+                                    name="latitude"
+                                    type="number"
+                                    value={formData.latitude}
+                                    onChange={handleInputChange}
+                                    fullWidth
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    label="Longitude"
+                                    name="longitude"
+                                    type="number"
+                                    value={formData.longitude}
+                                    onChange={handleInputChange}
+                                    fullWidth
+                                    variant="outlined"
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={formData.isExclusive}
+                                            onChange={handleInputChange}
+                                            name="isExclusive"
+                                            color="primary"
+                                        />
+                                    }
+                                    label="Is Exclusive"
+                                    className={styles.checkbox}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={formData.isActive}
+                                            onChange={handleInputChange}
+                                            name="isActive"
+                                            color="primary"
+                                        />
+                                    }
+                                    label="Is Active"
+                                    className={styles.checkbox}
+                                />
+                            </Grid>
+                        </Grid>
+                        {error && <Typography color="error" className={styles.error}>{error}</Typography>}
+                        <Box className={styles.buttonContainer}>
                             <Button
                                 variant="outlined"
                                 color="secondary"

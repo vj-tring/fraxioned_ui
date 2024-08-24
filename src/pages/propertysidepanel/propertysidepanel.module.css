@@ -2,6 +2,7 @@
     top: 60px;
     right: 0;
     height: calc(100vh - 60px);
+    margin-top: 9px;
     background-color: #fcfcfc;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
     color: #444444;
@@ -12,15 +13,18 @@
     display: flex;
     flex-direction: column;
     width: 230px;
+    padding-top: 0;
+
 }
 
 .menu {
     list-style-type: none;
     padding: 0;
     margin: 0;
+    margin-top: 0;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
     flex-grow: 1;
-    border-radius: 4px;
+    border-radius: 0;
     overflow-y: auto;
 }
 
@@ -34,9 +38,8 @@
 
 .menuLink {
     display: flex;
-    margin-top: 15px;
     align-items: center;
-    padding: 15px 20px;
+    padding: 12px 15px;
     text-decoration: none;
     color: #444444;
     transition: all 0.3s ease;
@@ -44,7 +47,6 @@
 
 .menuItem:active {
     background-color: rgba(226, 246, 248, 0.2);
-
 }
 
 .menuLink:hover {
@@ -53,6 +55,7 @@
 
 .icon {
     font-size: 1.2em;
+    margin-top: 0;
     width: 20px;
     text-align: center;
     margin-right: 15px;
@@ -61,9 +64,51 @@
 
 .label {
     font-size: 15px;
+    margin-top: 0;
     font-weight: 500;
     letter-spacing: 0.5px;
 }
+
+
+.propertyDropdown {
+    height: 65px;
+    padding: 0 15px;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fcfcfc;
+    border-bottom: 1px solid #e0e0e0;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #444444;
+}
+
+.propertyDropdown .MuiSelect-select {
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #444444;
+}
+
+.dropdownIcon {
+    color: #e28f25;
+    font-size: 12px;
+}
+
+.propertyDropdown .MuiOutlinedInput-notchedOutline {
+    border-color: #e0e0e0;
+}
+
+.propertyDropdown:hover .MuiOutlinedInput-notchedOutline {
+    border-color: #e28f25;
+}
+
+.propertyDropdown.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: #e28f25;
+}
+
 
 @media (max-width: 768px) {
     .propertyPanel {

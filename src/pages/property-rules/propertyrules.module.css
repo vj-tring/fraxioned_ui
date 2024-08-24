@@ -2,55 +2,42 @@
     padding: 20px;
     background-color: #ffffff;
     border-radius: 8px;
+    width: 710px;
+    margin-top: 92px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
+}
 
-  .titleContainer {
+.titleContainer {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-  }
-  
-  
-  .title {
+}
+
+.title {
     font-size: 24px;
-    margin-bottom: 20px;
     color: #333;
-  }
-  
-  .infoGrid {
+    margin: 0;
+}
+
+.rulesGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
-  }
-  
-  .infoItem {
+}
+
+.ruleItem {
     display: flex;
     flex-direction: column;
-  }
-  
-  .label {
+}
+
+.label {
     font-weight: bold;
     margin-bottom: 5px;
     color: #666;
-  }
-  
-  .value {
+}
+
+.value {
     color: #333;
-  }
-  
-  .description {
-    margin-top: 30px;
-  }
-  
-  .description h3 {
-    font-size: 18px;
-    margin-bottom: 10px;
-    color: #333;
-  }
-  
-  .description p {
-    color: #666;
-    line-height: 1.6;
-  }
+    font-size: 16px;
+}
