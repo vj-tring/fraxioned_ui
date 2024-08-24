@@ -8,7 +8,7 @@ import styles from './property.module.css';
 import NewPropertyForm from './NewPropertyForm';
 import EditPropertyForm from './EditPropertyForm';
 import ConfirmationModal from '@/components/confirmation-modal';
-
+import { useNavigate } from 'react-router-dom';
 
 
 interface PropertyData {
@@ -48,6 +48,8 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [propertyToDelete, setPropertyToDelete] = useState<PropertyData | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         fetchProperties();
@@ -79,6 +81,7 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             const propertyData = response.data;
             setEditPropertyData(propertyData);
             setIsEditFormOpen(true);
+            navigate(`/admin/property/${id}`);
         } catch (err) {
             console.error('Error fetching property details:', err);
             setError('Failed to fetch property details. Please try again.');
@@ -180,11 +183,15 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             {isEditFormOpen && editPropertyData && (
                 <div className={styles.modalOverlay} onClick={() => setIsEditFormOpen(false)}>
                     <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                        <EditPropertyForm
-                            onClose={() => setIsEditFormOpen(false)}
+                    <EditPropertyForm
+                            onClose={() => {
+                                setIsEditFormOpen(false);
+                                navigate('/property');
+                            }}
                             onPropertyUpdated={fetchProperties}
                             propertyData={editPropertyData}
                         />
+
                     </div>
                 </div>
             )}

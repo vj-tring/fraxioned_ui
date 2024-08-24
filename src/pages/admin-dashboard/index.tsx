@@ -5,6 +5,7 @@ import Holidays from '../grid/holiday-grid';
 import Calendar from '@/components/big-calendar';
 import Property from '../grid/property-grid';
 import PropertySidePanel from '../propertysidepanel';
+import PropertyGeneralInfo from '../property-generalinfo'
 import userImage from '../../assets/images/profile.jpeg'
 import CustomNavbar from '@/components/navbar';
 import fraxionedLogo from '../../assets/images/fraxioned.png'
@@ -13,6 +14,7 @@ import './admin-dashboard.css'
 const AdminDashboard: React.FC = () => {
     const navigate = useNavigate()
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -34,9 +36,14 @@ const AdminDashboard: React.FC = () => {
                         <Route path="/bookings" element={<Calendar isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/holidays" element={<Holidays isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/property" element={<Property isSidebarOpen={isSidebarOpen} />} />
-                        <Route path="/property/general-info" element={<PropertySidePanel isOpen={false} />} />
-
-
+                        <Route path="/property/:id" element={
+                            <div className="property-details-container">
+                                <PropertySidePanel isOpen={true} />
+                                <div className="property-info-content">
+                                    <PropertyGeneralInfo />
+                                </div>
+                            </div>
+                        } />
                     </Routes>
                 </div>
             </div>

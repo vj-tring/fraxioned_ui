@@ -13,6 +13,19 @@
     position: relative;
 }
 
+.property-details-container {
+    display: flex;
+    height: 100%;
+}
+
+.property-info-content {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    margin-right: 220px; 
+
+}
+
 .content {
     flex: 1;
     padding: 0;
@@ -45,7 +58,7 @@
 
 .content.property-panel-open {
     margin-right: 220px;
-  }
+}
 
 .divider {
     position: absolute;
@@ -82,7 +95,7 @@
 
     .content.property-panel-open {
         margin-right: 200px;
-      }
+    }
 
     .label {
         font-size: 14px;
