@@ -6,6 +6,7 @@ import propertyReducer from '../slice/auth/property-slice';
 import limitsReducer from '../slice/auth/propertyGuestSlice';
 import editpropertyReducer from '../slice/auth/editproperty';
 import addpropertyReducer from '../slice/auth/addproperty';
+import propertySeasonHolidayReducer from '../slice/auth/propertySeasonHolidaySlice';
 
 const appReducer = combineReducers({
   auth: authReducer,
@@ -15,6 +16,7 @@ const appReducer = combineReducers({
   properties: propertyReducer,
   editProperty: editpropertyReducer,
   limits: limitsReducer,
+  propertySeasonHoliday: propertySeasonHolidayReducer, 
 });
 
 const rootReducer = (
