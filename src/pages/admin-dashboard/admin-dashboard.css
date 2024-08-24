@@ -16,13 +16,14 @@
 .property-details-container {
     display: flex;
     height: 100%;
+    position: fixed;
 }
 
 .property-info-content {
     flex-grow: 1;
     padding: 20px;
     overflow-y: auto;
-    margin-right: 220px; 
+    margin-left: 120px;
 
 }
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getPropertyById } from '@/api';
+import EditButton from '@/components/edit';
 import styles from './property-generalinfo.module.css';
 
 interface PropertyData {
@@ -28,6 +29,8 @@ const PropertyGeneralInfo: React.FC = () => {
   const [propertyData, setPropertyData] = useState<PropertyData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchPropertyData = async () => {
@@ -45,13 +48,21 @@ const PropertyGeneralInfo: React.FC = () => {
     fetchPropertyData();
   }, [id]);
 
+  const handleEdit = () => {
+    navigate(`/admin/property/${id}/edit`);
+  };
+
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
   if (!propertyData) return <div>No property data found.</div>;
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>General Information</h2>
+      <div className={styles.titleContainer}>
+        <h2 className={styles.title}>General Information</h2>
+        <EditButton onClick={handleEdit} />
+      </div>
       <div className={styles.infoGrid}>
         <div className={styles.infoItem}>
           <span className={styles.label}>Property Name:</span>

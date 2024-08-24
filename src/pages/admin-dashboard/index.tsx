@@ -6,6 +6,7 @@ import Calendar from '@/components/big-calendar';
 import Property from '../grid/property-grid';
 import PropertySidePanel from '../propertysidepanel';
 import PropertyGeneralInfo from '../property-generalinfo'
+import EditPropertyForm from '../grid/property-grid/EditPropertyForm';
 import userImage from '../../assets/images/profile.jpeg'
 import CustomNavbar from '@/components/navbar';
 import fraxionedLogo from '../../assets/images/fraxioned.png'
@@ -14,7 +15,6 @@ import './admin-dashboard.css'
 const AdminDashboard: React.FC = () => {
     const navigate = useNavigate()
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
@@ -41,6 +41,14 @@ const AdminDashboard: React.FC = () => {
                                 <PropertySidePanel isOpen={true} />
                                 <div className="property-info-content">
                                     <PropertyGeneralInfo />
+                                </div>
+                            </div>
+                        } />
+                        <Route path="/property/:id/edit" element={
+                            <div className="property-details-container">
+                                <PropertySidePanel isOpen={true} />
+                                <div className="property-info-content">
+                                    <EditPropertyForm />
                                 </div>
                             </div>
                         } />

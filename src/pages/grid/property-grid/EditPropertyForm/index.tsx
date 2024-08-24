@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
     TextField,
     Button,
@@ -11,41 +12,38 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { useSelector } from 'react-redux';
-import { updatePropertyapi } from '@/api';
+import { updatePropertyapi, getPropertyById } from '@/api';
 import styles from './EditPropertyForm.module.css';
 import { RootState } from '@/store/reducers';
 
-interface EditPropertyFormProps {
-    onClose: () => void;
-    onPropertyUpdated: () => void;
-    propertyData: {
-        id: number;
-        propertyName: string;
-        ownerRezPropId: number;
-        address: string;
-        city: string;
-        state: string;
-        country: string;
-        zipcode: number;
-        houseDescription: string;
-        isExclusive: boolean;
-        propertyShare: number;
-        latitude: number;
-        longitude: number;
-        isActive: boolean;
-        displayOrder: number;
-    };
-}
-
-const EditPropertyForm: React.FC<EditPropertyFormProps> = ({ onClose, onPropertyUpdated, propertyData }) => {
-    const [formData, setFormData] = useState(propertyData);
+const EditPropertyForm: React.FC = () => {
+    const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
+    const [formData, setFormData] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
 
     const userId = useSelector((state: RootState) => state.auth.user?.id);
 
+    useEffect(() => {
+        const fetchPropertyData = async () => {
+            try {
+                const response = await getPropertyById(Number(id));
+                setFormData(response.data);
+                setLoading(false);
+            } catch (err) {
+                console.error('Error fetching property details:', err);
+                setError('Failed to fetch property details. Please try again.');
+                setLoading(false);
+            }
+        };
+
+        fetchPropertyData();
+    }, [id]);
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
-        setFormData(prevData => ({
+        setFormData((prevData: any) => ({
             ...prevData,
             [name]: type === 'checkbox' ? checked : value
         }));
@@ -78,29 +76,31 @@ const EditPropertyForm: React.FC<EditPropertyFormProps> = ({ onClose, onProperty
                 displayOrder: formData.displayOrder
             };
 
-            await updatePropertyapi(propertyData.id, updatedPropertyData);
-            onPropertyUpdated();
-            onClose();
+            await updatePropertyapi(Number(id), updatedPropertyData);
+            navigate(`/admin/property/${id}`);
         } catch (err) {
             console.error('Error updating property:', err);
             setError('Failed to update property. Please try again.');
         }
     };
 
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
+    if (!formData) return <div>No property data found.</div>;
+
     return (
-        <div className={styles.modalOverlay}>
-            <div className={styles.formContainer}>
-                <Paper elevation={3} className={styles.formPaper}>
-                    <div className={styles.staticHeader}>
-                        <Box className={styles.formHeader}>
-                            <EditIcon className={styles.headerIcon} />
-                            <Typography variant="h4" className={styles.formTitle}>
-                                Edit Property
-                            </Typography>
-                        </Box>
-                    </div>
-                    <div className={styles.scrollableContent}>
-                        <form onSubmit={handleSubmit} className={styles.form}>
+        <div className={styles.formContainer}>
+            <Paper elevation={3} className={styles.formPaper}>
+                <div className={styles.staticHeader}>
+                    <Box className={styles.formHeader}>
+                        <EditIcon className={styles.headerIcon} />
+                        <Typography variant="h4" className={styles.formTitle}>
+                            Edit Property
+                        </Typography>
+                    </Box>
+                </div>
+                <div className={styles.scrollableContent}>
+                    <form onSubmit={handleSubmit} className={styles.form}>
                             <Grid container spacing={3}>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
@@ -280,27 +280,26 @@ const EditPropertyForm: React.FC<EditPropertyFormProps> = ({ onClose, onProperty
                             </Grid>
                             {error && <Typography color="error" className={styles.error}>{error}</Typography>}
                             <Box className={styles.buttonContainer}>
-                                <Button
-                                    variant="outlined"
-                                    color="secondary"
-                                    onClick={onClose}
-                                    className={styles.cancelButton}
-                                >
-                                    Cancel
-                                </Button>
-                                <Button
-                                    type="submit"
-                                    variant="contained"
-                                    color="primary"
-                                    className={styles.updateButton}
-                                >
-                                    Update Property
-                                </Button>
-                            </Box>
-                        </form>
-                    </div>
-                </Paper>
-            </div>
+                            <Button
+                                variant="outlined"
+                                color="secondary"
+                                onClick={() => navigate(`/admin/property/${id}`)}
+                                className={styles.cancelButton}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                className={styles.updateButton}
+                            >
+                                Update Property
+                            </Button>
+                        </Box>
+                    </form>
+                </div>
+            </Paper>
         </div>
     );
 };

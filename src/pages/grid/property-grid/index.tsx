@@ -6,7 +6,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { getProperties, deletePropertyApi, getPropertyById } from '@/api';
 import styles from './property.module.css';
 import NewPropertyForm from './NewPropertyForm';
-import EditPropertyForm from './EditPropertyForm';
 import ConfirmationModal from '@/components/confirmation-modal';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,29 +21,9 @@ interface PropertyData {
     created_by: string;
 }
 
-interface EditPropertyData {
-    id: number;
-    propertyName: string;
-    ownerRezPropId: number;
-    address: string;
-    city: string;
-    state: string;
-    country: string;
-    zipcode: number;
-    houseDescription: string;
-    isExclusive: boolean;
-    propertyShare: number;
-    latitude: number;
-    longitude: number;
-    isActive: boolean;
-    displayOrder: number;
-}
-
 const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     const [properties, setProperties] = useState<PropertyData[]>([]);
     const [isNewFormOpen, setIsNewFormOpen] = useState(false);
-    const [isEditFormOpen, setIsEditFormOpen] = useState(false);
-    const [editPropertyData, setEditPropertyData] = useState<EditPropertyData | null>(null);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [propertyToDelete, setPropertyToDelete] = useState<PropertyData | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -79,9 +58,7 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
         try {
             const response = await getPropertyById(id);
             const propertyData = response.data;
-            setEditPropertyData(propertyData);
-            setIsEditFormOpen(true);
-            navigate(`/admin/property/${id}`);
+            navigate(`/admin/property/${id}`, { state: { propertyData } });
         } catch (err) {
             console.error('Error fetching property details:', err);
             setError('Failed to fetch property details. Please try again.');
@@ -177,21 +154,6 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                             onClose={() => setIsNewFormOpen(false)}
                             onPropertyAdded={fetchProperties}
                         />
-                    </div>
-                </div>
-            )}
-            {isEditFormOpen && editPropertyData && (
-                <div className={styles.modalOverlay} onClick={() => setIsEditFormOpen(false)}>
-                    <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-                    <EditPropertyForm
-                            onClose={() => {
-                                setIsEditFormOpen(false);
-                                navigate('/property');
-                            }}
-                            onPropertyUpdated={fetchProperties}
-                            propertyData={editPropertyData}
-                        />
-
                     </div>
                 </div>
             )}
