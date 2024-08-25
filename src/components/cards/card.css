@@ -56,9 +56,12 @@
 
 .card-text {
   color: rgb(173, 172, 172);
+  max-width: 230px !important;
+  width: 100% !important;
   display: flex;
   font-size: small;
-  text-align: -webkit-left;
+  text-wrap: wrap;
+  text-align: left;
 }
 
 .plus-icon-container {
@@ -73,15 +76,16 @@
 }
 .Cardcontainer {
   display: flex;
-  width: 85%;
+  width: 100%;
   margin: 15px;
-  padding: 15px;
-  overflow-x: auto; /* Allow horizontal scrolling */
+  /* padding: 15px; */
+  overflow-x: auto !important;
   white-space: nowrap; /* Prevent wrapping of items */
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   /* border: 1px solid #c2c2c2; */
   border-radius: 5px;
-  box-shadow: rgba(0, 0, 0, 0.1  ) 1px 1px 2px 1px; }
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 2px 1px;
+}
 
 .carousel {
   overflow: hidden; /* Hide overflowing content */
@@ -142,6 +146,9 @@
 }
 
 .FadeProp {
-  margin-top: 42px;
+  margin-top: 15px;
   margin-left: 20px;
+  /* position: sticky; */
+  /* right: 0; */
+  /* background-color: white; */
 }

@@ -30,6 +30,7 @@ interface RootState {
   };
 }
 
+
 const Home: React.FC = () => {
   const {
     cards: properties,
@@ -49,6 +50,7 @@ const Home: React.FC = () => {
       });
     }
   };
+  const Shadow =properties.length>=4?'rgba(0, 0, 0, 0.1) 1px 1px 2px 1px':'none';
 
   return (
     <div className="home-content">
@@ -113,6 +115,8 @@ const Home: React.FC = () => {
             </div>
           )}
           <div
+           style={{ boxShadow: Shadow
+           }}
             className={`Cardcontainer  ${showCarousel ? "carousel" : ""}`}
             ref={carouselRef}
           >
@@ -131,19 +135,7 @@ const Home: React.FC = () => {
                 // showPlusIcon={showCarousel && index === displayProperties.length - 1}
               />
             ))}
-          </div>
-          {showCarousel && (
-            <div className="carousel-controls ">
-              <button
-                className="carousel-control next"
-                onClick={() => scroll(250)}
-              >
-                &#10095;
-              </button>
-            </div>
-          )}
-
-          {showPlusIcon && (
+             {showPlusIcon && (
             <div className=" FadeProp">
               <div className="image-container   ">
                 <a href="https://www.fraxioned.com/" target="_blank">
@@ -167,6 +159,19 @@ const Home: React.FC = () => {
               </div>
             </div>
           )}
+          </div>
+          {showCarousel && (
+            <div className="carousel-controls ">
+              <button
+                className="carousel-control next"
+                onClick={() => scroll(250)}
+              >
+                &#10095;
+              </button>
+            </div>
+          )}
+
+         
         </div>
       </div>
     </div>
