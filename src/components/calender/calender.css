@@ -12,6 +12,11 @@
   color: gray;
 }
 
+.btn-book{
+  color: white;
+  background-color: #e8aa6c;
+}
+
 .end-calendar{
   margin-bottom: 10px;
 }

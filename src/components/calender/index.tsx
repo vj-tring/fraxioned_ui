@@ -3,7 +3,6 @@ import * as React from "react"
 import { addDays, format, addYears } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { DateRange } from "react-day-picker"
-
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -17,7 +16,9 @@ import calendarData from './calendarData.json';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProperties, selectSelectedPropertyDetails } from "@/store/slice/auth/property-slice";
 import { fetchPropertySeasonHoliday, selectPropertySeasonHolidays } from '@/store/slice/auth/propertySeasonHolidaySlice';
+import { saveBooking, clearBookingMessages } from '../../store/slice/auth/bookingSlice';
 import { useEffect } from "react";
+import { RootState } from "@/store/reducers"
 
 
 export function DatePickerWithRange({
@@ -33,6 +34,10 @@ export function DatePickerWithRange({
     to: addDays(today, 0),
   })
   const dispatch = useDispatch();
+  const bookingState = useSelector((state: RootState) => state.bookings);
+  const bookingError = bookingState?.error;
+  const bookingSuccessMessage = bookingState?.successMessage;
+  const isBookingLoading = bookingState?.isLoading;
   const selectedPropertyDetails = useSelector(selectSelectedPropertyDetails);
   const seasonHolidays = useSelector(selectPropertySeasonHolidays);
   const [selectedYear, setSelectedYear] = React.useState(new Date().getFullYear());
@@ -40,7 +45,8 @@ export function DatePickerWithRange({
   const [startDateSelected, setStartDateSelected] = React.useState<boolean>(false)
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
   const [isCalendarOpen, setIsCalendarOpen] = React.useState(false)
-
+  const currentBooking = useSelector((state: RootState) => state.bookings?.currentBooking);
+  const currentUser = useSelector((state: RootState) => state.auth.user);
   const bookedDates = calendarData.bookedDates.map(date => new Date(date));
   const unavailableDates = calendarData.unavailableDates.map(date => new Date(date));
   const blueDates = calendarData.blueDates.map(date => new Date(date));
@@ -48,6 +54,26 @@ export function DatePickerWithRange({
   useEffect(() => {
     dispatch(fetchProperties); 
   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(clearBookingMessages());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (bookingError) {
+      setErrorMessage(bookingError);
+    }
+    if (bookingSuccessMessage) {
+      console.log(bookingSuccessMessage);
+      clearDates();
+    }
+    const timer = setTimeout(() => {
+      dispatch(clearBookingMessages());
+    }, 5000); 
+
+    return () => clearTimeout(timer);
+  }, [bookingError, bookingSuccessMessage, dispatch]);
+
 
   useEffect(() => {
     if (selectedPropertyDetails?.id) {
@@ -183,12 +209,21 @@ export function DatePickerWithRange({
       const peakSeasonStart = new Date(selectedPropertyDetails.peakSeasonStartDate);
       const peakSeasonEnd = new Date(selectedPropertyDetails.peakSeasonEndDate);
       let peakNights = 0;
-      let offNights = 0;
+      let offNights = 0; 
+      let peakHolidayNights = 0;
+      let offHolidayNights = 0;
       for (let d = new Date(newStartDate); d < newEndDate; d.setDate(d.getDate() + 1)) {
         if (d >= peakSeasonStart && d <= peakSeasonEnd) {
           peakNights++;
         } else {
           offNights++;
+        }
+        if (isHolidayDate(d)) {
+          if (d >= peakSeasonStart && d <= peakSeasonEnd) {
+            peakHolidayNights++;
+          } else {
+            offHolidayNights++;
+          }
         }
       }
 
@@ -199,6 +234,16 @@ export function DatePickerWithRange({
 
       if (offNights > selectedPropertyDetails.details[selectedYear]?.offRemainingNights) {
         setErrorMessage(`You don't have sufficient off-season remaining nights to select this checkout date`);
+        return;
+      }
+
+      if (peakHolidayNights > selectedPropertyDetails.details[selectedYear]?.peakRemainingHolidayNights) {
+        setErrorMessage(`You don't have sufficient peak-season holiday remaining nights to select this checkout date`);
+        return;
+      }
+
+      if (offHolidayNights > selectedPropertyDetails.details[selectedYear]?.offRemainingHolidayNights) {
+        setErrorMessage(`You don't have sufficient off-season holiday remaining nights to select this checkout date`);
         return;
       }
   
@@ -257,6 +302,41 @@ export function DatePickerWithRange({
       if (onSelect) onSelect(undefined);
     }
   }
+
+  const handleBookingSubmit = () => {
+    if (!date?.from || !date?.to) {
+      setErrorMessage('Please select both check-in and check-out dates.');
+      return;
+    }
+  
+    if (!currentUser) {
+      setErrorMessage('User is not logged in. Please log in to make a booking.');
+      return;
+    }
+  
+    const checkinDate = new Date(Date.UTC(date.from.getFullYear(), date.from.getMonth(), date.from.getDate(), 12, 0, 0));
+    const checkoutDate = new Date(Date.UTC(date.to.getFullYear(), date.to.getMonth(), date.to.getDate(), 12, 0, 0));
+  
+    const bookingData = {
+      user: { id: currentUser.id },
+      property: { id: selectedPropertyDetails.id },
+      createdBy: { id: currentUser.id },
+      checkinDate: checkinDate.toISOString(),
+      checkoutDate: checkoutDate.toISOString(),
+      noOfGuests: 2,
+      noOfPets: 0,
+      isLastMinuteBooking: isLastMinuteBooking(checkinDate),
+      noOfAdults: 2, 
+      noOfChildren: 0, 
+      noOfInfants: 0, 
+      notes: 'Hi', 
+      confirmationCode: '', 
+      cleaningFee: 100, 
+      petFee: 0, 
+    };
+  
+    dispatch(saveBooking(bookingData));
+  };
   
   const customLocale = {
     code: calendarData.locale.code,
@@ -299,13 +379,11 @@ export function DatePickerWithRange({
             holiday: 'holiday-date',
           }}
         />
-          <div className="error-msg-container ml-5 flex justify-start">
+        <div className="error-msg-container ml-5 flex justify-start">
             <div className="error-msg">
-              {errorMessage && (
-                <div className="text-red-600">
-                  {errorMessage}
-                </div>
-              )}
+            {errorMessage && <div className="text-red-600">{errorMessage}</div>}
+            {bookingError && <div className="text-red-600">{bookingError}</div>}
+            {bookingSuccessMessage && <div className="text-green-600">{bookingSuccessMessage}</div>}
             </div>
           </div>
           <style>{`
@@ -337,11 +415,21 @@ export function DatePickerWithRange({
         <div className="flex items-center justify-end end-calendar">
         <div className='stay-length'>
             <div className='misl'>Minimum Stay Length : {calendarData.bookingRules.regularBooking.minNights} Nights</div>
-            <div className='masl'>Maximum Stay Length : {selectedPropertyDetails?.maximumStayLength} Nights</div>
+            <div className='masl'>Maximum Stay Length : {selectedPropertyDetails?.details[selectedYear]?.maximumStayLength} Nights</div>
         </div>
         <div onClick={clearDates} className="ml-auto btn-clear">
             Clear
           </div>
+
+        </div>
+        <div className="flex items-center justify-end ">
+        <Button 
+        onClick={handleBookingSubmit} 
+        className="m-2 mt-0 rounded-pill btn-book" 
+        disabled={isBookingLoading}
+        > 
+        {isBookingLoading ? 'Booking...' : 'Book Now'}
+      </Button>
         </div>
       </div>
       {/* Second Calendar */}

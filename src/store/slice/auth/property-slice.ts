@@ -22,6 +22,8 @@ const mockData: Card[] = [
         peakRemainingNights: 10,
         offRemainingNights: 10,
         lastMinuteRemainingNights: 6,
+        offRemainingHolidayNights:1,
+        peakRemainingHolidayNights:1,
         maximumStayLength: 14,
       },
       2025: {
@@ -32,6 +34,8 @@ const mockData: Card[] = [
         peakRemainingNights: 10,
         offRemainingNights: 10,
         lastMinuteRemainingNights: 6,
+        offRemainingHolidayNights:1,
+        peakRemainingHolidayNights:1,
         maximumStayLength: 14,
 
       },
@@ -43,6 +47,8 @@ const mockData: Card[] = [
         peakRemainingNights:15,
         offRemainingNights: 10,
         lastMinuteRemainingNights: 6,
+        offRemainingHolidayNights:1,
+        peakRemainingHolidayNights:1,
         maximumStayLength: 14,
       },
     },
@@ -67,6 +73,8 @@ const mockData: Card[] = [
         peakRemainingNights: 10,
         offRemainingNights: 10,
         lastMinuteRemainingNights: 6,
+        offRemainingHolidayNights:1,
+        peakRemainingHolidayNights:1,
         maximumStayLength: 14,
       },
       2025: {
@@ -77,6 +85,8 @@ const mockData: Card[] = [
         peakRemainingNights: 10,
         offRemainingNights: 10,
         lastMinuteRemainingNights: 6,
+        offRemainingHolidayNights:1,
+        peakRemainingHolidayNights:1,
         maximumStayLength: 14,
       },
       2026: {
@@ -87,6 +97,8 @@ const mockData: Card[] = [
         peakRemainingNights: 10,
         offRemainingNights: 10,
         lastMinuteRemainingNights: 6,
+        offRemainingHolidayNights:1,
+        peakRemainingHolidayNights:1,
         maximumStayLength: 14,
       },
 
@@ -118,6 +130,8 @@ const mockData: Card[] = [
         peakRemainingNights: 10,
         offRemainingNights: 10,
         lastMinuteRemainingNights: 6,
+        offRemainingHolidayNights:1,
+        peakRemainingHolidayNights:1,
         maximumStayLength: 14,
       },
       2025: {
@@ -128,6 +142,8 @@ const mockData: Card[] = [
         peakRemainingNights: 10,
         offRemainingNights: 10,
         lastMinuteRemainingNights: 6,
+        offRemainingHolidayNights:1,
+        peakRemainingHolidayNights:1,
         maximumStayLength: 14,
 
       },
@@ -139,6 +155,8 @@ const mockData: Card[] = [
         peakRemainingNights:15,
         offRemainingNights: 10,
         lastMinuteRemainingNights: 6,
+        offRemainingHolidayNights:1,
+        peakRemainingHolidayNights:1,
         maximumStayLength: 14,
       },
     },
@@ -163,7 +181,9 @@ const mockData: Card[] = [
         offSeasonHoliday: '5/25',
         peakRemainingNights: 10,
         offRemainingNights: 10,
-        lastMinuteRemainingNights: 6,
+        lastMinuteRemainingNights: 6,       
+        offRemainingHolidayNights:1,
+        peakRemainingHolidayNights:1,
         maximumStayLength: 14,
       },
       2025: {
@@ -174,6 +194,8 @@ const mockData: Card[] = [
         peakRemainingNights: 10,
         offRemainingNights: 10,
         lastMinuteRemainingNights: 6,
+        offRemainingHolidayNights:1,
+        peakRemainingHolidayNights:1,
         maximumStayLength: 14,
 
       },
@@ -185,6 +207,8 @@ const mockData: Card[] = [
         peakRemainingNights:15,
         offRemainingNights: 10,
         lastMinuteRemainingNights: 6,
+        offRemainingHolidayNights:1,
+        peakRemainingHolidayNights:1,
         maximumStayLength: 14,
       },
     },
@@ -209,7 +233,9 @@ const mockData: Card[] = [
         offSeasonHoliday: '5/25',
         peakRemainingNights: 10,
         offRemainingNights: 10,
-        lastMinuteRemainingNights: 6,
+        lastMinuteRemainingNights: 6,      
+        offRemainingHolidayNights:1,
+        peakRemainingHolidayNights:1,
         maximumStayLength: 14,
       },
       2025: {
@@ -219,7 +245,9 @@ const mockData: Card[] = [
         offSeasonHoliday: '5/25',
         peakRemainingNights: 10,
         offRemainingNights: 10,
-        lastMinuteRemainingNights: 6,
+        lastMinuteRemainingNights: 6,        
+        offRemainingHolidayNights:1,
+        peakRemainingHolidayNights:1,
         maximumStayLength: 14,
 
       },
@@ -231,6 +259,8 @@ const mockData: Card[] = [
         peakRemainingNights:15,
         offRemainingNights: 10,
         lastMinuteRemainingNights: 6,
+        offRemainingHolidayNights:1,
+        peakRemainingHolidayNights:1,
         maximumStayLength: 14,
       },
     },
@@ -305,6 +335,8 @@ interface Card {
       peakRemainingNights: number;
       offRemainingNights: number;
       lastMinuteRemainingNights: number;
+      offRemainingHolidayNights: number;
+      peakRemainingHolidayNights: number;
       maximumStayLength: number;
     };
   };
@@ -385,6 +417,8 @@ export const fetchProperties = createAsyncThunk(
               peakRemainingNights: userProp.peakRemainingNights,
               offRemainingNights: userProp.offRemainingNights,
               lastMinuteRemainingNights: userProp.lastMinuteRemainingNights,
+              offRemainingHolidayNights: userProp.offRemainingHolidayNights,
+              peakRemainingHolidayNights: userProp.peakRemainingHolidayNights,
               maximumStayLength: userProp.maximumStayLength,
               peakSeasonStartDate: property.peakSeasonStartDate,
               peakSeasonEndDate: property.peakSeasonEndDate,
@@ -402,6 +436,8 @@ export const fetchProperties = createAsyncThunk(
               peakRemainingNights: 0,
               offRemainingNights: 0,
               lastMinuteRemainingNights: 0,
+              offRemainingHolidayNights:0,
+              peakRemainingHolidayNights: 0,
               maximumStayLength: 0,
               peakSeasonStartDate: property.peakSeasonStartDate,
               peakSeasonEndDate: property.peakSeasonEndDate,
