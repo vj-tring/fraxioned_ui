@@ -114,7 +114,7 @@ const MultipleSelect: React.FC = () => {
   }, [open]);
 
   return (
-    <Box sx={{ width: '30%'}}>
+    <Box sx={{ width: '30%' }}>
       <Button
         disableRipple
         aria-controls="basic-menu"
@@ -147,7 +147,7 @@ const MultipleSelect: React.FC = () => {
             borderRadius: '10px !important',
             maxHeight: '400px',
             overflowY: 'auto',
-            padding: '.2rem 0'
+            padding: '0'
           },
         }}
       >
@@ -159,8 +159,8 @@ const MultipleSelect: React.FC = () => {
                 borderRadius: 0,
                 width: "100%",
                 padding: '0 2rem',
-                margin: '.5rem 0',
-                height: '4rem',
+                // margin: '.5rem 0',
+                height: '5rem',
               }}
               disableRipple
             >
@@ -212,7 +212,7 @@ const MultipleSelect: React.FC = () => {
               (!(names.indexOf(item) === names.length - 1)) &&
               <hr style={{
                 opacity: .08,
-                margin: '0 2.1rem'
+                // margin: '0 2.1rem'
               }} />
             }
           </>
