@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./register.module.css";
 import { IoMdClose } from "react-icons/io";
 import { FaSave, FaEdit, FaTrash } from "react-icons/fa";
+import { MdCancel } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { registerUser } from "../../store/slice/auth/register";
 import { AppDispatch } from "../../store";
@@ -42,6 +43,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
     propertyID: "",
     noOfShares: "",
     acquisitionDate: "",
+    userPropertyDetails: "null",
   });
 
   const [showSnackbar, setShowSnackbar] = useState(false);
@@ -120,21 +122,21 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
       setShowSnackbar(true);
       return;
     }
-  
+
     if (formValues.noOfShares <= 0) {
       setSnackbarMessage("Number of shares must be greater than 0");
       setSnackbarSeverity("error");
       setShowSnackbar(true);
       return;
     }
-  
+
     if (!formValues.acquisitionDate) {
       setSnackbarMessage("Please select an acquisition date");
       setSnackbarSeverity("error");
       setShowSnackbar(true);
       return;
     }
-  
+
     if (editIndex !== null) {
       setAddedProperties((prev) => {
         const updatedProperties = [...prev];
@@ -177,12 +179,21 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
       )
     );
 
-    if (addedProperties[index].isEditing) {
+    if (addedProperties[index].isEditing && index !== -1) {
       setSnackbarMessage("Successfully saved");
       setSnackbarSeverity("success");
       setShowSnackbar(true);
     }
   };
+
+  const handlecancelProperty = (index: number) => {
+    setAddedProperties((prev) =>
+      prev.map((property, i) =>
+        i === index ? { ...property, isEditing: !property.isEditing } : property
+      )
+    );
+  };
+
 
   const handleDeleteProperty = (index: number) => {
     setAddedProperties((prev) => prev.filter((_, i) => i !== index));
@@ -224,6 +235,10 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
     }
     if (formValues.roleId === 0) {
       newErrors.roleId = "Role is required";
+      hasErrors = true;
+    }
+    if (addedProperties.length === 0) {
+      errors.userPropertyDetails = 'Property should not be empty';
       hasErrors = true;
     }
     setErrors(newErrors);
@@ -292,9 +307,16 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
         setShowSnackbar(true);
       }
     } else {
-      setSnackbarMessage("Please correct the errors");
-      setSnackbarSeverity("error");
-      setShowSnackbar(true);
+      if (errors.userPropertyDetails) {
+        setSnackbarMessage(errors.userPropertyDetails);
+        setSnackbarSeverity("error");
+        setShowSnackbar(true);
+      }
+      else {
+        setSnackbarMessage("Please correct the errors");
+        setSnackbarSeverity("error");
+        setShowSnackbar(true);
+      }
     }
   };
 
@@ -304,259 +326,263 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
 
   return (
     <>
-      <div className={styles.modalOverlay}>
-        <div className={styles.modalContent}>
-          {isLoading && <Loader />}
-          <div className={styles.modalHeader}>
-            <h2 className={styles.modalTitle}>Create a New Account</h2>
-            <button className={styles.modalCloseButton} onClick={onClose}>
-              <IoMdClose size={20} />
-            </button>
-          </div>
-          <form className={styles.form} onSubmit={handleSubmit}>
-            <div className={styles.formContent}>
-              <div className={styles.leftContent}>
-                <h3 className={styles.sectionTitle}>Basic Details</h3>
-                <div className={styles.inputGroup}>
-                  <input
-                    type="text"
-                    id="firstName"
-                    name="firstName"
-                    placeholder="First Name"
-                    value={formValues.firstName}
-                    onChange={handleTextFieldChange}
-                  />
-                  {errors.firstName && (
-                    <span className={styles.error}>{errors.firstName}</span>
-                  )}
-                </div>
-                <div className={styles.inputGroup}>
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    placeholder="Last Name"
-                    value={formValues.lastName}
-                    onChange={handleTextFieldChange}
-                  />
-                  {errors.lastName && (
-                    <span className={styles.error}>{errors.lastName}</span>
-                  )}
-                </div>
-                <div className={styles.inputGroup}>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Email"
-                    value={formValues.email}
-                    onChange={handleTextFieldChange}
-                  />
-                  {errors.email && (
-                    <span className={styles.error}>{errors.email}</span>
-                  )}
-                </div>
-                <div className={styles.inputGroup}>
-                  <input
-                    type="text"
-                    id="addressLine1"
-                    name="addressLine1"
-                    placeholder="Address Line 1"
-                    value={formValues.addressLine1}
-                    onChange={handleTextFieldChange}
-                  />
-                  {errors.addressLine1 && (
-                    <span className={styles.error}>{errors.addressLine1}</span>
-                  )}
-                </div>
-                <div className={styles.inputGroup}>
-                  <input
-                    type="text"
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    placeholder="Phone Number"
-                    value={formValues.phoneNumber}
-                    onChange={handleTextFieldChange}
-                  />
-                  {errors.phoneNumber && (
-                    <span className={styles.error}>{errors.phoneNumber}</span>
-                  )}
-                </div>
-                <div className={styles.inputGroup}>
-                  <select
-                    id="roleId"
-                    name="roleId"
-                    value={formValues.roleId}
-                    onChange={handleSelectChange}
-                  >
-                    <option value={0}>Select Role</option>
-                    {roles.map((role) => (
-                      <option key={role.id} value={role.id}>
-                        {role.roleName}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.roleId && (
-                    <span className={styles.error}>{errors.roleId}</span>
-                  )}
-                </div>
+      <div className={styles.modalContent}>
+        {isLoading && <Loader />}
+        <div className={styles.modalHeader}>
+          <h2 className={styles.modalTitle}>Create a New Account</h2>
+          <button className={styles.modalCloseButton} onClick={onClose}>
+            <IoMdClose size={20} />
+          </button>
+        </div>
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <div className={styles.formContent}>
+            <div className={styles.leftContent}>
+              <h3 className={styles.sectionTitle}>Basic Details</h3>
+              <div className={styles.inputGroup}>
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  placeholder="First Name"
+                  value={formValues.firstName}
+                  onChange={handleTextFieldChange}
+                />
+                {errors.firstName && (
+                  <span className={styles.error}>{errors.firstName}</span>
+                )}
               </div>
-              <div className={styles.rightContent}>
-                <h3 className={styles.sectionTitle}>Property Details</h3>
+              <div className={styles.inputGroup}>
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  placeholder="Last Name"
+                  value={formValues.lastName}
+                  onChange={handleTextFieldChange}
+                />
+                {errors.lastName && (
+                  <span className={styles.error}>{errors.lastName}</span>
+                )}
+              </div>
+              <div className={styles.inputGroup}>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Email"
+                  value={formValues.email}
+                  onChange={handleTextFieldChange}
+                />
+                {errors.email && (
+                  <span className={styles.error}>{errors.email}</span>
+                )}
+              </div>
+              <div className={styles.inputGroup}>
+                <input
+                  type="text"
+                  id="addressLine1"
+                  name="addressLine1"
+                  placeholder="Address Line 1"
+                  value={formValues.addressLine1}
+                  onChange={handleTextFieldChange}
+                />
+                {errors.addressLine1 && (
+                  <span className={styles.error}>{errors.addressLine1}</span>
+                )}
+              </div>
+              <div className={styles.inputGroup}>
+                <input
+                  type="text"
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  placeholder="Phone Number"
+                  value={formValues.phoneNumber}
+                  onChange={handleTextFieldChange}
+                />
+                {errors.phoneNumber && (
+                  <span className={styles.error}>{errors.phoneNumber}</span>
+                )}
+              </div>
+              <div className={styles.inputGroup}>
+                <select
+                  id="roleId"
+                  name="roleId"
+                  value={formValues.roleId}
+                  onChange={handleSelectChange}
+                >
+                  <option value={0}>Select Role</option>
+                  {roles.map((role) => (
+                    <option key={role.id} value={role.id}>
+                      {role.roleName}
+                    </option>
+                  ))}
+                </select>
+                {errors.roleId && (
+                  <span className={styles.error}>{errors.roleId}</span>
+                )}
+              </div>
+            </div>
+            <div className={styles.rightContent}>
+              <h3 className={styles.sectionTitle}>Property Details</h3>
 
-                <div className="add-property"></div>
-                <div className={styles.addPropertySection}>
-                  <button
-                    type="button"
-                    className={styles.addButton}
-                    onClick={() => setShowPropertyFields(true)}
-                  >
-                    Add Property
-                  </button>
+              <div className={styles.addPropertySection}>
+                <button
+                  type="button"
+                  className={styles.addButton}
+                  onClick={() => setShowPropertyFields(true)}
+                >
+                  Add Property
+                </button>
 
-                  {showPropertyFields && (
-                    <div className={styles.propertyFields}>
-                      <div className={styles.inlineInputGroup}>
-                        <div className={styles.inputGroup}>
-                          <select
-                            id="propertyID"
-                            name="propertyID"
-                            value={formValues.propertyID}
-                            onChange={handleSelectChange}
-                            className={styles.equalWidthSelect}
-                          >
-                            <option value={0}>Select Property</option>
-                            {properties
-                              .filter(
-                                (property) =>
-                                  !addedProperties.some(
-                                    (added) => added.propertyID === property.id
-                                  )
+                {showPropertyFields && (
+                  <div className={styles.inlineInputGroup}>
+                    <div className={styles.propertyGroup}>
+                      <select
+                        id="propertyID"
+                        name="propertyID"
+                        value={formValues.propertyID}
+                        onChange={handleSelectChange}
+                        className={styles.addselectProperty}
+                      >
+                        <option value={0}>Select Property</option>
+                        {properties
+                          .filter(
+                            (property) =>
+                              !addedProperties.some(
+                                (added) => added.propertyID === property.id
                               )
-                              .map((property) => (
-                                <option key={property.id} value={property.id}>
-                                  {property.propertyName}
+                          )
+                          .map((property) => (
+                            <option key={property.id} value={property.id}>
+                              {property.propertyName}
+                            </option>
+                          ))}
+                      </select>
+                    </div>
+                    <div className={styles.propertyGroupshare}>
+                      <select
+                        id="noOfShares"
+                        name="noOfShares"
+                        value={formValues.noOfShares}
+                        onChange={handleSelectChange}
+                        className={styles.addselectshare}
+                      >
+                        {numberstate.map((shareCount) => (
+                          <option key={shareCount} value={shareCount}>
+                            {shareCount}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className={styles.propertyGroup}>
+                      <input
+                        type="date"
+                        id="acquisitionDate"
+                        name="acquisitionDate"
+                        value={formValues.acquisitionDate}
+                        onChange={handleDateChange}
+                        className={styles.addproptydate}
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      className={styles.saveButton}
+                      onClick={addProperty}
+                    >
+                      <FaSave />
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.saveButton}
+                      onClick={() => { setShowPropertyFields(false) }}
+                    >
+                      <MdCancel />
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {(addedProperties.length !== 0) && <div className={styles.addedPropertiesList}>
+                {addedProperties.map((property, index) => (
+                  <div key={index} className={styles.propertyItem}>
+                    {property.isEditing ? (
+                      <>
+                        <div className={styles.inlineInputGroup}>
+                          <div className={styles.propertyGroup}>
+                            <select
+                              className={styles.propertylist}
+                              value={property.propertyID}
+                              onChange={(e) =>
+                                setAddedProperties((prev) =>
+                                  prev.map((prop, i) =>
+                                    i === index
+                                      ? {
+                                        ...prop,
+                                        propertyID: parseInt(
+                                          e.target.value,
+                                          10
+                                        ),
+                                      }
+                                      : prop
+                                  )
+                                )
+                              }
+                            >
+                              {properties.map((prop) => (
+                                <option key={prop.id} value={prop.id}>
+                                  {prop.propertyName}
                                 </option>
                               ))}
-                          </select>
-                        </div>
-                        <div className={styles.inputGroup}>
-                          <select
-                            id="noOfShares"
-                            name="noOfShares"
-                            value={formValues.noOfShares}
-                            onChange={handleSelectChange}
-                            className={styles.equalWidthSelect}
-                          >
-                            {numberstate.map((shareCount) => (
-                              <option key={shareCount} value={shareCount}>
-                                {shareCount}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        <div className={styles.inputGroup}>
-                          <input
-                            type="date"
-                            id="acquisitionDate"
-                            name="acquisitionDate"
-                            value={formValues.acquisitionDate}
-                            onChange={handleDateChange}
-                            className={styles.equalWidthSelect}
-                          />
-                        </div>
-                        <button
-                          type="button"
-                          className={styles.saveButton}
-                          onClick={addProperty}
-                        >
-                          <FaSave />
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div className={styles.addedPropertiesList}>
-                  {addedProperties.map((property, index) => (
-                    <div key={index} className={styles.propertyItem}>
-                      {property.isEditing ? (
-                        <>
-                          <div className={styles.inlineInputGroup}>
-                            <div className={styles.inputGroup}>
-                              <select
-                                value={property.propertyID}
-                                onChange={(e) =>
-                                  setAddedProperties((prev) =>
-                                    prev.map((prop, i) =>
-                                      i === index
-                                        ? {
-                                            ...prop,
-                                            propertyID: parseInt(
-                                              e.target.value,
-                                              10
-                                            ),
-                                          }
-                                        : prop
-                                    )
-                                  )
-                                }
-                                className={styles.equalWidthSelect} // Apply equal width class
-                              >
-                                {properties.map((prop) => (
-                                  <option key={prop.id} value={prop.id}>
-                                    {prop.propertyName}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-                            <div className={styles.inputGroup}>
-                              <select
-                                value={property.noOfShares}
-                                onChange={(e) =>
-                                  setAddedProperties((prev) =>
-                                    prev.map((prop, i) =>
-                                      i === index
-                                        ? {
-                                            ...prop,
-                                            noOfShares: parseInt(
-                                              e.target.value,
-                                              10
-                                            ),
-                                          }
-                                        : prop
-                                    )
-                                  )
-                                }
-                                className={styles.equalWidthSelect} // Apply equal width class
-                              >
-                                {numberstate.map((shareCount) => (
-                                  <option key={shareCount} value={shareCount}>
-                                    {shareCount}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-                            <div className={styles.inputGroup}>
-                              <input
-                                type="date"
-                                value={property.acquisitionDate}
-                                onChange={(e) =>
-                                  setAddedProperties((prev) =>
-                                    prev.map((prop, i) =>
-                                      i === index
-                                        ? {
-                                            ...prop,
-                                            acquisitionDate: e.target.value,
-                                          }
-                                        : prop
-                                    )
-                                  )
-                                }
-                                className={styles.equalWidthSelect} // Apply equal width class
-                              />
-                            </div>
+                            </select>
                           </div>
+                          <div className={styles.propertyGroup}>
+                            <select
+                              className={styles.propertyshare}
+                              value={property.noOfShares}
+                              onChange={(e) =>
+                                setAddedProperties((prev) =>
+                                  prev.map((prop, i) =>
+                                    i === index
+                                      ? {
+                                        ...prop,
+                                        noOfShares: parseInt(
+                                          e.target.value,
+                                          10
+                                        ),
+                                      }
+                                      : prop
+                                  )
+                                )
+                              }
+                            >
+                              {numberstate.map((shareCount) => (
+                                <option key={shareCount} value={shareCount}>
+                                  {shareCount}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className={styles.propertyGroup}>
+                            <input
+                              className={styles.propertydate}
+                              type="date"
+                              value={property.acquisitionDate}
+                              onChange={(e) =>
+                                setAddedProperties((prev) =>
+                                  prev.map((prop, i) =>
+                                    i === index
+                                      ? {
+                                        ...prop,
+                                        acquisitionDate: e.target.value,
+                                      }
+                                      : prop
+                                  )
+                                )
+                              }
+                            />
+                          </div>
+                        </div>
+                        <div className={styles.inlinebutton}>
                           <button
                             type="button"
                             className={styles.UpdateButton}
@@ -564,12 +590,22 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                           >
                             <FaSave />
                           </button>
-                        </>
-                      ) : (
-                        <>
-                          <span>{property.propertyName}</span>
-                          <span>{property.noOfShares}</span>
-                          <span>{property.acquisitionDate}</span>
+                          <button
+                            type="button"
+                            className={styles.UpdateButton}
+                            onClick={() => handlecancelProperty(index)}
+                          >
+                            <MdCancel />
+                          </button>
+                        </div>
+
+                      </>
+                    ) : (
+                      <>
+                        <span className={styles.propertylistview}>{property.propertyName}</span>
+                        <span className={styles.propertyshareview}>{property.noOfShares}</span>
+                        <span className={styles.propertydateview}>{property.acquisitionDate}</span>
+                        <span className={styles.editsavebutton}>
                           <button
                             type="button"
                             className={styles.editButton}
@@ -584,33 +620,33 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                           >
                             <FaTrash />
                           </button>
-                        </>
-                      )}
-                    </div>
-                  ))}
-                </div>
+                        </span>
+
+                      </>
+                    )}
+                  </div>
+                ))}
               </div>
+              }
             </div>
-            <div className={styles.modalFooter}>
-              <button
-                type="submit"
-                className={styles.submitButton}
-                onClick={() => handleSubmit}
-              >
-                Register
-              </button>
-            </div>
-            <div className={styles.modalFooter}>
-              <button
-                type="button"
-                className={styles.cancelButton}
-                onClick={onClose}
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
+          </div>
+          <div className={styles.modalFooter}>
+            <button
+              type="button"
+              className={styles.cancelButton}
+              onClick={onClose}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className={styles.submitButton}
+              onClick={() => handleSubmit}
+            >
+              Register
+            </button>
+          </div>
+        </form>
       </div>
       {showSnackbar && (
         <CustomizedSnackbars
