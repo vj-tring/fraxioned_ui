@@ -36,7 +36,7 @@ export const propertywithDetails = () =>
     axiosInstance.get('/v1/properties/properties-with-details');
 
 export const fetchHolidaysApi = () =>
-    axiosInstance.get('/v1/holidays/holiday');
+    axiosInstance.get('/v1/holidays');
 
 //adding holiday api
 export const addHolidayApi = (holidayData: { name: string; year: number; startDate: string | undefined; endDate: string | undefined; createdBy: { id: number; }; }) =>
@@ -56,7 +56,7 @@ export const fetchpropertyHolidaysApi = (id: number) =>
 
 //propertyholiday api
 export const propertyseasonholiday = () =>
-    axiosInstance.get('/v1/property-season-holidays/property-season-holiday');
+    axiosInstance.get('/v1/property-season-holidays');
 
 //propertyholiday delete api
 export const propertyseasonholidaydelete = (id: number) =>
@@ -86,10 +86,17 @@ export const addPropertyApi = (propertyData: {
 export const deletePropertyApi = (id: number) =>
     axiosInstance.delete(`/v1/properties/property/${id}`);
 
+//fetching property basic details by id
 export const getPropertyById = (id: number) =>
     axiosInstance.get(`/v1/properties/property/${id}`);
 
 export const updatePropertyapi = (id: number, data: any) =>
     axiosInstance.patch(`/v1/properties/property/${id}`, data);
 
+export const userdetails = () =>
+    axiosInstance.get('/v1/users');
+
+//propertydetails by id api
+export const getProperrtDetailsbyId = (id: number) =>
+    axiosInstance.get(`/v1/property-details/property-detail/${id}`);
 

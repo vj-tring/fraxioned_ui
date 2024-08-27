@@ -21,7 +21,6 @@ import Loader from '@/components/loader';
 import { RootState } from '@/store/reducers';
 import EventIcon from '@mui/icons-material/Event';
 
-
 interface Property {
     id: number;
     propertyName: string;
@@ -41,8 +40,7 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
     const [selectedProperties, setSelectedProperties] = useState<number[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-
-
+    const [allPropertiesSelected, setAllPropertiesSelected] = useState(false);
     const [nameError, setNameError] = useState<string | null>(null);
     const [yearError, setYearError] = useState<string | null>(null);
     const [startDateError, setStartDateError] = useState<string | null>(null);
@@ -147,6 +145,21 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
         } else {
             setSelectedProperties(prev => prev.filter(id => id !== propertyId));
         }
+        updateAllPropertiesSelected();
+    };
+
+    const handleAllPropertiesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { checked } = event.target;
+        setAllPropertiesSelected(checked);
+        if (checked) {
+            setSelectedProperties(properties.map(property => property.id));
+        } else {
+            setSelectedProperties([]);
+        }
+    };
+
+    const updateAllPropertiesSelected = () => {
+        setAllPropertiesSelected(selectedProperties.length === properties.length);
     };
 
     if (loading) {
@@ -222,6 +235,17 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
                                     Select Properties
                                 </Typography>
                                 <FormControl component="fieldset" className={styles.checkboxGroup} error={!!propertiesError}>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={allPropertiesSelected}
+                                                onChange={handleAllPropertiesChange}
+                                                name="allProperties"
+                                            />
+                                        }
+                                        label="All Properties"
+                                        className={styles.formControlLabel}
+                                    />
                                     <div className={styles.scrollableContainer}>
                                         <FormGroup>
                                             <Grid container>
@@ -275,4 +299,3 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
 };
 
 export default NewForm;
-
