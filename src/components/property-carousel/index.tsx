@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import  { useState, useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
@@ -40,7 +40,7 @@ export default function BasicSelect() {
 
   const { cards, loading, error } = useSelector((state: RootState) => state.properties);
   const user = useSelector((state: RootState) => state.auth.user);
-  // const propertyselectid = useSelector((state: RootState) => state.properties.selectedPropertyId);
+
 
   useEffect(() => {
     if (user) {

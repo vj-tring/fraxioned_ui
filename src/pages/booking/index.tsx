@@ -1,23 +1,27 @@
-import React, { useState } from 'react';
-import { Scrollbars } from 'react-custom-scrollbars-2';
-import './booking.css'; // Import custom CSS
-import buildingImage from '../../assets/images/building.jpg';
-import unsplashImage1 from '../../assets/images/building1.jpg';
-import unsplashImage2 from '../../assets/images/building2.jpg';
-import unsplashImage3 from '../../assets/images/buildingnew.jpg';
-import unsplashImage4 from '../../assets/images/buildingnew.jpg';
-// import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { useState, useEffect } from 'react';
+import './booking.css'; 
+import buildingImage from '../../assests/crown-jewel.jpg';
+import unsplashImage1 from '../../assests/bear-lake-bluffs.jpg';
+import unsplashImage2 from '../../assests/blue-bear-lake.jpg';
+import unsplashImage3 from '../../assests/crown-jewel.jpg';
+import unsplashImage4 from '../../assests/lake-escape.jpg';
+import unsplashImage5 from '../../assets/images/building.jpg';
+import {  useParams } from 'react-router-dom';
+
 import { Card, Button, Typography, Grid, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Logo from '../../assets/images/fraxionedpng.png';
 import AvailableNights from '../../components/available-nights';
-import BasicRangeShortcuts from '../../components/basic-range-shortcuts';
+
 import SingleDevice from '../../components/single-device';
 import MapEmbed from '../../components/map-embed';
 import Showmore from '../../components/show-more';
 import ThingsToKnow from '../../components/things-to-know';
 import DatePickerCard from '../../components/date-picker-card';
 import { Element, Link } from 'react-scroll';
+import { DatePickerWithRange } from '@/components/calender';
+import { useSelector } from "react-redux";
+import { mockProperties } from "../home/mockData";
 
 const images = [  
   { src: buildingImage, alt: 'Exterior of Blue Bear Lake home' },
@@ -25,14 +29,49 @@ const images = [
   { src: unsplashImage2, alt: 'Living room in Blue Bear Lake home' },
   { src: unsplashImage3, alt: 'Game room in Blue Bear Lake home' },
   { src: unsplashImage4, alt: 'Game room in Blue Bear Lake home' },
+  { src: unsplashImage5, alt: 'Game room in Blue Bear Lake home' },
 ];
 
+interface Property {
+  id: number;
+  propertyName?: string;
+  address?: string;
+  propertyShare?: string;
+}
+
+interface RootState {
+  properties: {
+    cards: Property[];
+    loading: boolean;
+    error: string | null;
+  };
+}
 const Booking = () => {
+
+  const { cards: properties } = useSelector((state: RootState) => state.properties);
+  const displayProperties = properties.length ? properties : mockProperties;
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+  const { id } = useParams<{ id: string }>(); 
+
   const [currentImage, setCurrentImage] = useState<number>(0);
   const [guests, setGuests] = useState<number>(1);
   const [checkInDate, setCheckInDate] = useState<Date | null>(null);
   const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+
+
+  useEffect(() => {
+    if (displayProperties.length > 0) {
+      if (id) {
+        const propertyId = parseInt(id, 10);
+        console.log("IDp",propertyId);
+        const property = displayProperties.find(p => p.id === propertyId);
+        setSelectedProperty(property || null); 
+      } else {
+        setSelectedProperty(displayProperties[0]); 
+      }
+    }
+  }, [displayProperties, id]);
 
   const handleClickOpen = () => {
     setDialogOpen(true);
@@ -46,15 +85,15 @@ const Booking = () => {
     console.log('Check availability:', { checkInDate, checkOutDate, guests });
   };
 
+
   return (
-    <Scrollbars style={{ height: '100vh' }}>
       <div className="container mt-5">
         <div className="img-row mt-4">
           <Grid container spacing={1}>
             <Grid item xs={12} md={6}>
               <img
-                src={images[0].src}
-                alt={images[0].alt}
+                src={images[1].src}
+                alt={images[1].alt}
                 className={`img-fluid img1 cornertop ${currentImage === 0 ? 'active' : ''}`}
                 onClick={() => setCurrentImage(0)}
               />
@@ -67,8 +106,8 @@ const Booking = () => {
                 onClick={() => setCurrentImage(1)}
               />
               <img
-                src={images[2].src}
-                alt={images[2].alt}
+                src={images[5].src}
+                alt={images[5].alt}
                 className={`img-fluid image mt-1 ${currentImage === 2 ? 'active' : ''}`}
                 onClick={() => setCurrentImage(2)}
               />
@@ -96,40 +135,43 @@ const Booking = () => {
             </Grid>
           </Grid>
         </div>
+        
+        {selectedProperty && (
+          <>
 
-        <Typography variant="h5" className="mt-4 PropertyName monsterrat">Blue Bear Lake</Typography>
+        <Typography variant="h5" className="mt-4 PropertyName monsterrat">     {selectedProperty.name || 'Property Name'}
+        </Typography>
 
         <Box display="flex" alignItems="center" className="monsterrat">
           <img src={Logo} alt="Logo" style={{ width: 20, height: 26, marginRight: 8 }} />
           <Typography variant="h6" className='PropertyAddress monsterrat mt-2'>
-            537 Blue Lake St, Garden City, UT 80428
+                {selectedProperty.address || 'Property Address'}
           </Typography>
         </Box>
+        </>
 
-        <div className="Blue-row mt-5">
+        )}
+
+        <div className="Blue-row mt-5 mb-3">
           <Grid container spacing={2}>
             <Grid item xs={2}>
-              <Link to="myShare" smooth={true} duration={500}>
+              <Link to="myShare" smooth={true} duration={200}>
                 <Typography className='Blue-rowshare'>My Share</Typography>
               </Link>
             </Grid>
-            {/* <Grid item xs={2}>
-              <Link to="rooms" smooth={true} duration={500}>
-                <Typography className='Blue-rowshare'>Rooms</Typography>
-              </Link>
-            </Grid> */}
+         
             <Grid item xs={2}>
-              <Link to="rooms" smooth={true} duration={500}>
+              <Link to="rooms" smooth={true} duration={200}>
                 <Typography className='Blue-rowshare'>Amenities</Typography>
               </Link>
             </Grid>
             <Grid item xs={2}>
-              <Link to="location" smooth={true} duration={500}>
+              <Link to="location" smooth={true} duration={200}>
                 <Typography className='Blue-rowshare'>Location</Typography>
               </Link>
             </Grid>
             <Grid item xs={2}>
-              <Link to="info" smooth={true} duration={500}>
+              <Link to="info" smooth={true} duration={200}>
                 <Typography className='Blue-rowshare'>Info</Typography>
               </Link>
             </Grid>
@@ -139,8 +181,8 @@ const Booking = () => {
         <hr />
 
         <div className="d-flex ">
-          <Grid item xs={12} md={7} sx={{ Height: '40' }}>
-            <Element name="myShare">
+          <Grid item xs={6} md={7} className='GridWidth' >
+            <Element name="myShare" className='mt-4'>
               <Showmore />
             </Element>
             <hr style={{ width: '90%' }} />
@@ -148,12 +190,13 @@ const Booking = () => {
               <AvailableNights  />
             </Element>
             <hr style={{ width: '90%' }} />
-            <Element name="basicRangeShortcuts">
-              <BasicRangeShortcuts />
+            <Element name="basicRangeShortcuts" className='mt-5 mb-3'>
+              <h1 className='checkIn mb-3'>Select check-in date</h1>
+              <DatePickerWithRange  />
             </Element>
           </Grid>
 
-          <Grid item xs={12} md={5} sx={{ position: 'sticky', top: 0 }}>
+          <Grid item xs={6} md={5} className='GridWidth1'>
             <DatePickerCard
               checkInDate={checkInDate}
               checkOutDate={checkOutDate}
@@ -168,7 +211,7 @@ const Booking = () => {
 
         <hr style={{ width: '50%' }} />
 
-        <Element name="rooms">
+        <Element name="rooms" className='mt-5'>
           <SingleDevice />
         </Element>
         <Element name="location">
@@ -208,7 +251,6 @@ const Booking = () => {
           </DialogActions>
         </Dialog>
       </div>
-    </Scrollbars>
   );
 };
 

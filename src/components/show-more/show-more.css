@@ -1,6 +1,18 @@
 .Showmore {
-    font-family: 'Montserrat', sans-serif !important;
-    font-optical-sizing: auto;
-    width: 120%;
-  }
-  
+  font-family: 'Montserrat', sans-serif !important;
+  /* font-optical-sizing: auto; */
+  width: 85% !important;
+  /* max-width: 50% !important; */
+  /* height: 150px; */
+  font-weight: 500 !important; 
+  font-size: 16px !important;
+}
+
+.GridWidth{
+  width: 60%;
+}
+.GridWidth1{
+  width: 40%;
+  /* margin-right: 100px !important; */
+  /* background-color: antiquewhite; */
+}

@@ -91,7 +91,7 @@ const SingleDevice: React.FC = () => {
           <Grid container spacing={4}>
             <Grid item xs={12} sm={6}>
               <span className='d-flex flex-row justify-content-between mb-3'>
-                <Typography variant="h5" component="div"  className='monsterrat'>
+                <Typography variant="h5" component="div"  className='monsterrat checkIn'>
                   Rooms
                 </Typography>
                 <Box sx={{ marginBottom: 2 }}>
@@ -133,7 +133,7 @@ const SingleDevice: React.FC = () => {
 
             {/* Amenities Section */}
             <Grid item xs={12} sm={6} style={{paddingLeft:'100px'}} >
-              <Typography variant="h6" gutterBottom className='monsterrat ' >
+              <Typography variant="h6" gutterBottom className='monsterrat checkIn' >
                 Amenities
               </Typography>
               <Grid container spacing={0} className='mt-4'>

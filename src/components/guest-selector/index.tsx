@@ -15,7 +15,6 @@ import { CircleMinus, CirclePlus } from 'lucide-react';
 const names = [
   { label: 'Adults', description: 'Ages 13 or above', icon: <PeopleIcon /> },
   { label: 'Children', description: 'Ages 2 to 12', icon: <ChildFriendlyIcon /> },
-  // { label: 'Infants', description: 'Under 2', icon: <PeopleIcon /> },
   { label: 'Pets', description: 'Bringing a service?', icon: <PetsIcon /> },
 ];
 
@@ -24,7 +23,6 @@ const MultipleSelect: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const selectedPropertyId = useSelector((state: RootState) => state.properties.selectedPropertyId);
   const selectedPropertyLimits = useSelector((state: RootState) => state.properties.selectedPropertyLimits);
 
   const [counts, setCountsLocal] = useState<{ [key: string]: number }>({
@@ -128,7 +126,7 @@ const MultipleSelect: React.FC = () => {
   }, [open]);
 
   return (
-    <Box sx={{ width: '30%' }}>
+    <Box sx={{ width: '30%'}}>
       <Button
         disableRipple
         aria-controls="basic-menu"
@@ -161,7 +159,7 @@ const MultipleSelect: React.FC = () => {
             borderRadius: '10px !important',
             maxHeight: '400px',
             overflowY: 'auto',
-            padding: '0'
+            padding: '.2rem 0'
           },
         }}
       >
@@ -173,8 +171,8 @@ const MultipleSelect: React.FC = () => {
                 borderRadius: 0,
                 width: "100%",
                 padding: '0 2rem',
-                // margin: '.5rem 0',
-                height: '5rem',
+                margin: '.5rem 0',
+                height: '4rem',
               }}
               disableRipple
             >
@@ -208,13 +206,10 @@ const MultipleSelect: React.FC = () => {
 
                   <p className="Ad-count monsterrat">{counts[item.label]}</p>
                   <button
-                    // className={` monsterrat ${!selectedPropertyId ? 'disabled' : 'enabled'}`}
-
-                    // disabled={!selectedPropertyId || (selectedPropertyLimits ? counts[item.label] >= (item.label === 'Pets' ? selectedPropertyLimits.noOfPetsAllowed : selectedPropertyLimits.noOfGuestsAllowed - counts.Pets) : true)}
+           
                     onClick={() => handleCountChange(item.label, 'increase')}
                   >
                     <CirclePlus size={29} strokeWidth={0.75}
-                      // color='grey'
                       className={`${item.label === 'Pets'  ? counts.Pets === noOfPets ? 'circleplusdisable': 'circleplus' : ''} ${item.label === 'Adults' || item.label === 'Children'  ? counts.Adults === noOfguest ? 'circleplusdisable': 'circleplus': ''} `}
                     />
                   </button>
@@ -228,7 +223,7 @@ const MultipleSelect: React.FC = () => {
               (!(names.indexOf(item) === names.length - 1)) &&
               <hr style={{
                 opacity: .08,
-                // margin: '0 2.1rem'
+                margin: '0 2.1rem'
               }} />
             }
           </>

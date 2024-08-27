@@ -31,7 +31,7 @@ const MapEmbed = () => {
         src="https://www.google.com/maps/embed/v1/place?q=San+Francisco&key=YOUR_GOOGLE_MAPS_API_KEY"
       ></iframe>
        <div className='mt-4'>
-      <Typography variant="h6" className='ThingstoHead monsterrat' gutterBottom>Garden city, Utah, United States</Typography>
+      <Typography variant="h6" className='ThingstoHead monsterrat mb-4' gutterBottom>Garden city, Utah, United States</Typography>
       <Typography variant="body1" paragraph>
       <ul>
       {visibleRules.map((rule, index) => (
@@ -42,7 +42,7 @@ const MapEmbed = () => {
               fontWeight: '400 ',
               color: 'black' ,
               
-            }} className='monsterrat '>{rule}</li>
+            }} className='monsterrat RuleList'>{rule}</li>
           ))}
         </ul>
      
@@ -59,10 +59,10 @@ const MapEmbed = () => {
             padding:0
 
            }}
-           className='monsterrat'
+           className='monsterrat mt-4'
 
         >
-          {showMore ? '< Show Less ' : 'Show More >'}
+          {showMore ? '< Show Less ' : 'Show more >'}
         </Button>
        
       </Typography>

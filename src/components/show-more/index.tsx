@@ -21,12 +21,11 @@ const Showmore = () => {
   return (
     <div >
       <div className="row mt-2  ">
-        <Grid container spacing={2} >
-          <Grid item xs={6} md={9}>
-            <Typography variant="body1" className='Showmore'>
-              {fullContent.slice(0, 300) + '...'} 
+          <Grid item xs={6} md={6}>
+            <Typography  className='Showmore'>
+              {fullContent.slice(0, 470) + '...'} 
             </Typography>
-            <Button onClick={handleClickOpen} className="mt-2 mb-2 monsterrat"  style={{  fontSize: '14px',
+            <Button onClick={handleClickOpen} className="mt-3 mb-4 monsterrat"  style={{  fontSize: '14px',
             textDecoration: 'underline',
             textTransform: 'capitalize',
             color: 'black',
@@ -38,13 +37,12 @@ const Showmore = () => {
 
            >
 
-          {showMore ? '< Show Less ' : 'Show More >'}
+          {showMore ? '< Show less ' : 'Show more >'}
           </Button>
-          </Grid>
         </Grid>
       </div>
 
-      <Dialog open={dialogOpen} onClose={handleClose} fullWidth maxWidth="md">
+      <Dialog open={dialogOpen} onClose={handleClose}  maxWidth="sm">
         <DialogTitle className='d-flex justify-content-between'>
           <Typography variant="h6" className='monsterrat'>Property Details</Typography>
           <IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">

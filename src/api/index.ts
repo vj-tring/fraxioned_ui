@@ -33,7 +33,7 @@ export const logoutUserApi = (token: string) =>
     axiosInstance.post('/v1/authentication/logout', { sessionToken: token });
 
 export const propertywithDetails = () =>
-    axiosInstance.get('/v1/properties/properties-with-details');
+    axiosInstance.get('/v1/properties/user-properties-with-details');
 
 export const fetchHolidaysApi = () =>
     axiosInstance.get('/v1/holidays/holiday');
@@ -63,7 +63,7 @@ export const propertyseasonholidaydelete = (id: number) =>
     axiosInstance.delete(`/v1/property-season-holidays/property-season-holiday/${id}`);
 
 export const getUserProperties = (id: number) =>
-    axiosInstance.get(`/v1/properties/${id}/properties-with-details`);
+    axiosInstance.get(`/v1/properties/${id}/user-properties-with-details`);
 
 export const addPropertyApi = (propertyData: {
     createdBy: { id: number };

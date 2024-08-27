@@ -28,14 +28,14 @@ li {
  .box1{
 
 
-  border: 1px solid grey;
-  width: 550px;
+  border: 1px solid #cbcbcb;
+  width: 600px;
   height: 80px;
   text-align: center;
   align-items: center;
   font-weight: 500;
   font-size: x-large;
-  margin-left: 8px;
+  /* margin-left: 8px; */
 }
 
 .Box-list1{
@@ -50,16 +50,28 @@ li {
 .BlueHead2 {
   font-weight: bold;
   padding-top: 12px;
-  margin-left: 10px;
+  /* margin-left: 10px; */
+  font-size: x-large !important;
+}
+
+.AvailableText{
+  font-weight:500;
+  font-size: large;
 }
 .liststyle{
-  font-size: 20px !important;
+  font-size: 27px !important;
+   letter-spacing: 2px !important;
 }
 
 .card-btn2{
   border: 1px solid grey;
-  font-size: 7px;
-  padding: 5px;
+  font-size: small;
+  padding: 3px;
   border-radius: 20px;
-  width: 40px;
+  width: 90px;
+}
+
+.AvailableHover :hover{
+  background: none !important;
+  color: none !important;
 }

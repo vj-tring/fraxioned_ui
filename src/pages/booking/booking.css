@@ -44,6 +44,7 @@ body {
 
 .image {
   height: 198px;
+  width: 100% !important;
 }
 
 .container {
@@ -71,7 +72,7 @@ body {
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px !important;
     border-radius: 20px !important;
   background-color: white !important;
-  width: 70%;
+  width: 80%;
   margin-left: 160px;
   margin-top: 30px;
   /* height: 300px; */
@@ -127,9 +128,7 @@ body {
   font-weight: bold;
 }
 
-img {
-  /* border-radius: 8px; */
-}
+
 
 
 .PropertyName{
@@ -156,7 +155,8 @@ img {
 
 }
 
-.css-z3c6am-MuiFormControl-root-MuiTextField-root{
 
-  /* position: relative; */
+.checkIn{
+  font-size:large !important;
+  font-weight: 600 !important;
 }
