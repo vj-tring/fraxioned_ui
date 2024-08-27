@@ -1,7 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
+.Container{
+  /* border: 1px solid grey; */
+  margin:30px;
+  border-radius: 10px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  background: url("../../assets/images/building1.jpg");
 
-
+}
 .welcome-section {
   text-align: left;
   margin-bottom: 20px;
@@ -48,19 +54,16 @@
   }
 }
 
-
-
-/* .Cardcontainer {
+.Cardcontainer {
   display: flex;
   padding-left: 117px;
   padding-top: 10px;
   background: white !important;
   width: 80%;
-} */
-
+}
 
 .card1 {
-  background: url('../../assets/images/building1.jpg');
+  background: url("../../assets/images/building1.jpg");
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -69,34 +72,62 @@ hr {
   color: black !important;
 }
 
-
-.IconsText{
+.IconsText {
   font-weight: 500;
   font-size: small;
   margin-top: 1px;
 }
 
-svg{
-
+svg {
   margin-left: 5px;
 }
 
 .home-content {
   text-align: center;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-optical-sizing: auto;
   position: relative;
 }
-
-.HomeImg {
+.holidayAcc {
+  display: flex;
+  justify-content: space-between;
+  gap: 55rem;
   width: 100%;
-  height: 190px;
-  background: url('../../assets/images/homePage.jpg');
+  margin-left: 35px;
+  border-radius: 10px;
+  /* background-color: #917155; */
+  /* opacity: 50%; */
+  /* color: white; */
+  align-items: center;
+  padding: 3px;
+}
+.holitxt{
+  font-weight: 500;
+  font-size: 20px;
+}
+.HomeImg {
+  width: 96%;
+  height: 400px;
+  margin-left: 30px;
+  position: relative !important;
+  border-radius: 20px;
+  text-align: center;
+  color: rgb(255, 255, 255);
+  font-weight: 600;
+  font-size: 50px;
+  padding: 50px;
+  background: url("../../assests//room-interior-hotel-bedroom.jpg");
   background-size: cover;
   background-position: center;
-  opacity: 60%;
+  opacity: 90%;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
+.TitleDesc{
+  font-size: 18px;
+  font-weight: 200;
+  margin-top: 5px;
 
+}
 .icons {
   display: flex;
   flex-direction: row;
@@ -123,9 +154,7 @@ svg {
   margin: 0; /* Remove any margin around the SVG */
 }
 
-
-.HomeIcons{
+.HomeIcons {
   width: 50px;
   height: 50px;
 }
-
