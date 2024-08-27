@@ -1,0 +1,301 @@
+.modalContent {
+  padding: 1rem;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: .7rem;
+}
+
+.modalTitle {
+  font-weight: 400;
+  font-size: 24px;
+  color: #333;
+}
+
+.modalCloseButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+}
+
+.modalCloseButton:hover {
+  color: #333;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.formContent {
+  display: flex;
+  gap: 2rem;
+}
+
+.leftContent {
+  width: 50%;
+}
+
+.rightContent {
+  width: 50%;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: .8rem;
+  gap: .25rem;
+}
+
+.inputGroup input,
+.inputGroup select,
+.propertyGroup input,
+.propertyGroup select {
+  width: 100%;
+  padding: .6rem;
+  border: 1px solid #e1e1e1;
+  border-radius: .3rem;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+
+.propertyGroupshare {
+  width: 16%;
+}
+
+.propertyGroupshare select {
+  padding: .6rem;
+  border: 1px solid #e1e1e1;
+  border-radius: .3rem;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.inputGroup input:focus,
+.inputGroup select:focus {
+  border-color: #e8aa6c;
+  outline: none;
+}
+
+.inlineInputGroup {
+  display: flex;
+  gap: .4rem;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.addPropertySection {
+  margin-bottom: 1rem;
+}
+
+.addedPropertiesList {
+  padding: .8rem .5rem;
+  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+  max-height: 11.5rem;
+  overflow: scroll;
+}
+
+.propertylist {
+  width: 14rem !important;
+}
+
+.propertyshare {
+  width: 3.5rem !important;
+}
+
+.propertydate {
+  width: 8rem !important;
+}
+
+.propertylistview {
+  width: 13rem !important;
+}
+
+.propertyshareview {
+  width: 1.5rem !important;
+}
+
+.propertydateview {
+  width: 6.5rem !important;
+}
+
+.propertyButtons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.addButton {
+  width: 9rem !important;
+  margin-bottom: .8rem;
+}
+
+.inlinebutton {
+  display: flex;
+  gap: 1rem;
+}
+
+.saveButton {
+  width: 2.5rem !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.addButton:hover,
+.saveButton:hover {
+  background: #e49f63;
+}
+
+.propertyItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 1.5rem;
+  border-radius: 4px;
+  gap: .4rem;
+}
+
+.editsavebutton {
+  gap: .6rem;
+}
+
+.addselectProperty {
+  width: 100% !important;
+  font-size: small !important;
+}
+
+.addselectshare {
+  width: 100% !important;
+  font-size: small !important;
+}
+
+.addproptydate {
+  width: 100% !important;
+  font-size: small !important;
+}
+
+.propertyActions {
+  display: flex;
+  align-items: center;
+}
+
+.editButton,
+.deleteButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.editButton:hover {
+  color: #ffa500;
+}
+
+.deleteButton:hover {
+  color: red;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: .9rem;
+}
+
+.submitButton,
+.cancelButton,
+.addButton,
+.saveButton {
+  background: #e8aa6c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  height: 2.5rem;
+  width: 6rem;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px top 50%;
+  background-size: 20px;
+}
+
+.customSelect::-ms-expand {
+  display: none;
+}
+
+.submitButton:hover,
+.cancelButton:hover {
+  background: #e49f63;
+}
+
+.error {
+  color: #ff6b6b;
+  font-size: 12px;
+  padding-left: .3rem;
+}
+
+.customSnackbar {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1001;
+}
+
+.customSnackbar .MuiSnackbarContent-root {
+  background-color: #4caf50;
+  /* Default to success color */
+}
+
+.customSnackbar .MuiSnackbarContent-root.error {
+  background-color: #f44336;
+}
+
+.customSnackbar .MuiSnackbarContent-message {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+.customSnackbar .MuiSnackbarContent-action {
+  margin-left: 10px;
+}
+
+.sectionTitle {
+  margin-bottom: .8rem;
+}
+
+
+.propertyItem select,
+.propertyItem input[type="date"] {
+  width: 170px;
+}
+
+.UpdateButton {
+  background: #e8aa6c;
+  color: white;
+  border: none;
+  padding: 8px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: -16px;
+  transition: background-color 0.3s ease;
+}

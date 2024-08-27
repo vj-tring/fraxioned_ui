@@ -1,0 +1,103 @@
+.admin-dashboard-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow: hidden;
+    background-color: #f7fafb;
+}
+
+.dashboard-content {
+    display: flex;
+    flex: 1;
+    margin-top: 60px;
+    position: relative;
+}
+
+.property-details-container {
+    display: flex;
+    height: 100%;
+    position: fixed;
+}
+
+.property-info-content {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+
+}
+
+.content {
+    flex: 1;
+    padding: 0;
+    overflow: hidden;
+    background-color: #f8f6f6;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+.content.sidebar-open {
+    margin-left: 212px;
+    width: calc(100% - 220px);
+}
+
+.content.sidebar-closed {
+    margin-left: 17px;
+    width: calc(100% - 60px);
+}
+
+.custom-navbar {
+    background-color: #ebad5c;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.custom-navbar .user-image {
+    border: 2px solid #c7eaee;
+}
+
+.content.property-panel-open {
+    margin-right: 220px;
+}
+
+.divider {
+    position: absolute;
+    top: 60px;
+    left: 220px;
+    /* Adjust this value to position the divider */
+    height: calc(100% - 60px);
+    width: 1px;
+    background-color: #e0e0e0;
+    z-index: 1;
+}
+
+.side-panel {
+    position: fixed;
+    left: 0;
+    top: 60px;
+    height: calc(100% - 60px);
+    background-color: #ffffff;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    transition: width 0.3s ease;
+}
+
+
+
+
+@media (max-width: 768px) {
+    .sidePanel.open {
+        width: 200px;
+    }
+
+    .sidePanel.closed {
+        width: 60px;
+    }
+
+    .content.property-panel-open {
+        margin-right: 200px;
+    }
+
+    .label {
+        font-size: 14px;
+    }
+}

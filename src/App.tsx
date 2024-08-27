@@ -1,4 +1,3 @@
-// App.tsx
 import React from 'react';
 import {
   BrowserRouter as Router,
@@ -13,7 +12,7 @@ import ForgetPassword from './pages/forgot-password';
 import Change from './pages/recover-password';
 import ResetPassword from './pages/reset-password';
 import Dashboard from './pages/dashboard';
-import AdminDashboard from './pages/admin-dashboard';
+import AdminDashboard from './pages-admin/admin-dashboard';
 
 interface PrivateRouteProps {
   element: React.ComponentType;
@@ -44,6 +43,7 @@ function App() {
           <Route path="/resetPassword" element={<ResetPassword onClose={() => { }} />} />
           <Route path="/dashboard/*" element={<PrivateRoute element={Dashboard} allowedRoles={[2, 3]} />} />
           <Route path="/admin/*" element={<PrivateRoute element={AdminDashboard} allowedRoles={[1]} />} />
+
         </Routes>
       </Router>
     </Provider>
