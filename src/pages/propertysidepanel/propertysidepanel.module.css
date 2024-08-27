@@ -3,8 +3,8 @@
     right: 0;
     height: calc(100vh - 60px);
     margin-top: 9px;
-    background-color: #fcfcfc;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    background-color: #fbfcfc;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
     color: #444444;
     overflow-y: auto;
     z-index: 999;
@@ -29,21 +29,32 @@
 }
 
 .propertyPanel.open {
-    width: 220px;
+    width: 232px;
 }
 
 .menuItem {
     margin: 0;
 }
 
+.propertyNames
+{
+    font-weight: 900;
+    font-size: 20px;
+    margin-left: 13px;
+    overflow-x: auto;
+}
+
 .menuLink {
     display: flex;
     align-items: center;
-    padding: 12px 15px;
+    margin-top: 10px;
+    padding: 12px 24px;
     text-decoration: none;
     color: #444444;
     transition: all 0.3s ease;
 }
+
+
 
 .menuItem:active {
     background-color: rgba(226, 246, 248, 0.2);
@@ -73,11 +84,10 @@
 .propertyDropdown {
     height: 65px;
     padding: 0 15px;
-    margin-left: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #fcfcfc;
+    background-color: #fbfcfc;
     border-bottom: 1px solid #e0e0e0;
     cursor: pointer;
     font-size: 14px;

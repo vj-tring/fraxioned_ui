@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getProperrtDetailsbyId } from '@/api';
 import EditButton from '@/components/edit';
 import styles from './propertyrules.module.css';
+import Loader from '@/components/loader';
+
 
 interface PropertyRulesData {
     noOfGuestsAllowed: number;
@@ -47,7 +49,7 @@ const PropertyRules: React.FC = () => {
         return `${formattedHour}:00 ${ampm}`;
     };
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <Loader />
     if (error) return <div>{error}</div>;
     if (!rulesData) return <div>No rules data found.</div>;
 
@@ -77,14 +79,6 @@ const PropertyRules: React.FC = () => {
                 <div className={styles.ruleItem}>
                     <span className={styles.label}>WiFi Network:</span>
                     <span className={styles.value}>{rulesData.wifiNetwork}</span>
-                </div>
-                <div className={styles.ruleItem}>
-                    <span className={styles.label}>Peak Season Start:</span>
-                    <span className={styles.value}>{new Date(rulesData.peakSeasonStartDate).toLocaleDateString()}</span>
-                </div>
-                <div className={styles.ruleItem}>
-                    <span className={styles.label}>Peak Season End:</span>
-                    <span className={styles.value}>{new Date(rulesData.peakSeasonEndDate).toLocaleDateString()}</span>
                 </div>
             </div>
         </div>
