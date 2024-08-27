@@ -15,6 +15,14 @@
 .btn-book{
   color: white;
   background-color: #e8aa6c;
+  font-size: 14px;
+  height: 42px;
+  width: 108px;
+}
+
+.btn-book:hover{
+  color: white;
+  background-color: #eaa35b;
 }
 
 .end-calendar{

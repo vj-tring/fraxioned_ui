@@ -302,41 +302,6 @@ export function DatePickerWithRange({
       if (onSelect) onSelect(undefined);
     }
   }
-
-  const handleBookingSubmit = () => {
-    if (!date?.from || !date?.to) {
-      setErrorMessage('Please select both check-in and check-out dates.');
-      return;
-    }
-  
-    if (!currentUser) {
-      setErrorMessage('User is not logged in. Please log in to make a booking.');
-      return;
-    }
-  
-    const checkinDate = new Date(Date.UTC(date.from.getFullYear(), date.from.getMonth(), date.from.getDate(), 12, 0, 0));
-    const checkoutDate = new Date(Date.UTC(date.to.getFullYear(), date.to.getMonth(), date.to.getDate(), 12, 0, 0));
-  
-    const bookingData = {
-      user: { id: currentUser.id },
-      property: { id: selectedPropertyDetails.id },
-      createdBy: { id: currentUser.id },
-      checkinDate: checkinDate.toISOString(),
-      checkoutDate: checkoutDate.toISOString(),
-      noOfGuests: 2,
-      noOfPets: 0,
-      isLastMinuteBooking: isLastMinuteBooking(checkinDate),
-      noOfAdults: 2, 
-      noOfChildren: 0, 
-      noOfInfants: 0, 
-      notes: 'Hi', 
-      confirmationCode: '', 
-      cleaningFee: 100, 
-      petFee: 0, 
-    };
-  
-    dispatch(saveBooking(bookingData));
-  };
   
   const customLocale = {
     code: calendarData.locale.code,
@@ -423,13 +388,6 @@ export function DatePickerWithRange({
 
         </div>
         <div className="flex items-center justify-end ">
-        <Button 
-        onClick={handleBookingSubmit} 
-        className="m-2 mt-0 rounded-pill btn-book" 
-        disabled={isBookingLoading}
-        > 
-        {isBookingLoading ? 'Booking...' : 'Book Now'}
-      </Button>
         </div>
       </div>
       {/* Second Calendar */}
