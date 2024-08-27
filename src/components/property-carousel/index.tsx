@@ -132,7 +132,7 @@ export default function BasicSelect() {
   };
 
   return (
-    <Box sx={{ width: 250, borderRadius: 32, border: 'none' }}>
+    <Box sx={{ width: 300, borderRadius: 32, border: 'none' }}>
       <Button
         disableRipple
         aria-controls="basic-menu"
