@@ -15,6 +15,7 @@ const BookingSearchBar: React.FC = () => {
         <PopoverCalendar  />
         <div className="vl"></div>
         <GuestSelector />
+        
       </div>
     </div>
   );

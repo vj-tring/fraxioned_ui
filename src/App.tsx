@@ -14,6 +14,7 @@ import Change from './pages/recover-password';
 import ResetPassword from './pages/reset-password';
 import Dashboard from './pages/dashboard';
 import AdminDashboard from './pages/admin-dashboard';
+import BookingSummary from './pages/booking-summary/booking-summary';
 
 interface PrivateRouteProps {
   element: React.ComponentType;
@@ -41,6 +42,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/forgotPassword" element={<ForgetPassword />} />
           <Route path="/recoverPassword" element={<Change />} />
+          <Route path="/bookingSummary" element={<BookingSummary />} />
+          
           <Route path="/resetPassword" element={<ResetPassword onClose={() => { }} />} />
           <Route path="/dashboard/*" element={<PrivateRoute element={Dashboard} allowedRoles={[2, 3]} />} />
           <Route path="/admin/*" element={<PrivateRoute element={AdminDashboard} allowedRoles={[1]} />} />

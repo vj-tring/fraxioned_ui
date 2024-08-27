@@ -1,0 +1,62 @@
+.bookingsum {
+  position: relative;
+  top:20px;
+}
+
+
+.HomeImg1 {
+  width: 100%;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  /* margin-left: 5%; */
+
+  height: 140px;
+  background: url("../../assests/blue-bear-lake.jpg");
+  background-color:#00636d;
+  background-size: cover;
+  background-position: center;
+  opacity: 90%;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.ListSum {
+  text-align: left;
+  margin-left: 10%;
+  
+}
+
+.SummaryHead {
+    text-align: center;
+  font-weight: 600;
+  color: rgb(95, 177, 207);
+}
+
+.ListSum > li {
+  font-weight: 500;
+  padding-top: 5px;
+}
+
+
+.Btun > Button {
+  border-radius: 50px;
+  width: 200px;
+}
+
+#Textarea {
+  border: 2px solid lightblue !important;
+}
+.Btun {
+  display: flex;
+  flex-direction: row;
+  float: right;
+  gap: 10px;
+}
+.cancelBtn {
+  background-color: #88cdd4 !important;
+  color: white !important;
+}
+
+.confirmBtn {
+  background-color: #00636d !important;
+  color: white !important;
+}
