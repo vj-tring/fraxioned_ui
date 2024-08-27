@@ -12,7 +12,7 @@ import ForgetPassword from './pages/forgot-password';
 import Change from './pages/recover-password';
 import ResetPassword from './pages/reset-password';
 import Dashboard from './pages/dashboard';
-import AdminDashboard from './pages/admin-dashboard';
+import AdminDashboard from './pages-admin/admin-dashboard';
 
 interface PrivateRouteProps {
   element: React.ComponentType;
