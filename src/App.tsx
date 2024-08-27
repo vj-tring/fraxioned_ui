@@ -13,6 +13,7 @@ import Change from './pages/recover-password';
 import ResetPassword from './pages/reset-password';
 import Dashboard from './pages/dashboard';
 import AdminDashboard from './pages/admin-dashboard';
+import 'leaflet/dist/leaflet.css';
 
 interface PrivateRouteProps {
   element: React.ComponentType;
