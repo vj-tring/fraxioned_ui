@@ -92,4 +92,13 @@ export const getPropertyById = (id: number) =>
 export const updatePropertyapi = (id: number, data: any) =>
     axiosInstance.patch(`/v1/properties/property/${id}`, data);
 
+//  Users api
+export const getUsers = () =>
+    axiosInstance.get('/v1/users');
 
+
+export const deleteUserApi = (id: number) =>
+    axiosInstance.delete(`/v1/users/user/${id}`);
+
+export const getUserById = (id: number) =>
+    axiosInstance.get(`/v1/users/user/${id}`);
