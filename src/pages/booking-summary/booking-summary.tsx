@@ -8,12 +8,10 @@ const BookingSummary: React.FC = () => {
     <div className="home-content1">
       <div className="HomeImg1"></div>
       <div className="bookingsum">
-      <BookingSearchBar />
-
+        <BookingSearchBar />
       </div>
 
-<BookingSummaryForm/>
-      
+      <BookingSummaryForm />
     </div>
   );
 };

@@ -1,8 +1,7 @@
 .bookingsum {
   position: relative;
-  top:20px;
+  top: 20px;
 }
-
 
 .HomeImg1 {
   width: 100%;
@@ -12,7 +11,7 @@
 
   height: 140px;
   background: url("../../assests/blue-bear-lake.jpg");
-  background-color:#00636d;
+  background-color: #00636d;
   background-size: cover;
   background-position: center;
   opacity: 90%;
@@ -22,11 +21,10 @@
 .ListSum {
   text-align: left;
   margin-left: 10%;
-  
 }
 
 .SummaryHead {
-    text-align: center;
+  text-align: center;
   font-weight: 600;
   color: rgb(95, 177, 207);
 }
@@ -34,12 +32,16 @@
 .ListSum > li {
   font-weight: 500;
   padding-top: 5px;
+  display: flex;
+  text-align: left;
+  
+  
 }
-
 
 .Btun > Button {
   border-radius: 50px;
   width: 200px;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 
 #Textarea {
@@ -59,4 +61,12 @@
 .confirmBtn {
   background-color: #00636d !important;
   color: white !important;
+
 }
+
+.BookHead{
+    background-color: #687883;
+    color: white;
+    font-size: x-large;
+}
+

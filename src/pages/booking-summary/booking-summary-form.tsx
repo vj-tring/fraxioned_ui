@@ -14,7 +14,7 @@ export default function BookingSummaryForm() {
       }}
     >
       <div className="BookSum">
-        <h1 className="pt-5 pb-5 SummaryHead">BOOKING SUMMARY</h1>
+        <h1 className="pt-4 pb-4 mb-5 SummaryHead BookHead">BOOKING SUMMARY</h1>
         <div className="ListSum">
           <li>Property : </li>
           <li>Check-in : </li>
@@ -51,8 +51,8 @@ export default function BookingSummaryForm() {
         </div>
 
         <div className="Btun p-4 mt-4">
-          <Button className="cancelBtn"> Cancel</Button>
-          <Button className="confirmBtn">Confirm Booking</Button>
+          <Button disableRipple className="cancelBtn"> Cancel</Button>
+          <Button disableRipple className="confirmBtn">Confirm Booking</Button>
         </div>
       </div>
     </Box>
