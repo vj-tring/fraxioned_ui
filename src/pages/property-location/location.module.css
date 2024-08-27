@@ -1,0 +1,72 @@
+.container {
+    width:700px;
+    margin: 0 auto;
+    padding: 32px;
+  }
+  
+  .title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 24px;
+  }
+  
+  .mapContainer {
+    height: 400px;
+    margin-bottom: 24px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .map {
+    height: 100%;
+    width: 100%;
+  }
+  
+  .addressInfo {
+    background-color: #f8f8f8;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .addressInfo h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 16px;
+  }
+  
+  .addressInfo p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 8px;
+  }
+  
+  .loading,
+  .error,
+  .noData {
+    text-align: center;
+    padding: 24px;
+    font-size: 18px;
+    color: #666;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    margin-top: 24px;
+  }
+  
+  .error {
+    color: #d32f2f;
+    background-color: #fbe9e7;
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      padding: 16px;
+    }
+  
+    .mapContainer {
+      height: 300px;
+    }
+  }

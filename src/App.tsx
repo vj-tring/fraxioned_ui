@@ -1,4 +1,3 @@
-// App.tsx
 import React from 'react';
 import {
   BrowserRouter as Router,
@@ -47,6 +46,7 @@ function App() {
           <Route path="/resetPassword" element={<ResetPassword onClose={() => { }} />} />
           <Route path="/dashboard/*" element={<PrivateRoute element={Dashboard} allowedRoles={[2, 3]} />} />
           <Route path="/admin/*" element={<PrivateRoute element={AdminDashboard} allowedRoles={[1]} />} />
+
         </Routes>
       </Router>
     </Provider>
