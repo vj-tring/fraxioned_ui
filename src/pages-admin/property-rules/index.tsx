@@ -14,6 +14,11 @@ interface PropertyRulesData {
     peakSeasonStartDate: string;
     peakSeasonEndDate: string;
     petPolicy: string;
+    peakSeasonAllottedNights: string;
+    offSeasonAllottedNights: string;
+    peakSeasonAllottedHolidayNights: string;
+    offSeasonAllottedHolidayNights: string;
+    lastMinuteBookingAllottedNights: string;
 }
 
 const PropertyRules: React.FC = () => {
@@ -61,13 +66,18 @@ const PropertyRules: React.FC = () => {
                 </div>
                 <div className={styles.rulesGrid}>
                     <InfoItem label="Guests Allowed" value={rulesData.noOfGuestsAllowed} />
+                    <InfoItem label="Pet Policy" value={rulesData.petPolicy} />
                     <InfoItem label="Pets Allowed" value={rulesData.noOfPetsAllowed} />
                     <InfoItem label="Check-in Time" value={formatTime(rulesData.checkInTime)} />
                     <InfoItem label="Check-out Time" value={formatTime(rulesData.checkOutTime)} />
                     <InfoItem label="WiFi Network" value={rulesData.wifiNetwork} />
                     <InfoItem label="Peak Season Start" value={rulesData.peakSeasonStartDate} />
                     <InfoItem label="Peak Season End" value={rulesData.peakSeasonEndDate} />
-                    <InfoItem label="Pet Policy" value={rulesData.petPolicy} />
+                    <InfoItem label="Peak Season Alloted Nights" value={rulesData.peakSeasonAllottedNights} />
+                    <InfoItem label="Off Season Alloted Nights" value={rulesData.offSeasonAllottedNights} />
+                    <InfoItem label="Peak Season Alloted Holiday Nights" value={rulesData.peakSeasonAllottedHolidayNights} />
+                    <InfoItem label="Off Season Alloted Holiday Nights" value={rulesData.offSeasonAllottedHolidayNights} />
+                    <InfoItem label="Last Minute Booking Alloted Nights" value={rulesData.lastMinuteBookingAllottedNights} />
                 </div>
             </div>
         </div>
