@@ -12,6 +12,7 @@ export default defineConfig({
   plugins: [
     react({
       jsxRuntime: 'automatic',
+       
     }),
     // commonjs(),
     
@@ -19,6 +20,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': '/src',
+      'leaflet': 'leaflet/dist/leaflet-src.esm.js',
     },
   },
   css: {
