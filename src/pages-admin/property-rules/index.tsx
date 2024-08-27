@@ -5,7 +5,6 @@ import EditButton from '@/components/edit';
 import styles from './propertyrules.module.css';
 import Loader from '@/components/loader';
 
-
 interface PropertyRulesData {
     noOfGuestsAllowed: number;
     noOfPetsAllowed: number;
@@ -49,40 +48,37 @@ const PropertyRules: React.FC = () => {
         return `${formattedHour}:00 ${ampm}`;
     };
 
-    if (loading) return <Loader />
-    if (error) return <div>{error}</div>;
-    if (!rulesData) return <div>No rules data found.</div>;
+    if (loading) return <Loader />;
+    if (error) return <div className={styles.error}>{error}</div>;
+    if (!rulesData) return <div className={styles.noData}>No rules data found.</div>;
 
     return (
-        <div className={styles.container}>
-            <div className={styles.titleContainer}>
-                <h2 className={styles.title}>Property Rules</h2>
-                <EditButton onClick={handleEdit} />
-            </div>
-            <div className={styles.rulesGrid}>
-                <div className={styles.ruleItem}>
-                    <span className={styles.label}>Guests Allowed:</span>
-                    <span className={styles.value}>{rulesData.noOfGuestsAllowed}</span>
+        <div className={styles.fullContainer}>
+            <div className={styles.contentWrapper}>
+                <div className={styles.header}>
+                    <h2 className={styles.title}>Property Rules</h2>
+                    <EditButton onClick={handleEdit} />
                 </div>
-                <div className={styles.ruleItem}>
-                    <span className={styles.label}>Pets Allowed:</span>
-                    <span className={styles.value}>{rulesData.noOfPetsAllowed}</span>
-                </div>
-                <div className={styles.ruleItem}>
-                    <span className={styles.label}>Check-in Time:</span>
-                    <span className={styles.value}>{formatTime(rulesData.checkInTime)}</span>
-                </div>
-                <div className={styles.ruleItem}>
-                    <span className={styles.label}>Check-out Time:</span>
-                    <span className={styles.value}>{formatTime(rulesData.checkOutTime)}</span>
-                </div>
-                <div className={styles.ruleItem}>
-                    <span className={styles.label}>WiFi Network:</span>
-                    <span className={styles.value}>{rulesData.wifiNetwork}</span>
+                <div className={styles.rulesGrid}>
+                    <InfoItem label="Guests Allowed" value={rulesData.noOfGuestsAllowed} />
+                    <InfoItem label="Pets Allowed" value={rulesData.noOfPetsAllowed} />
+                    <InfoItem label="Check-in Time" value={formatTime(rulesData.checkInTime)} />
+                    <InfoItem label="Check-out Time" value={formatTime(rulesData.checkOutTime)} />
+                    <InfoItem label="WiFi Network" value={rulesData.wifiNetwork} />
+                    <InfoItem label="Peak Season Start" value={rulesData.peakSeasonStartDate} />
+                    <InfoItem label="Peak Season End" value={rulesData.peakSeasonEndDate} />
+                    <InfoItem label="Pet Policy" value={rulesData.petPolicy} />
                 </div>
             </div>
         </div>
     );
 };
+
+const InfoItem: React.FC<{ label: string; value: string | number }> = ({ label, value }) => (
+    <div className={styles.infoItem}>
+        <span className={styles.label}>{label}:</span>
+        <span className={styles.value}>{value}</span>
+    </div>
+);
 
 export default PropertyRules;

@@ -15,6 +15,9 @@ import Dashboard from './pages/dashboard';
 import AdminDashboard from './pages/admin-dashboard';
 import BookingSummary from './pages/booking-summary/booking-summary';
 
+import AdminDashboard from './pages-admin/admin-dashboard';
+
+
 interface PrivateRouteProps {
   element: React.ComponentType;
   allowedRoles: number[];

@@ -1,4 +1,4 @@
-import RegisterFormContent from '@/pages/register-form'
+import RegisterFormContent from '@/pages-admin/register-form'
 import React from 'react'
 import Modal from 'react-bootstrap/Modal'
 
