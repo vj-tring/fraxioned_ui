@@ -26,12 +26,12 @@ const PropertySidePanel: React.FC<PropertySidePanelProps> = ({ isOpen }) => {
     }, [id]);
 
     const menuItems = [
-        { icon: <FaInfoCircle />, label: 'General Info', path: `/admin/property/${id}`, disabled: false },
-        { icon: <FaMapMarkerAlt />, label: 'Location', path: `/admin/property/${id}/location`, disabled: false },
-        { icon: <FaList />, label: 'Rules', path: `/admin/property/${id}/rules`, disabled: false },
-        { icon: <FaConciergeBell />, label: 'Amenities', path: `/admin/property/${id}/amenities`, disabled: true },
-        { icon: <FaImages />, label: 'Photos', path: `/admin/property/${id}/photos`, disabled: true },
-        { icon: <FaFile />, label: 'Documents', path: `/admin/property/${id}/documents`, disabled: true },
+        { icon: <FaInfoCircle />, label: 'General Info', path: `/admin/property/${id}` },
+        { icon: <FaConciergeBell />, label: 'Amenities', path: `/admin/property/${id}/amenities` },
+        { icon: <FaMapMarkerAlt />, label: 'Location', path: `/admin/property/${id}/location` },
+        { icon: <FaImages />, label: 'Photos', path: `/admin/property/${id}/photos` },
+        { icon: <FaList />, label: 'Rules', path: `/admin/property/${id}/rules` },
+        { icon: <FaFile />, label: 'Documents', path: `/admin/property/${id}/documents` },
 
     ];
 

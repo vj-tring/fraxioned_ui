@@ -13,7 +13,7 @@ import CustomNavbar from '@/components/navbar';
 import fraxionedLogo from '../../assets/images/fraxioned.png'
 import './admin-dashboard.css'
 import PropertyRules from '../property-rules';
-import 'leaflet/dist/leaflet.css';
+import 'leaflet/dist/leaflet.css'
 
 const AdminDashboard: React.FC = () => {
     const navigate = useNavigate()
