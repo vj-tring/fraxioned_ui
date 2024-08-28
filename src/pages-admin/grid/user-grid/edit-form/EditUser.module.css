@@ -44,6 +44,7 @@
     position: relative;
     overflow: hidden;
 }
+
 .formPaper::before {
     content: '';
     position: absolute;
@@ -71,7 +72,9 @@
 .formHeader {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     position: relative;
+    padding-right: 48px;
 }
 
 .headerIcon {
@@ -85,6 +88,20 @@
     font-weight: 600 !important;
     color: #333;
     font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
+    flex-grow: 1;
+}
+
+.closeButton {
+    position: absolute !important;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #333 !important;
+    transition: color 0.3s ease !important;
+}
+
+.closeButton:hover {
+    color: #e28f25 !important;
 }
 
 .form {
@@ -163,6 +180,7 @@
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -173,6 +191,7 @@
         transform: translateY(-50px);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;

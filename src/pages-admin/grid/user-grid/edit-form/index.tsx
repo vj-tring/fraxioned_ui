@@ -11,10 +11,12 @@ import {
     Select,
     FormControl,
     InputLabel,
-    MenuItem
+    MenuItem,
+    IconButton
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { updateuserapi, getRoles } from '@/api';
+import CloseIcon from '@mui/icons-material/Close';
 import Loader from '@/components/loader';
 import styles from './EditUser.module.css';
 
@@ -63,7 +65,7 @@ interface EditFormProps {
 const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => {
     const [formData, setFormData] = useState<UserData>({
         ...user,
-        isActive: Boolean(user.isActive), 
+        isActive: Boolean(user.isActive),
         contactDetails: user.contactDetails || []
     });
     const [error, setError] = useState<string | null>(null);
@@ -120,7 +122,7 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                 lastName: formData.lastName,
                 password: formData.password,
                 imageURL: formData.imageURL,
-                isActive: Boolean(formData.isActive), 
+                isActive: Boolean(formData.isActive),
                 addressLine1: formData.addressLine1 || null,
                 addressLine2: formData.addressLine2 || null,
                 state: formData.state,
@@ -159,120 +161,128 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                         <Typography variant="h4" className={styles.formTitle}>
                             Edit User
                         </Typography>
+                        <IconButton
+                            onClick={onClose}
+                            className={styles.closeButton}
+                            aria-label="close"
+                        >
+                            <CloseIcon />
+                        </IconButton>
+
                     </Box>
                 </div>
                 <div className={styles.scrollableContent}>
                     <Paper elevation={9} className={styles.formPaper}>
                         <form onSubmit={handleSubmit} className={styles.form}>
                             <Grid container spacing={3}>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    label="First Name"
-                                    name="firstName"
-                                    value={formData.firstName}
-                                    onChange={handleInputChange}
-                                    fullWidth
-                                    required
-                                    variant="outlined"
-                                    className={styles.inputField}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    label="Last Name"
-                                    name="lastName"
-                                    value={formData.lastName}
-                                    onChange={handleInputChange}
-                                    fullWidth
-                                    required
-                                    variant="outlined"
-                                    className={styles.inputField}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    label="Address Line 1"
-                                    name="addressLine1"
-                                    value={formData.addressLine1}
-                                    onChange={handleInputChange}
-                                    fullWidth
-                                    variant="outlined"
-                                    className={styles.inputField}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    label="Address Line 2"
-                                    name="addressLine2"
-                                    value={formData.addressLine2}
-                                    onChange={handleInputChange}
-                                    fullWidth
-                                    variant="outlined"
-                                    className={styles.inputField}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    label="City"
-                                    name="city"
-                                    value={formData.city}
-                                    onChange={handleInputChange}
-                                    fullWidth
-                                    variant="outlined"
-                                    className={styles.inputField}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    label="State"
-                                    name="state"
-                                    value={formData.state}
-                                    onChange={handleInputChange}
-                                    fullWidth
-                                    variant="outlined"
-                                    className={styles.inputField}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    label="Country"
-                                    name="country"
-                                    value={formData.country}
-                                    onChange={handleInputChange}
-                                    fullWidth
-                                    variant="outlined"
-                                    className={styles.inputField}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    label="Zipcode"
-                                    name="zipcode"
-                                    value={formData.zipcode}
-                                    onChange={handleInputChange}
-                                    fullWidth
-                                    variant="outlined"
-                                    className={styles.inputField}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Typography variant="h6" className={styles.sectionTitle}>Contact Details</Typography>
-                            </Grid>
-                            {formData.contactDetails && formData.contactDetails.map((contact, index) => (
-                                <React.Fragment key={index}>
-                                    <Grid item xs={12} sm={6}>
-                                        <TextField
-                                            label={contact.contactType}
-                                            value={contact.contactValue}
-                                            onChange={(e) => handleContactChange(index, 'contactValue', e.target.value)}
-                                            fullWidth
-                                            variant="outlined"
-                                            className={styles.inputField}
-                                        />
-                                    </Grid>
-                                </React.Fragment>
-                            ))}
-                           <Grid item xs={12} sm={6}>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        label="First Name"
+                                        name="firstName"
+                                        value={formData.firstName}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        required
+                                        variant="outlined"
+                                        className={styles.inputField}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        label="Last Name"
+                                        name="lastName"
+                                        value={formData.lastName}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        required
+                                        variant="outlined"
+                                        className={styles.inputField}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        label="Address Line 1"
+                                        name="addressLine1"
+                                        value={formData.addressLine1}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        variant="outlined"
+                                        className={styles.inputField}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        label="Address Line 2"
+                                        name="addressLine2"
+                                        value={formData.addressLine2}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        variant="outlined"
+                                        className={styles.inputField}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        label="City"
+                                        name="city"
+                                        value={formData.city}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        variant="outlined"
+                                        className={styles.inputField}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        label="State"
+                                        name="state"
+                                        value={formData.state}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        variant="outlined"
+                                        className={styles.inputField}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        label="Country"
+                                        name="country"
+                                        value={formData.country}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        variant="outlined"
+                                        className={styles.inputField}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        label="Zipcode"
+                                        name="zipcode"
+                                        value={formData.zipcode}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        variant="outlined"
+                                        className={styles.inputField}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Typography variant="h6" className={styles.sectionTitle}>Contact Details</Typography>
+                                </Grid>
+                                {formData.contactDetails && formData.contactDetails.map((contact, index) => (
+                                    <React.Fragment key={index}>
+                                        <Grid item xs={12} sm={6}>
+                                            <TextField
+                                                label={contact.contactType}
+                                                value={contact.contactValue}
+                                                onChange={(e) => handleContactChange(index, 'contactValue', e.target.value)}
+                                                fullWidth
+                                                variant="outlined"
+                                                className={styles.inputField}
+                                            />
+                                        </Grid>
+                                    </React.Fragment>
+                                ))}
+                                <Grid item xs={12} sm={6}>
                                     <FormControl fullWidth variant="outlined" className={styles.inputField}>
                                         <InputLabel>Role</InputLabel>
                                         <Select
@@ -290,22 +300,22 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                                     </FormControl>
                                 </Grid>
 
-                            <Grid item xs={12}>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            checked={formData.isActive}
-                                            onChange={handleInputChange}
-                                            name="isActive"
-                                            color="primary"
-                                        />
-                                    }
-                                    label="Is Active"
-                                    className={styles.checkbox}
-                                />
+                                <Grid item xs={12}>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={formData.isActive}
+                                                onChange={handleInputChange}
+                                                name="isActive"
+                                                color="primary"
+                                            />
+                                        }
+                                        label="Is Active"
+                                        className={styles.checkbox}
+                                    />
+                                </Grid>
                             </Grid>
-                        </Grid>
-                        {error && <Typography color="error" className={styles.error}>{error}</Typography>}
+                            {error && <Typography color="error" className={styles.error}>{error}</Typography>}
                             <Box className={styles.buttonContainer}>
                                 <Button
                                     variant="outlined"
