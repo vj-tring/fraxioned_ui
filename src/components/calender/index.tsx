@@ -16,7 +16,7 @@ import calendarData from './calendarData.json';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProperties, selectSelectedPropertyDetails } from "@/store/slice/auth/property-slice";
 import { fetchPropertySeasonHoliday, selectPropertySeasonHolidays } from '@/store/slice/auth/propertySeasonHolidaySlice';
-import { saveBooking, clearBookingMessages } from '../../store/slice/auth/bookingSlice';
+import { saveBooking, clearBookingMessages, fetchBookings } from '../../store/slice/auth/bookingSlice';
 import { useEffect } from "react";
 import { RootState } from "@/store/reducers"
 
@@ -34,6 +34,7 @@ export function DatePickerWithRange({
     to: addDays(today, 0),
   })
   const dispatch = useDispatch();
+  const bookings = useSelector((state: RootState) => state.bookings.bookings);
   const bookingState = useSelector((state: RootState) => state.bookings);
   const bookingError = bookingState?.error;
   const bookingSuccessMessage = bookingState?.successMessage;
@@ -47,9 +48,17 @@ export function DatePickerWithRange({
   const [isCalendarOpen, setIsCalendarOpen] = React.useState(false)
   const currentBooking = useSelector((state: RootState) => state.bookings?.currentBooking);
   const currentUser = useSelector((state: RootState) => state.auth.user);
-  const bookedDates = calendarData.bookedDates.map(date => new Date(date));
+  // const bookedDates = calendarData.bookedDates.map(date => new Date(date));
   const unavailableDates = calendarData.unavailableDates.map(date => new Date(date));
   const blueDates = calendarData.blueDates.map(date => new Date(date));
+
+  useEffect(() => {
+    dispatch(fetchBookings());
+  }, [dispatch]);
+
+  useEffect(() => {
+    console.log('Bookings in component:', bookings);
+  }, [bookings]);
 
   useEffect(() => {
     dispatch(fetchProperties); 
@@ -89,6 +98,25 @@ export function DatePickerWithRange({
     setIsCalendarOpen(false);
     if (onSelect) onSelect(undefined);
   };
+
+  const bookedDates = React.useMemo(() => {
+    if (!selectedPropertyDetails) return [];
+
+    const dates = bookings
+      .filter(booking => booking.property.id === selectedPropertyDetails.id)
+      .flatMap(booking => {
+        if (!booking.checkinDate || !booking.checkoutDate) return [];
+        const start = new Date(booking.checkinDate);
+        const end = new Date(booking.checkoutDate);
+        const dates = [];
+        for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
+          dates.push(new Date(d));
+        }
+        return dates;
+      });
+    console.log('Generated bookedDates for property:', selectedPropertyDetails.id, dates);
+    return dates;
+  }, [bookings, selectedPropertyDetails]);
 
   const isBookedDate = (date: Date) => {
     return bookedDates.some(

@@ -8,10 +8,10 @@
 .card {
   display: flex;
     flex-direction: row;
-    width: 73%;
-    height: 65px;
+    width: 70%;
+    height: 60px;
     border-radius: 100px;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
     position: relative;

@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React, { useEffect, useState } from 'react';
 import './bookingbar.css';
 import Region from '../region';
@@ -13,7 +12,7 @@ import { RootState } from '@/store/reducers';
 import { saveBooking } from '@/store/slice/auth/bookingSlice';
 import { selectSelectedPropertyDetails } from '@/store/slice/auth/property-slice';
 import calendarData from '../calender/calendarData.json';
-import { useSnackbar } from '../snackbar-provider';
+import CustomizedSnackbars from '../../components/customized-snackbar';
 
 const BookingSearchBar: React.FC = () => {
     const today = new Date();
@@ -27,7 +26,11 @@ const BookingSearchBar: React.FC = () => {
     const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
     const currentUser = useSelector((state: RootState) => state.auth.user);
     const selectedPropertyDetails = useSelector(selectSelectedPropertyDetails);
-    const { showSnackbar } = useSnackbar();
+
+    // New state for snackbar
+    const [showSnackbar, setShowSnackbar] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
 
     const handleDateSelect = (range: DateRange | undefined) => {
         setDateRange(range);
@@ -48,19 +51,25 @@ const BookingSearchBar: React.FC = () => {
         return diffInDays <= calendarData.bookingRules.lastMinuteBooking.maxDays;
     };
 
+    const showSnackbarMessage = (message: string, severity: 'success' | 'error') => {
+        setSnackbarMessage(message);
+        setSnackbarSeverity(severity);
+        setShowSnackbar(true);
+    };
+
     const handleBookingSubmit = () => {
         if (!dateRange?.from || !dateRange?.to) {
-            showSnackbar('Please select both check-in and check-out dates.');
+            showSnackbarMessage('Please select both check-in and check-out dates.', 'error');
             return;
         }
 
         if (!currentUser) {
-            showSnackbar('User is not logged in. Please log in to make a booking.');
+            showSnackbarMessage('User is not logged in. Please log in to make a booking.', 'error');
             return;
         }
 
         if (!selectedPropertyDetails) {
-            showSnackbar('No property selected. Please select a property to book.');
+            showSnackbarMessage('No property selected. Please select a property to book.', 'error');
             return;
         }
 
@@ -93,22 +102,26 @@ const BookingSearchBar: React.FC = () => {
             setDateRange(undefined);
         }
 
-        if (bookingState.successMessage) {
-            showSnackbar(bookingState.successMessage, 'success');
-        }
+        // if (bookingState.successMessage) {
+        //     showSnackbarMessage(bookingState.successMessage, 'success');
+        // }
 
         if (bookingState.error) {
-            showSnackbar(bookingState.error, 'error');
+            showSnackbarMessage(bookingState.error, 'error');
         }
-    }, [isBookingLoading, errorMessage, bookingState.successMessage, bookingState.error, showSnackbar]);
+    }, [isBookingLoading, errorMessage, bookingState.successMessage, bookingState.error]);
+
+    const handleSnackbarClose = () => {
+        setShowSnackbar(false);
+    };
 
     return (
         <div className="MainCard">
             <div className="card">
                 <PropertyCarousel />
                 <div className="vl p-2"></div>
-                <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen} disableRipple>
-                    <PopoverTrigger asChild disableRipple>
+                <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+                    <PopoverTrigger asChild>
                         <div>
                             <Region
                                 label="Check In"
@@ -143,15 +156,20 @@ const BookingSearchBar: React.FC = () => {
                 <div className="vl"></div>
                 <GuestSelector />
                 <div className="vl"></div>
-                <Button
+                <button
                     onClick={handleBookingSubmit}
                     className="rounded-pill btn-book border-0"
                     disabled={isBookingLoading}
                 >
                     Book Now
-                </Button>
-                {errorMessage && <div className="text-red-600">{errorMessage}</div>}
+                </button>
             </div>
+            <CustomizedSnackbars
+                open={showSnackbar}
+                handleClose={handleSnackbarClose}
+                message={snackbarMessage}
+                severity={snackbarSeverity}
+            />
         </div>
     );
 };

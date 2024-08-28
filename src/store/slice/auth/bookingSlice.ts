@@ -1,5 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { createBooking } from '../../../api/index';
+import { createBooking, getBookings } from '../../../api/index';
+
+
+  export const fetchBookings = createAsyncThunk(
+    'bookings/fetchBookings',
+    async (_, { rejectWithValue }) => {
+      try {
+        const response = await getBookings();
+        console.log('Fetched bookings:', response.data); // Add this line
+        return response.data;
+      } catch (error: any) {
+        return rejectWithValue(error.response?.data || { message: 'An error occurred' });
+      }
+    }
+  );
 
 export const saveBooking = createAsyncThunk(
   'bookings/saveBooking',
@@ -16,6 +30,7 @@ export const saveBooking = createAsyncThunk(
 const bookingSlice = createSlice({
   name: 'bookings',
   initialState: {
+    bookings: [],
     currentBooking: null,
     error: null as string | null,
     successMessage: null as string | null,
@@ -33,6 +48,11 @@ const bookingSlice = createSlice({
         state.isLoading = true;
         state.error = null;
         state.successMessage = null;
+      })
+      .addCase(fetchBookings.fulfilled, (state, action) => {
+        state.bookings = action.payload;
+        state.isLoading = false;
+        console.log('Bookings stored in state:', state.bookings);
       })
       .addCase(saveBooking.fulfilled, (state, action) => {
         state.currentBooking = action.payload;
