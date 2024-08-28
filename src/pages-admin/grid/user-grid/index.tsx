@@ -52,7 +52,7 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             const fetchedUsers = response.data.users.map((user: any) => ({
                 ...user,
                 id: user.id,
-                roleName: user.role.id === 1 ? 'Admin' : 'Owner',
+                roleName: user.roleId === 1 ? 'Admin' : 'Owner',
             }));
             setUsers(fetchedUsers);
         } catch (err) {

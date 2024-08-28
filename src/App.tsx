@@ -25,7 +25,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ element: Element, allowedRo
   if (!token) {
     return <Navigate to="/login" />;
   }
-  if (allowedRoles.includes(user.role.id)) {
+  if (allowedRoles.includes(user.roleId)) {
     return <Element />;
   }
   return <Navigate to="/dashboard" />;

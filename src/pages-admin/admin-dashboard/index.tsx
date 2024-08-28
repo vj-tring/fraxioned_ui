@@ -35,7 +35,7 @@ const AdminDashboard: React.FC = () => {
                 <SidePanel isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
                 <div className={`content ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
                     <Routes>
-                        <Route path="/" element={<Navigate to="/admin/bookings" replace />} />
+                        <Route path="/" element={<Navigate to="admin/bookings" replace />} />
                         <Route path="/bookings" element={<Calendar isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/holidays" element={<Holidays isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/user" element={<UserGrid isSidebarOpen={isSidebarOpen} />} />
