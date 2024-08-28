@@ -125,7 +125,7 @@ const CancellationPolicy = () => {
            }}
            className='monsterrat'
         >
-          Add Dates 
+          {"Add Dates >"} 
           {/* {showMore ? '< Add dates ' : 'Add Dates >'} */}
         </Button>
       </Typography>
@@ -135,9 +135,9 @@ const CancellationPolicy = () => {
 
 const ThingsToKnow = () => {
   return (
-    <div style={{ padding: '16px' }}>
-      <Typography variant="h4"  className='ThingstoHead1 monsterrat' gutterBottom>Things to Know</Typography>
-      <Grid container spacing={3}>
+    <div className='mt-3'>
+      <Typography variant="h4"  className='ThingstoHead1 monsterrat'>Things to Know</Typography>
+      <Grid container spacing={2}>
         <Grid item xs={12} sm={4}>
           <HouseRules />
         </Grid>
