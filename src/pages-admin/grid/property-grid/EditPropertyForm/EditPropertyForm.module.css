@@ -13,8 +13,7 @@
 }
 
 .formContainer {
-    /* width: 90%; */
-    width: 1065px;
+    width: 1033px;
     height: 90vh;
     display: flex;
     flex-direction: column;

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { IconButton } from '@mui/material';
+import { IconButton, Modal } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { getUsers, deleteUserApi, getUserById } from '@/api';
+import { userdetails, getUserById } from '@/api';
 import styles from './User.module.css';
-import ConfirmationModal from '@/components/confirmation-modal';
+import EditForm from './edit-form';
 
 interface ContactDetail {
     id: number;
@@ -17,6 +16,7 @@ interface ContactDetail {
 
 interface UserData {
     id: number;
+    role: { id: number; roleName: string };
     firstName: string;
     lastName: string;
     addressLine1: string;
@@ -24,30 +24,22 @@ interface UserData {
     city: string;
     state: string;
     country: string;
+    zipcode: string;
+    isActive: boolean;
     contactDetails: ContactDetail[];
     createdBy: string;
-}
-
-interface EditUserData {
-    id: number;
-    firstName: string;
-    lastName: string;
-    addressLine1: string;
-    addressLine2: string;
-    city: string;
-    state: string;
-    country: string;
-    zipcode: number;
-    contactDetails: ContactDetail[];
-    createdBy: string;
+    lastLoginTime: string;
+    imageURL: string;
+    password?: string;
+    resetToken?: string;
+    resetTokenExpires?: string;
+    updatedBy?: number;
 }
 
 const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     const [users, setUsers] = useState<UserData[]>([]);
     const [isEditFormOpen, setIsEditFormOpen] = useState(false);
-    const [editUserData, setEditUserData] = useState<EditUserData | null>(null);
-    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-    const [userToDelete, setUserToDelete] = useState<UserData | null>(null);
+    const [editUserData, setEditUserData] = useState<UserData | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -56,18 +48,11 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
 
     const fetchUsers = async () => {
         try {
-            const response = await getUsers();
+            const response = await userdetails();
             const fetchedUsers = response.data.users.map((user: any) => ({
+                ...user,
                 id: user.id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                addressLine1: user.addressLine1,
-                addressLine2: user.addressLine2,
-                city: user.city,
-                state: user.state,
-                country: user.country,
-                contactDetails: user.contactDetails,
-                createdBy: user.createdBy,
+                roleName: user.role.id === 1 ? 'Admin' : 'Owner',
             }));
             setUsers(fetchedUsers);
         } catch (err) {
@@ -80,7 +65,8 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
         try {
             const response = await getUserById(id);
             const userData = response.data;
-            setEditUserData(userData);
+            console.log(userData);
+            setEditUserData(userData.user);
             setIsEditFormOpen(true);
         } catch (err) {
             console.error('Error fetching user details:', err);
@@ -88,38 +74,23 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
         }
     };
 
-    const handleDeleteClick = (user: UserData) => {
-        setUserToDelete(user);
-        setShowDeleteConfirmation(true);
+    const handleCloseEditForm = () => {
+        setIsEditFormOpen(false);
+        setEditUserData(null);
     };
 
-    const handleConfirmDelete = async () => {
-        if (userToDelete === null) return;
-
-        try {
-            await deleteUserApi(userToDelete.id);
-            await fetchUsers();
-            setShowDeleteConfirmation(false);
-            setUserToDelete(null);
-        } catch (err) {
-            console.error('Failed to delete user. Please try again.', err);
-            setError('Failed to delete user. Please try again.');
-        }
-    };
-
-    const handleCancelDelete = () => {
-        setShowDeleteConfirmation(false);
-        setUserToDelete(null);
+    const handleUserUpdated = () => {
+        fetchUsers();
+        handleCloseEditForm();
     };
 
     const columns: GridColDef[] = [
+        { field: 'id', headerName: 'Id', minWidth: 120, align: 'center', headerAlign: 'center' },
         { field: 'firstName', headerName: 'First Name', minWidth: 120, align: 'center', headerAlign: 'center' },
         { field: 'lastName', headerName: 'Last Name', minWidth: 120, align: 'center', headerAlign: 'center' },
-        { field: 'addressLine1', headerName: 'Address Line 1', minWidth: 180, align: 'center', headerAlign: 'center' },
-        { field: 'addressLine2', headerName: 'Address Line 2', minWidth: 180, align: 'center', headerAlign: 'center' },
-        { field: 'city', headerName: 'City', width: 120, align: 'center', headerAlign: 'center' },
-        { field: 'state', headerName: 'State', width: 120, align: 'center', headerAlign: 'center' },
-        { field: 'country', headerName: 'Country', width: 140, align: 'center', headerAlign: 'center' },
+        { field: 'addressLine1', headerName: 'Address', minWidth: 120, align: 'center', headerAlign: 'center' },
+        { field: 'state', headerName: 'State', minWidth: 120, align: 'center', headerAlign: 'center' },
+        { field: 'roleName', headerName: 'Role', minWidth: 120, align: 'center', headerAlign: 'center' },
         {
             field: 'contactDetails',
             headerName: 'Contact Details',
@@ -130,14 +101,14 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                 const phoneContact = params.row.contactDetails.find(
                     (contact: ContactDetail) => contact.contactType.toLowerCase() === 'phone'
                 );
-        
+
                 const emailContact = params.row.contactDetails.find(
                     (contact: ContactDetail) => contact.contactType.toLowerCase() === 'email'
                 );
-        
+
                 const phone = phoneContact ? phoneContact.contactValue : '';
                 const email = emailContact ? emailContact.contactValue : '';
-        
+
                 return (
                     <div className={styles.contactDetails}>
                         {phone && <div className={styles.contactRow}>{phone}</div>}
@@ -161,13 +132,6 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                         onClick={() => handleEditClick(params.row.id)}
                     >
                         <EditIcon />
-                    </IconButton>
-                    <IconButton
-                        aria-label="delete"
-                        color="secondary"
-                        onClick={() => handleDeleteClick(params.row)}
-                    >
-                        <DeleteIcon />
                     </IconButton>
                 </>
             ),
@@ -194,15 +158,22 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                     className={`${styles.dataGrid} ${styles.dataGridPadding}`}
                 />
             </div>
-            <ConfirmationModal
-                show={showDeleteConfirmation}
-                onHide={handleCancelDelete}
-                onConfirm={handleConfirmDelete}
-                title="Confirm Delete"
-                message="Are you sure you want to delete this user?"
-                confirmLabel="Delete"
-                cancelLabel="Cancel"
-            />
+            <Modal
+                open={isEditFormOpen}
+                onClose={handleCloseEditForm}
+                aria-labelledby="edit-user-modal"
+                aria-describedby="modal-to-edit-user-details"
+            >
+                <div>
+                    {editUserData && (
+                        <EditForm
+                            user={editUserData}
+                            onClose={handleCloseEditForm}
+                            onUserUpdated={handleUserUpdated}
+                        />
+                    )}
+                </div>
+            </Modal>
         </div>
     );
 };

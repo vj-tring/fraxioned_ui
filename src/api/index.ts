@@ -103,11 +103,12 @@ export const getProperrtDetailsbyId = (id: number) =>
 export const updaterulesapi = (id: number, data: any) =>
     axiosInstance.patch(`/v1/property-details/property-detail/${id}`, data);
 
-export const updateUserapi = (id: number, data?: any) =>
-    data
-        ? axiosInstance.patch(`/v1/users/user/${id}`, data)
-        : axiosInstance.get(`/v1/users/user/${id}`);
+export const deleteUserApi = (id: number) =>
+    axiosInstance.delete(`/v1/users/user/${id}`);
 
+export const getUserById = (id: number) =>
+    axiosInstance.get(`/v1/users/user/${id}`);
 
-        
+export const updateuserapi = (id: number, data: any) =>
+    axiosInstance.patch(`/v1/users/user/${id}`, data);
 
