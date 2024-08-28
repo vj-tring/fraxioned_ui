@@ -81,44 +81,25 @@
 }
 
 
-.propertyDropdown {
-    height: 65px;
-    padding: 0 15px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #fbfcfc;
-    border-bottom: 1px solid #e0e0e0;
+.propertyList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-top: none;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.propertyListItem {
+    padding: 10px 15px;
     cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    color: #444444;
 }
 
-.propertyDropdown .MuiSelect-select {
-    padding: 10px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #444444;
+.propertyListItem:hover {
+    background-color: rgba(226, 246, 248, 0.2);
 }
-
-.dropdownIcon {
-    color: #e28f25;
-    font-size: 12px;
-}
-
-.propertyDropdown .MuiOutlinedInput-notchedOutline {
-    border-color: #e0e0e0;
-}
-
-.propertyDropdown:hover .MuiOutlinedInput-notchedOutline {
-    border-color: #e28f25;
-}
-
-.propertyDropdown.Mui-focused .MuiOutlinedInput-notchedOutline {
-    border-color: #e28f25;
-}
-
 
 @media (max-width: 768px) {
     .propertyPanel {
