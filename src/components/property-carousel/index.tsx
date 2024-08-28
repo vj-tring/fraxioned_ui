@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import  { useState, useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
@@ -113,7 +113,7 @@ export default function BasicSelect() {
   const showCarouselControls = cards.length > 1;
   const cardItemWidth = cards.length === 1 ? '380px' : 
                       cards.length === 2 ? '380px' : 
-                      '508px';
+                      '550px';
   const buttonSize = {
     width: cards.length === 1 ? '3.7rem' :cards.length ===2 ? '3.7rem':'5rem',
 
@@ -132,7 +132,7 @@ export default function BasicSelect() {
   };
 
   return (
-    <Box sx={{ width: 300, borderRadius: 32, border: 'none' }}>
+    <Box sx={{ width: 250, borderRadius: 32, border: 'none' }}>
       <Button
         disableRipple
         aria-controls="basic-menu"
@@ -233,7 +233,7 @@ export default function BasicSelect() {
                   )}
                   <div className="card-name d-flex justify-content-between py-2 align-items-center gy-1">
                     <span className="CardFont">
-                      <h4 className="BlueHead" style={{ fontWeight: cardNameWeight }}>{selectedCard.name}</h4>
+                      <h4 className="BlueHead" style={{ fontWeight: cardNameWeight }}>{selectedCard.name} [{selectedCard.share}/{selectedCard.propertyShare} share]</h4>
                       <p className="BlueFont">{selectedCard.address}</p>
                     </span>
                     <span className={`CardImage ${imageClass}`}>
@@ -272,6 +272,10 @@ export default function BasicSelect() {
                     <div className="d-flex flex-column night-count">
                       <li>{selectedCard.details[selectedYear]?.offSeasonHoliday || 'N/A'}</li>
                       <li style={{ fontSize: BoxList }}>Off-Season Holiday</li>
+                    </div>
+                    <div className="d-flex flex-column night-count">
+                      <li>{selectedCard.details[selectedYear]?.lastMinute || 'N/A'}</li>
+                      <li style={{ fontSize: BoxList }}>Last Minute Booking</li>
                     </div>
                   </div>
                 </div>
