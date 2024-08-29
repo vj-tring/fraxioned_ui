@@ -40,6 +40,14 @@ const SidePanel: React.FC<SidePanelProps> = ({ isOpen, toggleSidebar }) => {
         }
     };
 
+    const isActive = (path: string) => {
+        if (path === '/admin/property') {
+            // Check if the current path starts with '/admin/property'
+            return location.pathname.startsWith('/admin/property');
+        }
+        return location.pathname === path;
+    };
+
     return (
         <nav className={`${styles.sidePanel} ${isOpen ? styles.open : styles.closed}`}>
             <div className={styles.logoContainer}>
@@ -64,7 +72,7 @@ const SidePanel: React.FC<SidePanelProps> = ({ isOpen, toggleSidebar }) => {
                     <li key={index} className={styles.menuItem}>
                         <Link
                             to={item.path}
-                            className={`${styles.menuLink} ${location.pathname === item.path ? styles.active : ''} ${item.disabled ? styles.disabled : ''}`}
+                            className={`${styles.menuLink} ${isActive(item.path) ? styles.active : ''} ${item.disabled ? styles.disabled : ''}`}
                             onClick={(e) => handleItemClick(e, item.disabled)}
                         >
                             <span className={styles.icon}>{item.icon}</span>
