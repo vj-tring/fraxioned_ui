@@ -53,6 +53,8 @@ const Login: React.FC = () => {
             setSnackbarMessage('Login Successful');
             setSnackbarSeverity('success');
             setShowSnackbar(true);
+  
+            if (resultAction.user.roleId === 1) {
 
             if (resultAction.user.roleId === 1) {
               navigate('/admin/bookings');
