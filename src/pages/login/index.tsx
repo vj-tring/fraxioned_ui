@@ -53,13 +53,12 @@ const Login: React.FC = () => {
             setSnackbarMessage('Login Successful');
             setSnackbarSeverity('success');
             setShowSnackbar(true);
-  
             if (resultAction.user.roleId === 1) {
               navigate('/admin/bookings');
             } else {
               navigate('/dashboard');
             }
-  
+
             setIsLoading(false);
           }
         }, 1000);
@@ -113,7 +112,7 @@ const Login: React.FC = () => {
                 onChange={handleEmailChange}
                 onBlur={handleEmailBlur}
                 className={emailError ? styles.errorInput : ''}
-                
+
               />
             </div>
             <div className={styles.inputGroup}>

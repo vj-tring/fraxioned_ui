@@ -77,7 +77,6 @@ const PropertyRules: React.FC = () => {
                     <InfoItem label="Off Season Alloted Nights" value={rulesData.offSeasonAllottedNights} />
                     <InfoItem label="Peak Season Alloted Holiday Nights" value={rulesData.peakSeasonAllottedHolidayNights} />
                     <InfoItem label="Off Season Alloted Holiday Nights" value={rulesData.offSeasonAllottedHolidayNights} />
-                    <InfoItem label="Last Minute Booking Alloted Nights" value={rulesData.lastMinuteBookingAllottedNights} />
                 </div>
             </div>
         </div>

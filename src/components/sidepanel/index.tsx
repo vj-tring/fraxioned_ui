@@ -24,7 +24,7 @@ const menuItems: MenuItem[] = [
     { icon: <FaCalendar />, label: 'Bookings', path: '/admin/bookings', disabled: false },
     { icon: <FaPlane />, label: 'Holidays', path: '/admin/holidays', disabled: false },
     { icon: <FaHome />, label: 'Property', path: '/admin/property', disabled: false },
-    { icon: <FaUser />, label: 'User', path: '/user', disabled: true },
+    { icon: <FaUser />, label: 'User', path: '/admin/user', disabled: false },
     { icon: <FaFile />, label: 'Documents', path: '/documents', disabled: true },
     { icon: <FaUserTag />, label: 'Role', path: '/role', disabled: true },
     { icon: <FaChartBar />, label: 'Reports', path: '/reports', disabled: true },
