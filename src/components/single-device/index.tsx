@@ -85,91 +85,102 @@ const SingleDevice: React.FC = () => {
     : allAmenities.amenities.slice(0, AMENITIES_PER_PAGE);
 
   return (
-    <Box sx={{ padding: 2 }}>
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <Grid container spacing={4}>
-            <Grid item xs={12} sm={6}>
-              <span className='d-flex flex-row justify-content-between mb-3'>
-                <Typography variant="h5" component="div"  className='monsterrat'>
-                  Rooms
+    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 10 }}>
+
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, width: '50%' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Typography variant="h6" component="div" className='monsterrat checkIn'>
+            Rooms
+          </Typography>
+          <Box>
+            <CustomPagination
+              page={page}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </Box>
+        </Box>
+
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+          {paginatedRooms.map((room, index) => (
+            <Box key={index} sx={{ flex: '1 1 calc(50% - 1rem)', display: 'flex', flexDirection: 'column' }}>
+              <Card sx={{ display: 'flex', flexDirection: 'column', height: '70%', width: '100%' }}>
+                <CardMedia
+                  component="img"
+                  height="100%"
+                  image={room.image}
+                  alt={room.name}
+                  sx={{ objectFit: 'cover' }}
+                />
+              </Card>
+              <CardContent sx={{ padding: 1, paddingTop: 2 }}>
+                <Typography variant="h6" sx={{ fontSize: 15, fontWeight: 600 }} className='monsterrat'>
+                  {room.name}
                 </Typography>
-                <Box sx={{ marginBottom: 2 }}>
-                  <CustomPagination
-                    page={page}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                  />
-                </Box>
-              </span>
-
-              <Grid container spacing={2}>
-                {paginatedRooms.map((room, index) => (
-                  <Grid item xs={12} sm={6} key={index}>
-                    <Card sx={{ display: 'flex', flexDirection: 'column',height: '70%',width:'100%' }}>
-                      <CardMedia
-                        component="img"
-                        height="100%"
-                        image={room.image}
-                        alt={room.name}
-                        sx={{ objectFit: 'cover' }}
-                      />
-                     
-                    </Card>
-                    <CardContent sx={{ padding: 1, paddingTop: 2 }}>
-                        <Typography variant="h6" sx={{ fontSize: 15, fontWeight: 500 }} className='monsterrat'>
-                          {room.name}
-                        </Typography>
-                        {room.Bed && (
-                          <Typography variant="body2" color="textSecondary" sx={{ fontSize: 10 }} className='monsterrat'>
-                            {room.Bed}
-                          </Typography>
-                        )}
-                      </CardContent>
-                  </Grid>
-                ))}
-              </Grid>
-            </Grid>
-
-            {/* Amenities Section */}
-            <Grid item xs={12} sm={6} style={{paddingLeft:'100px'}} >
-              <Typography variant="h6" gutterBottom className='monsterrat ' >
-                Amenities
-              </Typography>
-              <Grid container spacing={0} className='mt-4'>
-                {displayedAmenities.map((amenity, index) => (
-                  <Grid item xs={12} sm={6} key={index}>
-                    <ListItem sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', marginRight: 2 }}>
-                        {amenity.icon}
-                      </Box>
-                      <div  className='monsterrat' >{amenity.name} </div>
-                    </ListItem>
-                  </Grid>
-                ))}
-              </Grid>
-              <Box sx={{ display: 'flex', justifyContent: 'flex-start', marginTop: 2,
-              
-               }}>
-                {!showAllAmenities ? (
-                  <Button disableRipple onClick={handleShowMoreClick} className='ShowMoreAmenities monsterrat '
-                  style={{
-                    border:'1px solid grey'
-                  }}> 
-                    show all 60 Amenities
-                  </Button>
-                ) : (
-                  <Button disableRipple onClick={handleShowLessClick} className='ShowMoreAmenities monsterrat'   style={{
-                    border:'1px solid grey'
-                  }}>
-                    Show Less Amenities
-                  </Button>
+                {room.Bed && (
+                  <Typography variant="body1" sx={{ fontSize: 12 }} className='monsterrat'>
+                    {room.Bed}
+                  </Typography>
                 )}
+              </CardContent>
+            </Box>
+          ))}
+        </Box>
+      </Box>
+
+      <Box sx={{ width: '50%', display: 'flex', flexDirection: 'column', gap: 3 }}>
+        {/* <Typography variant="h3" component="div" className='monsterrat checkIn'>
+        Amenities
+        </Typography> */}
+        <Typography variant="h6" className='monsterrat checkIn'>
+          Amenities
+        </Typography>
+        <Box sx={{ display: 'flex', gap: 2 }}>
+          <Box sx={{ flex: 1 }}>
+            {displayedAmenities.slice(0, 5).map((amenity, index) => (
+              <Box key={index} sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', marginRight: 2 }}>
+                  {amenity.icon}
+                </Box>
+                <div className='monsterrat'>{amenity.name}</div>
               </Box>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+            ))}
+          </Box>
+
+          <Box sx={{ flex: 1 }}>
+            {displayedAmenities.slice(5, 10).map((amenity, index) => (
+              <Box key={index} sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', marginRight: 2 }}>
+                  {amenity.icon}
+                </Box>
+                <div className='monsterrat'>{amenity.name}</div>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+
+        <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+          {!showAllAmenities ? (
+            <Button
+              disableRipple
+              onClick={handleShowMoreClick}
+              className='ShowMoreAmenities '
+              sx={{ border: '1px solid grey' }}
+            >
+              show all 60 Amenities
+            </Button>
+          ) : (
+            <Button
+              disableRipple
+              onClick={handleShowLessClick}
+              className='ShowMoreAmenities'
+              sx={{ border: '1px solid grey' }}
+            >
+              Show Less Amenities
+            </Button>
+          )}
+        </Box>
+      </Box>
     </Box>
   );
 };

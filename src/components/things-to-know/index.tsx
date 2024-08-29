@@ -22,7 +22,7 @@ const HouseRules = () => {
       <Typography variant="body1" paragraph>
         <ul >
           {visibleRules.map((rule, index) => (
-            <li key={index} style={{ marginBottom: '8px' }} className='monsterrat1
+            <li key={index} style={{ marginBottom: '8px' }} className='monsterrat1 RuleList
 '>{rule}</li>
           ))}
         </ul>
@@ -42,7 +42,7 @@ const HouseRules = () => {
            className='monsterrat'
 
         >
-          {showMore ? '< Show Less ' : 'Show More >'}
+          {showMore ? '< Show Less ' : 'Show more >'}
         </Button>
       </Typography>
     </div>
@@ -66,7 +66,7 @@ const SafetyAndProperty = () => {
       <Typography variant="body1" paragraph>
         <ul >
           {visibleSafetyRules.map((rule, index) => (
-            <li key={index} style={{ marginBottom: '8px' }} className='monsterrat1'>{rule}</li>
+            <li key={index} style={{ marginBottom: '8px' }} className='monsterrat1 RuleList'>{rule}</li>
           ))}
         </ul>
         <Button
@@ -85,7 +85,7 @@ const SafetyAndProperty = () => {
            className='monsterrat'
 
         >
-          {showMore ? '< Show Less ' : 'Show More >'}
+          {showMore ? '< Show Less ' : 'Show more >'}
         </Button>
       </Typography>
     </div>
@@ -108,7 +108,7 @@ const CancellationPolicy = () => {
       <Typography variant="body1" paragraph>
         <ul >
           {visiblePolicyText.map((text, index) => (
-            <li key={index} style={{ marginBottom: '8px' }} className='monsterrat1'>{text}</li>
+            <li key={index} style={{ marginBottom: '8px' }} className='monsterrat1 RuleList'>{text}</li>
           ))}
         </ul>
         <Button
@@ -125,7 +125,7 @@ const CancellationPolicy = () => {
            }}
            className='monsterrat'
         >
-          Add Dates 
+          {"Add Dates >"} 
           {/* {showMore ? '< Add dates ' : 'Add Dates >'} */}
         </Button>
       </Typography>
@@ -135,9 +135,9 @@ const CancellationPolicy = () => {
 
 const ThingsToKnow = () => {
   return (
-    <div style={{ padding: '16px' }}>
-      <Typography variant="h4"  className='ThingstoHead1 monsterrat' gutterBottom>Things to Know</Typography>
-      <Grid container spacing={3}>
+    <div className='mt-3'>
+      <Typography variant="h4"  className='ThingstoHead1 monsterrat'>Things to Know</Typography>
+      <Grid container spacing={2}>
         <Grid item xs={12} sm={4}>
           <HouseRules />
         </Grid>

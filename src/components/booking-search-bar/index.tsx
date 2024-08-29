@@ -9,18 +9,21 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/reducers';
-import { saveBooking } from '@/store/slice/auth/bookingSlice';
+import { BookingData, saveBooking } from '@/store/slice/auth/bookingSlice';
 import { selectSelectedPropertyDetails } from '@/store/slice/auth/property-slice';
 import calendarData from '../calender/calendarData.json';
 import CustomizedSnackbars from '../../components/customized-snackbar';
+import { ThunkDispatch } from '@reduxjs/toolkit';
+import { AnyAction } from 'redux';
 
+import PopoverCalendar from "./PopoverCalendar";
 const BookingSearchBar: React.FC = () => {
     const today = new Date();
     const userId = '';
     const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const [activeDate, setActiveDate] = useState<'check-in' | 'check-out' | null>(null);
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
     const bookingState = useSelector((state: RootState) => state.bookings);
     const isBookingLoading = bookingState?.isLoading;
     const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
@@ -76,7 +79,7 @@ const BookingSearchBar: React.FC = () => {
         const checkinDate = new Date(Date.UTC(dateRange.from.getFullYear(), dateRange.from.getMonth(), dateRange.from.getDate(), 12, 0, 0));
         const checkoutDate = new Date(Date.UTC(dateRange.to.getFullYear(), dateRange.to.getMonth(), dateRange.to.getDate(), 12, 0, 0));
 
-        const bookingData = {
+        const bookingData: BookingData = {
             user: { id: currentUser.id },
             property: { id: selectedPropertyDetails.id },
             createdBy: { id: currentUser.id },
@@ -96,6 +99,7 @@ const BookingSearchBar: React.FC = () => {
 
         dispatch(saveBooking(bookingData));
     };
+
 
     useEffect(() => {
         if (!isBookingLoading && !errorMessage) {

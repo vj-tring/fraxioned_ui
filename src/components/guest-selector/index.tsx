@@ -22,7 +22,6 @@ const MultipleSelect: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const selectedPropertyId = useSelector((state: RootState) => state.properties.selectedPropertyId);
   const selectedPropertyLimits = useSelector((state: RootState) => state.properties.selectedPropertyLimits);
 
   const [counts, setCountsLocal] = useState<{ [key: string]: number }>({
@@ -159,7 +158,7 @@ const MultipleSelect: React.FC = () => {
             borderRadius: '10px !important',
             maxHeight: '400px',
             overflowY: 'auto',
-            padding: '0'
+            padding: '.2rem 0'
           },
         }}
       >
@@ -171,8 +170,8 @@ const MultipleSelect: React.FC = () => {
                 borderRadius: 0,
                 width: "100%",
                 padding: '0 2rem',
-                // margin: '.5rem 0',
-                height: '5rem',
+                margin: '.5rem 0',
+                height: '4rem',
               }}
               disableRipple
             >
@@ -214,7 +213,7 @@ const MultipleSelect: React.FC = () => {
               (!(names.indexOf(item) === names.length - 1)) &&
               <hr style={{
                 opacity: .08,
-                // margin: '0 2.1rem'
+                margin: '0 2.1rem'
               }} />
             }
           </>
