@@ -43,6 +43,11 @@ const datePickerSlice = createSlice({
       state.startDate = null;
       state.startDateSelected = false;
     },
+    clearPartial(state) {
+      state.dateRange = undefined;
+      state.startDate = null;
+      state.startDateSelected = false;
+    },
     setValidationMessage(state, action: PayloadAction<string | null>) { 
       state.validationMessage = action.payload;
     },
@@ -61,5 +66,5 @@ const datePickerSlice = createSlice({
   },
 });
 
-export const { setDateRange, setErrorMessage, setIsCalendarOpen, clearDates, setValidationMessage, clearValidationMessage, setSelectedYear, setStartDate, setStartDateSelected } = datePickerSlice.actions;
+export const { setDateRange, setErrorMessage, setIsCalendarOpen, clearDates, clearPartial, setValidationMessage, clearValidationMessage, setSelectedYear, setStartDate, setStartDateSelected } = datePickerSlice.actions;
 export default datePickerSlice.reducer;

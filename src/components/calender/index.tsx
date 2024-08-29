@@ -19,7 +19,7 @@ import { fetchPropertySeasonHoliday, selectPropertySeasonHolidays } from '@/stor
 import { saveBooking, clearBookingMessages, fetchBookings } from '../../store/slice/auth/bookingSlice';
 import { useEffect } from "react";
 import { RootState } from "@/store/reducers";
-import { setDateRange, setErrorMessage, setIsCalendarOpen, clearDates, setStartDate, setStartDateSelected, setSelectedYear, setValidationMessage, clearValidationMessage } from "@/store/slice/datePickerSlice";
+import { setDateRange, setErrorMessage, setIsCalendarOpen, clearDates, setStartDate, setStartDateSelected, setSelectedYear, setValidationMessage, clearValidationMessage, clearPartial } from "@/store/slice/datePickerSlice";
 
 interface DatePickerWithRangeProps extends React.HTMLAttributes<HTMLDivElement> {
   onSelect?: (range: DateRange | undefined) => void;
@@ -239,14 +239,13 @@ export function DatePickerWithRange({
       if (!meetsConsecutiveStayRule(newStartDate)) {
         console.log("Consecutive stay rule not met");
         dispatch(setErrorMessage('Have to wait at least 5 nights for the next booking'));
-        dispatch(clearDates());
+        dispatch(clearPartial());
         if (onSelect) onSelect(undefined);
         return;
       }
-  
       dispatch(setStartDate(newStartDate));
       dispatch(setStartDateSelected(true));
-      
+
       const lastMinuteBooking = isLastMinuteBooking(newStartDate);
       const peakSeasonStart = new Date(
         selectedPropertyDetails.peakSeasonStartDate
