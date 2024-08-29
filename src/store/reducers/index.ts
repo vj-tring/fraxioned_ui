@@ -8,6 +8,7 @@ import editpropertyReducer from '../slice/auth/editproperty';
 import addpropertyReducer from '../slice/auth/addproperty';
 import propertySeasonHolidayReducer from '../slice/auth/propertySeasonHolidaySlice';
 import bookingReducer from '../slice/auth/bookingSlice';
+import datePickerReducer from '../slice/datePickerSlice';
 
 const appReducer = combineReducers({
   auth: authReducer,
@@ -19,6 +20,7 @@ const appReducer = combineReducers({
   limits: limitsReducer,
   propertySeasonHoliday: propertySeasonHolidayReducer, 
   bookings: bookingReducer,
+  datePicker: datePickerReducer,
 });
 
 const rootReducer = (

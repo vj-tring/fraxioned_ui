@@ -1,11 +1,11 @@
 //@ts-nocheck
-import * as React from "react"
-import { addDays, format, addYears } from "date-fns"
-import { Calendar as CalendarIcon } from "lucide-react"
-import { DateRange } from "react-day-picker"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+import * as React from "react";
+import { addDays, format, addYears } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { DateRange } from "react-day-picker";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
@@ -18,8 +18,8 @@ import { fetchProperties, selectSelectedPropertyDetails } from "@/store/slice/au
 import { fetchPropertySeasonHoliday, selectPropertySeasonHolidays } from '@/store/slice/auth/propertySeasonHolidaySlice';
 import { saveBooking, clearBookingMessages, fetchBookings } from '../../store/slice/auth/bookingSlice';
 import { useEffect } from "react";
-import { RootState } from "@/store/reducers"
-
+import { RootState } from "@/store/reducers";
+import { setDateRange, setErrorMessage, setIsCalendarOpen, clearDates, setStartDate, setStartDateSelected, setSelectedYear, setValidationMessage, clearValidationMessage, clearPartial } from "@/store/slice/datePickerSlice";
 
 interface DatePickerWithRangeProps extends React.HTMLAttributes<HTMLDivElement> {
   onSelect?: (range: DateRange | undefined) => void;
@@ -39,10 +39,7 @@ export function DatePickerWithRange({
   const endDate = new Date(today.getFullYear() + 5, 11, 31);
   const checkInEndDate = addDays(today, 730);
   const checkOutEndDate = addYears(today, 5);
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: today,
-    to: addDays(today, 0),
-  });
+
   const dispatch = useDispatch();
   const bookings = useSelector((state: RootState) => state.bookings.bookings);
   const bookingState = useSelector((state: RootState) => state.bookings);
@@ -51,14 +48,16 @@ export function DatePickerWithRange({
   const isBookingLoading = bookingState?.isLoading;
   const selectedPropertyDetails = useSelector(selectSelectedPropertyDetails);
   const seasonHolidays = useSelector(selectPropertySeasonHolidays);
-  const [selectedYear, setSelectedYear] = React.useState(new Date().getFullYear());
-  const [startDate, setStartDate] = React.useState<Date | null>(null)
-  const [startDateSelected, setStartDateSelected] = React.useState<boolean>(false)
-  const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
-  const [isCalendarOpen, setIsCalendarOpen] = React.useState(false)
+  const selectedYear = useSelector((state: RootState) => state.datePicker.selectedYear);
+  const startDate = useSelector((state: RootState) => state.datePicker.startDate);
+  const startDateSelected = useSelector((state: RootState) => state.datePicker.startDateSelected);
+  const errorMessage = useSelector((state: RootState) => state.datePicker.errorMessage);
+  const isCalendarOpen = useSelector((state: RootState) => state.datePicker.isCalendarOpen);
+  const dateRange = useSelector((state: RootState) => state.datePicker.dateRange);
   const currentBooking = useSelector((state: RootState) => state.bookings?.currentBooking);
   const currentUser = useSelector((state: RootState) => state.auth.user);
-  // const bookedDates = calendarData.bookedDates.map(date => new Date(date));
+  const validationMessage = useSelector((state: RootState) => state.datePicker.validationMessage);
+
   const unavailableDates = calendarData.unavailableDates.map(date => new Date(date));
   const blueDates = calendarData.blueDates.map(date => new Date(date));
 
@@ -72,7 +71,7 @@ export function DatePickerWithRange({
 
   useEffect(() => {
     dispatch(fetchProperties);
-  }, [dispatch]);
+  }, [dispatch]); 
 
   useEffect(() => {
     dispatch(clearBookingMessages());
@@ -80,11 +79,11 @@ export function DatePickerWithRange({
 
   useEffect(() => {
     if (bookingError) {
-      setErrorMessage(bookingError);
+      dispatch(setErrorMessage(bookingError));
     }
     if (bookingSuccessMessage) {
       console.log(bookingSuccessMessage);
-      clearDates();
+      dispatch(clearDates());
     }
     const timer = setTimeout(() => {
       dispatch(clearBookingMessages());
@@ -93,19 +92,14 @@ export function DatePickerWithRange({
     return () => clearTimeout(timer);
   }, [bookingError, bookingSuccessMessage, dispatch]);
 
-
   useEffect(() => {
     if (selectedPropertyDetails?.id) {
       dispatch(fetchPropertySeasonHoliday(selectedPropertyDetails.id));
     }
   }, [dispatch, selectedPropertyDetails?.id]);
 
-  const clearDates = () => {
-    setDate(undefined);
-    setStartDate(null);
-    setStartDateSelected(false);
-    setErrorMessage(null);
-    setIsCalendarOpen(false);
+  const clearDatesHandler = () => {
+    dispatch(clearDates());
     if (onSelect) onSelect(undefined);
   };
 
@@ -206,7 +200,6 @@ export function DatePickerWithRange({
         isBookedDate(date) ||
         isUnavailableDate(date)
       );
-      //  (!meetsConsecutiveStayRule(date) && date.toDateString() !== today.toDateString());
     }
   };
 
@@ -229,7 +222,7 @@ export function DatePickerWithRange({
     const previousCheckOutDate = bookedDates.reduce((latest, bookedDate) => {
       return bookedDate < date && bookedDate > latest ? bookedDate : latest;
     }, new Date(0));
-
+  
     const nightsBetween = Math.floor(
       (date.getTime() - previousCheckOutDate.getTime()) / (1000 * 60 * 60 * 24)
     );
@@ -240,20 +233,18 @@ export function DatePickerWithRange({
     if (range?.from) {
       const newStartDate = range.from;
       let newEndDate = range.to;
-
-      setSelectedYear(newStartDate.getFullYear());
-
+  
+      dispatch(setSelectedYear(newStartDate.getFullYear()));
+  
       if (!meetsConsecutiveStayRule(newStartDate)) {
-        setErrorMessage("Minimum 5 nights required between bookings");
-        setDate(undefined);
-        setStartDate(null);
-        setStartDateSelected(false);
+        console.log("Consecutive stay rule not met");
+        dispatch(setErrorMessage('Have to wait at least 5 nights for the next booking'));
+        dispatch(clearPartial());
         if (onSelect) onSelect(undefined);
         return;
       }
-
-      setStartDate(newStartDate);
-      setStartDateSelected(true);
+      dispatch(setStartDate(newStartDate));
+      dispatch(setStartDateSelected(true));
 
       const lastMinuteBooking = isLastMinuteBooking(newStartDate);
       const peakSeasonStart = new Date(
@@ -280,22 +271,22 @@ export function DatePickerWithRange({
       }
 
       if (peakNights > selectedPropertyDetails.details[selectedYear]?.peakRemainingNights) {
-        setErrorMessage(`You don't have sufficient peak-season remaining nights to select this checkout date`);
+        dispatch(setErrorMessage(`You don't have sufficient peak-season remaining nights to select this checkout date`));
         return;
       }
 
       if (offNights > selectedPropertyDetails.details[selectedYear]?.offRemainingNights) {
-        setErrorMessage(`You don't have sufficient off-season remaining nights to select this checkout date`);
+        dispatch(setErrorMessage(`You don't have sufficient off-season remaining nights to select this checkout date`));
         return;
       }
 
       if (peakHolidayNights > selectedPropertyDetails.details[selectedYear]?.peakRemainingHolidayNights) {
-        setErrorMessage(`You don't have sufficient peak-season holiday remaining nights to select this checkout date`);
+        dispatch(setErrorMessage(`You don't have sufficient peak-season holiday remaining nights to select this checkout date`));
         return;
       }
 
       if (offHolidayNights > selectedPropertyDetails.details[selectedYear]?.offRemainingHolidayNights) {
-        setErrorMessage(`You don't have sufficient off-season holiday remaining nights to select this checkout date`);
+        dispatch(setErrorMessage(`You don't have sufficient off-season holiday remaining nights to select this checkout date`));
         return;
       }
 
@@ -311,60 +302,57 @@ export function DatePickerWithRange({
           (nextUnavailableDate && newEndDate > nextUnavailableDate)
         ) {
           newEndDate = undefined;
-          setErrorMessage(
+          dispatch(setErrorMessage(
             "Cannot select over booked dates. Please clear and try again."
-          );
+          ));
         } else {
           const nightsSelected =
             (newEndDate.getTime() - newStartDate.getTime()) /
             (1000 * 60 * 60 * 24);
           if (lastMinuteBooking) {
             if (nightsSelected < calendarData.bookingRules.lastMinuteBooking.minNights) {
-              setErrorMessage(`Minimum ${calendarData.bookingRules.lastMinuteBooking.minNights} night(s) required for last-minute bookings`);
+              dispatch(setErrorMessage(`Minimum ${calendarData.bookingRules.lastMinuteBooking.minNights} night(s) required for last-minute bookings`));
             } else if (nightsSelected > calendarData.bookingRules.lastMinuteBooking.maxNights) {
-              setErrorMessage(`Maximum ${calendarData.bookingRules.lastMinuteBooking.maxNights} nights allowed for last-minute bookings`);
+              dispatch(setErrorMessage(`Maximum ${calendarData.bookingRules.lastMinuteBooking.maxNights} nights allowed for last-minute bookings`));
             } else if (selectedPropertyDetails.details[selectedYear]?.lastMinuteRemainingNights == 0) {
-              setErrorMessage(`You don't have sufficient last-minute remaining nights to select this checkout date`);
+              dispatch(setErrorMessage(`You don't have sufficient last-minute remaining nights to select this checkout date`));
             } else {
-              setErrorMessage(null);
+              dispatch(setErrorMessage(null));
             }
           } else {
             if (nightsSelected < calendarData.bookingRules.regularBooking.minNights) {
-              setErrorMessage(`Minimum ${calendarData.bookingRules.regularBooking.minNights} nights required`);
+              dispatch(setErrorMessage(`Minimum ${calendarData.bookingRules.regularBooking.minNights} nights required`));
             } else if (nightsSelected > selectedPropertyDetails?.details[selectedYear]?.maximumStayLength) {
-              setErrorMessage('Your booking request has exceeded the maximum stay length');
+              dispatch(setErrorMessage('Your booking request has exceeded the maximum stay length'));
             } else {
-              setErrorMessage(null);
+              dispatch(setErrorMessage(null));
             }
           }
         }
-        setStartDateSelected(false);
+        dispatch(setStartDateSelected(false));
       } else {
         if (
           isDayBeforeBookedDate(newStartDate) ||
           isDayBeforeUnavailableDate(newStartDate)
         ) {
-          setErrorMessage("Check out only");
+          dispatch(setErrorMessage("Check out only"));
         } else {
-          setErrorMessage(null);
+          dispatch(setErrorMessage(null));
         }
       }
 
       const newDateRange = { from: newStartDate, to: newEndDate };
-      setDate(newDateRange);
+      dispatch(setDateRange(newDateRange));
       if (onSelect) onSelect(newDateRange);
 
       // Keep the calendar open if only the start or end date is selected
       if (newStartDate && !newEndDate) {
-        setIsCalendarOpen(true);
+        dispatch(setIsCalendarOpen(true));
       } else if (newStartDate && newEndDate) {
-        setIsCalendarOpen(false);
+        dispatch(setIsCalendarOpen(false));
       }
     } else {
-      setDate(undefined);
-      setStartDate(null);
-      setStartDateSelected(false);
-      setErrorMessage(null);
+      dispatch(clearDates());
       if (onSelect) onSelect(undefined);
     }
   };
@@ -385,8 +373,8 @@ export function DatePickerWithRange({
       <div>
         <Calendar
           mode="range"
-          defaultMonth={date?.from}
-          selected={date}
+          defaultMonth={dateRange?.from}
+          selected={dateRange}
           onSelect={handleDateChange}
           numberOfMonths={2}
           fromDate={today}
@@ -414,146 +402,46 @@ export function DatePickerWithRange({
             {errorMessage && <div className="text-red-600">{errorMessage}</div>}
             {bookingError && <div className="text-red-600">{bookingError}</div>}
             {bookingSuccessMessage && <div className="text-green-600">{bookingSuccessMessage}</div>}
+            {validationMessage && <div className="text-yellow-600">{validationMessage}</div>}
           </div>
         </div>
       </div>
       <style>{`
-            .booked-date {
-              color: gray;
-              text-decoration: line-through;
-            }
-
-            .unavailable-date {
-              color: gray;
-              text-decoration: line-through;
-            }
-
-            .after-booked-date {
-              color: gray;
-              text-decoration: line-through;
-            }
-
-            .checkout-only-date {
-              color: gray;
-              text-decoration: line-through;
-            }
-
-            .holiday-date {
-              color: #0560f2;
-            }
-
-          `}</style>
+        .booked-date {
+          color: gray;
+          text-decoration: line-through;
+        }
+  
+        .unavailable-date {
+          color: gray;
+          text-decoration: line-through;
+        }
+  
+        .after-booked-date {
+          color: gray;
+          text-decoration: line-through;
+        }
+  
+        .checkout-only-date {
+          color: gray;
+          text-decoration: line-through;
+        }
+  
+        .holiday-date {
+          color: #0560f2;
+        }
+      `}</style>
       <div className="flex items-center justify-between end-calendar">
         <div className='stay-length'>
           <div>Minimum Stay Length : {calendarData.bookingRules.regularBooking.minNights} Nights</div>
           <div>Maximum Stay Length : {selectedPropertyDetails?.details[selectedYear]?.maximumStayLength} Nights</div>
         </div>
-        <div onClick={clearDates} className="btn-clear">
+        <div onClick={clearDatesHandler} className="btn-clear">
           Clear
         </div>
-
       </div>
       <div className="flex items-center justify-end ">
       </div>
-
-      {/* Second Calendar 
-      <div className="calendar2">  
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              id="date"
-              variant={"outline"}
-              className={cn(
-                "w-[300px] justify-start text-left font-normal",
-                !date && "text-muted-foreground"
-              )}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {date?.from ? (
-                date.to ? (
-                  <>
-                    {format(date.from, "LLL dd, y")} -{" "}
-                    {format(date.to, "LLL dd, y")}
-                  </>
-                ) : (
-                  format(date.from, "LLL dd, y")
-                )
-              ) : (
-                <span>Pick a date</span>
-              )}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              initialFocus
-              mode="range"
-              defaultMonth={date?.from}
-              selected={date}
-              onSelect={handleDateChange}
-              numberOfMonths={2}
-              fromDate={today}
-              toDate={endDate}
-              disabled={disableDates}
-              locale={customLocale}
-              modifiers={{
-                booked: bookedDates,
-                unavailable: unavailableDates,
-                blue: blueDates,
-              }}
-              modifiersClassNames={{
-                booked: 'booked-date',
-                unavailable: 'unavailable-date',
-                blue: 'blue-date',
-              }}
-            /> 
-          <div className="error-msg-container ml-5 flex justify-start">
-            <div className="error-msg">
-              {errorMessage && (
-                <div className="text-red-600">
-                  {errorMessage}
-                </div>
-              )}
-            </div>
-          </div>
-            <style>{`
-              .booked-date {
-                color: gray;
-                text-decoration: line-through;
-              }
-  
-              .unavailable-date {
-                color: gray;
-                text-decoration: line-through;
-              }
-  
-              .blue-date {
-                background-color: #F4B76A;
-                color: white;
-              }
-  
-              .after-booked-date {
-                color: gray;
-                text-decoration: line-through;
-              }
-  
-              .checkout-only-date {
-                color: gray;
-                text-decoration: line-through;
-              }
-            `}</style>
-          <div className="flex items-center justify-end ml-5">
-         
-          <div className='stay-length'>
-              <div className='misl2'>Minimum Stay Length : {calendarData.bookingRules.regularBooking.minNights} Nights</div>
-              <div className='masl'>Maximum Stay Length : {calendarData.bookingRules.regularBooking.maxNights} Nights</div>
-          </div>
-          <Button onClick={clearDates} className="ml-auto mr-2">
-              Clear
-            </Button>
-          </div>
-          </PopoverContent>
-        </Popover>
-      </div> */}
     </div>
   );
 }
