@@ -239,9 +239,9 @@ export default function AvailableNights() {
 
                 <div className="d-flex flex-column night-count">
                   <li className="liststyle">
-                    {selectedCard.details[selectedYear]?.offSeason || "N/A"}
+                    {selectedCard.details[selectedYear]?.lastMinute || "N/A"}
                   </li>
-                  <li className="Box-list1">Remaining Holidays</li>
+                  <li className="Box-list1">Last Minute Booking</li>
                 </div>
               </div>
             </div>
