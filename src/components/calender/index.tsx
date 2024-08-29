@@ -238,7 +238,7 @@ export function DatePickerWithRange({
   
       if (!meetsConsecutiveStayRule(newStartDate)) {
         console.log("Consecutive stay rule not met");
-        dispatch(setErrorMessage('Have to wait at least 5 nights for the next booking'));
+        dispatch(setErrorMessage('Have to wait atleast 5 nights for the next booking'));
         dispatch(clearPartial());
         if (onSelect) onSelect(undefined);
         return;
