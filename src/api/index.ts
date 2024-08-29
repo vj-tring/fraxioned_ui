@@ -55,15 +55,24 @@ export const fetchpropertyHolidaysApi = (id: number) =>
     axiosInstance.get(`/v1/holidays/holiday/${id}`);
 
 //propertyholiday api
-export const propertyseasonholiday = () =>
+export const propertyseasonholiday = (p0?: string) =>
     axiosInstance.get('/v1/property-season-holidays');
 
 //propertyholiday delete api
 export const propertyseasonholidaydelete = (id: number) =>
-    axiosInstance.delete(`/v1/property-season-holidays/property-season-holiday/${id}`);
+    axiosInstance.delete(`/v1/property-season-holidays/${id}`);
+
+export const getPropertySeasonHoliday = (propertyId: number) =>
+    axiosInstance.get(`/v1/property-season-holidays/property-season-holiday/property/${propertyId}`);
+
+export const createBooking = (bookingData: void) =>
+    axiosInstance.post(`/v1/bookings/booking`, bookingData);
+
+export const getBookings = () =>
+    axiosInstance.get('/v1/bookings');
 
 export const getUserProperties = (id: number) =>
-    axiosInstance.get(`/v1/properties/${id}/properties-with-details`);
+    axiosInstance.get(`/v1/properties/${id}/user-properties-with-details`);
 
 export const addPropertyApi = (propertyData: {
     createdBy: { id: number };

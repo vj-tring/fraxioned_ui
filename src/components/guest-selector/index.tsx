@@ -15,10 +15,8 @@ import { CircleMinus, CirclePlus } from 'lucide-react';
 const names = [
   { label: 'Adults', description: 'Ages 13 or above', icon: <PeopleIcon /> },
   { label: 'Children', description: 'Ages 2 to 12', icon: <ChildFriendlyIcon /> },
-  // { label: 'Infants', description: 'Under 2', icon: <PeopleIcon /> },
   { label: 'Pets', description: 'Bringing a service?', icon: <PetsIcon /> },
 ];
-
 
 const MultipleSelect: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -36,18 +34,17 @@ const MultipleSelect: React.FC = () => {
   const [noOfguest, setNoOfGuestsAllowed] = useState<number>(0);
   const [noOfPets, setNoOfPetsAllowed] = useState<number>(0);
 
-
   useEffect(() => {
     validateCounts();
   }, [selectedPropertyLimits, counts]);
-  
+
   const validateCounts = () => {
     if (!selectedPropertyLimits) return;
 
     const { noOfGuestsAllowed, noOfPetsAllowed } = selectedPropertyLimits;
     setNoOfGuestsAllowed(noOfGuestsAllowed);
     setNoOfPetsAllowed(noOfPetsAllowed);
-    const totalGuests = counts.Adults + counts.Children 
+    const totalGuests = counts.Adults + counts.Children;
     const totalPets = counts.Pets;
 
     let message = '';
@@ -58,8 +55,7 @@ const MultipleSelect: React.FC = () => {
     } else if (totalPets > noOfPetsAllowed) {
       message = `The number of pets cannot exceed ${noOfPetsAllowed}.`;
     }
- 
-    
+
     setValidationMessage(message);
     return message === '';
   };
@@ -70,22 +66,19 @@ const MultipleSelect: React.FC = () => {
       return;
     }
 
-    const maxLimit = name === 'Pets' ? selectedPropertyLimits.noOfPetsAllowed : selectedPropertyLimits.noOfGuestsAllowed ;
+    const maxLimit = name === 'Pets' ? selectedPropertyLimits.noOfPetsAllowed : selectedPropertyLimits.noOfGuestsAllowed;
     const currentCount = counts[name];
 
-    let newCount: number= currentCount;
+    let newCount: number = currentCount;
 
     if (action === 'increase') {
-
-      if (name === 'Pets' && newCount > maxLimit-1) {
-        setValidationMessage(`You can't have more than ${maxLimit} pets.`)
+      if (name === 'Pets' && newCount > maxLimit - 1) {
+        setValidationMessage(`You can't have more than ${maxLimit} pets.`);
         return;
-      }
-      else if (name !== 'Pets' && (counts.Adults + counts.Children) > maxLimit-1) {
-        setValidationMessage(`You can't have more than ${maxLimit} guests.`)
+      } else if (name !== 'Pets' && (counts.Adults + counts.Children) > maxLimit - 1) {
+        setValidationMessage(`You can't have more than ${maxLimit} guests.`);
         return;
-      }
-      else{
+      } else {
         newCount = currentCount + 1;
       }
     } else {
@@ -94,9 +87,9 @@ const MultipleSelect: React.FC = () => {
 
     setCountsLocal((prevCounts) => ({
       ...prevCounts,
-      [name]: newCount
+      [name]: newCount,
     }));
-    console.log("function called")
+    console.log("function called");
   };
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -127,8 +120,13 @@ const MultipleSelect: React.FC = () => {
     };
   }, [open]);
 
+  const getTotalGuests = () => {
+    return counts.Adults + counts.Children;
+  };
+
   return (
-    <Box sx={{ width: '30%' }}>
+
+    <Box sx={{ width: '20%' }}>
       <Button
         disableRipple
         aria-controls="basic-menu"
@@ -137,16 +135,16 @@ const MultipleSelect: React.FC = () => {
         className="PropertyBtn"
         sx={{
           borderRadius: 10,
-          width: 348,
+          width: 200,
           height: 70,
           border: 'none',
           cursor: 'pointer',
-          paddingRight: 30,
+          paddingRight: 13,
         }}
       >
         <div className="d-flex align-items-start flex-column">
           <span className="DateHead1 monsterrat">Who</span>
-          <p className="property1 monsterrat">Add guests</p>
+          <p className="property1 monsterrat">{getTotalGuests()} guests </p>
         </div>
       </Button>
 
@@ -190,9 +188,7 @@ const MultipleSelect: React.FC = () => {
                 <div className="w-50">
                   <b>{item.label}</b>
                   <p className="DescFont monsterrat">{item.description}</p>
-
                 </div>
-
 
                 <div className="d-flex justify-content-around w-50 text-center">
                   <button
@@ -200,29 +196,19 @@ const MultipleSelect: React.FC = () => {
                     disabled={counts[item.label] === 0}
                     onClick={() => handleCountChange(item.label, 'decrease')}
                   >
-                    <CircleMinus size={29} strokeWidth={0.75}
-                      color='grey'
-
-                    />
+                    <CircleMinus size={29} strokeWidth={0.75} color='grey' />
                   </button>
 
                   <p className="Ad-count monsterrat">{counts[item.label]}</p>
                   <button
-                    // className={` monsterrat ${!selectedPropertyId ? 'disabled' : 'enabled'}`}
-
-                    // disabled={!selectedPropertyId || (selectedPropertyLimits ? counts[item.label] >= (item.label === 'Pets' ? selectedPropertyLimits.noOfPetsAllowed : selectedPropertyLimits.noOfGuestsAllowed - counts.Pets) : true)}
                     onClick={() => handleCountChange(item.label, 'increase')}
                   >
                     <CirclePlus size={29} strokeWidth={0.75}
-                      // color='grey'
-                      className={`${item.label === 'Pets'  ? counts.Pets === noOfPets ? 'circleplusdisable': 'circleplus' : ''} ${item.label === 'Adults' || item.label === 'Children'  ? counts.Adults === noOfguest ? 'circleplusdisable': 'circleplus': ''} `}
+                      className={`${item.label === 'Pets' ? counts.Pets === noOfPets ? 'circleplusdisable' : 'circleplus' : ''} ${item.label === 'Adults' || item.label === 'Children' ? counts.Adults === noOfguest ? 'circleplusdisable' : 'circleplus' : ''} `}
                     />
                   </button>
-
                 </div>
-
               </div>
-
             </MenuItem>
             {
               (!(names.indexOf(item) === names.length - 1)) &&
@@ -232,17 +218,12 @@ const MultipleSelect: React.FC = () => {
               }} />
             }
           </>
-
-
-
         ))}
 
         {validationMessage && <div className='validationMsg monsterrat'>
-
           <p style={{ color: 'red', textAlign: 'center' }}>
             {validationMessage}
           </p>
-
         </div>}
       </Menu>
     </Box>
