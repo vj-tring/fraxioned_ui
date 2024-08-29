@@ -34,7 +34,7 @@ export function DatePickerWithRange({
   initialRange,
   selectingFrom,
   userId,
-}:DatePickerWithRangeProps) {
+}: DatePickerWithRangeProps) {
   const today = new Date();
   const endDate = new Date(today.getFullYear() + 5, 11, 31);
   const checkInEndDate = addDays(today, 730);
@@ -71,7 +71,7 @@ export function DatePickerWithRange({
   }, [bookings]);
 
   useEffect(() => {
-    dispatch(fetchProperties); 
+    dispatch(fetchProperties);
   }, [dispatch]);
 
   useEffect(() => {
@@ -88,7 +88,7 @@ export function DatePickerWithRange({
     }
     const timer = setTimeout(() => {
       dispatch(clearBookingMessages());
-    }, 5000); 
+    }, 5000);
 
     return () => clearTimeout(timer);
   }, [bookingError, bookingSuccessMessage, dispatch]);
@@ -177,8 +177,8 @@ export function DatePickerWithRange({
   };
 
   const isHolidayDate = (date: Date) => {
-    return seasonHolidays.some(holiday => 
-      date >= new Date(holiday.holiday.startDate) && 
+    return seasonHolidays.some(holiday =>
+      date >= new Date(holiday.holiday.startDate) &&
       date <= new Date(holiday.holiday.endDate)
     );
   };
@@ -242,7 +242,7 @@ export function DatePickerWithRange({
       let newEndDate = range.to;
 
       setSelectedYear(newStartDate.getFullYear());
-  
+
       if (!meetsConsecutiveStayRule(newStartDate)) {
         setErrorMessage("Minimum 5 nights required between bookings");
         setDate(undefined);
@@ -261,7 +261,7 @@ export function DatePickerWithRange({
       );
       const peakSeasonEnd = new Date(selectedPropertyDetails.peakSeasonEndDate);
       let peakNights = 0;
-      let offNights = 0; 
+      let offNights = 0;
       let peakHolidayNights = 0;
       let offHolidayNights = 0;
       for (let d = new Date(newStartDate); d < newEndDate; d.setDate(d.getDate() + 1)) {
@@ -298,7 +298,7 @@ export function DatePickerWithRange({
         setErrorMessage(`You don't have sufficient off-season holiday remaining nights to select this checkout date`);
         return;
       }
-  
+
       if (newEndDate) {
         const nextBookedDate = bookedDates.find(
           (bookedDate) => bookedDate > newStartDate
@@ -325,7 +325,7 @@ export function DatePickerWithRange({
               setErrorMessage(`Maximum ${calendarData.bookingRules.lastMinuteBooking.maxNights} nights allowed for last-minute bookings`);
             } else if (selectedPropertyDetails.details[selectedYear]?.lastMinuteRemainingNights == 0) {
               setErrorMessage(`You don't have sufficient last-minute remaining nights to select this checkout date`);
-            } else  {
+            } else {
               setErrorMessage(null);
             }
           } else {
@@ -381,9 +381,8 @@ export function DatePickerWithRange({
   };
 
   return (
-    <div className={cn("gri flex flex-column", className)}>
-      {/* First Calendar */}
-      <div className="calendar">
+    <div className={cn("gri flex flex-column calendar", className)}>
+      <div>
         <Calendar
           mode="range"
           defaultMonth={date?.from}
@@ -398,9 +397,9 @@ export function DatePickerWithRange({
             booked: bookedDates,
             unavailable: unavailableDates,
             blue: blueDates,
-            holiday: seasonHolidays.map(h => ({ 
-              from: new Date(h.holiday.startDate), 
-              to: new Date(h.holiday.endDate) 
+            holiday: seasonHolidays.map(h => ({
+              from: new Date(h.holiday.startDate),
+              to: new Date(h.holiday.endDate)
             })),
           }}
           modifiersClassNames={{
@@ -411,14 +410,14 @@ export function DatePickerWithRange({
           }}
         />
         <div className="error-msg-container ml-5 flex justify-start">
-            <div className="error-msg">
+          <div className="error-msg">
             {errorMessage && <div className="text-red-600">{errorMessage}</div>}
             {bookingError && <div className="text-red-600">{bookingError}</div>}
             {bookingSuccessMessage && <div className="text-green-600">{bookingSuccessMessage}</div>}
-            </div>
           </div>
         </div>
-        <style>{`
+      </div>
+      <style>{`
             .booked-date {
               color: gray;
               text-decoration: line-through;
@@ -444,22 +443,21 @@ export function DatePickerWithRange({
             }
 
           `}</style>
-        <div className="flex items-center justify-between end-calendar">
+      <div className="flex items-center justify-between end-calendar">
         <div className='stay-length'>
-            <div>Minimum Stay Length : {calendarData.bookingRules.regularBooking.minNights} Nights</div>
-            <div>Maximum Stay Length : {selectedPropertyDetails?.details[selectedYear]?.maximumStayLength} Nights</div>
+          <div>Minimum Stay Length : {calendarData.bookingRules.regularBooking.minNights} Nights</div>
+          <div>Maximum Stay Length : {selectedPropertyDetails?.details[selectedYear]?.maximumStayLength} Nights</div>
         </div>
         <div onClick={clearDates} className="btn-clear">
-            Clear
-          </div>
+          Clear
+        </div>
 
-        </div>
-        <div className="flex items-center justify-end ">
-        </div>
+      </div>
+      <div className="flex items-center justify-end ">
       </div>
 
-      /* Second Calendar */
-      /* <div className="calendar2">  
+      {/* Second Calendar 
+      <div className="calendar2">  
         <Popover>
           <PopoverTrigger asChild>
             <Button
@@ -555,7 +553,7 @@ export function DatePickerWithRange({
           </div>
           </PopoverContent>
         </Popover>
-      </div>  */
-    // </div>
+      </div> */}
+    </div>
   );
 }

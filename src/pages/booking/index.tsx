@@ -20,8 +20,11 @@ import ThingsToKnow from '../../components/things-to-know';
 import DatePickerCard from '../../components/date-picker-card';
 import { Element, Link } from 'react-scroll';
 import { DatePickerWithRange } from '@/components/calender';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { mockProperties } from "../home/mockData";
+import { fetchProperties } from '@/store/slice/auth/property-slice';
+import { AppDispatch } from '@/store';
+import { Session, User } from '@/store/model';
 
 const images = [
   { src: buildingImage, alt: 'Exterior of Blue Bear Lake home' },
@@ -40,6 +43,7 @@ interface Property {
 }
 
 interface RootState {
+  auth: any;
   properties: {
     cards: Property[];
     loading: boolean;
@@ -51,6 +55,13 @@ interface RootState {
     error: null;
     successMessage: string | null;
     isLoading: false;
+  };
+  users: {
+    user: User | null;
+    session: Session | null;
+    loading: boolean;
+    error: string | null;
+    isAdmin: boolean;
   }
 }
 const Booking = () => {
@@ -65,11 +76,16 @@ const Booking = () => {
   const [checkInDate, setCheckInDate] = useState<Date | null>(null);
   const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const userId = useSelector((state: RootState) => state.auth.user.id);
 
-  const bookingData = useSelector((state: RootState) => state.bookings.bookings);
 
 
+  // const bookingData = useSelector((state: RootState) => state.bookings.bookings);
 
+  useEffect(() => {
+    dispatch(fetchProperties(userId));
+  }, []);
 
   useEffect(() => {
     if (displayProperties.length > 0) {
@@ -77,11 +93,11 @@ const Booking = () => {
         const propertyId = parseInt(id, 10);
         console.log("IDp", propertyId);
         const property = displayProperties.find(p => p.id === propertyId);
-        const selectedDate: any = bookingData.find((data: any) => data.property.id === propertyId);
-        if (selectedDate) {
-          setCheckInDate(selectedDate.checkinDate);
-          setCheckOutDate(selectedDate.checkoutDate)
-        }
+        // const selectedDate: any = bookingData.find((data: any) => data.property.id === propertyId);
+        // if (selectedDate) {
+        //   setCheckInDate(selectedDate.checkinDate);
+        //   setCheckOutDate(selectedDate.checkoutDate)
+        // }
 
         setSelectedProperty(property || null);
       } else {
@@ -89,6 +105,7 @@ const Booking = () => {
       }
     }
   }, [displayProperties, id]);
+
 
   const handleClickOpen = () => {
     setDialogOpen(true);
@@ -203,7 +220,7 @@ const Booking = () => {
               <AvailableNights />
             </Element>
             <hr style={{ width: '100%', backgroundColor: 'black', height: 1.2, opacity: .1 }} />
-            <Element name="basicRangeShortcuts" className='mt-5 mb-3'>
+            <Element name="basicRangeShortcuts" className='mt-5 mb-3 normalcalendar'>
               <h1 className='checkIn mb-3'>Select check-in date</h1>
               <DatePickerWithRange />
             </Element>
