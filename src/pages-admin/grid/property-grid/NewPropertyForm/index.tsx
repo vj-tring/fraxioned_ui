@@ -7,10 +7,12 @@ import {
     Box,
     Typography,
     Paper,
-    Grid
+    Grid,
+    IconButton
 } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import styles from './NewPropertyForm.module.css';
+import CloseIcon from '@mui/icons-material/Close';
 import { addPropertyApi } from '@/api';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/reducers';
@@ -76,6 +78,14 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
                         <Typography variant="h4" className={styles.formTitle}>
                             Add New Property
                         </Typography>
+                        <IconButton 
+                            onClick={onClose}
+                            className={styles.closeButton}
+                            aria-label="close"
+                        >
+                            <CloseIcon />
+                        </IconButton>
+
                     </Box>
                     <form onSubmit={handleSubmit} className={styles.form}>
                         <Grid container spacing={3}>

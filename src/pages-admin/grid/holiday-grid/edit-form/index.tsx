@@ -10,12 +10,14 @@ import {
     Typography,
     Paper,
     Grid,
+    IconButton,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import styles from './edit-form.module.css'
 import { getProperties, updateHolidaysApi, fetchpropertyHolidaysApi } from '@/api';
+import CloseIcon from '@mui/icons-material/Close';
 import { useSelector } from 'react-redux';
 import Loader from '@/components/loader';
 import { RootState } from '@/store/reducers';
@@ -130,6 +132,13 @@ const EditForm: React.FC<EditFormProps> = ({ onClose, onHolidayUpdated, holidayD
                         <Typography variant="h4" className={styles.formTitle}>
                             Edit Holiday
                         </Typography>
+                        <IconButton
+                            onClick={onClose}
+                            className={styles.closeButton}
+                            aria-label="close"
+                        >
+                            <CloseIcon />
+                        </IconButton>
                     </Box>
                     <form onSubmit={handleSubmit} className={styles.form}>
                         <Grid container spacing={3}>

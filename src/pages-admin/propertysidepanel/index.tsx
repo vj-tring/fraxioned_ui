@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate, useLocation } from 'react-router-dom';
 import styles from './propertysidepanel.module.css'
 import { FaInfoCircle, FaConciergeBell, FaMapMarkerAlt, FaImages, FaList, FaChevronDown, FaFile } from 'react-icons/fa';
 import { getPropertyById, getProperties } from '@/api';
@@ -16,6 +16,7 @@ interface Property {
 const PropertySidePanel: React.FC<PropertySidePanelProps> = ({ isOpen }) => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const location = useLocation();
     const [properties, setProperties] = useState<Property[]>([]);
     const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -66,13 +67,13 @@ const PropertySidePanel: React.FC<PropertySidePanelProps> = ({ isOpen }) => {
     return (
         <nav className={`${styles.propertyPanel} ${isOpen ? styles.open : ''}`}>
             <div 
-                className={styles.propertyDropdown}
+                className={`${styles.propertyDropdown} ${isDropdownOpen ? styles.active : ''}`}
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
                 <span className={styles.propertyNames}>
                     {selectedProperty ? selectedProperty.propertyName : 'Select a property'}
                 </span>
-                <FaChevronDown className={styles.dropdownIcon} />
+                <FaChevronDown className={`${styles.dropdownIcon} ${isDropdownOpen ? styles.open : ''}`} />
             </div>
             {isDropdownOpen && (
                 <ul className={styles.propertyList}>
@@ -80,7 +81,7 @@ const PropertySidePanel: React.FC<PropertySidePanelProps> = ({ isOpen }) => {
                         <li 
                             key={property.id}
                             onClick={() => handlePropertySelect(property)}
-                            className={styles.propertyListItem}
+                            className={`${styles.propertyListItem} ${selectedProperty?.id === property.id ? styles.active : ''}`}
                         >
                             {property.propertyName}
                         </li>
@@ -90,7 +91,7 @@ const PropertySidePanel: React.FC<PropertySidePanelProps> = ({ isOpen }) => {
             {selectedProperty && (
                 <ul className={styles.menu}>
                     {menuItems.map((item, index) => (
-                        <li key={index} className={styles.menuItem}>
+                        <li key={index} className={`${styles.menuItem} ${location.pathname === item.path ? styles.active : ''}`}>
                             <Link to={item.path} className={styles.menuLink}>
                                 <span className={styles.icon}>{item.icon}</span>
                                 <span className={styles.label}>{item.label}</span>
