@@ -45,6 +45,13 @@ interface RootState {
     loading: boolean;
     error: string | null;
   };
+  bookings: {
+    bookings: [];
+    currentBooking: null;
+    error: null;
+    successMessage: string | null;
+    isLoading: false;
+  }
 }
 const Booking = () => {
 
@@ -59,6 +66,10 @@ const Booking = () => {
   const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
+  const bookingData = useSelector((state: RootState) => state.bookings.bookings);
+
+
+
 
   useEffect(() => {
     if (displayProperties.length > 0) {
@@ -66,6 +77,12 @@ const Booking = () => {
         const propertyId = parseInt(id, 10);
         console.log("IDp", propertyId);
         const property = displayProperties.find(p => p.id === propertyId);
+        const selectedDate: any = bookingData.find((data: any) => data.property.id === propertyId);
+        if (selectedDate) {
+          setCheckInDate(selectedDate.checkinDate);
+          setCheckOutDate(selectedDate.checkoutDate)
+        }
+
         setSelectedProperty(property || null);
       } else {
         setSelectedProperty(displayProperties[0]);
