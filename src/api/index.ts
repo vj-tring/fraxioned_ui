@@ -60,7 +60,7 @@ export const propertyseasonholiday = (p0?: string) =>
 
 //propertyholiday delete api
 export const propertyseasonholidaydelete = (id: number) =>
-    axiosInstance.delete(`/v1/property-season-holidays/${id}`);
+    axiosInstance.delete(`/v1/property-season-holidays/property-season-holiday/${id}`);
 
 export const getPropertySeasonHoliday = (propertyId: number) =>
     axiosInstance.get(`/v1/property-season-holidays/property-season-holiday/property/${propertyId}`);
