@@ -56,17 +56,17 @@ const PropertySidePanel: React.FC<PropertySidePanelProps> = ({ isOpen }) => {
     };
 
     const menuItems = [
-        { icon: <FaInfoCircle />, label: 'General Info', path: `/admin/property/${id}` },
-        { icon: <FaConciergeBell />, label: 'Amenities', path: `/admin/property/${id}/amenities` },
-        { icon: <FaMapMarkerAlt />, label: 'Location', path: `/admin/property/${id}/location` },
-        { icon: <FaImages />, label: 'Photos', path: `/admin/property/${id}/photos` },
-        { icon: <FaList />, label: 'Rules', path: `/admin/property/${id}/rules` },
-        { icon: <FaFile />, label: 'Documents', path: `/admin/property/${id}/documents` },
+        { icon: <FaInfoCircle />, label: 'General Info', path: `/admin/property/${id}`, enabled: true },
+        { icon: <FaList />, label: 'Rules', path: `/admin/property/${id}/rules`, enabled: true },
+        { icon: <FaConciergeBell />, label: 'Amenities', path: `/admin/property/${id}/amenities`, enabled: false },
+        { icon: <FaMapMarkerAlt />, label: 'Location', path: `/admin/property/${id}/location`, enabled: false },
+        { icon: <FaImages />, label: 'Photos', path: `/admin/property/${id}/photos`, enabled: false },
+        { icon: <FaFile />, label: 'Documents', path: `/admin/property/${id}/documents`, enabled: false },
     ];
 
     return (
         <nav className={`${styles.propertyPanel} ${isOpen ? styles.open : ''}`}>
-            <div 
+            <div
                 className={`${styles.propertyDropdown} ${isDropdownOpen ? styles.active : ''}`}
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
@@ -78,7 +78,7 @@ const PropertySidePanel: React.FC<PropertySidePanelProps> = ({ isOpen }) => {
             {isDropdownOpen && (
                 <ul className={styles.propertyList}>
                     {properties.map((property) => (
-                        <li 
+                        <li
                             key={property.id}
                             onClick={() => handlePropertySelect(property)}
                             className={`${styles.propertyListItem} ${selectedProperty?.id === property.id ? styles.active : ''}`}
@@ -92,7 +92,11 @@ const PropertySidePanel: React.FC<PropertySidePanelProps> = ({ isOpen }) => {
                 <ul className={styles.menu}>
                     {menuItems.map((item, index) => (
                         <li key={index} className={`${styles.menuItem} ${location.pathname === item.path ? styles.active : ''}`}>
-                            <Link to={item.path} className={styles.menuLink}>
+                            <Link
+                                to={item.enabled ? item.path : '#'}
+                                className={`${styles.menuLink} ${!item.enabled ? styles.disabled : ''}`}
+                                onClick={(e) => !item.enabled && e.preventDefault()}
+                            >
                                 <span className={styles.icon}>{item.icon}</span>
                                 <span className={styles.label}>{item.label}</span>
                             </Link>
