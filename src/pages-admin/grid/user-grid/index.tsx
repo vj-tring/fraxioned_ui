@@ -49,10 +49,10 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     const fetchUsers = async () => {
         try {
             const response = await userdetails();
-            const fetchedUsers = response.data.users.map((user: any) => ({
+            const fetchedUsers = response.data.users.map((user: UserData) => ({
                 ...user,
                 id: user.id,
-                roleName: user.roleId === 1 ? 'Admin' : 'Owner',
+                roleName: user.role.roleName,
             }));
             setUsers(fetchedUsers);
         } catch (err) {
@@ -65,7 +65,6 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
         try {
             const response = await getUserById(id);
             const userData = response.data;
-            console.log(userData);
             setEditUserData(userData.user);
             setIsEditFormOpen(true);
         } catch (err) {
