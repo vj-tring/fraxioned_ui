@@ -31,6 +31,6 @@ const rootReducer = (
   return appReducer(state, action);
 };
 
-export type RootState = ReturnType<typeof rootReducer>;
+export type RootState = ReturnType<typeof appReducer>;
 
 export default rootReducer;

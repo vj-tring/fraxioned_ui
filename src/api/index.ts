@@ -33,7 +33,7 @@ export const logoutUserApi = (token: string) =>
     axiosInstance.post('/v1/authentication/logout', { sessionToken: token });
 
 export const propertywithDetails = () =>
-    axiosInstance.get('/v1/properties/properties-with-details');
+    axiosInstance.get('/v1/properties/user-properties-with-details');
 
 export const fetchHolidaysApi = () =>
     axiosInstance.get('/v1/holidays');

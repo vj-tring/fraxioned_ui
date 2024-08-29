@@ -1,23 +1,45 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { createBooking, getBookings } from '../../../api/index';
 
+export interface BookingData {
+  user: { id: number };
+  property: { id: number };
+  createdBy: { id: number };
+  checkinDate: string;
+  checkoutDate: string;
+  noOfGuests: number;
+  noOfPets: number;
+  isLastMinuteBooking: boolean;
+  noOfAdults: number;
+  noOfChildren: number;
+  noOfInfants: number;
+  notes: string;
+  confirmationCode: string;
+  cleaningFee: number;
+  petFee: number;
+}
 
-  export const fetchBookings = createAsyncThunk(
-    'bookings/fetchBookings',
-    async (_, { rejectWithValue }) => {
-      try {
-        const response = await getBookings();
-        console.log('Fetched bookings:', response.data); // Add this line
-        return response.data;
-      } catch (error: any) {
-        return rejectWithValue(error.response?.data || { message: 'An error occurred' });
-      }
+
+export const fetchBookings = createAsyncThunk(
+  'bookings/fetchBookings',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await getBookings();
+      console.log('Fetched bookings:', response.data); // Add this line
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || { message: 'An error occurred' });
     }
-  );
+  }
+);
 
-export const saveBooking = createAsyncThunk(
+export const saveBooking = createAsyncThunk<
+  BookingData, // Return type
+  BookingData, // Argument type
+  { rejectValue: { message: string } } // Rejection type
+>(
   'bookings/saveBooking',
-  async (bookingData, { rejectWithValue }) => {
+  async (bookingData: any, { rejectWithValue }) => {
     try {
       const response = await createBooking(bookingData);
       return response.data;
@@ -31,7 +53,7 @@ const bookingSlice = createSlice({
   name: 'bookings',
   initialState: {
     bookings: [],
-    currentBooking: null,
+    currentBooking: null as BookingData | null, // Ensure correct type here
     error: null as string | null,
     successMessage: null as string | null,
     isLoading: false,
@@ -52,7 +74,6 @@ const bookingSlice = createSlice({
       .addCase(fetchBookings.fulfilled, (state, action) => {
         state.bookings = action.payload;
         state.isLoading = false;
-        console.log('Bookings stored in state:', state.bookings);
       })
       .addCase(saveBooking.fulfilled, (state, action) => {
         state.currentBooking = action.payload;
@@ -69,6 +90,7 @@ const bookingSlice = createSlice({
       });
   },
 });
+
 
 export const { clearBookingMessages } = bookingSlice.actions;
 export default bookingSlice.reducer;

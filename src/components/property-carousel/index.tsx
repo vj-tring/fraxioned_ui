@@ -40,7 +40,7 @@ export default function BasicSelect() {
 
   const { cards, loading, error } = useSelector((state: RootState) => state.properties);
   const user = useSelector((state: RootState) => state.auth.user);
-  // const propertyselectid = useSelector((state: RootState) => state.properties.selectedPropertyId);
+
 
   useEffect(() => {
     if (user) {

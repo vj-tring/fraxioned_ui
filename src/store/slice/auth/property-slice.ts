@@ -321,7 +321,7 @@ const mockData: Card[] = [
   // Add more mock properties if needed
 ];
 
-interface Card {
+export interface Card {
   id: number;
   name: string;
   address: string;
@@ -349,7 +349,7 @@ interface Card {
   peakSeasonEndDate: string;
 }
 
-interface PropertyState {
+export interface PropertyState {
   cards: Card[];
   loading: boolean;
   error: string | null;

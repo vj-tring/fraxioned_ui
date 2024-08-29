@@ -7,12 +7,12 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import {
-  Popover,  
+  Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import './calender.css';
-import calendarData from './calendarData.json';
+import "./calender.css";
+import calendarData from "./calendarData.json";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProperties, selectSelectedPropertyDetails } from "@/store/slice/auth/property-slice";
 import { fetchPropertySeasonHoliday, selectPropertySeasonHolidays } from '@/store/slice/auth/propertySeasonHolidaySlice';
@@ -21,18 +21,28 @@ import { useEffect } from "react";
 import { RootState } from "@/store/reducers"
 
 
+interface DatePickerWithRangeProps extends React.HTMLAttributes<HTMLDivElement> {
+  onSelect?: (range: DateRange | undefined) => void;
+  initialRange?: DateRange;
+  selectingFrom?: boolean;
+  userId?: string;
+}
+
 export function DatePickerWithRange({
   className,
   onSelect,
-}: React.HTMLAttributes<HTMLDivElement> | { onSelect?: (range: DateRange | undefined) => void }) {
-  const today = new Date()
-  const endDate = new Date(today.getFullYear() + 5 , 11, 31); 
+  initialRange,
+  selectingFrom,
+  userId,
+}: DatePickerWithRangeProps) {
+  const today = new Date();
+  const endDate = new Date(today.getFullYear() + 5, 11, 31);
   const checkInEndDate = addDays(today, 730);
-  const checkOutEndDate = addYears(today, 5); 
+  const checkOutEndDate = addYears(today, 5);
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: today,
     to: addDays(today, 0),
-  })
+  });
   const dispatch = useDispatch();
   const bookings = useSelector((state: RootState) => state.bookings.bookings);
   const bookingState = useSelector((state: RootState) => state.bookings);
@@ -61,7 +71,7 @@ export function DatePickerWithRange({
   }, [bookings]);
 
   useEffect(() => {
-    dispatch(fetchProperties); 
+    dispatch(fetchProperties);
   }, [dispatch]);
 
   useEffect(() => {
@@ -78,7 +88,7 @@ export function DatePickerWithRange({
     }
     const timer = setTimeout(() => {
       dispatch(clearBookingMessages());
-    }, 5000); 
+    }, 5000);
 
     return () => clearTimeout(timer);
   }, [bookingError, bookingSuccessMessage, dispatch]);
@@ -109,7 +119,7 @@ export function DatePickerWithRange({
         const start = new Date(booking.checkinDate);
         const end = new Date(booking.checkoutDate);
         const dates = [];
-        for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
+        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
           dates.push(new Date(d));
         }
         return dates;
@@ -147,8 +157,7 @@ export function DatePickerWithRange({
 
   const isAfterUnavailableDate = (date: Date) => {
     return unavailableDates.some(
-      (unavailableDate) =>
-        date.getTime() > unavailableDate.getTime()
+      (unavailableDate) => date.getTime() > unavailableDate.getTime()
     );
   };
 
@@ -163,44 +172,55 @@ export function DatePickerWithRange({
 
   const isAfterBookedDate = (date: Date) => {
     return bookedDates.some(
-      (bookedDate) =>
-        date.getTime() > bookedDate.getTime()
+      (bookedDate) => date.getTime() > bookedDate.getTime()
     );
   };
 
   const isHolidayDate = (date: Date) => {
-    return seasonHolidays.some(holiday => 
-      date >= new Date(holiday.holiday.startDate) && 
+    return seasonHolidays.some(holiday =>
+      date >= new Date(holiday.holiday.startDate) &&
       date <= new Date(holiday.holiday.endDate)
     );
   };
 
   const disableDates = (date: Date) => {
     if (startDateSelected && startDate) {
-      const nextBookedDate = bookedDates.find(bookedDate => bookedDate > startDate);
-      const nextUnavailableDate = unavailableDates.find(unavailableDate => unavailableDate > startDate);
-      return date < startDate || isBookedDate(date) || isUnavailableDate(date) || date > checkOutEndDate || 
-               (nextBookedDate && date > nextBookedDate) ||
-               (nextUnavailableDate && date > nextUnavailableDate);
+      const nextBookedDate = bookedDates.find(
+        (bookedDate) => bookedDate > startDate
+      );
+      const nextUnavailableDate = unavailableDates.find(
+        (unavailableDate) => unavailableDate > startDate
+      );
+      return (
+        date < startDate ||
+        isBookedDate(date) ||
+        isUnavailableDate(date) ||
+        date > checkOutEndDate ||
+        (nextBookedDate && date > nextBookedDate) ||
+        (nextUnavailableDate && date > nextUnavailableDate)
+      );
     } else {
-      return (date < today && date.toDateString() !== today.toDateString()) || 
-             date > checkInEndDate || 
-             isBookedDate(date) || 
-             isUnavailableDate(date) 
-            //  (!meetsConsecutiveStayRule(date) && date.toDateString() !== today.toDateString());
+      return (
+        (date < today && date.toDateString() !== today.toDateString()) ||
+        date > checkInEndDate ||
+        isBookedDate(date) ||
+        isUnavailableDate(date)
+      );
+      //  (!meetsConsecutiveStayRule(date) && date.toDateString() !== today.toDateString());
     }
   };
 
   const isDateSpanningBookedDates = (start: Date, end: Date) => {
-    return bookedDates.some(bookedDate => 
-      bookedDate > start && bookedDate < end
+    return bookedDates.some(
+      (bookedDate) => bookedDate > start && bookedDate < end
     );
-  }
+  };
 
   const isLastMinuteBooking = (checkInDate: Date) => {
-    const diffInDays = (checkInDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
+    const diffInDays =
+      (checkInDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
     return diffInDays <= calendarData.bookingRules.lastMinuteBooking.maxDays;
-  }
+  };
 
   const meetsConsecutiveStayRule = (date: Date) => {
     if (date.toDateString() === today.toDateString()) {
@@ -209,8 +229,10 @@ export function DatePickerWithRange({
     const previousCheckOutDate = bookedDates.reduce((latest, bookedDate) => {
       return bookedDate < date && bookedDate > latest ? bookedDate : latest;
     }, new Date(0));
-    
-    const nightsBetween = Math.floor((date.getTime() - previousCheckOutDate.getTime()) / (1000 * 60 * 60 * 24));
+
+    const nightsBetween = Math.floor(
+      (date.getTime() - previousCheckOutDate.getTime()) / (1000 * 60 * 60 * 24)
+    );
     return nightsBetween >= 5;
   };
 
@@ -220,24 +242,26 @@ export function DatePickerWithRange({
       let newEndDate = range.to;
 
       setSelectedYear(newStartDate.getFullYear());
-  
+
       if (!meetsConsecutiveStayRule(newStartDate)) {
-        setErrorMessage('Minimum 5 nights required between bookings');
+        setErrorMessage("Minimum 5 nights required between bookings");
         setDate(undefined);
         setStartDate(null);
         setStartDateSelected(false);
         if (onSelect) onSelect(undefined);
         return;
       }
-  
+
       setStartDate(newStartDate);
       setStartDateSelected(true);
-  
+
       const lastMinuteBooking = isLastMinuteBooking(newStartDate);
-      const peakSeasonStart = new Date(selectedPropertyDetails.peakSeasonStartDate);
+      const peakSeasonStart = new Date(
+        selectedPropertyDetails.peakSeasonStartDate
+      );
       const peakSeasonEnd = new Date(selectedPropertyDetails.peakSeasonEndDate);
       let peakNights = 0;
-      let offNights = 0; 
+      let offNights = 0;
       let peakHolidayNights = 0;
       let offHolidayNights = 0;
       for (let d = new Date(newStartDate); d < newEndDate; d.setDate(d.getDate() + 1)) {
@@ -274,15 +298,26 @@ export function DatePickerWithRange({
         setErrorMessage(`You don't have sufficient off-season holiday remaining nights to select this checkout date`);
         return;
       }
-  
+
       if (newEndDate) {
-        const nextBookedDate = bookedDates.find(bookedDate => bookedDate > newStartDate);
-        const nextUnavailableDate = unavailableDates.find(unavailableDate => unavailableDate > newStartDate);
-        if ((nextBookedDate && newEndDate > nextBookedDate) || (nextUnavailableDate && newEndDate > nextUnavailableDate)) {
+        const nextBookedDate = bookedDates.find(
+          (bookedDate) => bookedDate > newStartDate
+        );
+        const nextUnavailableDate = unavailableDates.find(
+          (unavailableDate) => unavailableDate > newStartDate
+        );
+        if (
+          (nextBookedDate && newEndDate > nextBookedDate) ||
+          (nextUnavailableDate && newEndDate > nextUnavailableDate)
+        ) {
           newEndDate = undefined;
-          setErrorMessage('Cannot select over booked dates. Please clear and try again.');
+          setErrorMessage(
+            "Cannot select over booked dates. Please clear and try again."
+          );
         } else {
-          const nightsSelected = (newEndDate.getTime() - newStartDate.getTime()) / (1000 * 60 * 60 * 24);
+          const nightsSelected =
+            (newEndDate.getTime() - newStartDate.getTime()) /
+            (1000 * 60 * 60 * 24);
           if (lastMinuteBooking) {
             if (nightsSelected < calendarData.bookingRules.lastMinuteBooking.minNights) {
               setErrorMessage(`Minimum ${calendarData.bookingRules.lastMinuteBooking.minNights} night(s) required for last-minute bookings`);
@@ -290,7 +325,7 @@ export function DatePickerWithRange({
               setErrorMessage(`Maximum ${calendarData.bookingRules.lastMinuteBooking.maxNights} nights allowed for last-minute bookings`);
             } else if (selectedPropertyDetails.details[selectedYear]?.lastMinuteRemainingNights == 0) {
               setErrorMessage(`You don't have sufficient last-minute remaining nights to select this checkout date`);
-            } else  {
+            } else {
               setErrorMessage(null);
             }
           } else {
@@ -305,17 +340,20 @@ export function DatePickerWithRange({
         }
         setStartDateSelected(false);
       } else {
-        if (isDayBeforeBookedDate(newStartDate) || isDayBeforeUnavailableDate(newStartDate)) {
-          setErrorMessage('Check out only');
+        if (
+          isDayBeforeBookedDate(newStartDate) ||
+          isDayBeforeUnavailableDate(newStartDate)
+        ) {
+          setErrorMessage("Check out only");
         } else {
           setErrorMessage(null);
         }
       }
-  
+
       const newDateRange = { from: newStartDate, to: newEndDate };
       setDate(newDateRange);
       if (onSelect) onSelect(newDateRange);
-  
+
       // Keep the calendar open if only the start or end date is selected
       if (newStartDate && !newEndDate) {
         setIsCalendarOpen(true);
@@ -329,8 +367,8 @@ export function DatePickerWithRange({
       setErrorMessage(null);
       if (onSelect) onSelect(undefined);
     }
-  }
-  
+  };
+
   const customLocale = {
     code: calendarData.locale.code,
     localize: {
@@ -340,12 +378,11 @@ export function DatePickerWithRange({
     formatLong: {
       date: () => calendarData.locale.dateFormat,
     },
-  }
+  };
 
   return (
-    <div className={cn("grid gap-2 flex", className)}>
-      {/* First Calendar */}
-      <div className="calendar">
+    <div className={cn("gri flex flex-column calendar", className)}>
+      <div>
         <Calendar
           mode="range"
           defaultMonth={date?.from}
@@ -360,9 +397,9 @@ export function DatePickerWithRange({
             booked: bookedDates,
             unavailable: unavailableDates,
             blue: blueDates,
-            holiday: seasonHolidays.map(h => ({ 
-              from: new Date(h.holiday.startDate), 
-              to: new Date(h.holiday.endDate) 
+            holiday: seasonHolidays.map(h => ({
+              from: new Date(h.holiday.startDate),
+              to: new Date(h.holiday.endDate)
             })),
           }}
           modifiersClassNames={{
@@ -373,13 +410,14 @@ export function DatePickerWithRange({
           }}
         />
         <div className="error-msg-container ml-5 flex justify-start">
-            <div className="error-msg">
+          <div className="error-msg">
             {errorMessage && <div className="text-red-600">{errorMessage}</div>}
             {bookingError && <div className="text-red-600">{bookingError}</div>}
             {bookingSuccessMessage && <div className="text-green-600">{bookingSuccessMessage}</div>}
-            </div>
           </div>
-          <style>{`
+        </div>
+      </div>
+      <style>{`
             .booked-date {
               color: gray;
               text-decoration: line-through;
@@ -405,21 +443,21 @@ export function DatePickerWithRange({
             }
 
           `}</style>
-        <div className="flex items-center justify-end end-calendar">
+      <div className="flex items-center justify-between end-calendar">
         <div className='stay-length'>
-            <div className='misl'>Minimum Stay Length : {calendarData.bookingRules.regularBooking.minNights} Nights</div>
-            <div className='masl'>Maximum Stay Length : {selectedPropertyDetails?.details[selectedYear]?.maximumStayLength} Nights</div>
+          <div>Minimum Stay Length : {calendarData.bookingRules.regularBooking.minNights} Nights</div>
+          <div>Maximum Stay Length : {selectedPropertyDetails?.details[selectedYear]?.maximumStayLength} Nights</div>
         </div>
-        <div onClick={clearDates} className="ml-auto btn-clear">
-            Clear
-          </div>
+        <div onClick={clearDates} className="btn-clear">
+          Clear
+        </div>
 
-        </div>
-        <div className="flex items-center justify-end ">
-        </div>
       </div>
-      {/* Second Calendar */}
-      {/* <div className="calendar2">  
+      <div className="flex items-center justify-end ">
+      </div>
+
+      {/* Second Calendar 
+      <div className="calendar2">  
         <Popover>
           <PopoverTrigger asChild>
             <Button
@@ -515,7 +553,7 @@ export function DatePickerWithRange({
           </div>
           </PopoverContent>
         </Popover>
-      </div>  */}
+      </div> */}
     </div>
-  )
+  );
 }
