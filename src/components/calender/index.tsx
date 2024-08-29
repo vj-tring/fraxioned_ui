@@ -20,6 +20,7 @@ import { saveBooking, clearBookingMessages, fetchBookings } from '../../store/sl
 import { useEffect } from "react";
 import { RootState } from "@/store/reducers"
 
+
 interface DatePickerWithRangeProps extends React.HTMLAttributes<HTMLDivElement> {
   onSelect?: (range: DateRange | undefined) => void;
   initialRange?: DateRange;
@@ -118,7 +119,7 @@ export function DatePickerWithRange({
         const start = new Date(booking.checkinDate);
         const end = new Date(booking.checkoutDate);
         const dates = [];
-        for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
+        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
           dates.push(new Date(d));
         }
         return dates;

@@ -106,10 +106,6 @@ const BookingSearchBar: React.FC = () => {
             setDateRange(undefined);
         }
 
-        // if (bookingState.successMessage) {
-        //     showSnackbarMessage(bookingState.successMessage, 'success');
-        // }
-
         if (bookingState.error) {
             showSnackbarMessage(bookingState.error, 'error');
         }
