@@ -92,11 +92,11 @@ const BookingSearchBar: React.FC = () => {
           isLastMinuteBooking: isLastMinuteBooking(checkinDate),
           noOfAdults: guestCounts.Adults,
           noOfChildren: guestCounts.Children,
-          noOfInfants: 0, // Assuming infants are not counted separately in the current implementation
+          noOfInfants: 0, 
           notes: 'Hi',
           confirmationCode: '',
           cleaningFee: 100,
-          petFee: guestCounts.Pets > 0 ? 50 : 0, // Assuming a pet fee of 50 if there are pets
+          petFee: guestCounts.Pets > 0 ? 50 : 0, 
       };
 
         dispatch(saveBooking(bookingData));
