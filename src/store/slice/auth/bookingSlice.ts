@@ -25,7 +25,7 @@ export const fetchBookings = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getBookings();
-      console.log('Fetched bookings:', response.data); // Add this line
+      console.log('Fetched bookings:', response.data); 
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data || { message: 'An error occurred' });
@@ -34,9 +34,9 @@ export const fetchBookings = createAsyncThunk(
 );
 
 export const saveBooking = createAsyncThunk<
-  BookingData, // Return type
-  BookingData, // Argument type
-  { rejectValue: { message: string } } // Rejection type
+  BookingData,
+  BookingData,
+  { rejectValue: { message: string } }
 >(
   'bookings/saveBooking',
   async (bookingData: any, { rejectWithValue }) => {
@@ -53,7 +53,7 @@ const bookingSlice = createSlice({
   name: 'bookings',
   initialState: {
     bookings: [],
-    currentBooking: null as BookingData | null, // Ensure correct type here
+    currentBooking: null as BookingData | null,
     error: null as string | null,
     successMessage: null as string | null,
     isLoading: false,
