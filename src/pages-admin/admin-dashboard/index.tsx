@@ -7,13 +7,13 @@ import Property from '../grid/property-grid';
 import PropertySidePanel from '../propertysidepanel';
 import PropertyGeneralInfo from '../property-generalinfo'
 import EditPropertyForm from '../grid/property-grid/EditPropertyForm';
-// import PropertyLocation from '../property-location'; 
+import UserGrid from '../grid/user-grid';
+import PropertyRules from '../property-rules';
+import EditPropertyRulesForm from '../property-rules/edit-form';
 import userImage from '../../assets/images/profile.jpeg'
 import CustomNavbar from '@/components/navbar';
 import fraxionedLogo from '../../assets/images/fraxioned.png'
 import './admin-dashboard.css'
-import PropertyRules from '../property-rules';
-// import 'leaflet/dist/leaflet.css'
 
 const AdminDashboard: React.FC = () => {
     const navigate = useNavigate()
@@ -35,9 +35,10 @@ const AdminDashboard: React.FC = () => {
                 <SidePanel isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
                 <div className={`content ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
                     <Routes>
-                        <Route path="/" element={<Navigate to="/admin/bookings" replace />} />
+                        <Route path="/" element={<Navigate to="admin/bookings" replace />} />
                         <Route path="/bookings" element={<Calendar isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/holidays" element={<Holidays isSidebarOpen={isSidebarOpen} />} />
+                        <Route path="/user" element={<UserGrid isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/property" element={<Property isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/property/:id" element={
                             <div className="property-details-container">
@@ -60,6 +61,14 @@ const AdminDashboard: React.FC = () => {
                                 <PropertySidePanel isOpen={true} />
                                 <div className="property-info-content">
                                     <PropertyRules />
+                                </div>
+                            </div>
+                        } />
+                        <Route path="/property/:id/rules/edit" element={
+                            <div className="property-details-container">
+                                <PropertySidePanel isOpen={true} />
+                                <div className="property-info-content">
+                                    <EditPropertyRulesForm />
                                 </div>
                             </div>
                         } />

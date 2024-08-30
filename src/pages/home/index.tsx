@@ -3,13 +3,18 @@ import "./home.css";
 import BookingSearchBar from "../../components/booking-search-bar";
 import Card from "../../components/cards";
 import { useSelector } from "react-redux";
-// import SearchBar from "material-ui-search-bar";
-
+// import icon1 from "../../assests/Homeicons/1.png";
+// import icon2 from "../../assests/Homeicons/2.png";
+// import icon3 from "../../assests/Homeicons/3.png";
+// import icon4 from "../../assests/Homeicons/4.png";
+// import icon5 from "../../assests/Homeicons/5.png";
+// import icon6 from "../../assests/Homeicons/6.png";
+// import icon7 from "../../assests/Homeicons/7.png";
 import image1 from "../../assests/bear-lake-bluffs.jpg";
 import { FaPlus } from "react-icons/fa";
 import { mockProperties } from "./mockData";
 import PorpImg from "../../assests/crown-jewel.jpg";
-// import Icons from "./icons";
+import Icons from "./icons";
 // import SearchAppBar from "./searchfield";
 interface Property {
   id: number;
@@ -51,16 +56,55 @@ const Home: React.FC = () => {
   return (
     <div className="home-content">
       <div className="HomeImg">
-    
+        {/* <h1>Find your favourite </h1>
+        <h1>place here! </h1>
+        <h1 className="TitleDesc">
+          The best price for over 2 million properties worldwide{" "}
+        </h1> */}
       </div>
 
       <BookingSearchBar />
 
-      {/* <hr className="mb-1" />
+      {/* <hr className="mb-1" /> */}
 
-      <Icons/>
+      {/* <div className="icons">
+        <div className="icon-container">
+          <img className="HomeIcons mb-1 mt-2" src={icon1} alt="My Bookings" />
+          <p className="IconsText">My Bookings</p>
+        </div>
 
-      <hr className="mt-3" /> */}
+        <div className="icon-container">
+          <img className="HomeIcons mb-1 mt-2" src={icon2} alt="Payments" />
+          <p className="IconsText">Payments</p>
+        </div>
+
+        <div className="icon-container">
+          <img className="HomeIcons mb-1 mt-2" src={icon3} alt="Documents" />
+          <p className="IconsText">Documents</p>
+        </div>
+
+        <div className="icon-container">
+          <img className="HomeIcons mb-1 mt-2" src={icon4} alt="Tickets" />
+          <p className="IconsText">Tickets</p>
+        </div>
+
+        <div className="icon-container">
+          <img className="HomeIcons mb-1 mt-2" src={icon5} alt="GuideBooks" />
+          <p className="IconsText">GuideBooks</p>
+        </div>
+
+        <div className="icon-container">
+          <img className="HomeIcons mb-1 mt-2" src={icon6} alt="FAQs" />
+          <p className="IconsText">FAQs</p>
+        </div>
+
+        <div className="icon-container">
+          <img className="HomeIcons mb-1 mt-2" src={icon7} alt="Contact us" />
+          <p className="IconsText">Contact us</p>
+        </div>
+      </div> */}
+
+      {/* <hr className="mt-3" /> */}
 
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}

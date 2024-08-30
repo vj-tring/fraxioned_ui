@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { propertywithDetails } from '../../../api/index';
 import { RootState } from '@/store/reducers';
 
-interface LimitsState {
+export interface LimitsState {
   limits: {
     noOfGuestsAllowed: number;
     noOfPetsAllowed: number;
@@ -91,4 +91,5 @@ const limitsSlice = createSlice({
 });
 
 export const { resetLimits, updateCount } = limitsSlice.actions;
+
 export default limitsSlice.reducer;

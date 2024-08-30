@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { getPropertySeasonHoliday } from '../../../api/index';
 import { RootState } from '@/store/reducers';
 
-interface Holiday {
+export interface Holiday {
   id: number;
   name: string;
   year: number;
@@ -10,7 +10,7 @@ interface Holiday {
   endDate: string;
 }
 
-interface SeasonHoliday {
+export interface SeasonHoliday {
   id: number;
   isPeakSeason: boolean;
   property: {
@@ -19,7 +19,7 @@ interface SeasonHoliday {
   holiday: Holiday;
 }
 
-interface PropertySeasonHolidayState {
+export interface PropertySeasonHolidayState {
   seasonHolidays: SeasonHoliday[];
   loading: boolean;
   error: string | null;

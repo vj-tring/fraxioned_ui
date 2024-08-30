@@ -58,7 +58,7 @@ const Login: React.FC = () => {
             } else {
               navigate('/dashboard');
             }
-  
+
             setIsLoading(false);
           }
         }, 1000);
@@ -112,7 +112,7 @@ const Login: React.FC = () => {
                 onChange={handleEmailChange}
                 onBlur={handleEmailBlur}
                 className={emailError ? styles.errorInput : ''}
-                
+
               />
             </div>
             <div className={styles.inputGroup}>

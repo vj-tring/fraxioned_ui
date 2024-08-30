@@ -10,10 +10,12 @@ import {
     Typography,
     Paper,
     Grid,
+    IconButton,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import CloseIcon from '@mui/icons-material/Close';
 import styles from './new-form.module.css';
 import { getProperties, addHolidayApi } from '@/api';
 import { useSelector } from 'react-redux';
@@ -179,6 +181,13 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
                         <Typography variant="h4" className={styles.formTitle}>
                             Add Holiday
                         </Typography>
+                        <IconButton 
+                            onClick={onClose}
+                            className={styles.closeButton}
+                            aria-label="close"
+                        >
+                            <CloseIcon />
+                        </IconButton>
                     </Box>
                     <form onSubmit={handleSubmit} className={styles.form}>
                         <Grid container spacing={3}>

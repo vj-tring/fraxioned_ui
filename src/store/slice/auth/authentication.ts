@@ -9,7 +9,6 @@ const loadStateFromLocalStorage = (): AuthState => {
     const session = localStorage.getItem('session');
     if (user && session) {
       const parsedUser = JSON.parse(user);
-      console.log("user",parsedUser.roleId);
       const isAdmin = parsedUser.roleId === 1;
       return {
         user: parsedUser,
