@@ -60,6 +60,8 @@ const BookingSearchBar: React.FC = () => {
         setShowSnackbar(true);
     };
 
+    const guestCounts = useSelector((state: RootState) => state.limits.counts);
+
     const handleBookingSubmit = () => {
         if (!dateRange?.from || !dateRange?.to) {
             showSnackbarMessage('Please select both check-in and check-out dates.', 'error');
@@ -80,22 +82,22 @@ const BookingSearchBar: React.FC = () => {
         const checkoutDate = new Date(Date.UTC(dateRange.to.getFullYear(), dateRange.to.getMonth(), dateRange.to.getDate(), 12, 0, 0));
 
         const bookingData: BookingData = {
-            user: { id: currentUser.id },
-            property: { id: selectedPropertyDetails.id },
-            createdBy: { id: currentUser.id },
-            checkinDate: checkinDate.toISOString(),
-            checkoutDate: checkoutDate.toISOString(),
-            noOfGuests: 2,
-            noOfPets: 0,
-            isLastMinuteBooking: isLastMinuteBooking(checkinDate),
-            noOfAdults: 2,
-            noOfChildren: 0,
-            noOfInfants: 0,
-            notes: 'Hi',
-            confirmationCode: '',
-            cleaningFee: 100,
-            petFee: 0,
-        };
+          user: { id: currentUser.id },
+          property: { id: selectedPropertyDetails.id },
+          createdBy: { id: currentUser.id },
+          checkinDate: checkinDate.toISOString(),
+          checkoutDate: checkoutDate.toISOString(),
+          noOfGuests: guestCounts.Adults + guestCounts.Children,
+          noOfPets: guestCounts.Pets,
+          isLastMinuteBooking: isLastMinuteBooking(checkinDate),
+          noOfAdults: guestCounts.Adults,
+          noOfChildren: guestCounts.Children,
+          noOfInfants: 0, // Assuming infants are not counted separately in the current implementation
+          notes: 'Hi',
+          confirmationCode: '',
+          cleaningFee: 100,
+          petFee: guestCounts.Pets > 0 ? 50 : 0, // Assuming a pet fee of 50 if there are pets
+      };
 
         dispatch(saveBooking(bookingData));
     };

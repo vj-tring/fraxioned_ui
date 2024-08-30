@@ -219,12 +219,18 @@ export function DatePickerWithRange({
     if (date.toDateString() === today.toDateString()) {
       return true;
     }
-    const previousCheckOutDate = bookedDates.reduce((latest, bookedDate) => {
-      return bookedDate < date && bookedDate > latest ? bookedDate : latest;
+    const userBookings = bookings.filter(booking => 
+      booking.property.id === selectedPropertyDetails.id && 
+      booking.user.id === currentUser.id
+    );
+    
+    const latestCheckOutDate = userBookings.reduce((latest, booking) => {
+      const checkOutDate = new Date(booking.checkoutDate);
+      return checkOutDate > latest ? checkOutDate : latest;
     }, new Date(0));
   
     const nightsBetween = Math.floor(
-      (date.getTime() - previousCheckOutDate.getTime()) / (1000 * 60 * 60 * 24)
+      (date.getTime() - latestCheckOutDate.getTime()) / (1000 * 60 * 60 * 24)
     );
     return nightsBetween >= 5;
   };
@@ -238,7 +244,7 @@ export function DatePickerWithRange({
   
       if (!meetsConsecutiveStayRule(newStartDate)) {
         console.log("Consecutive stay rule not met");
-        dispatch(setErrorMessage('Have to wait atleast 5 nights for the next booking'));
+        dispatch(setErrorMessage('There must be at least 5 nights between your bookings at this property.'));
         dispatch(clearPartial());
         if (onSelect) onSelect(undefined);
         return;
