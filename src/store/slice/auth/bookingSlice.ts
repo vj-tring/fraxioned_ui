@@ -1,5 +1,6 @@
 import { createBooking } from '@/api';
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import {  getBookings } from '../../../api/index';
 
 interface BookingData {
   // Define your booking data structure
@@ -26,6 +27,18 @@ interface BookingState {
   isLoading: boolean;
 }
 
+export const fetchBookings = createAsyncThunk(
+  'bookings/fetchBookings',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await getBookings();
+      console.log('Fetched bookings:', response.data); 
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || { message: 'An error occurred' });
+    }
+  }
+);
 export const saveBooking = createAsyncThunk(
   'bookings/saveBooking',
   async (bookingData: BookingData) => {
@@ -53,9 +66,10 @@ export const confirmBooking = createAsyncThunk(
 const bookingSlice = createSlice({
   name: 'bookings',
   initialState: {
-    currentBooking: null,
-    error: null,
-    successMessage: null,
+    bookings: [],
+    currentBooking: null as BookingData | null,
+    error: null as string | null,
+    successMessage: null as string | null,
     isLoading: false,
   } as BookingState,
   reducers: {
@@ -66,10 +80,15 @@ const bookingSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+ 
       .addCase(saveBooking.pending, (state) => {
         state.isLoading = true;
         state.error = null;
         state.successMessage = null;
+      })
+      .addCase(fetchBookings.fulfilled, (state, action) => {
+        state.bookings = action.payload;
+        state.isLoading = false;
       })
       .addCase(saveBooking.fulfilled, (state, action: PayloadAction<BookingData>) => {
         state.currentBooking = action.payload;
