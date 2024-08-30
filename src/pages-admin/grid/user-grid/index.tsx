@@ -3,6 +3,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { IconButton, Modal } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { userdetails, getUserById } from '@/api';
+import Search from '@/pages-admin/search-user';
 import styles from './User.module.css';
 import EditForm from './edit-form';
 
@@ -38,6 +39,7 @@ interface UserData {
 
 const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     const [users, setUsers] = useState<UserData[]>([]);
+    const [filteredUsers, setFilteredUsers] = useState<UserData[]>([]);
     const [isEditFormOpen, setIsEditFormOpen] = useState(false);
     const [editUserData, setEditUserData] = useState<UserData | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -54,13 +56,23 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                 id: user.id,
                 roleName: user.role.roleName,
                 createdBy: user.createdBy === '1' ? 'owner' : 'Admin',
-
             }));
             setUsers(fetchedUsers);
+            setFilteredUsers(fetchedUsers);
         } catch (err) {
             console.error('Error fetching users:', err);
             setError('Failed to fetch users. Please try again.');
         }
+    };
+
+    const handleSearch = (query: string) => {
+        const lowercasedQuery = query.toLowerCase();
+        const filtered = users.filter((user) =>
+            user.firstName.toLowerCase().includes(lowercasedQuery) ||
+            user.lastName.toLowerCase().includes(lowercasedQuery) ||
+            user.role.roleName.toLowerCase().includes(lowercasedQuery)
+        );
+        setFilteredUsers(filtered);
     };
 
     const handleEditClick = async (id: number) => {
@@ -142,13 +154,16 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
 
     return (
         <div className={`${styles.usersContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed}`}>
-            <div className={styles.titleContainer}>
+            <div className={styles.headerContainer}>
                 <h1 className={styles.title}>Users</h1>
+                <div className={styles.searchWrapper}>
+                    <Search onSearch={handleSearch} placeholder="Search" />
+                </div>
             </div>
             {error && <div className={styles.error}>{error}</div>}
             <div className={styles.dataGridWrapper}>
                 <DataGrid
-                    rows={users}
+                    rows={filteredUsers}
                     columns={columns}
                     initialState={{
                         pagination: {
