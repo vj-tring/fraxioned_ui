@@ -53,6 +53,8 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                 ...user,
                 id: user.id,
                 roleName: user.role.roleName,
+                createdBy: user.createdBy === '1' ? 'owner' : 'Admin',
+
             }));
             setUsers(fetchedUsers);
         } catch (err) {
@@ -85,15 +87,16 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'Id', minWidth: 120, align: 'center', headerAlign: 'center' },
-        { field: 'firstName', headerName: 'First Name', minWidth: 120, align: 'center', headerAlign: 'center' },
-        { field: 'lastName', headerName: 'Last Name', minWidth: 120, align: 'center', headerAlign: 'center' },
+        { field: 'firstName', headerName: 'First Name', minWidth: 100, align: 'center', headerAlign: 'center' },
+        { field: 'lastName', headerName: 'Last Name', minWidth: 110, align: 'center', headerAlign: 'center' },
         { field: 'addressLine1', headerName: 'Address', minWidth: 120, align: 'center', headerAlign: 'center' },
-        { field: 'state', headerName: 'State', minWidth: 120, align: 'center', headerAlign: 'center' },
-        { field: 'roleName', headerName: 'Role', minWidth: 120, align: 'center', headerAlign: 'center' },
+        { field: 'state', headerName: 'State', minWidth: 100, align: 'center', headerAlign: 'center' },
+        { field: 'roleName', headerName: 'Role', minWidth: 130, align: 'center', headerAlign: 'center' },
+        { field: 'lastLoginTime', headerName: 'Last Login', minWidth: 110, align: 'center', headerAlign: 'center' },
         {
             field: 'contactDetails',
             headerName: 'Contact Details',
-            width: 200,
+            width: 170,
             align: 'center',
             headerAlign: 'center',
             renderCell: (params) => {
@@ -116,7 +119,7 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                 );
             },
         },
-        { field: 'createdBy', headerName: 'Created By', width: 140, align: 'center', headerAlign: 'center' },
+        { field: 'createdBy', headerName: 'Created By', width: 120, align: 'center', headerAlign: 'center' },
         {
             field: 'actions',
             headerName: 'Actions',

@@ -73,7 +73,7 @@ const PropertyGeneralInfo: React.FC = () => {
           <div className={styles.column}>
             <InfoItem label="Country:" value={propertyData.country} />
             <InfoItem label="Zipcode:" value={propertyData.zipcode} />
-            <InfoItem label="Property Share:" value={`${propertyData.propertyShare}%`} />
+            <InfoItem label="Property Share:" value={`${propertyData.propertyShare}`} />
             <InfoItem label="Is Exclusive:" value={propertyData.isExclusive ? 'Yes' : 'No'} />
             <InfoItem label="Is Active:" value={propertyData.isActive ? 'Yes' : 'No'} />
           </div>

@@ -17,8 +17,10 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import { updateuserapi, getRoles } from '@/api';
 import CloseIcon from '@mui/icons-material/Close';
+import AddIcon from '@mui/icons-material/Add';
 import Loader from '@/components/loader';
 import styles from './EditUser.module.css';
+import { DeleteIcon } from 'lucide-react';
 
 interface ContactDetail {
     id: number;
@@ -107,6 +109,27 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
             return { ...prevData, contactDetails: newContactDetails };
         });
     };
+
+
+    
+    const addContact = () => {
+        setFormData((prevData) => ({
+            ...prevData,
+            contactDetails: [
+                ...(prevData.contactDetails || []),
+                { id: Date.now(), contactType: 'email', contactValue: '', createdAt: '', updatedAt: '' },
+                { id: Date.now() + 1, contactType: 'phone', contactValue: '', createdAt: '', updatedAt: '' }
+            ]
+        }));
+    };
+
+    const removeContact = (index: number) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            contactDetails: prevData.contactDetails.filter((_, i) => i !== index && i !== index + 1)
+        }));
+    };
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -265,23 +288,6 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                                         className={styles.inputField}
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <Typography variant="h6" className={styles.sectionTitle}>Contact Details</Typography>
-                                </Grid>
-                                {formData.contactDetails && formData.contactDetails.map((contact, index) => (
-                                    <React.Fragment key={index}>
-                                        <Grid item xs={12} sm={6}>
-                                            <TextField
-                                                label={contact.contactType}
-                                                value={contact.contactValue}
-                                                onChange={(e) => handleContactChange(index, 'contactValue', e.target.value)}
-                                                fullWidth
-                                                variant="outlined"
-                                                className={styles.inputField}
-                                            />
-                                        </Grid>
-                                    </React.Fragment>
-                                ))}
                                 <Grid item xs={12} sm={6}>
                                     <FormControl fullWidth variant="outlined" className={styles.inputField}>
                                         <InputLabel>Role</InputLabel>
@@ -313,6 +319,41 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                                         label="Is Active"
                                         className={styles.checkbox}
                                     />
+                                </Grid>
+                                <Grid item xs={12}>
+                                <Typography variant="h6" className={styles.sectionTitle}>Contact Details</Typography>
+                                </Grid>
+                                {formData.contactDetails && formData.contactDetails.map((contact, index) => (
+                                    <React.Fragment key={index}>
+                                        <Grid item xs={12} sm={5}>
+                                            <TextField
+                                                label={contact.contactType}
+                                                value={contact.contactValue}
+                                                onChange={(e) => handleContactChange(index, 'contactValue', e.target.value)}
+                                                fullWidth
+                                                variant="outlined"
+                                                className={styles.inputField}
+                                            />
+                                        </Grid>
+                                        {index % 2 === 1 && (
+                                            <Grid item xs={12} sm={2}>
+                                                <IconButton onClick={() => removeContact(index - 1)} color="secondary">
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            </Grid>
+                                        )}
+                                    </React.Fragment>
+                                ))}
+                                <Grid item xs={12}>
+                                    <Button
+                                        startIcon={<AddIcon />}
+                                        onClick={addContact}
+                                        variant="outlined"
+                                        color="primary"
+                                        className={styles.addButton}
+                                    >
+                                        Add Contact
+                                    </Button>
                                 </Grid>
                             </Grid>
                             {error && <Typography color="error" className={styles.error}>{error}</Typography>}
