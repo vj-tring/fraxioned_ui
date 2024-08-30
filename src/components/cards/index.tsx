@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./card.css";
@@ -27,6 +28,7 @@ const Card: React.FC<CardProps> = ({
       navigate(`/dashboard/property/${id}`);
     }
   };
+
 
 
   return (

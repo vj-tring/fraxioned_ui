@@ -5,11 +5,10 @@ import './footer.css'
 
 const Footer: React.FC = () => {
   return (
-    <div className="footer d-flex">
-        <div className="col-md-4 mt-1">
-          <div className="logo"></div>
-        </div>
-        <div className="col-md-2 mt-3">
+    <div className="footer d-flex justify-content-between align-items-center px-7">
+      <div className="logo"></div>
+      <div className='d-flex gap-10 text-left'>
+        <div>
           <ul>
             <li>
               <Link to="/dashboard" className="no-underline disabled">
@@ -28,7 +27,7 @@ const Footer: React.FC = () => {
             </li>
           </ul>
         </div>
-        <div className="col-md-2 mt-3">
+        <div>
           <ul>
             <li>
               <Link to="/payments" className="no-underline disabled">
@@ -47,7 +46,7 @@ const Footer: React.FC = () => {
             </li>
           </ul>
         </div>
-        <div className="col-md-2 mt-3">
+        <div>
           <ul>
             <li>
               <Link to="/documents" className="no-underline disabled">
@@ -61,21 +60,24 @@ const Footer: React.FC = () => {
             </li>
             <li>
               <a href="https://www.fraxioned.com/" className="no-underline disabled ">
-               My Account
+                My Account
               </a>
             </li>
           </ul>
         </div>
-        <div className="col-md-7 mt-5 Footlink ">
-          <ul>
-            <li>
-              <a href="https://www.fraxioned.com/"  target='_blank' className="no-underline" rel="noreferrer">
-                fraxioned.com
-              </a>
-            </li>
-        
-          </ul>
-        </div>
+
+      </div>
+
+      <div>
+        <ul>
+          <li>
+            <a href="https://www.fraxioned.com/" target='_blank' className="no-underline" rel="noreferrer">
+              fraxioned.com
+            </a>
+          </li>
+
+        </ul>
+      </div>
     </div>
   )
 }

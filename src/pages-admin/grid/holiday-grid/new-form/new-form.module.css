@@ -72,6 +72,19 @@
     font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
 }
 
+.closeButton {
+    position: absolute !important;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #333 !important;
+    transition: color 0.3s ease !important;
+}
+
+.closeButton:hover {
+    color: #e28f25 !important;
+}
+
 .form {
     display: flex;
     flex-direction: column;

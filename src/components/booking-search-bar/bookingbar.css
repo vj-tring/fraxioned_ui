@@ -10,6 +10,8 @@
 
 .MainCard1{
   border-radius: 5px;
+
+
 }
 .with-border {
   border: 1px solid #b4b3b3; /* Example border style */
@@ -20,7 +22,7 @@
 .card {
   display: flex;
   flex-direction: row;
-  width: 65%;
+  width: 60%;
   height:60px;
   border-radius: 50px;
   justify-content: space-evenly;

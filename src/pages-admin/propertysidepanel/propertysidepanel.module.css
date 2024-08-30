@@ -3,70 +3,109 @@
     right: 0;
     height: calc(100vh - 60px);
     margin-top: 9px;
-    background-color: #fbfcfc;
+    background-color: #fcfcfc;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-    color: #444444;
+    color: #333333;
     overflow-y: auto;
     z-index: 999;
     font-family: 'Roboto', sans-serif;
     transition: width 0.3s ease;
     display: flex;
     flex-direction: column;
-    width: 230px;
+    width: 250px;
     padding-top: 0;
-
 }
 
 .menu {
     list-style-type: none;
     padding: 0;
     margin: 0;
-    margin-top: 0;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     flex-grow: 1;
     border-radius: 0;
     overflow-y: auto;
 }
 
 .propertyPanel.open {
-    width: 232px;
+    width: 250px;
 }
 
 .menuItem {
     margin: 0;
 }
 
-.propertyNames
-{
-    font-weight: 900;
-    font-size: 20px;
-    margin-left: 13px;
-    overflow-x: auto;
+.menuItem.active {
+    background-color: #f4f6f6;
+    font-weight: bold;
+}
+
+.menuItem.menuLink:hover {
+    background-color: #f4f6f6;
+}
+
+.menuItem.active .menuLink {
+    font-weight: 600;
+}
+
+.propertyDropdown {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    height: 64px;
+    background-color: #fcfcfc;
+    border-bottom: 1px solid #e0e0e0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.propertyDropdown:hover {
+    background-color: #f4f6f6;
+}
+
+.propertyDropdown.active {
+    background-color: #f4f6f6;
+}
+
+.propertyNames {
+    font-weight: 600;
+    font-size: 18px;
+    margin-left: 10px;
+    color: #333333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dropdownIcon {
+    font-size: 14px;
+    color: #6c757d;
+    transition: transform 0.3s ease;
+}
+
+.dropdownIcon.open {
+    transform: rotate(180deg);
 }
 
 .menuLink {
     display: flex;
     align-items: center;
-    margin-top: 10px;
-    padding: 12px 24px;
+    padding: 12px 20px;
     text-decoration: none;
     color: #444444;
     transition: all 0.3s ease;
 }
-
-
 
 .menuItem:active {
     background-color: rgba(226, 246, 248, 0.2);
 }
 
 .menuLink:hover {
-    background-color: rgba(226, 246, 248, 0.2);
+    background-color: #f4f6f6;
 }
 
 .icon {
-    font-size: 1.2em;
-    margin-top: 0;
+    font-size: 1.1em;
     width: 20px;
     text-align: center;
     margin-right: 15px;
@@ -74,58 +113,55 @@
 }
 
 .label {
-    font-size: 15px;
-    margin-top: 0;
+    font-size: 16px;
     font-weight: 500;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
 }
 
+.propertyList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    background-color: #fcfcfc;
+    border: 1px solid #e0e0e0;
+    border-top: none;
+    max-height: 250px;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-.propertyDropdown {
-    height: 65px;
-    padding: 0 15px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #fbfcfc;
-    border-bottom: 1px solid #e0e0e0;
+.propertyListItem {
+    padding: 12px 15px;
     cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    color: #444444;
+    transition: background-color 0.3s ease;
+    border-bottom: 1px solid #f0f0f0;
 }
 
-.propertyDropdown .MuiSelect-select {
-    padding: 10px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #444444;
+.propertyListItem:last-child {
+    border-bottom: none;
 }
 
-.dropdownIcon {
-    color: #e28f25;
-    font-size: 12px;
+.propertyListItem:hover {
+    background-color: #f8f9fa;
 }
 
-.propertyDropdown .MuiOutlinedInput-notchedOutline {
-    border-color: #e0e0e0;
+.propertyListItem.active {
+    background-color: #e9ecef;
+    font-weight: 600;
 }
 
-.propertyDropdown:hover .MuiOutlinedInput-notchedOutline {
-    border-color: #e28f25;
+.menuLink.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
 }
-
-.propertyDropdown.Mui-focused .MuiOutlinedInput-notchedOutline {
-    border-color: #e28f25;
-}
-
 
 @media (max-width: 768px) {
     .propertyPanel {
-        width: 200px;
+        width: 220px;
     }
 
     .label {
-        font-size: 14px;
+        font-size: 13px;
     }
 }

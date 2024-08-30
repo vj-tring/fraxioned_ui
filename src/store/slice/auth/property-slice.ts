@@ -321,7 +321,7 @@ const mockData: Card[] = [
   // Add more mock properties if needed
 ];
 
-interface Card {
+export interface Card {
   id: number;
   name: string;
   address: string;
@@ -349,7 +349,7 @@ interface Card {
   peakSeasonEndDate: string;
 }
 
-interface PropertyState {
+export interface PropertyState {
   cards: Card[];
   loading: boolean;
   error: string | null;
@@ -409,11 +409,15 @@ export const fetchProperties = createAsyncThunk(
             const offSeasonHolidayNumerator = userProp.offRemainingHolidayNights;
             const offSeasonHolidayDenominator = userProp.offAllottedHolidayNights;
 
+            const lastMinuteNumerator = userProp.lastMinuteRemainingNights;
+            const lastMinuteDenominator = userProp.lastMinuteAllottedNights;
+
             details[userProp.year] = {
               offSeason: offSeasonDenominator !== null ? `${offSeasonNumerator}/${offSeasonDenominator}` : 'undefined',
               peakSeason: peakSeasonDenominator !== null ? `${peakSeasonNumerator}/${peakSeasonDenominator}` : 'undefined',
               peakHoliday: peakHolidayDenominator !== null ? `${peakHolidayNumerator}/${peakHolidayDenominator}` : 'undefined',
               offSeasonHoliday: offSeasonHolidayDenominator !== null ? `${offSeasonHolidayNumerator}/${offSeasonHolidayDenominator}` : 'undefined',
+              lastMinute: lastMinuteDenominator !== null ? `${lastMinuteNumerator}/${lastMinuteDenominator}` : 'undefined',
               peakRemainingNights: userProp.peakRemainingNights,
               offRemainingNights: userProp.offRemainingNights,
               lastMinuteRemainingNights: userProp.lastMinuteRemainingNights,
@@ -433,6 +437,7 @@ export const fetchProperties = createAsyncThunk(
               peakSeason: '3',
               peakHoliday: '4',
               offSeasonHoliday: '5',
+              lastMinute: '1',
               peakRemainingNights: 0,
               offRemainingNights: 0,
               lastMinuteRemainingNights: 0,

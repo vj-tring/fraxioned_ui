@@ -62,12 +62,16 @@ export const propertyseasonholiday = (p0?: string) =>
 export const propertyseasonholidaydelete = (id: number) =>
     axiosInstance.delete(`/v1/property-season-holidays/${id}`);
 
-// Add this to your existing api/index.ts file
+
 export const getPropertySeasonHoliday = (propertyId: number) =>
     axiosInstance.get(`/v1/property-season-holidays/property-season-holiday/property/${propertyId}`);
 
 export const createBooking = (bookingData: void) =>
     axiosInstance.post(`/v1/bookings/booking`, bookingData);
+
+export const getBookings = () =>
+    axiosInstance.get('/v1/bookings');
+
 export const getUserProperties = (id: number) =>
     axiosInstance.get(`/v1/properties/${id}/user-properties-with-details`);
 
@@ -106,10 +110,17 @@ export const userdetails = () =>
 export const getProperrtDetailsbyId = (id: number) =>
     axiosInstance.get(`/v1/property-details/property-detail/${id}`);
 
-export const updateUserapi = (id: number, data?: any) =>
-    data
-        ? axiosInstance.patch(`/v1/users/user/${id}`, data)
-        : axiosInstance.get(`/v1/users/user/${id}`);
+export const updaterulesapi = (id: number, data: any) =>
+    axiosInstance.patch(`/v1/property-details/property-detail/${id}`, data);
+
+export const deleteUserApi = (id: number) =>
+    axiosInstance.delete(`/v1/users/user/${id}`);
+
+export const getUserById = (id: number) =>
+    axiosInstance.get(`/v1/users/user/${id}`);
+
+export const updateuserapi = (id: number, data: any) =>
+    axiosInstance.patch(`/v1/users/user/${id}`, data);
 
 
 
