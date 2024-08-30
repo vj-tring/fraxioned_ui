@@ -82,21 +82,21 @@ const BookingSearchBar: React.FC = () => {
         const checkoutDate = new Date(Date.UTC(dateRange.to.getFullYear(), dateRange.to.getMonth(), dateRange.to.getDate(), 12, 0, 0));
 
         const bookingData: BookingData = {
-          user: { id: currentUser.id },
-          property: { id: selectedPropertyDetails.id },
-          createdBy: { id: currentUser.id },
-          checkinDate: checkinDate.toISOString(),
-          checkoutDate: checkoutDate.toISOString(),
-          noOfGuests: guestCounts.Adults + guestCounts.Children,
-          noOfPets: guestCounts.Pets,
-          isLastMinuteBooking: isLastMinuteBooking(checkinDate),
-          noOfAdults: guestCounts.Adults,
-          noOfChildren: guestCounts.Children,
-          noOfInfants: 0, 
-          notes: 'Hi',
-          confirmationCode: '',
-          cleaningFee: 100,
-          petFee: guestCounts.Pets > 0 ? 50 : 0, 
+           user: { id: currentUser.id },
+           property: { id: selectedPropertyDetails.id },
+           createdBy: { id: currentUser.id },
+           checkinDate: checkinDate.toISOString(),
+           checkoutDate: checkoutDate.toISOString(),
+           noOfGuests: guestCounts.Adults + guestCounts.Children,
+           noOfPets: guestCounts.Pets,
+           isLastMinuteBooking: isLastMinuteBooking(checkinDate),
+           noOfAdults: guestCounts.Adults,
+           noOfChildren: guestCounts.Children,
+           noOfInfants: 0, 
+           notes: 'Hi',
+           confirmationCode: '',
+           cleaningFee: 100,
+           petFee: guestCounts.Pets > 0 ? 50 : 0, 
       };
 
         dispatch(saveBooking(bookingData));
