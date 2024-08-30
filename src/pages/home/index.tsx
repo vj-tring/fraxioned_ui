@@ -9,7 +9,7 @@ import image1 from "../../assests/bear-lake-bluffs.jpg";
 import { FaPlus } from "react-icons/fa";
 import { mockProperties } from "./mockData";
 import PorpImg from "../../assests/crown-jewel.jpg";
-import Icons from "./icons";
+// import Icons from "./icons";
 // import SearchAppBar from "./searchfield";
 interface Property {
   id: number;
@@ -51,11 +51,7 @@ const Home: React.FC = () => {
   return (
     <div className="home-content">
       <div className="HomeImg">
-        {/* <h1>Find your favourite </h1>
-        <h1>place here! </h1>
-        <h1 className="TitleDesc">
-          The best price for over 2 million properties worldwide{" "}
-        </h1> */}
+    
       </div>
 
       <BookingSearchBar />

@@ -1,7 +1,56 @@
-import Box from "@mui/material/Box";
-import { Button } from "@mui/material";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/store/reducers';
+import Box from '@mui/material/Box';
+import { Button } from '@mui/material';
+import { useSnackbar } from '../../components/snackbar-provider';
+import { confirmBooking } from '@/store/slice/auth/bookingSlice';
+import { useNavigate } from 'react-router-dom';
+import './booking-summary.css';
 
-export default function BookingSummaryForm() {
+const mockBooking = {
+  property: { id: 'Mock Property' },
+  checkinDate: new Date().toISOString(),
+  checkoutDate: new Date(new Date().setDate(new Date().getDate() + 2)).toISOString(),
+  noOfAdults: 2,
+  noOfChildren: 1,
+  noOfPets: 0,
+  isLastMinuteBooking: false,
+  cleaningFee: 100,
+  petFee: 0,
+};
+
+const BookingSummaryForm: React.FC = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { showSnackbar, SnackbarComponent } = useSnackbar();
+  const { currentBooking, isLoading, error, successMessage } = useSelector((state: RootState) => state.bookings);
+
+  const booking = currentBooking || mockBooking;
+  const checkinDate = new Date(booking.checkinDate);
+  const checkoutDate = new Date(booking.checkoutDate);
+  const totalNights = Math.ceil((checkoutDate.getTime() - checkinDate.getTime()) / (1000 * 60 * 60 * 24));
+
+
+  const handleBookingCancel =() =>{
+    navigate('/dashboard');
+
+  }
+  const handleBookingConfirm = async () => {
+    try {
+      const result = await dispatch(confirmBooking(booking)).unwrap();
+
+      showSnackbar(result.message, 'success');
+      navigate('/dashboard');
+    } catch (error) {
+        const errorMessage = typeof error === 'string' ? error : 'Failed to confirm booking';
+      showSnackbar(errorMessage, 'error');
+    }
+  };
+
+
+
+
   return (
     <Box
       height={900}
@@ -9,32 +58,79 @@ export default function BookingSummaryForm() {
       my={5}
       gap={4}
       sx={{
-        marginLeft: "28%",
-        boxShadow: " rgba(0, 0, 0, 0.24) 0px 3px 8px",
+        marginLeft: '28%',
+        boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
       }}
     >
       <div className="BookSum">
         <h1 className="pt-4 pb-4 mb-5 SummaryHead BookHead">BOOKING SUMMARY</h1>
         <div className="ListSum">
-          <li>Property : </li>
-          <li>Check-in : </li>
-          <li>Check-out : </li>
-          <li>Total-Nights : </li>
-          <li>Adults : </li>
-          <li>Children : </li>
-          <li>Pets : </li>
-          <li>Season : </li>
-          <li>Holiday : </li>
+          <div>
+            <div className="property">Property:</div>
+            <div className="colon">:</div>
+            <div className="value">{booking.property.id}</div>
+          </div>
+          <div>
+            <div className="property">Check-in:</div>
+            <div className="colon">:</div>
+            <div className="value">{checkinDate.toDateString()}</div>
+          </div>
+          <div>
+            <div className="property">Check-out:</div>
+            <div className="colon">:</div>
+            <div className="value">{checkoutDate.toDateString()}</div>
+          </div>
+          <div>
+            <div className="property">Total-Nights:</div>
+            <div className="colon">:</div>
+            <div className="value">{totalNights}</div>
+          </div>
+          <div>
+            <div className="property">Adults:</div>
+            <div className="colon">:</div>
+            <div className="value">{booking.noOfAdults}</div>
+          </div>
+          <div>
+            <div className="property">Children:</div>
+            <div className="colon">:</div>
+            <div className="value">{booking.noOfChildren}</div>
+          </div>
+          <div>
+            <div className="property">Pets:</div>
+            <div className="colon">:</div>
+            <div className="value">{booking.noOfPets}</div>
+          </div>
+          <div>
+            <div className="property">Season:</div>
+            <div className="colon">:</div>
+            <div className="value">{booking.isLastMinuteBooking ? 'Last Minute' : 'Regular'}</div>
+          </div>
         </div>
       </div>
 
       <div className="PaySum">
         <h1 className="mt-4 mb-5 SummaryHead">PAYMENTS SUMMARY</h1>
         <div className="ListSum">
-          <li>Cleaning Fee : </li>
-          <li>Pet Fee : </li>
-          <li>Total Amount Due : </li>
-          <li>Date of Charge : </li>
+          <div>
+            <div className="property">Cleaning Fee:</div>
+            <div className="colon">:</div>
+            <div className="value">${booking.cleaningFee}</div>
+          </div>
+          <div>
+            <div className="property">Pet Fee:</div>
+            <div className="colon">:</div>
+            <div className="value">${booking.petFee}</div>
+          </div>
+          <div>
+            <div className="property">Total Amount Due:</div>
+            <div className="colon">:</div>
+            <div className="value">${booking.cleaningFee + booking.petFee}</div>
+          </div>
+          <div>
+            <div className="property">Date of Charge:</div>
+            <div className="colon">:</div>
+            <div className="value">{new Date().toDateString()}</div>
+          </div>
         </div>
 
         <div className="PaySum">
@@ -46,15 +142,27 @@ export default function BookingSummaryForm() {
               rows="4"
               cols="60"
               className="p-3"
+              placeholder="Add any notes here..."
             ></textarea>
           </div>
         </div>
 
         <div className="Btun p-4 mt-4">
-          <Button disableRipple className="cancelBtn"> Cancel</Button>
-          <Button disableRipple className="confirmBtn">Confirm Booking</Button>
+          <Button disableRipple             onClick={handleBookingCancel}
+ className="cancelBtn">Cancel</Button>
+          <Button
+            disableRipple
+            className="confirmBtn"
+            onClick={handleBookingConfirm}
+            disabled={isLoading}
+          >
+            {isLoading ? 'Confirming...' : 'Confirm Booking'}
+          </Button>
         </div>
       </div>
+      {SnackbarComponent}
     </Box>
   );
-}
+};
+
+export default BookingSummaryForm;

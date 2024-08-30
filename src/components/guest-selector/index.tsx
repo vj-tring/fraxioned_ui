@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -11,7 +11,7 @@ import PetsIcon from '@mui/icons-material/Pets';
 import './guest-selector.css';
 import { RootState } from '@/store/reducers';
 import { CircleMinus, CirclePlus } from 'lucide-react';
-
+import { updateCount } from '@/store/slice/auth/propertyGuestSlice';
 const names = [
   { label: 'Adults', description: 'Ages 13 or above', icon: <PeopleIcon /> },
   { label: 'Children', description: 'Ages 2 to 12', icon: <ChildFriendlyIcon /> },
@@ -22,6 +22,7 @@ const names = [
 const MultipleSelect: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const dispatch = useDispatch();
 
   const selectedPropertyLimits = useSelector((state: RootState) => state.properties.selectedPropertyLimits);
 
@@ -65,6 +66,8 @@ const MultipleSelect: React.FC = () => {
   const handleCountChange = (name: string, action: 'increase' | 'decrease') => {
     if (!selectedPropertyLimits) {
       setValidationMessage('Please select a property before making changes.');
+
+
       return;
     }
 
@@ -90,11 +93,11 @@ const MultipleSelect: React.FC = () => {
       newCount = Math.max(currentCount - 1, 0);
     }
 
+    dispatch(updateCount({ name, count: newCount }));
     setCountsLocal((prevCounts) => ({
       ...prevCounts,
       [name]: newCount
     }));
-    console.log("function called")
   };
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {

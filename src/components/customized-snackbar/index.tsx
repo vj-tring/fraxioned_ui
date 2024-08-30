@@ -29,7 +29,7 @@ const CustomizedSnackbars: React.FC<CustomizedSnackbarsProps> = ({
         variant="filled"
         sx={{ width: '100%' }}
       >
-        {message}
+        <div>{message.toString()}</div>
       </Alert>
     </Snackbar>
   )

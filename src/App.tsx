@@ -13,7 +13,7 @@ import Change from "./pages/recover-password";
 import ResetPassword from "./pages/reset-password";
 import Dashboard from "./pages/dashboard";
 // import AdminDashboard from "./pages/admin-dashboard";
-import BookingSummary from "./pages/booking-summary/booking-summary";
+import BookingSummary from "./pages/booking-summary/pages";
 
 import AdminDashboard from './pages-admin/admin-dashboard';
 
@@ -32,7 +32,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   if (!token) {
     return <Navigate to="/login" />;
   }
-  if (allowedRoles.includes(user.role.id)) {
+  if (allowedRoles.includes(user.roleId)) {
     return <Element />;
   }
   return <Navigate to="/dashboard" />;

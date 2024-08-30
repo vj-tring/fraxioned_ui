@@ -29,7 +29,6 @@ const Card: React.FC<CardProps> = ({
   };
 
 
-  
   return (
     
     <div

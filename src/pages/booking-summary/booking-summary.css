@@ -7,7 +7,6 @@
   width: 100%;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
-  /* margin-left: 5%; */
 
   height: 140px;
   background: url("../../assests/blue-bear-lake.jpg");
@@ -19,8 +18,9 @@
 }
 
 .ListSum {
-  text-align: left;
   margin-left: 10%;
+  padding: 0;
+  list-style: none; 
 }
 
 .SummaryHead {
@@ -29,13 +29,28 @@
   color: rgb(95, 177, 207);
 }
 
-.ListSum > li {
-  font-weight: 500;
-  padding-top: 5px;
+.ListSum > div {
   display: flex;
-  text-align: left;
-  
-  
+  align-items: center;
+  padding: 2px 0; 
+}
+
+.ListSum .property {
+  font-weight: 600;
+  width: 150px; 
+}
+
+.ListSum .colon {
+  font-weight: 500;
+  width: 20px; 
+
+}
+
+.ListSum .value {
+  font-weight: 500;
+  font-size: small !important;
+  flex: 1; 
+  text-align: left; 
 }
 
 .Btun > Button {
@@ -47,12 +62,14 @@
 #Textarea {
   border: 2px solid lightblue !important;
 }
+
 .Btun {
   display: flex;
   flex-direction: row;
   float: right;
   gap: 10px;
 }
+
 .cancelBtn {
   background-color: #88cdd4 !important;
   color: white !important;
@@ -61,12 +78,10 @@
 .confirmBtn {
   background-color: #00636d !important;
   color: white !important;
-
 }
 
-.BookHead{
-    background-color: #687883;
-    color: white;
-    font-size: x-large;
+.BookHead {
+  background-color: #687883;
+  color: white;
+  font-size: x-large;
 }
-
