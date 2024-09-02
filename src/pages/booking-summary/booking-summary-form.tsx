@@ -7,6 +7,8 @@ import { useSnackbar } from "../../components/snackbar-provider";
 import { confirmBooking, setNotes } from "@/store/slice/auth/bookingSlice";
 import { useNavigate } from "react-router-dom";
 import "./booking-summary.css";
+import Loader from  "../../components/loader/index";
+import { AppDispatch } from "@/store";
 
 const mockBooking = {
   property: { id: "3" },
@@ -23,10 +25,10 @@ const mockBooking = {
 };
 
 const BookingSummaryForm: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { showSnackbar, SnackbarComponent } = useSnackbar();
-  const { currentBooking, isLoading, error, successMessage } = useSelector(
+  const { currentBooking, isLoading } = useSelector(
     (state: RootState) => state.bookings
   );
 
@@ -48,10 +50,10 @@ const BookingSummaryForm: React.FC = () => {
       dispatch(setNotes(notes));
       const result = await dispatch(confirmBooking({ ...booking, notes })).unwrap();
       showSnackbar(result.message, 'success');
-      navigate('/dashboard');
-    } catch (error) {
+      setTimeout(() => {
+        navigate('/dashboard');
+    }, 2000);    } catch (error) {
       showSnackbar(error as string || 'Failed to confirm booking', 'error');
-
     }
   };
   
@@ -72,7 +74,7 @@ const BookingSummaryForm: React.FC = () => {
           <div>
             <div className="property">Property:</div>
             <div className="colon">:</div>
-            <div className="value">{booking.property.id}</div>
+            <div className="value">{!(booking.data) ? booking.property.id : booking.data.property.id }</div>
           </div>
           <div>
             <div className="property">Check-in:</div>
@@ -172,6 +174,7 @@ const BookingSummaryForm: React.FC = () => {
           </Button>
         </div>
       </div>
+      {isLoading && <Loader />} {/* Conditionally render the Loader */}
       {SnackbarComponent}
     </Box>
   );

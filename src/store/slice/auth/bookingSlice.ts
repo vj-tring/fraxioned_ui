@@ -57,12 +57,14 @@ export const confirmBooking = createAsyncThunk<
       const response = await createBooking(bookingData);
       // const data = response.data;
 
-      if (response.data.status === 201) {
-        return { message: 'Booking successfully confirmed', data: response.data };
+      if (response.status === 201) {
+        return { message: response.data.message, data: response.data };
       } else {
+        console.log("rejected");
         return rejectWithValue(response.data.message || 'Failed to confirm booking');
       }
     } catch (error: any) {
+      console.log("error",error)
       const errorMessage = error.response?.data?.message || 'Something went wrong. Please try again later.';
       return rejectWithValue(errorMessage);
     }
