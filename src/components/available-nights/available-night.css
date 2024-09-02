@@ -25,6 +25,7 @@ li {
   border: 2px solid #ddd;
 }
 
+
 .box1 {
   border: 1px solid #00000048;
   height: 80px;
@@ -32,6 +33,7 @@ li {
   align-items: center;
   font-weight: 500;
   font-size: x-large;
+
 }
 
 .Box-list1 {
@@ -46,7 +48,7 @@ li {
 
 .BlueHead2 {
   font-weight: bold;
-  font-size: 2rem !important;
+    font-size: 2rem !important;
 }
 
 .AvailableText {

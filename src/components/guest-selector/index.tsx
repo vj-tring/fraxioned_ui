@@ -22,8 +22,8 @@ const names = [
 const MultipleSelect: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-
   const dispatch = useDispatch();
+
 
   const selectedPropertyLimits = useSelector((state: RootState) => state.properties.selectedPropertyLimits);
   const bookingSuccessMessage = useSelector((state: RootState) => state.bookings.successMessage);
@@ -78,6 +78,8 @@ const MultipleSelect: React.FC = () => {
   const handleCountChange = (name: string, action: 'increase' | 'decrease') => {
     if (!selectedPropertyLimits) {
       setValidationMessage('Please select a property before making changes.');
+
+
       return;
     }
     const maxLimit = name === 'Pets' ? selectedPropertyLimits.noOfPetsAllowed : selectedPropertyLimits.noOfGuestsAllowed ;
@@ -98,6 +100,7 @@ const MultipleSelect: React.FC = () => {
     } else {
       newCount = Math.max(currentCount - 1, 0);
     }
+
     dispatch(updateCount({ name, count: newCount }));
     setCountsLocal((prevCounts) => ({
       ...prevCounts,
@@ -201,6 +204,7 @@ const MultipleSelect: React.FC = () => {
                   </button>
                   <p className="Ad-count monsterrat">{counts[item.label]}</p>
                   <button
+
                     onClick={() => handleCountChange(item.label, 'increase')}
                   >
                     <CirclePlus size={29} strokeWidth={0.75}

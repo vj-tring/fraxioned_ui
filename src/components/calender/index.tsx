@@ -16,7 +16,7 @@ import calendarData from "./calendarData.json";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProperties, selectSelectedPropertyDetails } from "@/store/slice/auth/property-slice";
 import { fetchPropertySeasonHoliday, selectPropertySeasonHolidays } from '@/store/slice/auth/propertySeasonHolidaySlice';
-import { saveBooking, clearBookingMessages, fetchBookings } from '../../store/slice/auth/bookingSlice';
+import {  clearBookingMessages, fetchBookings } from '../../store/slice/auth/bookingSlice';
 import { useEffect } from "react";
 import { RootState } from "@/store/reducers";
 import { setDateRange, setErrorMessage, setIsCalendarOpen, clearDates, setStartDate, setStartDateSelected, setSelectedYear, setValidationMessage, clearValidationMessage, clearPartial } from "@/store/slice/datePickerSlice";
@@ -45,16 +45,16 @@ export function DatePickerWithRange({
   const bookingState = useSelector((state: RootState) => state.bookings);
   const bookingError = bookingState?.error;
   const bookingSuccessMessage = bookingState?.successMessage;
-  const isBookingLoading = bookingState?.isLoading;
+  // const isBookingLoading = bookingState?.isLoading;
   const selectedPropertyDetails = useSelector(selectSelectedPropertyDetails);
   const seasonHolidays = useSelector(selectPropertySeasonHolidays);
   const selectedYear = useSelector((state: RootState) => state.datePicker.selectedYear);
   const startDate = useSelector((state: RootState) => state.datePicker.startDate);
   const startDateSelected = useSelector((state: RootState) => state.datePicker.startDateSelected);
   const errorMessage = useSelector((state: RootState) => state.datePicker.errorMessage);
-  const isCalendarOpen = useSelector((state: RootState) => state.datePicker.isCalendarOpen);
+  // const isCalendarOpen = useSelector((state: RootState) => state.datePicker.isCalendarOpen);
   const dateRange = useSelector((state: RootState) => state.datePicker.dateRange);
-  const currentBooking = useSelector((state: RootState) => state.bookings?.currentBooking);
+  // const currentBooking = useSelector((state: RootState) => state.bookings?.currentBooking);
   const currentUser = useSelector((state: RootState) => state.auth.user);
   const validationMessage = useSelector((state: RootState) => state.datePicker.validationMessage);
 
