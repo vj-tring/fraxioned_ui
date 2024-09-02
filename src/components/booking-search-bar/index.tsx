@@ -107,7 +107,7 @@ const BookingSearchBar: React.FC = () => {
       noOfAdults: counts.Adults,
       noOfChildren: counts.Children,
       noOfInfants: 0,
-      notes: "Hi",
+      notes: "None",
       confirmationCode: "",
       cleaningFee: 100,
       petFee: 0,
@@ -158,7 +158,7 @@ const BookingSearchBar: React.FC = () => {
           onOpenChange={setIsCalendarOpen}
           disableRipple
         >
-          <PopoverTrigger asChild disableRipple>
+          <PopoverTrigger asChild >
             <div>
               <Region
                 label="Check In"
@@ -179,7 +179,7 @@ const BookingSearchBar: React.FC = () => {
         </Popover>
         <div className="vl p-2"></div>
         <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-          <PopoverTrigger asChild>
+          <PopoverTrigger >
             <div>
               <Region
                 label="Check Out"

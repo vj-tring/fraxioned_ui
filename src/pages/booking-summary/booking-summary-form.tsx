@@ -1,17 +1,19 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/store/reducers';
-import Box from '@mui/material/Box';
-import { Button } from '@mui/material';
-import { useSnackbar } from '../../components/snackbar-provider';
-import { confirmBooking } from '@/store/slice/auth/bookingSlice';
-import { useNavigate } from 'react-router-dom';
-import './booking-summary.css';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/reducers";
+import Box from "@mui/material/Box";
+import { Button } from "@mui/material";
+import { useSnackbar } from "../../components/snackbar-provider";
+import { confirmBooking, setNotes } from "@/store/slice/auth/bookingSlice";
+import { useNavigate } from "react-router-dom";
+import "./booking-summary.css";
 
 const mockBooking = {
-  property: { id: 'Mock Property' },
+  property: { id: "3" },
   checkinDate: new Date().toISOString(),
-  checkoutDate: new Date(new Date().setDate(new Date().getDate() + 2)).toISOString(),
+  checkoutDate: new Date(
+    new Date().setDate(new Date().getDate() + 2)
+  ).toISOString(),
   noOfAdults: 2,
   noOfChildren: 1,
   noOfPets: 0,
@@ -24,33 +26,35 @@ const BookingSummaryForm: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { showSnackbar, SnackbarComponent } = useSnackbar();
-  const { currentBooking, isLoading, error, successMessage } = useSelector((state: RootState) => state.bookings);
+  const { currentBooking, isLoading, error, successMessage } = useSelector(
+    (state: RootState) => state.bookings
+  );
+
+  const [notes, setNotesValue] = useState<string>(currentBooking?.notes || "");
 
   const booking = currentBooking || mockBooking;
   const checkinDate = new Date(booking.checkinDate);
   const checkoutDate = new Date(booking.checkoutDate);
-  const totalNights = Math.ceil((checkoutDate.getTime() - checkinDate.getTime()) / (1000 * 60 * 60 * 24));
+  const totalNights = Math.ceil(
+    (checkoutDate.getTime() - checkinDate.getTime()) / (1000 * 60 * 60 * 24)
+  );
 
+  const handleBookingCancel = () => {
+    navigate("/dashboard");
+  };
 
-  const handleBookingCancel =() =>{
-    navigate('/dashboard');
-
-  }
   const handleBookingConfirm = async () => {
     try {
-      const result = await dispatch(confirmBooking(booking)).unwrap();
-
+      dispatch(setNotes(notes));
+      const result = await dispatch(confirmBooking({ ...booking, notes })).unwrap();
       showSnackbar(result.message, 'success');
       navigate('/dashboard');
     } catch (error) {
-        const errorMessage = typeof error === 'string' ? error : 'Failed to confirm booking';
-      showSnackbar(errorMessage, 'error');
+      showSnackbar(error as string || 'Failed to confirm booking', 'error');
+
     }
   };
-
-
-
-
+  
   return (
     <Box
       height={900}
@@ -58,8 +62,8 @@ const BookingSummaryForm: React.FC = () => {
       my={5}
       gap={4}
       sx={{
-        marginLeft: '28%',
-        boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
+        marginLeft: "28%",
+        boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
       }}
     >
       <div className="BookSum">
@@ -103,7 +107,9 @@ const BookingSummaryForm: React.FC = () => {
           <div>
             <div className="property">Season:</div>
             <div className="colon">:</div>
-            <div className="value">{booking.isLastMinuteBooking ? 'Last Minute' : 'Regular'}</div>
+            <div className="value">
+              {booking.isLastMinuteBooking ? "Last Minute" : "Regular"}
+            </div>
           </div>
         </div>
       </div>
@@ -138,25 +144,31 @@ const BookingSummaryForm: React.FC = () => {
           <div className="ListSum">
             <textarea
               id="Textarea"
-              name=""
-              rows="4"
-              cols="60"
+              rows={4}
+              cols={60}
               className="p-3"
               placeholder="Add any notes here..."
+              value={notes}
+              onChange={(e) => setNotesValue(e.target.value)}
             ></textarea>
           </div>
         </div>
 
         <div className="Btun p-4 mt-4">
-          <Button disableRipple             onClick={handleBookingCancel}
- className="cancelBtn">Cancel</Button>
+          <Button
+            disableRipple
+            onClick={handleBookingCancel}
+            className="cancelBtn"
+          >
+            Cancel
+          </Button>
           <Button
             disableRipple
             className="confirmBtn"
             onClick={handleBookingConfirm}
             disabled={isLoading}
           >
-            {isLoading ? 'Confirming...' : 'Confirm Booking'}
+            {isLoading ? "Confirming..." : "Confirm Booking"}
           </Button>
         </div>
       </div>

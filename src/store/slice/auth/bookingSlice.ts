@@ -1,9 +1,7 @@
-import { createBooking } from '@/api';
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import {  getBookings } from '../../../api/index';
+import { createBooking, getBookings } from '../../../api/index'; // Ensure these imports are correct
 
 interface BookingData {
-  // Define your booking data structure
   property: { id: string };
   checkinDate: string;
   checkoutDate: string;
@@ -13,6 +11,7 @@ interface BookingData {
   isLastMinuteBooking: boolean;
   cleaningFee: number;
   petFee: number;
+  notes?: string; // Added notes field
 }
 
 interface ConfirmBookingResponse {
@@ -21,6 +20,7 @@ interface ConfirmBookingResponse {
 }
 
 interface BookingState {
+  bookings: BookingData[]; // Added bookings array to state
   currentBooking: BookingData | null;
   error: string | null;
   successMessage: string | null;
@@ -32,33 +32,39 @@ export const fetchBookings = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getBookings();
-      console.log('Fetched bookings:', response.data); 
+      console.log('Fetched bookings:', response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data || { message: 'An error occurred' });
     }
   }
 );
+
 export const saveBooking = createAsyncThunk(
   'bookings/saveBooking',
   async (bookingData: BookingData) => {
-    // Placeholder for save booking logic if needed
     return bookingData;
   }
 );
-
-export const confirmBooking = createAsyncThunk(
+export const confirmBooking = createAsyncThunk<
+  { message: string; data: any },
+  BookingData,
+  { rejectValue: string }
+>(
   'bookings/confirmBooking',
   async (bookingData: BookingData, { rejectWithValue }) => {
     try {
       const response = await createBooking(bookingData);
-      if (response.status === 200) {
-        return { message: 'Booking successfully confirmed in the database', data: response.data };
+      // const data = response.data;
+
+      if (response.data.status === 201) {
+        return { message: 'Booking successfully confirmed', data: response.data };
       } else {
         return rejectWithValue(response.data.message || 'Failed to confirm booking');
       }
-    } catch (error) {
-      return rejectWithValue('Failed to confirm booking');
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || 'Something went wrong. Please try again later.';
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -77,18 +83,22 @@ const bookingSlice = createSlice({
       state.error = null;
       state.successMessage = null;
     },
+    setNotes: (state, action: PayloadAction<string>) => {
+      if (state.currentBooking) {
+        state.currentBooking.notes = action.payload;
+      }
+    }
   },
   extraReducers: (builder) => {
     builder
- 
+      .addCase(fetchBookings.fulfilled, (state, action) => {
+        state.bookings = action.payload;
+        state.isLoading = false;
+      })
       .addCase(saveBooking.pending, (state) => {
         state.isLoading = true;
         state.error = null;
         state.successMessage = null;
-      })
-      .addCase(fetchBookings.fulfilled, (state, action) => {
-        state.bookings = action.payload;
-        state.isLoading = false;
       })
       .addCase(saveBooking.fulfilled, (state, action: PayloadAction<BookingData>) => {
         state.currentBooking = action.payload;
@@ -120,5 +130,5 @@ const bookingSlice = createSlice({
   },
 });
 
-export const { clearBookingMessages } = bookingSlice.actions;
+export const { clearBookingMessages, setNotes } = bookingSlice.actions;
 export default bookingSlice.reducer;
