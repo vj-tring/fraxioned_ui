@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { IconButton, Modal } from '@mui/material';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { IconButton, Modal, Typography, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import { userdetails, getUserById } from '@/api';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { userdetails, getUserById, propertydetailsapi } from '@/api';
 import Search from '@/pages-admin/search-user';
 import styles from './User.module.css';
 import EditForm from './edit-form';
+import UserForm from './user-form';
 
 interface ContactDetail {
     id: number;
@@ -35,6 +38,13 @@ interface UserData {
     resetToken?: string;
     resetTokenExpires?: string;
     updatedBy?: number;
+    properties?: string[];
+}
+
+interface PropertyData {
+    propertyId: number;
+    propertyName: string;
+    owners: { userId: number }[];
 }
 
 const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
@@ -43,9 +53,14 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     const [isEditFormOpen, setIsEditFormOpen] = useState(false);
     const [editUserData, setEditUserData] = useState<UserData | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [properties, setProperties] = useState<PropertyData[]>([]);
+    const [isUserFormOpen, setIsUserFormOpen] = useState(false);
+    const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+
 
     useEffect(() => {
         fetchUsers();
+        fetchProperties();
     }, []);
 
     const fetchUsers = async () => {
@@ -65,13 +80,41 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
         }
     };
 
+    const handleViewClick = (id: number) => {
+        setSelectedUserId(id);
+        setIsUserFormOpen(true);
+    };
+
+    const handleCloseUserForm = () => {
+        setIsUserFormOpen(false);
+        setSelectedUserId(null);
+    };
+
+    const fetchProperties = async () => {
+        try {
+            const response = await propertydetailsapi();
+            setProperties(response.data);
+        } catch (err) {
+            console.error('Error fetching properties:', err);
+            setError('Failed to fetch properties. Please try again.');
+        }
+    };
+
+    const getUserProperties = (userId: number) => {
+        return properties
+            .filter(property => property.owners.some(owner => owner.userId === userId))
+            .map(property => property.propertyName);
+    };
+
     const handleSearch = (query: string) => {
         const lowercasedQuery = query.toLowerCase();
-        const filtered = users.filter((user) =>
-            user.firstName.toLowerCase().includes(lowercasedQuery) ||
-            user.lastName.toLowerCase().includes(lowercasedQuery) ||
-            user.role.roleName.toLowerCase().includes(lowercasedQuery)
-        );
+        const filtered = users.filter((user) => {
+            const userProperties = getUserProperties(user.id);
+            return user.firstName.toLowerCase().includes(lowercasedQuery) ||
+                user.lastName.toLowerCase().includes(lowercasedQuery) ||
+                user.role.roleName.toLowerCase().includes(lowercasedQuery) ||
+                userProperties.some(property => property.toLowerCase().includes(lowercasedQuery));
+        });
         setFilteredUsers(filtered);
     };
 
@@ -98,17 +141,16 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     };
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'Id', minWidth: 120, align: 'center', headerAlign: 'center' },
+        { field: 'id', headerName: 'Id', minWidth: 100, align: 'center', headerAlign: 'center' },
         { field: 'firstName', headerName: 'First Name', minWidth: 100, align: 'center', headerAlign: 'center' },
-        { field: 'lastName', headerName: 'Last Name', minWidth: 110, align: 'center', headerAlign: 'center' },
-        { field: 'addressLine1', headerName: 'Address', minWidth: 120, align: 'center', headerAlign: 'center' },
-        { field: 'state', headerName: 'State', minWidth: 100, align: 'center', headerAlign: 'center' },
-        { field: 'roleName', headerName: 'Role', minWidth: 130, align: 'center', headerAlign: 'center' },
+        { field: 'lastName', headerName: 'Last Name', minWidth: 130, align: 'center', headerAlign: 'center' },
+        { field: 'state', headerName: 'State', minWidth: 120, align: 'center', headerAlign: 'center' },
+        { field: 'roleName', headerName: 'Role', minWidth: 140, align: 'center', headerAlign: 'center' },
         { field: 'lastLoginTime', headerName: 'Last Login', minWidth: 110, align: 'center', headerAlign: 'center' },
         {
             field: 'contactDetails',
             headerName: 'Contact Details',
-            width: 170,
+            width: 180,
             align: 'center',
             headerAlign: 'center',
             renderCell: (params) => {
@@ -131,7 +173,36 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                 );
             },
         },
-        { field: 'createdBy', headerName: 'Created By', width: 120, align: 'center', headerAlign: 'center' },
+        {
+            field: 'properties',
+            headerName: 'Properties',
+            width: 200,
+            align: 'center',
+            headerAlign: 'center',
+            renderCell: (params) => {
+                const userProperties = getUserProperties(params.row.id);
+                return (
+                    <div className={styles.propertyCell}>
+                        {userProperties.length === 0 ? (
+                            <Typography variant="body2" className={styles.noProperties}>
+                                No properties
+                            </Typography>
+                        ) : (
+                            <Tooltip title={userProperties.join(', ')} arrow>
+                                <div className={styles.propertyWrapper}>
+                                    <Typography variant="body2" className={styles.propertyName}>
+                                        {userProperties[0]}
+                                    </Typography>
+                                    {userProperties.length > 1 && (
+                                        <KeyboardArrowDownIcon className={styles.dropdownArrow} />
+                                    )}
+                                </div>
+                            </Tooltip>
+                        )}
+                    </div>
+                );
+            },
+        },
         {
             field: 'actions',
             headerName: 'Actions',
@@ -140,6 +211,13 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             headerAlign: 'center',
             renderCell: (params) => (
                 <>
+                    <IconButton
+                        aria-label="view"
+                        color="primary"
+                        onClick={() => handleViewClick(params.row.id)}
+                    >
+                        <VisibilityIcon />
+                    </IconButton>
                     <IconButton
                         aria-label="edit"
                         color="primary"
@@ -191,6 +269,22 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                     )}
                 </div>
             </Modal>
+            <Modal
+                open={isUserFormOpen}
+                onClose={handleCloseUserForm}
+                aria-labelledby="view-user-modal"
+                aria-describedby="modal-to-view-user-details"
+            >
+                <div>
+                    {selectedUserId && (
+                        <UserForm
+                            userId={selectedUserId}
+                            onClose={handleCloseUserForm}
+                        />
+                    )}
+                </div>
+            </Modal>
+
         </div>
     );
 };

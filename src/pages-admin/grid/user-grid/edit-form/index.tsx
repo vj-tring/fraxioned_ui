@@ -23,13 +23,10 @@ import styles from './EditUser.module.css';
 import { DeleteIcon } from 'lucide-react';
 
 interface ContactDetail {
-    id: number;
+    id?: number;
     contactType: string;
     contactValue: string;
-    createdAt: string;
-    updatedAt: string;
 }
-
 interface UserData {
     id: number;
     role: { id: number };
@@ -111,14 +108,14 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
     };
 
 
-    
+
     const addContact = () => {
         setFormData((prevData) => ({
             ...prevData,
             contactDetails: [
-                ...(prevData.contactDetails || []),
-                { id: Date.now(), contactType: 'email', contactValue: '', createdAt: '', updatedAt: '' },
-                { id: Date.now() + 1, contactType: 'phone', contactValue: '', createdAt: '', updatedAt: '' }
+                ...prevData.contactDetails,
+                { contactType: 'email', contactValue: '' },
+                { contactType: 'phone', contactValue: '' }
             ]
         }));
     };
@@ -156,10 +153,13 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                 resetTokenExpires: formData.resetTokenExpires,
                 lastLoginTime: formData.lastLoginTime,
                 updatedBy: formData.id,
-                contactDetails: formData.contactDetails.map(contact => ({
-                    contactType: contact.contactType,
-                    contactValue: contact.contactValue
-                }))
+                contactDetails: formData.contactDetails
+                    .filter(contact => contact.contactValue.trim() !== '')
+                    .map(contact => ({
+                        ...(contact.id ? { id: contact.id } : {}),
+                        contactType: contact.contactType,
+                        contactValue: contact.contactValue
+                    }))
             };
             await updateuserapi(formData.id, dataToSend);
             onUserUpdated();
@@ -171,6 +171,8 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
             setLoading(false);
         }
     };
+
+
 
 
     if (loading) return <Loader />;
@@ -321,7 +323,7 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                                     />
                                 </Grid>
                                 <Grid item xs={12}>
-                                <Typography variant="h6" className={styles.sectionTitle}>Contact Details</Typography>
+                                    <Typography variant="h6" className={styles.sectionTitle}>Contact Details</Typography>
                                 </Grid>
                                 {formData.contactDetails && formData.contactDetails.map((contact, index) => (
                                     <React.Fragment key={index}>

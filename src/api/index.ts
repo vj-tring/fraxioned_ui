@@ -121,3 +121,21 @@ export const getUserById = (id: number) =>
 export const updateuserapi = (id: number, data: any) =>
     axiosInstance.patch(`/v1/users/user/${id}`, data);
 
+export const propertydetailsapi = () =>
+    axiosInstance.get(`/v1/properties/properties-with-details`);
+
+export const amenitiesapi = () =>
+    axiosInstance.get(`/v1/amenities`);
+
+export const getpropertyamenityByid = () =>
+    axiosInstance.get(`/v1/property-amenities`);
+
+export const yearwiseproeprty = (userId: number) =>
+    axiosInstance.get(`//v1/properties//user-properties-with-details`);
+
+
+
+
+
+
+
