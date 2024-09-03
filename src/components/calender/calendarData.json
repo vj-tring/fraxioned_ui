@@ -27,7 +27,7 @@
     },
     "locale": {
       "code": "en-US",
-      "days": ["S", "M", "T", "W", "T", "F", "S"],
+      "days": ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"],
       "months": [
         "January", "February", "March", "April", "May", "June", 
         "July", "August", "September", "October", "November", "December"

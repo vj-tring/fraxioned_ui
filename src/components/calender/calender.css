@@ -1,9 +1,10 @@
 .calendar {
   background-color: rgb(255, 255, 255);
-  /* box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12); */
+  box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
   border-radius: 10px !important;
   /* padding: 1rem .5rem; */
   padding-bottom: 10px;
+  position: relative;
 }
 
 .stay-length {
@@ -16,6 +17,54 @@
   gap: 1rem;
   padding-left: 10px;
 }
+
+/* .error-msg-container {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 5px 5px 5px 3px;
+  color: red;
+  background-color: #ffe6e6;
+  border: 1px solid red;
+  border-radius: 4px;
+  text-align: center;
+  display: block;
+  width: 94%;
+  height: 32px;
+}
+
+.error-tooltip {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ffffff;
+  border: 1px solid #000000;
+  color: #c13515;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-top: 8px;
+}
+
+.error-tooltip::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 12px;
+  height: 12px;
+  background-color: #fff8f6;
+  border-left: 1px solid #000000;
+  border-top: 1px solid #000000;
+}
+
+.btn-err{
+  flex: auto;
+} */
 
 .btn-book{
   color: white;
@@ -42,6 +91,7 @@
 
 .btn-clear {
   cursor: pointer;
+  text-decoration: underline;
   font-family: UberMoveText, system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
 }
