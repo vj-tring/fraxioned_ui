@@ -152,7 +152,7 @@ const BookingSearchBar: React.FC = () => {
     <div className="MainCard">
       <div className="card">
         <PropertyCarousel />
-        <div className="vl p-2"></div>
+        <div className="vl"></div>
         <Popover
           open={isCalendarOpen}
           onOpenChange={setIsCalendarOpen}
@@ -177,7 +177,7 @@ const BookingSearchBar: React.FC = () => {
             />
           </PopoverContent>
         </Popover>
-        <div className="vl p-2"></div>
+        <div className="vl"></div>
         <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
           <PopoverTrigger >
             <div>
@@ -192,7 +192,7 @@ const BookingSearchBar: React.FC = () => {
         </Popover>
         <div className="vl"></div>
         <GuestSelector />
-        <div className="vl"></div>
+        {/* <div className="vl"></div> */}
         <Button
           onClick={handleBookingSubmit}
           className="rounded-pill btn-book border-0"

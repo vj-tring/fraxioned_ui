@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
   return (
     <div className="footer d-flex justify-content-between align-items-center px-7">
       <div className="logo"></div>
-      <div className='d-flex gap-10 text-left'>
+      <div className='d-flex foot-gap text-left'>
         <div>
           <ul>
             <li>
