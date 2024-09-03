@@ -14,8 +14,7 @@ import image1 from "../../assests/bear-lake-bluffs.jpg";
 import { FaPlus } from "react-icons/fa";
 import { mockProperties } from "./mockData";
 import PorpImg from "../../assests/crown-jewel.jpg";
-import Icons from "./icons";
-// import SearchAppBar from "./searchfield";
+
 interface Property {
   id: number;
   propertyName?: string;

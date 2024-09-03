@@ -62,7 +62,6 @@ ul {
   margin-top: 20px;
   /* Adjusted top margin */
   position: relative;
-  overflow: hidden;
   transition: background-color 0.3s;
   color: white;
   font-size: 16px;

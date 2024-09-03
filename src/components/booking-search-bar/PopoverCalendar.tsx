@@ -8,6 +8,8 @@ import { DateRange } from "react-day-picker"
 import { DatePickerWithRange } from '../calender'
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { maxWidth } from '@mui/system'
+import { useSelector } from "react-redux";
+
 
 interface PopoverCalendarProps {
   withBorder?: boolean;
@@ -18,6 +20,7 @@ const PopoverCalendar: React.FC<PopoverCalendarProps> = ({ withBorder = false, p
 
   const userId = ''
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined)
+  const dateRange1 = useSelector((state: RootState) => state.datePicker.dateRange);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
   const [activeDate, setActiveDate] = useState<'check-in' | 'check-out' | null>(null)
 
@@ -45,7 +48,7 @@ const PopoverCalendar: React.FC<PopoverCalendarProps> = ({ withBorder = false, p
           <div>
             <Region
               label="Check In"
-              date={dateRange?.from}
+              date={dateRange?.from || dateRange1?.from}
               onClick={() => handleRegionClick('check-in')}
               isActive={isCalendarOpen && activeDate === 'check-in'}
             />
@@ -68,7 +71,7 @@ const PopoverCalendar: React.FC<PopoverCalendarProps> = ({ withBorder = false, p
           <div>
             <Region
               label="Check Out"
-              date={dateRange?.to}
+              date={dateRange?.to || dateRange1?.to}
               onClick={() => handleRegionClick('check-out')}
               isActive={isCalendarOpen && activeDate === 'check-out'}
             />
