@@ -47,14 +47,15 @@ const Dashboard: React.FC = () => {
       />
       <>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/faq" element={<CustomizedAccordions />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/user-details" element={<UserDetails />} />
-          <Route path="/property/:id" element={<Booking />} />
-          <Route path="/peak-season" element={<ComingSoon />} />
-          <Route path="/payments" element={<ComingSoon />} />
-          <Route path="*" element={<Navigate to="/dashboard" />} />
+        <Route path="/" element={<Home />} />
+            <Route path="/faq" element={<CustomizedAccordions />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/user-details" element={<UserDetails />} />
+            <Route path="/property/:id" element={<Booking />} />
+            <Route path="/peak-season" element={<ComingSoon />} />
+            <Route path="/payments" element={<ComingSoon />} />
+            <Route path="/booking-summary" element={<BookingSummary />} />
+            <Route path="*" element={<Navigate to="/dashboard" />} />
         </Routes>
       </>
 
