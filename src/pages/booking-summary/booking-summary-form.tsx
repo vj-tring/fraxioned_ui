@@ -155,7 +155,7 @@ const BookingSummaryForm: React.FC = () => {
               <h1 className="SummaryHead">NOTES</h1>
               <textarea
                 id="Textarea"
-                rows={4}
+                rows={1}
                 className="p-3"
                 placeholder="Add any notes here..."
                 value={notes}
