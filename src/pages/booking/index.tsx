@@ -215,7 +215,7 @@ const Booking = () => {
         <div className="d-flex pt-2 h-100">
           <div className="col-6 col-md-7 GridWidth h-100">
             <Element name="myShare" className="mt-4">
-              <Showmore description={selectedProperty ? selectedProperty?.houseDescription : undefined} />
+              <Showmore description={selectedProperty ? selectedProperty?.houseDescription : ""} />
             </Element>
             {/* <hr style={{ width: '100%', backgroundColor: 'black', height: 1.2, opacity: 0.1 }} /> */}
             <Element name="availableNights">
