@@ -1,8 +1,7 @@
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./card.css";
-// import { FaPlus } from "react-icons/fa";
-// import FraxImg from "../../assets/images/bookings-page-banner.jpg";
 
 interface CardProps {
   imageUrl: string;
@@ -18,13 +17,19 @@ const Card: React.FC<CardProps> = ({
   text,
   title,
   share,
+  id,
+
   showPlusIcon,
 }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("/dashboard/booking");
+    if (id !== undefined) {
+      navigate(`/dashboard/property/${id}`);
+    }
   };
+
+
 
   return (
     

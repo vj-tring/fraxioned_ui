@@ -2,10 +2,15 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { propertywithDetails } from '../../../api/index';
 import { RootState } from '@/store/reducers';
 
-interface LimitsState {
+export interface LimitsState {
   limits: {
     noOfGuestsAllowed: number;
     noOfPetsAllowed: number;
+  };
+  counts: {
+    Adults: number;
+    Children: number;
+    Pets: number;
   };
   loading: boolean;
   error: string | null;
@@ -16,9 +21,15 @@ const initialState: LimitsState = {
     noOfGuestsAllowed: 0,
     noOfPetsAllowed: 0,
   },
+  counts: {
+    Adults: 1,
+    Children: 0,
+    Pets: 0,
+  },
   loading: false,
   error: null,
 };
+
 
 export const fetchLimits = createAsyncThunk(
   'limits/fetchLimits',
@@ -47,15 +58,18 @@ export const fetchLimits = createAsyncThunk(
     }
   }
 );
-
 const limitsSlice = createSlice({
   name: 'limits',
   initialState,
   reducers: {
     resetLimits: (state) => {
       state.limits = initialState.limits;
+      state.counts = initialState.counts;
       state.loading = false;
       state.error = null;
+    },
+    updateCount: (state, action: { type: string, payload: { name: string, count: number } }) => {
+      state.counts[action.payload.name] = action.payload.count;
     },
   },
   extraReducers: (builder) => {
@@ -76,5 +90,6 @@ const limitsSlice = createSlice({
   },
 });
 
-export const { resetLimits } = limitsSlice.actions;
+export const { resetLimits, updateCount } = limitsSlice.actions;
+
 export default limitsSlice.reducer;

@@ -9,7 +9,7 @@ const loadStateFromLocalStorage = (): AuthState => {
     const session = localStorage.getItem('session');
     if (user && session) {
       const parsedUser = JSON.parse(user);
-      const isAdmin = parsedUser.role.id === 1;
+      const isAdmin = parsedUser.roleId === 1;
       return {
         user: parsedUser,
         session: JSON.parse(session),
@@ -83,7 +83,7 @@ const authSlice = createSlice({
     setCredentials: (state, action: PayloadAction<{ user: User; session: Session }>) => {
       state.user = action.payload.user;
       state.session = action.payload.session;
-      state.isAdmin = action.payload.user.role.id === 1;
+      state.isAdmin = action.payload.user.roleId === 1;
       localStorage.setItem('user', JSON.stringify(action.payload.user));
       localStorage.setItem('session', JSON.stringify(action.payload.session));
     },
@@ -103,7 +103,7 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action: PayloadAction<{ user: User; session: Session }>) => {
         state.user = action.payload.user;
         state.session = action.payload.session;
-        state.isAdmin = action.payload.user.role.id === 1;
+        state.isAdmin = action.payload.user.roleId === 1;
         state.loading = false;
         state.error = null;
       })
