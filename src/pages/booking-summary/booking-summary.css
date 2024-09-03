@@ -1,12 +1,11 @@
 .bookingsum {
   position: relative;
   top: 20px;
+  
 }
 
 .HomeImg1 {
   width: 100%;
-  border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
 
   height: 140px;
   background: url("../../assests/blue-bear-lake.jpg");
@@ -16,41 +15,53 @@
   opacity: 90%;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
+/* General Styles */
+.BookSum, .PaySum {
+  display: flex;
+  flex-direction: column;
+  
+}
 
 .ListSum {
-  margin-left: 10%;
+  margin: 0;
   padding: 0;
-  list-style: none; 
+  list-style: none;
+
 }
 
 .SummaryHead {
-  text-align: center;
   font-weight: 600;
   color: rgb(95, 177, 207);
+  margin-bottom: 20px;
+  margin-top: 15px;
+
 }
 
 .ListSum > div {
   display: flex;
   align-items: center;
-  padding: 2px 0; 
+  padding: 2px 0;
+  margin-bottom: 10px;
 }
 
 .ListSum .property {
   font-weight: 600;
-  width: 150px; 
+  font-size:14px;
+  width: 150px;
 }
 
 .ListSum .colon {
   font-weight: 500;
-  width: 20px; 
-
+  width: 30px;
 }
 
 .ListSum .value {
   font-weight: 500;
-  font-size: small !important;
-  flex: 1; 
-  text-align: left; 
+  font-size: small;
+  flex: 1;
+  text-align: left;
+  color: rgb(0, 0, 0) !important; 
+
 }
 
 .Btun > Button {
@@ -60,16 +71,17 @@
 }
 
 #Textarea {
-  border: 2px solid lightblue !important;
+  border: 2px solid lightblue;
 }
 
 .Btun {
   display: flex;
   flex-direction: row;
-  float: right;
   gap: 10px;
+  
 }
 
+/* Button Styles */
 .cancelBtn {
   background-color: #88cdd4 !important;
   color: white !important;
@@ -80,8 +92,56 @@
   color: white !important;
 }
 
-.BookHead {
-  background-color: #687883;
-  color: white;
+/* Media Queries for Responsiveness */
+@media (max-width: 1200px) {
+  .BookSum, .PaySum {
+    width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .ListSum .property {
+    width: 120px;
+  }
+
+  .Btun > Button {
+    width: 150px;
+  }
+
+  #Textarea {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .BookSum, .PaySum {
+    padding: 0 10px;
+  }
+
+  .ListSum > div {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ListSum .property {
+    width: auto;
+  }
+
+  .Btun {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .Btun > Button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+
+
+.Bookingmsg {
+  animation: fadeInSlideIn 3s ease-out;
+  font-weight: 500;
   font-size: x-large;
 }
