@@ -27,18 +27,9 @@
   background-size: cover;
 }
 
-.dashboard-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
 .content-container {
   flex: 1;
-  padding-top: 60px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  position: relative;
 }
 
 .custom-navbar {
@@ -59,11 +50,6 @@
   width: 40px;
   height: 40px;
   margin-left: 10px;
-}
-
-body,
-html {
-  overflow: auto;
 }
 
 ::-webkit-scrollbar {

@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { Button, Typography, Grid, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import './show-more.css';
-const Showmore = () => {
+
+interface ShowMoreProps {
+  description?: string;
+}
+const Showmore: React.FC<ShowMoreProps> = ({ description }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [showMore] = useState(false);
 
@@ -23,7 +27,7 @@ const Showmore = () => {
       <div>
         <Grid item xs={6} md={6}>
           <Typography className='Showmore'>
-            {fullContent.slice(0, 470) + '...'}
+            {(description || fullContent).slice(0, 470) + '...'}
           </Typography>
           <Button onClick={handleClickOpen} className="mt-3 mb-4 monsterrat" style={{
             fontSize: '14px',
@@ -50,7 +54,7 @@ const Showmore = () => {
         </DialogTitle>
         <DialogContent>
           <Typography variant="body1" className='monsterrat'>
-            {fullContent}
+            {(description || fullContent)}
           </Typography>
         </DialogContent>
         <DialogActions>

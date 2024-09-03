@@ -22,7 +22,7 @@ import { Element, Link } from 'react-scroll';
 import { DatePickerWithRange } from '@/components/calender';
 import { useDispatch, useSelector } from "react-redux";
 import { mockProperties } from "../home/mockData";
-import { fetchProperties } from '@/store/slice/auth/property-slice';
+import { fetchProperties, selectProperty } from '@/store/slice/auth/property-slice';
 import { AppDispatch } from '@/store';
 import { Session, User } from '@/store/model';
 
@@ -40,6 +40,13 @@ interface Property {
   name?: string;
   address?: string;
   propertyShare?: string;
+  houseDescription?: string;
+  state?: string;
+  city?: string;
+  country?: string;
+  latitude?: string;
+  longitude?: string;
+
 }
 
 interface RootState {
@@ -93,13 +100,8 @@ const Booking = () => {
         const propertyId = parseInt(id, 10);
         console.log("IDp", propertyId);
         const property = displayProperties.find(p => p.id === propertyId);
-        // const selectedDate: any = bookingData.find((data: any) => data.property.id === propertyId);
-        // if (selectedDate) {
-        //   setCheckInDate(selectedDate.checkinDate);
-        //   setCheckOutDate(selectedDate.checkoutDate)
-        // }
-
         setSelectedProperty(property || null);
+        dispatch(selectProperty(propertyId));
       } else {
         setSelectedProperty(displayProperties[0]);
       }
@@ -121,8 +123,8 @@ const Booking = () => {
 
 
   return (
-    <div className="container-fluid d-flex flex-column gap-4">
-      <div className="img-row pt-4 px-3">
+    <div className="container-fluid d-flex flex-column gap-4 px-14">
+      <div className="img-row pt-4 px-12">
         <Grid container spacing={1}>
           <Grid item xs={12} md={6}>
             <img
@@ -170,7 +172,7 @@ const Booking = () => {
         </Grid>
       </div>
 
-      <div className='px-5 d-flex flex-column'>
+      <div className='px-12 d-flex flex-column'>
         {selectedProperty && (
           <>
             <Typography variant="h4" className="PropertyName monsterrat"> {selectedProperty.name || 'Property Name'}
@@ -178,7 +180,7 @@ const Booking = () => {
 
             <Box display="flex" alignItems="flex-end" gap={.5} className="monsterrat">
               <img src={Logo} alt="Logo" style={{ width: 26, height: 26 }} />
-              <Typography variant="h6" className='PropertyAddress monsterrat' style={{ opacity: .7, fontWeight: 'bolder' }}>
+              <Typography variant="h6" className='PropertyAddress monsterrat' style={{ opacity: .9, fontWeight: 'bolder' }}>
                 {selectedProperty.address || 'Property Address'}
               </Typography>
             </Box>
@@ -210,23 +212,23 @@ const Booking = () => {
           </div>
         </div>
 
-        <div className="d-flex pt-2">
-          <Grid item xs={6} md={7} className='GridWidth' >
-            <Element name="myShare" className='mt-4'>
-              <Showmore />
+        <div className="d-flex pt-2 h-100">
+          <div className="col-6 col-md-7 GridWidth h-100">
+            <Element name="myShare" className="mt-4">
+              <Showmore description={selectedProperty ? selectedProperty?.houseDescription : ""} />
             </Element>
-            <hr style={{ width: '100%', backgroundColor: 'black', height: 1.2, opacity: .1 }} />
+            {/* <hr style={{ width: '100%', backgroundColor: 'black', height: 1.2, opacity: 0.1 }} /> */}
             <Element name="availableNights">
               <AvailableNights />
             </Element>
-            <hr style={{ width: '100%', backgroundColor: 'black', height: 1.2, opacity: .1 }} />
-            <Element name="basicRangeShortcuts" className='mt-5 mb-3 normalcalendar'>
-              <h1 className='checkIn mb-3'>Select check-in date</h1>
+            {/* <hr style={{ width: '100%', backgroundColor: 'black', height: 1.2, opacity: 0.1 }} /> */}
+            <Element name="basicRangeShortcuts" className="mt-5 mb-3 normalcalendar">
+              <h1 className="checkIn mb-3">Select check-in date</h1>
               <DatePickerWithRange />
             </Element>
-          </Grid>
+          </div>
 
-          <Grid item xs={6} md={5} className='GridWidth1'>
+          <div className="py-4 GridWidth1 position-relative">
             <DatePickerCard
               checkInDate={checkInDate}
               checkOutDate={checkOutDate}
@@ -236,8 +238,10 @@ const Booking = () => {
               setGuests={setGuests}
               onCheckAvailability={handleCheckAvailability}
             />
-          </Grid>
+          </div>
         </div>
+
+
 
         <hr style={{ width: '100%', backgroundColor: 'black', height: 1.2, opacity: .1 }} />
 
@@ -245,7 +249,11 @@ const Booking = () => {
           <SingleDevice />
         </Element>
         <Element name="location">
-          <MapEmbed />
+          <MapEmbed
+            city={selectedProperty ? selectedProperty?.city : "Garden City"}
+            state={selectedProperty ? selectedProperty?.state : "Utah"}
+            country={selectedProperty ? selectedProperty?.country : "United State"}
+          />
         </Element>
         <Element name="info">
           <ThingsToKnow />

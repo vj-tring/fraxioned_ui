@@ -2,8 +2,15 @@ import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
+interface MapEmbedProps {
+  city?: string;
+  state?: string;
+  country?: string;
+  latitude?: string;
+  longitude?: string;
+}
 
-const MapEmbed = () => {
+const MapEmbed: React.FC<MapEmbedProps> = ({ city, state, country }) => {
 
   const [showMore, setShowMore] = useState(false);
   const houseRules = [
@@ -33,7 +40,7 @@ const MapEmbed = () => {
         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d100939.9964103114!2d-122.52000155037997!3d37.75780703794148!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80859a6d00690021%3A0x4a501367f076adff!2sSan%20Francisco%2C%20CA%2C%20USA!5e0!3m2!1sen!2sin!4v1724762892590!5m2!1sen!2sin"
       ></iframe>
       <div>
-        <Typography variant="h6" className='ThingstoHead monsterrat mb-2' gutterBottom>Garden city, Utah, United States</Typography>
+        <Typography variant="h6" className='ThingstoHead monsterrat mb-2' gutterBottom>{city}, {state}, {country}</Typography>
         <Typography variant="body1" paragraph>
           <ul>
             {visibleRules.map((rule, index) => (
