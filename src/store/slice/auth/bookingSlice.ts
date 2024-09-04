@@ -3,6 +3,7 @@ import { createBooking, getBookings } from '../../../api/index'; // Ensure these
 
 interface BookingData {
   property: { id: string };
+  propertyName:string;
   checkinDate: string;
   checkoutDate: string;
   noOfAdults: number;
@@ -46,6 +47,8 @@ export const saveBooking = createAsyncThunk(
     return bookingData;
   }
 );
+
+
 export const confirmBooking = createAsyncThunk<
   { message: string; data: any },
   BookingData,
@@ -54,10 +57,14 @@ export const confirmBooking = createAsyncThunk<
   'bookings/confirmBooking',
   async (bookingData: BookingData, { rejectWithValue }) => {
     try {
-      const response = await createBooking(bookingData);
-      // const data = response.data;
 
-      if (response.status === 201) {
+      const { propertyName, ...filteredBookingData } = bookingData;
+
+      // Make the API call with the filtered data
+      const response = await createBooking(filteredBookingData);
+  
+
+      if (response.data.status === 201) {
         return { message: response.data.message, data: response.data };
       } else {
         console.log("rejected");
