@@ -16,7 +16,7 @@ import calendarData from "./calendarData.json";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProperties, selectSelectedPropertyDetails } from "@/store/slice/auth/property-slice";
 import { fetchPropertySeasonHoliday, selectPropertySeasonHolidays } from '@/store/slice/auth/propertySeasonHolidaySlice';
-import { saveBooking, clearBookingMessages, fetchBookings } from '../../store/slice/auth/bookingSlice';
+import {  clearBookingMessages, fetchBookings } from '../../store/slice/auth/bookingSlice';
 import { useEffect } from "react";
 import { RootState } from "@/store/reducers";
 import { setDateRange, setErrorMessage, setIsCalendarOpen, clearDates, setStartDate, setStartDateSelected, setSelectedYear, setValidationMessage, clearValidationMessage, clearPartial } from "@/store/slice/datePickerSlice";
@@ -45,16 +45,16 @@ export function DatePickerWithRange({
   const bookingState = useSelector((state: RootState) => state.bookings);
   const bookingError = bookingState?.error;
   const bookingSuccessMessage = bookingState?.successMessage;
-  const isBookingLoading = bookingState?.isLoading;
+  // const isBookingLoading = bookingState?.isLoading;
   const selectedPropertyDetails = useSelector(selectSelectedPropertyDetails);
   const seasonHolidays = useSelector(selectPropertySeasonHolidays);
   const selectedYear = useSelector((state: RootState) => state.datePicker.selectedYear);
   const startDate = useSelector((state: RootState) => state.datePicker.startDate);
   const startDateSelected = useSelector((state: RootState) => state.datePicker.startDateSelected);
   const errorMessage = useSelector((state: RootState) => state.datePicker.errorMessage);
-  const isCalendarOpen = useSelector((state: RootState) => state.datePicker.isCalendarOpen);
+  // const isCalendarOpen = useSelector((state: RootState) => state.datePicker.isCalendarOpen);
   const dateRange = useSelector((state: RootState) => state.datePicker.dateRange);
-  const currentBooking = useSelector((state: RootState) => state.bookings?.currentBooking);
+  // const currentBooking = useSelector((state: RootState) => state.bookings?.currentBooking);
   const currentUser = useSelector((state: RootState) => state.auth.user);
   const validationMessage = useSelector((state: RootState) => state.datePicker.validationMessage);
 
@@ -219,14 +219,26 @@ export function DatePickerWithRange({
     if (date.toDateString() === today.toDateString()) {
       return true;
     }
-    const previousCheckOutDate = bookedDates.reduce((latest, bookedDate) => {
-      return bookedDate < date && bookedDate > latest ? bookedDate : latest;
+  
+    const userBookings = bookings.filter(booking => 
+      booking.property.id === selectedPropertyDetails.id && 
+      booking.user.id === currentUser.id
+    );
+  
+    if (userBookings.length === 0) {
+      return true;
+    }
+  
+    const latestCheckOutDate = userBookings.reduce((latest, booking) => {
+      const checkOutDate = new Date(booking.checkoutDate);
+      return checkOutDate > latest ? checkOutDate : latest;
     }, new Date(0));
   
     const nightsBetween = Math.floor(
-      (date.getTime() - previousCheckOutDate.getTime()) / (1000 * 60 * 60 * 24)
+      (date.getTime() - latestCheckOutDate.getTime()) / (1000 * 60 * 60 * 24)
     );
-    return nightsBetween >= 5;
+  
+    return date < latestCheckOutDate || nightsBetween >= 5;
   };
 
   const handleDateChange = (range: DateRange | undefined) => {
@@ -238,7 +250,7 @@ export function DatePickerWithRange({
   
       if (!meetsConsecutiveStayRule(newStartDate)) {
         console.log("Consecutive stay rule not met");
-        dispatch(setErrorMessage('Have to wait atleast 5 nights for the next booking'));
+        dispatch(setErrorMessage('There must be at least 5 nights between your bookings at this property.'));
         dispatch(clearPartial());
         if (onSelect) onSelect(undefined);
         return;
@@ -371,6 +383,7 @@ export function DatePickerWithRange({
   return (
     <div className={cn("gri flex flex-column calendar", className)}>
       <div>
+     
         <Calendar
           mode="range"
           defaultMonth={dateRange?.from}
@@ -397,7 +410,7 @@ export function DatePickerWithRange({
             holiday: 'holiday-date',
           }}
         />
-        <div className="error-msg-container ml-5 flex justify-start">
+      <div className="error-msg-container ml-5 flex justify-start">
           <div className="error-msg">
             {errorMessage && <div className="text-red-600">{errorMessage}</div>}
             {bookingError && <div className="text-red-600">{bookingError}</div>}
@@ -437,7 +450,7 @@ export function DatePickerWithRange({
           <div>Maximum Stay Length : {selectedPropertyDetails?.details[selectedYear]?.maximumStayLength} Nights</div>
         </div>
         <div onClick={clearDatesHandler} className="btn-clear">
-          Clear
+          Clear dates
         </div>
       </div>
       <div className="flex items-center justify-end ">

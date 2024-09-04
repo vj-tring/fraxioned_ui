@@ -13,6 +13,7 @@ import ComingSoon from '../../components/coming-soon';
 import { isAuthenticated } from '../../authService';
 import Home from '../../pages/home';
 import Booking from '../../pages/booking';
+import BookingSummary from '../booking-summary/pages';
 
 const Dashboard: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -20,7 +21,7 @@ const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   useEffect(() => {
 
-    if (!isAuthenticated()) { 
+    if (!isAuthenticated()) {
       navigate('/login')
     }
   }, [navigate]);
@@ -31,12 +32,12 @@ const Dashboard: React.FC = () => {
     // { name: 'BOOKINGS', href: '/dashboard/booking', disabled: false },
     { name: 'DOCUMENTS', href: '/dashboard/peak-season', disabled: false },
     { name: 'PAYMENTS', href: '/dashboard/payments', disabled: true },
-    { name: 'MORE', href: '/dashboard/faq', disabled: true }, 
-    
+    { name: 'MORE', href: '/dashboard/faq', disabled: true },
+
   ]
 
   return (
-    <div className="dashboard-container">
+    <>
       <CustomNavbar
         logo={fraxionedLogo}
         links={links}
@@ -44,23 +45,24 @@ const Dashboard: React.FC = () => {
         userName={userEmail}
         onUserImageClick={() => navigate('/user-details')}
       />
-      <div className="content-container">
-        <div className="content-wrapper">
-          <Routes>
-            <Route path="/" element={<Home />} />
+      <>
+        <Routes>
+        <Route path="/" element={<Home />} />
             <Route path="/faq" element={<CustomizedAccordions />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/user-details" element={<UserDetails />} />
             <Route path="/property/:id" element={<Booking />} />
             <Route path="/peak-season" element={<ComingSoon />} />
             <Route path="/payments" element={<ComingSoon />} />
+            <Route path="/booking-summary" element={<BookingSummary />} />
             <Route path="*" element={<Navigate to="/dashboard" />} />
-          </Routes>
-        </div>
-      </div>
+        </Routes>
+      </>
+
       <Footer />
-    </div>
-  
+    </>
+
+
   );
 };
 export default Dashboard;

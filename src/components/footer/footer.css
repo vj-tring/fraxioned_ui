@@ -14,6 +14,10 @@
   align-items: center;
 }
 
+.foot-gap{
+  gap: 10.5rem;
+}
+
 .container {
   max-width: 1200px;
   /* Increased maximum width for better layout control */
@@ -62,7 +66,6 @@ ul {
   margin-top: 20px;
   /* Adjusted top margin */
   position: relative;
-  overflow: hidden;
   transition: background-color 0.3s;
   color: white;
   font-size: 16px;

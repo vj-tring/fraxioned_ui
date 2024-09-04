@@ -62,6 +62,7 @@ export const propertyseasonholiday = (p0?: string) =>
 export const propertyseasonholidaydelete = (id: number) =>
     axiosInstance.delete(`/v1/property-season-holidays/property-season-holiday/${id}`);
 
+
 export const getPropertySeasonHoliday = (propertyId: number) =>
     axiosInstance.get(`/v1/property-season-holidays/property-season-holiday/property/${propertyId}`);
 
@@ -132,10 +133,5 @@ export const getpropertyamenityByid = () =>
 
 export const yearwiseproeprty = (userId: number) =>
     axiosInstance.get(`//v1/properties//user-properties-with-details`);
-
-
-
-
-
 
 

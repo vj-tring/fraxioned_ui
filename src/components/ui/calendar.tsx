@@ -16,12 +16,12 @@ function Calendar({
   return (
     <DayPicker
       showOutsideDays={false}
-      className={cn("p-3", className)}
+      className={cn("p-3 font-sans", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
         caption: "flex justify-center pt-1 relative items-center",
-        caption_label: "text-sm font-medium",
+        caption_label: "text-sm font-medium text-[16px]",
         nav: "space-x-1 flex items-center",
         nav_button: cn(
           buttonVariants,
@@ -32,12 +32,12 @@ function Calendar({
         table: "w-full border-collapse space-y-1",
         head_row: "flex",
         head_cell:
-         "text-gray-500 rounded-md h-9 w-10 font-normal text-[13px]",
-        row: "flex w-full mt-2",
-        cell: "h-8 w-10 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-full [&:has([aria-selected].day-range-start)]:rounded-l-full [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent focus-within:relative focus-within:z-20",
+         "text-rounded-md h-10 w-11 font-semibold	 text-[13px] text-center p-2",
+        row: "flex w-full mt-2.5",
+        cell: "h-9 w-11 text-center p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-full [&:has([aria-selected].day-range-start)]:rounded-l-full [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent focus-within:relative focus-within:z-20",
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-9 w-10 p-0 font-normal aria-selected:opacity-100"
+          "h-10 w-11 p-0 font-sm aria-selected:opacity-100 text-black"
         ),
         day_range_start: "rounded-l",
         day_range_end: "rounded-r",

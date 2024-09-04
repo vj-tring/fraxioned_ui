@@ -1,30 +1,31 @@
 .cards {
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px !important;
-    border-radius: 20px !important;
+  border-radius: 20px !important;
   background-color: white !important;
-  width: 75%;
-  margin-left: 60px;
-  margin-top: 30px;
-  /* height: 300px; */
-  
+  position: sticky;
+  top: 6rem;
+  margin: 0 auto;
 }
 
-.monsterrat{
+.monsterrat {
   font-family: 'Montserrat', sans-serif !important;
 }
+
 .DatePicker {
   padding: 0;
   white-space: normal;
 }
+
 .selectDate {
   font-weight: 600 !important;
 }
+
 .availability {
-  width: 200px;  
+  width: 200px;
   height: 50px;
   text-align: center;
   border-radius: 50px !important;
-  background-color: #88CDD4!important;
+  background-color: #88CDD4 !important;
   border: none;
 }
 

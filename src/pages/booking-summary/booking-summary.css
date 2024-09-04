@@ -1,0 +1,147 @@
+.bookingsum {
+  position: relative;
+  top: 20px;
+  
+}
+
+.HomeImg1 {
+  width: 100%;
+
+  height: 140px;
+  background: url("../../assests/blue-bear-lake.jpg");
+  background-color: #00636d;
+  background-size: cover;
+  background-position: center;
+  opacity: 90%;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+/* General Styles */
+.BookSum, .PaySum {
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.ListSum {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+}
+
+.SummaryHead {
+  font-weight: 600;
+  color: rgb(95, 177, 207);
+  margin-bottom: 20px;
+  margin-top: 15px;
+
+}
+
+.ListSum > div {
+  display: flex;
+  align-items: center;
+  padding: 2px 0;
+  margin-bottom: 10px;
+}
+
+.ListSum .property {
+  font-weight: 600;
+  font-size:14px;
+  width: 150px;
+}
+
+.ListSum .colon {
+  font-weight: 500;
+  width: 30px;
+}
+
+.ListSum .value {
+  font-weight: 500;
+  font-size: small;
+  flex: 1;
+  text-align: left;
+  color: rgb(0, 0, 0) !important; 
+
+}
+
+.Btun > Button {
+  border-radius: 50px;
+  width: 200px;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+#Textarea {
+  border: 2px solid lightblue;
+}
+
+.Btun {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  
+}
+
+/* Button Styles */
+.cancelBtn {
+  background-color: #88cdd4 !important;
+  color: white !important;
+}
+
+.confirmBtn {
+  background-color: #00636d !important;
+  color: white !important;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1200px) {
+  .BookSum, .PaySum {
+    width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .ListSum .property {
+    width: 120px;
+  }
+
+  .Btun > Button {
+    width: 150px;
+  }
+
+  #Textarea {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .BookSum, .PaySum {
+    padding: 0 10px;
+  }
+
+  .ListSum > div {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ListSum .property {
+    width: auto;
+  }
+
+  .Btun {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .Btun > Button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+
+
+.Bookingmsg {
+  animation: fadeInSlideIn 3s ease-out;
+  font-weight: 500;
+  font-size: x-large;
+}
