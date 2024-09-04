@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { createBooking, getBookings } from '../../../api/index'; // Ensure these imports are correct
 
-interface BookingData {
+export interface BookingData {
   property: { id: string };
   checkinDate: string;
   checkoutDate: string;
@@ -11,6 +11,7 @@ interface BookingData {
   isLastMinuteBooking: boolean;
   cleaningFee: number;
   petFee: number;
+  createdAt: string;
   notes?: string; // Added notes field
 }
 
