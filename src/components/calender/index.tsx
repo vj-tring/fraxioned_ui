@@ -219,11 +219,16 @@ export function DatePickerWithRange({
     if (date.toDateString() === today.toDateString()) {
       return true;
     }
+  
     const userBookings = bookings.filter(booking => 
       booking.property.id === selectedPropertyDetails.id && 
       booking.user.id === currentUser.id
     );
-    
+  
+    if (userBookings.length === 0) {
+      return true;
+    }
+  
     const latestCheckOutDate = userBookings.reduce((latest, booking) => {
       const checkOutDate = new Date(booking.checkoutDate);
       return checkOutDate > latest ? checkOutDate : latest;
@@ -232,7 +237,8 @@ export function DatePickerWithRange({
     const nightsBetween = Math.floor(
       (date.getTime() - latestCheckOutDate.getTime()) / (1000 * 60 * 60 * 24)
     );
-    return nightsBetween >= 5;
+  
+    return date < latestCheckOutDate || nightsBetween >= 5;
   };
 
   const handleDateChange = (range: DateRange | undefined) => {
@@ -377,6 +383,7 @@ export function DatePickerWithRange({
   return (
     <div className={cn("gri flex flex-column calendar", className)}>
       <div>
+     
         <Calendar
           mode="range"
           defaultMonth={dateRange?.from}
@@ -403,7 +410,7 @@ export function DatePickerWithRange({
             holiday: 'holiday-date',
           }}
         />
-        <div className="error-msg-container ml-5 flex justify-start">
+      <div className="error-msg-container ml-5 flex justify-start">
           <div className="error-msg">
             {errorMessage && <div className="text-red-600">{errorMessage}</div>}
             {bookingError && <div className="text-red-600">{bookingError}</div>}
@@ -443,7 +450,7 @@ export function DatePickerWithRange({
           <div>Maximum Stay Length : {selectedPropertyDetails?.details[selectedYear]?.maximumStayLength} Nights</div>
         </div>
         <div onClick={clearDatesHandler} className="btn-clear">
-          Clear
+          Clear dates
         </div>
       </div>
       <div className="flex items-center justify-end ">

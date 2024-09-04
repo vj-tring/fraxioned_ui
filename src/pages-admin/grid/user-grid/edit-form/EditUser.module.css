@@ -175,6 +175,17 @@
     font-size: 14px;
 }
 
+
+.addButton {
+    margin-top: 16px !important;
+    color: #e28f25 !important;
+    border-color: #e28f25 !important;
+}
+
+.addButton:hover {
+    background-color: rgba(226, 143, 37, 0.04) !important;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -263,4 +274,13 @@
     border-color: #fabf95 !important;
     box-shadow: 0 4px 20px rgba(246, 169, 97, 0.1);
 
+}
+
+
+:global(.MuiIconButton-root) {
+    color: #e28f25;
+}
+
+:global(.MuiIconButton-root:hover) {
+    background-color: rgba(244, 67, 54, 0.04) !important;
 }
