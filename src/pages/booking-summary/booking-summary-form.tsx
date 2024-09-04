@@ -9,7 +9,13 @@ import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "@/store";
 import { Button, CircularProgress, SvgIcon } from "@mui/material";
 import CustomizedSnackbars from "../../components/customized-snackbar";
-
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import img1 from "../../assests/bear-lake-bluffs.jpg";
+import img2 from "../../assests/blue-bear-lake.jpg";
+import img3 from "../../assests/crown-jewel.jpg";
+import img4 from "../../assests/lake-escape.jpg";
 const mockBooking = {
   property: { id: "3" },
   checkinDate: new Date().toISOString(),
@@ -100,17 +106,18 @@ const BookingSummaryForm: React.FC = () => {
   };
   return (
     <Box
-      my={5}
+      my={2}
       sx={{
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-around",
-        gap: 4,
-        padding: 2,
-        width: "65%",
-        marginLeft: "17%",
-        borderRadius:"10px",
-        
+        gap: 2,
+        paddingTop: 2,
+        paddingBottom: 2,
+        width: "90%",
+        marginLeft: "5%",
+        borderRadius: "5px",
+
         boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
       }}
     >
@@ -164,9 +171,30 @@ const BookingSummaryForm: React.FC = () => {
 
       {!showConfirmation && (
         <>
+          <div className="SummaryImg ">
+            <Row className=" RowImg">
+              <Col sm={11}>
+                <img src={img1} alt="Image 1" />
+              </Col>
+            </Row>
+            <Row className="mt-3 ">
+              <Col sm={4}>
+                <img src={img2} alt="Image 2" />
+              </Col>
+              <Col sm={4}>
+                <img src={img3} alt="Image 3" />
+              </Col>
+              <Col sm={4}>
+                <img src={img4} alt="Image 4" />
+              </Col>
+            </Row>
+          </div>
+
+          {/* </div> */}
+
           <div className="BookSum">
             <h1 className="SummaryHead">BOOKING SUMMARY</h1>
-            <div className="ListSum">
+            <div className="ListSum mt-3">
               <div>
                 <div className="property">Property</div>{" "}
                 <div className="colon">:</div>
@@ -227,7 +255,7 @@ const BookingSummaryForm: React.FC = () => {
 
           <div className="PaySum">
             <h1 className="SummaryHead">PAYMENTS SUMMARY</h1>
-            <div className="ListSum">
+            <div className="ListSum mt-3">
               <div>
                 <div className="property">Cleaning Fee</div>
                 <div className="colon">:</div>

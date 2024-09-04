@@ -58,7 +58,7 @@ export const confirmBooking = createAsyncThunk<
   async (bookingData: BookingData, { rejectWithValue }) => {
     try {
 
-      const { propertyName, ...filteredBookingData } = bookingData;
+      const { propertyName,noOfInfants,confirmationCode,cleaningFee,petFee, ...filteredBookingData } = bookingData;
 
       // Make the API call with the filtered data
       const response = await createBooking(filteredBookingData);
