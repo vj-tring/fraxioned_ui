@@ -413,8 +413,6 @@ export function DatePickerWithRange({
       <div className="error-msg-container ml-5 flex justify-start">
           <div className="error-msg">
             {errorMessage && <div className="text-red-600">{errorMessage}</div>}
-            {bookingError && <div className="text-red-600">{bookingError}</div>}
-            {bookingSuccessMessage && <div className="text-green-600">{bookingSuccessMessage}</div>}
             {validationMessage && <div className="text-yellow-600">{validationMessage}</div>}
           </div>
         </div>

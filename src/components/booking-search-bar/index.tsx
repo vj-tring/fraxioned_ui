@@ -108,7 +108,7 @@ const BookingSearchBar: React.FC = () => {
       noOfAdults: counts.Adults,
       noOfChildren: counts.Children,
       noOfInfants: 0,
-      notes: "None",
+      notes: "",
       confirmationCode: "",
       cleaningFee: 100,
       petFee: 0,
@@ -190,13 +190,13 @@ const BookingSearchBar: React.FC = () => {
         <div className="vl"></div>
         <GuestSelector />
         {/* <div className="vl"></div> */}
-        <Button
+        <button
           onClick={handleBookingSubmit}
           className="rounded-pill btn-book border-0"
           disabled={isBookingLoading}
         >
           Book Now
-        </Button>
+        </button>
         {errorMessage && <div className="text-red-600">{errorMessage}</div>}
       </div>
     </div>
