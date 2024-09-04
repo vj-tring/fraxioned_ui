@@ -1,7 +1,6 @@
 .bookingsum {
   position: relative;
   top: 20px;
-  
 }
 
 .HomeImg1 {
@@ -15,26 +14,47 @@
   opacity: 90%;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
-/* General Styles */
-.BookSum, .PaySum {
+.BookSum,
+.PaySum {
   display: flex;
   flex-direction: column;
-  
+}
+
+.BookPaym {
+  display: flex;
+  justify-content: space-around;
+}
+
+.SummaryImg {
+  /* background: url("../../assests//crown-jewel.jpg"); */
+  width: 32% !important;
+  background-size: cover;
+  background-position: center;
+  border-radius:5px;
+  height: 40% !important;
+  margin-top: 3px;
+  /* background-color: #88cdd4; */
+}
+
+.RowImg{
+  width: 115%;
+  /* height: 90% !important; */
+  border-radius: 10px !important;
+
 }
 
 .ListSum {
   margin: 0;
   padding: 0;
   list-style: none;
-
 }
 
 .SummaryHead {
   font-weight: 600;
+  font-size: 16px;
   color: rgb(95, 177, 207);
   margin-bottom: 20px;
   margin-top: 15px;
-
 }
 
 .ListSum > div {
@@ -46,8 +66,8 @@
 
 .ListSum .property {
   font-weight: 600;
-  font-size:14px;
-  width: 150px;
+  font-size: 14px;
+  width: 120px;
 }
 
 .ListSum .colon {
@@ -60,8 +80,7 @@
   font-size: small;
   flex: 1;
   text-align: left;
-  color: rgb(0, 0, 0) !important; 
-
+  color: rgb(0, 0, 0) !important;
 }
 
 .Btun > Button {
@@ -78,7 +97,6 @@
   display: flex;
   flex-direction: row;
   gap: 10px;
-  
 }
 
 /* Button Styles */
@@ -94,7 +112,8 @@
 
 /* Media Queries for Responsiveness */
 @media (max-width: 1200px) {
-  .BookSum, .PaySum {
+  .BookSum,
+  .PaySum {
     width: 100%;
   }
 }
@@ -114,7 +133,8 @@
 }
 
 @media (max-width: 600px) {
-  .BookSum, .PaySum {
+  .BookSum,
+  .PaySum {
     padding: 0 10px;
   }
 
@@ -138,10 +158,10 @@
   }
 }
 
-
-
 .Bookingmsg {
   animation: fadeInSlideIn 3s ease-out;
   font-weight: 500;
   font-size: x-large;
 }
+
+

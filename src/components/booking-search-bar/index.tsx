@@ -98,10 +98,11 @@ const BookingSearchBar: React.FC = () => {
     const bookingData = {
       user: { id: currentUser.id },
       property: { id: selectedPropertyDetails.id },
+      propertyName: selectedPropertyDetails.propertyName,
       createdBy: { id: currentUser.id },
       checkinDate: checkinDate.toISOString(),
       checkoutDate: checkoutDate.toISOString(),
-      noOfGuests: counts.Adults+counts.Children,
+      noOfGuests: counts.Adults + counts.Children,
       noOfPets: counts.Pets,
       isLastMinuteBooking: isLastMinuteBooking(checkinDate),
       noOfAdults: counts.Adults,
@@ -115,38 +116,34 @@ const BookingSearchBar: React.FC = () => {
 
     dispatch(saveBooking(bookingData));
 
-    
     // if (bookingState.successMessage) {
-      // showSnackbar(bookingState.successMessage, "success");
-      navigate("/dashboard/booking-summary");
+    // showSnackbar(bookingState.successMessage, "success");
+    navigate("/dashboard/booking-summary");
     // }
   };
 
-  
-  useEffect(() => {
-    // if (!isBookingLoading && !bookingState.error) {
-    //   setDateRange(undefined);
-    // }
+  // useEffect(() => {
+  //   // if (!isBookingLoading && !bookingState.error) {
+  //   //   setDateRange(undefined);
+  //   // }
 
-  
+  //   // if (bookingState.error) {
+  //   //   showSnackbar(bookingState.error, "error");
 
-    // if (bookingState.error) {
-    //   showSnackbar(bookingState.error, "error");
-
-    //   if (bookingState.error.includes("Booking successfully created!")) {
-    //     setErrorMessage(bookingState.error);
-    //     navigate("/dashboard");
-    //   } else {
-    //     setErrorMessage(bookingState.error);
-    //   }
-    // }
-  }, [
-    isBookingLoading,
-    bookingState.successMessage,
-    bookingState.error,
-    showSnackbar,
-    navigate,
-  ]);
+  //   //   if (bookingState.error.includes("Booking successfully created!")) {
+  //   //     setErrorMessage(bookingState.error);
+  //   //     navigate("/dashboard");
+  //   //   } else {
+  //   //     setErrorMessage(bookingState.error);
+  //   //   }
+  //   // }
+  // }, [
+  //   isBookingLoading,
+  //   bookingState.successMessage,
+  //   bookingState.error,
+  //   showSnackbar,
+  //   navigate,
+  // ]);
 
   return (
     <div className="MainCard">
@@ -158,7 +155,7 @@ const BookingSearchBar: React.FC = () => {
           onOpenChange={setIsCalendarOpen}
           disableRipple
         >
-          <PopoverTrigger asChild >
+          <PopoverTrigger asChild>
             <div>
               <Region
                 label="Check In"
@@ -179,7 +176,7 @@ const BookingSearchBar: React.FC = () => {
         </Popover>
         <div className="vl"></div>
         <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-          <PopoverTrigger >
+          <PopoverTrigger>
             <div>
               <Region
                 label="Check Out"
