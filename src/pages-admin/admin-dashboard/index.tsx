@@ -7,6 +7,8 @@ import Property from '../grid/property-grid';
 import PropertySidePanel from '../propertysidepanel';
 import PropertyGeneralInfo from '../property-generalinfo'
 import EditPropertyForm from '../grid/property-grid/EditPropertyForm';
+import EditAmenityForm from '../property-amenities/edit-amenityform';
+import PropertyAmenities from '../property-amenities';
 import UserGrid from '../grid/user-grid';
 import PropertyRules from '../property-rules';
 import EditPropertyRulesForm from '../property-rules/edit-form';
@@ -14,6 +16,7 @@ import userImage from '../../assets/images/profile.jpeg'
 import CustomNavbar from '@/components/navbar';
 import fraxionedLogo from '../../assets/images/fraxioned.png'
 import './admin-dashboard.css'
+import id from 'date-fns/locale/id';
 
 const AdminDashboard: React.FC = () => {
     const navigate = useNavigate()
@@ -80,6 +83,23 @@ const AdminDashboard: React.FC = () => {
                                 </div>
                             </div>
                         } />
+                        <Route path="/property/:id/amenities" element={
+                            <div className="property-details-container">
+                                <PropertySidePanel isOpen={true} />
+                                <div className="property-info-content">
+                                    <PropertyAmenities />
+                                </div>
+                            </div>
+                        } />
+                        <Route path="/property/:id/amenities/edit" element={
+                            <div className="property-details-container">
+                                <PropertySidePanel isOpen={true} />
+                                <div className="property-info-content">
+                                    <EditAmenityForm onClose={() => navigate(`/property/${id}/amenities/edit`)} />
+                                </div>
+                            </div>
+                        } />
+
                     </Routes>
                 </div>
             </div>

@@ -58,7 +58,7 @@ const PropertySidePanel: React.FC<PropertySidePanelProps> = ({ isOpen }) => {
     const menuItems = [
         { icon: <FaInfoCircle />, label: 'General Info', path: `/admin/property/${id}`, enabled: true },
         { icon: <FaList />, label: 'Rules', path: `/admin/property/${id}/rules`, enabled: true },
-        { icon: <FaConciergeBell />, label: 'Amenities', path: `/admin/property/${id}/amenities`, enabled: false },
+        { icon: <FaConciergeBell />, label: 'Amenities', path: `/admin/property/${id}/amenities`, enabled: true },
         { icon: <FaMapMarkerAlt />, label: 'Location', path: `/admin/property/${id}/location`, enabled: false },
         { icon: <FaImages />, label: 'Photos', path: `/admin/property/${id}/photos`, enabled: false },
         { icon: <FaFile />, label: 'Documents', path: `/admin/property/${id}/documents`, enabled: false },
