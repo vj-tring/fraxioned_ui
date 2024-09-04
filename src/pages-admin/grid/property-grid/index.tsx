@@ -3,7 +3,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Button, IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { getProperties, deletePropertyApi, getPropertyById } from '@/api';
+import { getProperties, deletePropertyApi, getPropertyById} from '@/api';
 import styles from './property.module.css';
 import NewPropertyForm from './NewPropertyForm';
 import ConfirmationModal from '@/components/confirmation-modal';
@@ -91,12 +91,11 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
 
     const columns: GridColDef[] = [
         { field: 'name', headerName: 'Property Name', minWidth: 180, align: 'center', headerAlign: 'center' },
-        { field: 'address', headerName: 'Address', minWidth: 220, align: 'center', headerAlign: 'center' },
-        { field: 'city', headerName: 'City', width: 120, align: 'center', headerAlign: 'center' },
-        { field: 'state', headerName: 'State', width: 120, align: 'center', headerAlign: 'center' },
-        { field: 'country', headerName: 'Country', width: 140, align: 'center', headerAlign: 'center' },
-        { field: 'Property_share', headerName: 'Property Share', width: 140, align: 'center', headerAlign: 'center' },
-        { field: 'created_by', headerName: 'Created By', width: 130, align: 'center', headerAlign: 'center' },
+        { field: 'address', headerName: 'Address', minWidth: 240, align: 'center', headerAlign: 'center' },
+        { field: 'city', headerName: 'City', width: 150, align: 'center', headerAlign: 'center' },
+        { field: 'state', headerName: 'State', width: 150, align: 'center', headerAlign: 'center' },
+        { field: 'country', headerName: 'Country', width: 160, align: 'center', headerAlign: 'center' },
+        { field: 'Property_share', headerName: 'Property Share', width: 150, align: 'center', headerAlign: 'center' },
         {
             field: 'actions',
             headerName: 'Actions',
