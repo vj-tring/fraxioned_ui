@@ -71,10 +71,20 @@ const MultipleSelect: React.FC = () => {
     return message === '';
   };
 
+
+  // const { currentBooking } = useSelector((state: RootState) => state.bookings);
+
+
   const getTotalGuests = () => {
+
+    // if(currentBooking){
+    //   return currentBooking.noOfAdults+currentBooking.noOfChildren
+    // }
     return counts.Adults + counts.Children;
   };
 
+
+  
   const handleCountChange = (name: string, action: 'increase' | 'decrease') => {
     if (!selectedPropertyLimits) {
       setValidationMessage('Please select a property before making changes.');
