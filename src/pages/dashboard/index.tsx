@@ -14,6 +14,7 @@ import { isAuthenticated } from '../../authService';
 import Home from '../../pages/home';
 import PropertyListingPage from '../property-listing-page';
 import Booking from '../booking';
+import BookingSummary from '../booking-summary/pages';
 
 const Dashboard: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -54,6 +55,7 @@ const Dashboard: React.FC = () => {
           <Route path="/property/:id" element={<PropertyListingPage />} />
           <Route path="/peak-season" element={<ComingSoon />} />
           <Route path="/booking" element={<Booking />} />
+          <Route path="/booking-summary" element={<BookingSummary />} />
           <Route path="/payments" element={<ComingSoon />} />
           <Route path="*" element={<Navigate to="/dashboard" />} />
         </Routes>
