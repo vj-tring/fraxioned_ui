@@ -65,7 +65,7 @@ export const confirmBooking = createAsyncThunk<
       const response = await createBooking(filteredBookingData);
   
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         return { message: response.data.message, data: response.data };
       } else {
         console.log("rejected");
