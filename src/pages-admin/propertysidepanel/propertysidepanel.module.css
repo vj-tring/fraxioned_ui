@@ -2,7 +2,6 @@
     top: 60px;
     right: 0;
     height: calc(100vh - 60px);
-    margin-top: 9px;
     background-color: #fcfcfc;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
     color: #333333;
@@ -70,7 +69,7 @@
 .propertyNames {
     font-weight: 600;
     font-size: 18px;
-    margin-left: 10px;
+    margin-left: 38px;
     color: #333333;
     overflow: hidden;
     text-overflow: ellipsis;

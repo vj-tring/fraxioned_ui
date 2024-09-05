@@ -64,7 +64,7 @@ export const propertyseasonholidaydelete = (id: number) =>
 
 
 export const getPropertySeasonHoliday = (propertyId: number) =>
-    axiosInstance.get(`/v1/property-season-holidays/property-season-holiday/property/${propertyId}`);
+    axiosInstance.get(`/v1/property-season-holidays/property/${propertyId}`);
 
 export const createBooking = (bookingData: void) =>
     axiosInstance.post(`/v1/bookings/booking`, bookingData);
@@ -132,6 +132,20 @@ export const getpropertyamenityByid = () =>
     axiosInstance.get(`/v1/property-amenities`);
 
 export const yearwiseproeprty = (userId: number) =>
-    axiosInstance.get(`//v1/properties//user-properties-with-details`);
+    axiosInstance.get(`/v1/properties//user-properties-with-details`);
+
+export const getAmenitiesById = (id: number) =>
+    axiosInstance.get(`/v1/property-amenities/property/${id}`);
+
+export const addamenity = (data: {
+    createdBy: { id: number };
+    amenityName: string;
+    amenityDescription: string;
+    amenityType: string;
+  }) => axiosInstance.post('/v1/amenities/amenity', data);
+
+
+
+
 
 
