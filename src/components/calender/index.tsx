@@ -214,44 +214,30 @@ export function DatePickerWithRange({
       (checkInDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
     return diffInDays <= calendarData.bookingRules.lastMinuteBooking.maxDays;
   };
-
-const meetsConsecutiveStayRule = (date: Date) => {
+  const meetsConsecutiveStayRule = (date: Date) => {
     if (date.toDateString() === today.toDateString()) {
-        return true;
+      return true;
     }
-
     const userBookings = bookings.filter(
-        booking => booking.property.id === selectedPropertyDetails.id && booking.user.id === currentUser.id
+      booking => booking.property.id === selectedPropertyDetails.id && 
+                 booking.user.id === currentUser.id
     );
-
-    if (userBookings.length === 0) {
-        return true;
+      if (userBookings.length === 0) {
+      return true;
     }
-
-    // Check if the date is within any of the booked periods
-    for (const booking of userBookings) {
+      for (const booking of userBookings) {
+      const checkOutDate = new Date(booking.checkoutDate);
+      const daysSinceCheckout = Math.floor((date.getTime() - checkOutDate.getTime()) / (1000 * 60 * 60 * 24));
+        if (daysSinceCheckout >= 0 && daysSinceCheckout < 5) {
+        return false;
+      }
         const checkInDate = new Date(booking.checkinDate);
-        const checkOutDate = new Date(booking.checkoutDate);
-
-        if (date >= checkInDate && date <= checkOutDate) {
-            return true;
-        }
+      if (date >= checkInDate && date <= checkOutDate) {
+        return false;
+      }
     }
-
-    // Find the latest checkout date
-    const latestCheckOutDate = userBookings.reduce((latest, booking) => {
-        const checkOutDate = new Date(booking.checkoutDate);
-        return checkOutDate > latest ? checkOutDate : latest;
-    }, new Date(0));
-
-    const daysBetween = Math.floor(
-        (date.getTime() - latestCheckOutDate.getTime()) / (1000 * 60 * 60 * 24)
-    );
-
-    // Ensure the date is at least 5 days after the latest checkout date
-    return daysBetween >= 5;
-};
-
+      return true;
+  };
   const handleDateChange = (range: DateRange | undefined) => {
     if (range?.from) {
       const newStartDate = range.from;
@@ -450,7 +436,7 @@ const meetsConsecutiveStayRule = (date: Date) => {
         }
   
         .holiday-date {
-          color: #0560f2;
+          color: blue !important;
         }
       `}</style>
       <div className="flex items-center justify-between end-calendar">
