@@ -66,19 +66,22 @@ const BookingSummaryForm: React.FC = () => {
     try {
       dispatch(setNotes(notes));
       const result = await dispatch(
-        confirmBooking({ ...booking, notes })
+        confirmBooking({
+          ...booking,
+          notes,
+          // propertyName: "",
+          // createdAt: "",
+        })
       ).unwrap();
 
-      // setTimeout(() => {
-        setIsLoading(false);
-        setShowConfirmation(true);
-      // }, 3000);
-      setShowSnackbar(true);
-
+      setIsLoading(false);
+      // setShowConfirmation(true);
       setSnackbarMessage(result.message);
       setSnackbarSeverity("success");
-      navigate("/home");
-
+      setShowSnackbar(true);
+      setTimeout(() => {
+        navigate("/home");
+      }, 3000);
     } catch (error) {
       // Handle error
       setSnackbarMessage((error as string) || "Failed to confirm booking");
