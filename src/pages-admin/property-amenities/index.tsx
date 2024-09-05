@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import styles from './PropertyAmenities.module.css';
+import styles from './propertyamenities.module.css';
 import { amenitiesapi, getAmenitiesById } from '@/api';
 import NewAmenityForm from './new-amenity';
 
