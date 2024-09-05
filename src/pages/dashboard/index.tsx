@@ -12,7 +12,8 @@ import UserDetails from '../../pages/user-details';
 import ComingSoon from '../../components/coming-soon';
 import { isAuthenticated } from '../../authService';
 import Home from '../../pages/home';
-import Booking from '../../pages/booking';
+import PropertyListingPage from '../property-listing-page';
+import Booking from '../booking';
 import BookingSummary from '../booking-summary/pages';
 
 const Dashboard: React.FC = () => {
@@ -29,7 +30,7 @@ const Dashboard: React.FC = () => {
 
   const links = [
     { name: 'HOME', href: '/dashboard', disabled: false },
-    // { name: 'BOOKINGS', href: '/dashboard/booking', disabled: false },
+    { name: 'BOOKINGS', href: '/dashboard/booking', disabled: false },
     { name: 'DOCUMENTS', href: '/dashboard/peak-season', disabled: false },
     { name: 'PAYMENTS', href: '/dashboard/payments', disabled: true },
     { name: 'MORE', href: '/dashboard/faq', disabled: true },
@@ -47,22 +48,20 @@ const Dashboard: React.FC = () => {
       />
       <>
         <Routes>
-        <Route path="/" element={<Home />} />
-            <Route path="/faq" element={<CustomizedAccordions />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/user-details" element={<UserDetails />} />
-            <Route path="/property/:id" element={<Booking />} />
-            <Route path="/peak-season" element={<ComingSoon />} />
-            <Route path="/payments" element={<ComingSoon />} />
-            <Route path="/booking-summary" element={<BookingSummary />} />
-            <Route path="*" element={<Navigate to="/dashboard" />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/faq" element={<CustomizedAccordions />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/user-details" element={<UserDetails />} />
+          <Route path="/property/:id" element={<PropertyListingPage />} />
+          <Route path="/peak-season" element={<ComingSoon />} />
+          <Route path="/booking" element={<Booking />} />
+          <Route path="/booking-summary" element={<BookingSummary />} />
+          <Route path="/payments" element={<ComingSoon />} />
+          <Route path="*" element={<Navigate to="/dashboard" />} />
         </Routes>
       </>
-
       <Footer />
     </>
-
-
   );
 };
 export default Dashboard;

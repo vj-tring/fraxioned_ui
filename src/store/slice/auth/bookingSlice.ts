@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { createBooking, getBookings } from '../../../api/index'; // Ensure these imports are correct
 
-interface BookingData {
+export interface BookingData {
   property: { id: string };
+  propertyName:string;
   checkinDate: string;
   checkoutDate: string;
   noOfAdults: number;
@@ -11,6 +12,7 @@ interface BookingData {
   isLastMinuteBooking: boolean;
   cleaningFee: number;
   petFee: number;
+  createdAt: string;
   notes?: string; // Added notes field
 }
 
@@ -46,6 +48,8 @@ export const saveBooking = createAsyncThunk(
     return bookingData;
   }
 );
+
+
 export const confirmBooking = createAsyncThunk<
   { message: string; data: any },
   BookingData,
@@ -54,10 +58,14 @@ export const confirmBooking = createAsyncThunk<
   'bookings/confirmBooking',
   async (bookingData: BookingData, { rejectWithValue }) => {
     try {
-      const response = await createBooking(bookingData);
-      // const data = response.data;
 
-      if (response.status === 201) {
+      const { propertyName,noOfInfants,confirmationCode,cleaningFee,petFee, ...filteredBookingData } = bookingData;
+
+      // Make the API call with the filtered data
+      const response = await createBooking(filteredBookingData);
+  
+
+      if (response.data.statusCode === 201) {
         return { message: response.data.message, data: response.data };
       } else {
         console.log("rejected");

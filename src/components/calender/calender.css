@@ -67,7 +67,8 @@
 } */
 
 .btn-book{
-  color: white;
+  color: rgb(0, 0, 0);
+  font-weight: 600;
   background-color: #e8aa6c;
   font-size: 15px;
   height: 50px;
@@ -75,8 +76,8 @@
 }
 
 .btn-book:hover{
-  color: white;
-  background-color: #eaa35b;
+  color: rgb(255, 255, 255);
+  background-color: #e48b32;
 }
 
 .btn-book{

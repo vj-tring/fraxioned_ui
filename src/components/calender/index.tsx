@@ -43,8 +43,8 @@ export function DatePickerWithRange({
   const dispatch = useDispatch();
   const bookings = useSelector((state: RootState) => state.bookings.bookings);
   const bookingState = useSelector((state: RootState) => state.bookings);
-  const bookingError = bookingState?.error;
-  const bookingSuccessMessage = bookingState?.successMessage;
+  // const bookingError = bookingState?.error;
+  // const bookingSuccessMessage = bookingState?.successMessage;
   // const isBookingLoading = bookingState?.isLoading;
   const selectedPropertyDetails = useSelector(selectSelectedPropertyDetails);
   const seasonHolidays = useSelector(selectPropertySeasonHolidays);
@@ -77,20 +77,20 @@ export function DatePickerWithRange({
     dispatch(clearBookingMessages());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (bookingError) {
-      dispatch(setErrorMessage(bookingError));
-    }
-    if (bookingSuccessMessage) {
-      console.log(bookingSuccessMessage);
-      dispatch(clearDates());
-    }
-    const timer = setTimeout(() => {
-      dispatch(clearBookingMessages());
-    }, 5000);
+  // useEffect(() => {
+  //   if (bookingError) {
+  //     dispatch(setErrorMessage(bookingError));
+  //   }
+  //   if (bookingSuccessMessage) {
+  //     console.log(bookingSuccessMessage);
+  //     dispatch(clearDates());
+  //   }
+  //   const timer = setTimeout(() => {
+  //     dispatch(clearBookingMessages());
+  //   }, 5000);
 
-    return () => clearTimeout(timer);
-  }, [bookingError, bookingSuccessMessage, dispatch]);
+  //   return () => clearTimeout(timer);
+  // }, [bookingError, bookingSuccessMessage, dispatch]);
 
   useEffect(() => {
     if (selectedPropertyDetails?.id) {
@@ -215,31 +215,42 @@ export function DatePickerWithRange({
     return diffInDays <= calendarData.bookingRules.lastMinuteBooking.maxDays;
   };
 
-  const meetsConsecutiveStayRule = (date: Date) => {
+const meetsConsecutiveStayRule = (date: Date) => {
     if (date.toDateString() === today.toDateString()) {
-      return true;
+        return true;
     }
-  
-    const userBookings = bookings.filter(booking => 
-      booking.property.id === selectedPropertyDetails.id && 
-      booking.user.id === currentUser.id
+
+    const userBookings = bookings.filter(
+        booking => booking.property.id === selectedPropertyDetails.id && booking.user.id === currentUser.id
     );
-  
+
     if (userBookings.length === 0) {
-      return true;
+        return true;
     }
-  
+
+    // Check if the date is within any of the booked periods
+    for (const booking of userBookings) {
+        const checkInDate = new Date(booking.checkinDate);
+        const checkOutDate = new Date(booking.checkoutDate);
+
+        if (date >= checkInDate && date <= checkOutDate) {
+            return true;
+        }
+    }
+
+    // Find the latest checkout date
     const latestCheckOutDate = userBookings.reduce((latest, booking) => {
-      const checkOutDate = new Date(booking.checkoutDate);
-      return checkOutDate > latest ? checkOutDate : latest;
+        const checkOutDate = new Date(booking.checkoutDate);
+        return checkOutDate > latest ? checkOutDate : latest;
     }, new Date(0));
-  
-    const nightsBetween = Math.floor(
-      (date.getTime() - latestCheckOutDate.getTime()) / (1000 * 60 * 60 * 24)
+
+    const daysBetween = Math.floor(
+        (date.getTime() - latestCheckOutDate.getTime()) / (1000 * 60 * 60 * 24)
     );
-  
-    return date < latestCheckOutDate || nightsBetween >= 5;
-  };
+
+    // Ensure the date is at least 5 days after the latest checkout date
+    return daysBetween >= 5;
+};
 
   const handleDateChange = (range: DateRange | undefined) => {
     if (range?.from) {
@@ -413,8 +424,6 @@ export function DatePickerWithRange({
       <div className="error-msg-container ml-5 flex justify-start">
           <div className="error-msg">
             {errorMessage && <div className="text-red-600">{errorMessage}</div>}
-            {bookingError && <div className="text-red-600">{bookingError}</div>}
-            {bookingSuccessMessage && <div className="text-green-600">{bookingSuccessMessage}</div>}
             {validationMessage && <div className="text-yellow-600">{validationMessage}</div>}
           </div>
         </div>
