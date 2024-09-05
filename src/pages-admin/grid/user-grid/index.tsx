@@ -3,12 +3,12 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { IconButton, Modal, Typography, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+// import VisibilityIcon from '@mui/icons-material/Visibility';
 import { userdetails, getUserById, propertydetailsapi } from '@/api';
 import Search from '@/pages-admin/search-user';
 import styles from './User.module.css';
 import EditForm from './edit-form';
-import UserForm from './user-form';
+// import UserForm from './user-form';
 
 interface ContactDetails {
     id: number;
@@ -146,11 +146,11 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     };
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'Id', minWidth: 100, align: 'center', headerAlign: 'center' },
-        { field: 'firstName', headerName: 'First Name', minWidth: 100, align: 'center', headerAlign: 'center' },
+        { field: 'id', headerName: 'Id', minWidth: 110, align: 'center', headerAlign: 'center' },
+        { field: 'firstName', headerName: 'First Name', minWidth: 120, align: 'center', headerAlign: 'center' },
         { field: 'lastName', headerName: 'Last Name', minWidth: 130, align: 'center', headerAlign: 'center' },
-        { field: 'roleName', headerName: 'Role', minWidth: 140, align: 'center', headerAlign: 'center' },
-        { field: 'lastLoginTime', headerName: 'Last Login', minWidth: 110, align: 'center', headerAlign: 'center' },
+        { field: 'roleName', headerName: 'Role', minWidth: 150, align: 'center', headerAlign: 'center' },
+        { field: 'lastLoginTime', headerName: 'Last Login', minWidth: 150, align: 'center', headerAlign: 'center' },
         {
             field: 'contactDetails',
             headerName: 'Contact Details',
@@ -207,13 +207,13 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             headerAlign: 'center',
             renderCell: (params) => (
                 <>
-                    <IconButton
+                    {/* <IconButton
                         aria-label="view"
                         color="primary"
                         onClick={() => handleViewClick(params.row.id)}
                     >
                         <VisibilityIcon />
-                    </IconButton>
+                    </IconButton> */}
                     <IconButton
                         aria-label="edit"
                         color="primary"
@@ -265,7 +265,7 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                     )}
                 </div>
             </Modal>
-            <Modal
+            {/* <Modal
                 open={isUserFormOpen}
                 onClose={handleCloseUserForm}
                 aria-labelledby="view-user-modal"
@@ -279,7 +279,7 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                         />
                     )}
                 </div>
-            </Modal>
+            </Modal> */}
 
         </div>
     );
