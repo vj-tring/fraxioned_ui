@@ -59,7 +59,7 @@ const BookingSummaryForm: React.FC = () => {
   );
 
   const handleBookingCancel = () => {
-    navigate("/dashboard");
+    navigate("/home");
   };
   const handleBookingConfirm = async () => {
     setIsLoading(true);
@@ -77,7 +77,7 @@ const BookingSummaryForm: React.FC = () => {
 
       setSnackbarMessage(result.message);
       setSnackbarSeverity("success");
-      navigate("/dashboard");
+      navigate("/home");
 
     } catch (error) {
       // Handle error

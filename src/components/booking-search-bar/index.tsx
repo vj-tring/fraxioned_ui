@@ -118,7 +118,7 @@ const BookingSearchBar: React.FC = () => {
 
     // if (bookingState.successMessage) {
     // showSnackbar(bookingState.successMessage, "success");
-    navigate("/dashboard/booking-summary");
+    navigate("/home/booking-summary");
     // }
   };
 

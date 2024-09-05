@@ -25,7 +25,7 @@ const Card: React.FC<CardProps> = ({
 
   const handleClick = () => {
     if (id !== undefined) {
-      navigate(`/dashboard/property/${id}`);
+      navigate(`/home/property/${id}`);
     }
   };
 
