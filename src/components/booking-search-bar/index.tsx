@@ -110,7 +110,7 @@ const BookingSearchBar: React.FC = () => {
       noOfInfants: 0,
       notes: "",
       confirmationCode: "",
-      cleaningFee: 100,
+      cleaningFee: 0,
       petFee: 0,
     };
 
