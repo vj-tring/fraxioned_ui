@@ -69,17 +69,16 @@ const BookingSummaryForm: React.FC = () => {
         confirmBooking({ ...booking, notes })
       ).unwrap();
 
-      // Show success message
-
-      // Ensure loader is visible for 3 seconds
-      setTimeout(() => {
+      // setTimeout(() => {
         setIsLoading(false);
         setShowConfirmation(true);
-        navigate("/dashboard");
-      }, 3000);
+      // }, 3000);
+      setShowSnackbar(true);
+
       setSnackbarMessage(result.message);
       setSnackbarSeverity("success");
-      setShowSnackbar(true);
+      navigate("/dashboard");
+
     } catch (error) {
       // Handle error
       setSnackbarMessage((error as string) || "Failed to confirm booking");
