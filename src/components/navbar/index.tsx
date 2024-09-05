@@ -22,7 +22,10 @@ import FormDialog from "../register-form-modal";
 import { ListItemText } from "@mui/material";
 import LockResetOutlinedIcon from "@mui/icons-material/LockResetOutlined";
 import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined";
-
+import ConfirmationNumberOutlinedIcon from '@mui/icons-material/ConfirmationNumberOutlined';
+import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
+import LiveHelpOutlinedIcon from '@mui/icons-material/LiveHelpOutlined';
+import ContactPageOutlinedIcon from '@mui/icons-material/ContactPageOutlined';
 interface CustomNavbarProps {
   logo?: string;
   links?: {
@@ -145,15 +148,16 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
         </Navbar.Collapse>
 
         <Nav className="ml-auto">
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box sx={{ display: "flex", alignItems: "center",backgroundColor:"none" }}>
             <IconButton
               onClick={handleClick}
               size="small"
-              sx={{ ml: 2 }}
+              sx={{ ml: 2, '.MuiIconButton-root:hover': { backgroundColor: "none" } }}
               aria-controls={open ? "account-menu" : undefined}
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
               disableRipple
+      
             >
               <Box
                 display="flex"
@@ -232,6 +236,69 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               },
             }}
           >
+                {!isAdmin && (
+<>
+             <MenuItem
+              // onClick={handleResetPasswordClick}
+              style={{
+                height: "2.4rem",
+              }}
+            >
+              <ListItemIcon>
+                <ConfirmationNumberOutlinedIcon
+                  style={{
+                    width: "80%",
+                  }}
+                />
+              </ListItemIcon>
+              <ListItemText>Tickets</ListItemText>
+            </MenuItem>
+           
+            <MenuItem
+              // onClick={handleResetPasswordClick}
+              style={{
+                height: "2.4rem",
+              }}
+            >
+              <ListItemIcon>
+                <MenuBookOutlinedIcon
+                  style={{
+                    width: "80%",
+                  }}
+                />
+              </ListItemIcon>
+              <ListItemText>GuideBooks</ListItemText>
+            </MenuItem>
+            <MenuItem
+              // onClick={handleResetPasswordClick}
+              style={{
+                height: "2.4rem",
+              }}
+            >
+              <ListItemIcon>
+                <LiveHelpOutlinedIcon
+                  style={{
+                    width: "80%",
+                  }}
+                />
+              </ListItemIcon>
+              <ListItemText>Faq</ListItemText>
+            </MenuItem>
+            <MenuItem
+              // onClick={handleResetPasswordClick}
+              style={{
+                height: "2.4rem",
+              }}
+            >
+              <ListItemIcon>
+                <ContactPageOutlinedIcon
+                  style={{
+                    width: "80%",
+                  }}
+                />
+              </ListItemIcon>
+              <ListItemText>Contact us</ListItemText>
+            </MenuItem>
             <MenuItem
               onClick={handleResetPasswordClick}
               style={{
@@ -247,6 +314,10 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               </ListItemIcon>
               <ListItemText>Reset</ListItemText>
             </MenuItem>
+
+            </>
+            )}
+            
             {isAdmin && (
               <MenuItem
                 onClick={handleAddAccountClick}
@@ -273,6 +344,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                 opacity: 0.12,
               }}
             />
+
             <MenuItem
               onClick={handleLogoutClick}
               style={{

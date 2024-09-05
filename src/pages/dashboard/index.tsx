@@ -33,13 +33,14 @@ const Dashboard: React.FC = () => {
     { name: 'BOOKINGS', href: '/dashboard/booking', disabled: false },
     { name: 'DOCUMENTS', href: '/dashboard/peak-season', disabled: false },
     { name: 'PAYMENTS', href: '/dashboard/payments', disabled: true },
-    { name: 'MORE', href: '/dashboard/faq', disabled: true },
+    // { name: 'MORE', href: '/dashboard/faq', disabled: true },
 
   ]
 
   return (
     <>
       <CustomNavbar
+      
         logo={fraxionedLogo}
         links={links}
         userImage={userImage}
