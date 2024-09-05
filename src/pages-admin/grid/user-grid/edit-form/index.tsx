@@ -17,36 +17,40 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import { updateuserapi, getRoles } from '@/api';
 import CloseIcon from '@mui/icons-material/Close';
-import AddIcon from '@mui/icons-material/Add';
 import Loader from '@/components/loader';
 import styles from './EditUser.module.css';
-import { DeleteIcon } from 'lucide-react';
 
-interface ContactDetail {
-    id?: number;
-    contactType: string;
-    contactValue: string;
+interface ContactDetails {
+    id: number;
+    primaryEmail: string;
+    secondaryEmail: string | null;
+    optionalEmailOne: string | null;
+    optionalEmailTwo: string | null;
+    primaryPhone: string;
+    secondaryPhone: string | null;
+    optionalPhoneOne: string | null;
+    optionalPhoneTwo: string | null;
 }
+
 interface UserData {
     id: number;
     role: { id: number };
     firstName: string;
     lastName: string;
-    addressLine1: string;
-    addressLine2: string;
-    city: string;
-    state: string;
-    country: string;
-    zipcode: string;
-    isActive: boolean;
-    contactDetails: ContactDetail[];
-    createdBy: string;
-    lastLoginTime: string;
-    imageURL: string;
     password?: string;
+    imageURL: string | null;
+    isActive: boolean;
+    addressLine1: string | null;
+    addressLine2: string | null;
+    state: string | null;
+    country: string | null;
+    city: string | null;
+    zipcode: string | null;
     resetToken?: string;
     resetTokenExpires?: string;
+    lastLoginTime: string;
     updatedBy?: number;
+    contactDetails: ContactDetails;
 }
 
 interface Role {
@@ -62,11 +66,7 @@ interface EditFormProps {
 }
 
 const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => {
-    const [formData, setFormData] = useState<UserData>({
-        ...user,
-        isActive: Boolean(user.isActive),
-        contactDetails: user.contactDetails || []
-    });
+    const [formData, setFormData] = useState<UserData>(user);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [roles, setRoles] = useState<Role[]>([]);
@@ -85,10 +85,6 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
         fetchRoles();
     }, []);
 
-    useEffect(() => {
-        console.log("data", formData);
-    }, [formData]);
-
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
         setFormData((prevData) => ({
@@ -97,69 +93,25 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
         }));
     };
 
-    const handleContactChange = (index: number, field: string, value: string) => {
-        setFormData((prevData) => {
-            const newContactDetails = [...(prevData.contactDetails || [])];
-            if (newContactDetails[index]) {
-                newContactDetails[index] = { ...newContactDetails[index], [field]: value };
-            }
-            return { ...prevData, contactDetails: newContactDetails };
-        });
-    };
-
-
-
-    const addContact = () => {
+    const handleContactChange = (field: keyof ContactDetails, value: string) => {
         setFormData((prevData) => ({
             ...prevData,
-            contactDetails: [
+            contactDetails: {
                 ...prevData.contactDetails,
-                { contactType: 'email', contactValue: '' },
-                { contactType: 'phone', contactValue: '' }
-            ]
+                [field]: value
+            }
         }));
     };
-
-    const removeContact = (index: number) => {
-        setFormData((prevData) => ({
-            ...prevData,
-            contactDetails: prevData.contactDetails.filter((_, i) => i !== index && i !== index + 1)
-        }));
-    };
-
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!formData.id) {
-            setError('User ID not found. Please try again.');
-            return;
-        }
         setLoading(true);
         try {
             const dataToSend = {
+                ...formData,
                 role: { id: formData.role.id },
-                firstName: formData.firstName,
-                lastName: formData.lastName,
-                password: formData.password,
-                imageURL: formData.imageURL,
                 isActive: Boolean(formData.isActive),
-                addressLine1: formData.addressLine1 || null,
-                addressLine2: formData.addressLine2 || null,
-                state: formData.state,
-                country: formData.country,
-                city: formData.city,
-                zipcode: formData.zipcode,
-                resetToken: formData.resetToken,
-                resetTokenExpires: formData.resetTokenExpires,
-                lastLoginTime: formData.lastLoginTime,
                 updatedBy: formData.id,
-                contactDetails: formData.contactDetails
-                    .filter(contact => contact.contactValue.trim() !== '')
-                    .map(contact => ({
-                        ...(contact.id ? { id: contact.id } : {}),
-                        contactType: contact.contactType,
-                        contactValue: contact.contactValue
-                    }))
             };
             await updateuserapi(formData.id, dataToSend);
             onUserUpdated();
@@ -171,9 +123,6 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
             setLoading(false);
         }
     };
-
-
-
 
     if (loading) return <Loader />;
 
@@ -193,13 +142,13 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                         >
                             <CloseIcon />
                         </IconButton>
-
                     </Box>
                 </div>
                 <div className={styles.scrollableContent}>
                     <Paper elevation={9} className={styles.formPaper}>
                         <form onSubmit={handleSubmit} className={styles.form}>
                             <Grid container spacing={3}>
+                                {/* Basic Information */}
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         label="First Name"
@@ -224,11 +173,13 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                                         className={styles.inputField}
                                     />
                                 </Grid>
+                                
+                                {/* Address Fields */}
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         label="Address Line 1"
                                         name="addressLine1"
-                                        value={formData.addressLine1}
+                                        value={formData.addressLine1 || ''}
                                         onChange={handleInputChange}
                                         fullWidth
                                         variant="outlined"
@@ -239,7 +190,7 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                                     <TextField
                                         label="Address Line 2"
                                         name="addressLine2"
-                                        value={formData.addressLine2}
+                                        value={formData.addressLine2 || ''}
                                         onChange={handleInputChange}
                                         fullWidth
                                         variant="outlined"
@@ -250,7 +201,7 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                                     <TextField
                                         label="City"
                                         name="city"
-                                        value={formData.city}
+                                        value={formData.city || ''}
                                         onChange={handleInputChange}
                                         fullWidth
                                         variant="outlined"
@@ -261,7 +212,7 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                                     <TextField
                                         label="State"
                                         name="state"
-                                        value={formData.state}
+                                        value={formData.state || ''}
                                         onChange={handleInputChange}
                                         fullWidth
                                         variant="outlined"
@@ -272,7 +223,7 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                                     <TextField
                                         label="Country"
                                         name="country"
-                                        value={formData.country}
+                                        value={formData.country || ''}
                                         onChange={handleInputChange}
                                         fullWidth
                                         variant="outlined"
@@ -283,18 +234,20 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                                     <TextField
                                         label="Zipcode"
                                         name="zipcode"
-                                        value={formData.zipcode}
+                                        value={formData.zipcode || ''}
                                         onChange={handleInputChange}
                                         fullWidth
                                         variant="outlined"
                                         className={styles.inputField}
                                     />
                                 </Grid>
+
+                                {/* Role Selection */}
                                 <Grid item xs={12} sm={6}>
                                     <FormControl fullWidth variant="outlined" className={styles.inputField}>
                                         <InputLabel>Role</InputLabel>
                                         <Select
-                                            value={formData.role?.id || ''}
+                                            value={formData.role.id}
                                             onChange={(e) => setFormData(prev => ({ ...prev, role: { id: Number(e.target.value) } }))}
                                             label="Role"
                                             name="role.id"
@@ -308,6 +261,7 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                                     </FormControl>
                                 </Grid>
 
+                                {/* Is Active Checkbox */}
                                 <Grid item xs={12}>
                                     <FormControlLabel
                                         control={
@@ -322,41 +276,52 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                                         className={styles.checkbox}
                                     />
                                 </Grid>
+
+                                {/* Contact Details */}
                                 <Grid item xs={12}>
                                     <Typography variant="h6" className={styles.sectionTitle}>Contact Details</Typography>
                                 </Grid>
-                                {formData.contactDetails && formData.contactDetails.map((contact, index) => (
-                                    <React.Fragment key={index}>
-                                        <Grid item xs={12} sm={5}>
-                                            <TextField
-                                                label={contact.contactType}
-                                                value={contact.contactValue}
-                                                onChange={(e) => handleContactChange(index, 'contactValue', e.target.value)}
-                                                fullWidth
-                                                variant="outlined"
-                                                className={styles.inputField}
-                                            />
-                                        </Grid>
-                                        {index % 2 === 1 && (
-                                            <Grid item xs={12} sm={2}>
-                                                <IconButton onClick={() => removeContact(index - 1)} color="secondary">
-                                                    <DeleteIcon />
-                                                </IconButton>
-                                            </Grid>
-                                        )}
-                                    </React.Fragment>
-                                ))}
-                                <Grid item xs={12}>
-                                    <Button
-                                        startIcon={<AddIcon />}
-                                        onClick={addContact}
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        label="Primary Email"
+                                        value={formData.contactDetails.primaryEmail}
+                                        onChange={(e) => handleContactChange('primaryEmail', e.target.value)}
+                                        fullWidth
                                         variant="outlined"
-                                        color="primary"
-                                        className={styles.addButton}
-                                    >
-                                        Add Contact
-                                    </Button>
+                                        className={styles.inputField}
+                                    />
                                 </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        label="Secondary Email"
+                                        value={formData.contactDetails.secondaryEmail || ''}
+                                        onChange={(e) => handleContactChange('secondaryEmail', e.target.value)}
+                                        fullWidth
+                                        variant="outlined"
+                                        className={styles.inputField}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        label="Primary Phone"
+                                        value={formData.contactDetails.primaryPhone}
+                                        onChange={(e) => handleContactChange('primaryPhone', e.target.value)}
+                                        fullWidth
+                                        variant="outlined"
+                                        className={styles.inputField}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        label="Secondary Phone"
+                                        value={formData.contactDetails.secondaryPhone || ''}
+                                        onChange={(e) => handleContactChange('secondaryPhone', e.target.value)}
+                                        fullWidth
+                                        variant="outlined"
+                                        className={styles.inputField}
+                                    />
+                                </Grid>
+                                {/* Add fields for optional emails and phones if needed */}
                             </Grid>
                             {error && <Typography color="error" className={styles.error}>{error}</Typography>}
                             <Box className={styles.buttonContainer}>

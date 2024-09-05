@@ -3,17 +3,23 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { IconButton, Modal, Typography, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+// import VisibilityIcon from '@mui/icons-material/Visibility';
 import { userdetails, getUserById, propertydetailsapi } from '@/api';
 import Search from '@/pages-admin/search-user';
 import styles from './User.module.css';
 import EditForm from './edit-form';
-import UserForm from './user-form';
+// import UserForm from './user-form';
 
-interface ContactDetail {
+interface ContactDetails {
     id: number;
-    contactType: string;
-    contactValue: string;
+    primaryEmail: string;
+    secondaryEmail: string | null;
+    optionalEmailOne: string | null;
+    optionalEmailTwo: string | null;
+    primaryPhone: string;
+    secondaryPhone: string | null;
+    optionalPhoneOne: string | null;
+    optionalPhoneTwo: string | null;
     createdAt: string;
     updatedAt: string;
 }
@@ -23,17 +29,17 @@ interface UserData {
     role: { id: number; roleName: string };
     firstName: string;
     lastName: string;
-    addressLine1: string;
-    addressLine2: string;
-    city: string;
-    state: string;
-    country: string;
-    zipcode: string;
+    addressLine1: string | null;
+    addressLine2: string | null;
+    city: string | null;
+    state: string | null;
+    country: string | null;
+    zipcode: string | null;
     isActive: boolean;
-    contactDetails: ContactDetail[];
-    createdBy: string;
+    contactDetails: ContactDetails;
+    createdBy: number;
     lastLoginTime: string;
-    imageURL: string;
+    imageURL: string | null;
     password?: string;
     resetToken?: string;
     resetTokenExpires?: string;
@@ -70,7 +76,6 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                 ...user,
                 id: user.id,
                 roleName: user.role.roleName,
-                createdBy: user.createdBy === '1' ? 'owner' : 'Admin',
             }));
             setUsers(fetchedUsers);
             setFilteredUsers(fetchedUsers);
@@ -141,12 +146,11 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     };
 
     const columns: GridColDef[] = [
-        { field: 'id', headerName: 'Id', minWidth: 100, align: 'center', headerAlign: 'center' },
-        { field: 'firstName', headerName: 'First Name', minWidth: 100, align: 'center', headerAlign: 'center' },
+        { field: 'id', headerName: 'Id', minWidth: 110, align: 'center', headerAlign: 'center' },
+        { field: 'firstName', headerName: 'First Name', minWidth: 120, align: 'center', headerAlign: 'center' },
         { field: 'lastName', headerName: 'Last Name', minWidth: 130, align: 'center', headerAlign: 'center' },
-        { field: 'state', headerName: 'State', minWidth: 120, align: 'center', headerAlign: 'center' },
-        { field: 'roleName', headerName: 'Role', minWidth: 140, align: 'center', headerAlign: 'center' },
-        { field: 'lastLoginTime', headerName: 'Last Login', minWidth: 110, align: 'center', headerAlign: 'center' },
+        { field: 'roleName', headerName: 'Role', minWidth: 150, align: 'center', headerAlign: 'center' },
+        { field: 'lastLoginTime', headerName: 'Last Login', minWidth: 150, align: 'center', headerAlign: 'center' },
         {
             field: 'contactDetails',
             headerName: 'Contact Details',
@@ -154,25 +158,17 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             align: 'center',
             headerAlign: 'center',
             renderCell: (params) => {
-                const phoneContact = params.row.contactDetails.find(
-                    (contact: ContactDetail) => contact.contactType.toLowerCase() === 'phone'
-                );
-
-                const emailContact = params.row.contactDetails.find(
-                    (contact: ContactDetail) => contact.contactType.toLowerCase() === 'email'
-                );
-
-                const phone = phoneContact ? phoneContact.contactValue : '';
-                const email = emailContact ? emailContact.contactValue : '';
+                const { primaryPhone, primaryEmail } = params.row.contactDetails;
 
                 return (
                     <div className={styles.contactDetails}>
-                        {phone && <div className={styles.contactRow}>{phone}</div>}
-                        {email && <div className={styles.contactRow}>{email}</div>}
+                        {primaryPhone && <div className={styles.contactRow}>{primaryPhone}</div>}
+                        {primaryEmail && <div className={styles.contactRow}>{primaryEmail}</div>}
                     </div>
                 );
             },
         },
+
         {
             field: 'properties',
             headerName: 'Properties',
@@ -211,13 +207,13 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             headerAlign: 'center',
             renderCell: (params) => (
                 <>
-                    <IconButton
+                    {/* <IconButton
                         aria-label="view"
                         color="primary"
                         onClick={() => handleViewClick(params.row.id)}
                     >
                         <VisibilityIcon />
-                    </IconButton>
+                    </IconButton> */}
                     <IconButton
                         aria-label="edit"
                         color="primary"
@@ -269,7 +265,7 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                     )}
                 </div>
             </Modal>
-            <Modal
+            {/* <Modal
                 open={isUserFormOpen}
                 onClose={handleCloseUserForm}
                 aria-labelledby="view-user-modal"
@@ -283,7 +279,7 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                         />
                     )}
                 </div>
-            </Modal>
+            </Modal> */}
 
         </div>
     );

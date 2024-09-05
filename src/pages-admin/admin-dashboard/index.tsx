@@ -16,7 +16,6 @@ import userImage from '../../assets/images/profile.jpeg'
 import CustomNavbar from '@/components/navbar';
 import fraxionedLogo from '../../assets/images/fraxioned.png'
 import './admin-dashboard.css'
-import id from 'date-fns/locale/id';
 
 const AdminDashboard: React.FC = () => {
     const navigate = useNavigate()
@@ -95,11 +94,10 @@ const AdminDashboard: React.FC = () => {
                             <div className="property-details-container">
                                 <PropertySidePanel isOpen={true} />
                                 <div className="property-info-content">
-                                    <EditAmenityForm onClose={() => navigate(`/property/${id}/amenities/edit`)} />
+                                    <EditAmenityForm />
                                 </div>
                             </div>
                         } />
-
                     </Routes>
                 </div>
             </div>
