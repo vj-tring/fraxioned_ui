@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './booking.css';
 import { Typography, Box, Tabs, Tab } from '@mui/material';
-import BookingSearchBar from '@/components/booking-search-bar';
+// import BookingSearchBar from '@/components/booking-search-bar';
 import BookingGrid from '@/components/grid/BookingGrid';
 import { BookingData, fetchBookings } from '@/store/slice/auth/bookingSlice';
 import { AppDispatch } from '@/store';
@@ -48,9 +48,9 @@ const Booking = () => {
 
     return (
         <>
-            <div className="HomeImg">
+            {/* <div className="HomeImg">
             </div>
-            <BookingSearchBar />
+            <BookingSearchBar /> */}
             <Box sx={{ padding: 4 }}>
                 <Typography variant="h4" gutterBottom>
                     My Bookings
