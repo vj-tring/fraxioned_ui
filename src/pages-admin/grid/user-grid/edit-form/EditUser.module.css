@@ -281,6 +281,6 @@
     color: #e28f25;
 }
 
-:global(.MuiIconButton-root:hover) {
+/* :global(.MuiIconButton-root:hover) {
     background-color: rgba(244, 67, 54, 0.04) !important;
-}
+} */
