@@ -214,30 +214,44 @@ export function DatePickerWithRange({
       (checkInDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
     return diffInDays <= calendarData.bookingRules.lastMinuteBooking.maxDays;
   };
-  const meetsConsecutiveStayRule = (date: Date) => {
-    if (date.toDateString() === today.toDateString()) {
-      return true;
+const meetsConsecutiveStayRule = (date: Date) => {
+  if (date.toDateString() === today.toDateString()) {
+    return true;
+  }
+
+  const userBookings = bookings.filter(
+    booking => booking.property.id === selectedPropertyDetails.id &&
+               booking.user.id === currentUser.id
+  );
+
+  if (userBookings.length === 0) {
+    return true;
+  }
+
+  for (const booking of userBookings) {
+    const checkOutDate = new Date(booking.checkoutDate);
+    const checkInDate = new Date(booking.checkinDate);
+    
+    // Check if the date is within 5 days after a previous checkout
+    const daysSinceCheckout = Math.floor((date.getTime() - checkOutDate.getTime()) / (1000 * 60 * 60 * 24));
+    if (daysSinceCheckout >= 0 && daysSinceCheckout < 5) {
+      return false;
     }
-    const userBookings = bookings.filter(
-      booking => booking.property.id === selectedPropertyDetails.id && 
-                 booking.user.id === currentUser.id
-    );
-      if (userBookings.length === 0) {
-      return true;
+    
+    // Check if the date is within 5 days before a future check-in
+    const daysBeforeCheckin = Math.floor((checkInDate.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+    if (daysBeforeCheckin >= 0 && daysBeforeCheckin <= 5) {
+      return false;
     }
-      for (const booking of userBookings) {
-      const checkOutDate = new Date(booking.checkoutDate);
-      const daysSinceCheckout = Math.floor((date.getTime() - checkOutDate.getTime()) / (1000 * 60 * 60 * 24));
-        if (daysSinceCheckout >= 0 && daysSinceCheckout < 5) {
-        return false;
-      }
-        const checkInDate = new Date(booking.checkinDate);
-      if (date >= checkInDate && date <= checkOutDate) {
-        return false;
-      }
+    
+    // Check if the date falls within an existing booking
+    if (date >= checkInDate && date <= checkOutDate) {
+      return false;
     }
-      return true;
-  };
+  }
+    
+  return true;
+};
   const handleDateChange = (range: DateRange | undefined) => {
     if (range?.from) {
       const newStartDate = range.from;
@@ -439,17 +453,15 @@ export function DatePickerWithRange({
           color: blue !important;
         }
       `}</style>
-      <div className="flex items-center justify-between end-calendar">
-        <div className='stay-length'>
-          <div>Minimum Stay Length : {calendarData.bookingRules.regularBooking.minNights} Nights</div>
-          <div>Maximum Stay Length : {selectedPropertyDetails?.details[selectedYear]?.maximumStayLength} Nights</div>
+        <div className="flex items-center justify-between end-calendar">
+          <div className='stay-length'>
+            <div>Minimum Stay Length : {calendarData.bookingRules.regularBooking.minNights} Nights</div>
+            <div>Maximum Stay Length : {selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.maximumStayLength || 'N/A'} Nights</div>
+          </div>
+          <div onClick={clearDatesHandler} className="btn-clear">
+            Clear dates
+          </div>
         </div>
-        <div onClick={clearDatesHandler} className="btn-clear">
-          Clear dates
-        </div>
-      </div>
-      <div className="flex items-center justify-end ">
-      </div>
     </div>
   );
 }
