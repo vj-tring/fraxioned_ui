@@ -131,9 +131,6 @@ export const amenitiesapi = () =>
 export const getpropertyamenityByid = () =>
     axiosInstance.get(`/v1/property-amenities`);
 
-export const yearwiseproeprty = (userId: number) =>
-    axiosInstance.get(`/v1/properties//user-properties-with-details`);
-
 export const getAmenitiesById = (id: number) =>
     axiosInstance.get(`/v1/property-amenities/property/${id}`);
 
@@ -142,7 +139,17 @@ export const addamenity = (data: {
     amenityName: string;
     amenityDescription: string;
     amenityType: string;
-  }) => axiosInstance.post('/v1/amenities/amenity', data);
+}) => axiosInstance.post('/v1/amenities/amenity', data);
+
+export const updateamenityforproperty = (updateData: { property: { id: number; }; amenities: { id: number; }[]; updatedBy: { id: number; }; }) =>
+    axiosInstance.patch(`/v1/property-amenities`, updateData);
+
+export const updateamenities = (id: number, updateData: {
+    updatedBy: { id: number };
+    amenityName: string;
+    amenityDescription: string;
+    amenityType: string;
+  }) => axiosInstance.patch(`/v1/amenities/amenity/${id}`, updateData);
 
 
 

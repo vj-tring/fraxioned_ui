@@ -6,13 +6,13 @@
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
     color: #333333;
     overflow-y: auto;
-    z-index: 999;
     font-family: 'Roboto', sans-serif;
     transition: width 0.3s ease;
     display: flex;
     flex-direction: column;
-    width: 250px;
     padding-top: 0;
+    flex: 1;
+    max-width: 16rem;
 }
 
 .menu {
@@ -68,8 +68,8 @@
 
 .propertyNames {
     font-weight: 600;
+    margin-left:10px;
     font-size: 18px;
-    margin-left: 38px;
     color: #333333;
     overflow: hidden;
     text-overflow: ellipsis;
