@@ -9,7 +9,6 @@
 .dashboard-content {
     display: flex;
     flex: 1;
-    margin-top: 60px;
     position: relative;
 }
 
@@ -21,7 +20,9 @@
 
 .property-info-content {
     flex-grow: 1;
-    padding: 20px;
+    padding-top: 14px;
+    padding-left: 20px;
+    padding-bottom: 20px;
     overflow-y: auto;
 
 }
@@ -64,7 +65,6 @@
     position: absolute;
     top: 60px;
     left: 220px;
-    /* Adjust this value to position the divider */
     height: calc(100% - 60px);
     width: 1px;
     background-color: #e0e0e0;

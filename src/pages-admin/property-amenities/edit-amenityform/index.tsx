@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { amenitiesapi } from '@/api';
 import styles from './editamenityform.module.css';
-import CloseIcon from '@mui/icons-material/Close';
 
 interface Amenity {
     id: number;
@@ -9,12 +9,10 @@ interface Amenity {
     amenityType: string;
 }
 
-interface EditAmenityFormProps {
-    onClose: () => void;
-}
-
-const EditAmenityForm: React.FC<EditAmenityFormProps> = ({ onClose }) => {
+const EditAmenityForm: React.FC = () => {
     const [amenities, setAmenities] = useState<{ [key: string]: Amenity[] }>({});
+    const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchAmenities = async () => {
@@ -36,26 +34,31 @@ const EditAmenityForm: React.FC<EditAmenityFormProps> = ({ onClose }) => {
         fetchAmenities();
     }, []);
 
+    const handleClose = () => {
+        navigate(`/property/${id}/amenities`);
+    };
+
     return (
-        <div className={styles.overlay}>
-            <div className={styles.modal}>
-                <div className={styles.header}>
-                    <h2 className={styles.title}>Edit Amenities</h2>
-                    <CloseIcon className={styles.closeIcon} onClick={onClose} />
-                </div>
-                <div className={styles.content}>
-                    {Object.keys(amenities).map((type) => (
-                        <div key={type} className={styles.amenityGroup}>
-                            <h3 className={styles.amenityType}>{type}</h3>
-                            {amenities[type].map((amenity) => (
-                                <label key={amenity.id} className={styles.amenityItem}>
-                                    <input type="checkbox" />
-                                    {amenity.amenityName}
-                                </label>
-                            ))}
-                        </div>
-                    ))}
-                </div>
+        <div className={styles.container}>
+            <div className={styles.header}>
+                <h2 className={styles.title}>Edit Amenities</h2>
+                <button className={styles.closeButton} onClick={handleClose}>Close</button>
+            </div>
+            <div className={styles.content}>
+                {Object.keys(amenities).map((type) => (
+                    <div key={type} className={styles.amenityGroup}>
+                        <h3 className={styles.amenityType}>{type}</h3>
+                        {amenities[type].map((amenity) => (
+                            <label key={amenity.id} className={styles.amenityItem}>
+                                <input type="checkbox" />
+                                {amenity.amenityName}
+                            </label>
+                        ))}
+                    </div>
+                ))}
+            </div>
+            <div className={styles.footer}>
+                <button className={styles.saveButton} onClick={handleClose}>Save Changes</button>
             </div>
         </div>
     );

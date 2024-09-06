@@ -12,18 +12,39 @@ interface UserDetailsProps {
     onClose: () => void;
 }
 
+interface ContactDetails {
+    id: number;
+    primaryEmail: string;
+    secondaryEmail: string | null;
+    optionalEmailOne: string | null;
+    optionalEmailTwo: string | null;
+    primaryPhone: string;
+    secondaryPhone: string | null;
+    optionalPhoneOne: string | null;
+    optionalPhoneTwo: string | null;
+    createdAt: string;
+    updatedAt: string;
+}
+
 interface UserData {
     id: number;
     role: { id: number; roleName: string };
     firstName: string;
     lastName: string;
-    addressLine1: string;
-    addressLine2?: string;
-    city: string;
-    state: string;
-    country: string;
-    zipcode: string;
-    contactDetails: { contactType: string; contactValue: string }[];
+    imageURL: string | null;
+    isActive: boolean;
+    addressLine1: string | null;
+    addressLine2: string | null;
+    city: string | null;
+    state: string | null;
+    country: string | null;
+    zipcode: string | null;
+    lastLoginTime: string;
+    createdBy: number;
+    updatedBy: number;
+    createdAt: string;
+    updatedAt: string;
+    contactDetails: ContactDetails;
 }
 
 interface PropertyData {
@@ -104,23 +125,30 @@ const UserDetails: React.FC<UserDetailsProps> = ({ userId, onClose }) => {
                             <DetailItem label="Role" value={userData.role.roleName} />
                             <DetailItem label="First Name" value={userData.firstName} />
                             <DetailItem label="Last Name" value={userData.lastName} />
+                            <DetailItem label="Active" value={userData.isActive ? 'Yes' : 'No'} />
+                            <DetailItem label="Last Login" value={new Date(userData.lastLoginTime).toLocaleString()} />
                         </div>
 
                         <div className={styles.detailsSection}>
                             <Typography variant="h6" className={styles.sectionTitle}>Address</Typography>
-                            <DetailItem label="Address Line 1" value={userData.addressLine1} />
-                            {userData.addressLine2 && <DetailItem label="Address Line 2" value={userData.addressLine2} />}
-                            <DetailItem label="City" value={userData.city} />
-                            <DetailItem label="State" value={userData.state} />
-                            <DetailItem label="Country" value={userData.country} />
-                            <DetailItem label="Zipcode" value={userData.zipcode} />
+                            <DetailItem label="Address Line 1" value={userData.addressLine1 || 'N/A'} />
+                            <DetailItem label="Address Line 2" value={userData.addressLine2 || 'N/A'} />
+                            <DetailItem label="City" value={userData.city || 'N/A'} />
+                            <DetailItem label="State" value={userData.state || 'N/A'} />
+                            <DetailItem label="Country" value={userData.country || 'N/A'} />
+                            <DetailItem label="Zipcode" value={userData.zipcode || 'N/A'} />
                         </div>
 
                         <div className={styles.detailsSection}>
                             <Typography variant="h6" className={styles.sectionTitle}>Contact Details</Typography>
-                            {userData.contactDetails.map((contact, index) => (
-                                <DetailItem key={index} label={contact.contactType} value={contact.contactValue} />
-                            ))}
+                            <DetailItem label="Primary Email" value={userData.contactDetails.primaryEmail} />
+                            <DetailItem label="Secondary Email" value={userData.contactDetails.secondaryEmail || 'N/A'} />
+                            <DetailItem label="Optional Email 1" value={userData.contactDetails.optionalEmailOne || 'N/A'} />
+                            <DetailItem label="Optional Email 2" value={userData.contactDetails.optionalEmailTwo || 'N/A'} />
+                            <DetailItem label="Primary Phone" value={userData.contactDetails.primaryPhone} />
+                            <DetailItem label="Secondary Phone" value={userData.contactDetails.secondaryPhone || 'N/A'} />
+                            <DetailItem label="Optional Phone 1" value={userData.contactDetails.optionalPhoneOne || 'N/A'} />
+                            <DetailItem label="Optional Phone 2" value={userData.contactDetails.optionalPhoneTwo || 'N/A'} />
                         </div>
 
                         {userProperties.length > 0 && (
