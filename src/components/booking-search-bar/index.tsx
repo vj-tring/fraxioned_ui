@@ -28,6 +28,18 @@ const BookingSearchBar: React.FC = () => {
   const [activeDate, setActiveDate] = useState<"check-in" | "check-out" | null>(
     null
   );
+  const bookingdetails = useSelector((state: RootState) => state.datePicker.dateRange);
+
+  
+  useEffect(() => {
+    if (bookingdetails) {
+        setDateRange({
+            from: bookingdetails.from,
+            to: bookingdetails.to
+        });
+    }
+}, [bookingdetails]);
+
   const dispatch = useDispatch();
   const navigate = useNavigate(); // Initialize useNavigate
   const bookingState = useSelector((state: RootState) => state.bookings);
@@ -38,6 +50,8 @@ const BookingSearchBar: React.FC = () => {
   const selectedPropertyDetails = useSelector(selectSelectedPropertyDetails);
   const { showSnackbar } = useSnackbar();
 
+
+  
   const handleDateSelect = (range: DateRange | undefined) => {
     setDateRange(range);
     if (range?.from && !range.to) {
