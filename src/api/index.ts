@@ -62,7 +62,6 @@ export const propertyseasonholiday = (p0?: string) =>
 export const propertyseasonholidaydelete = (id: number) =>
     axiosInstance.delete(`/v1/property-season-holidays/property-season-holiday/${id}`);
 
-
 export const getPropertySeasonHoliday = (propertyId: number) =>
     axiosInstance.get(`/v1/property-season-holidays/property/${propertyId}`);
 
@@ -149,8 +148,16 @@ export const updateamenities = (id: number, updateData: {
     amenityName: string;
     amenityDescription: string;
     amenityType: string;
-  }) => axiosInstance.patch(`/v1/amenities/amenity/${id}`, updateData);
+}) => axiosInstance.patch(`/v1/amenities/amenity/${id}`, updateData);
 
+export const propertyImageapi = () =>
+    axiosInstance.get(`/v1/propertyImages`);
+
+export const deleteAmenity = (id: number) =>
+    axiosInstance.delete(`/v1/amenities/amenity/${id}`);
+
+export const propertyImageuploadapi = () =>
+    axiosInstance.post(`/v1/propertyImages`);
 
 
 

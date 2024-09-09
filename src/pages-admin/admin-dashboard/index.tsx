@@ -1,17 +1,19 @@
 import React, { useState } from 'react'
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
-import SidePanel from '@/components/sidepanel';
+import SidePanel from '@/pages-admin/sidepanel';
 import Holidays from '../grid/holiday-grid';
 import Calendar from '@/components/big-calendar';
 import Property from '../grid/property-grid';
 import PropertySidePanel from '../propertysidepanel';
 import PropertyGeneralInfo from '../property-generalinfo'
 import EditPropertyForm from '../grid/property-grid/EditPropertyForm';
+import AmenityManagement from '../amenity-page';
 import EditAmenityForm from '../property-amenities/edit-amenityform';
 import PropertyAmenities from '../property-amenities';
 import UserGrid from '../grid/user-grid';
 import PropertyRules from '../property-rules';
 import EditPropertyRulesForm from '../property-rules/edit-form';
+import PropertyPhotos from '../property-photos';
 import userImage from '../../assets/images/profile.jpeg'
 import CustomNavbar from '@/components/navbar';
 import fraxionedLogo from '../../assets/images/fraxioned.png'
@@ -39,6 +41,7 @@ const AdminDashboard: React.FC = () => {
                     <Routes>
                         <Route path="/" element={<Navigate to="admin/bookings" replace />} />
                         <Route path="/bookings" element={<Calendar isSidebarOpen={isSidebarOpen} />} />
+                        <Route path="/amenity" element={<AmenityManagement/>} />
                         <Route path="/holidays" element={<Holidays isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/user" element={<UserGrid isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/property" element={<Property isSidebarOpen={isSidebarOpen} />} />
@@ -95,6 +98,15 @@ const AdminDashboard: React.FC = () => {
                                 <PropertySidePanel isOpen={true} />
                                 <div className="property-info-content">
                                     <EditAmenityForm />
+                                </div>
+                            </div>
+                        } />
+                        {/* Add the new route for PropertyPhotos */}
+                        <Route path="/property/:id/photos" element={
+                            <div className="property-details-container">
+                                <PropertySidePanel isOpen={true} />
+                                <div className="property-info-content">
+                                    <PropertyPhotos />
                                 </div>
                             </div>
                         } />

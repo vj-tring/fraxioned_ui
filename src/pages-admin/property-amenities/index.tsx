@@ -101,9 +101,7 @@ const PropertyAmenities: React.FC = () => {
     }
   };
 
-  const handleAddNewAmenity = () => {
-    setShowNewAmenityForm(true);
-  };
+ 
 
   const handleCloseNewAmenityForm = () => {
     setShowNewAmenityForm(false);
@@ -182,11 +180,11 @@ const PropertyAmenities: React.FC = () => {
         <div className={styles.header}>
           <h1 className={styles.title}>Property Amenities</h1>
           <div className={styles.buttonGroup}>
-            <button className={`${styles.updateButton} ${editMode ? styles.active : ''}`} onClick={toggleEditMode}>
+            {/* <button className={`${styles.updateButton} ${editMode ? styles.active : ''}`} onClick={toggleEditMode}>
               {editMode ? 'Done' : 'Edit'}
-            </button>
+            </button> */}
             <button className={styles.updateButton} onClick={handleUpdate}>Update</button>
-            <button className={styles.addButton} onClick={handleAddNewAmenity}>Add</button>
+            {/* <button className={styles.addButton} onClick={handleAddNewAmenity}>Add</button> */}
           </div>
         </div>
         <div className={styles.amenitiesGrid}>
