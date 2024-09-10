@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import "./home.css";
 import BookingSearchBar from "../../components/booking-search-bar";
 import Card from "../../components/cards";
@@ -14,6 +14,9 @@ import image1 from "../../assests/bear-lake-bluffs.jpg";
 import { FaPlus } from "react-icons/fa";
 import { mockProperties } from "./mockData";
 import PorpImg from "../../assests/crown-jewel.jpg";
+import { resetLimits } from "@/store/slice/auth/propertyGuestSlice";
+import { useDispatch } from "react-redux";
+import { clearDates } from "@/store/slice/datePickerSlice";
 
 interface Property {
   id: number;
@@ -37,6 +40,8 @@ const Home: React.FC = () => {
     error,
   } = useSelector((state: RootState) => state.properties);
 
+  const dispatch = useDispatch();
+
   const displayProperties = properties.length ? properties : mockProperties;
   const showCarousel = displayProperties.length > 4;
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -49,6 +54,12 @@ const Home: React.FC = () => {
       });
     }
   };
+
+  useEffect(() => {
+    dispatch(resetLimits());
+    dispatch(clearDates());
+  }, [dispatch]);
+
   const Shadow =
     properties.length >= 4 ? "rgba(0, 0, 0, 0.1) 1px 1px 2px 1px" : "none";
 

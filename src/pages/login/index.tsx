@@ -56,7 +56,7 @@ const Login: React.FC = () => {
             if (resultAction.user.roleId === 1) {
               navigate('/admin/bookings');
             } else {
-              navigate('/dashboard');
+              navigate('/home');
             }
 
             setIsLoading(false);

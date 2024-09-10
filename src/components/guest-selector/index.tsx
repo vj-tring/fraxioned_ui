@@ -40,15 +40,21 @@ const MultipleSelect: React.FC = () => {
     validateCounts();
   }, [selectedPropertyLimits, counts]);
 
+
+
+  
+  const  currentBooking  = useSelector((state: RootState) => state.limits.counts);
+
+
+
   useEffect(() => {
-    if (bookingSuccessMessage) {
-      // Reset counts when booking is successful
+    if (currentBooking) {
       setCountsLocal({
-        Adults: 1,
-        Children: 0,
-        Pets: 0,
+        Adults: currentBooking.Adults,
+        Children: currentBooking.Children,
+        Pets: currentBooking.Pets,
       });
-      dispatch(resetLimits());
+      // dispatch(resetLimits());
     }
   }, [bookingSuccessMessage, dispatch]);
 
@@ -72,14 +78,13 @@ const MultipleSelect: React.FC = () => {
   };
 
 
-  // const { currentBooking } = useSelector((state: RootState) => state.bookings);
+
+
 
 
   const getTotalGuests = () => {
 
-    // if(currentBooking){
-    //   return currentBooking.noOfAdults+currentBooking.noOfChildren
-    // }
+    
     return counts.Adults + counts.Children;
   };
 

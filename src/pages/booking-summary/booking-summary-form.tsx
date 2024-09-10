@@ -7,8 +7,11 @@ import { confirmBooking, setNotes } from "@/store/slice/auth/bookingSlice";
 import { useNavigate } from "react-router-dom";
 // import Loader from "../../components/loader/index";
 import { AppDispatch } from "@/store";
-import { Button, CircularProgress, SvgIcon } from "@mui/material";
+import { Button, CircularProgress, SvgIcon, Typography } from "@mui/material";
 import CustomizedSnackbars from "../../components/customized-snackbar";
+import { keyframes } from "@mui/system";
+import { css } from '@emotion/react';
+
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -16,6 +19,8 @@ import img1 from "../../assests/bear-lake-bluffs.jpg";
 import img2 from "../../assests/blue-bear-lake.jpg";
 import img3 from "../../assests/crown-jewel.jpg";
 import img4 from "../../assests/lake-escape.jpg";
+import { resetLimits } from "@/store/slice/auth/propertyGuestSlice";
+import { clearDates } from "@/store/slice/datePickerSlice";
 const mockBooking = {
   property: { id: "3" },
   checkinDate: new Date().toISOString(),
@@ -31,10 +36,21 @@ const mockBooking = {
 };
 
 const CheckIcon: React.FC = () => (
-  <SvgIcon viewBox="0 0 24 24" sx={{ fontSize: 60, color: "#4CAF50" }}>
+  <SvgIcon viewBox="0 0 24 24" sx={{ fontSize: 40, color: "#4CAF50" ,            marginRight:"3px"
+  }}>
     <path d="M10 15.172l-3.707-3.707 1.414-1.414L10 12.343l7.293-7.293 1.414 1.414L10 15.172z" />
   </SvgIcon>
 );
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
 const BookingSummaryForm: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -59,35 +75,35 @@ const BookingSummaryForm: React.FC = () => {
   );
 
   const handleBookingCancel = () => {
-    navigate("/dashboard");
+    dispatch(resetLimits());
+    dispatch(clearDates());
+    navigate("/home");
   };
   const handleBookingConfirm = async () => {
     setIsLoading(true);
     try {
       dispatch(setNotes(notes));
       const result = await dispatch(
-        confirmBooking({ ...booking, notes })
+        confirmBooking({
+          ...booking,
+          notes,
+        })
       ).unwrap();
 
-      // setTimeout(() => {
+      // Simulate loading time and then show confirmation
+      setTimeout(() => {
         setIsLoading(false);
         setShowConfirmation(true);
-      // }, 3000);
-      setShowSnackbar(true);
 
-      setSnackbarMessage(result.message);
-      setSnackbarSeverity("success");
-      navigate("/dashboard");
-
+        setTimeout(() => {
+          navigate("/home/booking");
+        }, 3000);
+      }, 5000);
     } catch (error) {
-      // Handle error
       setSnackbarMessage((error as string) || "Failed to confirm booking");
       setSnackbarSeverity("error");
       setShowSnackbar(true);
       setIsLoading(false);
-    } finally {
-      // Ensure loading state is cleared if error occurs
-      // No need for this here as setIsLoading(false) is handled in catch
     }
   };
 
@@ -95,6 +111,22 @@ const BookingSummaryForm: React.FC = () => {
     setShowSnackbar(false);
   };
 
+
+  const fadeInLeftToRight = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+`;
+
+// Define the animation CSS
+const animationStyle = css`
+  animation: ${fadeInLeftToRight} 1s ease-out;
+`;
   const formatDate = (date) => {
     return date.toLocaleDateString("en-US", {
       weekday: "short", // Abbreviated weekday (e.g., Wed)
@@ -115,12 +147,13 @@ const BookingSummaryForm: React.FC = () => {
         paddingBottom: 2,
         width: "90%",
         marginLeft: "5%",
-        borderRadius: "5px",
+        // borderRadius: "5px",
+        borderTopRightRadius:"15px",
 
         boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
       }}
     >
-      {isLoading && (
+      {isLoading && !showConfirmation && (
         <Box
           sx={{
             position: "absolute",
@@ -131,7 +164,8 @@ const BookingSummaryForm: React.FC = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "rgba(255, 255, 255, 0.8)",
+            
+            backgroundColor: "rgba(255, 255,    255, 0.8)",
             zIndex: 1000,
           }}
         >
@@ -146,7 +180,7 @@ const BookingSummaryForm: React.FC = () => {
         message={snackbarMessage}
         severity={snackbarSeverity}
       />
-      {/* {showConfirmation && (
+      {showConfirmation && (
         <Box
           sx={{
             position: "fixed",
@@ -161,160 +195,163 @@ const BookingSummaryForm: React.FC = () => {
             alignItems: "center",
             zIndex: 1000,
             color: "#4CAF50",
+            animation: `${fadeIn} 1s ease-in-out`,
           }}
         >
+          <Typography variant="h2" component="h1" sx={{ marginTop: 2 ,
+            fontSize:"24px",
+          }}>
           <CheckIcon />
-          <h1>Booking Successful</h1>
+          Booking Successful
+          </Typography>
         </Box>
-      )} */}
+      )}
 
-      {!showConfirmation && (
-        <>
-          <div className="SummaryImg ">
-            <Row className=" RowImg">
-              <Col sm={11}>
-                <img src={img1} alt="Image 1" />
-              </Col>
-            </Row>
-            <Row className="mt-3 ">
-              <Col sm={4}>
-                <img src={img2} alt="Image 2" />
-              </Col>
-              <Col sm={4}>
-                <img src={img3} alt="Image 3" />
-              </Col>
-              <Col sm={4}>
-                <img src={img4} alt="Image 4" />
-              </Col>
-            </Row>
-          </div>
+      {/* {!isLoading && ( */}
+      <>
+        <div className="SummaryImg ">
+          <Row className=" RowImg">
+            <Col sm={11}>
+              <img src={img1} alt="Image 1" />
+            </Col>
+          </Row>
+          <Row className="mt-3 ">
+            <Col sm={4}>
+              <img src={img2} alt="Image 2" />
+            </Col>
+            <Col sm={4}>
+              <img src={img3} alt="Image 3" />
+            </Col>
+            <Col sm={4}>
+              <img src={img4} alt="Image 4" />
+            </Col>
+          </Row>
+        </div>
 
-          {/* </div> */}
+        {/* </div> */}
 
-          <div className="BookSum">
-            <h1 className="SummaryHead">BOOKING SUMMARY</h1>
-            <div className="ListSum mt-3">
-              <div>
-                <div className="property">Property</div>{" "}
-                <div className="colon">:</div>
-                <div className="value">
-                  {booking.propertyName}
-                  {/* {!booking.data
+        <div className="BookSum">
+          <h1 className="SummaryHead">BOOKING SUMMARY</h1>
+          <div className="ListSum mt-3">
+            <div>
+              <div className="property">Property</div>{" "}
+              <div className="colon">:</div>
+              <div className="value">
+                {booking.propertyName}
+                {/* {!booking.data
                     ? booking.property.id
                     : booking.data.property.id} */}
-                </div>
               </div>
-              <div>
-                <div className="property">Check-in</div>
-                <div className="colon">:</div>
-                <div className="value">{formatDate(new Date(checkinDate))}</div>
-              </div>
-              <div>
-                <div className="property">Check-out</div>
-                <div className="colon">:</div>
+            </div>
+            <div>
+              <div className="property">Check-in</div>
+              <div className="colon">:</div>
+              <div className="value">{formatDate(new Date(checkinDate))}</div>
+            </div>
+            <div>
+              <div className="property">Check-out</div>
+              <div className="colon">:</div>
 
-                <div className="value">
-                  {formatDate(new Date(checkoutDate))}
-                </div>
-              </div>
-              <div>
-                <div className="property">Total Nights</div>
-                <div className="colon">:</div>
+              <div className="value">{formatDate(new Date(checkoutDate))}</div>
+            </div>
+            <div>
+              <div className="property">Total Nights</div>
+              <div className="colon">:</div>
 
-                <div className="value">{totalNights}</div>
-              </div>
-              <div>
-                <div className="property">Adults</div>
-                <div className="colon">:</div>
+              <div className="value">{totalNights}</div>
+            </div>
+            <div>
+              <div className="property">Adults</div>
+              <div className="colon">:</div>
 
-                <div className="value">{booking.noOfAdults}</div>
-              </div>
-              <div>
-                <div className="property">Children</div>
-                <div className="colon">:</div>
+              <div className="value">{booking.noOfAdults}</div>
+            </div>
+            <div>
+              <div className="property">Children</div>
+              <div className="colon">:</div>
 
-                <div className="value">{booking.noOfChildren}</div>
-              </div>
-              <div>
-                <div className="property">Pets</div>
-                <div className="colon">:</div>
+              <div className="value">{booking.noOfChildren}</div>
+            </div>
+            <div>
+              <div className="property">Pets</div>
+              <div className="colon">:</div>
 
-                <div className="value">{booking.noOfPets}</div>
-              </div>
-              <div>
-                <div className="property">Season</div>
-                <div className="colon">:</div>
+              <div className="value">{booking.noOfPets}</div>
+            </div>
+            <div>
+              <div className="property">Season</div>
+              <div className="colon">:</div>
 
-                <div className="value">
-                  {booking.isLastMinuteBooking ? "Last Minute" : "Regular"}
-                </div>
+              <div className="value">
+                {booking.isLastMinuteBooking ? "Last Minute" : "Regular"}
               </div>
             </div>
           </div>
+        </div>
 
-          <div className="PaySum">
-            <h1 className="SummaryHead">PAYMENTS SUMMARY</h1>
-            <div className="ListSum mt-3">
-              <div>
-                <div className="property">Cleaning Fee</div>
-                <div className="colon">:</div>
+        <div className="PaySum">
+          <h1 className="SummaryHead">PAYMENTS SUMMARY</h1>
+          <div className="ListSum mt-3">
+            <div>
+              <div className="property">Cleaning Fee</div>
+              <div className="colon">:</div>
 
-                <div className="value">${booking.cleaningFee}</div>
-              </div>
-              <div>
-                <div className="property">Pet Fee</div>
-                <div className="colon">:</div>
+              <div className="value">${booking.cleaningFee}</div>
+            </div>
+            <div>
+              <div className="property">Pet Fee</div>
+              <div className="colon">:</div>
 
-                <div className="value">${booking.petFee}</div>
-              </div>
-              <div>
-                <div className="property">Total Amount Due</div>
-                <div className="colon">:</div>
+              <div className="value">${booking.petFee}</div>
+            </div>
+            <div>
+              <div className="property">Total Amount Due</div>
+              <div className="colon">:</div>
 
-                <div className="value">
-                  ${booking.cleaningFee + booking.petFee}
-                </div>
-              </div>
-              <div>
-                <div className="property">Date of Charge</div>
-                <div className="colon">:</div>
-
-                <div className="value">{formatDate(new Date())}</div>
+              <div className="value">
+                ${booking.cleaningFee + booking.petFee}
               </div>
             </div>
+            <div>
+              <div className="property">Date of Charge</div>
+              <div className="colon">:</div>
 
-            <div className="Notes">
-              <h1 className="SummaryHead">NOTES</h1>
-              <textarea
-                id="Textarea"
-                rows={1}
-                className="p-3 w-100"
-                placeholder="Add any notes here..."
-                value={notes}
-                onChange={(e) => setNotesValue(e.target.value)}
-              />
-            </div>
-
-            <div className="Btun mt-3">
-              <Button
-                disableRipple
-                onClick={handleBookingCancel}
-                className="cancelBtn"
-              >
-                Cancel
-              </Button>
-              <Button
-                disableRipple
-                onClick={handleBookingConfirm}
-                className="confirmBtn"
-                disabled={isLoading}
-              >
-                {isLoading ? "Confirming..." : "Confirm Booking"}
-              </Button>
+              <div className="value">{formatDate(new Date())}</div>
             </div>
           </div>
-        </>
-      )}
+
+          <div className="Notes">
+            <h1 className="SummaryHead">NOTES</h1>
+            <textarea
+              id="Textarea"
+              rows={1}
+              className="p-3 w-100"
+              placeholder="Add any notes here..."
+              value={notes}
+              onChange={(e) => setNotesValue(e.target.value)}
+            />
+          </div>
+
+          <div className="Btun mt-3">
+            <Button
+              disableRipple
+              onClick={handleBookingCancel}
+              className="cancelBtn"
+            >
+              Cancel
+            </Button>
+            <Button
+              disableRipple
+              onClick={handleBookingConfirm}
+              className="confirmBtn"
+              disabled={isLoading}
+            >
+              {isLoading ? "Confirming..." : "Confirm Booking"}
+            </Button>
+          </div>
+        </div>
+      </>
+      {/* )} */}
     </Box>
   );
 };
