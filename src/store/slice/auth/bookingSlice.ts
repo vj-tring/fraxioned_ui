@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { createBooking, getBookings } from '../../../api/index'; // Ensure these imports are correct
+import { createBooking, getBookings,getUserBookings } from '../../../api/index'; // Ensure these imports are correct
 
 export interface BookingData {
+  id?: number;
   property: { id: string };
   propertyName:string;
   checkinDate: string;
@@ -23,6 +24,7 @@ interface ConfirmBookingResponse {
 
 interface BookingState {
   bookings: BookingData[]; // Added bookings array to state
+  userBookings: BookingData[];
   currentBooking: BookingData | null;
   error: string | null;
   successMessage: string | null;
@@ -35,6 +37,18 @@ export const fetchBookings = createAsyncThunk(
     try {
       const response = await getBookings();
       console.log('Fetched bookings:', response.data);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || { message: 'An error occurred' });
+    }
+  }
+);
+
+export const fetchUserBookings = createAsyncThunk(
+  'bookings/fetchUserBookings',
+  async (userId: number, { rejectWithValue }) => {
+    try {
+      const response = await getUserBookings(userId);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data || { message: 'An error occurred' });
@@ -83,6 +97,7 @@ const bookingSlice = createSlice({
   name: 'bookings',
   initialState: {
     bookings: [],
+    userBookings: [],
     currentBooking: null as BookingData | null,
     error: null as string | null,
     successMessage: null as string | null,
@@ -92,6 +107,8 @@ const bookingSlice = createSlice({
     clearBookingMessages: (state) => {
       state.error = null;
       state.successMessage = null;
+      state.isLoading = false;
+      // state.error = action.payload as string;
     },
     setNotes: (state, action: PayloadAction<string>) => {
       if (state.currentBooking) {
@@ -104,6 +121,19 @@ const bookingSlice = createSlice({
       .addCase(fetchBookings.fulfilled, (state, action) => {
         state.bookings = action.payload;
         state.isLoading = false;
+      })
+      .addCase(fetchUserBookings.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchUserBookings.fulfilled, (state, action: PayloadAction<BookingData[]>) => {
+        state.userBookings = action.payload;
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(fetchUserBookings.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
       })
       .addCase(saveBooking.pending, (state) => {
         state.isLoading = true;
