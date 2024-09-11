@@ -20,6 +20,7 @@ const AmenityManagement: React.FC = () => {
     const [isAddingNew, setIsAddingNew] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [amenityToDelete, setAmenityToDelete] = useState<Amenity | null>(null);
+    
 
     useEffect(() => {
         fetchAmenities();

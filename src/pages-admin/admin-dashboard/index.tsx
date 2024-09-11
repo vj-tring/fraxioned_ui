@@ -16,6 +16,7 @@ import PropertyRules from '../property-rules';
 import EditPropertyRulesForm from '../property-rules/edit-form';
 import PropertyPhotos from '../property-photos';
 import userImage from '../../assets/images/profile.jpeg'
+import EditPhoto from '../property-photos/edit-propertyphoto';
 import CustomNavbar from '@/components/navbar';
 import fraxionedLogo from '../../assets/images/fraxioned.png'
 import './admin-dashboard.css'
@@ -42,7 +43,7 @@ const AdminDashboard: React.FC = () => {
                     <Routes>
                         <Route path="/" element={<Navigate to="admin/bookings" replace />} />
                         <Route path="/bookings" element={<Calendar isSidebarOpen={isSidebarOpen} />} />
-                        <Route path="/amenity" element={<AmenityManagement/>} />
+                        <Route path="/amenity" element={<AmenityManagement />} />
                         <Route path="/holidays" element={<Holidays isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/user" element={<UserGrid isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/property" element={<Property isSidebarOpen={isSidebarOpen} />} />
@@ -118,6 +119,15 @@ const AdminDashboard: React.FC = () => {
                                 </div>
                             </div>
                         } />
+                        <Route path="/property/:id/photos/:imageId/edit" element={
+                            <div className="property-details-container">
+                                <PropertySidePanel isOpen={true} />
+                                <div className="property-info-content">
+                                    <EditPhoto />
+                                </div>
+                            </div>
+                        } />
+
 
                     </Routes>
                 </div>

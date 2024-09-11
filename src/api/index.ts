@@ -168,16 +168,13 @@ export const propertyImageuploadapi = (formData: FormData) => {
         }
     });
 };
-
 export const propertyImageeditapi = (id: number, formData: FormData) => {
-    return axiosInstance.patch(`/v1/propertyImages/${id}`, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-            'Accept': '*/*'
-        }
-    });
+    console.log('to backend', formData);
+    return axiosInstance.patch(`/v1/propertyImages/propertyImage/${id}`, formData);
 };
 
+export const deletetpropertyImageById = (id: number) =>
+    axiosInstance.delete(`/v1/propertyImages/propertyImage/${id}`);
 
 
 

@@ -1,3 +1,4 @@
+
 import axios from 'axios';
 import { useAuthHelpers } from './useAuthHelper';
 
@@ -29,14 +30,13 @@ axiosInstance.interceptors.request.use(
             config.headers['resetToken'] = resetToken;
         }
 
-        // Check if the request is for image upload
-        const isImageUpload = config.url?.includes('/propertyImages') && config.method === 'post';
+        const isImageUpload = config.url?.includes('/propertyImages') && 
+            (config.method === 'post' || config.method === 'patch');
 
         if (isImageUpload) {
             config.headers['Content-Type'] = 'multipart/form-data';
             config.headers['Accept'] = '*/*';
         } else {
-            // For all other requests, use JSON headers
             config.headers['Content-Type'] = 'application/json';
             config.headers['Accept'] = 'application/json';
         }
@@ -67,3 +67,4 @@ axiosInstance.interceptors.response.use(
 );
 
 export default axiosInstance;
+

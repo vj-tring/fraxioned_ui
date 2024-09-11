@@ -18,9 +18,7 @@ const spaceTypes = [
 ];
 
 const spaces = [
-    { id: 1, name: 'General' },
-    { id: 2, name: 'Bedroom' },
-    { id: 3, name: 'Bathroom' },
+    { id: 1, name: 'General' }
 ];
 
 const PhotoUpload: React.FC = () => {
@@ -67,6 +65,8 @@ const PhotoUpload: React.FC = () => {
             navigate(`/admin/property/${id}/photos`);
         } catch (error) {
             console.error('Error uploading images:', error);
+            navigate(`/admin/property/${id}/photos`);
+
         } finally {
             setIsLoading(false);
         }
