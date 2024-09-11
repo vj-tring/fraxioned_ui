@@ -43,7 +43,7 @@ const Booking = () => {
     } Children, ${booking.noOfPets} Pet${booking.noOfPets > 1 ? "s" : ""}`;
     return {
       ...booking,
-      property: booking.property.id,
+      property: booking.property.propertyName,
       guest: guestDetails,
       checkinDate: formattedDate(booking.checkinDate),
       checkoutDate: formattedDate(booking.checkoutDate),

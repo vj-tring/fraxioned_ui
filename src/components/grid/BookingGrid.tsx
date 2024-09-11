@@ -29,7 +29,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
 }) => {
   const columns: GridColDef[] = [
     {
-      field: "bookingId",
+      field: "property",
       headerName: "Property",
       flex: 1,
       headerAlign: "center",
