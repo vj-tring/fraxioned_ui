@@ -240,7 +240,7 @@ export function DatePickerWithRange({
       if (diffInDaysFromCheckout >= 0 && diffInDaysFromCheckout <= 5) {
         return false;
       }
-      if (diffInDaysFromCheckoutToLastCheckin >= -5 && diffInDaysFromCheckoutToLastCheckin < 0) {
+      if (diffInDaysFromCheckoutToLastCheckin >= -6 && diffInDaysFromCheckoutToLastCheckin < 0) {
         return false;
       }
       if (diffInDaysFromCheckin >= 0 && diffInDaysFromCheckin <= 5) {
