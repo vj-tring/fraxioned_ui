@@ -215,44 +215,41 @@ export function DatePickerWithRange({
 
     return diffInDays <= calendarData.bookingRules.lastMinuteBooking.maxDays; 
   };
-const meetsConsecutiveStayRule = (date: Date) => {
-  if (date.toDateString() === today.toDateString()) {
+  const meetsConsecutiveStayRule = (checkinDate: Date, checkoutDate: Date) => {
+    if (checkinDate.toDateString() === today.toDateString()) {
+      return true;
+    }
+
+    const userBookings = bookings.filter(
+      booking => booking.property.id === selectedPropertyDetails.id &&
+                 booking.user.id === currentUser.id
+    );
+
+    if (userBookings.length === 0) {
+      return true;
+    }
+
+    for (const booking of userBookings) {
+      const lastCheckoutDate = new Date(booking.checkoutDate);
+      const lastCheckinDate = new Date(booking.checkinDate);
+      
+      const diffInDaysFromCheckout = (checkinDate.getTime() - lastCheckoutDate.getTime()) / (1000 * 60 * 60 * 24);
+      const diffInDaysFromCheckoutToLastCheckin = (checkoutDate.getTime() - lastCheckinDate.getTime()) / (1000 * 60 * 60 * 24);
+      const diffInDaysFromCheckin = (lastCheckinDate.getTime() - checkinDate.getTime()) / (1000 * 60 * 60 * 24);
+
+      if (diffInDaysFromCheckout >= 0 && diffInDaysFromCheckout <= 5) {
+        return false;
+      }
+      if (diffInDaysFromCheckoutToLastCheckin >= -5 && diffInDaysFromCheckoutToLastCheckin < 0) {
+        return false;
+      }
+      if (diffInDaysFromCheckin >= 0 && diffInDaysFromCheckin <= 5) {
+        return false;
+      }
+    }
+    
     return true;
-  }
-
-  const userBookings = bookings.filter(
-    booking => booking.property.id === selectedPropertyDetails.id &&
-               booking.user.id === currentUser.id
-  );
-
-  if (userBookings.length === 0) {
-    return true;
-  }
-
-  for (const booking of userBookings) {
-    const checkOutDate = new Date(booking.checkoutDate);
-    const checkInDate = new Date(booking.checkinDate);
-    
-    // Check if the date is within 5 days after a previous checkout
-    const daysSinceCheckout = Math.floor((date.getTime() - checkOutDate.getTime()) / (1000 * 60 * 60 * 24));
-    if (daysSinceCheckout >= 0 && daysSinceCheckout < 5) {
-      return false;
-    }
-    
-    // Check if the date is within 5 days before a future check-in
-    const daysBeforeCheckin = Math.floor((checkInDate.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
-    if (daysBeforeCheckin >= 0 && daysBeforeCheckin <= 5) {
-      return false;
-    }
-    
-    // Check if the date falls within an existing booking
-    if (date >= checkInDate && date <= checkOutDate) {
-      return false;
-    }
-  }
-    
-  return true;
-};
+  };
 
 const isBookingTooCloseToCheckin = (checkinDate: Date) => {
   const checkinTime = new Date(checkinDate);
@@ -271,8 +268,7 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
   
       dispatch(setSelectedYear(newStartDate.getFullYear()));
   
-      if (!meetsConsecutiveStayRule(newStartDate)) {
-        console.log("Consecutive stay rule not met");
+      if (!meetsConsecutiveStayRule(newStartDate, newStartDate)) {
         dispatch(setErrorMessage('There must be at least 5 nights between your bookings at this property.'));
         dispatch(clearPartial());
         if (onSelect) onSelect(undefined);
@@ -280,6 +276,15 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
       }
       dispatch(setStartDate(newStartDate));
       dispatch(setStartDateSelected(true));
+
+      if (newEndDate) {
+        if (!meetsConsecutiveStayRule(newStartDate, newEndDate)) {
+          dispatch(setErrorMessage('There must be at least 5 nights between your bookings at this property.'));
+          dispatch(clearPartial());
+          if (onSelect) onSelect(undefined);
+          return;
+        }
+      }
 
       if (isBookingTooCloseToCheckin(newStartDate)) {
         dispatch(setErrorMessage('Booking must be made at least 24 hours before the check-in time'));
