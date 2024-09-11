@@ -69,6 +69,9 @@ export const getPropertySeasonHoliday = (propertyId: number) =>
 export const createBooking = (bookingData: void) =>
     axiosInstance.post(`/v1/bookings/booking`, bookingData);
 
+export const createBookingSummary = (bookingData: void) =>
+    axiosInstance.post(`/v1/bookings/booking/booking-summary`, bookingData);
+
 export const getBookings = () =>
     axiosInstance.get('/v1/bookings');
 

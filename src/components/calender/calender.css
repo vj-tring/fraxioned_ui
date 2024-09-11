@@ -18,6 +18,17 @@
   padding-left: 10px;
 }
 
+.peak-length {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: UberMoveText, system-ui, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  color: gray;
+  gap: 1rem;
+  padding-left: 10px;
+  padding-bottom: 5px;
+}
 /* .error-msg-container {
   margin-top: 5px;
   margin-bottom: 5px;
@@ -105,6 +116,10 @@
 .error-msg{
   font-size: 13px; 
   margin-bottom: 10px;
+}
+
+.bold{
+  font-weight: 500;
 }
 
 /* .calendar{

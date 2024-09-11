@@ -23,7 +23,7 @@ const MultipleSelect: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
-
+  const [dynamicMessage, setDynamicMessage] = useState<string>('');
 
   const selectedPropertyLimits = useSelector((state: RootState) => state.properties.selectedPropertyLimits);
   const bookingSuccessMessage = useSelector((state: RootState) => state.bookings.successMessage);
@@ -74,6 +74,15 @@ const MultipleSelect: React.FC = () => {
       message = `The number of pets cannot exceed ${noOfPetsAllowed}.`;
     }
     setValidationMessage(message);
+    let dynamicMsg;
+
+    if (noOfPetsAllowed === 0) {
+        dynamicMsg = `This property has a maximum of ${noOfGuestsAllowed} guests, including children. Pets aren't allowed.`;
+    } else {
+        dynamicMsg = `This property has a maximum of ${noOfGuestsAllowed} guests, including children and ${noOfPetsAllowed} pets.`;
+    }
+    setDynamicMessage(dynamicMsg);
+
     return message === '';
   };
 
@@ -238,14 +247,18 @@ const MultipleSelect: React.FC = () => {
             }
           </>
         ))}
-        {validationMessage && <div className='validationMsg monsterrat'>
-          <p style={{ color: 'red', textAlign: 'center' }}>
-            {validationMessage}
-          </p>
-        </div>}
+         {validationMessage && (
+          <div className="validationMsg monsterrat">
+            <p style={{ color: 'red' }}>{validationMessage}</p>
+          </div>
+        )}
+        <div className="dynamicMsg monsterrat">
+          <p>{dynamicMessage}</p>
+        </div>
       </Menu>
     </Box>
   );
 };
+
 
 export default MultipleSelect;
