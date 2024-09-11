@@ -9,6 +9,7 @@ import { AppDispatch } from "@/store";
 import { Button, CircularProgress, SvgIcon, Typography } from "@mui/material";
 import CustomizedSnackbars from "../../components/customized-snackbar";
 import { keyframes } from "@mui/system";
+
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import img1 from "../../assests/bear-lake-bluffs.jpg";
@@ -17,6 +18,7 @@ import img3 from "../../assests/crown-jewel.jpg";
 import img4 from "../../assests/lake-escape.jpg";
 import { resetLimits } from "@/store/slice/auth/propertyGuestSlice";
 import { clearDates } from "@/store/slice/datePickerSlice";
+import { selectSelectedPropertyDetails } from "@/store/slice/auth/property-slice";
 const mockBooking = {
   property: { id: "3" },
   checkinDate: new Date().toISOString(),
@@ -29,6 +31,7 @@ const mockBooking = {
   isLastMinuteBooking: false,
   cleaningFee: 100,
   petFee: 0,
+  totalAmountDue: 0,
 };
 
 const CheckIcon: React.FC = () => (
@@ -58,7 +61,7 @@ const BookingSummaryForm: React.FC = () => {
   const [notes, setNotesValue] = useState<string>(currentBooking?.notes || "");
   const [isLoading, setIsLoading] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
-
+  const selectedPropertyDetails = useSelector(selectSelectedPropertyDetails);
   const booking = currentBooking || mockBooking;
   const checkinDate = new Date(booking.checkinDate);
   const checkoutDate = new Date(booking.checkoutDate);
@@ -80,23 +83,16 @@ const BookingSummaryForm: React.FC = () => {
   const handleBookingConfirm = async () => {
     setIsLoading(true);
     try {
-      dispatch(setNotes(notes));
-      const result = await dispatch(
-        confirmBooking({
-          ...booking,
-          notes,
-        })
-      ).unwrap();
 
-      // Simulate loading time and then show confirmation
-      // setTimeout(() => {
-      setIsLoading(false);
+      dispatch(setNotes(notes));
+      const { season, totalAmountDue, ...bookingPayload } = booking; // Exclude season and totalAmountDue
+      const result = await dispatch(confirmBooking({ ...bookingPayload, notes })).unwrap();
+    setIsLoading(false);
       setShowConfirmation(true);
 
       setTimeout(() => {
         navigate("/home/booking");
       }, 1000);
-      // }, );
     } catch (error) {
       setSnackbarMessage((error as string) || "Failed to confirm booking");
       setSnackbarSeverity("error");
@@ -109,22 +105,10 @@ const BookingSummaryForm: React.FC = () => {
     setShowSnackbar(false);
   };
 
-  //   const fadeInLeftToRight = keyframes`
-  //   0% {
-  //     opacity: 0;
-  //     transform: translateX(-20px);
-  //   }
-  //   100% {
-  //     opacity: 1;
-  //     transform: translateX(0);
-  //   }
-  // `;
 
-  // Define the animation CSS
-  // const animationStyle = css`
-  //   animation: ${fadeInLeftToRight} 1s ease-out;
-  // `;
-  const formatDate = (date) => {
+
+
+  const formatDate = (date: Date) => {
     return date.toLocaleDateString("en-US", {
       weekday: "short", // Abbreviated weekday (e.g., Wed)
       month: "short", // Abbreviated month (e.g., Sep)
@@ -233,6 +217,7 @@ const BookingSummaryForm: React.FC = () => {
               <div className="property">Property</div>{" "}
               <div className="colon">:</div>
               <div className="value">{booking.propertyName}</div>
+
             </div>
             <div>
               <div className="property">Check-in</div>
@@ -274,7 +259,7 @@ const BookingSummaryForm: React.FC = () => {
               <div className="colon">:</div>
 
               <div className="value">
-                {booking.isLastMinuteBooking ? "Last Minute" : "Regular"}
+                {booking.season} Season
               </div>
             </div>
           </div>
@@ -300,7 +285,7 @@ const BookingSummaryForm: React.FC = () => {
               <div className="colon">:</div>
 
               <div className="value">
-                ${booking.cleaningFee + booking.petFee}
+                ${booking.totalAmountDue}
               </div>
             </div>
             <div>

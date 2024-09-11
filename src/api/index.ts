@@ -92,7 +92,10 @@ export const createBooking = (bookingData: void) =>
 export const getUserBookings = (userId: number) =>
   axiosInstance.get(`/v1/bookings/user/${userId}`);
 
-export const getBookings = () => axiosInstance.get("/v1/bookings");
+
+export const createBookingSummary = (bookingData: void) =>
+    axiosInstance.post(`/v1/bookings/booking/booking-summary`, bookingData);
+
 
 export const getUserProperties = (id: number) =>
   axiosInstance.get(`/v1/properties/${id}/user-properties-with-details`);

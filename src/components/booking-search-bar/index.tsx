@@ -15,7 +15,7 @@ import {
 import { Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/reducers";
-import { saveBooking } from "@/store/slice/auth/bookingSlice";
+import {bookingSummary, saveBooking } from "@/store/slice/auth/bookingSlice";
 import { selectSelectedPropertyDetails } from "@/store/slice/auth/property-slice";
 import calendarData from "../calender/calendarData.json";
 import { useSnackbar } from "../snackbar-provider";
@@ -72,7 +72,7 @@ const BookingSearchBar: React.FC = () => {
     return diffInDays <= calendarData.bookingRules.lastMinuteBooking.maxDays;
   };
 
-  const handleBookingSubmit = () => {
+  const handleBookingSubmit = async () => {
     if (!dateRange?.from || !dateRange?.to) {
       showSnackbar("Please select both check-in and check-out dates.");
       return;
@@ -98,6 +98,7 @@ const BookingSearchBar: React.FC = () => {
         0
       )
     );
+
     const checkoutDate = new Date(
       Date.UTC(
         dateRange.to.getFullYear(),
@@ -112,7 +113,6 @@ const BookingSearchBar: React.FC = () => {
     const bookingData = {
       user: { id: currentUser.id },
       property: { id: selectedPropertyDetails.id },
-      propertyName: selectedPropertyDetails.propertyName,
       createdBy: { id: currentUser.id },
       checkinDate: checkinDate.toISOString(),
       checkoutDate: checkoutDate.toISOString(),
@@ -121,43 +121,34 @@ const BookingSearchBar: React.FC = () => {
       isLastMinuteBooking: isLastMinuteBooking(checkinDate),
       noOfAdults: counts.Adults,
       noOfChildren: counts.Children,
-      noOfInfants: 0,
       notes: "",
-      confirmationCode: "",
-      cleaningFee: 0,
-      petFee: 0,
     };
 
-    dispatch(saveBooking(bookingData));
+    try {
+      console.log('Submitting booking data:', bookingData);
+      const result = await dispatch(bookingSummary(bookingData)).unwrap();
 
-    // if (bookingState.successMessage) {
-    // showSnackbar(bookingState.successMessage, "success");
-    navigate("/home/booking-summary");
-    // }
+      if (result) {
+        console.log('Booking summary created successfully:', result);
+
+        // Update the booking data with the response values
+        const updatedBookingData = {
+          ...bookingData,
+          season: result.season,
+          cleaningFee: result.cleaningFee,
+          petFee: result.petFee,
+          totalAmountDue: result.totalAmountDue,
+        };
+
+        await dispatch(saveBooking(updatedBookingData));
+        navigate("/home/booking-summary");
+      }
+    } catch (error) {
+      console.error('Error during booking process:', error);
+      showSnackbar("An error occurred while processing your booking. Please try again.", "error");
+    }
   };
 
-  // useEffect(() => {
-  //   // if (!isBookingLoading && !bookingState.error) {
-  //   //   setDateRange(undefined);
-  //   // }
-
-  //   // if (bookingState.error) {
-  //   //   showSnackbar(bookingState.error, "error");
-
-  //   //   if (bookingState.error.includes("Booking successfully created!")) {
-  //   //     setErrorMessage(bookingState.error);
-  //   //     navigate("/dashboard");
-  //   //   } else {
-  //   //     setErrorMessage(bookingState.error);
-  //   //   }
-  //   // }
-  // }, [
-  //   isBookingLoading,
-  //   bookingState.successMessage,
-  //   bookingState.error,
-  //   showSnackbar,
-  //   navigate,
-  // ]);
 
   return (
     <div className="MainCard">
