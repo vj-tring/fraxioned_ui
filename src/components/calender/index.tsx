@@ -216,39 +216,39 @@ export function DatePickerWithRange({
 
     return diffInDays <= calendarData.bookingRules.lastMinuteBooking.maxDays; 
   };
-  const meetsConsecutiveStayRule = (checkinDate: Date, checkoutDate: Date) => {
-    if (checkinDate.toDateString() === today.toDateString()) {
+  const meetsConsecutiveStayRule = (date: Date) => {
+    if (date.toDateString() === today.toDateString()) {
       return true;
     }
-
+  
     const userBookings = bookings.filter(
       booking => booking.property.id === selectedPropertyDetails.id &&
                  booking.user.id === currentUser.id
     );
-
+  
     if (userBookings.length === 0) {
       return true;
     }
-
+  
     for (const booking of userBookings) {
-      const lastCheckoutDate = new Date(booking.checkoutDate);
-      const lastCheckinDate = new Date(booking.checkinDate);
-      
-      const diffInDaysFromCheckout = (checkinDate.getTime() - lastCheckoutDate.getTime()) / (MILLISECONDS_IN_A_DAY);
-      const diffInDaysFromCheckoutToLastCheckin = (checkoutDate.getTime() - lastCheckinDate.getTime()) / (MILLISECONDS_IN_A_DAY);
-      const diffInDaysFromCheckin = (lastCheckinDate.getTime() - checkinDate.getTime()) / (MILLISECONDS_IN_A_DAY);
-
-      if (diffInDaysFromCheckout >= 0 && diffInDaysFromCheckout <= 5) {
+      const checkOutDate = new Date(booking.checkoutDate);
+      const checkInDate = new Date(booking.checkinDate);
+  
+      const daysSinceCheckout = Math.floor((date.getTime() - checkOutDate.getTime()) / (1000 * 60 * 60 * 24));
+      if (daysSinceCheckout >= 0 && daysSinceCheckout < 4) {
         return false;
       }
-      if (diffInDaysFromCheckoutToLastCheckin >= -6 && diffInDaysFromCheckoutToLastCheckin < 0) {
+  
+      const daysBeforeCheckin = Math.floor((checkInDate.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+      if (daysBeforeCheckin >= 0 && daysBeforeCheckin <= 5) {
         return false;
       }
-      if (diffInDaysFromCheckin >= 0 && diffInDaysFromCheckin <= 5) {
+  
+      if (date >= checkInDate && date <= checkOutDate) {
         return false;
       }
     }
-    
+  
     return true;
   };
 
@@ -269,7 +269,7 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
   
       dispatch(setSelectedYear(newStartDate.getFullYear()));
   
-      if (!meetsConsecutiveStayRule(newStartDate, newStartDate)) {
+      if (!meetsConsecutiveStayRule(newStartDate, newEndDate || newStartDate)) {
         dispatch(setErrorMessage('There must be at least 5 nights between your bookings at this property.'));
         dispatch(clearPartial());
         if (onSelect) onSelect(undefined);
@@ -278,14 +278,14 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
       dispatch(setStartDate(newStartDate));
       dispatch(setStartDateSelected(true));
 
-      if (newEndDate) {
-        if (!meetsConsecutiveStayRule(newStartDate, newEndDate)) {
-          dispatch(setErrorMessage('There must be at least 5 nights between your bookings at this property.'));
-          dispatch(clearPartial());
-          if (onSelect) onSelect(undefined);
-          return;
-        }
-      }
+      // if (newEndDate) {
+      //   if (!meetsConsecutiveStayRule(newStartDate, newEndDate)) {
+      //     dispatch(setErrorMessage('There must be at least 5 nights between your bookings at this property.'));
+      //     dispatch(clearPartial());
+      //     if (onSelect) onSelect(undefined);
+      //     return;
+      //   }
+      // }
 
       if (isBookingTooCloseToCheckin(newStartDate)) {
         dispatch(setErrorMessage('Booking must be made at least 24 hours before the check-in time'));
