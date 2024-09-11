@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { fetchHolidaysApi, propertyseasonholiday, propertyseasonholidaydelete } from '@/api';
+import { fetchHolidaysApi, propertyseasonholiday, propertyseasonholidaydelete, deleteHolidaysApi } from '@/api';
 import styles from './holiday.module.css';
 import NewForm from '@/pages-admin/grid/holiday-grid/new-form';
 import EditForm from '@/pages-admin/grid/holiday-grid/edit-form';
 import PropertyImage from '@/pages-admin/property-image';
-import { Dialog, DialogContent, Button, IconButton } from '@mui/material';
+import { Dialog, DialogContent, Button, IconButton, Alert, Snackbar } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ConfirmationModal from '@/components/confirmation-modal';
-
 
 interface Holiday {
     id: number;
@@ -17,13 +16,12 @@ interface Holiday {
     year: number;
     start_date: string;
     end_date: string;
-
     created_at: string;
     updated_at: string;
     created_by: string;
     updated_by: string | null;
-    propertyId: number;
-    propertySeasonHolidayId: number;
+    propertyId: number | null;
+    propertySeasonHolidayId: number | null;
 }
 
 const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
@@ -36,7 +34,8 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     const [selectedHoliday, setSelectedHoliday] = useState<Holiday | null>(null);
     const [selectedPropertyId, setSelectedPropertyId] = useState<number | string>('all');
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-
+    const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const fetchHolidays = useCallback(async (propertyId: number | string = 'all') => {
         try {
@@ -59,13 +58,13 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                     updated_at: holiday.updatedAt,
                     created_by: holiday.createdBy ? holiday.createdBy.id : 'N/A',
                     updated_by: holiday.updatedBy ? holiday.updatedBy.id : 'N/A',
-                    propertyId: item.property ? item.property.id : item.propertyId,
-                    propertySeasonHolidayId: item.id,
+                    propertyId: item.property ? item.property.id : null,
+                    propertySeasonHolidayId: item.id || null,
                 };
             });
 
             setHolidays(mappedData);
-            setFilteredHolidays(propertyId === 'all' ? mappedData : mappedData.filter((h: { propertyId: string | number; }) => h.propertyId === propertyId));
+            setFilteredHolidays(propertyId === 'all' ? mappedData : mappedData.filter((h: { propertyId: string | number | null; }) => h.propertyId === propertyId));
         } catch (err) {
             console.error('Error fetching holidays:', err);
             setError('Failed to fetch holidays. Please try again.');
@@ -88,8 +87,6 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
         }
     };
 
-
-
     const handleDeleteClick = (holiday: Holiday) => {
         setHolidayToDelete(holiday);
         setShowDeleteConfirmation(true);
@@ -99,13 +96,27 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
         if (holidayToDelete === null) return;
 
         try {
-            await propertyseasonholidaydelete(holidayToDelete.propertySeasonHolidayId);
+            if (selectedPropertyId === 'all') {
+                // Attempt to delete the holiday
+                const response = await deleteHolidaysApi(holidayToDelete.id);
+                if (!response.data.success) {
+                    throw new Error(response.data.message);
+                }
+            } else {
+                // Delete property-season-holiday mapping
+                if (holidayToDelete.propertySeasonHolidayId) {
+                    await propertyseasonholidaydelete(holidayToDelete.propertySeasonHolidayId);
+                } else {
+                    throw new Error("Cannot delete: propertySeasonHolidayId is null");
+                }
+            }
             await fetchHolidays(selectedPropertyId);
             setShowDeleteConfirmation(false);
             setHolidayToDelete(null);
-        } catch (err) {
+        } catch (err: any) {
             console.error('Error deleting holiday:', err);
-            setError('Failed to delete holiday. Please try again.');
+            setErrorMessage(err.message || 'Failed to delete holiday. Please try again.');
+            setShowErrorSnackbar(true);
         }
     };
 
@@ -212,10 +223,25 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                 onHide={handleCancelDelete}
                 onConfirm={handleConfirmDelete}
                 title="Confirm Delete"
-                message="Are you sure you want to delete this holiday?"
+                message={
+                    selectedPropertyId === 'all'
+                        ? "Are you sure you want to delete this holiday?"
+                        : "Are you sure you want to remove this holiday from the property?"
+                }
                 confirmLabel="Delete"
                 cancelLabel="Cancel"
             />
+
+            <Snackbar
+                open={showErrorSnackbar}
+                autoHideDuration={6000}
+                onClose={() => setShowErrorSnackbar(false)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert onClose={() => setShowErrorSnackbar(false)} severity="error" sx={{ width: '100%' }}>
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
         </div>
     );
 };

@@ -103,12 +103,7 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
             setEndDateError(null);
         }
 
-        if (selectedProperties.length === 0) {
-            setPropertiesError('Select at least one property');
-            valid = false;
-        } else {
-            setPropertiesError(null);
-        }
+
 
         if (!userId) {
             setError('User ID not found. Please log in again.');
@@ -150,6 +145,8 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
         updateAllPropertiesSelected();
     };
 
+
+
     const handleAllPropertiesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { checked } = event.target;
         setAllPropertiesSelected(checked);
@@ -181,7 +178,7 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
                         <Typography variant="h4" className={styles.formTitle}>
                             Add Holiday
                         </Typography>
-                        <IconButton 
+                        <IconButton
                             onClick={onClose}
                             className={styles.closeButton}
                             aria-label="close"
@@ -244,7 +241,7 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
                                     Select Properties
                                 </Typography>
                                 <FormControl component="fieldset" className={styles.checkboxGroup} error={!!propertiesError}>
-                                    <FormControlLabel
+                                    {/* <FormControlLabel
                                         control={
                                             <Checkbox
                                                 checked={allPropertiesSelected}
@@ -252,9 +249,9 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
                                                 name="allProperties"
                                             />
                                         }
-                                        label="All Properties"
+                                        // label="All Properties"
                                         className={styles.formControlLabel}
-                                    />
+                                    /> */}
                                     <div className={styles.scrollableContainer}>
                                         <FormGroup>
                                             <Grid container>

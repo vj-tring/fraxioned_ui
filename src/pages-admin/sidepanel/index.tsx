@@ -4,7 +4,7 @@ import fraxionedLogo from '../../assets/images/fraxioned.png';
 import logo from '../../assets/images/fraxionedpng.png'
 import {
     FaCalendar, FaPlane, FaUser, FaFile,
-    FaUserTag, FaChartBar, FaGavel, FaBars, FaHome
+    FaUserTag, FaChartBar, FaGavel, FaBars, FaHome, FaConciergeBell
 } from 'react-icons/fa';
 import styles from './sidepanel.module.css'
 
@@ -25,6 +25,7 @@ const menuItems: MenuItem[] = [
     { icon: <FaPlane />, label: 'Holidays', path: '/admin/holidays', disabled: false },
     { icon: <FaHome />, label: 'Property', path: '/admin/property', disabled: false },
     { icon: <FaUser />, label: 'User', path: '/admin/user', disabled: false },
+    { icon: <FaConciergeBell />, label: 'Amenity', path: '/admin/amenity', disabled: false },
     { icon: <FaFile />, label: 'Documents', path: '/documents', disabled: true },
     { icon: <FaUserTag />, label: 'Role', path: '/role', disabled: true },
     { icon: <FaChartBar />, label: 'Reports', path: '/reports', disabled: true },

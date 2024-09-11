@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './propertyamenities.module.css';
-import { amenitiesapi, getAmenitiesById } from '@/api';
+import { amenitiesapi, getAmenitiesById, updateamenityforproperty, updateamenities } from '@/api';
 import NewAmenityForm from './new-amenity';
+import { Pencil, Check, X } from 'lucide-react';
 
 interface Amenity {
   id: number;
   amenityName: string;
   amenityType: string;
+  amenityDescription?: string;
 }
 
 const PropertyAmenities: React.FC = () => {
@@ -17,6 +19,10 @@ const PropertyAmenities: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedAmenities, setSelectedAmenities] = useState<number[]>([]);
   const [showNewAmenityForm, setShowNewAmenityForm] = useState(false);
+  const [updateStatus, setUpdateStatus] = useState<string | null>(null);
+  const [editMode, setEditMode] = useState(false);
+  const [editingAmenity, setEditingAmenity] = useState<Amenity | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchAmenities();
@@ -27,6 +33,12 @@ const PropertyAmenities: React.FC = () => {
       fetchSelectedAmenities(Number(id));
     }
   }, [id]);
+
+  useEffect(() => {
+    if (editingAmenity && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [editingAmenity]);
 
   const fetchAmenities = async () => {
     try {
@@ -68,13 +80,28 @@ const PropertyAmenities: React.FC = () => {
     );
   };
 
-  // const handleUpdate = () => {
-  //   console.log('Selected amenities:', selectedAmenities);
-  // };
+  const handleUpdate = async () => {
+    try {
+      const updateData = {
+        property: {
+          id: Number(id)
+        },
+        amenities: selectedAmenities.map(amenityId => ({ id: amenityId })),
+        updatedBy: {
+          id: 1
+        }
+      };
 
-  const handleAddNewAmenity = () => {
-    setShowNewAmenityForm(true);
+      const response = await updateamenityforproperty(updateData);
+      setUpdateStatus('Amenities updated successfully!');
+      console.log('Update response:', response);
+    } catch (err) {
+      setUpdateStatus('Failed to update amenities. Please try again.');
+      console.error('Update error:', err);
+    }
   };
+
+ 
 
   const handleCloseNewAmenityForm = () => {
     setShowNewAmenityForm(false);
@@ -83,6 +110,60 @@ const PropertyAmenities: React.FC = () => {
   const handleNewAmenityAdded = () => {
     fetchAmenities();
     setShowNewAmenityForm(false);
+  };
+
+  const toggleEditMode = async () => {
+    if (editMode && editingAmenity) {
+      await saveEdit();
+    }
+    setEditMode(!editMode);
+    setEditingAmenity(null);
+  };
+
+  const startEditing = (amenity: Amenity) => {
+    setEditingAmenity(amenity);
+  };
+
+  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (editingAmenity) {
+      setEditingAmenity({ ...editingAmenity, amenityName: e.target.value });
+    }
+  };
+
+  const saveEdit = async () => {
+    if (editingAmenity) {
+      try {
+        const updateData = {
+          updatedBy: {
+            id: 1
+          },
+          amenityName: editingAmenity.amenityName,
+          amenityDescription: editingAmenity.amenityDescription || "",
+          amenityType: editingAmenity.amenityType
+        };
+
+        await updateamenities(editingAmenity.id, updateData);
+
+        setAmenities(prev => {
+          const newAmenities = { ...prev };
+          const typeArray = newAmenities[editingAmenity.amenityType];
+          const index = typeArray.findIndex(a => a.id === editingAmenity.id);
+          if (index !== -1) {
+            typeArray[index] = editingAmenity;
+          }
+          return newAmenities;
+        });
+        setEditingAmenity(null);
+        setUpdateStatus('Amenity updated successfully!');
+      } catch (err) {
+        setUpdateStatus('Failed to update amenity. Please try again.');
+        console.error('Update error:', err);
+      }
+    }
+  };
+
+  const cancelEdit = () => {
+    setEditingAmenity(null);
   };
 
   if (loading) {
@@ -98,32 +179,58 @@ const PropertyAmenities: React.FC = () => {
       <div className={styles.contentWrapper}>
         <div className={styles.header}>
           <h1 className={styles.title}>Property Amenities</h1>
-          <button className={styles.addButton} onClick={handleAddNewAmenity}>
-            Add
-          </button>
+          <div className={styles.buttonGroup}>
+            {/* <button className={`${styles.updateButton} ${editMode ? styles.active : ''}`} onClick={toggleEditMode}>
+              {editMode ? 'Done' : 'Edit'}
+            </button> */}
+            <button className={styles.updateButton} onClick={handleUpdate}>Update</button>
+            {/* <button className={styles.addButton} onClick={handleAddNewAmenity}>Add</button> */}
+          </div>
         </div>
         <div className={styles.amenitiesGrid}>
           {Object.entries(amenities).map(([type, amenitiesList]) => (
             <div key={type} className={styles.amenityGroup}>
               <h2 className={styles.amenityType}>{type}</h2>
               {amenitiesList.map((amenity) => (
-                <label key={amenity.id} className={styles.amenityItem}>
+                <div key={amenity.id} className={styles.amenityItem}>
                   <input
                     type="checkbox"
                     checked={selectedAmenities.includes(amenity.id)}
                     onChange={() => handleCheckboxChange(amenity.id)}
                     className={styles.checkbox}
                   />
-                  <span className={styles.checkmark}></span>
-                  {amenity.amenityName}
-                </label>
+                  {editMode && editingAmenity?.id === amenity.id ? (
+                    <div className={styles.editingWrapper}>
+                      <input
+                        ref={inputRef}
+                        type="text"
+                        value={editingAmenity.amenityName}
+                        onChange={handleEditChange}
+                        className={styles.editInput}
+                      />
+                      <button onClick={saveEdit} className={styles.editButton}>
+                        <Check size={16} />
+                      </button>
+                      <button onClick={cancelEdit} className={styles.editButton}>
+                        <X size={16} />
+                      </button>
+                    </div>
+                  ) : (
+                    <span className={styles.amenityName}>
+                      {amenity.amenityName}
+                      {editMode && (
+                        <button onClick={() => startEditing(amenity)} className={styles.editButton}>
+                          <Pencil size={16} />
+                        </button>
+                      )}
+                    </span>
+                  )}
+                </div>
               ))}
             </div>
           ))}
         </div>
-        {/* <button className={styles.updateButton} onClick={handleUpdate}>
-          Update
-        </button> */}
+        {updateStatus && <div className={styles.updateStatus}>{updateStatus}</div>}
       </div>
       {showNewAmenityForm && (
         <NewAmenityForm
@@ -136,3 +243,7 @@ const PropertyAmenities: React.FC = () => {
 };
 
 export default PropertyAmenities;
+
+
+
+
