@@ -60,6 +60,7 @@ export function DatePickerWithRange({
 
   const unavailableDates = calendarData.unavailableDates.map(date => new Date(date));
   const blueDates = calendarData.blueDates.map(date => new Date(date));
+  const MILLISECONDS_IN_A_DAY = 1000 * 60 * 60 * 24;
 
   useEffect(() => {
     dispatch(fetchBookings());
@@ -233,9 +234,9 @@ export function DatePickerWithRange({
       const lastCheckoutDate = new Date(booking.checkoutDate);
       const lastCheckinDate = new Date(booking.checkinDate);
       
-      const diffInDaysFromCheckout = (checkinDate.getTime() - lastCheckoutDate.getTime()) / (1000 * 60 * 60 * 24);
-      const diffInDaysFromCheckoutToLastCheckin = (checkoutDate.getTime() - lastCheckinDate.getTime()) / (1000 * 60 * 60 * 24);
-      const diffInDaysFromCheckin = (lastCheckinDate.getTime() - checkinDate.getTime()) / (1000 * 60 * 60 * 24);
+      const diffInDaysFromCheckout = (checkinDate.getTime() - lastCheckoutDate.getTime()) / (MILLISECONDS_IN_A_DAY);
+      const diffInDaysFromCheckoutToLastCheckin = (checkoutDate.getTime() - lastCheckinDate.getTime()) / (MILLISECONDS_IN_A_DAY);
+      const diffInDaysFromCheckin = (lastCheckinDate.getTime() - checkinDate.getTime()) / (MILLISECONDS_IN_A_DAY);
 
       if (diffInDaysFromCheckout >= 0 && diffInDaysFromCheckout <= 5) {
         return false;
