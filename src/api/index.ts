@@ -203,7 +203,5 @@ export const deletetpropertyImageById = (id: number) =>
     axiosInstance.delete(`/v1/propertyImages/propertyImage/${id}`);
 
 
-
-
 export const getBookings = () =>
   axiosInstance.get('/v1/bookings');
