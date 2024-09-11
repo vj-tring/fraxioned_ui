@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { useAuthHelpers } from './useAuthHelper';
 
-
 // Create an Axios instance
 const axiosInstance = axios.create({
     baseURL: 'http://192.168.1.47:3008/api',
@@ -11,7 +10,6 @@ const axiosInstance = axios.create({
 // Add a request interceptor
 axiosInstance.interceptors.request.use(
     (config) => {
-
         // Get the access token from local storage or state
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         const session = JSON.parse(localStorage.getItem('session') || '{}');
@@ -31,9 +29,17 @@ axiosInstance.interceptors.request.use(
             config.headers['resetToken'] = resetToken;
         }
 
-        // Add any other common headers here
-        config.headers['Content-Type'] = 'application/json';
-        config.headers['Accept'] = 'application/json';
+        // Check if the request is for image upload
+        const isImageUpload = config.url?.includes('/propertyImages') && config.method === 'post';
+
+        if (isImageUpload) {
+            config.headers['Content-Type'] = 'multipart/form-data';
+            config.headers['Accept'] = '*/*';
+        } else {
+            // For all other requests, use JSON headers
+            config.headers['Content-Type'] = 'application/json';
+            config.headers['Accept'] = 'application/json';
+        }
 
         return config;
     },

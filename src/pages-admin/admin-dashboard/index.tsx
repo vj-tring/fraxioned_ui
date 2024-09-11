@@ -6,6 +6,7 @@ import Calendar from '@/components/big-calendar';
 import Property from '../grid/property-grid';
 import PropertySidePanel from '../propertysidepanel';
 import PropertyGeneralInfo from '../property-generalinfo'
+import PhotoUpload from '../property-photos/new-photoupload';
 import EditPropertyForm from '../grid/property-grid/EditPropertyForm';
 import AmenityManagement from '../amenity-page';
 import EditAmenityForm from '../property-amenities/edit-amenityform';
@@ -101,7 +102,6 @@ const AdminDashboard: React.FC = () => {
                                 </div>
                             </div>
                         } />
-                        {/* Add the new route for PropertyPhotos */}
                         <Route path="/property/:id/photos" element={
                             <div className="property-details-container">
                                 <PropertySidePanel isOpen={true} />
@@ -110,6 +110,15 @@ const AdminDashboard: React.FC = () => {
                                 </div>
                             </div>
                         } />
+                        <Route path="/property/:id/photos/upload" element={
+                            <div className="property-details-container">
+                                <PropertySidePanel isOpen={true} />
+                                <div className="property-info-content">
+                                    <PhotoUpload />
+                                </div>
+                            </div>
+                        } />
+
                     </Routes>
                 </div>
             </div>
