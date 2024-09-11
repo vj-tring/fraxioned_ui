@@ -88,7 +88,7 @@ const BookingSummaryForm: React.FC = () => {
       dispatch(setNotes(notes));
       const { season, totalAmountDue, ...bookingPayload } = booking; // Exclude season and totalAmountDue
       const result = await dispatch(confirmBooking({ ...bookingPayload, notes })).unwrap();
-      setTimeout(() => {
+      // setTimeout(() => {
         setIsLoading(false);
         setShowConfirmation(true);
         setSnackbarMessage(result.message);
@@ -97,7 +97,7 @@ const BookingSummaryForm: React.FC = () => {
         setTimeout(() => {
           navigate("/home/booking");
         }, 3000);
-      }, 5000);
+      // }, 5000);
     } catch (error) {
       setSnackbarMessage((error as string) || "Failed to confirm booking");
       setSnackbarSeverity("error");

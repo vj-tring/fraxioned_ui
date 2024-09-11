@@ -136,6 +136,22 @@ export interface Card {
       offRemainingHolidayNights: number;
       peakRemainingHolidayNights: number;
       maximumStayLength: number;
+      peakUsedNights: number;
+      offUsedNights: number;
+      peakBookedNights: number;
+      offBookedNights: number;
+      lastMinuteAllottedNights: number;
+      lastMinuteLostNights: number;
+      peakBookedHolidayNights: number;
+      offBookedHolidayNights: number;
+      peakCancelledHolidayNights: number;
+      offCancelledHolidayNights: number;
+      peakLostHolidayNights: number;
+      offLostHolidayNights: number;
+      offUsedHolidayNights: number;
+      peakUsedHolidayNights: number;
+      lastMinuteBookedNights: number;
+      lastMinuteCancelledNights: number;
     };
   };
   propertyShare: number;
@@ -179,11 +195,16 @@ export interface Card {
   peakSeasonAllottedHolidayNights: number;
   offSeasonAllottedHolidayNights: number;
   lastMinuteBookingAllottedNights: number;
+  offAllottedHolidayNights:number;
+  peakAllottedNights:number;
+  offAllottedNights:number;
+  peakAllottedHolidayNights:number;
   wifiNetwork: string;
   users: User[];
 }
 
 export interface PropertyState {
+  find(arg0: (p: any) => boolean): unknown;
   cards: Card[];
   loading: boolean;
   error: string | null;
@@ -242,6 +263,27 @@ export const fetchProperties = createAsyncThunk(
               maximumStayLength: userProp.maximumStayLength,
               peakSeasonStartDate: property.peakSeasonStartDate,
               peakSeasonEndDate: property.peakSeasonEndDate,
+              peakUsedNights: userProp.peakUsedNights,
+              offUsedNights: userProp.offUsedNights,
+              peakBookedNights: userProp.peakBookedNights,
+              offBookedNights: userProp.offBookedNights,
+              lastMinuteLostNights: userProp.lastMinuteLostNights,
+              peakBookedHolidayNights: userProp.peakBookedHolidayNights,
+              offBookedHolidayNights: userProp.offBookedHolidayNights,
+              peakCancelledHolidayNights: userProp.peakCancelledHolidayNights,
+              offCancelledHolidayNights: userProp.offCancelledHolidayNights,
+              peakLostHolidayNights: userProp.peakLostHolidayNights,
+              offLostHolidayNights: userProp.offLostHolidayNights,
+              offUsedHolidayNights: userProp.offUsedHolidayNights,
+              peakUsedHolidayNights: userProp.peakUsedHolidayNights,
+              lastMinuteBookedNights: userProp.lastMinuteBookedNights,
+              lastMinuteCancelledNights: userProp.lastMinuteCancelledNights,
+              offAllottedHolidayNights:userProp.offAllottedHolidayNights,
+              peakAllottedHolidayNights:userProp.peakAllottedHolidayNights,
+              peakAllottedNights:userProp.peakAllottedNights,
+              offAllottedNights:userProp.offAllottedNights,
+
+
             };
           }
         });
@@ -262,6 +304,10 @@ export const fetchProperties = createAsyncThunk(
               maximumStayLength: 0,
               peakSeasonStartDate: property.peakSeasonStartDate,
               peakSeasonEndDate: property.peakSeasonEndDate,
+              peakUsedNights: property.peakUsedNights,
+              offUsedNights: property.offUsedNights,
+              peakBookedNights: property.peakBookedNights,
+              offBookedNights: property.offBookedNights,
             };
           }
         });
@@ -319,6 +365,10 @@ export const fetchProperties = createAsyncThunk(
             property.lastMinuteBookingAllottedNights || 0,
           wifiNetwork: property.wifiNetwork || "No WiFi available",
           users: property.users || [],
+          // peakUsedNights:property.peakUsedNights || 0,
+          // offUsedNights:property.offUsedNights|| 0,
+          // peakBookedNights:property.peakBookedNights || 0,
+          // offBookedNights:property.offBookedNights || 1
         };
       });
 

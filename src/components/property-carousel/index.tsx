@@ -36,7 +36,9 @@ interface Card {
 
 export default function BasicSelect() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedCardIndex, setSelectedCardIndex] = useState<number | null >(null);
+  const [selectedCardIndex, setSelectedCardIndex] = useState<number | null>(
+    null
+  );
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
   const [years] = useState<number[]>([2024, 2025, 2026]);
   const [selectedYear, setSelectedYear] = useState<number>(2024);
@@ -59,11 +61,11 @@ export default function BasicSelect() {
   }, [dispatch, user]);
 
   const property = useSelector((state: RootState) => state.properties);
-  useEffect(()=>{
-    setSelectedCardIndex(property.selectedCardIndex)
-  },[])
   useEffect(() => {
-    if(selectedCardIndex != null){
+    setSelectedCardIndex(property.selectedCardIndex);
+  }, []);
+  useEffect(() => {
+    if (selectedCardIndex != null) {
       if (cards.length > 0) {
         setSelectedCard(cards[selectedCardIndex]);
         setSelectedCardIndex(selectedCardIndex);
@@ -75,7 +77,6 @@ export default function BasicSelect() {
         setSelectedCard(null);
       }
     }
-    
   }, [selectedCardIndex, cards]);
 
   useEffect(() => {
