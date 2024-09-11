@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { propertyImageapi, deletetpropertyImageById } from '@/api';
 import { Edit, Trash2 } from 'lucide-react';
@@ -29,7 +29,7 @@ const PropertyPhotos: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const refreshPhotos = async () => {
+    const refreshPhotos = useCallback(async () => {
         setIsLoading(true);
         try {
             const response = await propertyImageapi();
@@ -44,11 +44,20 @@ const PropertyPhotos: React.FC = () => {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [id]);
 
     useEffect(() => {
         refreshPhotos();
-    }, [id, location.pathname]);
+    }, [refreshPhotos]);
+
+    useEffect(() => {
+        // Check if we're returning from an edit operation
+        if (location.state && location.state.fromEdit) {
+            refreshPhotos();
+            // Clear the state to prevent unnecessary refreshes
+            navigate(location.pathname, { replace: true, state: {} });
+        }
+    }, [location, navigate, refreshPhotos]);
 
     const toggleEditMode = () => {
         setIsEditMode(!isEditMode);
@@ -78,8 +87,7 @@ const PropertyPhotos: React.FC = () => {
                 setImageToDelete(null);
             } catch (error) {
                 console.error('Error deleting property image:', error);
-            }
-            finally {
+            } finally {
                 setIsLoading(false);
             }
         }

@@ -84,10 +84,10 @@ const EditPhoto: React.FC = () => {
             }
 
             await propertyImageeditapi(Number(imageId), formData);
-            navigate(`/admin/property/${id}/photos`);
+            navigate(`/admin/property/${id}/photos`, { state: { fromEdit: true } });
         } catch (error) {
             console.error('Error updating image:', error);
-            navigate(`/admin/property/${id}/photos`);
+            navigate(`/admin/property/${id}/photos`, { state: { fromEdit: true } });
         }
 
         finally {

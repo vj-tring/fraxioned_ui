@@ -20,7 +20,6 @@ const AmenityManagement: React.FC = () => {
     const [isAddingNew, setIsAddingNew] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [amenityToDelete, setAmenityToDelete] = useState<Amenity | null>(null);
-    
 
     useEffect(() => {
         fetchAmenities();
@@ -140,8 +139,10 @@ const AmenityManagement: React.FC = () => {
                                                 onChange={(e) => setEditingAmenity({ ...editingAmenity, amenityName: e.target.value })}
                                                 className={styles.editInput}
                                             />
-                                            <button onClick={handleSave} className={styles.saveButton}><Check size={16} /></button>
-                                            <button onClick={handleCancel} className={styles.cancelButton}><X size={16} /></button>
+                                            <div className={styles.actionButtons}>
+                                                <button onClick={handleSave} className={styles.saveButton}><Check size={16} /></button>
+                                                <button onClick={handleCancel} className={styles.cancelButton}><X size={16} /></button>
+                                            </div>
                                         </>
                                     ) : (
                                         <>

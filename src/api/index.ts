@@ -54,6 +54,10 @@ export const deleteHolidayApi = (id: number) =>
 export const fetchpropertyHolidaysApi = (id: number) =>
     axiosInstance.get(`/v1/holidays/holiday/${id}`);
 
+//delete the holiday which has no mapping
+export const deleteHolidaysApi = (id: number) =>
+    axiosInstance.delete(`/v1/holidays/holiday/${id}`);
+
 //propertyholiday api
 export const propertyseasonholiday = (p0?: string) =>
     axiosInstance.get('/v1/property-season-holidays');

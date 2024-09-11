@@ -62,7 +62,7 @@ const AdminDashboard: React.FC = () => {
                                     <EditPropertyForm />
                                 </div>
                             </div>
-                        } />
+                        } />    
                         <Route path="/property/:id/rules" element={
                             <div className="property-details-container">
                                 <PropertySidePanel isOpen={true} />
