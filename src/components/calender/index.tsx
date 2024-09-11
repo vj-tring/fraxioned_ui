@@ -60,6 +60,7 @@ export function DatePickerWithRange({
 
   const unavailableDates = calendarData.unavailableDates.map(date => new Date(date));
   const blueDates = calendarData.blueDates.map(date => new Date(date));
+  const MILLISECONDS_IN_A_DAY = 1000 * 60 * 60 * 24;
 
   useEffect(() => {
     dispatch(fetchBookings());
@@ -212,44 +213,53 @@ export function DatePickerWithRange({
   const isLastMinuteBooking = (checkInDate: Date) => {
     const diffInDays =
       (checkInDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
-    return diffInDays <= calendarData.bookingRules.lastMinuteBooking.maxDays;
-  };
 
-const meetsConsecutiveStayRule = (date: Date) => {
-    if (date.toDateString() === today.toDateString()) {
-        return true;
+    return diffInDays <= calendarData.bookingRules.lastMinuteBooking.maxDays; 
+  };
+  const meetsConsecutiveStayRule = (checkinDate: Date, checkoutDate: Date) => {
+    if (checkinDate.toDateString() === today.toDateString()) {
+      return true;
     }
 
     const userBookings = bookings.filter(
-        booking => booking.property.id === selectedPropertyDetails.id && booking.user.id === currentUser.id
+      booking => booking.property.id === selectedPropertyDetails.id &&
+                 booking.user.id === currentUser.id
     );
 
     if (userBookings.length === 0) {
-        return true;
+      return true;
     }
 
-    // Check if the date is within any of the booked periods
     for (const booking of userBookings) {
-        const checkInDate = new Date(booking.checkinDate);
-        const checkOutDate = new Date(booking.checkoutDate);
+      const lastCheckoutDate = new Date(booking.checkoutDate);
+      const lastCheckinDate = new Date(booking.checkinDate);
+      
+      const diffInDaysFromCheckout = (checkinDate.getTime() - lastCheckoutDate.getTime()) / (MILLISECONDS_IN_A_DAY);
+      const diffInDaysFromCheckoutToLastCheckin = (checkoutDate.getTime() - lastCheckinDate.getTime()) / (MILLISECONDS_IN_A_DAY);
+      const diffInDaysFromCheckin = (lastCheckinDate.getTime() - checkinDate.getTime()) / (MILLISECONDS_IN_A_DAY);
 
-        if (date >= checkInDate && date <= checkOutDate) {
-            return true;
-        }
+      if (diffInDaysFromCheckout >= 0 && diffInDaysFromCheckout <= 5) {
+        return false;
+      }
+      if (diffInDaysFromCheckoutToLastCheckin >= -6 && diffInDaysFromCheckoutToLastCheckin < 0) {
+        return false;
+      }
+      if (diffInDaysFromCheckin >= 0 && diffInDaysFromCheckin <= 5) {
+        return false;
+      }
     }
+    
+    return true;
+  };
 
-    // Find the latest checkout date
-    const latestCheckOutDate = userBookings.reduce((latest, booking) => {
-        const checkOutDate = new Date(booking.checkoutDate);
-        return checkOutDate > latest ? checkOutDate : latest;
-    }, new Date(0));
+const isBookingTooCloseToCheckin = (checkinDate: Date) => {
+  const checkinTime = new Date(checkinDate);
+  checkinTime.setHours(selectedPropertyDetails.checkInTime, 0, 0, 0);
 
-    const daysBetween = Math.floor(
-        (date.getTime() - latestCheckOutDate.getTime()) / (1000 * 60 * 60 * 24)
-    );
+  const timeDifference = checkinTime.getTime() - today.getTime();
+  const hoursDifference = timeDifference / (1000 * 60 * 60);
 
-    // Ensure the date is at least 5 days after the latest checkout date
-    return daysBetween >= 5;
+  return hoursDifference < 24;
 };
 
   const handleDateChange = (range: DateRange | undefined) => {
@@ -259,8 +269,7 @@ const meetsConsecutiveStayRule = (date: Date) => {
   
       dispatch(setSelectedYear(newStartDate.getFullYear()));
   
-      if (!meetsConsecutiveStayRule(newStartDate)) {
-        console.log("Consecutive stay rule not met");
+      if (!meetsConsecutiveStayRule(newStartDate, newStartDate)) {
         dispatch(setErrorMessage('There must be at least 5 nights between your bookings at this property.'));
         dispatch(clearPartial());
         if (onSelect) onSelect(undefined);
@@ -268,6 +277,22 @@ const meetsConsecutiveStayRule = (date: Date) => {
       }
       dispatch(setStartDate(newStartDate));
       dispatch(setStartDateSelected(true));
+
+      if (newEndDate) {
+        if (!meetsConsecutiveStayRule(newStartDate, newEndDate)) {
+          dispatch(setErrorMessage('There must be at least 5 nights between your bookings at this property.'));
+          dispatch(clearPartial());
+          if (onSelect) onSelect(undefined);
+          return;
+        }
+      }
+
+      if (isBookingTooCloseToCheckin(newStartDate)) {
+        dispatch(setErrorMessage('Booking must be made at least 24 hours before the check-in time'));
+        dispatch(clearPartial());
+        if (onSelect) onSelect(undefined);
+        return;
+      }
 
       const lastMinuteBooking = isLastMinuteBooking(newStartDate);
       const peakSeasonStart = new Date(
@@ -450,20 +475,24 @@ const meetsConsecutiveStayRule = (date: Date) => {
         }
   
         .holiday-date {
-          color: #0560f2;
+          color: blue !important;
         }
       `}</style>
-      <div className="flex items-center justify-between end-calendar">
-        <div className='stay-length'>
-          <div>Minimum Stay Length : {calendarData.bookingRules.regularBooking.minNights} Nights</div>
-          <div>Maximum Stay Length : {selectedPropertyDetails?.details[selectedYear]?.maximumStayLength} Nights</div>
+      {/* <div className="flex items-center justify-between end-calendar">
+        <div className='peak-length'>
+            <div><b className="bold">Peak Nights : </b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.peakRemainingNights || 'N/A'} Nights</div>
+            <div><b className="bold">Off Nights : </b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.offRemainingNights || 'N/A'} Nights</div>
+          </div>
+        </div> */}
+        <div className="flex items-center justify-between end-calendar">
+          <div className='stay-length'>
+            <div><b className="bold">Minimum Stay :</b> {calendarData.bookingRules.regularBooking.minNights} Nights</div>
+            <div><b className="bold">Maximum Stay :</b> {selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.maximumStayLength || 'N/A'} Nights</div>  
+          </div>
+          <div onClick={clearDatesHandler} className="btn-clear">
+            Clear dates
+          </div>
         </div>
-        <div onClick={clearDatesHandler} className="btn-clear">
-          Clear dates
-        </div>
-      </div>
-      <div className="flex items-center justify-end ">
-      </div>
     </div>
   );
 }

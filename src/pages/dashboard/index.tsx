@@ -29,10 +29,10 @@ const Dashboard: React.FC = () => {
 
 
   const links = [
-    { name: 'HOME', href: '/dashboard', disabled: false },
-    { name: 'BOOKINGS', href: '/dashboard/booking', disabled: false },
-    { name: 'DOCUMENTS', href: '/dashboard/peak-season', disabled: false },
-    { name: 'PAYMENTS', href: '/dashboard/payments', disabled: true },
+    { name: 'HOME', href: '/home', disabled: false },
+    { name: 'BOOKINGS', href: '/home/booking', disabled: false },
+    { name: 'DOCUMENTS', href: '/home/peak-season', disabled: false },
+    { name: 'PAYMENTS', href: '/home/payments', disabled: true },
     // { name: 'MORE', href: '/dashboard/faq', disabled: true },
 
   ]
@@ -58,7 +58,7 @@ const Dashboard: React.FC = () => {
           <Route path="/booking" element={<Booking />} />
           <Route path="/booking-summary" element={<BookingSummary />} />
           <Route path="/payments" element={<ComingSoon />} />
-          <Route path="*" element={<Navigate to="/dashboard" />} />
+          <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
       </>
       <Footer />

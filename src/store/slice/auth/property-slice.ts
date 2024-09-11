@@ -1,23 +1,23 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { getUserProperties } from '../../../api/index';
-import imageParadiseShores from '../../../assests/bear-lake-bluffs.jpg';
-import imageBlueBearLake from '../../../assests/crown-jewel.jpg';
-import imageCrownJewel from '../../../assests/blue-bear-lake.jpg';
-import imageLakeEscape from '../../../assests/lake-escape.jpg';
-import { RootState } from '@/store/reducers';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { getUserProperties } from "../../../api/index";
+import imageParadiseShores from "../../../assests/bear-lake-bluffs.jpg";
+import imageBlueBearLake from "../../../assests/crown-jewel.jpg";
+import imageCrownJewel from "../../../assests/blue-bear-lake.jpg";
+import imageLakeEscape from "../../../assests/lake-escape.jpg";
+import { RootState } from "@/store/reducers";
 
 const mockData: Card[] = [
   {
     id: 1,
-    name: 'The Lake Escape',
-    address: '123 Mock Lane',
-    image: 'imageParadiseShores',
+    name: "The Lake Escape",
+    address: "123 Mock Lane",
+    image: "imageParadiseShores",
     details: {
       2024: {
-        offSeason: '2/10',
-        peakSeason: '3/15',
-        peakHoliday: '4/20',
-        offSeasonHoliday: '5/25',
+        offSeason: "2/10",
+        peakSeason: "3/15",
+        peakHoliday: "4/20",
+        offSeasonHoliday: "5/25",
         peakRemainingNights: 10,
         offRemainingNights: 10,
         lastMinuteRemainingNights: 6,
@@ -30,19 +30,19 @@ const mockData: Card[] = [
     maxGuestsAllowed: 4,
     maxPetsAllowed: 2,
     share: 0,
-    peakSeasonStartDate: '2024-03-15',
-    peakSeasonEndDate: '2024-11-15',
+    peakSeasonStartDate: "2024-03-15",
+    peakSeasonEndDate: "2024-11-15",
     propertyId: 101,
     propertyDetailsId: 201,
-    createdAt: '2024-01-01',
-    updatedAt: '2024-01-10',
+    createdAt: "2024-01-01",
+    updatedAt: "2024-01-10",
     ownerRezPropId: 301,
-    propertyName: 'The Lake Escape',
-    city: 'Mock City',
-    state: 'Mock State',
-    country: 'Mock Country',
+    propertyName: "The Lake Escape",
+    city: "Mock City",
+    state: "Mock State",
+    country: "Mock Country",
     zipcode: 12345,
-    houseDescription: 'A serene lakefront escape.',
+    houseDescription: "A serene lakefront escape.",
     isExclusive: true,
     latitude: 34.0522,
     longitude: -118.2437,
@@ -56,10 +56,10 @@ const mockData: Card[] = [
     noOfBathroomsFull: 1,
     noOfBathroomsHalf: 1,
     noOfPetsAllowed: 2,
-    squareFootage: '1500 sqft',
+    squareFootage: "1500 sqft",
     checkInTime: 15,
     checkOutTime: 11,
-    petPolicy: 'Pets allowed with an additional fee.',
+    petPolicy: "Pets allowed with an additional fee.",
     feePerPet: 50,
     cleaningFee: 100,
     peakSeasonAllottedNights: 20,
@@ -67,29 +67,29 @@ const mockData: Card[] = [
     peakSeasonAllottedHolidayNights: 5,
     offSeasonAllottedHolidayNights: 10,
     lastMinuteBookingAllottedNights: 3,
-    wifiNetwork: 'LakeEscape_WiFi',
+    wifiNetwork: "LakeEscape_WiFi",
     users: [
       {
         userId: 1,
         id: 1,
-        firstName: 'John',
-        lastName: 'Doe',
-        password: 'hashedPassword',
+        firstName: "John",
+        lastName: "Doe",
+        password: "hashedPassword",
         imageURL: null,
         isActive: 1,
-        addressLine1: '456 Main St',
+        addressLine1: "456 Main St",
         addressLine2: null,
-        state: 'Mock State',
-        country: 'Mock Country',
-        city: 'Mock City',
-        zipcode: '12345',
-        resetToken: 'token123',
-        resetTokenExpires: '2024-02-01',
-        lastLoginTime: '2024-01-15T08:30:00Z',
+        state: "Mock State",
+        country: "Mock Country",
+        city: "Mock City",
+        zipcode: "12345",
+        resetToken: "token123",
+        resetTokenExpires: "2024-02-01",
+        lastLoginTime: "2024-01-15T08:30:00Z",
         createdBy: 1,
         updatedBy: 2,
-        createdAt: '2024-01-01',
-        updatedAt: '2024-01-10',
+        createdAt: "2024-01-01",
+        updatedAt: "2024-01-10",
       },
     ],
   },
@@ -189,6 +189,8 @@ export interface PropertyState {
   error: string | null;
   selectedYear: number;
   selectedPropertyId: number | null;
+  selectedCard: Card | null;
+  selectedCardIndex: number;
   selectedPropertyLimits: {
     noOfGuestsAllowed: number;
     noOfPetsAllowed: number;
@@ -200,12 +202,14 @@ const initialState: PropertyState = {
   loading: false,
   error: null,
   selectedPropertyId: null,
+  selectedCard: null,
+  selectedCardIndex: 0,
   selectedYear: new Date().getFullYear(),
   selectedPropertyLimits: null,
 };
 
 export const fetchProperties = createAsyncThunk(
-  'properties/fetchProperties',
+  "properties/fetchProperties",
   async (userId: number, { rejectWithValue }) => {
     try {
       const response = await getUserProperties(userId);
@@ -242,14 +246,14 @@ export const fetchProperties = createAsyncThunk(
           }
         });
 
-        [2024, 2025, 2026].forEach(year => {
+        [2024, 2025, 2026].forEach((year) => {
           if (!details[year]) {
             details[year] = {
-              offSeason: 'undefined',
-              peakSeason: 'undefined',
-              peakHoliday: 'undefined',
-              offSeasonHoliday: 'undefined',
-              lastMinute: 'undefined',
+              offSeason: "undefined",
+              peakSeason: "undefined",
+              peakHoliday: "undefined",
+              offSeasonHoliday: "undefined",
+              lastMinute: "undefined",
               peakRemainingNights: 0,
               offRemainingNights: 0,
               lastMinuteRemainingNights: 0,
@@ -264,8 +268,8 @@ export const fetchProperties = createAsyncThunk(
 
         return {
           id: property.propertyId,
-          name: property.propertyName || 'Unknown Property',
-          address: property.address || 'Unknown',
+          name: property.propertyName || "Unknown Property",
+          address: property.address || "Unknown",
           image: getImageForProperty(property.propertyId),
           share: shareMap[2024] || 0,
           details,
@@ -279,12 +283,13 @@ export const fetchProperties = createAsyncThunk(
           createdAt: property.createdAt,
           updatedAt: property.updatedAt,
           ownerRezPropId: property.ownerRezPropId,
-          propertyName: property.propertyName || 'Unknown Property',
-          city: property.city || 'Unknown City',
-          state: property.state || 'Unknown State',
-          country: property.country || 'Unknown Country',
+          propertyName: property.propertyName || "Unknown Property",
+          city: property.city || "Unknown City",
+          state: property.state || "Unknown State",
+          country: property.country || "Unknown Country",
           zipcode: property.zipcode || 0,
-          houseDescription: property.houseDescription || 'No description available.',
+          houseDescription:
+            property.houseDescription || "No description available.",
           isExclusive: property.isExclusive || false,
           latitude: property.latitude || 0,
           longitude: property.longitude || 0,
@@ -298,18 +303,21 @@ export const fetchProperties = createAsyncThunk(
           noOfBathroomsFull: property.noOfBathroomsFull || 0,
           noOfBathroomsHalf: property.noOfBathroomsHalf || 0,
           noOfPetsAllowed: property.noOfPetsAllowed || 0,
-          squareFootage: property.squareFootage || 'Unknown sqft',
+          squareFootage: property.squareFootage || "Unknown sqft",
           checkInTime: property.checkInTime || 0,
           checkOutTime: property.checkOutTime || 0,
-          petPolicy: property.petPolicy || 'No pets allowed.',
+          petPolicy: property.petPolicy || "No pets allowed.",
           feePerPet: property.feePerPet || 0,
           cleaningFee: property.cleaningFee || 0,
           peakSeasonAllottedNights: property.peakSeasonAllottedNights || 0,
           offSeasonAllottedNights: property.offSeasonAllottedNights || 0,
-          peakSeasonAllottedHolidayNights: property.peakSeasonAllottedHolidayNights || 0,
-          offSeasonAllottedHolidayNights: property.offSeasonAllottedHolidayNights || 0,
-          lastMinuteBookingAllottedNights: property.lastMinuteBookingAllottedNights || 0,
-          wifiNetwork: property.wifiNetwork || 'No WiFi available',
+          peakSeasonAllottedHolidayNights:
+            property.peakSeasonAllottedHolidayNights || 0,
+          offSeasonAllottedHolidayNights:
+            property.offSeasonAllottedHolidayNights || 0,
+          lastMinuteBookingAllottedNights:
+            property.lastMinuteBookingAllottedNights || 0,
+          wifiNetwork: property.wifiNetwork || "No WiFi available",
           users: property.users || [],
         };
       });
@@ -351,12 +359,14 @@ const getImageForProperty = (propertyId: number): string => {
 };
 
 const propertySlice = createSlice({
-  name: 'properties',
+  name: "properties",
   initialState,
   reducers: {
     selectProperty: (state, action: PayloadAction<number>) => {
       state.selectedPropertyId = action.payload;
-      const selectedProperty = state.cards.find(card => card.id === action.payload);
+      const selectedProperty = state.cards.find(
+        (card) => card.id === action.payload
+      );
       if (selectedProperty) {
         state.selectedPropertyLimits = {
           noOfGuestsAllowed: selectedProperty.maxGuestsAllowed,
@@ -365,6 +375,13 @@ const propertySlice = createSlice({
       } else {
         state.selectedPropertyLimits = null;
       }
+    },
+
+    selectcard: (state, action: PayloadAction<Card | null>) => {
+      state.selectedCard = action.payload;
+    },
+    selectcardindex: (state, action: PayloadAction<number>) => {
+      state.selectedCardIndex = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -384,7 +401,8 @@ const propertySlice = createSlice({
   },
 });
 
-export const { selectProperty } = propertySlice.actions;
+export const { selectProperty, selectcard, selectcardindex } =
+  propertySlice.actions;
 // export const selectSelectedPropertyDetails = (state: RootState) => {
 //   const selectedProperty = state.properties.cards.find(card => card.id === state.properties.selectedPropertyId);
 //   if (selectedProperty) {
@@ -401,7 +419,9 @@ export const { selectProperty } = propertySlice.actions;
 // };
 
 export const selectSelectedPropertyDetails = (state: RootState) => {
-  const selectedProperty = state.properties.cards.find(card => card.id === state.properties.selectedPropertyId);
+  const selectedProperty = state.properties.cards.find(
+    (card) => card.id === state.properties.selectedPropertyId
+  );
   if (selectedProperty) {
     const currentYear = new Date().getFullYear();
     const relevantYears = [currentYear, currentYear + 1, currentYear + 2];

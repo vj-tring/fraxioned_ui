@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { createBooking, getBookings } from '../../../api/index'; // Ensure these imports are correct
+import { createBooking, createBookingSummary, getBookings } from '../../../api/index'; // Ensure these imports are correct
 
 export interface BookingData {
   property: { id: string };
@@ -14,6 +14,32 @@ export interface BookingData {
   petFee: number;
   createdAt: string;
   notes?: string; // Added notes field
+}
+
+
+interface BookingSummaryResponse {
+  adults: number;
+  bookingId: string;
+  checkIn: string;
+  checkInTime: number;
+  checkOut: string;
+  checkOutTime: number;
+  children: number;
+  cleaningFee: number;
+  dateOfCharge: string;
+  holiday: string;
+  isLastMinuteBooking: boolean;
+  noOfGuests: number;
+  offHolidayNights: number;
+  offNights: number;
+  peakHolidayNights: number;
+  peakNights: number;
+  petFee: number;
+  pets: number;
+  property: { id: number };
+  season: string;
+  totalAmountDue: number;
+  totalNights: number;
 }
 
 interface ConfirmBookingResponse {
@@ -38,6 +64,26 @@ export const fetchBookings = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data || { message: 'An error occurred' });
+    }
+  }
+);
+
+export const bookingSummary = createAsyncThunk<
+  BookingSummaryResponse,
+  BookingData,
+  { rejectValue: string }
+>(
+  'bookings/bookingSummary',
+  async (bookingData: BookingData, { rejectWithValue }) => {
+    try {
+      console.log('Sending booking data to API:', bookingData);
+      const response = await createBookingSummary(bookingData);
+      console.log('API response:', response.data);
+      return response.data;
+    } catch (error: any) {
+      console.error('Error in bookingSummary:', error);
+      const errorMessage = error.response?.data?.message || error.message || 'Something went wrong. Please try again later.';
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -133,6 +179,36 @@ const bookingSlice = createSlice({
         state.successMessage = action.payload.message;
       })
       .addCase(confirmBooking.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+        state.successMessage = null;
+      })
+      .addCase(bookingSummary.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+        state.successMessage = null;
+      })
+      .addCase(bookingSummary.fulfilled, (state, action: PayloadAction<BookingSummaryResponse>) => {
+        if (state.currentBooking) {
+          state.currentBooking = {
+            ...state.currentBooking,
+            season: action.payload.season,
+            cleaningFee: action.payload.cleaningFee,
+            petFee: action.payload.petFee,
+            totalAmountDue: action.payload.totalAmountDue,
+            noOfAdults: action.payload.adults,
+            noOfChildren: action.payload.children,
+            noOfPets: action.payload.pets,
+            checkinDate: action.payload.checkIn,
+            checkoutDate: action.payload.checkOut,
+            isLastMinuteBooking: action.payload.isLastMinuteBooking,
+          };
+        }
+        state.isLoading = false;
+        state.error = null;
+        state.successMessage = 'Booking summary created successfully';
+      })
+      .addCase(bookingSummary.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
         state.successMessage = null;

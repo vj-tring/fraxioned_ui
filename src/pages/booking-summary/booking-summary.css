@@ -30,17 +30,16 @@
   width: 32% !important;
   background-size: cover;
   background-position: center;
-  border-radius:5px;
+  border-radius: 5px;
   height: 40% !important;
   margin-top: 3px;
   /* background-color: #88cdd4; */
 }
 
-.RowImg{
+.RowImg {
   width: 115%;
   /* height: 90% !important; */
   border-radius: 10px !important;
-
 }
 
 .ListSum {
@@ -163,5 +162,3 @@
   font-weight: 500;
   font-size: x-large;
 }
-
-

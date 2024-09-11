@@ -113,7 +113,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
         style={{ height: "4.3rem" }}
       >
         {!isAdminDashboard && (
-          <Navbar.Brand href="/dashboard" className="p-2">
+          <Navbar.Brand href="/home" className="p-2">
             <img
               src={logo}
               height="40"
@@ -236,6 +236,8 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               },
             }}
           >
+
+            
                 {!isAdmin && (
 <>
              <MenuItem
