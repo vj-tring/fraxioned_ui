@@ -5,11 +5,14 @@ import Box from "@mui/material/Box";
 // import { useSnackbar } from "../../components/snackbar-provider";
 import { confirmBooking, setNotes } from "@/store/slice/auth/bookingSlice";
 import { useNavigate } from "react-router-dom";
+// import Loader from "../../components/loader/index";
 import { AppDispatch } from "@/store";
 import { Button, CircularProgress, SvgIcon, Typography } from "@mui/material";
 import CustomizedSnackbars from "../../components/customized-snackbar";
 import { keyframes } from "@mui/system";
+// import { css } from '@emotion/react';
 
+// import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import img1 from "../../assests/bear-lake-bluffs.jpg";
@@ -35,10 +38,8 @@ const mockBooking = {
 };
 
 const CheckIcon: React.FC = () => (
-  <SvgIcon
-    viewBox="0 0 24 24"
-    sx={{ fontSize: 40, color: "#4CAF50", marginRight: "3px" }}
-  >
+  <SvgIcon viewBox="0 0 24 24" sx={{ fontSize: 40, color: "#4CAF50" ,            marginRight:"3px"
+  }}>
     <path d="M10 15.172l-3.707-3.707 1.414-1.414L10 12.343l7.293-7.293 1.414 1.414L10 15.172z" />
   </SvgIcon>
 );
@@ -83,16 +84,20 @@ const BookingSummaryForm: React.FC = () => {
   const handleBookingConfirm = async () => {
     setIsLoading(true);
     try {
-
+      dispatch(setNotes(notes));
       dispatch(setNotes(notes));
       const { season, totalAmountDue, ...bookingPayload } = booking; // Exclude season and totalAmountDue
       const result = await dispatch(confirmBooking({ ...bookingPayload, notes })).unwrap();
-    setIsLoading(false);
-      setShowConfirmation(true);
+      // setTimeout(() => {
+        setIsLoading(false);
+        setShowConfirmation(true);
+        setSnackbarMessage(result.message);
 
-      setTimeout(() => {
-        navigate("/home/booking");
-      }, 1000);
+
+        setTimeout(() => {
+          navigate("/home/booking");
+        }, 3000);
+      // }, 5000);
     } catch (error) {
       setSnackbarMessage((error as string) || "Failed to confirm booking");
       setSnackbarSeverity("error");
@@ -106,8 +111,21 @@ const BookingSummaryForm: React.FC = () => {
   };
 
 
+//   const fadeInLeftToRight = keyframes`
+//   0% {
+//     opacity: 0;
+//     transform: translateX(-20px);
+//   }
+//   100% {
+//     opacity: 1;
+//     transform: translateX(0);
+//   }
+// `;
 
-
+// Define the animation CSS
+// const animationStyle = css`
+//   animation: ${fadeInLeftToRight} 1s ease-out;
+// `;
   const formatDate = (date: Date) => {
     return date.toLocaleDateString("en-US", {
       weekday: "short", // Abbreviated weekday (e.g., Wed)
@@ -129,7 +147,8 @@ const BookingSummaryForm: React.FC = () => {
         width: "90%",
         marginLeft: "5%",
         // borderRadius: "5px",
-        borderTopRightRadius: "15px",
+        borderTopRightRadius:"15px",
+
         boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
       }}
     >
@@ -144,6 +163,7 @@ const BookingSummaryForm: React.FC = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            
             backgroundColor: "rgba(255, 255,    255, 0.8)",
             zIndex: 1000,
           }}
@@ -151,6 +171,7 @@ const BookingSummaryForm: React.FC = () => {
           <CircularProgress />
         </Box>
       )}
+      {/* {SnackbarComponent} */}
 
       <CustomizedSnackbars
         open={showSnackbar}
@@ -161,12 +182,12 @@ const BookingSummaryForm: React.FC = () => {
       {showConfirmation && (
         <Box
           sx={{
-            position: "absolute",
+            position: "fixed",
             top: 0,
             left: 0,
             width: "100%",
             height: "100%",
-            backgroundColor: "rgba(255, 255,    255, 0.8)",
+            backgroundColor: "white",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -176,13 +197,11 @@ const BookingSummaryForm: React.FC = () => {
             animation: `${fadeIn} 1s ease-in-out`,
           }}
         >
-          <Typography
-            variant="h2"
-            component="h1"
-            sx={{ marginTop: 2, fontSize: "24px" }}
-          >
-            <CheckIcon />
-            Booking Successful
+          <Typography variant="h2" component="h1" sx={{ marginTop: 2 ,
+            fontSize:"24px",
+          }}>
+          <CheckIcon />
+          Booking Successful
           </Typography>
         </Box>
       )}
@@ -216,8 +235,12 @@ const BookingSummaryForm: React.FC = () => {
             <div>
               <div className="property">Property</div>{" "}
               <div className="colon">:</div>
-              <div className="value">{booking.propertyName}</div>
-
+              <div className="value">
+                {selectedPropertyDetails.propertyName}
+                {/* {!booking.data
+                    ? booking.property.id
+                    : booking.data.property.id} */}
+              </div>
             </div>
             <div>
               <div className="property">Check-in</div>

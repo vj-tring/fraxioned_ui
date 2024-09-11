@@ -166,3 +166,6 @@ export const addamenity = (data: {
   amenityDescription: string;
   amenityType: string;
 }) => axiosInstance.post("/v1/amenities/amenity", data);
+
+export const getBookings = () =>
+  axiosInstance.get('/v1/bookings');
