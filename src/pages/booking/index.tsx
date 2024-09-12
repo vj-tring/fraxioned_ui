@@ -18,9 +18,7 @@ const Booking = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const user = useSelector((state: RootState) => state.auth.user);
-  const userBookings = useSelector(
-    (state: RootState) => state.bookings.userBookings
-  );
+  const userBookings = useSelector((state: RootState) => state.bookings.userBookings || []);
 
   useEffect(() => {
     if (user && user.id) {
@@ -33,7 +31,7 @@ const Booking = () => {
     return format(date, "MMM do, yyyy hh:mm a");
   };
 
-  const details = userBookings.map((booking: BookingData) => {
+  const details = (Array.isArray(userBookings) ? userBookings : []).map((booking: BookingData) => {
     const guestDetails = `${booking.noOfAdults} Adults, ${
       booking.noOfChildren
     } Children, ${booking.noOfPets} Pet${booking.noOfPets > 1 ? "s" : ""}`;
