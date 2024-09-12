@@ -64,6 +64,13 @@ const BookingGrid: React.FC<BookingGridProps> = ({
       align: "center",
     },
     {
+      field: "totalNights",
+      headerName: "TotalNights",
+      flex: 1,
+      headerAlign: "center",
+      align: "center",
+    },
+    {
       field: "actions",
       headerName: "Actions",
       headerAlign: "center",
@@ -129,9 +136,10 @@ const BookingGrid: React.FC<BookingGridProps> = ({
         columnHeaderHeight={40}
         sx={{
           "& .MuiDataGrid-columnHeader": {
-            backgroundColor: "#c4eaf4",
+            backgroundColor: "#46696E",
             fontWeight: "bold",
-            color: "#808080",
+            color: "white",
+            textTransform:"capitalize",
             paddingRight: "50px",
             fontFamily: "Montserrat, sans-serif",
           },

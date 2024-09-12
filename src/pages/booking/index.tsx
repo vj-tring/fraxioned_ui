@@ -4,7 +4,6 @@ import { Typography, Box, Tabs, Tab, Button } from "@mui/material";
 import BookingGrid from "@/components/grid/BookingGrid";
 import {
   BookingData,
-  fetchBookings,
   fetchUserBookings,
 } from "@/store/slice/auth/bookingSlice";
 import { AppDispatch } from "@/store";
@@ -13,18 +12,13 @@ import { RootState } from "@/store/reducers";
 import { format } from "date-fns";
 import PropertyList from "../home/propertyList";
 import TrackingMyNigts from "./trackingMyNights";
-import BookingBar from "./booking-bar";
 import FilterListIcon from "@mui/icons-material/FilterList";
 
 const Booking = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const bookingdetails = useSelector(
-    (state: RootState) => state.bookings.bookings
-  );
+
   const user = useSelector((state: RootState) => state.auth.user);
-  const userBookings = useSelector(
-    (state: RootState) => state.bookings.userBookings
-  );
+  const userBookings = useSelector((state: RootState) => state.bookings.userBookings || []);
 
   useEffect(() => {
     if (user && user.id) {
@@ -37,7 +31,7 @@ const Booking = () => {
     return format(date, "MMM do, yyyy hh:mm a");
   };
 
-  const details = userBookings.map((booking: BookingData) => {
+  const details = (Array.isArray(userBookings) ? userBookings : []).map((booking: BookingData) => {
     const guestDetails = `${booking.noOfAdults} Adults, ${
       booking.noOfChildren
     } Children, ${booking.noOfPets} Pet${booking.noOfPets > 1 ? "s" : ""}`;
@@ -102,7 +96,7 @@ const Booking = () => {
           </Tabs>
           <div>
             <Button
-             disableRipple
+              disableRipple
               variant="contained"
               style={{
                 marginLeft: "16px",
@@ -152,7 +146,7 @@ const Booking = () => {
           >
             Create New Bookings
           </h1>
-          <PropertyList />
+          <PropertyList paddingLeft />
         </div>
       </Box>
     </>

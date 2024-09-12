@@ -8,10 +8,21 @@ import unsplashImage4 from '../../assets/lake-escape.jpg';
 import unsplashImage5 from '../../assets/images/building.jpg';
 import { useParams } from 'react-router-dom';
 
-import { Card, Button, Typography, Grid, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Box } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import Logo from '../../assets/images/fraxionedpng.png';
-import AvailableNights from '../../components/available-nights';
+import {
+  Card,
+  Button,
+  Typography,
+  Grid,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Box,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import Logo from "../../assets/images/fraxionedpng.png";
+import AvailableNights from "../../components/available-nights";
 
 import SingleDevice from '../../components/single-device';
 import MapEmbed from '../../components/map-embed';
@@ -88,13 +99,15 @@ interface RootState {
     loading: boolean;
     error: string | null;
     isAdmin: boolean;
-  }
+  };
 }
 
 const PropertyListingPage = () => {
   const { cards: properties } = useSelector((state: RootState) => state.properties);
   const displayProperties = properties.length ? properties : mockProperties;
-  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(
+    null
+  );
   const { id } = useParams<{ id: string }>();
 
   const [currentImage, setCurrentImage] = useState<number>(0);
@@ -144,7 +157,6 @@ const PropertyListingPage = () => {
     fetchPropertyImages();
   }, [id]);
 
-
   const handleClickOpen = () => {
     setDialogOpen(true);
   };
@@ -154,7 +166,7 @@ const PropertyListingPage = () => {
   };
 
   const handleCheckAvailability = () => {
-    console.log('Check availability:', { checkInDate, checkOutDate, guests });
+    console.log("Check availability:", { checkInDate, checkOutDate, guests });
   };
 
   return (
@@ -207,15 +219,31 @@ const PropertyListingPage = () => {
         </Grid>
       </div>
 
-      <div className='px-12 d-flex flex-column'>
+      <div className="px-12 d-flex flex-column">
         {selectedProperty && (
           <>
-            <Typography variant="h4" className="PropertyName monsterrat"> {selectedProperty.name || 'Property Name'}</Typography>
+            <Typography variant="h4" className="PropertyName monsterrat">
 
-            <Box display="flex" alignItems="flex-end" gap={.5} className="monsterrat">
+              {selectedProperty &&
+              (selectedProperty.id === 1 || selectedProperty.id === 2)
+                ? "Paradise Shores"
+                : selectedProperty?.name || "Property Name"}
+
+            </Typography>
+
+            <Box
+              display="flex"
+              alignItems="flex-end"
+              gap={0.5}
+              className="monsterrat"
+            >
               <img src={Logo} alt="Logo" style={{ width: 26, height: 26 }} />
-              <Typography variant="h6" className='PropertyAddress monsterrat' style={{ opacity: .9, fontWeight: 'bolder' }}>
-                {selectedProperty.address || 'Property Address'}
+              <Typography
+                variant="h6"
+                className="PropertyAddress monsterrat"
+                style={{ opacity: 0.9, fontWeight: "bolder" }}
+              >
+                {selectedProperty.address || "Property Address"}
               </Typography>
             </Box>
           </>
@@ -224,22 +252,24 @@ const PropertyListingPage = () => {
         <div className="Blue-row pb-3 pt-5">
           <div>
             <Link to="myShare" smooth={true} duration={200}>
-              <h1 className='Blue-rowshare' style={{ fontWeight: 'bolder' }}>My Share</h1>
+              <h1 className="Blue-rowshare" style={{ fontWeight: "bolder" }}>
+                My Share
+              </h1>
             </Link>
           </div>
           <div>
             <Link to="rooms" smooth={true} duration={200}>
-              <h1 className='Blue-rowshare'>Amenities</h1>
+              <h1 className="Blue-rowshare">Amenities</h1>
             </Link>
           </div>
           <div>
             <Link to="location" smooth={true} duration={200}>
-              <h1 className='Blue-rowshare'>Location</h1>
+              <h1 className="Blue-rowshare">Location</h1>
             </Link>
           </div>
           <div>
             <Link to="info" smooth={true} duration={200}>
-              <h1 className='Blue-rowshare'>Info</h1>
+              <h1 className="Blue-rowshare">Info</h1>
             </Link>
           </div>
         </div>
@@ -247,7 +277,11 @@ const PropertyListingPage = () => {
         <div className="d-flex pt-2 h-100">
           <div className="col-6 col-md-7 GridWidth h-100">
             <Element name="myShare" className="mt-4">
-              <Showmore description={selectedProperty ? selectedProperty?.houseDescription : ""} />
+              <Showmore
+                description={
+                  selectedProperty ? selectedProperty?.houseDescription : ""
+                }
+              />
             </Element>
 
             <Element name="availableNights">
@@ -273,33 +307,40 @@ const PropertyListingPage = () => {
           </div>
         </div>
 
+        <hr
+          style={{
+            width: "100%",
+            backgroundColor: "black",
+            height: 1.2,
+            opacity: 0.1,
+          }}
+        />
 
-
-        <hr style={{ width: '100%', backgroundColor: 'black', height: 1.2, opacity: .1 }} />
-
-        <Element name="rooms" className='mt-5'>
+        <Element name="rooms" className="mt-5">
           <SingleDevice />
         </Element>
         <Element name="location">
           <MapEmbed
             city={selectedProperty ? selectedProperty?.city : "Garden City"}
             state={selectedProperty ? selectedProperty?.state : "Utah"}
-            country={selectedProperty ? selectedProperty?.country : "United State"}
+            country={
+              selectedProperty ? selectedProperty?.country : "United State"
+            }
           />
         </Element>
         <Element name="info">
           <ThingsToKnow />
         </Element>
 
-        <Dialog
-          open={dialogOpen}
-          onClose={handleClose}
-          fullWidth
-          maxWidth="md"
-        >
-          <DialogTitle className='d-flex justify-content-between'>
+        <Dialog open={dialogOpen} onClose={handleClose} fullWidth maxWidth="md">
+          <DialogTitle className="d-flex justify-content-between">
             <Typography variant="h6">More Photos</Typography>
-            <IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
+            <IconButton
+              edge="end"
+              color="inherit"
+              onClick={handleClose}
+              aria-label="close"
+            >
               <CloseIcon />
             </IconButton>
           </DialogTitle>
@@ -320,10 +361,7 @@ const PropertyListingPage = () => {
             </Button>
           </DialogActions>
         </Dialog>
-
       </div>
-
-
     </div>
   );
 };
