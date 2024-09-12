@@ -1,6 +1,6 @@
 //@ts-nocheck
 import * as React from "react";
-import { addDays, addYears } from "date-fns";
+import { addDays, addYears, format } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
@@ -407,6 +407,11 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
     },
   };
 
+  const formatDate = (dateString: string) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return format(date, "d MMM");
+  };
   return (
     <div className={cn("gri flex flex-column calendar", className)}>
       <div>
@@ -478,9 +483,9 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
       `}</style>
         <div className="flex items-center justify-between end-calendar">
           <div className='stay-length'>
-          <div><b className="bold">Nights: (Peak -</b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.peakRemainingNights || 'N/A'}) (<b className="bold">Off -</b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.offRemainingNights || 'N/A'})</div>
-            {/* <div><b className="bold">Minimum Stay :</b> {calendarData.bookingRules.regularBooking.minNights} Nights</div> */}
-          <div><b className="bold">Maximum Stay :</b> {selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.maximumStayLength || 'N/A'} Nights</div>  
+              <div><b className="bold">Nights: [Peak -</b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.peakRemainingNights || '0'} , <b className="bold">Off -</b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.offRemainingNights || '0'}]</div>
+              <div><b className="bold">Peak Season :</b> [{formatDate(selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.peakSeasonStartDate)} - {formatDate(selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.peakSeasonEndDate)}] </div>  
+              <div><b className="bold">Max Stay :</b> {selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.maximumStayLength || '0'} Nights</div>
           </div>
           <div onClick={clearDatesHandler} className="btn-clear">
             Clear dates
