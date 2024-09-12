@@ -1,0 +1,211 @@
+.propertyPhotosContainer {
+    padding: 20px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.container {
+    width: 1200px;
+    height: 600px;
+    margin: 0 auto;
+    margin-right: 20px;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.popupOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popupContent {
+    position: relative;
+    max-width: 50%;
+    max-height: 90%;
+    background-color: transparent;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.popupImage {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+}
+
+.closeButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.closeButton:hover {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.editOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.photoItem:hover .editOverlay {
+    opacity: 1;
+}
+
+.iconButton {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    margin: 0 10px;
+    padding: 5px;
+    transition: transform 0.2s ease;
+}
+
+.iconButton:hover {
+    transform: scale(1.2);
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 10px;
+}
+
+.button {
+    padding: 10px 20px;
+    background-color: #e28f25;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #c97d1e;
+}
+
+.activeButton {
+    background-color: #2ecc71;
+}
+
+.activeButton:hover {
+    background-color: #27ae60;
+}
+
+.photoGridContainer {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.photoGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding-right: 10px;
+}
+
+.photoItem {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.photoItem:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.imageWrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.propertyImage {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.editOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+}
+
+.editOverlay:hover {
+    opacity: 1;
+}
+
+.editOverlay svg {
+    color: white;
+}
+
+.imageInfo {
+    padding: 10px;
+    background-color: #f8f8f8;
+}
+
+.spaceName {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.spaceType {
+    color: #666;
+}

@@ -6,6 +6,12 @@ interface RegionProps {
 }
 
 const Region: React.FC<RegionProps> = ({ label, date, onClick, isActive }) => {
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  };
+
   return (
     <div 
       className={`d-flex align-items-start flex-column cursor-pointer ${isActive ? 'active1' : ''}`}
@@ -13,7 +19,7 @@ const Region: React.FC<RegionProps> = ({ label, date, onClick, isActive }) => {
     >
       <span className="DateHead1 monsterrat">{label}</span>
       <p className="property1 monsterrat">
-        {date ? date.toLocaleDateString() : "Add Dates"}
+        {date ? date.toLocaleDateString('en-US', dateOptions) : "Add Dates"}
       </p>
     </div>
   );

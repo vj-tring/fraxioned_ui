@@ -66,7 +66,6 @@
     flex-direction: column;
     gap: 24px;
     margin-top: 16px;
-    /* Add top margin to the form */
 
 }
 
@@ -194,7 +193,7 @@
     }
 }
 
-:global(.MuiFormControl-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline) {
+:global(.MuiFormControl-root  .MuiOutlinedInput-notchedOutline) {
     border-color: #fabf95 !important;
     box-shadow: 0 4px 20px rgba(246, 169, 97, 0.1);
 }

@@ -35,7 +35,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   if (allowedRoles.includes(user.roleId)) {
     return <Element />;
   }
-  return <Navigate to="/dashboard" />;
+  return <Navigate to="/home" />;
 };
 
 function App() {
@@ -54,7 +54,7 @@ function App() {
             element={<ResetPassword onClose={() => {}} />}
           />
           <Route
-            path="/dashboard/*"
+            path="/home/*"
             element={<PrivateRoute element={Dashboard} allowedRoles={[2, 3]} />}
           />
           <Route

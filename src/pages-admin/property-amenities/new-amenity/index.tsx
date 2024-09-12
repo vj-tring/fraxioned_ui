@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './addamenity.module.css';
 import { addamenity } from '@/api';
+import Loader from '@/components/loader';
 
 interface NewAmenityFormProps {
     onClose: () => void;
@@ -10,6 +11,7 @@ interface NewAmenityFormProps {
 const NewAmenityForm: React.FC<NewAmenityFormProps> = ({ onClose, onAmenityAdded }) => {
     const [amenityType, setAmenityType] = useState('');
     const [amenityName, setAmenityName] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const [amenityDescription, setAmenityDescription] = useState('');
     const [error, setError] = useState('');
 
@@ -21,6 +23,7 @@ const NewAmenityForm: React.FC<NewAmenityFormProps> = ({ onClose, onAmenityAdded
             setError('Amenity Type and Name are required.');
             return;
         }
+        setIsLoading(true);
 
         try {
             const data = {
@@ -38,11 +41,19 @@ const NewAmenityForm: React.FC<NewAmenityFormProps> = ({ onClose, onAmenityAdded
             console.error('Failed to add amenity:', error);
             setError('Failed to add amenity. Please try again.');
         }
+        finally {
+            setIsLoading(false);
+        }
     };
 
     return (
         <div className={styles.overlay}>
             <div className={styles.formContainer}>
+                {isLoading && (
+                    <div className={styles.loaderOverlay}>
+                        <Loader />
+                    </div>
+                )}
                 <h2 className={styles.formTitle}>Add Amenity</h2>
                 {error && <p className={styles.errorMessage}>{error}</p>}
                 <form onSubmit={handleSubmit} className={styles.form}>

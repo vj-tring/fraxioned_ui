@@ -1,0 +1,11 @@
+.my-Book{
+    font-size:large !important;
+    font-weight: 600 !important ;
+    
+}
+
+.Up,.Com,.Can,.All{
+    font-weight: 600 !important;
+    color: grey !important;
+    text-transform: capitalize !important;
+}

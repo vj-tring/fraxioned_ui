@@ -214,7 +214,7 @@
         width: 100%;
     }
 }
-
+/* 
 :global(.MuiOutlinedInput-root) {
     border-radius: 8px;
     transition: all 0.3s ease;
@@ -224,11 +224,8 @@
     box-shadow: 0 2px 8px rgba(0, 99, 109, 0.1);
 }
 
-:global(.MuiOutlinedInput-root.Mui-focused) {
-    box-shadow: 0 2px 8px rgba(0, 99, 109, 0.2);
-}
 
-:global(.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline) {
+:global(.MuiOutlinedInput-notchedOutline) {
     border-color: #00636d;
 }
 
@@ -244,7 +241,7 @@
     color: #e28f25;
 }
 
-:global(.MuiFormControl-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline) {
+:global(.MuiFormControl-root  .MuiOutlinedInput-notchedOutline) {
     border-color: #00636d !important;
     box-shadow: 0 4px 20px rgba(0, 99, 109, 0.1);
-}
+} */

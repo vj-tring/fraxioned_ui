@@ -11,8 +11,7 @@
     background-color: rgba(255, 255, 255, 0.7); 
   }
   
-  /* HTML: <div class="loader"></div> */
-  /* HTML: <div class="loader"></div> */
+  
   .loading-spinner .MuiCircularProgress-colorPrimary {
     color: #DC9751; 
   }
