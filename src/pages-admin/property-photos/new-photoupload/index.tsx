@@ -48,25 +48,19 @@ const PhotoUpload: React.FC = () => {
             spaceType: { id: spaceType },
             space: { id: space }
         }));
-        console.log('data', propertyImagesData);
         const formData = new FormData();
 
         images.forEach((image, index) => {
             formData.append(`imageFiles`, image);
-            console.log(`Appending image ${index}:`, image);
         });
         formData.append('propertyImages', JSON.stringify(propertyImagesData));
-        console.log("images", images);
-
-        console.log('from file', formData)
 
         try {
             await propertyImageuploadapi(formData);
-            navigate(`/admin/property/${id}/photos`);
+            navigate(`/admin/property/${id}/photos`, { state: { fromUpload: true } });
         } catch (error) {
             console.error('Error uploading images:', error);
             navigate(`/admin/property/${id}/photos`);
-
         } finally {
             setIsLoading(false);
         }

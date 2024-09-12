@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { propertyImageapi, deletetpropertyImageById } from '@/api';
-import { Edit, Trash2 } from 'lucide-react';
+import { Edit, Trash2, X } from 'lucide-react';
 import Loader from '@/components/loader';
 import styles from './propertyphoto.module.css';
 import ConfirmationModal from '@/components/confirmation-modal';
@@ -25,6 +25,7 @@ const PropertyPhotos: React.FC = () => {
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [imageToDelete, setImageToDelete] = useState<number | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const location = useLocation();
@@ -51,10 +52,8 @@ const PropertyPhotos: React.FC = () => {
     }, [refreshPhotos]);
 
     useEffect(() => {
-        // Check if we're returning from an edit operation
-        if (location.state && location.state.fromEdit) {
+        if (location.state && (location.state.fromEdit || location.state.fromUpload)) {
             refreshPhotos();
-            // Clear the state to prevent unnecessary refreshes
             navigate(location.pathname, { replace: true, state: {} });
         }
     }, [location, navigate, refreshPhotos]);
@@ -93,6 +92,14 @@ const PropertyPhotos: React.FC = () => {
         }
     };
 
+    const handleImageClick = (imageUrl: string) => {
+        setSelectedImageUrl(imageUrl);
+    };
+
+    const handleClosePopup = () => {
+        setSelectedImageUrl(null);
+    };
+
     return (
         <div className={styles.propertyPhotosContainer}>
             {isLoading && (
@@ -114,15 +121,15 @@ const PropertyPhotos: React.FC = () => {
             <div className={styles.photoGridContainer}>
                 <div className={styles.photoGrid}>
                     {images.map((image) => (
-                        <div key={image.id} className={styles.photoItem}>
+                        <div key={image.id} className={styles.photoItem} onClick={() => handleImageClick(image.imageUrl)}>
                             <div className={styles.imageWrapper}>
                                 <img src={image.imageUrl} alt={image.imageName} className={styles.propertyImage} />
                                 {isEditMode && (
                                     <div className={styles.editOverlay}>
-                                        <button className={styles.iconButton} onClick={() => handleEditImage(image.id)}>
+                                        <button className={styles.iconButton} onClick={(e) => { e.stopPropagation(); handleEditImage(image.id); }}>
                                             <Edit size={24} />
                                         </button>
-                                        <button className={styles.iconButton} onClick={() => handleDeleteImage(image.id)}>
+                                        <button className={styles.iconButton} onClick={(e) => { e.stopPropagation(); handleDeleteImage(image.id); }}>
                                             <Trash2 size={24} />
                                         </button>
                                     </div>
@@ -136,6 +143,16 @@ const PropertyPhotos: React.FC = () => {
                     ))}
                 </div>
             </div>
+            {selectedImageUrl && (
+                <div className={styles.popupOverlay} onClick={handleClosePopup}>
+                    <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
+                        <img src={selectedImageUrl} alt="Selected property" className={styles.popupImage} />
+                        <button className={styles.closeButton} onClick={handleClosePopup}>
+                            <X size={24} />
+                        </button>
+                    </div>
+                </div>
+            )}
             <ConfirmationModal
                 show={showDeleteConfirmation}
                 onHide={handleCancelDelete}
