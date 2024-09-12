@@ -11,10 +11,10 @@
 .bar-btn {
   /* border: 1px solid grey; */
   border-radius: 50px;
-  width: 50%;
+  width: 40%;
   display: flex;
   float: right;
-  height: 65px;
+  height: 50px;
   justify-content: space-between;
   /* padding-left: 20px; */
   padding-right: 10px;
@@ -24,10 +24,10 @@
   background-color: #88cdd4;
   border-radius: 50px;
   width: 7.5rem;
-  height: 3rem;
+  height: 2rem;
   margin-top: 8px;
   color: white;
-  font-size: large;
+  font-size: medium;
   font-weight: 600;
 }
 .Track-btn > span {
@@ -47,34 +47,56 @@
 }
 .Prop-sec {
   margin-top: 10px;
-  
+
   /* margin-left: 3px; */
 }
 .Prop1 {
   font-size: small;
 }
 .PropImg1 {
-  width: 230px;
-  height: 230px;
+  width: 260px;
+  height: 260px;
   border-radius: 20px;
   background-repeat: no-repeat;
   background-size: cover;
   opacity: 90%;
   /* border: 1px solid grey; */
 }
+.cardImg {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+  padding: 10px;
+  /* height: 350px; */
+  border-radius: 10px;
+  height: 386px;
+}
 .Prop {
   font-weight: 600;
   color: rgb(56, 55, 55) !important;
+  margin-top: 5px;
 }
-.container3{
-    display: flex;
-    justify-content: space-between;
-    color: #808080 !important;
+.Prop-sec > span {
+  padding-left: 5px;
 }
+.container3 {
+  display: flex;
+  justify-content: space-between;
+  color: #808080 !important;
+  /* box-shadow: rgba(14, 63, 126, 0.04) 0px 0px 0px 1px,
+    rgba(42, 51, 69, 0.04) 0px 1px 1px -0.5px,
+    rgba(42, 51, 70, 0.04) 0px 3px 3px -1.5px,
+    rgba(42, 51, 70, 0.04) 0px 6px 6px -3px,
+    rgba(14, 63, 126, 0.04) 0px 12px 12px -6px,
+    rgba(14, 63, 126, 0.04) 0px 24px 24px -12px; */
+  /* background-color: aquamarine; */
+  padding: 1.5rem;
+  border-radius: 20px;
+}
+
 .Total {
   width: 1000px;
   height: 400px;
   margin-left: 30px;
+  /* background-color: blue; */
   /* border: 1px solid grey; */
 }
 
@@ -86,16 +108,15 @@
 }
 .OffHead {
   font-weight: 600;
-  font-size: large !important;
+  font-size: 20px !important;
   color: grey;
 }
 .Off-season > li {
-  font-size: small;
-  
+  font-size: 14px;
 }
 .OffSea,
 .PeakSea {
-  width: 900px;
+  /* width: 900px; */
   height: 180px;
   margin-left: 30px;
   border: 1px solid grey;
@@ -107,7 +128,7 @@
 .Total-Nights > table,
 .Total-Nights > table > tr > th,
 .Total-Nights > table > tr > td {
-  border: 1px solid grey;
+  border: 1.5px solid grey;
   border-collapse: collapse;
   padding: 5px;
 }
@@ -115,7 +136,7 @@
 .Total-Holiday > table,
 .Total-Holiday > table > tr > th,
 .Total-Holiday > table > tr > td {
-  border: 1px solid grey;
+  border: 1.5px solid grey;
   border-collapse: collapse;
   padding: 5px;
 }
