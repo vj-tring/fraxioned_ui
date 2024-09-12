@@ -1,22 +1,55 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./home.css";
-// import BookingSearchBar from "../../components/booking-search-bar";
 import Card from "../../components/cards";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import image1 from "../../assests/bear-lake-bluffs.jpg";
 import { FaPlus } from "react-icons/fa";
-import { mockProperties } from "./mockData";
 import PorpImg from "../../assests/crown-jewel.jpg";
 import { resetLimits } from "@/store/slice/auth/propertyGuestSlice";
-import { useDispatch } from "react-redux";
 import { clearDates } from "@/store/slice/datePickerSlice";
+import { User } from '@/store/model';
+import { propertyImageapi } from "@/api";
 
 interface Property {
   id: number;
-  propertyName?: string;
+  name?: string;
   address?: string;
   propertyShare?: string;
+  houseDescription?: string;
+  state?: string;
+  city?: string;
+  country?: string;
+  latitude?: string;
+  longitude?: string;
+
 }
+
+// Interface for space details
+interface Space {
+  id: number;
+  name: string;
+}
+
+// Interface for space type details
+interface SpaceType {
+  id: number;
+  name: string;
+  space: Space;
+}
+
+export interface Image {
+  createdAt: string;
+  updatedAt: string;
+  id: number;
+  imageUrl: string;
+  imageName: string;
+  displayOrder: number;
+  spaceType: SpaceType;
+  property: Property;
+  createdBy: User;
+  updatedBy: User;
+}
+
 
 interface RootState {
   properties: {
@@ -37,11 +70,27 @@ const PropertyList: React.FC<PropertyListProps> =({
   } = useSelector((state: RootState) => state.properties);
 
   const dispatch = useDispatch();
-
-  const displayProperties = properties.length ? properties : mockProperties;
-  const showCarousel = displayProperties.length > 4;
+  const [images, setImages] = useState<Image[]>([]);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const showCarousel = properties.length > 4;
   const showPlusIcon = true;
+
+  const fetchImages = async () => {
+    try {
+      const response = await propertyImageapi();
+      const data = response.data.data as Image[];
+      setImages(data.filter(img => img.displayOrder === 1));
+    } catch (error) {
+      console.error("Error fetching images:", error);
+    }
+  };
+
+  useEffect(() => {
+    dispatch(resetLimits());
+    dispatch(clearDates());
+    fetchImages();
+  }, [dispatch]);
+
   const scroll = (scrollOffset: number) => {
     if (carouselRef.current) {
       carouselRef.current.scrollBy({
@@ -51,13 +100,7 @@ const PropertyList: React.FC<PropertyListProps> =({
     }
   };
 
-  useEffect(() => {
-    dispatch(resetLimits());
-    dispatch(clearDates());
-  }, [dispatch]);
-
-  const Shadow =
-    properties.length >= 4 ? "rgba(0, 0, 0, 0.1) 1px 1px 2px 1px" : "none";
+  const Shadow = properties.length >= 4 ? "rgba(0, 0, 0, 0.1) 1px 1px 2px 1px" : "none";
 
   return (
     <div className="Container1" 
@@ -68,7 +111,7 @@ const PropertyList: React.FC<PropertyListProps> =({
           marginLeft: paddingLeft ? '-45px' : '3%'
         }}>
           {showCarousel && (
-            <div className="carousel-controls ">
+            <div className="carousel-controls">
               <button
                 className="carousel-control prev"
                 onClick={() => scroll(-250)}
@@ -79,26 +122,30 @@ const PropertyList: React.FC<PropertyListProps> =({
           )}
           <div
             style={{ boxShadow: Shadow }}
-            className={`Cardcontainer  ${showCarousel ? "carousel" : ""}`}
+            className={`Cardcontainer ${showCarousel ? "carousel" : ""}`}
             ref={carouselRef}
           >
-            {displayProperties.map((property,) => (
-              <Card
-                key={property.id}
-                imageUrl={property.image || image1}
-                title={property.name || "No Title"}
-                text={property.address || "Address not available"}
-                share={
-                  property.share
-                    ? `You Own ${property.share}/${property.propertyShare}th share`
-                    : "Share information not available"
-                }
-                id={property.id}
-              />
-            ))}
+            {properties.map(property => {
+              // Find the image for the current property
+              const propertyImage = images.find(img => img.property.id === property.id);
+              return (
+                <Card
+                  key={property.id}
+                  imageUrl={propertyImage?.imageUrl || image1}
+                  title={property.name || "No Title"}
+                  text={property.address || "Address not available"}
+                  share={
+                    property.propertyShare
+                      ? `You Own ${property.propertyShare}th share`
+                      : "Share information not available"
+                  }
+                  id={property.id}
+                />
+              );
+            })}
             {showPlusIcon && (
-              <div className=" FadeProp">
-                <div className="image-container   ">
+              <div className="FadeProp">
+                <div className="image-container">
                   <a href="https://www.fraxioned.com/" target="_blank">
                     <img
                       src={PorpImg}
@@ -108,7 +155,6 @@ const PropertyList: React.FC<PropertyListProps> =({
                     <FaPlus className="plus-icon" />
                   </a>
                 </div>
-
                 <div className="card-body">
                   <h4 className="card-title">Adventure Awaits...</h4>
                   <span className="card-text">
@@ -119,7 +165,7 @@ const PropertyList: React.FC<PropertyListProps> =({
             )}
           </div>
           {showCarousel && (
-            <div className="carousel-controls ">
+            <div className="carousel-controls">
               <button
                 className="carousel-control next"
                 onClick={() => scroll(250)}
