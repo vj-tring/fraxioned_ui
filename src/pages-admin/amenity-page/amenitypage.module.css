@@ -1,14 +1,20 @@
 .container {
-    max-width: 1200px;
+    width: 1200px;
     margin: 0 auto;
     padding: 2rem;
-    height: 100vh;
+    height: calc(100vh - 60px);
     display: flex;
-    margin-top: 20px;
     flex-direction: column;
     background-color: #f8f9fa;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    margin-left: 110px;
+    margin-top: 30px;
+    transform: translateX(-50%);
+    overflow: hidden;
 }
 
 .header {
@@ -18,8 +24,6 @@
     margin-bottom: 2rem;
     padding-bottom: 1rem;
     border-bottom: 2px solid #ecf0f1;
-    position: sticky;
-    top: 0;
     background-color: #f8f9fa;
     z-index: 10;
 }
@@ -55,6 +59,7 @@
     padding-right: 1rem;
 }
 
+
 .amenitiesGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -62,11 +67,11 @@
 }
 
 .amenityGroup {
-    background-color: rgb(253, 253, 253);
+    background-color: #f8f9fa;
     max-height: 250px;
     border-radius: 8px;
     padding: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
 }
 
@@ -193,8 +198,12 @@
 @media (max-width: 768px) {
     .container {
         padding: 1rem;
-        height: 100%;
+        height: calc(100% - 60px);
+        /* Adjust 60px to match your navbar height */
         border-radius: 0;
+        width: 100%;
+        left: 0;
+        transform: none;
     }
 
     .header {
