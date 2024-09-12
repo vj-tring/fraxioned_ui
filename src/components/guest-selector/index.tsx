@@ -77,9 +77,9 @@ const MultipleSelect: React.FC = () => {
     let dynamicMsg;
 
     if (noOfPetsAllowed === 0) {
-        dynamicMsg = `This property has a maximum of ${noOfGuestsAllowed} guests, including children. Pets aren't allowed.`;
+        dynamicMsg = `This property allows a maximum of ${noOfGuestsAllowed} guests, including children. Pets aren't allowed.`;
     } else {
-        dynamicMsg = `This property has a maximum of ${noOfGuestsAllowed} guests, including children and ${noOfPetsAllowed} pets.`;
+        dynamicMsg = `This property allows a maximum of ${noOfGuestsAllowed} guests, including children and ${noOfPetsAllowed} pets.`;
     }
     setDynamicMessage(dynamicMsg);
 

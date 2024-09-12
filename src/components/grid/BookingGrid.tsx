@@ -136,7 +136,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
         columnHeaderHeight={40}
         sx={{
           "& .MuiDataGrid-columnHeader": {
-            backgroundColor: "#88CDD4",
+            backgroundColor: "#46696E",
             fontWeight: "bold",
             color: "white",
             textTransform:"capitalize",

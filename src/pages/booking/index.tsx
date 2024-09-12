@@ -148,7 +148,7 @@ const Booking = () => {
           >
             Create New Bookings
           </h1>
-          <PropertyList />
+          <PropertyList paddingLeft />
         </div>
       </Box>
     </>

@@ -83,6 +83,10 @@ const TrackingMyNigts: React.FC = () => {
     ? propertyImages[selectedPropertyId]
     : PropImg1;
 
+    const formatDate = (dateStr) => {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    };
   return (
     <div className="Container">
       <div className="My-nights">
@@ -120,7 +124,6 @@ const TrackingMyNigts: React.FC = () => {
               backgroundColor: "none",
             }}
           >
-       
             {properties.map((property) => (
               <MenuItem key={property.id} value={property.id}>
                 <div className="d-flex flex-column">
@@ -269,8 +272,10 @@ const TrackingMyNigts: React.FC = () => {
           <div className="PeakSea d-flex">
             <div className="Off-season">
               <li className="OffHead">Peak-Season</li>
-              <li>Dec 31 - May 31</li>
-              <li>Sept 21 - Dec 30</li>
+              <li>{formatDate(propertyDetails.peakSeasonStartDate)} - {formatDate(propertyDetails.peakSeasonEndDate)}</li>
+
+              {/* <li>Dec 31 - May 31</li> */}
+              {/* <li>Sept 21 - Dec 30</li> */}
             </div>
             <div className="Total-Nights pt-4">
               <table style={{ width: "90%" }}>

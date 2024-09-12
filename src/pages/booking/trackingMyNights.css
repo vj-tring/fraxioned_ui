@@ -54,20 +54,21 @@
   font-size: small;
 }
 .PropImg1 {
-  width: 260px;
-  height: 260px;
+  width: 350px;
+  height: 220px;
   border-radius: 20px;
   background-repeat: no-repeat;
   background-size: cover;
   opacity: 90%;
+  padding: 3px;
   /* border: 1px solid grey; */
 }
 .cardImg {
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
-  padding: 10px;
-  /* height: 350px; */
+  /* box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px; */
+  padding: 20px;
+  height: 350px;
   border-radius: 10px;
-  height: 386px;
+  /* height: 386px; */
 }
 .Prop {
   font-weight: 600;
@@ -81,20 +82,20 @@
   display: flex;
   justify-content: space-between;
   color: #808080 !important;
-  /* box-shadow: rgba(14, 63, 126, 0.04) 0px 0px 0px 1px,
+  box-shadow: rgba(14, 63, 126, 0.04) 0px 0px 0px 1px,
     rgba(42, 51, 69, 0.04) 0px 1px 1px -0.5px,
     rgba(42, 51, 70, 0.04) 0px 3px 3px -1.5px,
     rgba(42, 51, 70, 0.04) 0px 6px 6px -3px,
     rgba(14, 63, 126, 0.04) 0px 12px 12px -6px,
-    rgba(14, 63, 126, 0.04) 0px 24px 24px -12px; */
+    rgba(14, 63, 126, 0.04) 0px 24px 24px -12px;
   /* background-color: aquamarine; */
-  padding: 1.5rem;
-  border-radius: 20px;
+  /* padding: 1.5rem; */
+  border-radius: 10px;
 }
 
 .Total {
   width: 1000px;
-  height: 400px;
+  height: 370px;
   margin-left: 30px;
   /* background-color: blue; */
   /* border: 1px solid grey; */
@@ -117,9 +118,9 @@
 .OffSea,
 .PeakSea {
   /* width: 900px; */
-  height: 180px;
+  height: 140px;
   margin-left: 30px;
-  border: 1px solid grey;
+  /* border: 1px solid grey; */
   display: flex;
   /* padding: 20px; */
   justify-content: space-between !important;
@@ -156,3 +157,4 @@ tr > th {
 .ProperName:hover {
   background: none !important;
 }
+

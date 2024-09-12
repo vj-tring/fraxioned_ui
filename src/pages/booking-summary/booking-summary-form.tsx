@@ -56,7 +56,7 @@ const BookingSummaryForm: React.FC = () => {
   const { currentBooking } = useSelector((state: RootState) => state.bookings);
   const [notes, setNotesValue] = useState<string>(currentBooking?.notes || "");
   const [isLoading, setIsLoading] = useState(false);
-  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showConfirmation] = useState(false);
   const selectedPropertyDetails = useSelector(selectSelectedPropertyDetails);
   const booking = currentBooking || mockBooking;
   const checkinDate = new Date(booking.checkinDate);
@@ -77,7 +77,7 @@ const BookingSummaryForm: React.FC = () => {
   const handleBookingConfirm = async () => {
     setIsLoading(true);
     try {
-      dispatch(setNotes(notes));
+      // dispatch(setNotes(notes));
       dispatch(setNotes(notes));
       const { season, totalAmountDue, ...bookingPayload } = booking;
       const result = await dispatch(
@@ -211,7 +211,7 @@ const BookingSummaryForm: React.FC = () => {
               <div className="property">Property</div>{" "}
               <div className="colon">:</div>
               <div className="value">
-                {selectedPropertyDetails.propertyName}
+                {selectedPropertyDetails?.propertyName}
               </div>
             </div>
             <div>
