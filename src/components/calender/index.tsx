@@ -1,16 +1,9 @@
 //@ts-nocheck
 import * as React from "react";
-import { addDays, format, addYears } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { addDays, addYears } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import "./calender.css";
 import calendarData from "./calendarData.json";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,7 +12,7 @@ import { fetchPropertySeasonHoliday, selectPropertySeasonHolidays } from '@/stor
 import {  clearBookingMessages, fetchBookings } from '../../store/slice/auth/bookingSlice';
 import { useEffect } from "react";
 import { RootState } from "@/store/reducers";
-import { setDateRange, setErrorMessage, setIsCalendarOpen, clearDates, setStartDate, setStartDateSelected, setSelectedYear, setValidationMessage, clearValidationMessage, clearPartial } from "@/store/slice/datePickerSlice";
+import { setDateRange, setErrorMessage, setIsCalendarOpen, clearDates, setStartDate, setStartDateSelected, setSelectedYear, clearPartial } from "@/store/slice/datePickerSlice";
 
 interface DatePickerWithRangeProps extends React.HTMLAttributes<HTMLDivElement> {
   onSelect?: (range: DateRange | undefined) => void;
@@ -31,9 +24,6 @@ interface DatePickerWithRangeProps extends React.HTMLAttributes<HTMLDivElement> 
 export function DatePickerWithRange({
   className,
   onSelect,
-  initialRange,
-  selectingFrom,
-  userId,
 }: DatePickerWithRangeProps) {
   const today = new Date();
   const endDate = new Date(today.getFullYear() + 5, 11, 31);
@@ -42,7 +32,6 @@ export function DatePickerWithRange({
 
   const dispatch = useDispatch();
   const bookings = useSelector((state: RootState) => state.bookings.bookings);
-  const bookingState = useSelector((state: RootState) => state.bookings);
   // const bookingError = bookingState?.error;
   // const bookingSuccessMessage = bookingState?.successMessage;
   // const isBookingLoading = bookingState?.isLoading;
@@ -150,12 +139,6 @@ export function DatePickerWithRange({
     );
   };
 
-  const isAfterUnavailableDate = (date: Date) => {
-    return unavailableDates.some(
-      (unavailableDate) => date.getTime() > unavailableDate.getTime()
-    );
-  };
-
   const isDayBeforeBookedDate = (date: Date) => {
     return bookedDates.some(
       (bookedDate) =>
@@ -165,9 +148,20 @@ export function DatePickerWithRange({
     );
   };
 
-  const isAfterBookedDate = (date: Date) => {
-    return bookedDates.some(
-      (bookedDate) => date.getTime() > bookedDate.getTime()
+  const checkoutDates = React.useMemo(() => {
+    if (!selectedPropertyDetails) return [];
+  
+    return bookings
+      .filter(booking => booking.property.id === selectedPropertyDetails.id)
+      .map(booking => new Date(booking.checkoutDate));
+  }, [bookings, selectedPropertyDetails]);
+
+  const isCheckoutDate = (date: Date) => {
+    return checkoutDates.some(
+      (checkoutDate) =>
+        date.getFullYear() === checkoutDate.getFullYear() &&
+        date.getMonth() === checkoutDate.getMonth() &&
+        date.getDate() === checkoutDate.getDate()
     );
   };
 
@@ -190,6 +184,7 @@ export function DatePickerWithRange({
         date < startDate ||
         isBookedDate(date) ||
         isUnavailableDate(date) ||
+        isCheckoutDate(date) ||
         date > checkOutEndDate ||
         (nextBookedDate && date > nextBookedDate) ||
         (nextUnavailableDate && date > nextUnavailableDate)
@@ -199,16 +194,12 @@ export function DatePickerWithRange({
         (date < today && date.toDateString() !== today.toDateString()) ||
         date > checkInEndDate ||
         isBookedDate(date) ||
-        isUnavailableDate(date)
+        isUnavailableDate(date) ||
+        isCheckoutDate(date)
       );
     }
   };
 
-  const isDateSpanningBookedDates = (start: Date, end: Date) => {
-    return bookedDates.some(
-      (bookedDate) => bookedDate > start && bookedDate < end
-    );
-  };
 
   const isLastMinuteBooking = (checkInDate: Date) => {
     const diffInDays =
@@ -216,39 +207,39 @@ export function DatePickerWithRange({
 
     return diffInDays <= calendarData.bookingRules.lastMinuteBooking.maxDays; 
   };
-  const meetsConsecutiveStayRule = (date: Date) => {
-    if (date.toDateString() === today.toDateString()) {
+  const meetsConsecutiveStayRule = (checkinDate: Date, checkoutDate: Date) => {
+    if (checkinDate.toDateString() === today.toDateString()) {
       return true;
     }
-  
+
     const userBookings = bookings.filter(
       booking => booking.property.id === selectedPropertyDetails.id &&
                  booking.user.id === currentUser.id
     );
-  
+
     if (userBookings.length === 0) {
       return true;
     }
-  
+
     for (const booking of userBookings) {
-      const checkOutDate = new Date(booking.checkoutDate);
-      const checkInDate = new Date(booking.checkinDate);
-  
-      const daysSinceCheckout = Math.floor((date.getTime() - checkOutDate.getTime()) / (1000 * 60 * 60 * 24));
-      if (daysSinceCheckout >= 0 && daysSinceCheckout < 4) {
+      const lastCheckoutDate = new Date(booking.checkoutDate);
+      const lastCheckinDate = new Date(booking.checkinDate);
+      
+      const diffInDaysFromCheckout = (checkinDate.getTime() - lastCheckoutDate.getTime()) / (MILLISECONDS_IN_A_DAY);
+      const diffInDaysFromCheckoutToLastCheckin = (checkoutDate.getTime() - lastCheckinDate.getTime()) / (MILLISECONDS_IN_A_DAY);
+      const diffInDaysFromCheckin = (lastCheckinDate.getTime() - checkinDate.getTime()) / (MILLISECONDS_IN_A_DAY);
+
+      if (diffInDaysFromCheckout >= 0 && diffInDaysFromCheckout <= 5) {
         return false;
       }
-  
-      const daysBeforeCheckin = Math.floor((checkInDate.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
-      if (daysBeforeCheckin >= 0 && daysBeforeCheckin <= 5) {
+      if (diffInDaysFromCheckoutToLastCheckin >= -6 && diffInDaysFromCheckoutToLastCheckin < 0) {
         return false;
       }
-  
-      if (date >= checkInDate && date <= checkOutDate) {
+      if (diffInDaysFromCheckin >= 0 && diffInDaysFromCheckin <= 5) {
         return false;
       }
     }
-  
+    
     return true;
   };
 
@@ -269,7 +260,7 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
   
       dispatch(setSelectedYear(newStartDate.getFullYear()));
   
-      if (!meetsConsecutiveStayRule(newStartDate, newEndDate || newStartDate)) {
+      if (!meetsConsecutiveStayRule(newStartDate, newStartDate)) {
         dispatch(setErrorMessage('There must be at least 5 nights between your bookings at this property.'));
         dispatch(clearPartial());
         if (onSelect) onSelect(undefined);
@@ -278,14 +269,14 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
       dispatch(setStartDate(newStartDate));
       dispatch(setStartDateSelected(true));
 
-      // if (newEndDate) {
-      //   if (!meetsConsecutiveStayRule(newStartDate, newEndDate)) {
-      //     dispatch(setErrorMessage('There must be at least 5 nights between your bookings at this property.'));
-      //     dispatch(clearPartial());
-      //     if (onSelect) onSelect(undefined);
-      //     return;
-      //   }
-      // }
+      if (newEndDate) {
+        if (!meetsConsecutiveStayRule(newStartDate, newEndDate)) {
+          dispatch(setErrorMessage('There must be at least 5 nights between your bookings at this property.'));
+          dispatch(clearPartial());
+          if (onSelect) onSelect(undefined);
+          return;
+        }
+      }
 
       if (isBookingTooCloseToCheckin(newStartDate)) {
         dispatch(setErrorMessage('Booking must be made at least 24 hours before the check-in time'));
@@ -433,6 +424,7 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
           modifiers={{
             booked: bookedDates,
             unavailable: unavailableDates,
+            checkout: checkoutDates,
             blue: blueDates,
             holiday: seasonHolidays.map(h => ({
               from: new Date(h.holiday.startDate),
@@ -444,6 +436,7 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
             unavailable: 'unavailable-date',
             blue: 'blue-date',
             holiday: 'holiday-date',
+            checkout: 'checkout-date',
           }}
         />
       <div className="error-msg-container ml-5 flex justify-start">
@@ -463,6 +456,11 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
           color: gray;
           text-decoration: line-through;
         }
+
+        .checkout-date {
+          color: gray;
+          text-decoration: line-through;
+        }
   
         .after-booked-date {
           color: gray;
@@ -478,16 +476,11 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
           color: blue !important;
         }
       `}</style>
-      {/* <div className="flex items-center justify-between end-calendar">
-        <div className='peak-length'>
-            <div><b className="bold">Peak Nights : </b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.peakRemainingNights || 'N/A'} Nights</div>
-            <div><b className="bold">Off Nights : </b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.offRemainingNights || 'N/A'} Nights</div>
-          </div>
-        </div> */}
         <div className="flex items-center justify-between end-calendar">
           <div className='stay-length'>
-            <div><b className="bold">Minimum Stay :</b> {calendarData.bookingRules.regularBooking.minNights} Nights</div>
-            <div><b className="bold">Maximum Stay :</b> {selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.maximumStayLength || 'N/A'} Nights</div>  
+          <div><b className="bold">Nights: (Peak -</b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.peakRemainingNights || 'N/A'}) (<b className="bold">Off -</b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.offRemainingNights || 'N/A'})</div>
+            {/* <div><b className="bold">Minimum Stay :</b> {calendarData.bookingRules.regularBooking.minNights} Nights</div> */}
+          <div><b className="bold">Maximum Stay :</b> {selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.maximumStayLength || 'N/A'} Nights</div>  
           </div>
           <div onClick={clearDatesHandler} className="btn-clear">
             Clear dates
