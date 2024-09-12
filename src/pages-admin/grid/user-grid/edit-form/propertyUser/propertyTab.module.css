@@ -1,0 +1,24 @@
+.propertyPaper {
+    padding: 16px;
+    margin: 16px 0;
+    margin-top: -30px;
+}
+
+.propertyTitle {
+    margin-bottom: 16px;
+
+}
+
+.userPropertiesTitle {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.userPropertyPaper {
+    padding: 16px;
+    margin-bottom: 16px;
+}
+.title {
+    margin-bottom:16px;
+    padding: 10px;
+  }

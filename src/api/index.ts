@@ -75,6 +75,8 @@ export const getBookings = () =>
 export const getUserProperties = (id: number) =>
     axiosInstance.get(`/v1/properties/${id}/user-properties-with-details`);
 
+
+
 export const addPropertyApi = (propertyData: {
     createdBy: { id: number };
     propertyName: string;

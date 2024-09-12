@@ -13,8 +13,8 @@
 }
 
 .formContainer {
-    width: 90%;
-    max-width: 1000px;
+    width: 100%;
+    max-width: 1300px;
     height: 90vh;
     display: flex;
     flex-direction: column;
@@ -83,7 +83,7 @@
 }
 
 .formTitle {
-    font-size: 32px !important;
+    font-size: 25px !important;
     font-weight: 600 !important;
     color: #333;
     font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
@@ -93,8 +93,8 @@
 .closeButton {
     position: absolute !important;
     right: 0;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 60%;
+    transform: translateY(-60%);
     color: #333 !important;
     transition: color 0.3s ease !important;
 }
@@ -198,7 +198,7 @@
 
 @keyframes slideIn {
     from {
-        transform: translateY(-50px);
+        transform: translateY(-60px);
         opacity: 0;
     }
 

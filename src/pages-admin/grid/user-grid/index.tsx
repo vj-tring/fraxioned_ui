@@ -7,8 +7,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import { userdetails, getUserById, propertydetailsapi } from '@/api';
 import Search from '@/pages-admin/search-user';
 import styles from './User.module.css';
-import EditForm from './edit-form';
+import EditForm from './edit-form/GeneralUser';
 // import UserForm from './user-form';
+import { useParams, useNavigate } from 'react-router-dom';
 
 interface ContactDetails {
     id: number;
