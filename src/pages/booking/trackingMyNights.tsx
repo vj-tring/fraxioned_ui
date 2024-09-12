@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import PropImg from "../../assests/room-interior-hotel-bedroom.jpg";
+// import PropImg from "../../assests/room-interior-hotel-bedroom.jpg";
+import PropImg1 from "../../assests/room-interior-hotel-bedroom.jpg";
+import PropImg2 from "../../assests/blue-bear-lake.jpg";
+import PropImg3 from "../../assests/bear-lake-bluffs.jpg";
+import PropImg4 from "../../assests/lake-escape.jpg";
 import "../booking/trackingMyNights.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -44,8 +48,14 @@ const TrackingMyNigts: React.FC = () => {
     new Date().getFullYear()
   );
 
+  const propertyImages: { [key: number]: string } = {
+    1: PropImg1,
+    2: PropImg2,
+    3: PropImg3,
+    4: PropImg4,
+  };
+
   useEffect(() => {
-    // Set the first property as the default selected property
     if (properties.length > 0) {
       setSelectedPropertyId(properties[0].id);
     }
@@ -69,7 +79,14 @@ const TrackingMyNigts: React.FC = () => {
   const availableYears = Object.keys(selectedProperty?.details || {}).map(
     (year) => parseInt(year)
   );
+  const imageSrc = selectedPropertyId
+    ? propertyImages[selectedPropertyId]
+    : PropImg1;
 
+    const formatDate = (dateStr) => {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    };
   return (
     <div className="Container">
       <div className="My-nights">
@@ -87,8 +104,8 @@ const TrackingMyNigts: React.FC = () => {
             displayEmpty
             className="Year-btn"
             sx={{
-              width: "300px",
-              color:"#808080",
+              width: "270px",
+              color: "#808080",
               border: "none",
               borderRadius: "50px",
               "& .MuiSelect-select": {
@@ -105,12 +122,8 @@ const TrackingMyNigts: React.FC = () => {
                 color: "#ffffff",
               },
               backgroundColor: "none",
-              // border:"none",
             }}
           >
-            {/* <MenuItem value="" disabled>
-              My Home
-            </MenuItem> */}
             {properties.map((property) => (
               <MenuItem key={property.id} value={property.id}>
                 <div className="d-flex flex-column">
@@ -129,8 +142,8 @@ const TrackingMyNigts: React.FC = () => {
             displayEmpty
             className="Year-btn"
             sx={{
-              width: "300px",
-              color:"#808080",
+              width: "150px",
+              color: "#808080",
               border: "none",
               borderRadius: "50px",
               paddingLeft: "30px",
@@ -173,8 +186,8 @@ const TrackingMyNigts: React.FC = () => {
       </div>
 
       <div className="container3 mt-3 pt-4 d-flex">
-        <div>
-          <img src={PropImg} className="PropImg1" alt="Property" />
+        <div className="cardImg">
+          <img src={imageSrc} className="PropImg1" alt="Property" />
           <div className="d-flex flex-column Prop-sec">
             {/* <span className="Prop">Property</span> */}
             <span className="Prop">
@@ -259,8 +272,10 @@ const TrackingMyNigts: React.FC = () => {
           <div className="PeakSea d-flex">
             <div className="Off-season">
               <li className="OffHead">Peak-Season</li>
-              <li>Dec 31 - May 31</li>
-              <li>Sept 21 - Dec 30</li>
+              <li>{formatDate(propertyDetails.peakSeasonStartDate)} - {formatDate(propertyDetails.peakSeasonEndDate)}</li>
+
+              {/* <li>Dec 31 - May 31</li> */}
+              {/* <li>Sept 21 - Dec 30</li> */}
             </div>
             <div className="Total-Nights pt-4">
               <table style={{ width: "90%" }}>

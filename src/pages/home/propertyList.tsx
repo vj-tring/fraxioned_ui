@@ -25,12 +25,15 @@ interface RootState {
     error: string | null;
   };
 }
+interface PropertyListProps {
+  paddingLeft?: boolean;
+}
 
-const PropertyList: React.FC = () => {
+const PropertyList: React.FC<PropertyListProps> =({
+  paddingLeft = false }) => {
   const {
     cards: properties,
-    // loading,
-    // error,
+   
   } = useSelector((state: RootState) => state.properties);
 
   const dispatch = useDispatch();
@@ -57,9 +60,13 @@ const PropertyList: React.FC = () => {
     properties.length >= 4 ? "rgba(0, 0, 0, 0.1) 1px 1px 2px 1px" : "none";
 
   return (
-    <div className="Container1">
+    <div className="Container1" 
+    >
       <div>
-        <div className="d-flex flex-row PropImg ">
+        <div className="d-flex flex-row PropImg "
+        style={{
+          marginLeft: paddingLeft ? '-45px' : '3%'
+        }}>
           {showCarousel && (
             <div className="carousel-controls ">
               <button

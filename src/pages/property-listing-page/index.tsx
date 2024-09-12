@@ -202,10 +202,12 @@ const PropertyListingPage = () => {
         {selectedProperty && (
           <>
             <Typography variant="h4" className="PropertyName monsterrat">
+
               {selectedProperty &&
               (selectedProperty.id === 1 || selectedProperty.id === 2)
                 ? "Paradise Shores"
                 : selectedProperty?.name || "Property Name"}
+
             </Typography>
 
             <Box
