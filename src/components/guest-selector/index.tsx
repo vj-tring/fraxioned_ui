@@ -163,11 +163,12 @@ const MultipleSelect: React.FC = () => {
         className="PropertyBtn"
         sx={{
           borderRadius: 10,
-          width: 200,
-          height: 70,
+          width: 130,
+          height: 65,
           border: 'none',
           cursor: 'pointer',
-          paddingRight: 15,
+          paddingRight: 8,
+          marginTop: -2,
         }}
       >
         <div className="d-flex align-items-start flex-column">

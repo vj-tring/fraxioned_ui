@@ -167,11 +167,11 @@ export default function BasicSelect() {
         className="PropertyBtn"
         sx={{
           borderRadius: 10,
-          width: 264,
-          height: 70,
+          width: 250,
+          height: 65,
           border: "none",
           cursor: "pointer",
-          paddingRight: 0,
+          marginTop: -2,
           position: "relative",
           display: "flex",
           alignItems: "center",
