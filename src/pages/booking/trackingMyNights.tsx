@@ -83,10 +83,52 @@ const TrackingMyNigts: React.FC = () => {
     ? propertyImages[selectedPropertyId]
     : PropImg1;
 
-    const formatDate = (dateStr) => {
-      const date = new Date(dateStr);
-      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  };
+
+  const getOffSeasonDates = (startDate: string, endDate: string) => {
+    const peakStart = new Date(startDate);
+    const peakEnd = new Date(endDate);
+
+    const offSeasonBeforeStart = {
+      startDate: new Date(peakStart.getFullYear(), 12, 1), // Dec 31 of the current year
+      endDate: new Date(peakStart.getFullYear(), peakStart.getMonth(), peakStart.getDate() - 1) // Day before peak season starts
     };
+
+    const offSeasonAfterEnd = {
+      startDate: new Date(peakEnd.getFullYear(), peakEnd.getMonth(), peakEnd.getDate() + 1), // Day after peak season ends
+      endDate: new Date(peakEnd.getFullYear(), 11, 31) // Dec 30 of the same year
+    };
+
+    // Handle cases where peak season spans across years
+    if (peakStart.getMonth() < 11) {
+      offSeasonBeforeStart.endDate = new Date(peakStart.getFullYear(), peakStart.getMonth(), peakStart.getDate() );
+    }
+    if (peakEnd.getMonth() > 0 || peakEnd.getFullYear() > peakStart.getFullYear()) {
+      offSeasonAfterEnd.startDate = new Date(peakEnd.getFullYear(), peakEnd.getMonth(), peakEnd.getDate() +2 );
+    }
+
+    return {
+      offSeasonBefore: {
+        startDate: offSeasonBeforeStart.startDate.toISOString().split("T")[0],
+        endDate: offSeasonBeforeStart.endDate.toISOString().split("T")[0],
+      },
+      offSeasonAfter: {
+        startDate: offSeasonAfterEnd.startDate.toISOString().split("T")[0],
+        endDate: offSeasonAfterEnd.endDate.toISOString().split("T")[0],
+      }
+    };
+  };
+
+  const { offSeasonBefore, offSeasonAfter } = selectedProperty
+  ? getOffSeasonDates(
+      selectedProperty.details[selectedYear]?.peakSeasonStartDate || "",
+      selectedProperty.details[selectedYear]?.peakSeasonEndDate || ""
+    )
+  : { offSeasonBefore: { startDate: "", endDate: "" }, offSeasonAfter: { startDate: "", endDate: "" } };
+
   return (
     <div className="Container">
       <div className="My-nights">
@@ -203,10 +245,11 @@ const TrackingMyNigts: React.FC = () => {
         </div>
         <div className="Total ">
           <div className="OffSea mb-4  ">
-            <div className="Off-season">
-              <li className="OffHead">Off-Season</li>
-              <li>Dec 31 - May 31</li>
-              <li>Sept 21 - Dec 30</li>
+          <div className="Off-season">
+              <li className="OffHead">Off-Season </li>
+              <li>{`${formatDate(offSeasonBefore.startDate)} - ${formatDate(offSeasonBefore.endDate)}`}</li>
+            
+              <li>{`${formatDate(offSeasonAfter.startDate)} - ${formatDate(offSeasonAfter.endDate)}`}</li>
             </div>
             <div className="Total-Nights pt-3 ">
               <table style={{ width: "90%" }}>
@@ -272,7 +315,10 @@ const TrackingMyNigts: React.FC = () => {
           <div className="PeakSea d-flex">
             <div className="Off-season">
               <li className="OffHead">Peak-Season</li>
-              <li>{formatDate(propertyDetails.peakSeasonStartDate)} - {formatDate(propertyDetails.peakSeasonEndDate)}</li>
+              <li>
+                {formatDate(propertyDetails.peakSeasonStartDate)} -{" "}
+                {formatDate(propertyDetails.peakSeasonEndDate)}
+              </li>
 
               {/* <li>Dec 31 - May 31</li> */}
               {/* <li>Sept 21 - Dec 30</li> */}
