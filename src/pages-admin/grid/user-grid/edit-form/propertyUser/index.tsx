@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { TextField, Grid, Typography, Paper } from "@mui/material";
-import styles from "./PropertyTab.module.css";
+import styles from "./propertyTab.module.css";
 import { getUserProperties } from "@/api";
 import { style } from "@mui/system/Stack/createStack";
 
