@@ -30,7 +30,7 @@ axiosInstance.interceptors.request.use(
             config.headers['resetToken'] = resetToken;
         }
 
-        const isImageUpload = config.url?.includes('/propertyImages') && 
+        const isImageUpload = config.url?.includes('/propertyImages') &&
             (config.method === 'post' || config.method === 'patch');
 
         if (isImageUpload) {

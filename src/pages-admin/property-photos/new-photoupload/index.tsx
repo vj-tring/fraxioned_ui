@@ -1,35 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styles from './newphoto.module.css';
-import { propertyImageuploadapi } from '@/api';
+import { propertyImageuploadapi, propertyspaceapi, propertyspacetypesapi } from '@/api';
 import Loader from '@/components/loader';
 
-const spaceTypes = [
-    { id: 1, name: 'Dining Room' },
-    { id: 2, name: 'Exterior' },
-    { id: 3, name: 'Family Room' },
-    { id: 4, name: 'Garage' },
-    { id: 5, name: 'Kitchen' },
-    { id: 6, name: 'Living Room' },
-    { id: 7, name: 'Other' },
-    { id: 8, name: 'Patio' },
-    { id: 9, name: 'Pool' },
-    { id: 10, name: 'Theatre Room' },
-];
+interface Space {
+    id: number;
+    name: string;
+}
 
-const spaces = [
-    { id: 1, name: 'General' }
-];
+interface SpaceType {
+    id: number;
+    name: string;
+    space: {
+        id: number;
+        name: string;
+    };
+}
 
 const PhotoUpload: React.FC = () => {
     const [images, setImages] = useState<File[]>([]);
     const [name, setName] = useState('');
-    const [spaceType, setSpaceType] = useState(spaceTypes[0].id);
-    const [space, setSpace] = useState(spaces[0].id);
+    const [spaceType, setSpaceType] = useState<number | null>(null);
+    const [space, setSpace] = useState<number | null>(null);
+    const [spaces, setSpaces] = useState<Space[]>([]);
+    const [spaceTypes, setSpaceTypes] = useState<SpaceType[]>([]);
+    const [filteredSpaceTypes, setFilteredSpaceTypes] = useState<SpaceType[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const { id } = useParams<{ id: string }>();
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchSpacesAndSpaceTypes = async () => {
+            try {
+                const [spacesResponse, spaceTypesResponse] = await Promise.all([
+                    propertyspaceapi(),
+                    propertyspacetypesapi()
+                ]);
+
+                if (spacesResponse.data && spacesResponse.data.data) {
+                    setSpaces(spacesResponse.data.data);
+                }
+
+                if (spaceTypesResponse.data && spaceTypesResponse.data.data) {
+                    setSpaceTypes(spaceTypesResponse.data.data);
+                }
+            } catch (error) {
+                console.error('Error fetching spaces and space types:', error);
+            }
+        };
+
+        fetchSpacesAndSpaceTypes();
+    }, []);
+
+    useEffect(() => {
+        if (space) {
+            const filtered = spaceTypes.filter(type => type.space.id === space);
+            setFilteredSpaceTypes(filtered);
+            setSpaceType(filtered.length > 0 ? filtered[0].id : null);
+        } else {
+            setFilteredSpaceTypes([]);
+            setSpaceType(null);
+        }
+    }, [space, spaceTypes]);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -38,6 +72,11 @@ const PhotoUpload: React.FC = () => {
     };
 
     const handleSubmit = async () => {
+        if (!space || !spaceType) {
+            alert('Please select both Space and Space Type');
+            return;
+        }
+
         setIsLoading(true);
         const createdBy = 1;
         const propertyImagesData = images.map((image, index) => ({
@@ -93,31 +132,34 @@ const PhotoUpload: React.FC = () => {
                         />
                     </div>
                     <div className={styles.inputGroup}>
-                        <label htmlFor="spaceType" className={styles.label}>Space Type</label>
+                        <label htmlFor="space" className={styles.label}>Space</label>
                         <select
-                            id="spaceType"
+                            id="space"
                             className={styles.select}
-                            value={spaceType}
-                            onChange={(e) => setSpaceType(parseInt(e.target.value))}
+                            value={space || ''}
+                            onChange={(e) => setSpace(parseInt(e.target.value))}
                         >
-                            {spaceTypes.map((type) => (
-                                <option key={type.id} value={type.id}>
-                                    {type.name}
+                            <option value="">Select a Space</option>
+                            {spaces.map((spaceItem) => (
+                                <option key={spaceItem.id} value={spaceItem.id}>
+                                    {spaceItem.name}
                                 </option>
                             ))}
                         </select>
                     </div>
                     <div className={styles.inputGroup}>
-                        <label htmlFor="space" className={styles.label}>Space</label>
+                        <label htmlFor="spaceType" className={styles.label}>Space Type</label>
                         <select
-                            id="space"
+                            id="spaceType"
                             className={styles.select}
-                            value={space}
-                            onChange={(e) => setSpace(parseInt(e.target.value))}
+                            value={spaceType || ''}
+                            onChange={(e) => setSpaceType(parseInt(e.target.value))}
+                            disabled={!space}
                         >
-                            {spaces.map((space) => (
-                                <option key={space.id} value={space.id}>
-                                    {space.name}
+                            <option value="">Select a Space Type</option>
+                            {filteredSpaceTypes.map((type) => (
+                                <option key={type.id} value={type.id}>
+                                    {type.name}
                                 </option>
                             ))}
                         </select>

@@ -16,7 +16,7 @@ import PropertyRules from '../property-rules';
 import EditPropertyRulesForm from '../property-rules/edit-form';
 import PropertyPhotos from '../property-photos';
 import userImage from '../../assets/images/profile.jpeg'
-import EditPhoto from '../property-photos/edit-propertyphoto';
+// import EditPhoto from '../property-photos/edit-propertyphoto';
 import CustomNavbar from '@/components/navbar';
 import fraxionedLogo from '../../assets/images/fraxioned.png'
 import './admin-dashboard.css'
@@ -62,7 +62,7 @@ const AdminDashboard: React.FC = () => {
                                     <EditPropertyForm />
                                 </div>
                             </div>
-                        } />    
+                        } />
                         <Route path="/property/:id/rules" element={
                             <div className="property-details-container">
                                 <PropertySidePanel isOpen={true} />
@@ -119,14 +119,14 @@ const AdminDashboard: React.FC = () => {
                                 </div>
                             </div>
                         } />
-                        <Route path="/property/:id/photos/:imageId/edit" element={
+                        {/* <Route path="/property/:id/photos/:imageId/edit" element={
                             <div className="property-details-container">
                                 <PropertySidePanel isOpen={true} />
                                 <div className="property-info-content">
                                     <EditPhoto />
                                 </div>
                             </div>
-                        } />
+                        } /> */}
 
 
                     </Routes>
