@@ -217,7 +217,7 @@ const BookingSearchBar: React.FC = () => {
                 disabled={isBookingLoading}
               >
                 Book Now
-          </button>
+              </button>
         </div>
       </div>
       <CustomizedSnackbar

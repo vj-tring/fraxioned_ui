@@ -13,7 +13,7 @@
 }
 
 .bar {
-  width: 890px;
+  width: 820px;
   background-color: white !important;
   background-image: none !important;
   box-shadow: 0 0 5px hsl(0 0% 78%);
@@ -73,7 +73,7 @@
 .check-out,
 .guests {
   width: 22%;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .check-in p,
