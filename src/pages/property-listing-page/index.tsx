@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
-import "./propertylisting.css";
-import buildingImage from "../../assests/crown-jewel.jpg";
-import unsplashImage1 from "../../assests/bear-lake-bluffs.jpg";
-import unsplashImage2 from "../../assests/blue-bear-lake.jpg";
-import unsplashImage3 from "../../assests/crown-jewel.jpg";
-import unsplashImage4 from "../../assests/lake-escape.jpg";
-import unsplashImage5 from "../../assets/images/building.jpg";
-import { useParams } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import './propertylisting.css';
+import buildingImage from '../../assets/crown-jewel.jpg';
+import unsplashImage1 from '../../assets/bear-lake-bluffs.jpg';
+import unsplashImage2 from '../../assets/blue-bear-lake.jpg';
+import unsplashImage3 from '../../assets/crown-jewel.jpg';
+import unsplashImage4 from '../../assets/lake-escape.jpg';
+import unsplashImage5 from '../../assets/images/building.jpg';
+import { useParams } from 'react-router-dom';
 
 import {
   Card,
@@ -24,30 +24,21 @@ import CloseIcon from "@mui/icons-material/Close";
 import Logo from "../../assets/images/fraxionedpng.png";
 import AvailableNights from "../../components/available-nights";
 
-import SingleDevice from "../../components/single-device";
-import MapEmbed from "../../components/map-embed";
-import Showmore from "../../components/show-more";
-import ThingsToKnow from "../../components/things-to-know";
-import DatePickerCard from "../../components/date-picker-card";
-import { Element, Link } from "react-scroll";
-import { DatePickerWithRange } from "@/components/calender";
+import SingleDevice from '../../components/single-device';
+import MapEmbed from '../../components/map-embed';
+import Showmore from '../../components/show-more';
+import ThingsToKnow from '../../components/things-to-know';
+import DatePicker from '../../components/date-picker-card';
+import { Element, Link } from 'react-scroll';
+import { DatePickerWithRange } from '@/components/calender';
 import { useDispatch, useSelector } from "react-redux";
 import { mockProperties } from "../home/mockData";
-import {
-  fetchProperties,
-  selectProperty,
-} from "@/store/slice/auth/property-slice";
-import { AppDispatch } from "@/store";
-import { Session, User } from "@/store/model";
+import { fetchProperties, selectProperty } from '@/store/slice/auth/property-slice';
+import { AppDispatch } from '@/store';
+import { Session, User } from '@/store/model';
+import { propertyImageapi } from '@/api';
+import { PiDotsNineBold } from "react-icons/pi";
 
-const images = [
-  { src: buildingImage, alt: "Exterior of Blue Bear Lake home" },
-  { src: unsplashImage1, alt: "Aerial view of Blue Bear Lake home" },
-  { src: unsplashImage2, alt: "Living room in Blue Bear Lake home" },
-  { src: unsplashImage3, alt: "Game room in Blue Bear Lake home" },
-  { src: unsplashImage4, alt: "Game room in Blue Bear Lake home" },
-  { src: unsplashImage5, alt: "Game room in Blue Bear Lake home" },
-];
 
 interface Property {
   id: number;
@@ -60,6 +51,32 @@ interface Property {
   country?: string;
   latitude?: string;
   longitude?: string;
+}
+
+// Interface for space details
+interface Space {
+  id: number;
+  name: string;
+}
+
+// Interface for space type details
+interface SpaceType {
+  id: number;
+  name: string;
+  space: Space;
+}
+
+export interface Image {
+  createdAt: string;
+  updatedAt: string;
+  id: number;
+  imageUrl: string;
+  imageName: string;
+  displayOrder: number;
+  spaceType: SpaceType;
+  property: Property;
+  createdBy: User;
+  updatedBy: User;
 }
 
 interface RootState {
@@ -84,10 +101,9 @@ interface RootState {
     isAdmin: boolean;
   };
 }
+
 const PropertyListingPage = () => {
-  const { cards: properties } = useSelector(
-    (state: RootState) => state.properties
-  );
+  const { cards: properties } = useSelector((state: RootState) => state.properties);
   const displayProperties = properties.length ? properties : mockProperties;
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(
     null
@@ -99,28 +115,47 @@ const PropertyListingPage = () => {
   const [checkInDate, setCheckInDate] = useState<Date | null>(null);
   const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [imageDetails, setImageDetails] = useState<Image[]>([]);
   const dispatch = useDispatch<AppDispatch>();
   const userId = useSelector((state: RootState) => state.auth.user.id);
 
-  // const bookingData = useSelector((state: RootState) => state.bookings.bookings);
-
   useEffect(() => {
     dispatch(fetchProperties(userId));
-  }, []);
+  }, [dispatch, userId]);
 
   useEffect(() => {
     if (displayProperties.length > 0) {
       if (id) {
         const propertyId = parseInt(id, 10);
-        console.log("IDp", propertyId);
-        const property = displayProperties.find((p) => p.id === propertyId);
+        const property = displayProperties.find(p => p.id === propertyId);
         setSelectedProperty(property || null);
         dispatch(selectProperty(propertyId));
       } else {
         setSelectedProperty(displayProperties[0]);
       }
     }
-  }, [displayProperties, id]);
+  }, [displayProperties, id, dispatch]);
+
+  useEffect(() => {
+    const fetchPropertyImages = async () => {
+      try {
+        const propertyId = parseInt(id, 10);
+        if (isNaN(propertyId)) {
+          console.error('Invalid propertyId:', id);
+          return;
+        }
+        const response = await propertyImageapi();
+        const filterById = response.data.data.filter((image: Image) => (image.property?.id === propertyId) && image.displayOrder);
+
+        const sortedImages = filterById.sort((a: Image, b: Image) => a.displayOrder - b.displayOrder);
+        setImageDetails(sortedImages);
+      } catch (error) {
+        console.error('Error fetching property images:', error);
+      }
+    };
+
+    fetchPropertyImages();
+  }, [id]);
 
   const handleClickOpen = () => {
     setDialogOpen(true);
@@ -139,61 +174,47 @@ const PropertyListingPage = () => {
       <div className="img-row pt-4 px-12">
         <Grid container spacing={1}>
           <Grid item xs={12} md={6}>
-            <img
-              src={images[1].src}
-              alt={images[1].alt}
-              className={`img-fluid img1 cornertop ${
-                currentImage === 0 ? "active" : ""
-              }`}
-              onClick={() => setCurrentImage(0)}
-            />
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <img
-              src={images[2].src}
-              alt={images[2].alt}
-              className={`img-fluid image ${
-                currentImage === 1 ? "active" : ""
-              }`}
-              onClick={() => setCurrentImage(1)}
-            />
-            <img
-              src={images[5].src}
-              alt={images[5].alt}
-              className={`img-fluid image mt-1 ${
-                currentImage === 2 ? "active" : ""
-              }`}
-              onClick={() => setCurrentImage(2)}
-            />
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <div className="image-container">
+            {imageDetails.slice(0, 1).map((image, index) => (
               <img
-                src={images[3].src}
-                alt={images[3].alt}
-                className={`img-fluid image cornertopright ${
-                  currentImage === 3 ? "active" : ""
-                }`}
-                onClick={() => setCurrentImage(3)}
+                key={index}
+                src={image.imageUrl}
+                alt={image.imageName}
+                className={`img-fluid img1 cornertop ${currentImage === index ? 'active' : ''}`}
+                onClick={() => setCurrentImage(index)}
               />
-              <div className="show-more-overlay">
-                <Typography
-                  variant="button"
-                  onClick={handleClickOpen}
-                  className="show-more-text"
-                >
-                  Show More Photos
-                </Typography>
-              </div>
-              <img
-                src={images[4].src}
-                alt={images[4].alt}
-                className={`img-fluid image mt-1 cornerbottomright ${
-                  currentImage === 4 ? "active" : ""
-                }`}
-                onClick={() => setCurrentImage(4)}
-              />
-            </div>
+            ))}
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Grid container spacing={1}>
+              {imageDetails.slice(1, 5).map((image, index) => (
+                <Grid item xs={6} key={index}>
+                  <img
+                    src={image.imageUrl}
+                    alt={image.imageName}
+                    className={`img-fluid image ${currentImage === index + 1 ? 'active' : ''}`}
+                    onClick={() => setCurrentImage(index + 1)}
+                  />
+                </Grid>
+              ))}
+
+              {imageDetails.length > 5 && (
+                <Grid item xs={12}>
+                  <div className="image-container">
+                    <div className="show-more-overlay">
+                      <PiDotsNineBold style={{ fontSize: '.87rem', fontWeight: 'bolder' }} />
+                      <Typography
+                        variant="button"
+                        onClick={handleClickOpen}
+                        className="show-more-text"
+                      >
+                        Show all photos
+                      </Typography>
+                    </div>
+                  </div>
+                </Grid>
+              )}
+            </Grid>
           </Grid>
         </Grid>
       </div>
@@ -202,10 +223,12 @@ const PropertyListingPage = () => {
         {selectedProperty && (
           <>
             <Typography variant="h4" className="PropertyName monsterrat">
+
               {selectedProperty &&
               (selectedProperty.id === 1 || selectedProperty.id === 2)
                 ? "Paradise Shores"
                 : selectedProperty?.name || "Property Name"}
+
             </Typography>
 
             <Box
@@ -234,7 +257,6 @@ const PropertyListingPage = () => {
               </h1>
             </Link>
           </div>
-
           <div>
             <Link to="rooms" smooth={true} duration={200}>
               <h1 className="Blue-rowshare">Amenities</h1>
@@ -261,22 +283,19 @@ const PropertyListingPage = () => {
                 }
               />
             </Element>
-            {/* <hr style={{ width: '100%', backgroundColor: 'black', height: 1.2, opacity: 0.1 }} /> */}
+
             <Element name="availableNights">
               <AvailableNights />
             </Element>
-            {/* <hr style={{ width: '100%', backgroundColor: 'black', height: 1.2, opacity: 0.1 }} /> */}
-            <Element
-              name="basicRangeShortcuts"
-              className="mt-5 mb-3 normalcalendar"
-            >
+
+            <Element name="basicRangeShortcuts" className="mt-5 mb-3 normalcalendar">
               <h1 className="checkIn mb-3">Select check-in date</h1>
               <DatePickerWithRange />
             </Element>
           </div>
 
           <div className="py-4 GridWidth1 position-relative">
-            <DatePickerCard
+            <DatePicker
               checkInDate={checkInDate}
               checkOutDate={checkOutDate}
               guests={guests}
@@ -327,14 +346,10 @@ const PropertyListingPage = () => {
           </DialogTitle>
           <DialogContent>
             <Grid container spacing={2}>
-              {images.map((image, index) => (
+              {imageDetails.map((image, index) => (
                 <Grid item xs={12} sm={6} md={4} key={index}>
                   <Card>
-                    <img
-                      src={image.src}
-                      alt={image.alt}
-                      style={{ width: "100%", height: "auto" }}
-                    />
+                    <img src={image.imageUrl} alt={image.imageName} style={{ width: '100%', height: 'auto' }} />
                   </Card>
                 </Grid>
               ))}

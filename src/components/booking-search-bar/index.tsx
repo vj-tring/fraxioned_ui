@@ -19,6 +19,7 @@ import {bookingSummary, saveBooking } from "@/store/slice/auth/bookingSlice";
 import { selectSelectedPropertyDetails } from "@/store/slice/auth/property-slice";
 import calendarData from "../calender/calendarData.json";
 import { useSnackbar } from "../snackbar-provider";
+import CustomizedSnackbar from "../customized-snackbar";
 
 const BookingSearchBar: React.FC = () => {
   const today = new Date();
@@ -48,10 +49,21 @@ const BookingSearchBar: React.FC = () => {
   const currentUser = useSelector((state: RootState) => state.auth.user);
   const counts = useSelector((state: RootState) => state.limits.counts);
   const selectedPropertyDetails = useSelector(selectSelectedPropertyDetails);
-  const { showSnackbar } = useSnackbar();
+  const calendarError = useSelector((state: RootState) => state.datePicker.errorMessage);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error" >("error");
 
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
-  
+  const showSnackbar = (message: string, severity: "error" | "info" | "warning" = "error") => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
+
   const handleDateSelect = (range: DateRange | undefined) => {
     setDateRange(range);
     if (range?.from && !range.to) {
@@ -73,6 +85,11 @@ const BookingSearchBar: React.FC = () => {
   };
 
   const handleBookingSubmit = async () => {
+    if (calendarError) {
+      showSnackbar("You can't book the date you have selected. Please choose a valid date range.", "error");
+      return;
+    }
+
     if (!dateRange?.from || !dateRange?.to) {
       showSnackbar("Please select both check-in and check-out dates.");
       return;
@@ -204,6 +221,12 @@ const BookingSearchBar: React.FC = () => {
         </button>
         {errorMessage && <div className="text-red-600">{errorMessage}</div>}
       </div>
+      <CustomizedSnackbar
+        open={snackbarOpen}
+        handleClose={handleSnackbarClose}
+        message={snackbarMessage}
+        severity={snackbarSeverity}
+      />
     </div>
   );
 };
