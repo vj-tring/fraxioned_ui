@@ -123,7 +123,7 @@ const PropertyPhotos: React.FC = () => {
                     {images.map((image) => (
                         <div key={image.id} className={styles.photoItem} onClick={() => handleImageClick(image.imageUrl)}>
                             <div className={styles.imageWrapper}>
-                                <img src={image.imageUrl} alt={image.imageName} className={styles.propertyImage} />
+                                <img src={image.imageUrl} alt={image.imageName} className={styles.propertyImage} loading="lazy" />
                                 {isEditMode && (
                                     <div className={styles.editOverlay}>
                                         <button className={styles.iconButton} onClick={(e) => { e.stopPropagation(); handleEditImage(image.id); }}>
@@ -146,7 +146,7 @@ const PropertyPhotos: React.FC = () => {
             {selectedImageUrl && (
                 <div className={styles.popupOverlay} onClick={handleClosePopup}>
                     <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
-                        <img src={selectedImageUrl} alt="Selected property" className={styles.popupImage} />
+                        <img src={selectedImageUrl} alt="Selected property" className={styles.popupImage} loading="lazy" />
                         <button className={styles.closeButton} onClick={handleClosePopup}>
                             <X size={24} />
                         </button>

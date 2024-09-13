@@ -9,6 +9,7 @@ import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/index";
 import { RootState } from "../../store/reducers";
+import { Image } from '@/pages/property-listing-page/index';
 import {
   fetchProperties,
   selectProperty,
@@ -18,12 +19,14 @@ import {
   // setSelectedCardIndex
 } from "../../store/slice/auth/property-slice";
 import "./propertycarousel.css";
+import { propertyImageapi } from "@/api";
 
 interface Card {
   id: number;
   name: string;
   address: string;
   image: string;
+  propertyId: number;
   details: {
     [year: number]: {
       offSeason: string;
@@ -43,6 +46,7 @@ export default function BasicSelect() {
   const [years] = useState<number[]>([2024, 2025, 2026]);
   const [selectedYear, setSelectedYear] = useState<number>(2024);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const [imageDetails, setImageDetails] = useState<Image[]>([]);
   const open = Boolean(anchorEl);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -52,7 +56,18 @@ export default function BasicSelect() {
   );
   const user = useSelector((state: RootState) => state.auth.user);
 
-  const val = useSelector((state: RootState) => state.datePicker.startDate);
+  useEffect(() => {
+    const fetchPropertyImages = async () => {
+      try {
+        const response = await propertyImageapi();
+        setImageDetails(response.data.data);
+      } catch (error) {
+        console.error('Error fetching property images:', error);
+      }
+    };
+
+    fetchPropertyImages();
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -82,7 +97,7 @@ export default function BasicSelect() {
   useEffect(() => {
     if (carouselRef.current) {
       const selectedElement = carouselRef.current.children[
-        selectedCardIndex
+        selectedCardIndex ?? 1
       ] as HTMLElement;
       if (selectedElement) {
         selectedElement.scrollIntoView({
@@ -117,6 +132,11 @@ export default function BasicSelect() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const showselectedimage = (id: number) => {
+    const filteredImage = imageDetails.filter((image) => image.property.id === id).sort((a: Image, b: Image) => a.displayOrder - b.displayOrder);
+    return filteredImage[0]?.imageUrl;
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -254,9 +274,8 @@ export default function BasicSelect() {
                         <Button
                           key={card.id}
                           disableRipple
-                          className={`additionalproperty ${
-                            selectedCardIndex === index ? "active" : ""
-                          }`}
+                          className={`additionalproperty ${selectedCardIndex === index ? "active" : ""
+                            }`}
                           // style={{ padding: additionalPadding }}
                           onClick={() => handleCardClick(index)}
                           sx={{
@@ -293,9 +312,8 @@ export default function BasicSelect() {
                       {cards.map((_, index: number) => (
                         <div
                           key={index}
-                          className={`dot ${
-                            index === selectedCardIndex ? "active" : ""
-                          }`}
+                          className={`dot ${index === selectedCardIndex ? "active" : ""
+                            }`}
                           onClick={() => handleCardClick(index)}
                         ></div>
                       ))}
@@ -314,9 +332,10 @@ export default function BasicSelect() {
                     </span>
                     <span className={`CardImage ${imageClass}`}>
                       <img
-                        src={selectedCard.image}
+                        src={showselectedimage(selectedCard.propertyId ?? 1)}
                         alt={selectedCard.name}
                         className="property-image"
+                        loading="lazy"
                       />
                     </span>
                   </div>
@@ -328,9 +347,8 @@ export default function BasicSelect() {
                           disableRipple
                           key={year}
                           onClick={() => handleYearClick(year)}
-                          className={`card-btn1 ${
-                            selectedYear === year ? "active" : ""
-                          }`}
+                          className={`card-btn1 ${selectedYear === year ? "active" : ""
+                            }`}
                           sx={{
                             margin: "2px",
                             padding: "4px",
