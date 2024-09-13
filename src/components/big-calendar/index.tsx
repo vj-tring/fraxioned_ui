@@ -1,233 +1,182 @@
-import React, { useState } from "react";
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Calendar as BigCalendar, momentLocalizer } from 'react-big-calendar';
-import moment from "moment";
-import Dialog  from "@mui/material/Dialog";
-import DialogTitle  from "@mui/material/DialogTitle";
-import DialogContent  from "@mui/material/DialogContent";
-import DialogActions  from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import './big-calender.css'
+import moment from 'moment';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import './big-calender.css';
+import { fetchBookings } from '@/store/slice/auth/bookingSlice';
 
 const localizer = momentLocalizer(moment);
 
-interface Event {
-    id?: number;
-    title: string;
-    start: Date;
-    end: Date;
-    desc: string;
-}
+const Calendar = ({ isSidebarOpen }) => {
+  const dispatch = useDispatch();
+  const bookings = useSelector((state) => state.bookings.bookings);
+  const [openSlot, setOpenSlot] = React.useState(false);
+  const [openEvent, setOpenEvent] = React.useState(false);
+  const [selectedEvent, setSelectedEvent] = React.useState(null);
+  const [newEvent, setNewEvent] = React.useState({
+    title: '',
+    start: null,
+    end: null,
+    desc: '',
+  });
 
-const bookedDates: Event[] = [
-    {
-        id: 1,
-        title: "Booked",
-        start: new Date("2024-08-01T10:00:00"),
-        end: new Date("2024-08-03T11:00:00"),
-        desc: "Booked"
-    },
-    {
-        id: 2,
-        title: "Booked",
-        start: new Date("2024-08-06T18:00:00"),
-        end: new Date("2024-08-06T22:00:00"),
-        desc: "Party"
-    },
-    {
-        id: 3,
-        title: "Booked",
-        start: new Date("2024-08-09T17:00:00"),
-        end: new Date("2024-08-13T18:30:00"),
-        desc: "Personal training"
-    }
-];
+  useEffect(() => {
+    dispatch(fetchBookings());
+  }, [dispatch]);
 
-const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
-    const [events, setEvents] = useState<Event[]>((bookedDates));
-    const [title, setTitle] = useState("");
-    const [start, setStart] = useState<Date | null>(null);
-    const [end, setEnd] = useState<Date | null>(null);
-    const [desc, setDesc] = useState("");
-    const [openSlot, setOpenSlot] = useState(false);
-    const [openEvent, setOpenEvent] = useState(false);
-    const [clickedEvent, setClickedEvent] = useState<Event | null>(null);
+  const handleSlotSelect = (slotInfo: { start: any; end: any; }) => {
+    setNewEvent({
+      title: '',
+      start: slotInfo.start,
+      end: slotInfo.end,
+      desc: '',
+    });
+    setOpenSlot(true);
+  };
 
-    const handleClose = () => {
-        setOpenEvent(false);
-        setOpenSlot(false);
-    };
+  const handleEventSelect = (event: React.SetStateAction<null>) => {
+    setSelectedEvent(event);
+    setOpenEvent(true);
+  };
 
-    const handleSlotSelected = (slotInfo: { start: Date; end: Date }) => {
-        setTitle("");
-        setDesc("");
-        setStart(slotInfo.start);
-        setEnd(slotInfo.end);
-        setOpenSlot(true);
-    };
+  const handleClose = () => {
+    setOpenSlot(false);
+    setOpenEvent(false);
+    setSelectedEvent(null);
+    setNewEvent({
+      title: '',
+      start: null,
+      end: null,
+      desc: '',
+    });
+  };
 
-    const handleEventSelected = (event: Event) => {
-        setOpenEvent(true);
-        setClickedEvent(event);
-        setStart(event.start);
-        setEnd(event.end);
-        setTitle(event.title);
-        setDesc(event.desc);
-    };
+  const handleInputChange = (e: { target: { name: any; value: any; }; }) => {
+    const { name, value } = e.target;
+    setNewEvent((prev) => ({ ...prev, [name]: value }));
+  };
 
-    const handleStartTime = (date: moment.Moment | null) => {
-        setStart(date?.toDate() || null);
-    };
+  const handleTimeChange = (time: moment.Moment | null, type: string) => {
+    setNewEvent((prev) => ({
+      ...prev,
+      [type]: time ? time.toDate() : null,
+    }));
+  };
 
-    const handleEndTime = (date: moment.Moment | null) => {
-        setEnd(date?.toDate() || null);
-    };
+  const events = bookings.map((booking: { property: { id: any; }; checkinDate: string | number | Date; checkoutDate: string | number | Date; noOfAdults: any; noOfChildren: any; noOfPets: any; }) => ({
+    title: `Booking: ${booking.property?.id || 'Unknown Property'}`,
+    start: new Date(booking.checkinDate),
+    end: new Date(booking.checkoutDate),
+    desc: `Adults: ${booking.noOfAdults}, Children: ${booking.noOfChildren}, Pets: ${booking.noOfPets}`,
+  }));
 
-    const setNewAppointment = () => {
-        if (start && end) {
-            const appointment = { title, start, end, desc };
-            setEvents([...events, appointment]);
-        }
-    };
+  return (
+    <div className={`calendar-container ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
+      <BigCalendar
+        localizer={localizer}
+        events={events}
+        views={['month', 'week', 'day']}
+        defaultView="month"
+        selectable
+        onSelectSlot={handleSlotSelect}
+        onSelectEvent={handleEventSelect}
+      />
 
-    const updateEvent = () => {
-        if (clickedEvent && start && end) {
-            const updatedEvents = events.map(event =>
-                event === clickedEvent ? { ...event, title, desc, start, end } : event
-            );
-            setEvents(updatedEvents);
-        }
-    };
-
-    const deleteEvent = () => {
-        const updatedEvents = events.filter(event => event.start !== start);
-        setEvents(updatedEvents);
-    };
-
-    const eventActions = [
-        <Button onClick={handleClose}>Cancel</Button>,
-        <Button color="secondary" onClick={() => { deleteEvent(); handleClose(); }}>
-            Delete
-        </Button>,
-        <Button color="primary" onClick={() => { updateEvent(); handleClose(); }}>
-            Confirm Edit
-        </Button>
-    ];
-
-    const appointmentActions = [
-        <Button color="secondary" onClick={handleClose}>Cancel</Button>,
-        <Button color="primary" onClick={() => { setNewAppointment(); handleClose(); }}>
-            Submit
-        </Button>
-    ];
-
-    return (
-        <div className={`calendar-container ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
-            <BigCalendar
-                localizer={localizer}
-                events={events}
-                views={["month", "week", "day"]}
-                timeslots={2}
-                defaultView="month"
-                defaultDate={new Date()}
-                selectable={true}
-                onSelectEvent={(event: Event) => handleEventSelected(event)}
-                onSelectSlot={(slotInfo: { start: Date; end: Date }) => handleSlotSelected(slotInfo)}
+      <Dialog open={openSlot} onClose={handleClose}>
+        <DialogTitle>Add New Booking</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            name="title"
+            label="Title"
+            fullWidth
+            value={newEvent.title}
+            onChange={handleInputChange}
+          />
+          <LocalizationProvider dateAdapter={AdapterMoment}>
+            <TimePicker
+              label="Start Time"
+              value={moment(newEvent.start)}
+              onChange={(time) => handleTimeChange(time, 'start')}
             />
+            <TimePicker
+              label="End Time"
+              value={moment(newEvent.end)}
+              onChange={(time) => handleTimeChange(time, 'end')}
+            />
+          </LocalizationProvider>
+          <TextField
+            margin="dense"
+            name="desc"
+            label="Description"
+            fullWidth
+            multiline
+            rows={4}
+            value={newEvent.desc}
+            onChange={handleInputChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose} color="primary">Add Booking</Button>
+        </DialogActions>
+      </Dialog>
 
-            <Dialog
-                open={openSlot}
-                onClose={handleClose}
-                aria-labelledby="form-dialog-title"
-            >
-                <DialogTitle id="form-dialog-title">
-                    {`Book an appointment on ${moment(start).format("MMMM Do YYYY")}`}
-                </DialogTitle>
-                <DialogContent>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="title"
-                        label="Title"
-                        fullWidth
-                        onChange={e => setTitle(e.target.value)}
-                    />
-                    <TextField
-                        margin="dense"
-                        id="description"
-                        label="Description"
-                        fullWidth
-                        onChange={e => setDesc(e.target.value)}
-                    />
-                    <LocalizationProvider dateAdapter={AdapterMoment}>
-                        <TimePicker
-                            label="Start Time"
-                            value={moment(start)}
-                            onChange={handleStartTime}
-                        />
-                        <TimePicker
-                            label="End Time"
-                            value={moment(end)}
-                            onChange={handleEndTime}
-                        />
-                    </LocalizationProvider>
-                </DialogContent>
-                <DialogActions>
-                    {appointmentActions}
-                </DialogActions>
-            </Dialog>
-
-            <Dialog
-                open={openEvent}
-                onClose={handleClose}
-                aria-labelledby="form-dialog-title"
-            >
-                <DialogTitle id="form-dialog-title">
-                    {`View/Edit Appointment of ${moment(start).format("MMMM Do YYYY")}`}
-                </DialogTitle>
-                <DialogContent>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="title"
-                        label="Title"
-                        fullWidth
-                        defaultValue={title}
-                        onChange={e => setTitle(e.target.value)}
-                    />
-                    <TextField
-                        margin="dense"
-                        id="description"
-                        label="Description"
-                        fullWidth
-                        defaultValue={desc}
-                        onChange={e => setDesc(e.target.value)}
-                    />
-                    <LocalizationProvider dateAdapter={AdapterMoment}>
-                        <TimePicker
-                            label="Start Time"
-                            value={moment(start)}
-                            onChange={handleStartTime}
-                            className="time-picker"
-                        />
-                        <TimePicker
-                            label="End Time"
-                            value={moment(end)}
-                            onChange={handleEndTime}
-                            className="custom-time-picker"
-                        />
-                    </LocalizationProvider>
-                </DialogContent>
-                <DialogActions>
-                    {eventActions}
-                </DialogActions>
-            </Dialog>
-        </div>
-    );
+      <Dialog open={openEvent} onClose={handleClose}>
+        <DialogTitle>Booking Details</DialogTitle>
+        <DialogContent>
+          {selectedEvent && (
+            <>
+              <TextField
+                margin="dense"
+                label="Title"
+                fullWidth
+                value={selectedEvent.title}
+                InputProps={{ readOnly: true }}
+              />
+              <TextField
+                margin="dense"
+                label="Start"
+                fullWidth
+                value={moment(selectedEvent.start).format('MMMM Do YYYY, h:mm a')}
+                InputProps={{ readOnly: true }}
+              />
+              <TextField
+                margin="dense"
+                label="End"
+                fullWidth
+                value={moment(selectedEvent.end).format('MMMM Do YYYY, h:mm a')}
+                InputProps={{ readOnly: true }}
+              />
+              <TextField
+                margin="dense"
+                label="Description"
+                fullWidth
+                multiline
+                rows={4}
+                value={selectedEvent.desc}
+                InputProps={{ readOnly: true }}
+              />
+            </>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
 };
 
 export default Calendar;
