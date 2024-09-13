@@ -14,6 +14,7 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './big-calender.css';
 import { fetchBookings } from '@/store/slice/auth/bookingSlice';
+import PropertyImage from '@/pages-admin/property-image';
 
 const localizer = momentLocalizer(moment);
 
@@ -82,6 +83,7 @@ const Calendar = ({ isSidebarOpen }) => {
 
   return (
     <div className={`calendar-container ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
+        <PropertyImage/>
       <BigCalendar
         localizer={localizer}
         events={events}
