@@ -64,12 +64,12 @@ const PropertyTab: React.FC<PropertyTabProps> = ({ Id }) => {
     <Paper elevation={3} className={styles.propertyPaper}>
       {propertyData.length > 0 &&
         propertyData.map((prop: PropertyResponse, index: number) => {
-          
+
           const userProperty = prop.userProperties.find(
             (userProp) => userProp.user.id === Id
           );
 
-          
+
           if (!userProperty) return null;
 
           return (
@@ -131,26 +131,26 @@ const PropertyTab: React.FC<PropertyTabProps> = ({ Id }) => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Number of Shares"
-                      value={userProperty.noOfShare}
-                      fullWidth
-                      variant="outlined"
-                      InputProps={{ readOnly: true }}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Acquisition Date"
-                      value={userProperty.acquisitionDate}
-                      fullWidth
-                      variant="outlined"
-                      InputProps={{ readOnly: true }}
-                    />
-                  </Grid>
+                  <TextField
+                    label="Number of Shares"
+                    value={userProperty.noOfShare}
+                    fullWidth
+                    variant="outlined"
+                    InputProps={{ readOnly: true }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Acquisition Date"
+                    value={userProperty.acquisitionDate}
+                    fullWidth
+                    variant="outlined"
+                    InputProps={{ readOnly: true }}
+                  />
+                </Grid>
               </Grid>
 
-          
+
 
             </React.Fragment>
           );
