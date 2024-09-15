@@ -115,6 +115,13 @@ input[type="text"] {
   text-align: left;
 }
 
+.check-in.active,
+.check-out.active {
+  background: hsl(0 0% 94%);
+}
+
+
+
 input[type="text"]:focus {
   outline: none;
 }
@@ -137,9 +144,6 @@ input[type="text"]:focus {
   transition: background 250ms ease;
 }
 
-.btn-book:hover {
-  background: #e31c5f;
-}
 
 .btn-book:disabled {
   background: #ffa5b5;

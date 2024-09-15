@@ -78,24 +78,25 @@
 } */
 
 .btn-book{
-  color: rgb(0, 0, 0);
+  color: white;
   font-weight: 600;
   background-color: #e8aa6c;
   font-size: 14px;
   margin-right: 5px;
   height: 46px;
-  width: 191px;
+  width: 150px;
+  padding: 2px;
 }
 
 .btn-book:hover{
-  color: rgb(255, 255, 255);
-  background-color: #e48b32;
+  color: rgb(40, 39, 39);
+  background-color: rgb(241, 167, 92);
 }
 
-.btn-book{
+/* .btn-book{
   color: white;
   background-color: #e8aa6c;
-}
+} */
 
 .end-calendar{
   width: 100%;
