@@ -26,7 +26,7 @@ const Contact: React.FC = () => {
       <Row className="contactrow">
         <Col md={6} className="contact-left">
           <div className="contact-header">
-            <img className="contact-icon" src={fraxionedIcon} alt="Icon" />
+            <img className="contact-icon" src={fraxionedIcon} alt="Icon" loading="lazy" />
             <h2 className="contact-title">HI THERE!</h2>
           </div>
           <p className="contact-text">

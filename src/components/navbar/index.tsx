@@ -120,6 +120,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               width="160"
               className="d-inline-block align-top"
               alt="Logo"
+              loading="lazy"
             />
           </Navbar.Brand>
         )}
@@ -192,6 +193,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                     <img
                       src={userImage}
                       alt="User"
+                      loading="lazy"
                       style={{
                         width: "100%",
                         height: "100%",

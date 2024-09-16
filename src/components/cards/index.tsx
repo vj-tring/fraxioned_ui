@@ -38,7 +38,7 @@ const Card: React.FC<CardProps> = ({
       onClick={handleClick}
     >
       <div className="image-container">
-        <img src={imageUrl} className="card-img-top" alt={title} />
+        <img src={imageUrl} className="card-img-top" loading="lazy" alt={title} />
       </div>
 
       <div className="card-body">

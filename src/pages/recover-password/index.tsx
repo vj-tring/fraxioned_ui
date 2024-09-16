@@ -95,7 +95,7 @@ const Change: React.FC = () => {
     <div className={styles.outerContainer}>
       <div className={styles.innerContainer}>
         {isLoading && <Loader />}
-        <img src={logo} alt="Fraxioned Logo" className={styles.logo} />
+        <img src={logo} alt="Fraxioned Logo" className={styles.logo} loading="lazy" />
         <div className={styles.formWrapper}>
           <h2 className={styles.login}>Change password</h2>
           <p className={styles.loginSubtext}>Set your new password here</p>

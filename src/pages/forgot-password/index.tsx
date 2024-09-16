@@ -89,7 +89,7 @@ const ForgetPassword: React.FC = () => {
     <div className={styles.outerContainer} style={{ backgroundImage: `url(${background})` }}>
       <div className={styles.innerContainer}>
         {isLoading && <Loader />}
-        <img src={logo} alt="Fraxioned Logo" className={styles.logo} />
+        <img src={logo} alt="Fraxioned Logo" className={styles.logo} loading="lazy" />
         <div className={styles.formWrapper}>
           <h2 className={styles.login}>Forget password</h2>
           <p className={styles.loginSubtext}>Recover your password here</p>

@@ -179,6 +179,7 @@ const PropertyListingPage = () => {
                 key={index}
                 src={image.imageUrl}
                 alt={image.imageName}
+                loading="lazy"
                 className={`img-fluid img1 cornertop ${currentImage === index ? 'active' : ''}`}
                 onClick={() => setCurrentImage(index)}
               />
@@ -192,6 +193,7 @@ const PropertyListingPage = () => {
                   <img
                     src={image.imageUrl}
                     alt={image.imageName}
+                    loading="lazy"
                     className={`img-fluid image ${currentImage === index + 1 ? 'active' : ''}`}
                     onClick={() => setCurrentImage(index + 1)}
                   />
@@ -237,7 +239,7 @@ const PropertyListingPage = () => {
               gap={0.5}
               className="monsterrat"
             >
-              <img src={Logo} alt="Logo" style={{ width: 26, height: 26 }} />
+              <img src={Logo} alt="Logo" style={{ width: 26, height: 26 }} loading="lazy" />
               <Typography
                 variant="h6"
                 className="PropertyAddress monsterrat"
@@ -349,7 +351,7 @@ const PropertyListingPage = () => {
               {imageDetails.map((image, index) => (
                 <Grid item xs={12} sm={6} md={4} key={index}>
                   <Card>
-                    <img src={image.imageUrl} alt={image.imageName} style={{ width: '100%', height: 'auto' }} />
+                    <img src={image.imageUrl} alt={image.imageName} style={{ width: '100%', height: 'auto' }} loading="lazy" />
                   </Card>
                 </Grid>
               ))}

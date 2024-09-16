@@ -145,6 +145,7 @@ const PhotoUpload: React.FC = () => {
                                         src={URL.createObjectURL(image)}
                                         alt={`Preview ${index + 1}`}
                                         className={styles.previewImage}
+                                        loading="lazy"
                                     />
                                     <button
                                         className={styles.removeButton}

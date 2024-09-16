@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/reducers";
 import Box from "@mui/material/Box";
@@ -16,7 +16,8 @@ import img3 from "../../assests/crown-jewel.jpg";
 import img4 from "../../assests/lake-escape.jpg";
 import { resetLimits } from "@/store/slice/auth/propertyGuestSlice";
 import { clearDates } from "@/store/slice/datePickerSlice";
-import { selectSelectedPropertyDetails } from "@/store/slice/auth/property-slice";
+import { selectSelectedPropertyDetails, User } from "@/store/slice/auth/property-slice";
+import { propertyImageapi } from "@/api";
 const mockBooking = {
   property: { id: "3" },
   checkinDate: new Date().toISOString(),
@@ -31,6 +32,45 @@ const mockBooking = {
   petFee: 0,
   totalAmountDue: 0,
 };
+
+interface Property {
+  id: number;
+  name?: string;
+  address?: string;
+  propertyShare?: string;
+  houseDescription?: string;
+  state?: string;
+  city?: string;
+  country?: string;
+  latitude?: string;
+  longitude?: string;
+}
+
+// Interface for space details
+interface Space {
+  id: number;
+  name: string;
+}
+
+// Interface for space type details
+interface SpaceType {
+  id: number;
+  name: string;
+  space: Space;
+}
+
+export interface Image {
+  createdAt: string;
+  updatedAt: string;
+  id: number;
+  imageUrl: string;
+  imageName: string;
+  displayOrder: number;
+  spaceType: SpaceType;
+  property: Property;
+  createdBy: User;
+  updatedBy: User;
+}
 
 const CheckIcon: React.FC = () => (
   <SvgIcon
@@ -54,6 +94,8 @@ const BookingSummaryForm: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { currentBooking } = useSelector((state: RootState) => state.bookings);
+  const currentBookingId = useSelector((state: RootState) => state.properties.selectedCard?.id);
+
   const [notes, setNotesValue] = useState<string>(currentBooking?.notes || "");
   const [isLoading, setIsLoading] = useState(false);
   const [showConfirmation] = useState(false);
@@ -69,6 +111,25 @@ const BookingSummaryForm: React.FC = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
     "success"
   );
+  const [imageDetails, setImageDetails] = useState<Image[]>([]);
+
+
+  useEffect(() => {
+    const fetchPropertyImages = async () => {
+      try {
+        const response = await propertyImageapi();
+        const filterById = response.data.data.filter((image: Image) => (image.property?.id === currentBookingId) && image.displayOrder);
+
+        const sortedImages = filterById.sort((a: Image, b: Image) => a.displayOrder - b.displayOrder);
+        setImageDetails(sortedImages);
+      } catch (error) {
+        console.error('Error fetching property images:', error);
+      }
+    };
+
+    fetchPropertyImages();
+  }, [currentBookingId]);
+
   const handleBookingCancel = () => {
     dispatch(resetLimits());
     dispatch(clearDates());
@@ -185,22 +246,23 @@ const BookingSummaryForm: React.FC = () => {
       )}
 
       <>
-        <div className="SummaryImg ">
-          <Row className=" RowImg">
+        <div className="SummaryImg">
+          <Row className="RowImg">
             <Col sm={11}>
-              <img src={img1} alt="Image 1" />
+              {/* Display the first image larger */}
+              {imageDetails[0] ? (
+                <img src={imageDetails[0].imageUrl} alt={`Image ${imageDetails[0].displayOrder}`} loading='lazy' />
+              ) : (
+                <div className="placeholder-image">No Image</div>
+              )}
             </Col>
           </Row>
-          <Row className="mt-3 ">
-            <Col sm={4}>
-              <img src={img2} alt="Image 2" />
-            </Col>
-            <Col sm={4}>
-              <img src={img3} alt="Image 3" />
-            </Col>
-            <Col sm={4}>
-              <img src={img4} alt="Image 4" />
-            </Col>
+          <Row className="mt-3">
+            {imageDetails.slice(1, 4).map((image, index) => (
+              <Col sm={4} key={index}>
+                <img src={image.imageUrl} alt={`Image ${image.displayOrder}`} loading='lazy' />
+              </Col>
+            ))}
           </Row>
         </div>
 
