@@ -47,6 +47,10 @@ const DatePickerCard: React.FC<DatePickerCardProps> = ({
         ))}
       </TextField>
 
+      {/* <Typography variant="h5" className="guest">
+        <GuestSelector/>
+      </Typography> */}
+
       <Button
         variant="contained"
         color="primary"

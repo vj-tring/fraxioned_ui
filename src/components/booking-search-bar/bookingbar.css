@@ -34,20 +34,23 @@
   right: 0;
   bottom: 0;
   background-color: white;
-  border-radius: inherit;
+  border-radius: 100vw;
   z-index: -1;
 }
 
 .bar > div {
-  border-radius: inherit;
   padding: 0.8rem 1.5rem;
   transition: background 250ms ease;
   background: white;
   position: relative;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .bar > div:hover {
   background: hsl(0 0% 94%);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .bar > div::before {

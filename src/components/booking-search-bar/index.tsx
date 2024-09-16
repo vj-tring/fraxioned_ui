@@ -61,19 +61,12 @@ const BookingSearchBar: React.FC = () => {
     setSnackbarOpen(true);
   };
 
- const handleDateSelect = (range: DateRange | undefined) => {
+  const handleDateSelect = (range: DateRange | undefined) => {
     setDateRange(range);
-    if (range?.from && !range.to) {
-      setActiveDate("check-in");
-    } else if (range?.from && range?.to) {
-      setActiveDate("check-out");
-    }
   };
-  
 
-  const handleRegionClick = (type: "check-in" | "check-out") => {
-    setIsCalendarOpen(true);
-    setActiveDate(type);
+  const handleCalendarToggle = (isOpen: boolean) => {
+    setIsCalendarOpen(isOpen);
   };
 
   const isLastMinuteBooking = (checkInDate: Date) => {
@@ -175,17 +168,16 @@ const BookingSearchBar: React.FC = () => {
       <div className="position">
         <div className="bar">
           <PropertyCarousel />
-          <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+          <Popover open={isCalendarOpen} onOpenChange={handleCalendarToggle}>
             <PopoverTrigger asChild>
-            <div className={`check-in ${activeDate === "check-in" ? "active" : ""}`}>
-              <p>Check in</p>
-              <input
-                type="text"
-                placeholder="Add dates"
-                value={dateRange?.from ? dateRange.from.toLocaleDateString('en-US', dateOptions) : ""}
-                readOnly
-                onClick={() => handleRegionClick("check-in")}
-              />
+              <div className={`check-in ${isCalendarOpen ? "active" : ""}`}>
+                <p>Check in</p>
+                <input
+                  type="text"
+                  placeholder="Add dates"
+                  value={dateRange?.from ? dateRange.from.toLocaleDateString('en-US', dateOptions) : ""}
+                  readOnly
+                />
             </div>
 
             </PopoverTrigger>
@@ -198,17 +190,16 @@ const BookingSearchBar: React.FC = () => {
               />
             </PopoverContent>
           </Popover>
-          <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+          <Popover open={isCalendarOpen} onOpenChange={handleCalendarToggle}>
             <PopoverTrigger asChild>
-            <div className={`check-out ${activeDate === "check-out" ? "active" : ""}`}>
-              <p>Check out</p>
-              <input
-                type="text"
-                placeholder="Add dates"
-                value={dateRange?.to ? dateRange.to.toLocaleDateString('en-US', dateOptions) : ""}
-                readOnly
-                onClick={() => handleRegionClick("check-out")}
-              />
+            <div className={`check-out ${isCalendarOpen ? "active" : ""}`}>
+            <p>Check out</p>
+            <input
+              type="text"
+              placeholder="Add dates"
+              value={dateRange?.to ? dateRange.to.toLocaleDateString('en-US', dateOptions) : ""}
+              readOnly
+            />
             </div>
             </PopoverTrigger>
           </Popover>

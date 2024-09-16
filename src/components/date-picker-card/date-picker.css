@@ -20,6 +20,12 @@
   font-weight: 600 !important;
 }
 
+/* .guest{
+ width: 100%;
+ border: 2px solid rgb(207, 207, 207);
+ padding: 5px 0px 0px 20px;
+} */
+
 .availability {
   width: 200px;
   height: 50px;
