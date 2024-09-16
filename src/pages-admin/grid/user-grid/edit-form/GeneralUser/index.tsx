@@ -19,9 +19,11 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Loader from '@/components/loader';
-import { updateuserapi, getRoles, userdetails} from '@/api';
+import { updateuserapi, getRoles, userdetails } from '@/api';
+import UserBookings from '../user-bookings';
 import styles from './GeneralUser.module.css';
 import PropertyTab from '../propertyUser';
+import Availability from '../availablity';
 
 interface ContactDetails {
     id: number;
@@ -73,7 +75,7 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [roles, setRoles] = useState<Role[]>([]);
-    const [selectedTab, setSelectedTab] = useState(0); 
+    const [selectedTab, setSelectedTab] = useState(0);
     useEffect(() => {
         const fetchRoles = async () => {
             try {
@@ -161,7 +163,7 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                         <Tab label="General Details" />
                         <Tab label="Property" />
                         <Tab label="Booking" />
-                        <Tab label="Availability"/>
+                        <Tab label="Availability" />
                     </Tabs>
                 </div>
 
@@ -195,7 +197,7 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                                             className={styles.inputField}
                                         />
                                     </Grid>
-                                    
+
                                     {/* Address Fields */}
                                     <Grid item xs={12} sm={6}>
                                         <TextField
@@ -330,22 +332,20 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                         )}
 
                         {selectedTab === 1 && (
-                            
+
                             <PropertyTab Id={user.id} />
-                            
+
                         )}
 
                         {selectedTab === 2 && (
-                            <div>
-                                <Typography variant="h6">Booking Management</Typography>
-                            </div>
+                            <UserBookings userId={user.id} />
                         )}
                         {selectedTab === 3 && (
-                            <div>
-                                <Typography variant="h6">Availability Management</Typography>
-                            </div>
+                            <Availability userId={user.id} />
                         )}
-                        <Box className={styles.buttonContainer}>
+
+                        {selectedTab === 0 && (
+                            <Box className={styles.buttonContainer}>
                                 <Button
                                     variant="outlined"
                                     onClick={onClose}
@@ -357,10 +357,12 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                                     type="submit"
                                     variant="contained"
                                     className={styles.updateButton}
+                                    onClick={handleSubmit}
                                 >
                                     Update User
                                 </Button>
                             </Box>
+                        )}
                     </Paper>
                 </div>
             </div>

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { TextField, Grid, Typography, Paper } from "@mui/material";
-import styles from "./propertyTab.module.css";
+import { Card, CardContent, Typography, Chip, Box } from "@mui/material";
 import { getUserProperties } from "@/api";
-import { style } from "@mui/system/Stack/createStack";
-
+import styles from "./PropertyTab.module.css";
+import { Image } from "lucide-react";
 
 interface UserProperty {
   id: number;
@@ -30,6 +29,7 @@ interface PropertyResponse {
   zipcode: number;
   isActive: boolean;
   userProperties: UserProperty[];
+  propertyShare: number;
 }
 
 interface PropertyTabProps {
@@ -61,101 +61,68 @@ const PropertyTab: React.FC<PropertyTabProps> = ({ Id }) => {
   if (error) return <Typography color="error">{error}</Typography>;
 
   return (
-    <Paper elevation={3} className={styles.propertyPaper}>
+    <div className={styles.propertyTabContainer}>
       {propertyData.length > 0 &&
         propertyData.map((prop: PropertyResponse, index: number) => {
-
           const userProperty = prop.userProperties.find(
             (userProp) => userProp.user.id === Id
           );
 
-
           if (!userProperty) return null;
 
+          const shareFraction = `${userProperty.noOfShare}/${prop.propertyShare}`;
+
           return (
-            <React.Fragment key={index}>
-              <Typography variant="h6" className={styles.title}>Property Details</Typography>
-              <Grid container spacing={3}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Property Name"
-                    value={prop.propertyName}
-                    fullWidth
-                    variant="outlined"
-                    InputProps={{ readOnly: true }}
+            <Box key={index} className={styles.propertyWrapper}>
+              <Card className={styles.propertyCard}>
+                <CardContent>
+                  <Typography variant="h5" className={styles.propertyName}>
+                    {prop.propertyName}
+                  </Typography>
+                  <Chip
+                    label={prop.isActive ? "Active" : "Inactive"}
+                    color={prop.isActive ? "success" : "error"}
+                    className={styles.statusChip}
                   />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Address"
-                    value={prop.address}
-                    fullWidth
-                    variant="outlined"
-                    InputProps={{ readOnly: true }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="City"
-                    value={prop.city}
-                    fullWidth
-                    variant="outlined"
-                    InputProps={{ readOnly: true }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="State"
-                    value={prop.state}
-                    fullWidth
-                    variant="outlined"
-                    InputProps={{ readOnly: true }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Country"
-                    value={prop.country}
-                    fullWidth
-                    variant="outlined"
-                    InputProps={{ readOnly: true }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Zipcode"
-                    value={prop.zipcode}
-                    fullWidth
-                    variant="outlined"
-                    InputProps={{ readOnly: true }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Number of Shares"
-                    value={userProperty.noOfShare}
-                    fullWidth
-                    variant="outlined"
-                    InputProps={{ readOnly: true }}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Acquisition Date"
-                    value={userProperty.acquisitionDate}
-                    fullWidth
-                    variant="outlined"
-                    InputProps={{ readOnly: true }}
-                  />
-                </Grid>
-              </Grid>
+                  <Box className={styles.detailsContainer}>
+                    <Typography variant="subtitle1" className={styles.detailLabel}>
+                      Address
+                    </Typography>
+                    <Typography variant="body1" className={styles.detailValue}>
+                      {prop.address}
+                    </Typography>
 
+                    <Typography variant="subtitle1" className={styles.detailLabel}>
+                      Location
+                    </Typography>
+                    <Typography variant="body1" className={styles.detailValue}>
+                      {`${prop.city}, ${prop.state}, ${prop.country} ${prop.zipcode}`}
+                    </Typography>
 
+                    <Typography variant="subtitle1" className={styles.detailLabel}>
+                      Number of Shares
+                    </Typography>
+                    <Typography variant="body1" className={styles.detailValue}>
+                      {shareFraction}
+                    </Typography>
 
-            </React.Fragment>
+                    <Typography variant="subtitle1" className={styles.detailLabel}>
+                      Acquisition Date
+                    </Typography>
+                    <Typography variant="body1" className={styles.detailValue}>
+                      {new Date(userProperty.acquisitionDate).toLocaleDateString()}
+                    </Typography>
+                  </Box>
+                </CardContent>
+              </Card>
+              <Box className={styles.imageContainer}>
+                <Image size={48} />
+                <Typography variant="body2">No image available</Typography>
+              </Box>
+            </Box>
           );
         })}
-    </Paper>
+    </div>
   );
 };
 

@@ -65,6 +65,7 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
 
 
+
     useEffect(() => {
         fetchUsers();
         fetchProperties();
