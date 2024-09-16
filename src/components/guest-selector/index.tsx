@@ -240,7 +240,7 @@ const MultipleSelect: React.FC = () => {
             </MenuItem>
             {
               (!(names.indexOf(item) === names.length - 1)) &&
-              <hr style={{
+              <hr style={{  
                 opacity: .08,
                 margin: '0 2.1rem'
               }} />

@@ -13,12 +13,15 @@ import { format } from "date-fns";
 import PropertyList from "../home/propertyList";
 import TrackingMyNigts from "./trackingMyNights";
 import FilterListIcon from "@mui/icons-material/FilterList";
+import BookingSearchBar from "@/components/booking-search-bar";
 
 const Booking = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const user = useSelector((state: RootState) => state.auth.user);
-  const userBookings = useSelector((state: RootState) => state.bookings.userBookings || []);
+  const userBookings = useSelector(
+    (state: RootState) => state.bookings.userBookings || []
+  );
 
   useEffect(() => {
     if (user && user.id) {
@@ -28,22 +31,30 @@ const Booking = () => {
 
   const formattedDate = (dateString: string) => {
     const date = new Date(dateString);
-    return format(date, "MMM do, yyyy hh:mm a");
+    return {
+      date: format(date, "MMM d, yyyy"),
+      time: format(date, "hh:mm a"),
+    };
   };
 
-  const details = (Array.isArray(userBookings) ? userBookings : []).map((booking: BookingData) => {
-    const guestDetails = `${booking.noOfAdults} Adults, ${
-      booking.noOfChildren
-    } Children, ${booking.noOfPets} Pet${booking.noOfPets > 1 ? "s" : ""}`;
-    return {
-      ...booking,
-      property: booking.property.propertyName,
-      guest: guestDetails,
-      checkinDate: formattedDate(booking.checkinDate),
-      checkoutDate: formattedDate(booking.checkoutDate),
-      createdAt: formattedDate(booking.createdAt),
-    };
-  });
+  const details = (Array.isArray(userBookings) ? userBookings : []).map(
+    (booking: BookingData) => {
+      const guestDetails = `${booking.noOfAdults} Adults, ${
+        booking.noOfChildren
+      } Children, ${booking.noOfPets} Pet${booking.noOfPets > 1 ? "s" : ""}`;
+      const checkin = formattedDate(booking.checkinDate);
+      const checkout = formattedDate(booking.checkoutDate);
+      const createdAt = formattedDate(booking.createdAt);
+      return {
+        ...booking,
+        property: booking.property.propertyName,
+        guest: guestDetails,
+        checkinDate: `${checkin.date}\n${checkin.time}`,
+        checkoutDate: `${checkout.date}\n${checkout.time}`,
+        createdAt: `${createdAt.date}\n${createdAt.time}`,
+      };
+    }
+  );
 
   const handleEdit = (id: number) => {
     console.log(`Edit clicked for booking id: ${id}`);
@@ -55,12 +66,17 @@ const Booking = () => {
 
   const [activeTab, setActiveTab] = useState(0);
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
   };
 
   return (
     <>
+      <div className="home-content">
+        <div className="HomeImg"></div>
+
+        <BookingSearchBar />
+      </div>
       <Box
         sx={{
           width: "90%",

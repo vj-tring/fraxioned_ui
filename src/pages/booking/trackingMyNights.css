@@ -18,7 +18,7 @@
   justify-content: space-between;
   /* padding-left: 20px; */
   padding-right: 10px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  box-shadow: rgba(4, 66, 77, 0.24) 0px 3px 8px;
 }
 .Track-btn {
   background-color: #88cdd4;
@@ -82,7 +82,7 @@
   display: flex;
   justify-content: space-between;
   color: #808080 !important;
-box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;  /* background-color: aquamarine; */
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px; /* background-color: aquamarine; */
   /* padding: 1.5rem; */
   border-radius: 10px;
 }
@@ -152,3 +152,7 @@ tr > th {
   background: none !important;
 }
 
+.My-nights {
+  width: 50%;
+  /* background-color: aquamarine; */
+}
