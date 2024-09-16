@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { Grid, Typography, Button } from '@mui/material'; // Updated import for Material-UI components
 import './things-to-know.css';
 const HouseRules = () => {

@@ -251,47 +251,47 @@ const PropertyListingPage = () => {
 
         <div className="Blue-row pb-3 pt-5">
           <div>
-            <Link to="myShare" smooth={true} duration={200}>
+            <a href="#myShare" smooth={true} duration={200}>
               <h1 className="Blue-rowshare" style={{ fontWeight: "bolder" }}>
                 My Share
               </h1>
-            </Link>
+            </a>
           </div>
           <div>
-            <Link to="rooms" smooth={true} duration={200}>
+            <a href="#rooms" smooth={true} duration={200}>
               <h1 className="Blue-rowshare">Amenities</h1>
-            </Link>
+            </a>
           </div>
           <div>
-            <Link to="location" smooth={true} duration={200}>
+            <a href="#location" smooth={true} duration={200}>
               <h1 className="Blue-rowshare">Location</h1>
-            </Link>
+            </a>
           </div>
           <div>
-            <Link to="info" smooth={true} duration={200}>
+            <a href="#info" smooth={true} duration={200}>
               <h1 className="Blue-rowshare">Info</h1>
-            </Link>
+            </a>
           </div>
         </div>
 
         <div className="d-flex pt-2 h-100">
           <div className="col-6 col-md-7 GridWidth h-100">
-            <Element name="myShare" className="mt-4">
+            <div id="myShare" className="mt-4">
               <Showmore
                 description={
                   selectedProperty ? selectedProperty?.houseDescription : ""
                 }
               />
-            </Element>
+            </div>
 
-            <Element name="availableNights">
+            <div id="availableNights">
               <AvailableNights />
-            </Element>
+            </div>
 
-            <Element name="basicRangeShortcuts" className="mt-5 mb-3 normalcalendar">
+            <div id="basicRangeShortcuts" className="mt-5 mb-3 normalcalendar">
               <h1 className="checkIn mb-3">Select check-in date</h1>
               <DatePickerWithRange />
-            </Element>
+            </div>
           </div>
 
           <div className="py-4 GridWidth1 position-relative">
@@ -316,10 +316,10 @@ const PropertyListingPage = () => {
           }}
         />
 
-        <Element name="rooms" className="mt-5">
+        <div id="rooms" className="mt-5">
           <SingleDevice />
-        </Element>
-        <Element name="location">
+        </div>
+        <div id="location">
           <MapEmbed
             city={selectedProperty ? selectedProperty?.city : "Garden City"}
             state={selectedProperty ? selectedProperty?.state : "Utah"}
@@ -327,10 +327,10 @@ const PropertyListingPage = () => {
               selectedProperty ? selectedProperty?.country : "United State"
             }
           />
-        </Element>
-        <Element name="info">
+        </div>
+        <div id="info">
           <ThingsToKnow />
-        </Element>
+        </div>
 
         <Dialog open={dialogOpen} onClose={handleClose} fullWidth maxWidth="md">
           <DialogTitle className="d-flex justify-content-between">
