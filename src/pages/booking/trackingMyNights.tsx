@@ -17,7 +17,6 @@ interface Property {
   propertyShare?: string;
   details: {
     [year: number]: {
-      peakSeasonStartDate: string;
       offSeason: string;
       peakSeason: string;
       peakHoliday: string;
@@ -84,7 +83,7 @@ const TrackingMyNigts: React.FC = () => {
     ? propertyImages[selectedPropertyId]
     : PropImg1;
 
-  const formatDate = (dateStr: string | number | Date) => {
+  const formatDate = (dateStr) => {
     const date = new Date(dateStr);
     return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   };
@@ -95,39 +94,20 @@ const TrackingMyNigts: React.FC = () => {
 
     const offSeasonBeforeStart = {
       startDate: new Date(peakStart.getFullYear(), 12, 1), // Dec 31 of the current year
-      endDate: new Date(
-        peakStart.getFullYear(),
-        peakStart.getMonth(),
-        peakStart.getDate() - 1
-      ), // Day before peak season starts
+      endDate: new Date(peakStart.getFullYear(), peakStart.getMonth(), peakStart.getDate() - 1) // Day before peak season starts
     };
 
     const offSeasonAfterEnd = {
-      startDate: new Date(
-        peakEnd.getFullYear(),
-        peakEnd.getMonth(),
-        peakEnd.getDate() + 1
-      ), // Day after peak season ends
-      endDate: new Date(peakEnd.getFullYear(), 11, 31), // Dec 30 of the same year
+      startDate: new Date(peakEnd.getFullYear(), peakEnd.getMonth(), peakEnd.getDate() + 1), // Day after peak season ends
+      endDate: new Date(peakEnd.getFullYear(), 11, 31) // Dec 30 of the same year
     };
 
     // Handle cases where peak season spans across years
     if (peakStart.getMonth() < 11) {
-      offSeasonBeforeStart.endDate = new Date(
-        peakStart.getFullYear(),
-        peakStart.getMonth(),
-        peakStart.getDate()
-      );
+      offSeasonBeforeStart.endDate = new Date(peakStart.getFullYear(), peakStart.getMonth(), peakStart.getDate() );
     }
-    if (
-      peakEnd.getMonth() > 0 ||
-      peakEnd.getFullYear() > peakStart.getFullYear()
-    ) {
-      offSeasonAfterEnd.startDate = new Date(
-        peakEnd.getFullYear(),
-        peakEnd.getMonth(),
-        peakEnd.getDate() + 2
-      );
+    if (peakEnd.getMonth() > 0 || peakEnd.getFullYear() > peakStart.getFullYear()) {
+      offSeasonAfterEnd.startDate = new Date(peakEnd.getFullYear(), peakEnd.getMonth(), peakEnd.getDate() +2 );
     }
 
     return {
@@ -138,30 +118,27 @@ const TrackingMyNigts: React.FC = () => {
       offSeasonAfter: {
         startDate: offSeasonAfterEnd.startDate.toISOString().split("T")[0],
         endDate: offSeasonAfterEnd.endDate.toISOString().split("T")[0],
-      },
+      }
     };
   };
 
   const { offSeasonBefore, offSeasonAfter } = selectedProperty
-    ? getOffSeasonDates(
-        selectedProperty.details[selectedYear]?.peakSeasonStartDate || "",
-        selectedProperty.details[selectedYear]?.peakSeasonEndDate || ""
-      )
-    : {
-        offSeasonBefore: { startDate: "", endDate: "" },
-        offSeasonAfter: { startDate: "", endDate: "" },
-      };
+  ? getOffSeasonDates(
+      selectedProperty.details[selectedYear]?.peakSeasonStartDate || "",
+      selectedProperty.details[selectedYear]?.peakSeasonEndDate || ""
+    )
+  : { offSeasonBefore: { startDate: "", endDate: "" }, offSeasonAfter: { startDate: "", endDate: "" } };
 
   return (
     <div className="Container">
-      <div className="d-flex justify-between">
-        <div className="My-nights">
-          <h1 className="Trac-Nig">Tracking My Nights</h1>
-          <p className="Trac-sec">
-            Select the property and year you would like to track
-          </p>
-        </div>
+      <div className="My-nights">
+        <h1 className="Trac-Nig">Tracking My Nights</h1>
+        <p className="Trac-sec">
+          Select the property and year you would like to track
+        </p>
+      </div>
 
+      <div className="bar-btn-head">
         <div className="d-flex bar-btn">
           <Select
             value={selectedPropertyId || ""}
@@ -250,8 +227,6 @@ const TrackingMyNigts: React.FC = () => {
         </div>
       </div>
 
-      <div className="bar-btn-head"></div>
-
       <div className="container3 mt-3 pt-4 d-flex">
         <div className="cardImg">
           <img src={imageSrc} className="PropImg1" alt="Property" />
@@ -270,15 +245,11 @@ const TrackingMyNigts: React.FC = () => {
         </div>
         <div className="Total ">
           <div className="OffSea mb-4  ">
-            <div className="Off-season">
+          <div className="Off-season">
               <li className="OffHead">Off-Season </li>
-              <li>{`${formatDate(offSeasonBefore.startDate)} - ${formatDate(
-                offSeasonBefore.endDate
-              )}`}</li>
-
-              <li>{`${formatDate(offSeasonAfter.startDate)} - ${formatDate(
-                offSeasonAfter.endDate
-              )}`}</li>
+              <li>{`${formatDate(offSeasonBefore.startDate)} - ${formatDate(offSeasonBefore.endDate)}`}</li>
+            
+              <li>{`${formatDate(offSeasonAfter.startDate)} - ${formatDate(offSeasonAfter.endDate)}`}</li>
             </div>
             <div className="Total-Nights pt-3 ">
               <table style={{ width: "90%" }}>
