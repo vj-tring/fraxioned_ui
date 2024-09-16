@@ -171,6 +171,11 @@ const BookingSearchBar: React.FC = () => {
     }
   };
 
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
+  };
 
   return (
     <div className="MainCard">
@@ -184,7 +189,7 @@ const BookingSearchBar: React.FC = () => {
               <input
                 type="text"
                 placeholder="Add dates"
-                value={dateRange?.from ? dateRange.from.toLocaleDateString() : ""}
+                value={dateRange?.from ? dateRange.from.toLocaleDateString('en-US', dateOptions) : ""}
                 readOnly
                 onClick={() => handleRegionClick("check-in")}
               />
@@ -207,7 +212,7 @@ const BookingSearchBar: React.FC = () => {
               <input
                 type="text"
                 placeholder="Add dates"
-                value={dateRange?.to ? dateRange.to.toLocaleDateString() : ""}
+                value={dateRange?.to ? dateRange.to.toLocaleDateString('en-US', dateOptions) : ""}
                 readOnly
                 onClick={() => handleRegionClick("check-out")}
               />
