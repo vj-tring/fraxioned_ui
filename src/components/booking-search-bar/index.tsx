@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "./bookingbar.css";
-import Region from "../region";
 import PropertyCarousel from "../property-carousel";
 import GuestSelector from "../guest-selector";
 import { DateRange } from "react-day-picker";
@@ -12,13 +11,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/reducers";
 import {bookingSummary, saveBooking } from "@/store/slice/auth/bookingSlice";
 import { selectSelectedPropertyDetails } from "@/store/slice/auth/property-slice";
 import calendarData from "../calender/calendarData.json";
-import { useSnackbar } from "../snackbar-provider";
 import CustomizedSnackbar from "../customized-snackbar";
 
 const BookingSearchBar: React.FC = () => {
@@ -64,16 +61,12 @@ const BookingSearchBar: React.FC = () => {
     setSnackbarOpen(true);
   };
 
-  const handleDateSelect = (range: DateRange | undefined) => {
+ const handleDateSelect = (range: DateRange | undefined) => {
     setDateRange(range);
-    
     if (range?.from && !range.to) {
-      setActiveDate("check-out");
-    } else if (range?.from && range?.to) {
-      setActiveDate(null);
-      setIsCalendarOpen(true); 
-    } else {
       setActiveDate("check-in");
+    } else if (range?.from && range?.to) {
+      setActiveDate("check-out");
     }
   };
   
