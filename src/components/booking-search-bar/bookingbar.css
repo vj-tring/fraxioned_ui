@@ -113,6 +113,7 @@ input[type="text"] {
   width: 100%;
   font-size: 0.75rem;
   text-align: left;
+  cursor: pointer;
 }
 
 .check-in.active,
