@@ -72,11 +72,11 @@ const Booking = () => {
 
   return (
     <>
-      <div className="home-content">
+      {/* <div className="home-content">
         <div className="HomeImg"></div>
 
         <BookingSearchBar />
-      </div>
+      </div> */}
       <Box
         sx={{
           width: "90%",

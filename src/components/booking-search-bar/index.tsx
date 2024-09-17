@@ -12,15 +12,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/reducers";
-import {bookingSummary, saveBooking } from "@/store/slice/auth/bookingSlice";
+import { bookingSummary, saveBooking } from "@/store/slice/auth/bookingSlice";
 import { selectSelectedPropertyDetails } from "@/store/slice/auth/property-slice";
 import calendarData from "../calender/calendarData.json";
-import { useSnackbar } from "../snackbar-provider";
 import CustomizedSnackbar from "../customized-snackbar";
-
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import PersonAddAlt1OutlinedIcon from '@mui/icons-material/PersonAddAlt1Outlined';
 const BookingSearchBar: React.FC = () => {
   const today = new Date();
   const userId = "";
@@ -29,36 +28,44 @@ const BookingSearchBar: React.FC = () => {
   const [activeDate, setActiveDate] = useState<"check-in" | "check-out" | null>(
     null
   );
-  const bookingdetails = useSelector((state: RootState) => state.datePicker.dateRange);
+  const bookingdetails = useSelector(
+    (state: RootState) => state.datePicker.dateRange
+  );
 
-  
   useEffect(() => {
     if (bookingdetails) {
-        setDateRange({
-            from: bookingdetails.from,
-            to: bookingdetails.to
-        });
+      setDateRange({
+        from: bookingdetails.from,
+        to: bookingdetails.to,
+      });
     }
-}, [bookingdetails]);
+  }, [bookingdetails]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate(); // Initialize useNavigate
   const bookingState = useSelector((state: RootState) => state.bookings);
   const isBookingLoading = bookingState?.isLoading;
-  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+  const [errorMessage] = React.useState<string | null>(null);
   const currentUser = useSelector((state: RootState) => state.auth.user);
   const counts = useSelector((state: RootState) => state.limits.counts);
   const selectedPropertyDetails = useSelector(selectSelectedPropertyDetails);
-  const calendarError = useSelector((state: RootState) => state.datePicker.errorMessage);
+  const calendarError = useSelector(
+    (state: RootState) => state.datePicker.errorMessage
+  );
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error" >("error");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "error"
+  );
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
 
-  const showSnackbar = (message: string, severity: "error" | "info" | "warning" = "error") => {
+  const showSnackbar = (
+    message: string,
+    severity: "error" | "info" | "warning" = "error"
+  ) => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setSnackbarOpen(true);
@@ -86,7 +93,10 @@ const BookingSearchBar: React.FC = () => {
 
   const handleBookingSubmit = async () => {
     if (calendarError) {
-      showSnackbar("You can't book the date you have selected. Please choose a valid date range.", "error");
+      showSnackbar(
+        "You can't book the date you have selected. Please choose a valid date range.",
+        "error"
+      );
       return;
     }
 
@@ -142,13 +152,12 @@ const BookingSearchBar: React.FC = () => {
     };
 
     try {
-      console.log('Submitting booking data:', bookingData);
+      console.log("Submitting booking data:", bookingData);
       const result = await dispatch(bookingSummary(bookingData)).unwrap();
 
       if (result) {
-        console.log('Booking summary created successfully:', result);
+        console.log("Booking summary created successfully:", result);
 
-        // Update the booking data with the response values
         const updatedBookingData = {
           ...bookingData,
           season: result.season,
@@ -161,60 +170,79 @@ const BookingSearchBar: React.FC = () => {
         navigate("/home/booking-summary");
       }
     } catch (error) {
-      console.error('Error during booking process:', error);
-      showSnackbar("An error occurred while processing your booking. Please try again.", "error");
+      console.error("Error during booking process:", error);
+      showSnackbar(
+        "An error occurred while processing your booking. Please try again.",
+        "error"
+      );
     }
   };
-
 
   return (
     <div className="MainCard">
       <div className="card">
         <PropertyCarousel />
         <div className="vl"></div>
-        <Popover
-          open={isCalendarOpen}
-          onOpenChange={setIsCalendarOpen}
-          disableRipple
-        >
-          <PopoverTrigger asChild>
-            <div>
-              <Region
-                label="Check In"
-                date={dateRange?.from}
-                onClick={() => handleRegionClick("check-in")}
-                isActive={isCalendarOpen && activeDate === "check-in"}
+
+        <div className="popOver">
+          <Popover
+            open={isCalendarOpen}
+            onOpenChange={setIsCalendarOpen}
+            disableRipple
+          >
+            {" "}
+            <PopoverTrigger asChild>
+              <div className="check-in">
+              <CalendarMonthOutlinedIcon  className="calenderIcon"
+               sx={{
+                color:"grey"
+              }}/>
+
+                <Region
+                  label="Check In"
+                  date={dateRange?.from}
+                  onClick={() => handleRegionClick("check-in")}
+                  isActive={isCalendarOpen && activeDate === "check-in"}
+                />
+              </div>
+            </PopoverTrigger>
+            <PopoverContent className="calendar-popover" align="start">
+              <DatePickerWithRange
+                onSelect={handleDateSelect}
+                initialRange={dateRange}
+                selectingFrom={activeDate === "check-in"}
+                userId={userId}
               />
-            </div>
-          </PopoverTrigger>
-          <PopoverContent className="calendar-popover" align="start">
-            <DatePickerWithRange
-              onSelect={handleDateSelect}
-              initialRange={dateRange}
-              selectingFrom={activeDate === "check-in"}
-              userId={userId}
-            />
-          </PopoverContent>
-        </Popover>
-        <div className="vl"></div>
-        <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-          <PopoverTrigger>
-            <div>
-              <Region
-                label="Check Out"
-                date={dateRange?.to}
-                onClick={() => handleRegionClick("check-out")}
-                isActive={isCalendarOpen && activeDate === "check-out"}
-              />
-            </div>
-          </PopoverTrigger>
-        </Popover>
+            </PopoverContent>
+          </Popover>
+
+          <div className="vl "></div>
+
+          <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+            <PopoverTrigger>
+              <div className="check-out">
+              <CalendarMonthOutlinedIcon  className="calenderIcon"
+              sx={{
+                color:"grey"
+              }}/>
+
+                <Region
+                  label="Check Out"
+                  date={dateRange?.to}
+                  onClick={() => handleRegionClick("check-out")}
+                  isActive={isCalendarOpen && activeDate === "check-out"}
+                />
+              </div>
+            </PopoverTrigger>
+          </Popover>
+        </div>
+
         <div className="vl"></div>
         <GuestSelector />
-        {/* <div className="vl"></div> */}
+       
         <button
           onClick={handleBookingSubmit}
-          className="rounded-pill btn-book border-0"
+          className=" btn-book border-0"
           disabled={isBookingLoading}
         >
           Book Now

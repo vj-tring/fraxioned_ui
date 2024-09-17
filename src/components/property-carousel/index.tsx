@@ -9,18 +9,16 @@ import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/index";
 import { RootState } from "../../store/reducers";
-import { Image } from '@/pages/property-listing-page/index';
+import { Image } from "@/pages/property-listing-page/index";
 import {
   fetchProperties,
   selectProperty,
   selectcard,
   selectcardindex,
-  // setSelectedCard,
-  // setSelectedCardIndex
 } from "../../store/slice/auth/property-slice";
 import "./propertycarousel.css";
 import { propertyImageapi } from "@/api";
-
+import AddHomeOutlinedIcon from '@mui/icons-material/AddHomeOutlined';
 interface Card {
   id: number;
   name: string;
@@ -62,7 +60,7 @@ export default function BasicSelect() {
         const response = await propertyImageapi();
         setImageDetails(response.data.data);
       } catch (error) {
-        console.error('Error fetching property images:', error);
+        console.error("Error fetching property images:", error);
       }
     };
 
@@ -134,9 +132,11 @@ export default function BasicSelect() {
   };
 
   const showselectedimage = (id: number) => {
-    const filteredImage = imageDetails.filter((image) => image.property.id === id).sort((a: Image, b: Image) => a.displayOrder - b.displayOrder);
+    const filteredImage = imageDetails
+      .filter((image) => image.property.id === id)
+      .sort((a: Image, b: Image) => a.displayOrder - b.displayOrder);
     return filteredImage[0]?.imageUrl;
-  }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -178,7 +178,7 @@ export default function BasicSelect() {
   };
 
   return (
-    <Box sx={{ width: 250, borderRadius: 32, border: "none" }}>
+    <Box sx={{  borderRadius: 32, border: "none" }}>
       <Button
         disableRipple
         aria-controls="basic-menu"
@@ -187,7 +187,7 @@ export default function BasicSelect() {
         className="PropertyBtn"
         sx={{
           borderRadius: 10,
-          width: 264,
+          // width: 264,
           height: 70,
           border: "none",
           cursor: "pointer",
@@ -195,9 +195,14 @@ export default function BasicSelect() {
           position: "relative",
           display: "flex",
           alignItems: "center",
+          gap:2,
           justifyContent: "space-between",
         }}
       >
+        <AddHomeOutlinedIcon 
+        sx={{
+          color:"grey"
+        }}/>
         <div className="d-flex align-items-start flex-column card-item">
           <span className="DateHead1 monsterrat">My Home(s)</span>
           <p className="property1 monsterrat">
@@ -274,8 +279,9 @@ export default function BasicSelect() {
                         <Button
                           key={card.id}
                           disableRipple
-                          className={`additionalproperty ${selectedCardIndex === index ? "active" : ""
-                            }`}
+                          className={`additionalproperty ${
+                            selectedCardIndex === index ? "active" : ""
+                          }`}
                           // style={{ padding: additionalPadding }}
                           onClick={() => handleCardClick(index)}
                           sx={{
@@ -312,8 +318,9 @@ export default function BasicSelect() {
                       {cards.map((_, index: number) => (
                         <div
                           key={index}
-                          className={`dot ${index === selectedCardIndex ? "active" : ""
-                            }`}
+                          className={`dot ${
+                            index === selectedCardIndex ? "active" : ""
+                          }`}
                           onClick={() => handleCardClick(index)}
                         ></div>
                       ))}
@@ -347,8 +354,9 @@ export default function BasicSelect() {
                           disableRipple
                           key={year}
                           onClick={() => handleYearClick(year)}
-                          className={`card-btn1 ${selectedYear === year ? "active" : ""
-                            }`}
+                          className={`card-btn1 ${
+                            selectedYear === year ? "active" : ""
+                          }`}
                           sx={{
                             margin: "2px",
                             padding: "4px",

@@ -20,7 +20,7 @@ const Card: React.FC<CardProps> = ({
   id,
   showPlusIcon,
 }) => {
-  const [loading, setLoading] = useState(true); // State to track image loading
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const handleClick = () => {
