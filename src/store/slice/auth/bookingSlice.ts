@@ -7,7 +7,7 @@ import {
 } from "../../../api/index"; // Ensure these imports are correct
 
 export interface BookingData {
-  property: { id: string };
+  property: { id: number };
   propertyName: string;
   checkinDate: string;
   checkoutDate: string;

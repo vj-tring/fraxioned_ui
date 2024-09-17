@@ -97,7 +97,7 @@ const Login: React.FC = () => {
     <div className={styles.outerContainer} >
       <div className={styles.innerContainer}>
         {isLoading && <div data-testid="loader"><Loader /></div>}
-        <img src={logo} alt="Fraxioned Logo" className={styles.logo} />
+        <img src={logo} alt="Fraxioned Logo" className={styles.logo} loading="lazy" />
         <div className={styles.formWrapper}>
           <h2 className={styles.login}>Login here</h2>
           <p className={styles.loginSubtext}>Please enter your details to sign in</p>

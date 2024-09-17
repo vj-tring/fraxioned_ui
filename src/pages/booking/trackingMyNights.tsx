@@ -9,12 +9,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { MenuItem, Select } from "@mui/material";
+import { Image } from "../property-listing-page";
+import { propertyImageapi } from "@/api";
 
 interface Property {
   id: number;
   propertyName?: string;
   address?: string;
   propertyShare?: string;
+  propertyId?: number;
   details: {
     [year: number]: {
       offSeason: string;
@@ -47,6 +50,8 @@ const TrackingMyNigts: React.FC = () => {
   const [selectedYear, setSelectedYear] = useState<number>(
     new Date().getFullYear()
   );
+  const [imageDetails, setImageDetails] = useState<Image[]>([]);
+
 
   const propertyImages: { [key: number]: string } = {
     1: PropImg1,
@@ -79,14 +84,33 @@ const TrackingMyNigts: React.FC = () => {
   const availableYears = Object.keys(selectedProperty?.details || {}).map(
     (year) => parseInt(year)
   );
+
+  useEffect(() => {
+    const fetchPropertyImages = async () => {
+      try {
+        const response = await propertyImageapi();
+        setImageDetails(response.data.data);
+      } catch (error) {
+        console.error('Error fetching property images:', error);
+      }
+    };
+
+    fetchPropertyImages();
+  }, []);
+
+  const showselectedimage = (id: number) => {
+    const filteredImage = imageDetails.filter((image) => image.property.id === id).sort((a: Image, b: Image) => a.displayOrder - b.displayOrder);
+    return filteredImage[0]?.imageUrl;
+  }
+
   const imageSrc = selectedPropertyId
     ? propertyImages[selectedPropertyId]
     : PropImg1;
 
-    const formatDate = (dateStr) => {
-      const date = new Date(dateStr);
-      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    };
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  };
   return (
     <div className="Container">
       <div className="My-nights">
@@ -187,7 +211,7 @@ const TrackingMyNigts: React.FC = () => {
 
       <div className="container3 mt-3 pt-4 d-flex">
         <div className="cardImg">
-          <img src={imageSrc} className="PropImg1" alt="Property" />
+          <img src={showselectedimage(selectedProperty?.propertyId ?? 1)} className="PropImg1" alt="Property" loading="lazy" />
           <div className="d-flex flex-column Prop-sec">
             {/* <span className="Prop">Property</span> */}
             <span className="Prop">

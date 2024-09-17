@@ -44,6 +44,7 @@ const AdminDashboard: React.FC = () => {
                         <Route path="/" element={<Navigate to="admin/bookings" replace />} />
                         <Route path="/bookings" element={<Calendar isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/amenity" element={<AmenityManagement />} />
+                        {/* <Route path="/user/:id/edit" element={<EditForm />} /> */}
                         <Route path="/holidays" element={<Holidays isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/user" element={<UserGrid isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/property" element={<Property isSidebarOpen={isSidebarOpen} />} />
@@ -62,6 +63,7 @@ const AdminDashboard: React.FC = () => {
                                     <EditPropertyForm />
                                 </div>
                             </div>
+                        } />
                         } />
                         <Route path="/property/:id/rules" element={
                             <div className="property-details-container">

@@ -192,7 +192,7 @@ export default function AvailableNights() {
               <div className="d-flex justify-content-between align-items-center pb-3">
                 <h4 className="BlueHead2">Your 1/4 share</h4>
                 <div className="ProfileImageContainer">
-                  <img src={userImage} alt="Profile" className="ProfileImage" />
+                  <img src={userImage} alt="Profile" className="ProfileImage" loading="lazy" />
                 </div>
               </div>
 
