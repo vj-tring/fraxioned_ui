@@ -3,12 +3,11 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { IconButton, Modal, Typography, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-// import VisibilityIcon from '@mui/icons-material/Visibility';
 import { userdetails, getUserById, propertydetailsapi } from '@/api';
 import Search from '@/pages-admin/search-user';
 import styles from './User.module.css';
 import EditForm from './edit-form/GeneralUser';
-// import UserForm from './user-form';
+import UserForm from './edit-form/userform';
 import { useParams, useNavigate } from 'react-router-dom';
 
 interface ContactDetails {
@@ -63,7 +62,6 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     const [properties, setProperties] = useState<PropertyData[]>([]);
     const [isUserFormOpen, setIsUserFormOpen] = useState(false);
     const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
-
 
 
     useEffect(() => {
@@ -209,13 +207,6 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             headerAlign: 'center',
             renderCell: (params) => (
                 <>
-                    {/* <IconButton
-                        aria-label="view"
-                        color="primary"
-                        onClick={() => handleViewClick(params.row.id)}
-                    >
-                        <VisibilityIcon />
-                    </IconButton> */}
                     <IconButton
                         aria-label="edit"
                         color="primary"
@@ -267,22 +258,6 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                     )}
                 </div>
             </Modal>
-            {/* <Modal
-                open={isUserFormOpen}
-                onClose={handleCloseUserForm}
-                aria-labelledby="view-user-modal"
-                aria-describedby="modal-to-view-user-details"
-            >
-                <div>
-                    {selectedUserId && (
-                        <UserForm
-                            userId={selectedUserId}
-                            onClose={handleCloseUserForm}
-                        />
-                    )}
-                </div>
-            </Modal> */}
-
         </div>
     );
 };

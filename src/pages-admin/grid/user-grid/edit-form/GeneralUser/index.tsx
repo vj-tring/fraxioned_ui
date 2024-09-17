@@ -19,8 +19,9 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Loader from '@/components/loader';
-import { updateuserapi, getRoles, userdetails } from '@/api';
+import { updateuserapi, getRoles, userdetails, getUserById } from '@/api';
 import UserBookings from '../user-bookings';
+import UserForm from '../userform';
 import styles from './GeneralUser.module.css';
 import PropertyTab from '../propertyUser';
 import Availability from '../availablity';
@@ -76,6 +77,9 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
     const [loading, setLoading] = useState(false);
     const [roles, setRoles] = useState<Role[]>([]);
     const [selectedTab, setSelectedTab] = useState(0);
+    const [showUserForm, setShowUserForm] = useState(true);
+
+
     useEffect(() => {
         const fetchRoles = async () => {
             try {
@@ -131,6 +135,11 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
 
     const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
         setSelectedTab(newValue);
+        setShowUserForm(newValue === 0);
+    };
+
+    const handleEditClick = () => {
+        setShowUserForm(false);
     };
 
 
@@ -141,10 +150,6 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
             <div className={styles.formContainer}>
                 <div className={styles.staticHeader}>
                     <Box className={styles.formHeader}>
-                        {/*<EditIcon className={styles.headerIcon} />*/}
-                        {/*<Typography variant="h4" className={styles.formTitle}>
-                            Edit User
-                        </Typography>*/}
                         <IconButton
                             onClick={onClose}
                             className={styles.closeButton}
@@ -169,8 +174,15 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
 
                 <div className={styles.scrollableContent}>
                     <Paper elevation={9} className={styles.formPaper}>
-                        {selectedTab === 0 && (
+                        {selectedTab === 0 && showUserForm ? (
+                            <UserForm 
+                                userId={user.id} 
+                                onClose={() => setShowUserForm(false)}
+                                onEditClick={handleEditClick}
+                            />
+                        ) : selectedTab === 0 && (
                             <form onSubmit={handleSubmit} className={styles.form}>
+
                                 <Grid container spacing={3}>
                                     {/* Basic Information */}
                                     <Grid item xs={12} sm={6}>
@@ -331,10 +343,8 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                             </form>
                         )}
 
-                        {selectedTab === 1 && (
-
+{selectedTab === 1 && (
                             <PropertyTab Id={user.id} />
-
                         )}
 
                         {selectedTab === 2 && (
@@ -344,7 +354,7 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                             <Availability userId={user.id} />
                         )}
 
-                        {selectedTab === 0 && (
+                        {selectedTab === 0 && !showUserForm && (
                             <Box className={styles.buttonContainer}>
                                 <Button
                                     variant="outlined"
