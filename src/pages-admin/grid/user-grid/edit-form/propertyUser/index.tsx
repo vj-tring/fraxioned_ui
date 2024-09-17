@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, Typography, Chip, Box } from "@mui/material";
 import { getUserProperties } from "@/api";
-import styles from "./PropertyTab.module.css";
+import styles from "./propertyTab.module.css";
 import { Image } from "lucide-react";
 
 interface UserProperty {
