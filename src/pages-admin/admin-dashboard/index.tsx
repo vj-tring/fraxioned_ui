@@ -13,12 +13,12 @@ import EditAmenityForm from '../property-amenities/edit-amenityform';
 import PropertyAmenities from '../property-amenities';
 import UserGrid from '../grid/user-grid';
 import PropertyRules from '../property-rules';
+import UserProperty from '../property-user';
 import EditPropertyRulesForm from '../property-rules/edit-form';
 import PropertyPhotos from '../property-photos';
-import userImage from '../../assets/images/profile.jpeg'
-// import EditPhoto from '../property-photos/edit-propertyphoto';
 import CustomNavbar from '@/components/navbar';
 import fraxionedLogo from '../../assets/images/fraxioned.png'
+import userImage from '../../assets/images/profile.jpeg'
 import './admin-dashboard.css'
 
 const AdminDashboard: React.FC = () => {
@@ -119,16 +119,15 @@ const AdminDashboard: React.FC = () => {
                                 </div>
                             </div>
                         } />
-                        {/* <Route path="/property/:id/photos/:imageId/edit" element={
+                        {/* Add the new route for UserProperty */}
+                        <Route path="/property/:id/users" element={
                             <div className="property-details-container">
                                 <PropertySidePanel isOpen={true} />
                                 <div className="property-info-content">
-                                    <EditPhoto />
+                                    <UserProperty />
                                 </div>
                             </div>
-                        } /> */}
-
-
+                        } />
                     </Routes>
                 </div>
             </div>

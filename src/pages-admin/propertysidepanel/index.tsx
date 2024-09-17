@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate, useLocation } from 'react-router-dom';
 import styles from './propertysidepanel.module.css'
-import { FaInfoCircle, FaConciergeBell, FaMapMarkerAlt, FaImages, FaList, FaChevronDown, FaFile } from 'react-icons/fa';
+import { FaInfoCircle, FaConciergeBell, FaMapMarkerAlt, FaImages, FaList, FaChevronDown, FaFile, FaUser } from 'react-icons/fa';
 import { getPropertyById, getProperties } from '@/api';
 
 interface PropertySidePanelProps {
@@ -60,6 +60,7 @@ const PropertySidePanel: React.FC<PropertySidePanelProps> = ({ isOpen }) => {
         { icon: <FaList />, label: 'Rules', path: `/admin/property/${id}/rules`, enabled: true },
         { icon: <FaConciergeBell />, label: 'Amenities', path: `/admin/property/${id}/amenities`, enabled: true },
         { icon: <FaImages />, label: 'Photos', path: `/admin/property/${id}/photos`, enabled: true },
+        { icon: <FaUser />, label: 'Users', path: `/admin/property/${id}/users`, enabled: true },
         { icon: <FaMapMarkerAlt />, label: 'Location', path: `/admin/property/${id}/location`, enabled: false },
         { icon: <FaFile />, label: 'Documents', path: `/admin/property/${id}/documents`, enabled: false },
     ];

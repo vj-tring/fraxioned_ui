@@ -140,6 +140,9 @@ export const getpropertyamenityByid = () =>
 export const getAmenitiesById = (id: number) =>
     axiosInstance.get(`/v1/property-amenities/property/${id}`);
 
+export const getuserbyproperty = (id: number) =>
+    axiosInstance.get(`/v1/properties/property/${id}/details`);
+
 export const addamenity = (data: {
     createdBy: { id: number };
     amenityName: string;
