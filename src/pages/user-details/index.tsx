@@ -82,13 +82,13 @@ const UserDetails: React.FC = () => {
   return (
     <div className="user-details-container">
       <div className="user-header">
-        <img src={userImage} alt="User" className="user-image" />
+        <img src={userImage} alt="User" className="user-image" loading="lazy" />
         <div className="name">
           <h5>{userDetails.name}</h5>
           <h6>{userDetails.email}</h6>
         </div>
         <div className="edit-icon">
-          <img className="edit" src={EditIcon} alt="Edit" />
+          <img className="edit" src={EditIcon} alt="Edit" loading="lazy" />
         </div>
       </div>
       <div className="user-info">

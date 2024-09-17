@@ -53,7 +53,7 @@ const SidePanel: React.FC<SidePanelProps> = ({ isOpen, toggleSidebar }) => {
             <div className={styles.logoContainer}>
                 {isOpen ? (
                     <>
-                        <img src={fraxionedLogo} alt="Fraxioned Owners' Portal" className={styles.logo} />
+                        <img src={fraxionedLogo} alt="Fraxioned Owners' Portal" className={styles.logo} loading="lazy" />
                         <button className={styles.toggleButton} onClick={toggleSidebar}>
                             <FaBars />
                         </button>
@@ -64,6 +64,7 @@ const SidePanel: React.FC<SidePanelProps> = ({ isOpen, toggleSidebar }) => {
                         alt="Fraxioned Owners' Portal"
                         className={styles.logotwo}
                         onClick={toggleSidebar}
+                        loading="lazy"
                     />
                 )}
             </div>

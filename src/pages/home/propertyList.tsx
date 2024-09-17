@@ -151,6 +151,7 @@ const PropertyList: React.FC<PropertyListProps> =({
                       src={PorpImg}
                       className="card-img-top blur-effect"
                       alt=""
+                      loading="lazy"
                     />
                     <FaPlus className="plus-icon" />
                   </a>

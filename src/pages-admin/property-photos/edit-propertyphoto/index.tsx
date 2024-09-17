@@ -177,6 +177,7 @@ const EditPhoto: React.FC = () => {
                                 src={currentImage}
                                 alt="Current"
                                 className={styles.previewImage}
+                                loading="lazy"
                             />
                         ) : (
                             <div className={styles.placeholderImage}>No image selected</div>
