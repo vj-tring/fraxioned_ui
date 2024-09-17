@@ -19,7 +19,7 @@ import { selectSelectedPropertyDetails } from "@/store/slice/auth/property-slice
 import calendarData from "../calender/calendarData.json";
 import CustomizedSnackbar from "../customized-snackbar";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
-import PersonAddAlt1OutlinedIcon from '@mui/icons-material/PersonAddAlt1Outlined';
+import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined";
 const BookingSearchBar: React.FC = () => {
   const today = new Date();
   const userId = "";
@@ -193,10 +193,12 @@ const BookingSearchBar: React.FC = () => {
             {" "}
             <PopoverTrigger asChild>
               <div className="check-in">
-              <CalendarMonthOutlinedIcon  className="calenderIcon"
-               sx={{
-                color:"grey"
-              }}/>
+                <CalendarMonthOutlinedIcon
+                  className="calenderIcon"
+                  sx={{
+                    color: "grey",
+                  }}
+                />
 
                 <Region
                   label="Check In"
@@ -221,10 +223,12 @@ const BookingSearchBar: React.FC = () => {
           <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
             <PopoverTrigger>
               <div className="check-out">
-              <CalendarMonthOutlinedIcon  className="calenderIcon"
-              sx={{
-                color:"grey"
-              }}/>
+                <CalendarMonthOutlinedIcon
+                  className="calenderIcon"
+                  sx={{
+                    color: "grey",
+                  }}
+                />
 
                 <Region
                   label="Check Out"
@@ -239,7 +243,7 @@ const BookingSearchBar: React.FC = () => {
 
         <div className="vl"></div>
         <GuestSelector />
-       
+
         <button
           onClick={handleBookingSubmit}
           className=" btn-book border-0"

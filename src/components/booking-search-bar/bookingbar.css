@@ -38,7 +38,7 @@
 
 .card-item {
   text-transform: capitalize !important;
-  padding-right: 26px;
+  /* padding-right: 26px; */
 }
 
 .vl {
