@@ -7,8 +7,6 @@ import { userdetails, getUserById, propertydetailsapi } from '@/api';
 import Search from '@/pages-admin/search-user';
 import styles from './User.module.css';
 import EditForm from './edit-form/GeneralUser';
-import UserForm from './edit-form/userform';
-import { useParams, useNavigate } from 'react-router-dom';
 
 interface ContactDetails {
     id: number;

@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Loader from '@/components/loader';
-import { updateuserapi, getRoles, userdetails, getUserById } from '@/api';
+import { updateuserapi, getRoles } from '@/api';
 import UserBookings from '../user-bookings';
 import UserForm from '../userform';
 import styles from './GeneralUser.module.css';
@@ -79,7 +79,6 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
     const [selectedTab, setSelectedTab] = useState(0);
     const [showUserForm, setShowUserForm] = useState(true);
 
-
     useEffect(() => {
         const fetchRoles = async () => {
             try {
@@ -117,11 +116,34 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
         setLoading(true);
         try {
             const dataToSend = {
-                ...formData,
                 role: { id: formData.role.id },
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                password: formData.password,
+                imageURL: formData.imageURL,
                 isActive: Boolean(formData.isActive),
+                addressLine1: formData.addressLine1,
+                addressLine2: formData.addressLine2,
+                state: formData.state,
+                country: formData.country,
+                city: formData.city,
+                zipcode: formData.zipcode,
+                resetToken: formData.resetToken,
+                resetTokenExpires: formData.resetTokenExpires,
+                lastLoginTime: formData.lastLoginTime,
                 updatedBy: formData.id,
+                contactDetails: {
+                    primaryEmail: formData.contactDetails.primaryEmail,
+                    primaryPhone: formData.contactDetails.primaryPhone,
+                    secondaryEmail: formData.contactDetails.secondaryEmail,
+                    secondaryPhone: formData.contactDetails.secondaryPhone,
+                    optionalEmailOne: formData.contactDetails.optionalEmailOne,
+                    optionalPhoneOne: formData.contactDetails.optionalPhoneOne,
+                    optionalEmailTwo: formData.contactDetails.optionalEmailTwo,
+                    optionalPhoneTwo: formData.contactDetails.optionalPhoneTwo
+                }
             };
+
             await updateuserapi(formData.id, dataToSend);
             onUserUpdated();
             onClose();
@@ -141,7 +163,6 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
     const handleEditClick = () => {
         setShowUserForm(false);
     };
-
 
     if (loading) return <Loader />;
 
@@ -175,14 +196,13 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                 <div className={styles.scrollableContent}>
                     <Paper elevation={9} className={styles.formPaper}>
                         {selectedTab === 0 && showUserForm ? (
-                            <UserForm 
-                                userId={user.id} 
+                            <UserForm
+                                userId={user.id}
                                 onClose={() => setShowUserForm(false)}
                                 onEditClick={handleEditClick}
                             />
                         ) : selectedTab === 0 && (
                             <form onSubmit={handleSubmit} className={styles.form}>
-
                                 <Grid container spacing={3}>
                                     {/* Basic Information */}
                                     <Grid item xs={12} sm={6}>
@@ -343,7 +363,7 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                             </form>
                         )}
 
-{selectedTab === 1 && (
+                        {selectedTab === 1 && (
                             <PropertyTab Id={user.id} />
                         )}
 
