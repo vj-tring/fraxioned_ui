@@ -155,7 +155,7 @@ export default function BasicSelect() {
   const showCarousel = cards.length > 0;
   const showCarouselControls = cards.length > 1;
   const cardItemWidth =
-    cards.length === 1 ? "380px" : cards.length === 2 ? "380px" : "550px";
+    cards.length === 1 ? "380px" : cards.length === 2 ? "380px" : "520px";
   const buttonSize = {
     width:
       cards.length === 1 ? "3.7rem" : cards.length === 2 ? "3.7rem" : "5rem",
@@ -169,7 +169,7 @@ export default function BasicSelect() {
   const BoxMargin =
     cards.length === 1 ? "0px" : cards.length === 2 ? "0px" : "8px";
   const cardItemHeight =
-    cards.length === 1 ? "232px" : cards.length === 2 ? "232px" : "250px";
+    cards.length === 1 ? "232px" : cards.length === 2 ? "232px" : "270px";
   const cardNameWeight =
     cards.length === 1 ? "600" : cards.length === 2 ? "600" : "600";
 
@@ -376,34 +376,34 @@ export default function BasicSelect() {
                     style={{ marginTop: BoxMargin }}
                   >
                     <div className="d-flex flex-column night-count">
-                      <li>
+                      <li className="Off-Values">
                         {selectedCard.details[selectedYear]?.offSeason || "N/A"}
                       </li>
                       <li style={{ fontSize: BoxList }}>Off-Season Nights</li>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li>
+                      <li className="Off-Values">
                         {selectedCard.details[selectedYear]?.peakSeason ||
                           "N/A"}
                       </li>
                       <li style={{ fontSize: BoxList }}>Peak-Season Nights</li>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li>
+                      <li className="Off-Values">
                         {selectedCard.details[selectedYear]?.peakHoliday ||
                           "N/A"}
                       </li>
                       <li style={{ fontSize: BoxList }}>Peak-Season Holiday</li>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li>
+                      <li className="Off-Values">
                         {selectedCard.details[selectedYear]?.offSeasonHoliday ||
                           "N/A"}
                       </li>
                       <li style={{ fontSize: BoxList }}>Off-Season Holiday</li>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li>
+                      <li className="Off-Values">
                         {selectedCard.details[selectedYear]?.lastMinute ||
                           "N/A"}
                       </li>

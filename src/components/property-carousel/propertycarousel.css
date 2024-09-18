@@ -318,13 +318,21 @@
 
 .box {
   border: 1px solid grey;
+  /* border-top: 1px solid rgb(240, 238, 238); */
   /* height: 53px; */
   text-align: center;
   align-items: center;
   font-weight: 500;
   font-size: x-large;
 }
+.night-count {
+  display: flex;
+  /* border: 1px solid grey; */
+  padding: 5px;
 
+  /* flex-direction: row-reverse !important; */
+  align-items: center;
+}
 .BlueHead {
   margin: 0 !important;
   font-weight: bold;
@@ -382,7 +390,7 @@
 }
 
 .Available {
-  font-weight: 500;
+  font-weight: 600;
   margin: 0 !important;
 }
 
@@ -428,10 +436,16 @@
 .night-count li:nth-child(1) {
   letter-spacing: 0.14rem;
   font-size: 1rem;
+  text-wrap: balance;
 }
 
+.Off-Values {
+  font-size: 20px !important;
+  font-weight: 600 !important;
+}
 .night-count li:nth-child(2) {
   opacity: 0.8;
+  text-wrap: balance;
 }
 
 .property-image {
@@ -499,6 +513,8 @@
   }
   .Available {
     font-size: x-small;
+    color: black !important;
+    font-weight: 600 !important;
   }
   .card-btn1 {
     width: 1rem !important;

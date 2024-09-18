@@ -184,7 +184,7 @@ const TrackingMyNigts: React.FC = () => {
               },
               "& .MuiSelect-icon": {
                 color: "#ffffff",
-                display:"none"
+                display: "none",
               },
               backgroundColor: "none",
             }}
