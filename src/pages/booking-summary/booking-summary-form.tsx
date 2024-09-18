@@ -356,17 +356,17 @@ const BookingSummaryForm: React.FC = () => {
                 <div>
                   <div className="property">Cleaning Fee</div>
                   <div className="colon">:</div>
-                  <div className="value">${booking.cleaningFee.toFixed(2)}</div>
+                  <div className="value">${booking.cleaningFee}</div>
                 </div>
                 <div>
                   <div className="property">Pet Fee</div>
                   <div className="colon">:</div>
-                  <div className="value">${booking.petFee.toFixed(2)}</div>
+                  <div className="value">${booking.petFee}</div>
                 </div>
                 <div>
                   <div className="property">Total Amount Due</div>
                   <div className="colon">:</div>
-                  <div className="value">${booking.totalAmountDue.toFixed(2)}</div>
+                  <div className="value">${booking.totalAmountDue}</div>
                 </div>
                 <div>
                   <div className="property">Date of Charge</div>
