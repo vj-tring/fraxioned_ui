@@ -488,8 +488,9 @@
 }
 
 .additionalproperty.active {
+  color: #faab00 !important;
   background-color: #ffffff; /* or any color you prefer */
-  border: 1px solid #b4b4b4 !important; /* example border color for active state */
+  border: 1px solid #faab00 !important;
 }
 
 .CardItem[data-single-card="true"] {

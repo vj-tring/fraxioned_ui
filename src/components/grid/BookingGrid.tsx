@@ -1,5 +1,5 @@
 import React from "react";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { Button, IconButton } from "@mui/material";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
@@ -86,7 +86,6 @@ const BookingGrid: React.FC<BookingGridProps> = ({
               //   fontSize: "14px",
               // }}
               className="DeleteFont"
-
             />
           </div>
         </div>
@@ -109,6 +108,19 @@ const BookingGrid: React.FC<BookingGridProps> = ({
         disableRowSelectionOnClick
         rowHeight={40}
         columnHeaderHeight={40}
+        disableDensitySelector
+        disableColumnSelector
+        disableColumnMenu
+        disableColumnFilter
+        
+        slots={{ toolbar: GridToolbar }}
+        slotProps={{
+          toolbar: {
+            showQuickFilter: true,
+            printOptions: { disableToolbarButton: true },
+            csvOptions: { disableToolbarButton: true },
+          },
+        }}
         sx={{
           "& .MuiDataGrid-columnHeader": {
             backgroundColor: "#c4eaf4",
