@@ -45,6 +45,10 @@ const SidePanel: React.FC<SidePanelProps> = ({ isOpen, toggleSidebar }) => {
         if (path === '/admin/property') {
             return location.pathname.startsWith('/admin/property');
         }
+        if (path === '/admin/user') {
+            return location.pathname.startsWith('/admin/user');
+        }
+
         return location.pathname === path;
     };
 

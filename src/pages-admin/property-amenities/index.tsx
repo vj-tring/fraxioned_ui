@@ -4,6 +4,7 @@ import styles from './propertyamenities.module.css';
 import { amenitiesapi, getAmenitiesById, updateamenityforproperty, updateamenities } from '@/api';
 import NewAmenityForm from './new-amenity';
 import { Pencil, Check, X } from 'lucide-react';
+import CustomizedSnackbars from '@/components/customized-snackbar';
 
 interface Amenity {
   id: number;
@@ -12,17 +13,26 @@ interface Amenity {
   amenityDescription?: string;
 }
 
+interface SnackbarState {
+  open: boolean;
+  message: string;
+  severity: 'success' | 'info' | 'warning' | 'error';
+}
+
 const PropertyAmenities: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [amenities, setAmenities] = useState<{ [key: string]: Amenity[] }>({});
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [selectedAmenities, setSelectedAmenities] = useState<number[]>([]);
   const [showNewAmenityForm, setShowNewAmenityForm] = useState(false);
-  const [updateStatus, setUpdateStatus] = useState<string | null>(null);
   const [editMode, setEditMode] = useState(false);
   const [editingAmenity, setEditingAmenity] = useState<Amenity | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [snackbar, setSnackbar] = useState<SnackbarState>({
+    open: false,
+    message: '',
+    severity: 'info',
+  });
 
   useEffect(() => {
     fetchAmenities();
@@ -40,6 +50,17 @@ const PropertyAmenities: React.FC = () => {
     }
   }, [editingAmenity]);
 
+  const showSnackbar = (message: string, severity: 'success' | 'info' | 'warning' | 'error') => {
+    setSnackbar({ open: true, message, severity });
+  };
+
+  const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbar({ ...snackbar, open: false });
+  };
+
   const fetchAmenities = async () => {
     try {
       const response = await amenitiesapi();
@@ -47,7 +68,7 @@ const PropertyAmenities: React.FC = () => {
       setAmenities(groupedAmenities);
       setLoading(false);
     } catch (err) {
-      setError('Failed to fetch amenities. Please try again later.');
+      showSnackbar('Failed to fetch amenities. Please try again later.', 'error');
       setLoading(false);
     }
   };
@@ -58,7 +79,7 @@ const PropertyAmenities: React.FC = () => {
       const selected = response.data.data.map((item: any) => item.amenity.id);
       setSelectedAmenities(selected);
     } catch (err) {
-      setError('Failed to fetch selected amenities for this property.');
+      showSnackbar('Failed to fetch selected amenities for this property.', 'error');
     }
   };
 
@@ -93,15 +114,13 @@ const PropertyAmenities: React.FC = () => {
       };
 
       const response = await updateamenityforproperty(updateData);
-      setUpdateStatus('Amenities updated successfully!');
+      showSnackbar('Amenities updated successfully!', 'success');
       console.log('Update response:', response);
     } catch (err) {
-      setUpdateStatus('Failed to update amenities. Please try again.');
+      showSnackbar('Failed to update amenities. Please try again.', 'error');
       console.error('Update error:', err);
     }
   };
-
- 
 
   const handleCloseNewAmenityForm = () => {
     setShowNewAmenityForm(false);
@@ -110,6 +129,7 @@ const PropertyAmenities: React.FC = () => {
   const handleNewAmenityAdded = () => {
     fetchAmenities();
     setShowNewAmenityForm(false);
+    showSnackbar('New amenity added successfully!', 'success');
   };
 
   const toggleEditMode = async () => {
@@ -154,9 +174,9 @@ const PropertyAmenities: React.FC = () => {
           return newAmenities;
         });
         setEditingAmenity(null);
-        setUpdateStatus('Amenity updated successfully!');
+        showSnackbar('Amenity updated successfully!', 'success');
       } catch (err) {
-        setUpdateStatus('Failed to update amenity. Please try again.');
+        showSnackbar('Failed to update amenity. Please try again.', 'error');
         console.error('Update error:', err);
       }
     }
@@ -170,21 +190,13 @@ const PropertyAmenities: React.FC = () => {
     return <div className={styles.loading}>Loading...</div>;
   }
 
-  if (error) {
-    return <div className={styles.error}>{error}</div>;
-  }
-
   return (
     <div className={styles.fullContainer}>
       <div className={styles.contentWrapper}>
         <div className={styles.header}>
           <h1 className={styles.title}>Property Amenities</h1>
           <div className={styles.buttonGroup}>
-            {/* <button className={`${styles.updateButton} ${editMode ? styles.active : ''}`} onClick={toggleEditMode}>
-              {editMode ? 'Done' : 'Edit'}
-            </button> */}
             <button className={styles.updateButton} onClick={handleUpdate}>Update</button>
-            {/* <button className={styles.addButton} onClick={handleAddNewAmenity}>Add</button> */}
           </div>
         </div>
         <div className={styles.amenitiesGrid}>
@@ -230,7 +242,6 @@ const PropertyAmenities: React.FC = () => {
             </div>
           ))}
         </div>
-        {updateStatus && <div className={styles.updateStatus}>{updateStatus}</div>}
       </div>
       {showNewAmenityForm && (
         <NewAmenityForm
@@ -238,12 +249,14 @@ const PropertyAmenities: React.FC = () => {
           onAmenityAdded={handleNewAmenityAdded}
         />
       )}
+      <CustomizedSnackbars
+        open={snackbar.open}
+        handleClose={handleCloseSnackbar}
+        message={snackbar.message}
+        severity={snackbar.severity}
+      />
     </div>
   );
 };
 
 export default PropertyAmenities;
-
-
-
-

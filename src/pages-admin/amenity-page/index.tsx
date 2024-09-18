@@ -4,6 +4,7 @@ import styles from './amenitypage.module.css';
 import NewAmenityForm from '../property-amenities/new-amenity';
 import { Edit2, Check, X, Trash2 } from 'lucide-react';
 import ConfirmationModal from '@/components/confirmation-modal';
+import CustomizedSnackbars from '@/components/customized-snackbar';
 
 interface Amenity {
     id: number;
@@ -12,18 +13,48 @@ interface Amenity {
     amenityDescription?: string;
 }
 
+interface SnackbarState {
+    open: boolean;
+    message: string;
+    severity: 'success' | 'info' | 'warning' | 'error';
+}
+
 const AmenityManagement: React.FC = () => {
     const [amenities, setAmenities] = useState<{ [key: string]: Amenity[] }>({});
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const [editingAmenity, setEditingAmenity] = useState<Amenity | null>(null);
     const [isAddingNew, setIsAddingNew] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [amenityToDelete, setAmenityToDelete] = useState<Amenity | null>(null);
+    const [snackbar, setSnackbar] = useState<SnackbarState>({
+        open: false,
+        message: '',
+        severity: 'info',
+    });
 
     useEffect(() => {
         fetchAmenities();
     }, []);
+
+    useEffect(() => {
+        if (snackbar.open) {
+            const timer = setTimeout(() => {
+                setSnackbar((prev) => ({ ...prev, open: false }));
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [snackbar.open]);
+
+    const showSnackbar = (message: string, severity: 'success' | 'info' | 'warning' | 'error') => {
+        setSnackbar({ open: true, message, severity });
+    };
+
+    const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbar({ ...snackbar, open: false });
+    };
 
     const fetchAmenities = async () => {
         try {
@@ -32,7 +63,7 @@ const AmenityManagement: React.FC = () => {
             setAmenities(groupedAmenities);
             setLoading(false);
         } catch (err) {
-            setError('Failed to fetch amenities. Please try again later.');
+            showSnackbar('Failed to fetch amenities. Please try again later.', 'error');
             setLoading(false);
         }
     };
@@ -54,16 +85,21 @@ const AmenityManagement: React.FC = () => {
     const handleSave = async () => {
         if (editingAmenity) {
             try {
-                await updateamenities(editingAmenity.id, {
+                const response = await updateamenities(editingAmenity.id, {
                     updatedBy: { id: 1 },
                     amenityName: editingAmenity.amenityName,
                     amenityDescription: editingAmenity.amenityDescription || '',
                     amenityType: editingAmenity.amenityType
                 });
-                setEditingAmenity(null);
-                await fetchAmenities();
-            } catch (err) {
-                setError('Failed to update amenity. Please try again.');
+                if (response.data.success) {
+                    setEditingAmenity(null);
+                    await fetchAmenities();
+                    showSnackbar('Amenity updated successfully', 'success');
+                } else {
+                    showSnackbar(response.data.message || 'Failed to update amenity. Please try again.', 'error');
+                }
+            } catch (err: any) {
+                showSnackbar(err.response?.data?.message || 'Failed to update amenity. Please try again.', 'error');
             }
         }
     };
@@ -82,6 +118,7 @@ const AmenityManagement: React.FC = () => {
 
     const handleAmenityAdded = () => {
         fetchAmenities();
+        showSnackbar('New amenity added successfully', 'success');
     };
 
     const handleDeleteClick = (amenity: Amenity) => {
@@ -92,12 +129,27 @@ const AmenityManagement: React.FC = () => {
     const handleDeleteConfirm = async () => {
         if (amenityToDelete) {
             try {
-                await deleteAmenity(amenityToDelete.id);
-                setShowDeleteModal(false);
-                setAmenityToDelete(null);
-                await fetchAmenities();
-            } catch (err) {
-                setError('Failed to delete amenity. Please try again.');
+                const response = await deleteAmenity(amenityToDelete.id);
+                if (response.data.success) {
+                    showSnackbar('Amenity deleted successfully', 'success');
+                    setTimeout(() => {
+                        setShowDeleteModal(false);
+                        setAmenityToDelete(null);
+                    }, 500);
+                    await fetchAmenities();
+                } else {
+                    showSnackbar(response.data.message || 'Failed to delete amenity. Please try again.', 'error');
+                    setTimeout(() => {
+                        setShowDeleteModal(false);
+                        setAmenityToDelete(null);
+                    }, 500);
+                }
+            } catch (err: any) {
+                showSnackbar(err.response?.data?.message || 'Failed to delete amenity. Please try again.', 'error');
+                setTimeout(() => {
+                    setShowDeleteModal(false);
+                    setAmenityToDelete(null);
+                }, 500);
             }
         }
     };
@@ -108,7 +160,6 @@ const AmenityManagement: React.FC = () => {
     };
 
     if (loading) return <div className={styles.loading}>Loading...</div>;
-    if (error) return <div className={styles.error}>{error}</div>;
 
     return (
         <div className={styles.container}>
@@ -171,6 +222,12 @@ const AmenityManagement: React.FC = () => {
                 message={`Are you sure you want to delete the amenity "${amenityToDelete?.amenityName}"?`}
                 confirmLabel="Delete"
                 cancelLabel="Cancel"
+            />
+            <CustomizedSnackbars
+                open={snackbar.open}
+                handleClose={handleSnackbarClose}
+                message={snackbar.message}
+                severity={snackbar.severity}
             />
         </div>
     );
