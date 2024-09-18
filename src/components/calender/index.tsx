@@ -217,14 +217,15 @@ export function DatePickerWithRange({
 
     return diffInDays <= calendarData.bookingRules.lastMinuteBooking.maxDays; 
   };
-  const meetsConsecutiveStayRule = (date: Date) => {
-    if (date.toDateString() === today.toDateString()) {
+  const meetsConsecutiveStayRule = (startDate: Date, endDate: Date) => {
+    if (startDate.toDateString() === today.toDateString()) {
       return true;
     }
   
     const userBookings = bookings.filter(
-      booking => booking.property.id === selectedPropertyDetails.id &&
-                 booking.user.id === currentUser.id
+      booking =>
+        booking.property.id === selectedPropertyDetails.id &&
+        booking.user.id === currentUser.id
     );
   
     if (userBookings.length === 0) {
@@ -235,23 +236,50 @@ export function DatePickerWithRange({
       const checkOutDate = new Date(booking.checkoutDate);
       const checkInDate = new Date(booking.checkinDate);
   
-      const daysSinceCheckout = Math.floor((date.getTime() - checkOutDate.getTime()) / (1000 * 60 * 60 * 24));
-      if (daysSinceCheckout >= 0 && daysSinceCheckout < 4) {
+      // Calculate days since previous checkout date for the start date
+      const daysSinceCheckoutStart = Math.floor(
+        (startDate.getTime() - checkOutDate.getTime()) / (1000 * 60 * 60 * 24)
+      );
+  
+      const daysSinceCheckoutEnd = Math.floor(
+        (endDate.getTime() - checkOutDate.getTime()) / (1000 * 60 * 60 * 24)
+      );
+  
+      if (
+        (daysSinceCheckoutStart >= 0 && daysSinceCheckoutStart < 4) ||
+        (daysSinceCheckoutEnd >= 0 && daysSinceCheckoutEnd < 4)
+      ) {
         return false;
       }
   
-      const daysBeforeCheckin = Math.floor((checkInDate.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
-      if (daysBeforeCheckin >= 0 && daysBeforeCheckin <= 5) {
+      const daysBeforeCheckinStart = Math.floor(
+        (checkInDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+      );
+  
+      const daysBeforeCheckinEnd = Math.floor(
+        (checkInDate.getTime() - endDate.getTime()) / (1000 * 60 * 60 * 24)
+      );
+  
+      if (
+        (daysBeforeCheckinStart >= 0 && daysBeforeCheckinStart <= 5) ||
+        (daysBeforeCheckinEnd >= 0 && daysBeforeCheckinEnd <= 5)
+      ) {
         return false;
       }
   
-      if (date >= checkInDate && date <= checkOutDate) {
+      // Ensure the selected range does not overlap with an existing booking
+      if (
+        (startDate >= checkInDate && startDate <= checkOutDate) ||
+        (endDate >= checkInDate && endDate <= checkOutDate)
+      ) {
         return false;
       }
     }
   
     return true;
   };
+  
+
 
 const isBookingTooCloseToCheckin = (checkinDate: Date) => {
   const checkinTime = new Date(checkinDate);
