@@ -18,7 +18,7 @@ import {
 } from "../../store/slice/auth/property-slice";
 import "./propertycarousel.css";
 import { propertyImageapi } from "@/api";
-import AddHomeOutlinedIcon from '@mui/icons-material/AddHomeOutlined';
+import AddHomeOutlinedIcon from "@mui/icons-material/AddHomeOutlined";
 interface Card {
   id: number;
   name: string;
@@ -178,7 +178,7 @@ export default function BasicSelect() {
   };
 
   return (
-    <Box sx={{  borderRadius: 32, border: "none" }}>
+    <Box sx={{ borderRadius: 32, border: "none" }}>
       <Button
         disableRipple
         aria-controls="basic-menu"
@@ -195,14 +195,15 @@ export default function BasicSelect() {
           position: "relative",
           display: "flex",
           alignItems: "center",
-          gap:2,
+          gap: 2,
           justifyContent: "space-between",
         }}
       >
-        <AddHomeOutlinedIcon 
-        sx={{
-          color:"grey"
-        }}/>
+        <AddHomeOutlinedIcon
+          sx={{
+            color: "grey",
+          }}
+        />
         <div className="d-flex align-items-start flex-column card-item">
           <span className="DateHead1 monsterrat">My Home(s)</span>
           <p className="property1 monsterrat">
@@ -326,7 +327,7 @@ export default function BasicSelect() {
                       ))}
                     </div>
                   )}
-                  <div className="card-name d-flex justify-content-between py-2 align-items-center gy-1">
+                  <div className="card-name d-flex justify-content-between py-2 align-items-center gy-1 ">
                     <span className="CardFont">
                       <h4
                         className="BlueHead"
@@ -346,7 +347,7 @@ export default function BasicSelect() {
                       />
                     </span>
                   </div>
-                  <div className="d-flex justify-content-between py-2 align-items-center pt-0">
+                  <div className="d-flex justify-content-between py-2 align-items-center pt-0 MyAvaNigt">
                     <p className="Available">My Available Nights</p>
                     <div className="d-flex justify-content-center">
                       {years.map((year) => (

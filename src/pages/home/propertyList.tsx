@@ -103,9 +103,9 @@ const PropertyList: React.FC<PropertyListProps> = ({ paddingLeft = false }) => {
     <div className="Container1">
       <div>
         <div
-          className="d-flex flex-row PropImg "
+          className="d-flex flex-row Container1 "
           style={{
-            marginLeft: paddingLeft ? "-45px" : "3%",
+            marginLeft: paddingLeft ? "-45px" : "1%",
           }}
         >
           {showCarousel && (
@@ -124,7 +124,6 @@ const PropertyList: React.FC<PropertyListProps> = ({ paddingLeft = false }) => {
             ref={carouselRef}
           >
             {properties.map((property) => {
-              // Find the image for the current property
               const propertyImage = images.find(
                 (img) => img.property.id === property.id
               );
@@ -156,9 +155,9 @@ const PropertyList: React.FC<PropertyListProps> = ({ paddingLeft = false }) => {
                     <FaPlus className="plus-icon" />
                   </a>
                 </div>
-                <div className="card-body">
+                <div className="card-body card-body-plus">
                   <h4 className="card-title">Adventure Awaits...</h4>
-                  <span className="card-text">
+                  <span className="card-text ">
                     Discover your next Fraxioned home at fraxioned.com
                   </span>
                 </div>

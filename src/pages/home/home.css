@@ -48,17 +48,6 @@
   }
 }
 
-
-
-/* .Cardcontainer {
-  display: flex;
-  padding-left: 117px;
-  padding-top: 10px;
-  background: white !important;
-  width: 80%;
-} */
-
-
 .card1 {
   background: url('../../assets/images/building1.jpg');
   background-size: cover;

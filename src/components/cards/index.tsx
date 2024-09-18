@@ -38,7 +38,9 @@ const Card: React.FC<CardProps> = ({
       className={`card3 ${showPlusIcon ? "static-card" : ""}`}
       onClick={handleClick}
     >
-      <Box sx={{ position: "relative", width: "100%", height: 200 }}>
+      <Box sx={{ position: "relative", width: "100%", height: 200,
+        
+       }} >
         {loading && (
           <Skeleton variant="rectangular" width="100%" height="100%" />
         )}
@@ -56,7 +58,10 @@ const Card: React.FC<CardProps> = ({
         </div>
       </Box>
 
-      <Box sx={{}}>
+      <Box sx={{
+
+      
+      }} >
         {loading ? (
           <>
             <Skeleton width="60%" height={20} />
@@ -65,25 +70,31 @@ const Card: React.FC<CardProps> = ({
           </>
         ) : (
           <div className="card-body ">
-            <Typography variant="" className="card-title monsterrat">
-              {title}
-            </Typography>
-            <Typography
-              variant="body2"
-              color="textSecondary"
-              className="card-text monsterrat"
-            >
-              {text}
-            </Typography>
-            {share && (
-              <Typography
-                variant="caption"
-                color="textSecondary"
-                className="share mt-0 monsterrat"
-              >
-                {share}
+            <div className="card-BodyHead">
+              <Typography variant="" className="card-title monsterrat">
+                {title}
               </Typography>
-            )}
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                className="card-text monsterrat"
+              >
+                {text}
+              </Typography>
+              {share && (
+                <Typography
+                  variant="caption"
+                  color="textSecondary"
+                  className="share monsterrat"
+                >
+                  {share}
+                </Typography>
+              )}
+            </div>
+
+            <div className="View">
+              <button className="ViewBtn">View</button>
+            </div>
           </div>
         )}
       </Box>

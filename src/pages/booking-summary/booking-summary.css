@@ -1,12 +1,17 @@
 .bookingsum {
   position: relative;
-  top: 20px;
+  top: 2px;
 }
-
+.Booking-Summary {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px;
+}
 .HomeImg1 {
   width: 100%;
 
-  height: 140px;
+  height: 300px;
   background: url("../../assests/blue-bear-lake.jpg");
   background-color: #00636d;
   background-size: cover;
@@ -131,19 +136,55 @@
   }
 }
 
-@media (max-width: 600px) {
+@media only screen and (max-width: 600px) {
   .BookSum,
   .PaySum {
     padding: 0 10px;
   }
 
-  .ListSum > div {
+  .Booking-Summary {
+    display: flex;
     flex-direction: column;
-    align-items: flex-start;
+  }
+  .ListSum > div {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+
+    padding: 2px 0;
+    margin-bottom: 10px;
   }
 
   .ListSum .property {
-    width: auto;
+    font-weight: 600;
+    font-size: 14px;
+    width: 120px;
+  }
+
+  .ListSum .colon {
+    font-weight: 500;
+    width: 30px;
+  }
+
+  .ListSum .value {
+    font-weight: 500;
+    font-size: small;
+    flex: 1;
+    text-align: left;
+    color: rgb(0, 0, 0) !important;
+  }
+
+  .RowImg {
+    width: 340%;
+  }
+  .SumImg {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    /* max-width: 168px; */
+  }
+  .SumImg > div {
+    width: 180px;
   }
 
   .Btun {
@@ -155,6 +196,13 @@
     width: 100%;
     margin-bottom: 10px;
   }
+  .PropImgHeight {
+    height: 80px !important;
+    width: 80% !important;
+  }
+  .PropImgHeadHeight{
+    height: 150px !important;
+  }
 }
 
 .Bookingmsg {
@@ -163,4 +211,53 @@
   font-size: x-large;
 }
 
+@media only screen and (max-width: 400px) {
+  .Booking-Summary {
+    display: flex;
+    flex-direction: column;
+  }
 
+  .ListSum > div {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+
+    padding: 2px 0;
+    margin-bottom: 10px;
+  }
+
+  .ListSum .property {
+    font-weight: 600;
+    font-size: 14px;
+    width: 120px;
+  }
+
+  .ListSum .colon {
+    font-weight: 500;
+    width: 30px;
+  }
+  .PropImgHeight {
+    height: 40px !important;
+    width: 70% !important;
+  }
+  .PropImgHeadHeight{
+    height: 150px !important;
+  }
+  .ListSum .value {
+    font-weight: 500;
+    font-size: small;
+    flex: 1;
+    text-align: left;
+    color: rgb(0, 0, 0) !important;
+  }
+
+  .RowImg {
+    width: 330%;
+  }
+  .SumImg {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    max-width: 115px;
+  }
+}
