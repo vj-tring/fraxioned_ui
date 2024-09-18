@@ -90,7 +90,7 @@ const Booking = () => {
         >
           My Bookings
         </Typography>
-        <div className="d-flex justify-between">
+        <div className="d-flex justify-between BookHeader">
           <Tabs
             disableRipple
             value={activeTab}
@@ -110,7 +110,7 @@ const Booking = () => {
             <Tab disableRipple label="Cancelled" className="monsterrat Can" />
             <Tab disableRipple label="All" className="monsterrat All" />
           </Tabs>
-          <div>
+          <div className="CalendarFilter">
             <Button
               disableRipple
               variant="contained"

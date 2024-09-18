@@ -9,3 +9,22 @@
     color: grey !important;
     text-transform: capitalize !important;
 }
+
+
+@media only screen and (max-width: 480px) {
+
+    .BookHeader{
+        display: flex;
+        flex-direction: column-reverse;
+    }
+
+    .Up,.Com,.Can,.All{
+        font-size: x-small !important;
+
+    }
+    .CalendarFilter{
+        display: flex;
+        justify-content: space-between;
+    }
+}
+

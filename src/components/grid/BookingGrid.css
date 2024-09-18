@@ -1,0 +1,7 @@
+@media only screen and (max-width: 480px) {
+  .MuiDataGrid-cell,
+  .MuiDataGrid-columnHeader {
+    font-size: xx-small !important;
+    width: 100px !important;
+  }
+}
