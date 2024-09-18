@@ -20,6 +20,8 @@ interface User {
     contactDetails: {
         primaryEmail: string;
         primaryPhone: string;
+        secondaryEmail: string;
+        secondaryPhone: string;
     };
     role: {
         roleName: string;
@@ -63,11 +65,13 @@ const UserForm: React.FC<UserFormProps> = ({ userId, onEditClick }) => {
             </div>
             <div className={styles.content}>
                 <div className={styles.profileSection}>
-                    <img
-                        src={user.imageURL || defaultProfile}
-                        alt={`${user.firstName} ${user.lastName}`}
-                        className={styles.profileImage}
-                    />
+                    <div className={styles.imageContainer}>
+                        <img
+                            src={user.imageURL || defaultProfile}
+                            alt={`${user.firstName} ${user.lastName}`}
+                            className={styles.profileImage}
+                        />
+                    </div>
                     <h3>{user.firstName} {user.lastName}</h3>
                     <p className={styles.role}>{user.role.roleName}</p>
                     <p className={`${styles.status} ${user.isActive ? styles.activeStatus : styles.inactiveStatus}`}>
@@ -78,15 +82,29 @@ const UserForm: React.FC<UserFormProps> = ({ userId, onEditClick }) => {
                     <div className={styles.detailItem}>
                         <Mail size={20} />
                         <div>
-                            <strong>Email</strong>
+                            <strong>Primary Email</strong>
                             <p>{user.contactDetails.primaryEmail}</p>
+                        </div>
+                    </div>
+                    <div className={styles.detailItem}>
+                        <Mail size={20} />
+                        <div>
+                            <strong>Alternate Email</strong>
+                            <p>{user.contactDetails.secondaryEmail || 'N/A'}</p>
                         </div>
                     </div>
                     <div className={styles.detailItem}>
                         <Phone size={20} />
                         <div>
-                            <strong>Phone</strong>
+                            <strong>Primary Phone</strong>
                             <p>{user.contactDetails.primaryPhone}</p>
+                        </div>
+                    </div>
+                    <div className={styles.detailItem}>
+                        <Phone size={20} />
+                        <div>
+                            <strong>Alternate Phone</strong>
+                            <p>{user.contactDetails.secondaryPhone || 'N/A'}</p>
                         </div>
                     </div>
                     <div className={styles.detailItem}>

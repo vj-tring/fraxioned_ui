@@ -55,54 +55,55 @@ const UserBookings: React.FC<BookingProps> = ({ userId }) => {
     return (
         <div className={styles.bookingsContainer}>
             {bookings.map((booking) => (
-                <div key={booking.id} className={styles.bookingCard}>
-                    <div className={styles.bookingHeader}>
-                        <span className={styles.bookingIdLabel}>Booking ID:</span>
+                <div key={booking.id} className={styles.bookingTile}>
+                    <div className={styles.tileHeader}>
+                        <h3 className={styles.propertyName}>{booking.propertyName}</h3>
                         <span className={styles.bookingId}>{booking.bookingId}</span>
                     </div>
-                    <div className={styles.bookingContent}>
-                        <h3 className={styles.propertyName}>{booking.propertyName}</h3>
+                    <div className={styles.tileContent}>
                         <div className={styles.dateSection}>
                             <div className={styles.dateBox}>
-                                <span className={styles.dateLabel}>Check-in</span>
+                                <span className={styles.dateLabel}>Check-in: </span>
                                 <span className={styles.date}>{formatDate(booking.checkinDate)}</span>
                             </div>
                             <div className={styles.dateBox}>
-                                <span className={styles.dateLabel}>Check-out</span>
+                                <span className={styles.dateLabel}>Check-out: </span>
                                 <span className={styles.date}>{formatDate(booking.checkoutDate)}</span>
                             </div>
                         </div>
-                        <div className={styles.infoContainer}>
+                        <div className={styles.infoGrid}>
                             <div className={styles.infoItem}>
-                                <span className={styles.infoLabel}>Nights</span>
+                                <span className={styles.infoLabel}>Booked Nights: </span>
                                 <span className={styles.infoValue}>{booking.totalNights}</span>
                             </div>
                             <div className={styles.infoItem}>
-                                <span className={styles.infoLabel}>Adults</span>
+                                <span className={styles.infoLabel}>Adults: </span>
                                 <span className={styles.infoValue}>{booking.noOfAdults}</span>
                             </div>
                             <div className={styles.infoItem}>
-                                <span className={styles.infoLabel}>Children</span>
+                                <span className={styles.infoLabel}>Children: </span>
                                 <span className={styles.infoValue}>{booking.noOfChildren}</span>
                             </div>
                             <div className={styles.infoItem}>
-                                <span className={styles.infoLabel}>Pets</span>
+                                <span className={styles.infoLabel}>Pets: </span>
                                 <span className={styles.infoValue}>{booking.noOfPets}</span>
                             </div>
-                            <div className={styles.infoItem}>
-                                <span className={styles.infoLabel}>Cleaning Fee</span>
-                                <span className={styles.infoValue}>${booking.cleaningFee.toFixed(2)}</span>
+                        </div>
+                        <div className={styles.feeSection}>
+                            <div className={styles.feeItem}>
+                                <span className={styles.feeLabel}>Cleaning Fee: </span>
+                                <span className={styles.feeValue}>${booking.cleaningFee.toFixed(2)}</span>
                             </div>
-                            <div className={styles.infoItem}>
-                                <span className={styles.infoLabel}>Pet Fee</span>
-                                <span className={styles.infoValue}>${booking.petFee.toFixed(2)}</span>
+                            <div className={styles.feeItem}>
+                                <span className={styles.feeLabel}>Pet Fee: </span>
+                                <span className={styles.feeValue}>${booking.petFee.toFixed(2)}</span>
                             </div>
-                            <div className={`${styles.infoItem} ${styles.totalTransaction}`}>
-                                <span className={styles.infoLabel}>Total Transaction</span>
-                                <span className={styles.infoValue}>
-                                    ${calculateTotalTransaction(booking.cleaningFee, booking.petFee).toFixed(2)}
-                                </span>
-                            </div>
+                        </div>
+                        <div className={styles.totalTransaction}>
+                            <span className={styles.totalLabel}>Total Transaction: </span>
+                            <span className={styles.totalValue}>
+                                ${calculateTotalTransaction(booking.cleaningFee, booking.petFee).toFixed(2)}
+                            </span>
                         </div>
                     </div>
                 </div>

@@ -6,7 +6,6 @@ import {
     Checkbox,
     Box,
     Typography,
-    Paper,
     Grid,
     Select,
     FormControl,
@@ -15,6 +14,7 @@ import {
     IconButton,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import AddIcon from '@mui/icons-material/Add';
 import { updateuserapi, getRoles } from '@/api';
 import styles from './useresit.module.css'
 
@@ -67,6 +67,8 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
     const [formData, setFormData] = useState<UserData>(user);
     const [error, setError] = useState<string | null>(null);
     const [roles, setRoles] = useState<Role[]>([]);
+    const [showSecondaryContact, setShowSecondaryContact] = useState(false);
+
 
     useEffect(() => {
         const fetchRoles = async () => {
@@ -81,6 +83,12 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
 
         fetchRoles();
     }, []);
+
+    useEffect(() => {
+        if (formData.contactDetails.secondaryEmail || formData.contactDetails.secondaryPhone) {
+            setShowSecondaryContact(true);
+        }
+    }, [formData.contactDetails]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
@@ -98,6 +106,10 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                 [field]: value
             }
         }));
+    };
+
+    const handleAddContact = () => {
+        setShowSecondaryContact(true);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -295,6 +307,43 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated }) => 
                             className={styles.inputField}
                         />
                     </Grid>
+
+                    {showSecondaryContact && (
+                        <>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    label="Secondary Phone"
+                                    name="secondaryPhone"
+                                    value={formData.contactDetails.secondaryPhone || ''}
+                                    onChange={(e) => handleContactChange('secondaryPhone', e.target.value)}
+                                    fullWidth
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    label="Secondary Email"
+                                    name="secondaryEmail"
+                                    value={formData.contactDetails.secondaryEmail || ''}
+                                    onChange={(e) => handleContactChange('secondaryEmail', e.target.value)}
+                                    fullWidth
+                                    className={styles.inputField}
+                                />
+                            </Grid>
+                        </>
+                    )}
+
+                    {!showSecondaryContact && (
+                        <Grid item xs={12}>
+                            <Button
+                                startIcon={<AddIcon />}
+                                onClick={handleAddContact}
+                                className={styles.addContactButton}
+                            >
+                                Add Contact
+                            </Button>
+                        </Grid>
+                    )}
                 </Grid>
 
                 {error && (

@@ -50,7 +50,8 @@
 }
 
 .updateButton,
-.cancelButton {
+.cancelButton,
+.addContactButton {
     min-width: 100px;
     font-size: 14px;
     font-weight: 500;
@@ -76,6 +77,16 @@
 }
 
 .cancelButton:hover {
+    background-color: rgba(226, 143, 37, 0.04);
+}
+
+.addContactButton {
+    color: #e28f25 !important;
+    border-color: #e28f25 !important;
+    margin-top: 16px !important;
+}
+
+.addContactButton:hover {
     background-color: rgba(226, 143, 37, 0.04);
 }
 
@@ -124,7 +135,8 @@
     }
 
     .updateButton,
-    .cancelButton {
+    .cancelButton,
+    .addContactButton {
         width: 100%;
         margin-left: 0 !important;
         margin-top: 8px;

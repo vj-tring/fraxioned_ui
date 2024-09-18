@@ -6,59 +6,45 @@
     font-family: 'Arial', sans-serif;
 }
 
-.bookingCard {
+.bookingTile {
     background-color: #ffffff;
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    height: 600px;
     width: 500px;
 }
 
-.bookingCard:hover {
+.bookingTile:hover {
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
 
-.bookingHeader {
+.tileHeader {
     background-color: #c7eaee;
-    color: #ffffff;
-    padding: 0.75rem 1.25rem;
-    position: relative;
-}
-
-.bookingIdLabel {
-    font-size: 0.8rem;
-    font-weight: 600;
     color: #00636d;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.bookingId {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-color: #c7eaee;
-    color: #e28f25;
-    padding: 0.4rem 0.8rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    border-bottom-left-radius: 8px;
-}
-
-.bookingContent {
-    padding: 1.25rem;
-    height: calc(100% - 50px);
+    padding: 1rem;
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .propertyName {
-    margin: 0 0 0.75rem;
+    margin: 0;
     font-size: 1.2rem;
     font-weight: 700;
-    color: #2c3e50;
+    color: #00636d;
+}
+
+.bookingId {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e28f25;
+}
+
+.tileContent {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .dateSection {
@@ -77,7 +63,7 @@
 
 .dateLabel {
     display: block;
-    font-size: 0.8rem;
+    font-size: 15px;
     color: #7f8c8d;
     margin-bottom: 0.25rem;
     font-weight: 600;
@@ -89,29 +75,22 @@
     color: #34495e;
 }
 
-.infoContainer {
+.infoGrid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 0.75rem;
-    background-color: #ecf0f1;
-    padding: 1rem;
-    border-radius: 8px;
-    flex-grow: 1;
-    overflow-y: auto;
+    margin-bottom: 1rem;
 }
 
 .infoItem {
-    background-color: #ffffff;
+    background-color: #ecf0f1;
     padding: 0.6rem;
     border-radius: 6px;
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 }
 
 .infoLabel {
-    font-size: 0.75rem;
+    font-size: 15px;
     color: #7f8c8d;
     margin-bottom: 0.2rem;
     font-weight: 600;
@@ -123,19 +102,52 @@
     font-weight: 700;
 }
 
+.feeSection {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.feeItem {
+    background-color: #f8f9fa;
+    padding: 0.6rem;
+    border-radius: 6px;
+    text-align: center;
+    flex: 1;
+    margin: 0 0.375rem;
+}
+
+.feeLabel {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-bottom: 0.2rem;
+    font-weight: 600;
+}
+
+.feeValue {
+    font-size: 1rem;
+    color: #2c3e50;
+    font-weight: 700;
+}
+
 .totalTransaction {
-    grid-column: 1 / -1;
     background-color: #e8f4fd;
+    padding: 0.75rem;
+    border-radius: 8px;
+    text-align: center;
 }
 
-.totalTransaction .infoLabel {
+.totalLabel {
+    font-size: 16px;
     color: #00636d;
-    font-size: 0.85rem;
+    margin-bottom: 0.2rem;
+    font-weight: 600;
 }
 
-.totalTransaction .infoValue {
-    color: #00636d;
+.totalValue {
     font-size: 1.2rem;
+    color: #00636d;
+    font-weight: 700;
 }
 
 @media (max-width: 768px) {
@@ -143,7 +155,7 @@
         grid-template-columns: 1fr;
     }
 
-    .bookingCard {
+    .bookingTile {
         width: 100%;
         height: auto;
         min-height: 600px;
