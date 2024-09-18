@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getUserBookings } from '@/api';
-import styles from './UserBookings.module.css';
+import styles from './userbookings.module.css';
 
 interface BookingProps {
     userId: number;
