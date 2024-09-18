@@ -17,31 +17,21 @@ interface Booking {
     noOfChildren: number;
     noOfPets: number;
     cleaningFee: number;
-}
-
-interface GroupedBookings {
-    [key: string]: Booking[];
+    petFee: number;
 }
 
 const UserBookings: React.FC<BookingProps> = ({ userId }) => {
-    const [groupedBookings, setGroupedBookings] = useState<GroupedBookings>({});
+    const [bookings, setBookings] = useState<Booking[]>([]);
 
     useEffect(() => {
         const fetchBookings = async () => {
             try {
                 const response = await getUserBookings(userId);
-                const bookings = response.data.map((booking: any) => ({
+                const fetchedBookings = response.data.map((booking: any) => ({
                     ...booking,
                     propertyName: booking.property.propertyName
                 }));
-                const grouped = bookings.reduce((acc: GroupedBookings, booking: Booking) => {
-                    if (!acc[booking.propertyName]) {
-                        acc[booking.propertyName] = [];
-                    }
-                    acc[booking.propertyName].push(booking);
-                    return acc;
-                }, {});
-                setGroupedBookings(grouped);
+                setBookings(fetchedBookings);
             } catch (error) {
                 console.error('Error fetching bookings:', error);
             }
@@ -53,58 +43,68 @@ const UserBookings: React.FC<BookingProps> = ({ userId }) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-GB', {
             day: '2-digit',
-            month: '2-digit',
+            month: 'short',
             year: 'numeric'
         });
     };
 
+    const calculateTotalTransaction = (cleaning: number, pet: number) => {
+        return cleaning + pet;
+    };
+
     return (
         <div className={styles.bookingsContainer}>
-            {Object.entries(groupedBookings).map(([propertyName, bookings]) => (
-                <div key={propertyName} className={styles.propertyGroup}>
-                    <h2 className={styles.propertyName}>{propertyName}</h2>
-                    <div className={styles.bookingsList}>
-                        {bookings.map((booking) => (
-                            <div key={booking.id} className={styles.bookingCard}>
-                                <div className={styles.bookingHeader}>
-                                    <span className={styles.bookingId}>{booking.bookingId}</span>
-                                </div>
-                                <div className={styles.bookingDetails}>
-                                    <div className={styles.bookingDates}>
-                                        <div className={styles.dateBox}>
-                                            <span className={styles.dateLabel}>Check-in</span>
-                                            <span className={styles.date}>{formatDate(booking.checkinDate)}</span>
-                                        </div>
-                                        <div className={styles.dateBox}>
-                                            <span className={styles.dateLabel}>Check-out</span>
-                                            <span className={styles.date}>{formatDate(booking.checkoutDate)}</span>
-                                        </div>
-                                    </div>
-                                    <div className={styles.bookingInfo}>
-                                        <div className={styles.infoItem}>
-                                            <span className={styles.infoLabel}>Nights</span>
-                                            <span className={styles.infoValue}>{booking.totalNights}</span>
-                                        </div>
-                                        <div className={styles.infoItem}>
-                                            <span className={styles.infoLabel}>Adults</span>
-                                            <span className={styles.infoValue}>{booking.noOfAdults}</span>
-                                        </div>
-                                        <div className={styles.infoItem}>
-                                            <span className={styles.infoLabel}>Children</span>
-                                            <span className={styles.infoValue}>{booking.noOfChildren}</span>
-                                        </div>
-                                        <div className={styles.infoItem}>
-                                            <span className={styles.infoLabel}>Pets</span>
-                                            <span className={styles.infoValue}>{booking.noOfPets}</span>
-                                        </div>
-                                        <div className={styles.infoItem}>
-                                            <span className={styles.infoLabel}>Cleaning Fee:</span>
-                                            <span className={styles.infoValue}>${booking.cleaningFee}</span>
-                                        </div>
-                                    </div>
-                                </div>
+            {bookings.map((booking) => (
+                <div key={booking.id} className={styles.bookingTile}>
+                    <div className={styles.tileHeader}>
+                        <h3 className={styles.propertyName}>{booking.propertyName}</h3>
+                        <span className={styles.bookingId}>{booking.bookingId}</span>
+                    </div>
+                    <div className={styles.tileContent}>
+                        <div className={styles.dateSection}>
+                            <div className={styles.dateBox}>
+                                <span className={styles.dateLabel}>Check-in: </span>
+                                <span className={styles.date}>{formatDate(booking.checkinDate)}</span>
                             </div>
-                        ))}
+                            <div className={styles.dateBox}>
+                                <span className={styles.dateLabel}>Check-out: </span>
+                                <span className={styles.date}>{formatDate(booking.checkoutDate)}</span>
+                            </div>
+                        </div>
+                        <div className={styles.infoGrid}>
+                            <div className={styles.infoItem}>
+                                <span className={styles.infoLabel}>Booked Nights: </span>
+                                <span className={styles.infoValue}>{booking.totalNights}</span>
+                            </div>
+                            <div className={styles.infoItem}>
+                                <span className={styles.infoLabel}>Adults: </span>
+                                <span className={styles.infoValue}>{booking.noOfAdults}</span>
+                            </div>
+                            <div className={styles.infoItem}>
+                                <span className={styles.infoLabel}>Children: </span>
+                                <span className={styles.infoValue}>{booking.noOfChildren}</span>
+                            </div>
+                            <div className={styles.infoItem}>
+                                <span className={styles.infoLabel}>Pets: </span>
+                                <span className={styles.infoValue}>{booking.noOfPets}</span>
+                            </div>
+                        </div>
+                        <div className={styles.feeSection}>
+                            <div className={styles.feeItem}>
+                                <span className={styles.feeLabel}>Cleaning Fee: </span>
+                                <span className={styles.feeValue}>${booking.cleaningFee.toFixed(2)}</span>
+                            </div>
+                            <div className={styles.feeItem}>
+                                <span className={styles.feeLabel}>Pet Fee: </span>
+                                <span className={styles.feeValue}>${booking.petFee.toFixed(2)}</span>
+                            </div>
+                        </div>
+                        <div className={styles.totalTransaction}>
+                            <span className={styles.totalLabel}>Total Transaction: </span>
+                            <span className={styles.totalValue}>
+                                ${calculateTotalTransaction(booking.cleaningFee, booking.petFee).toFixed(2)}
+                            </span>
+                        </div>
                     </div>
                 </div>
             ))}

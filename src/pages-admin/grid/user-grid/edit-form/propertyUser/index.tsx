@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, Typography, Chip, Box } from "@mui/material";
+import { Card, CardContent, Typography, Chip } from "@mui/material";
 import { getUserProperties } from "@/api";
 import styles from "./propertyTab.module.css";
-import { Image } from "lucide-react";
+import { Image as ImageIcon } from "lucide-react";
+import imageone from '../../../../../assests/bear-lake-bluffs.jpg';
+import imagetwo from '../../../../../assests/crown-jewel.jpg';
+import imagethree from '../../../../../assests/lake-escape.jpg';
 
 interface UserProperty {
   id: number;
@@ -41,6 +44,8 @@ const PropertyTab: React.FC<PropertyTabProps> = ({ Id }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const images = [imageone, imagetwo, imagethree];
+
   useEffect(() => {
     const fetchPropertyData = async () => {
       try {
@@ -62,66 +67,81 @@ const PropertyTab: React.FC<PropertyTabProps> = ({ Id }) => {
 
   return (
     <div className={styles.propertyTabContainer}>
-      {propertyData.length > 0 &&
-        propertyData.map((prop: PropertyResponse, index: number) => {
-          const userProperty = prop.userProperties.find(
-            (userProp) => userProp.user.id === Id
-          );
+      <div className={styles.cardGrid}>
+        {propertyData.length > 0 &&
+          propertyData.map((prop: PropertyResponse, index: number) => {
+            const userProperty = prop.userProperties.find(
+              (userProp) => userProp.user.id === Id
+            );
 
-          if (!userProperty) return null;
+            if (!userProperty) return null;
 
-          const shareFraction = `${userProperty.noOfShare}/${prop.propertyShare}`;
+            const shareFraction = `${userProperty.noOfShare}/${prop.propertyShare}`;
+            const randomImage = images[index % images.length];
 
-          return (
-            <Box key={index} className={styles.propertyWrapper}>
-              <Card className={styles.propertyCard}>
-                <CardContent>
-                  <Typography variant="h5" className={styles.propertyName}>
-                    {prop.propertyName}
-                  </Typography>
-                  <Chip
-                    label={prop.isActive ? "Active" : "Inactive"}
-                    color={prop.isActive ? "success" : "error"}
-                    className={styles.statusChip}
-                  />
-                  <Box className={styles.detailsContainer}>
-                    <Typography variant="subtitle1" className={styles.detailLabel}>
-                      Address
+            return (
+              <Card key={index} className={styles.propertyCard}>
+                <CardContent className={styles.cardContent}>
+                  <div className={styles.imageContainer}>
+                    {randomImage ? (
+                      <img src={randomImage} alt={prop.propertyName} className={styles.propertyImage} />
+                    ) : (
+                      <div className={styles.noImage}>
+                        <ImageIcon size={48} />
+                        <Typography variant="body2">No image available</Typography>
+                      </div>
+                    )}
+                  </div>
+                  <div className={styles.propertyInfo}>
+                    <Typography variant="h6" className={styles.propertyName}>
+                      {prop.propertyName}
                     </Typography>
-                    <Typography variant="body1" className={styles.detailValue}>
-                      {prop.address}
-                    </Typography>
-
-                    <Typography variant="subtitle1" className={styles.detailLabel}>
-                      Location
-                    </Typography>
-                    <Typography variant="body1" className={styles.detailValue}>
-                      {`${prop.city}, ${prop.state}, ${prop.country} ${prop.zipcode}`}
-                    </Typography>
-
-                    <Typography variant="subtitle1" className={styles.detailLabel}>
-                      Number of Shares
-                    </Typography>
-                    <Typography variant="body1" className={styles.detailValue}>
-                      {shareFraction}
-                    </Typography>
-
-                    <Typography variant="subtitle1" className={styles.detailLabel}>
-                      Acquisition Date
-                    </Typography>
-                    <Typography variant="body1" className={styles.detailValue}>
-                      {new Date(userProperty.acquisitionDate).toLocaleDateString()}
-                    </Typography>
-                  </Box>
+                    <Chip
+                      label={prop.isActive ? "Active" : "Inactive"}
+                      color={prop.isActive ? "success" : "error"}
+                      size="small"
+                      className={styles.statusChip}
+                    />
+                    <div className={styles.detailsContainer}>
+                      <div className={styles.detailItem}>
+                        <Typography variant="subtitle2" className={styles.detailLabel}>
+                          Address
+                        </Typography>
+                        <Typography variant="body2" className={styles.detailValue}>
+                          {prop.address}
+                        </Typography>
+                      </div>
+                      <div className={styles.detailItem}>
+                        <Typography variant="subtitle2" className={styles.detailLabel}>
+                          Location
+                        </Typography>
+                        <Typography variant="body2" className={styles.detailValue}>
+                          {`${prop.city}, ${prop.state}, ${prop.country} ${prop.zipcode}`}
+                        </Typography>
+                      </div>
+                      <div className={styles.detailItem}>
+                        <Typography variant="subtitle2" className={styles.detailLabel}>
+                          Shares
+                        </Typography>
+                        <Typography variant="body2" className={styles.detailValue}>
+                          {shareFraction}
+                        </Typography>
+                      </div>
+                      <div className={styles.detailItem}>
+                        <Typography variant="subtitle2" className={styles.detailLabel}>
+                          Acquired
+                        </Typography>
+                        <Typography variant="body2" className={styles.detailValue}>
+                          {new Date(userProperty.acquisitionDate).toLocaleDateString()}
+                        </Typography>
+                      </div>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
-              <Box className={styles.imageContainer}>
-                <Image size={48} />
-                <Typography variant="body2">No image available</Typography>
-              </Box>
-            </Box>
-          );
-        })}
+            );
+          })}
+      </div>
     </div>
   );
 };

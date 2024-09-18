@@ -7,19 +7,19 @@ import Property from '../grid/property-grid';
 import PropertySidePanel from '../propertysidepanel';
 import PropertyGeneralInfo from '../property-generalinfo'
 import PhotoUpload from '../property-photos/new-photoupload';
+import TabSwitch from '../grid/user-grid/edit-form/tab-switch';
 import EditPropertyForm from '../grid/property-grid/EditPropertyForm';
 import AmenityManagement from '../amenity-page';
 import EditAmenityForm from '../property-amenities/edit-amenityform';
 import PropertyAmenities from '../property-amenities';
 import UserGrid from '../grid/user-grid';
-import EditForm from '../grid/user-grid/edit-form/GeneralUser';
 import PropertyRules from '../property-rules';
+import UserProperty from '../property-user';
 import EditPropertyRulesForm from '../property-rules/edit-form';
 import PropertyPhotos from '../property-photos';
-import userImage from '../../assets/images/profile.jpeg'
-import EditPhoto from '../property-photos/edit-propertyphoto';
 import CustomNavbar from '@/components/navbar';
 import fraxionedLogo from '../../assets/images/fraxioned.png'
+import userImage from '../../assets/images/profile.jpeg'
 import './admin-dashboard.css'
 
 const AdminDashboard: React.FC = () => {
@@ -29,6 +29,10 @@ const AdminDashboard: React.FC = () => {
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
+
+    function handleUserUpdated(): void {
+        throw new Error('Function not implemented.');
+    }
 
     return (
         <div className="admin-dashboard-container">
@@ -45,7 +49,7 @@ const AdminDashboard: React.FC = () => {
                         <Route path="/" element={<Navigate to="admin/bookings" replace />} />
                         <Route path="/bookings" element={<Calendar isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/amenity" element={<AmenityManagement />} />
-                        {/* <Route path="/user/:id/edit" element={<EditForm />} /> */}
+                        <Route path="/user/:id/edit" element={<TabSwitch onUserUpdated={handleUserUpdated} />} />
                         <Route path="/holidays" element={<Holidays isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/user" element={<UserGrid isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/property" element={<Property isSidebarOpen={isSidebarOpen} />} />
@@ -121,17 +125,14 @@ const AdminDashboard: React.FC = () => {
                                 </div>
                             </div>
                         } />
-                        <Route path="/property/:id/photos/:imageId/edit" element={
+                        <Route path="/property/:id/users" element={
                             <div className="property-details-container">
                                 <PropertySidePanel isOpen={true} />
                                 <div className="property-info-content">
-                                    <EditPhoto />
+                                    <UserProperty />
                                 </div>
                             </div>
                         } />
-
-
-
                     </Routes>
                 </div>
             </div>

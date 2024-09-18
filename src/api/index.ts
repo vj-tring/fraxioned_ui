@@ -141,6 +141,9 @@ export const getpropertyamenityByid = () =>
 export const getAmenitiesById = (id: number) =>
     axiosInstance.get(`/v1/property-amenities/property/${id}`);
 
+export const getuserbyproperty = (id: number) =>
+    axiosInstance.get(`/v1/properties/property/${id}/details`);
+
 export const addamenity = (data: {
     createdBy: { id: number };
     amenityName: string;
@@ -186,3 +189,9 @@ export const deletetpropertyImageById = (id: number) =>
 
 export const getUserBookings = (userId: number) =>
     axiosInstance.get(`/v1/bookings/user/${userId}`);
+
+export const propertyspaceapi = () =>
+    axiosInstance.get(`/v1/spaces`);
+
+export const propertyspacetypesapi = () =>
+    axiosInstance.get(`/v1/space-types`);

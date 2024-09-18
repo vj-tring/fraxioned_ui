@@ -1,6 +1,6 @@
 .modalOverlay {
     position: fixed;
-    top: 0; 
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
@@ -267,7 +267,7 @@
     color: #e28f25;
 }
 
-:global(.MuiFormControl-root  .MuiOutlinedInput-notchedOutline) {
+:global(.MuiFormControl-root .MuiOutlinedInput-notchedOutline) {
     border-color: #fabf95 !important;
     box-shadow: 0 4px 20px rgba(246, 169, 97, 0.1);
 

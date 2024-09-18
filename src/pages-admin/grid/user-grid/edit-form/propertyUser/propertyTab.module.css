@@ -4,14 +4,16 @@
     margin: 0 auto;
 }
 
-.propertyWrapper {
-    display: flex;
-    margin-bottom: 30px;
+.cardGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
     gap: 20px;
+    justify-content: center;
 }
 
 .propertyCard {
-    flex: 1;
+    width: 500px;
+    height: 500px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
@@ -19,65 +21,102 @@
 }
 
 .propertyCard:hover {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-.propertyName {
-    color: #e28f25;
-    margin-bottom: 15px;
-}
-
-.statusChip {
-    margin-bottom: 20px;
-    margin-top: 10px;
-}
-
-.detailsContainer {
+.cardContent {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-}
-
-.detailLabel {
-    color: #757575;
-    font-weight: 600;
-    margin-bottom: 4px;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 0.5px;
-}
-
-.detailValue {
-    color: #212121;
-    font-size: 1rem;
-    line-height: 1.5;
+    height: 100%;
+    padding: 0 !important;
 }
 
 .imageContainer {
+    flex: 1;
+    overflow: hidden;
+}
+
+.propertyImage {
+    width: 500px;
+    height: 300px;
+    object-fit: cover;
+}
+
+.noImage {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 400px;
     background-color: #f5f5f5;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.imageContainer svg {
-    margin-bottom: 10px;
     color: #9e9e9e;
 }
 
-@media (max-width: 768px) {
-    .propertyWrapper {
-        flex-direction: column;
+.propertyInfo {
+    padding: 16px;
+    height: 240px;
+}
+
+.propertyName {
+    color: #e28f25;
+    margin-bottom: 8px;
+    font-weight: 600;
+    margin-bottom: 10px !important;
+}
+
+.statusChip {
+    margin-bottom: 12px;
+}
+
+.detailsContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.detailItem {
+    display: flex;
+    flex-direction: column;
+}
+
+.detailLabel {
+    color: #494949;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 15px !important;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+.detailValue {
+    color: #212121;
+    font-size: 14px !important;
+    line-height: 1.3;
+}
+
+@media (max-width: 1100px) {
+    .cardGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .propertyCard {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 600px) {
+    .propertyCard {
+        height: auto;
     }
 
     .imageContainer {
-        width: 100%;
-        aspect-ratio: 16 / 9;
-        margin-top: 20px;
+        height: 200px;
+    }
+
+    .detailsContainer {
+        grid-template-columns: 1fr;
     }
 }

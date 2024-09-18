@@ -132,6 +132,10 @@
     color: #1976d2;
 }
 
+.dataGrid :global(.MuiIconButton-root) {
+    color: #00636d !important;
+}
+
 .dataGrid :global(.MuiDataGrid-columnSeparator) {
     display: none;
 }
