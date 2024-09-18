@@ -1,0 +1,130 @@
+.bookingsContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Arial', sans-serif;
+}
+
+.propertyGroup {
+    margin-bottom: 3rem;
+}
+
+.propertyName {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #dba052;
+}
+
+.bookingsList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.bookingCard {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bookingCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.bookingHeader {
+    background-color: #dba052;
+    color: #fff;
+    padding: 1rem 1.5rem;
+    text-align: center;
+}
+
+.bookingId {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.bookingDetails {
+    padding: 1.5rem;
+}
+
+.bookingDates {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.dateBox {
+    text-align: center;
+    flex: 1;
+}
+
+.dateLabel {
+    display: block;
+    font-size: 0.9rem;
+    color: #777;
+    margin-bottom: 0.5rem;
+}
+
+.date {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.bookingInfo {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.infoItem {
+    display: flex;
+    flex-direction: column;
+}
+
+.infoLabel {
+    font-size: 0.9rem;
+    color: #777;
+    margin-bottom: 0.25rem;
+}
+
+.infoValue {
+    font-size: 1.1rem;
+    color: #333;
+    font-weight: bold;
+}
+
+.cleaningFee {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.feeLabel {
+    font-size: 1rem;
+    color: #555;
+}
+
+.feeValue {
+    font-size: 1.1rem;
+    color: #333;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .bookingsList {
+        grid-template-columns: 1fr;
+    }
+}

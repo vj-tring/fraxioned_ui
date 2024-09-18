@@ -12,6 +12,7 @@ import AmenityManagement from '../amenity-page';
 import EditAmenityForm from '../property-amenities/edit-amenityform';
 import PropertyAmenities from '../property-amenities';
 import UserGrid from '../grid/user-grid';
+import EditForm from '../grid/user-grid/edit-form/GeneralUser';
 import PropertyRules from '../property-rules';
 import EditPropertyRulesForm from '../property-rules/edit-form';
 import PropertyPhotos from '../property-photos';
@@ -44,6 +45,7 @@ const AdminDashboard: React.FC = () => {
                         <Route path="/" element={<Navigate to="admin/bookings" replace />} />
                         <Route path="/bookings" element={<Calendar isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/amenity" element={<AmenityManagement />} />
+                        {/* <Route path="/user/:id/edit" element={<EditForm />} /> */}
                         <Route path="/holidays" element={<Holidays isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/user" element={<UserGrid isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/property" element={<Property isSidebarOpen={isSidebarOpen} />} />
@@ -62,7 +64,7 @@ const AdminDashboard: React.FC = () => {
                                     <EditPropertyForm />
                                 </div>
                             </div>
-                        } />    
+                        } />
                         <Route path="/property/:id/rules" element={
                             <div className="property-details-container">
                                 <PropertySidePanel isOpen={true} />
@@ -127,6 +129,7 @@ const AdminDashboard: React.FC = () => {
                                 </div>
                             </div>
                         } />
+
 
 
                     </Routes>

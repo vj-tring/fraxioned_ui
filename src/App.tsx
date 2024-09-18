@@ -44,6 +44,7 @@ function App() {
             <Route path="/admin/*" element={<PrivateRoute element={AdminDashboard} allowedRoles={[1]} />} />
           </Routes>
         </ScrollToTop>
+
       </Router>
     </Provider>
   );
