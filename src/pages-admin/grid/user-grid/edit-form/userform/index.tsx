@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { getUserById } from '@/api';
-import { Edit } from 'lucide-react';
-import profile from '../../../../../assets/images/profile.jpeg';
+import { Edit, Mail, Phone, MapPin, Building, Flag, Hash, Clock } from 'lucide-react';
+import defaultProfile from '../../../../../assets/images/profile.jpeg';
 import styles from './userform.module.css';
-import Loader from '@/components/loader';
 
 interface User {
     id: number;
@@ -29,13 +28,11 @@ interface User {
 
 interface UserFormProps {
     userId: number;
-    onClose: () => void;
     onEditClick: () => void;
 }
 
-const UserForm: React.FC<UserFormProps> = ({ userId, onClose, onEditClick }) => {
+const UserForm: React.FC<UserFormProps> = ({ userId, onEditClick }) => {
     const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -46,15 +43,12 @@ const UserForm: React.FC<UserFormProps> = ({ userId, onClose, onEditClick }) => 
             } catch (err) {
                 console.error('Error fetching user:', err);
                 setError('Failed to fetch user data. Please try again.');
-            } finally {
-                setLoading(false);
             }
         };
 
         fetchUser();
     }, [userId]);
 
-    if (loading) return <Loader />;
     if (error) return <div className={styles.error}>{error}</div>;
     if (!user) return <div className={styles.error}>User not found</div>;
 
@@ -62,41 +56,82 @@ const UserForm: React.FC<UserFormProps> = ({ userId, onClose, onEditClick }) => 
         <div className={styles.userForm}>
             <div className={styles.header}>
                 <h2>User Details</h2>
-                <button onClick={onClose} className={styles.closeButton}>×</button>
+                <button className={styles.editButton} onClick={onEditClick}>
+                    <Edit size={16} />
+                    Edit Profile
+                </button>
             </div>
             <div className={styles.content}>
                 <div className={styles.profileSection}>
                     <img
-                        src={user.imageURL || profile}
+                        src={user.imageURL || defaultProfile}
                         alt={`${user.firstName} ${user.lastName}`}
                         className={styles.profileImage}
                     />
-                </div>
-                <div className={styles.detailsSection}>
                     <h3>{user.firstName} {user.lastName}</h3>
                     <p className={styles.role}>{user.role.roleName}</p>
+                    <p className={`${styles.status} ${user.isActive ? styles.activeStatus : styles.inactiveStatus}`}>
+                        {user.isActive ? 'Active' : 'Inactive'}
+                    </p>
+                </div>
+                <div className={styles.detailsSection}>
                     <div className={styles.detailItem}>
-                        <strong>Email:</strong> {user.contactDetails.primaryEmail}
+                        <Mail size={20} />
+                        <div>
+                            <strong>Email</strong>
+                            <p>{user.contactDetails.primaryEmail}</p>
+                        </div>
                     </div>
                     <div className={styles.detailItem}>
-                        <strong>Phone:</strong> {user.contactDetails.primaryPhone}
+                        <Phone size={20} />
+                        <div>
+                            <strong>Phone</strong>
+                            <p>{user.contactDetails.primaryPhone}</p>
+                        </div>
                     </div>
                     <div className={styles.detailItem}>
-                        <strong>Address:</strong> {user.addressLine1}, {user.addressLine2}, {user.city}, {user.state}, {user.country}, {user.zipcode}
+                        <MapPin size={20} />
+                        <div>
+                            <strong>Address</strong>
+                            <p>{user.addressLine1}{user.addressLine2 ? `, ${user.addressLine2}` : ''}</p>
+                        </div>
                     </div>
                     <div className={styles.detailItem}>
-                        <strong>Last Login:</strong> {new Date(user.lastLoginTime).toLocaleString()}
+                        <Building size={20} />
+                        <div>
+                            <strong>City</strong>
+                            <p>{user.city || 'N/A'}</p>
+                        </div>
                     </div>
                     <div className={styles.detailItem}>
-                        <strong>Status:</strong> {user.isActive ? 'Active' : 'Inactive'}
+                        <MapPin size={20} />
+                        <div>
+                            <strong>State</strong>
+                            <p>{user.state || 'N/A'}</p>
+                        </div>
+                    </div>
+                    <div className={styles.detailItem}>
+                        <Flag size={20} />
+                        <div>
+                            <strong>Country</strong>
+                            <p>{user.country || 'N/A'}</p>
+                        </div>
+                    </div>
+                    <div className={styles.detailItem}>
+                        <Hash size={20} />
+                        <div>
+                            <strong>Zipcode</strong>
+                            <p>{user.zipcode || 'N/A'}</p>
+                        </div>
+                    </div>
+                    <div className={styles.detailItem}>
+                        <Clock size={20} />
+                        <div>
+                            <strong>Last Login</strong>
+                            <p>{new Date(user.lastLoginTime).toLocaleString()}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className={styles.footer}>
-                <button className={styles.editButton} onClick={onEditClick}>
-                    <Edit size={16} />
-                    Edit
-                </button>
             </div>
         </div>
     );

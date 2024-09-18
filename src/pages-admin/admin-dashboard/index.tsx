@@ -7,6 +7,7 @@ import Property from '../grid/property-grid';
 import PropertySidePanel from '../propertysidepanel';
 import PropertyGeneralInfo from '../property-generalinfo'
 import PhotoUpload from '../property-photos/new-photoupload';
+import TabSwitch from '../grid/user-grid/edit-form/tab-switch';
 import EditPropertyForm from '../grid/property-grid/EditPropertyForm';
 import AmenityManagement from '../amenity-page';
 import EditAmenityForm from '../property-amenities/edit-amenityform';
@@ -29,6 +30,10 @@ const AdminDashboard: React.FC = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
 
+    function handleUserUpdated(): void {
+        throw new Error('Function not implemented.');
+    }
+
     return (
         <div className="admin-dashboard-container">
             <CustomNavbar
@@ -44,7 +49,7 @@ const AdminDashboard: React.FC = () => {
                         <Route path="/" element={<Navigate to="admin/bookings" replace />} />
                         <Route path="/bookings" element={<Calendar isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/amenity" element={<AmenityManagement />} />
-                        {/* <Route path="/user/:id/edit" element={<EditForm />} /> */}
+                        <Route path="/user/:id/edit" element={<TabSwitch onUserUpdated={handleUserUpdated} />} />
                         <Route path="/holidays" element={<Holidays isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/user" element={<UserGrid isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/property" element={<Property isSidebarOpen={isSidebarOpen} />} />
@@ -63,7 +68,6 @@ const AdminDashboard: React.FC = () => {
                                     <EditPropertyForm />
                                 </div>
                             </div>
-                        } />
                         } />
                         <Route path="/property/:id/rules" element={
                             <div className="property-details-container">
@@ -121,7 +125,6 @@ const AdminDashboard: React.FC = () => {
                                 </div>
                             </div>
                         } />
-                        {/* Add the new route for UserProperty */}
                         <Route path="/property/:id/users" element={
                             <div className="property-details-container">
                                 <PropertySidePanel isOpen={true} />

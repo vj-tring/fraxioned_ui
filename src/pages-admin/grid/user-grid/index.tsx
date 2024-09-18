@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { IconButton, Modal, Typography, Tooltip } from '@mui/material';
+import { IconButton, Typography, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import { userdetails, getUserById, propertydetailsapi } from '@/api';
+import { userdetails, propertydetailsapi } from '@/api';
 import Search from '@/pages-admin/search-user';
 import styles from './User.module.css';
-import EditForm from './edit-form/GeneralUser';
+import { useNavigate } from 'react-router-dom';
+
 
 interface ContactDetails {
     id: number;
@@ -60,6 +61,8 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     const [properties, setProperties] = useState<PropertyData[]>([]);
     const [isUserFormOpen, setIsUserFormOpen] = useState(false);
     const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+    const navigate = useNavigate();
+
 
 
     useEffect(() => {
@@ -121,17 +124,10 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
         setFilteredUsers(filtered);
     };
 
-    const handleEditClick = async (id: number) => {
-        try {
-            const response = await getUserById(id);
-            const userData = response.data;
-            setEditUserData(userData.user);
-            setIsEditFormOpen(true);
-        } catch (err) {
-            console.error('Error fetching user details:', err);
-            setError('Failed to fetch user details. Please try again.');
-        }
+    const handleEditClick = (id: number) => {
+        navigate(`/admin/user/${id}/edit`);
     };
+
 
     const handleCloseEditForm = () => {
         setIsEditFormOpen(false);
@@ -207,7 +203,7 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                 <>
                     <IconButton
                         aria-label="edit"
-                        color="primary"
+                        sx={{ color: '#00636d' }}
                         onClick={() => handleEditClick(params.row.id)}
                     >
                         <EditIcon />
@@ -216,6 +212,7 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             ),
         },
     ];
+
 
     return (
         <div className={`${styles.usersContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed}`}>
@@ -240,22 +237,6 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                     className={`${styles.dataGrid} ${styles.dataGridPadding}`}
                 />
             </div>
-            <Modal
-                open={isEditFormOpen}
-                onClose={handleCloseEditForm}
-                aria-labelledby="edit-user-modal"
-                aria-describedby="modal-to-edit-user-details"
-            >
-                <div>
-                    {editUserData && (
-                        <EditForm
-                            user={editUserData}
-                            onClose={handleCloseEditForm}
-                            onUserUpdated={handleUserUpdated}
-                        />
-                    )}
-                </div>
-            </Modal>
         </div>
     );
 };
