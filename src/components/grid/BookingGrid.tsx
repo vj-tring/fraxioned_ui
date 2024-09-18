@@ -1,7 +1,8 @@
 import React from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Button, IconButton } from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import "../grid/BookingGrid.css";
 interface BookingGridProps {
   bookings: Array<{
@@ -70,43 +71,25 @@ const BookingGrid: React.FC<BookingGridProps> = ({
       align: "center",
       flex: 1,
       renderCell: (params) => (
-        <>
-          {/* <IconButton>
-                          <MoreVertIcon />
-                      </IconButton> */}
-          <Button
-            variant="outlined"
-            disableRipple
-            onClick={() => onEdit(params.row.id)}
-            sx={{
-              marginRight: 1,
-              height: "25px",
-              fontSize: "12px",
-              borderRadius: "15px",
-              border: "1px solid black",
-              color: "#808080",
-              fontFamily: "Montserrat, sans-serif",
-            }}
-          >
-            Edit
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            disableRipple
-            onClick={() => onCancel(params.row.id)}
-            sx={{
-              borderRadius: "15px",
-              height: "25px",
-              fontSize: "12px",
-              border: "1px solid black",
-              color: "#808080",
-              fontFamily: "Montserrat, sans-serif",
-            }}
-          >
-            Cancel
-          </Button>
-        </>
+        <div className="GridBtn1">
+          <div onClick={() => onEdit(params.row.id)}>
+            <ModeEditOutlineOutlinedIcon
+              // sx={{
+              //   fontSize: "14px",
+              // }}
+              className="EditFont"
+            />
+          </div>
+          <div onClick={() => onCancel(params.row.id)}>
+            <DeleteOutlineOutlinedIcon
+              // sx={{
+              //   fontSize: "14px",
+              // }}
+              className="DeleteFont"
+
+            />
+          </div>
+        </div>
       ),
     },
   ];
