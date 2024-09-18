@@ -51,7 +51,7 @@ function App() {
 
           <Route
             path="/resetPassword"
-            element={<ResetPassword onClose={() => {}} />}
+            element={<ResetPassword onClose={() => { }} />}
           />
           <Route
             path="/home/*"
