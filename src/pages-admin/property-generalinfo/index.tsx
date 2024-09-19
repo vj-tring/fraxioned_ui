@@ -3,6 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getPropertyById } from '@/api';
 import EditButton from '@/components/edit';
 import styles from './property-generalinfo.module.css';
+import imageone from '../../assests/bear-lake-bluffs.jpg';
+import imagetwo from '../../assests/crown-jewel.jpg';
+import imagethree from '../../assests/lake-escape.jpg';
+import Loader from '@/components/loader';
+import pinImage from '../../assets/images/pin.jpg';
 
 interface PropertyData {
   id: number;
@@ -31,6 +36,9 @@ const PropertyGeneralInfo: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
+  const images = [imageone, imagetwo, imagethree];
+  const randomImage = images[Math.floor(Math.random() * images.length)];
+
   useEffect(() => {
     const fetchPropertyData = async () => {
       try {
@@ -51,7 +59,7 @@ const PropertyGeneralInfo: React.FC = () => {
     navigate(`/admin/property/${id}/edit`);
   };
 
-  if (loading) return <div className={styles.loading}>Loading...</div>;
+  if (loading) return <Loader />;
   if (error) return <div className={styles.error}>{error}</div>;
   if (!propertyData) return <div className={styles.noData}>No property data found.</div>;
 
@@ -62,20 +70,28 @@ const PropertyGeneralInfo: React.FC = () => {
           <h2 className={styles.title}>General Information</h2>
           <EditButton onClick={handleEdit} />
         </div>
-        <div className={styles.infoGrid}>
-          <div className={styles.column}>
-            <InfoItem label="Property Name:" value={propertyData.propertyName} />
-            <InfoItem label="OwnerRez Property ID:" value={propertyData.ownerRezPropId} />
-            <InfoItem label="Address:" value={propertyData.address} />
-            <InfoItem label="City:" value={propertyData.city} />
-            <InfoItem label="State:" value={propertyData.state} />
+        <div className={styles.propertyCard}>
+          <div className={styles.imageContainer}>
+            <img src={randomImage} alt={propertyData.propertyName} className={styles.propertyImage} />
+            <div className={styles.exclusiveTag}>
+              <img src={pinImage} alt="Pin" className={styles.pinIcon} />
+              <span>{propertyData.isExclusive ? 'Exclusive' : 'Collective'}</span>
+            </div>
           </div>
-          <div className={styles.column}>
-            <InfoItem label="Country:" value={propertyData.country} />
-            <InfoItem label="Zipcode:" value={propertyData.zipcode} />
-            <InfoItem label="Property Share:" value={`${propertyData.propertyShare}`} />
-            <InfoItem label="Is Exclusive:" value={propertyData.isExclusive ? 'Yes' : 'No'} />
-            <InfoItem label="Is Active:" value={propertyData.isActive ? 'Yes' : 'No'} />
+          <div className={styles.infoContainer}>
+            <h3 className={styles.propertyName}>{propertyData.propertyName}</h3>
+            <div className={styles.infoInnerContainer}>
+              <div className={styles.infoGrid}>
+                <InfoItem label="OwnerRez Property ID" value={propertyData.ownerRezPropId} />
+                <InfoItem label="Address" value={propertyData.address} />
+                <InfoItem label="City" value={propertyData.city} />
+                <InfoItem label="State" value={propertyData.state} />
+                <InfoItem label="Country" value={propertyData.country} />
+                <InfoItem label="Zipcode" value={propertyData.zipcode} />
+                <InfoItem label="Property Share" value={`${propertyData.propertyShare}`} />
+                <InfoItem label="Is Active" value={propertyData.isActive ? 'Yes' : 'No'} />
+              </div>
+            </div>
           </div>
         </div>
       </div>

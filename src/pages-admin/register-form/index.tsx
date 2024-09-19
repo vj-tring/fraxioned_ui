@@ -202,7 +202,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
   const updateShareholderLimits = (propertyId: number) => {
     const selectedProperty = properties.find((prop) => prop.id === propertyId);
     if (selectedProperty) {
-      const maxShares = selectedProperty.propertyShare;
+      const maxShares = selectedProperty.propertyRemainingShare;
       setNumberstate(Array.from({ length: maxShares }, (_, i) => i + 1));
     } else {
       setNumberstate([]);
@@ -211,6 +211,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
 
   const validate = () => {
     let hasErrors = false;
+
     const newErrors: any = {};
 
     if (!formValues.firstName) {

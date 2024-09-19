@@ -28,6 +28,14 @@
     align-items: center;
 }
 
+.noBookingsMessage
+{
+    font-size: 20px;
+    font-weight: bolder;
+    color: #4d391e;
+
+}
+
 .propertyName {
     margin: 0;
     font-size: 1.2rem;

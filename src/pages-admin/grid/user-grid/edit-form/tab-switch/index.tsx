@@ -23,7 +23,7 @@ interface TabSwitchProps {
 const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
     const [selectedTab, setSelectedTab] = useState(0);
     const [isEditing, setIsEditing] = useState(false);
-    const [userData, setUserData] = useState(null);
+    const [userData, setUserData] = useState<any>(null);
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
@@ -64,6 +64,8 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
         return <div className={styles.loading}>Loading...</div>;
     }
 
+    const isOwner = userData.role.roleName === 'Owner';
+
     return (
         <div className={styles.tabContainer}>
             <Tabs
@@ -73,9 +75,9 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
                 className={styles.tabs}
             >
                 <Tab label="General Details" />
-                <Tab label="Property" />
-                <Tab label="Booking" />
-                <Tab label="Availability" />
+                <Tab label="Property" disabled={!isOwner} />
+                <Tab label="Booking" disabled={!isOwner} />
+                <Tab label="Availability" disabled={!isOwner} />
 
                 <IconButton
                     onClick={handleBackClick}
@@ -84,8 +86,6 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
                 >
                     <ArrowBackIcon />
                 </IconButton>
-
-
             </Tabs>
 
             <div className={styles.content}>
@@ -102,15 +102,15 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
                     />
                 )}
 
-                {selectedTab === 1 && (
+                {isOwner && selectedTab === 1 && (
                     <PropertyTab Id={Number(id)} />
                 )}
 
-                {selectedTab === 2 && (
+                {isOwner && selectedTab === 2 && (
                     <UserBookings userId={Number(id)} />
                 )}
 
-                {selectedTab === 3 && (
+                {isOwner && selectedTab === 3 && (
                     <Availability userId={Number(id)} />
                 )}
             </div>
