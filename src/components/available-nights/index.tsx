@@ -55,14 +55,6 @@ export default function AvailableNights() {
     }
   }, [id, selectedCardIndex, cards]);
 
-  // useEffect(() => {
-  //   if (cards.length > 0 && selectedCardIndex >= 0) {
-  //     setSelectedCard(cards[selectedCardIndex]);
-  //     console.log("CardIndex", selectedCardIndex);
-  //   } else {
-  //     setSelectedCard(null);
-  //   }
-  // }, [selectedCardIndex, cards]); // Dependency on 'selectedCardIndex' and 'cards'
 
   useEffect(() => {
     const fetchData = async () => {
@@ -196,7 +188,7 @@ export default function AvailableNights() {
                 </div>
               </div>
 
-              <div className="d-flex justify-content-between">
+              <div className="d-flex justify-content-between MyAvailProp">
                 <p className="AvailableText">My Available Nights</p>
                 <div className="d-flex justify-content-around align-items-center gap-3">
                   {years.map((year) => (

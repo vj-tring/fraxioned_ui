@@ -55,9 +55,7 @@ const Home: React.FC = () => {
     dispatch(clearDates());
   }, [dispatch]);
 
-  // const Shadow =
-  //   properties.length >= 4 ? "rgba(0, 0, 0, 0.1) 1px 1px 2px 1px" : "none";
-
+ 
   return (
     <div className="home-content">
       <div className="HomeImg"></div>

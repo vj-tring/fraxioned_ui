@@ -1,12 +1,6 @@
-import { useState, useEffect } from 'react';
-import './propertylisting.css';
-import buildingImage from '../../assets/crown-jewel.jpg';
-import unsplashImage1 from '../../assets/bear-lake-bluffs.jpg';
-import unsplashImage2 from '../../assets/blue-bear-lake.jpg';
-import unsplashImage3 from '../../assets/crown-jewel.jpg';
-import unsplashImage4 from '../../assets/lake-escape.jpg';
-import unsplashImage5 from '../../assets/images/building.jpg';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import "./propertylisting.css";
+import { useParams } from "react-router-dom";
 
 import {
   Card,
@@ -24,21 +18,22 @@ import CloseIcon from "@mui/icons-material/Close";
 import Logo from "../../assets/images/fraxionedpng.png";
 import AvailableNights from "../../components/available-nights";
 
-import SingleDevice from '../../components/single-device';
-import MapEmbed from '../../components/map-embed';
-import Showmore from '../../components/show-more';
-import ThingsToKnow from '../../components/things-to-know';
-import DatePicker from '../../components/date-picker-card';
-import { Element, Link } from 'react-scroll';
-import { DatePickerWithRange } from '@/components/calender';
+import SingleDevice from "../../components/single-device";
+import MapEmbed from "../../components/map-embed";
+import Showmore from "../../components/show-more";
+import ThingsToKnow from "../../components/things-to-know";
+import DatePicker from "../../components/date-picker-card";
+import { DatePickerWithRange } from "@/components/calender";
 import { useDispatch, useSelector } from "react-redux";
 import { mockProperties } from "../home/mockData";
-import { fetchProperties, selectProperty } from '@/store/slice/auth/property-slice';
-import { AppDispatch } from '@/store';
-import { Session, User } from '@/store/model';
-import { propertyImageapi } from '@/api';
+import {
+  fetchProperties,
+  selectProperty,
+} from "@/store/slice/auth/property-slice";
+import { AppDispatch } from "@/store";
+import { Session, User } from "@/store/model";
+import { propertyImageapi } from "@/api";
 import { PiDotsNineBold } from "react-icons/pi";
-
 
 interface Property {
   id: number;
@@ -53,13 +48,11 @@ interface Property {
   longitude?: string;
 }
 
-// Interface for space details
 interface Space {
   id: number;
   name: string;
 }
 
-// Interface for space type details
 interface SpaceType {
   id: number;
   name: string;
@@ -103,7 +96,9 @@ interface RootState {
 }
 
 const PropertyListingPage = () => {
-  const { cards: properties } = useSelector((state: RootState) => state.properties);
+  const { cards: properties } = useSelector(
+    (state: RootState) => state.properties
+  );
   const displayProperties = properties.length ? properties : mockProperties;
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(
     null
@@ -127,7 +122,7 @@ const PropertyListingPage = () => {
     if (displayProperties.length > 0) {
       if (id) {
         const propertyId = parseInt(id, 10);
-        const property = displayProperties.find(p => p.id === propertyId);
+        const property = displayProperties.find((p) => p.id === propertyId);
         setSelectedProperty(property || null);
         dispatch(selectProperty(propertyId));
       } else {
@@ -141,16 +136,21 @@ const PropertyListingPage = () => {
       try {
         const propertyId = parseInt(id, 10);
         if (isNaN(propertyId)) {
-          console.error('Invalid propertyId:', id);
+          console.error("Invalid propertyId:", id);
           return;
         }
         const response = await propertyImageapi();
-        const filterById = response.data.data.filter((image: Image) => (image.property?.id === propertyId) && image.displayOrder);
+        const filterById = response.data.data.filter(
+          (image: Image) =>
+            image.property?.id === propertyId && image.displayOrder
+        );
 
-        const sortedImages = filterById.sort((a: Image, b: Image) => a.displayOrder - b.displayOrder);
+        const sortedImages = filterById.sort(
+          (a: Image, b: Image) => a.displayOrder - b.displayOrder
+        );
         setImageDetails(sortedImages);
       } catch (error) {
-        console.error('Error fetching property images:', error);
+        console.error("Error fetching property images:", error);
       }
     };
 
@@ -180,7 +180,9 @@ const PropertyListingPage = () => {
                 src={image.imageUrl}
                 alt={image.imageName}
                 loading="lazy"
-                className={`img-fluid img1 cornertop ${currentImage === index ? 'active' : ''}`}
+                className={`img-fluid img1 cornertop ${
+                  currentImage === index ? "active" : ""
+                }`}
                 onClick={() => setCurrentImage(index)}
               />
             ))}
@@ -194,7 +196,9 @@ const PropertyListingPage = () => {
                     src={image.imageUrl}
                     alt={image.imageName}
                     loading="lazy"
-                    className={`img-fluid image ${currentImage === index + 1 ? 'active' : ''}`}
+                    className={`img-fluid image ${
+                      currentImage === index + 1 ? "active" : ""
+                    }`}
                     onClick={() => setCurrentImage(index + 1)}
                   />
                 </Grid>
@@ -204,7 +208,9 @@ const PropertyListingPage = () => {
                 <Grid item xs={12}>
                   <div className="image-container">
                     <div className="show-more-overlay">
-                      <PiDotsNineBold style={{ fontSize: '.87rem', fontWeight: 'bolder' }} />
+                      <PiDotsNineBold
+                        style={{ fontSize: ".87rem", fontWeight: "bolder" }}
+                      />
                       <Typography
                         variant="button"
                         onClick={handleClickOpen}
@@ -225,21 +231,24 @@ const PropertyListingPage = () => {
         {selectedProperty && (
           <>
             <Typography variant="h4" className="PropertyName monsterrat">
-
               {selectedProperty &&
               (selectedProperty.id === 1 || selectedProperty.id === 2)
                 ? "Paradise Shores"
                 : selectedProperty?.name || "Property Name"}
-
             </Typography>
 
             <Box
               display="flex"
               alignItems="flex-end"
               gap={0.5}
-              className="monsterrat"
+              className="monsterrat location"
             >
-              <img src={Logo} alt="Logo" style={{ width: 26, height: 26 }} loading="lazy" />
+              <img
+                src={Logo}
+                alt="Logo"
+                style={{ width: 26, height: 26 }}
+                loading="lazy"
+              />
               <Typography
                 variant="h6"
                 className="PropertyAddress monsterrat"
@@ -253,47 +262,47 @@ const PropertyListingPage = () => {
 
         <div className="Blue-row pb-3 pt-5">
           <div>
-            <Link to="myShare" smooth={true} duration={200}>
+            <a href="#myShare" smooth={true} duration={200}>
               <h1 className="Blue-rowshare" style={{ fontWeight: "bolder" }}>
                 My Share
               </h1>
-            </Link>
+            </a>
           </div>
           <div>
-            <Link to="rooms" smooth={true} duration={200}>
+            <a href="#rooms" smooth={true} duration={200}>
               <h1 className="Blue-rowshare">Amenities</h1>
-            </Link>
+            </a>
           </div>
           <div>
-            <Link to="location" smooth={true} duration={200}>
+            <a href="#location" smooth={true} duration={200}>
               <h1 className="Blue-rowshare">Location</h1>
-            </Link>
+            </a>
           </div>
           <div>
-            <Link to="info" smooth={true} duration={200}>
+            <a href="#info" smooth={true} duration={200}>
               <h1 className="Blue-rowshare">Info</h1>
-            </Link>
+            </a>
           </div>
         </div>
 
         <div className="d-flex pt-2 h-100">
           <div className="col-6 col-md-7 GridWidth h-100">
-            <Element name="myShare" className="mt-4">
+            <div id="myShare" className="mt-4">
               <Showmore
                 description={
                   selectedProperty ? selectedProperty?.houseDescription : ""
                 }
               />
-            </Element>
+            </div>
 
-            <Element name="availableNights">
+            <div id="availableNights">
               <AvailableNights />
-            </Element>
+            </div>
 
-            <Element name="basicRangeShortcuts" className="mt-5 mb-3 normalcalendar">
+            <div id="basicRangeShortcuts" className="mt-5 mb-3 normalcalendar">
               <h1 className="checkIn mb-3">Select check-in date</h1>
               <DatePickerWithRange />
-            </Element>
+            </div>
           </div>
 
           <div className="py-4 GridWidth1 position-relative">
@@ -318,10 +327,10 @@ const PropertyListingPage = () => {
           }}
         />
 
-        <Element name="rooms" className="mt-5">
+        <div id="rooms" className="mt-5">
           <SingleDevice />
-        </Element>
-        <Element name="location">
+        </div>
+        <div id="location">
           <MapEmbed
             city={selectedProperty ? selectedProperty?.city : "Garden City"}
             state={selectedProperty ? selectedProperty?.state : "Utah"}
@@ -329,10 +338,10 @@ const PropertyListingPage = () => {
               selectedProperty ? selectedProperty?.country : "United State"
             }
           />
-        </Element>
-        <Element name="info">
+        </div>
+        <div id="info">
           <ThingsToKnow />
-        </Element>
+        </div>
 
         <Dialog open={dialogOpen} onClose={handleClose} fullWidth maxWidth="md">
           <DialogTitle className="d-flex justify-content-between">
@@ -351,7 +360,12 @@ const PropertyListingPage = () => {
               {imageDetails.map((image, index) => (
                 <Grid item xs={12} sm={6} md={4} key={index}>
                   <Card>
-                    <img src={image.imageUrl} alt={image.imageName} style={{ width: '100%', height: 'auto' }} loading="lazy" />
+                    <img
+                      src={image.imageUrl}
+                      alt={image.imageName}
+                      style={{ width: "100%", height: "auto" }}
+                      loading="lazy"
+                    />
                   </Card>
                 </Grid>
               ))}

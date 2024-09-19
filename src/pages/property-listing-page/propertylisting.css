@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
 body {
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: "Montserrat", sans-serif !important;
   font-optical-sizing: auto;
 }
 
@@ -20,15 +20,15 @@ body {
   justify-content: flex-start;
   gap: 1.2rem;
   cursor: pointer;
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: "Montserrat", sans-serif !important;
   border-bottom: 2px solid #00000015 !important;
 }
 
 .Blue-rowshare {
-  font-family: 'Montserrat', sans-serif !important;
-  font-size: .9rem !important;
+  font-family: "Montserrat", sans-serif !important;
+  font-size: 0.9rem !important;
   font-weight: 600 !important;
-  letter-spacing: .06rem;
+  letter-spacing: 0.06rem;
 }
 
 .img-row {
@@ -68,7 +68,8 @@ body {
 }
 
 .cards {
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px !important;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px !important;
   border-radius: 20px !important;
   background-color: white !important;
   width: 70%;
@@ -94,12 +95,12 @@ body {
   height: 50px;
   text-align: center;
   border-radius: 50px !important;
-  background-color: #88CDD4 !important;
+  background-color: #88cdd4 !important;
   border: none;
 }
 
 .availability:hover {
-  background-color: #88CDD4;
+  background-color: #88cdd4;
   border: none;
 }
 
@@ -113,7 +114,7 @@ body {
   bottom: 18px;
   right: 12px;
   color: black;
-  padding: 0 .7rem;
+  padding: 0 0.7rem;
   background-color: rgba(255, 255, 255, 0.6);
   border-radius: 5px;
   background-color: #fff;
@@ -122,19 +123,18 @@ body {
   align-items: center;
   justify-content: center;
   border: 1px solid #000;
-  gap: .2rem;
+  gap: 0.2rem;
 }
 
-.show-more-overlay:hover{
+.show-more-overlay:hover {
   background-color: #f5f5f5ee;
 }
 
 .show-more-text {
   cursor: pointer;
-  font-size: .8rem !important;
+  font-size: 0.8rem !important;
   text-transform: none !important;
 }
-
 
 .stikcy-eft {
   position: sticky !important;
@@ -154,17 +154,14 @@ body {
   margin-right: 100px;
 }
 
-
 .ThingstoHead1 {
   font-weight: 500 !important;
   font-size: x-large !important;
 }
 
 .monsterrat {
-  font-family: 'Montserrat', sans-serif !important;
-
+  font-family: "Montserrat", sans-serif !important;
 }
-
 
 .checkIn {
   font-size: 1.3rem !important;
@@ -182,4 +179,119 @@ body {
 .normalcalendar .calendar {
   box-shadow: none !important;
   width: 100% !important;
+}
+@media only screen and (max-width: 400px) {
+  .PropertyName {
+    font-size: medium !important;
+  }
+  .PropertyAddress {
+    font-size: small !important;
+  }
+  .location > img {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  .Blue-rowshare {
+    font-size: x-small !important;
+  }
+  .container-fluid {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }
+  .Showmore {
+    font-size: 12px !important;
+
+    text-align: left !important;
+  }
+  .GridWidth1 {
+    width: 87% !important;
+  }
+  .cards {
+    width: 73% !important;
+    margin-right: 135px !important;
+    padding: 1rem !important;
+  }
+  .MainCard1 > div > div > span,
+  .MainCard1 > div > div > p {
+    font-size: 7px !important;
+    width: max-content !important;
+  }
+  .selectDate {
+    font-size: 12px !important;
+  }
+  .GuestDrop {
+    font-size: 12px !important;
+    /* padding: 1px 10px !important; */
+  }
+  .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+    padding: 3.5px 10px !important;
+    font-size: 10px !important;
+  }
+  /* .MainCard1 {
+    height: 34px !important;
+    width: 145px !important;
+  }
+  .vl {
+    visibility: visible !important;
+    height: 20px !important;
+  }
+  .DateHead1 {
+    height: 10px !important;
+  } */
+  .availability {
+    font-size: xx-small !important;
+    height: 30px !important;
+  }
+  .BlueHead2 {
+    font-size: 0.67rem !important;
+  }
+  .ProfileImageContainer {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  .AvailableText {
+    font-size: x-small !important;
+    margin-bottom: 10px !important;
+  }
+  .MyAvailProp {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .card-btn2 {
+    border: 1px solid #80808044;
+    font-size: 7px !important;
+    border-radius: 20px !important;
+    width: 93px !important;
+    height: 98% !important;
+  }
+  .box1 > div > li {
+    display: flex;
+ 
+    font-weight: 600;
+
+    font-size: 8px !important;
+  }
+  .propertyDetailsYear {
+    width: 300px !important;
+  }
+  .box1{
+    padding: 10px;
+  }
+  .Box-list1{
+    text-wrap: wrap !important;
+  }
+  .checkIn {
+    font-size: small !important;
+  }
+  .singleDevice{
+    display: flex;
+    flex-direction: column !important;
+  }
+  .RoomsRes{
+    width: 100% !important;
+  }
+  .AmenRes{
+    display: flex; 
+    flex-direction: column !important;
+  }
 }

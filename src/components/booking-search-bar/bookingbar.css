@@ -1,36 +1,30 @@
 .MainCard {
   display: flex;
   justify-content: space-evenly;
-  /* border: none !important; */
   margin-bottom: 10px;
-  /* border: 1px solid rgb(226, 226, 226) !important; */
   border-radius: 5px;
   padding-bottom: 5px;
 }
 
-.MainCard1{
+.MainCard1 {
   border-radius: 5px;
-
-
 }
 .with-border {
-  border: 1px solid #b4b3b3; /* Example border style */
+  border: 1px solid #b4b3b3;
 }
-.padding{
+.padding {
   padding-top: 3px;
 }
 .card {
   display: flex;
   flex-direction: row;
   width: 60%;
-  height:60px;
+  height: 60px;
   border-radius: 50px;
   justify-content: space-evenly;
   align-items: center;
-  box-shadow:
-    rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
     rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
-  /* position: relative; */
   margin-top: -137px;
   font-size: small;
   padding: 10px 0px 10px 10px !important;
@@ -43,10 +37,8 @@
 }
 
 .card-item {
-  /* align-content: inherit; */
-  /* padding-top: 11px; */
   text-transform: capitalize !important;
-  padding-right: 26px;
+  /* padding-right: 26px; */
 }
 
 .vl {
@@ -76,7 +68,7 @@
 .DateHead2 {
   font-weight: 600;
   margin-right: 7px;
-}
+} 
 
 .whoGuest {
   padding-top: 5px;
@@ -92,10 +84,6 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-
 .active1 {
   border-radius: 25px;
-  /* background-color: #e4e4e4;
-  padding: 10px 10px; */
-  /* padding:1px; */
 }

@@ -4,13 +4,13 @@
   align-items: center;
   padding: 10px 20px;
   background: linear-gradient(to top, #f9fafa 0%, #f9fafa 100%) !important;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px !important;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px !important;
   color: #fff;
   z-index: 1;
   position: sticky;
   top: 0;
 }
-
 
 .username {
   padding-left: 30px;
@@ -32,7 +32,6 @@
   text-decoration: none;
   transition: color 0.3s ease;
   gap: 25px !important;
-
 }
 
 .navbar-link:hover {
@@ -51,7 +50,6 @@
 
 .nav-link-with-margin {
   margin-right: 20px;
-
 }
 
 .navbar-user-name {
@@ -198,4 +196,31 @@
   font-weight: bold;
   color: #023138 !important;
   /* Active link   */
+}
+
+@media only screen and (max-width: 480px) {
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: linear-gradient(to top, #f9fafa 0%, #f9fafa 100%) !important;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+      rgba(0, 0, 0, 0.3) 0px 1px 3px -1px !important;
+    color: #fff;
+    z-index: 1;
+    position: sticky;
+    top: 0;
+  }
+ .ProfileMenu{
+  margin-left: 150px;
+  display: none;
+ }
+  .Navbar-Img{
+    width: 100px;
+  }
+  .show{
+     
+  }
+ 
 }

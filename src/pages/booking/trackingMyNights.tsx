@@ -9,15 +9,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { MenuItem, Select } from "@mui/material";
-import { Image } from "../property-listing-page";
-import { propertyImageapi } from "@/api";
 
 interface Property {
   id: number;
   propertyName?: string;
   address?: string;
   propertyShare?: string;
-  propertyId?: number;
   details: {
     [year: number]: {
       offSeason: string;
@@ -50,8 +47,6 @@ const TrackingMyNigts: React.FC = () => {
   const [selectedYear, setSelectedYear] = useState<number>(
     new Date().getFullYear()
   );
-  const [imageDetails, setImageDetails] = useState<Image[]>([]);
-
 
   const propertyImages: { [key: number]: string } = {
     1: PropImg1,
@@ -84,33 +79,78 @@ const TrackingMyNigts: React.FC = () => {
   const availableYears = Object.keys(selectedProperty?.details || {}).map(
     (year) => parseInt(year)
   );
-
-  useEffect(() => {
-    const fetchPropertyImages = async () => {
-      try {
-        const response = await propertyImageapi();
-        setImageDetails(response.data.data);
-      } catch (error) {
-        console.error('Error fetching property images:', error);
-      }
-    };
-
-    fetchPropertyImages();
-  }, []);
-
-  const showselectedimage = (id: number) => {
-    const filteredImage = imageDetails.filter((image) => image.property.id === id).sort((a: Image, b: Image) => a.displayOrder - b.displayOrder);
-    return filteredImage[0]?.imageUrl;
-  }
-
   const imageSrc = selectedPropertyId
     ? propertyImages[selectedPropertyId]
     : PropImg1;
 
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   };
+
+  const getOffSeasonDates = (startDate: string, endDate: string) => {
+    const peakStart = new Date(startDate);
+    const peakEnd = new Date(endDate);
+
+    const offSeasonBeforeStart = {
+      startDate: new Date(peakStart.getFullYear(), 12, 1), // Dec 31 of the current year
+      endDate: new Date(
+        peakStart.getFullYear(),
+        peakStart.getMonth(),
+        peakStart.getDate() - 1
+      ), // Day before peak season starts
+    };
+
+    const offSeasonAfterEnd = {
+      startDate: new Date(
+        peakEnd.getFullYear(),
+        peakEnd.getMonth(),
+        peakEnd.getDate() + 1
+      ), // Day after peak season ends
+      endDate: new Date(peakEnd.getFullYear(), 11, 31), // Dec 30 of the same year
+    };
+
+    // Handle cases where peak season spans across years
+    if (peakStart.getMonth() < 11) {
+      offSeasonBeforeStart.endDate = new Date(
+        peakStart.getFullYear(),
+        peakStart.getMonth(),
+        peakStart.getDate()
+      );
+    }
+    if (
+      peakEnd.getMonth() > 0 ||
+      peakEnd.getFullYear() > peakStart.getFullYear()
+    ) {
+      offSeasonAfterEnd.startDate = new Date(
+        peakEnd.getFullYear(),
+        peakEnd.getMonth(),
+        peakEnd.getDate() + 2
+      );
+    }
+
+    return {
+      offSeasonBefore: {
+        startDate: offSeasonBeforeStart.startDate.toISOString().split("T")[0],
+        endDate: offSeasonBeforeStart.endDate.toISOString().split("T")[0],
+      },
+      offSeasonAfter: {
+        startDate: offSeasonAfterEnd.startDate.toISOString().split("T")[0],
+        endDate: offSeasonAfterEnd.endDate.toISOString().split("T")[0],
+      },
+    };
+  };
+
+  const { offSeasonBefore, offSeasonAfter } = selectedProperty
+    ? getOffSeasonDates(
+        selectedProperty.details[selectedYear]?.peakSeasonStartDate || "",
+        selectedProperty.details[selectedYear]?.peakSeasonEndDate || ""
+      )
+    : {
+        offSeasonBefore: { startDate: "", endDate: "" },
+        offSeasonAfter: { startDate: "", endDate: "" },
+      };
+
   return (
     <div className="Container">
       <div className="My-nights">
@@ -126,7 +166,7 @@ const TrackingMyNigts: React.FC = () => {
             value={selectedPropertyId || ""}
             onChange={handlePropertyChange}
             displayEmpty
-            className="Year-btn"
+            className="PropertyButton"
             sx={{
               width: "270px",
               color: "#808080",
@@ -134,7 +174,7 @@ const TrackingMyNigts: React.FC = () => {
               borderRadius: "50px",
               "& .MuiSelect-select": {
                 padding: "10px 14px",
-                fontSize: "16px",
+                // fontSize: "16px",
               },
               "& .MuiOutlinedInput-notchedOutline": {
                 border: "none",
@@ -144,13 +184,14 @@ const TrackingMyNigts: React.FC = () => {
               },
               "& .MuiSelect-icon": {
                 color: "#ffffff",
+                display: "none",
               },
               backgroundColor: "none",
             }}
           >
             {properties.map((property) => (
               <MenuItem key={property.id} value={property.id}>
-                <div className="d-flex flex-column">
+                <div className="d-flex flex-column propertyMenu">
                   <MenuItem disableRipple className="ProperName monsterrat">
                     {property.propertyName}
                   </MenuItem>
@@ -175,7 +216,7 @@ const TrackingMyNigts: React.FC = () => {
 
               "& .MuiSelect-select": {
                 padding: "10px 14px",
-                fontSize: "16px",
+                // fontSize: "16px",
               },
               "& .MuiOutlinedInput-notchedOutline": {
                 border: "none",
@@ -195,7 +236,7 @@ const TrackingMyNigts: React.FC = () => {
                 disableRipple
                 key={year}
                 value={year}
-                className="monsterrat"
+                className="monsterrat Year"
               >
                 {year}
               </MenuItem>
@@ -211,7 +252,7 @@ const TrackingMyNigts: React.FC = () => {
 
       <div className="container3 mt-3 pt-4 d-flex">
         <div className="cardImg">
-          <img src={showselectedimage(selectedProperty?.propertyId ?? 1)} className="PropImg1" alt="Property" loading="lazy" />
+          <img src={imageSrc} className="PropImg1" alt="Property" />
           <div className="d-flex flex-column Prop-sec">
             {/* <span className="Prop">Property</span> */}
             <span className="Prop">
@@ -228,9 +269,14 @@ const TrackingMyNigts: React.FC = () => {
         <div className="Total ">
           <div className="OffSea mb-4  ">
             <div className="Off-season">
-              <li className="OffHead">Off-Season</li>
-              <li>Dec 31 - May 31</li>
-              <li>Sept 21 - Dec 30</li>
+              <li className="OffHead">Off-Season </li>
+              <li>{`${formatDate(offSeasonBefore.startDate)} - ${formatDate(
+                offSeasonBefore.endDate
+              )}`}</li>
+
+              <li>{`${formatDate(offSeasonAfter.startDate)} - ${formatDate(
+                offSeasonAfter.endDate
+              )}`}</li>
             </div>
             <div className="Total-Nights pt-3 ">
               <table style={{ width: "90%" }}>
@@ -296,7 +342,10 @@ const TrackingMyNigts: React.FC = () => {
           <div className="PeakSea d-flex">
             <div className="Off-season">
               <li className="OffHead">Peak-Season</li>
-              <li>{formatDate(propertyDetails.peakSeasonStartDate)} - {formatDate(propertyDetails.peakSeasonEndDate)}</li>
+              <li>
+                {formatDate(propertyDetails.peakSeasonStartDate)} -{" "}
+                {formatDate(propertyDetails.peakSeasonEndDate)}
+              </li>
 
               {/* <li>Dec 31 - May 31</li> */}
               {/* <li>Sept 21 - Dec 30</li> */}

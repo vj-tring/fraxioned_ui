@@ -5,9 +5,290 @@
   border: 1px solid lightgrey !important;
   border-radius: 38px;
   margin-left: 10px;
-  width: 240px;
+  /* width: 10%; */
   background: white !important;
   box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+}
+.check-in,
+.check-out {
+  gap: 10px;
+  display: flex;
+}
+.calenderIcon {
+  margin-top: 4px;
+  /* position: absolute; */
+  /* visibility: hidden; */
+}
+.popOver {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around !important;
+  width: 37%;
+}
+.btn-book {
+  border-radius: 50px;
+}
+
+@media only screen and (max-width: 1300px) {
+  .DateHead1 {
+    font-size: 10px !important;
+  }
+  .property1 {
+    font-size: 9px !important;
+  }
+  .card {
+    height: 55px;
+  }
+  .btn-book {
+    height: 45px !important;
+  }
+  .check-in {
+    margin-top: 5px !important;
+  }
+  .popOver {
+    display: flex;
+    justify-content: space-around !important;
+    /* gap: 15px !important; */
+    width: 40% !important;
+  }
+}
+
+@media only screen and (max-width: 1204px) {
+  .DateHead1 {
+    font-size: 10px !important;
+  }
+  .property1 {
+    font-size: 9px !important;
+  }
+  .PropertyBtn {
+    height: 40px !important;
+  }
+  .check-in {
+    margin-top: 5px !important;
+  }
+  .popOver {
+    display: flex;
+    justify-content: space-around !important;
+    /* gap: 15px !important; */
+    width: 40% !important;
+  }
+  .card {
+    height: 50px;
+  }
+  .btn-book {
+    height: 40px !important;
+  }
+}
+
+@media only screen and (max-width: 1180px) {
+  .DateHead1 {
+    font-size: 9px !important;
+  }
+  .property1 {
+    font-size: 10px !important;
+  }
+  .PropertyBtn {
+    height: 40px !important;
+    /* width: 50% !important; */
+  }
+  .card {
+    height: 50px;
+  }
+  .btn-book {
+    height: 40px !important;
+  }
+  .popOver {
+    display: flex;
+    justify-content: space-around !important;
+    /* gap: 15px !important; */
+    /* width: 45% !important; */
+  }
+}
+
+@media only screen and (max-width: 1110px) {
+  .DateHead1 {
+    font-size: 8px !important;
+  }
+  .property1 {
+    font-size: 8px !important;
+  }
+  .PropertyBtn {
+    height: 40px !important;
+  }
+  .card {
+    height: 50px;
+  }
+  .popOver {
+    display: flex;
+    justify-content: space-around !important;
+    gap: 5px !important;
+    width: 40%;
+  }
+  .check-in {
+    margin-top: 3px !important;
+  }
+  .btn-book {
+    height: 45px !important;
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  .DateHead1 {
+    font-size: 8px !important;
+  }
+  .property1 {
+    font-size: 8px !important;
+  }
+  .PropertyBtn {
+    height: 40px !important;
+  }
+  .card {
+    height: 50px;
+  }
+  .popOver {
+    display: flex;
+    justify-content: space-around !important;
+    gap: 0px !important;
+    width: 60%;
+  }
+  .check-in {
+    margin-top: 3px !important;
+  }
+  .btn-book {
+    height: 45px !important;
+  }
+}
+@media only screen and (max-width: 1000px) {
+  .DateHead1 {
+    font-size: 8px !important;
+  }
+  .property1 {
+    font-size: 8px !important;
+  }
+  .PropertyBtn {
+    height: 40px !important;
+  }
+  .card {
+    height: 45px;
+  }
+  .popOver {
+    display: flex;
+    justify-content: space-around !important;
+    /* gap: 15px !important; */
+    width: 36%;
+  }
+  .check-in {
+    margin-top: 5px !important;
+  }
+  .btn-book {
+    height: 40px !important;
+  }
+}
+@media only screen and (max-width: 900px) {
+  .DateHead1 {
+    font-size: 8px !important;
+  }
+  .property1 {
+    font-size: 8px !important;
+  }
+  .PropertyBtn {
+    height: 40px !important;
+  }
+  .card {
+    height: 40px;
+  }
+  .popOver {
+    display: flex;
+    justify-content: space-around !important;
+    /* gap: 15px !important; */
+    width: 50% !important;
+  }
+  .check-in {
+    margin-top: 5px !important;
+  }
+  .btn-book {
+    height: 35px !important;
+    font-size: 10px !important;
+  }
+}
+
+@media only screen and (max-width: 816px) {
+  .DateHead1 {
+    font-size: 12px !important;
+  }
+  .property1 {
+    font-size: 11px !important;
+  }
+  .PropertyBtn {
+    height: 40px !important;
+    align-items: flex-start;
+  }
+  .MainCard {
+    padding: 9px;
+    margin: 10px;
+  }
+  .check-in,
+  .check-out {
+    display: flex;
+    gap: 15px;
+  }
+  .card {
+    height: 250px;
+    width: 100%;
+    border-radius: 10px;
+    margin-top: -285px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 18px !important;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px !important;
+  }
+
+  .btn-book {
+    height: 100px !important;
+    margin-top: 10px;
+    border-radius: 10px;
+    width: 100% !important;
+    /* margin: 1rem; */
+  }
+  .calenderIcon {
+    position: relative;
+    visibility: visible;
+  }
+  .rounded-pill {
+    height: 100px !important;
+  }
+  .popOver {
+    display: flex;
+    width: 100% !important;
+    padding: 10px;
+    justify-content: space-between !important;
+    border-bottom: 1px solid rgb(211, 210, 210);
+    border-top: 1px solid rgb(211, 210, 210);
+  }
+  .vl {
+    visibility: hidden !important;
+  }
+  .card-item {
+    padding-right: 0;
+  }
+}
+
+@media only screen and (max-width: 387px) {
+  .check-in,
+  .check-out {
+    display: flex;
+    gap: 10px;
+  }
+
+  .popOver {
+    display: flex;
+    width: 107% !important;
+    padding: 10px;
+    justify-content: space-between !important;
+    border-bottom: 1px solid rgb(211, 210, 210);
+    border-top: 1px solid rgb(211, 210, 210);
+  }
 }
 
 .card-btn.active {
@@ -16,8 +297,6 @@
 
 .card-btn1 {
   text-transform: none;
-  /* height: 19px !important; */
-  /* width: 3.7rem !important; */
   border: 1px solid lightgrey !important;
   border-radius: 18px !important;
   background: white !important;
@@ -39,13 +318,21 @@
 
 .box {
   border: 1px solid grey;
-  height: 53px;
+  /* border-top: 1px solid rgb(240, 238, 238); */
+  /* height: 53px; */
   text-align: center;
   align-items: center;
   font-weight: 500;
   font-size: x-large;
 }
+.night-count {
+  display: flex;
+  /* border: 1px solid grey; */
+  padding: 5px;
 
+  /* flex-direction: row-reverse !important; */
+  align-items: center;
+}
 .BlueHead {
   margin: 0 !important;
   font-weight: bold;
@@ -103,7 +390,7 @@
 }
 
 .Available {
-  font-weight: 500;
+  font-weight: 600;
   margin: 0 !important;
 }
 
@@ -149,10 +436,16 @@
 .night-count li:nth-child(1) {
   letter-spacing: 0.14rem;
   font-size: 1rem;
+  text-wrap: balance;
 }
 
+.Off-Values {
+  font-size: 20px !important;
+  font-weight: 600 !important;
+}
 .night-count li:nth-child(2) {
   opacity: 0.8;
+  text-wrap: balance;
 }
 
 .property-image {
@@ -195,10 +488,44 @@
 }
 
 .additionalproperty.active {
+  color: #faab00 !important;
   background-color: #ffffff; /* or any color you prefer */
-  border: 1px solid #b4b4b4 !important; /* example border color for active state */
+  border: 1px solid #faab00 !important;
 }
 
 .CardItem[data-single-card="true"] {
   width: 300px;
+}
+
+@media only screen and (max-width: 400px) {
+  .CardItem {
+    width: 300px !important;
+    height: 300px !important;
+  }
+  .additionalproperty {
+    width: 234px !important;
+  }
+  .BlueHead {
+    font-size: 0.7rem;
+  }
+  .CardImage {
+    width: 55px;
+    height: 36px;
+  }
+  .Available {
+    font-size: x-small;
+    color: black !important;
+    font-weight: 600 !important;
+  }
+  .card-btn1 {
+    width: 1rem !important;
+    height: 20px !important;
+    padding: 1px !important;
+    min-width: 53px !important;
+  }
+  .box {
+    display: flex;
+    /* flex-direction: column; */
+    flex-wrap: wrap;
+  }
 }

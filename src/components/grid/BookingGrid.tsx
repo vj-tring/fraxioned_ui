@@ -1,5 +1,5 @@
 import React from "react";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { Button, IconButton } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
@@ -28,9 +28,16 @@ const BookingGrid: React.FC<BookingGridProps> = ({
   onEdit,
   onCancel,
   activeTab,
-
 }) => {
   const columns: GridColDef[] = [
+    {
+      field: "bookingId",
+      headerName: "BookingID",
+      flex: 1,
+      // width:"10px",
+      headerAlign: "center",
+      align: "center",
+    },
     {
       field: "property",
       headerName: "Property",
@@ -41,14 +48,14 @@ const BookingGrid: React.FC<BookingGridProps> = ({
     {
       field: "checkinDate",
       headerName: "Check-in",
-      flex: 1,
+      // flex: 1,
       headerAlign: "center",
       align: "center",
     },
     {
       field: "checkoutDate",
       headerName: "Checkout",
-      flex: 1,
+      // flex: 1,
       headerAlign: "center",
       align: "center",
     },
@@ -137,12 +144,24 @@ const BookingGrid: React.FC<BookingGridProps> = ({
         disableRowSelectionOnClick
         rowHeight={40}
         columnHeaderHeight={40}
+        disableDensitySelector
+        disableColumnSelector
+        disableColumnMenu
+        disableColumnFilter
+        slots={{ toolbar: GridToolbar }}
+        slotProps={{
+          toolbar: {
+            showQuickFilter: true,
+            printOptions: { disableToolbarButton: true },
+            csvOptions: { disableToolbarButton: true },
+          },
+        }}
         sx={{
           "& .MuiDataGrid-columnHeader": {
             backgroundColor: "#46696E",
             fontWeight: "bold",
             color: "white",
-            textTransform:"capitalize",
+            textTransform: "capitalize",
             paddingRight: "50px",
             fontFamily: "Montserrat, sans-serif",
           },
@@ -155,7 +174,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
           },
           "& .MuiDataGrid-cell": {
             fontFamily: "Montserrat, sans-serif",
-            color:"#808080"
+            color: "#808080",
           },
         }}
       />

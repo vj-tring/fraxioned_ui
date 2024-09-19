@@ -9,18 +9,16 @@ import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/index";
 import { RootState } from "../../store/reducers";
-import { Image } from '@/pages/property-listing-page/index';
+import { Image } from "@/pages/property-listing-page/index";
 import {
   fetchProperties,
   selectProperty,
   selectcard,
   selectcardindex,
-  // setSelectedCard,
-  // setSelectedCardIndex
 } from "../../store/slice/auth/property-slice";
 import "./propertycarousel.css";
 import { propertyImageapi } from "@/api";
-
+import AddHomeOutlinedIcon from "@mui/icons-material/AddHomeOutlined";
 interface Card {
   id: number;
   name: string;
@@ -62,7 +60,7 @@ export default function BasicSelect() {
         const response = await propertyImageapi();
         setImageDetails(response.data.data);
       } catch (error) {
-        console.error('Error fetching property images:', error);
+        console.error("Error fetching property images:", error);
       }
     };
 
@@ -134,9 +132,11 @@ export default function BasicSelect() {
   };
 
   const showselectedimage = (id: number) => {
-    const filteredImage = imageDetails.filter((image) => image.property.id === id).sort((a: Image, b: Image) => a.displayOrder - b.displayOrder);
+    const filteredImage = imageDetails
+      .filter((image) => image.property.id === id)
+      .sort((a: Image, b: Image) => a.displayOrder - b.displayOrder);
     return filteredImage[0]?.imageUrl;
-  }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -155,7 +155,7 @@ export default function BasicSelect() {
   const showCarousel = cards.length > 0;
   const showCarouselControls = cards.length > 1;
   const cardItemWidth =
-    cards.length === 1 ? "380px" : cards.length === 2 ? "380px" : "550px";
+    cards.length === 1 ? "380px" : cards.length === 2 ? "380px" : "520px";
   const buttonSize = {
     width:
       cards.length === 1 ? "3.7rem" : cards.length === 2 ? "3.7rem" : "5rem",
@@ -169,7 +169,7 @@ export default function BasicSelect() {
   const BoxMargin =
     cards.length === 1 ? "0px" : cards.length === 2 ? "0px" : "8px";
   const cardItemHeight =
-    cards.length === 1 ? "232px" : cards.length === 2 ? "232px" : "250px";
+    cards.length === 1 ? "232px" : cards.length === 2 ? "232px" : "270px";
   const cardNameWeight =
     cards.length === 1 ? "600" : cards.length === 2 ? "600" : "600";
 
@@ -178,7 +178,7 @@ export default function BasicSelect() {
   };
 
   return (
-    <Box sx={{ width: 250, borderRadius: 32, border: "none" }}>
+    <Box sx={{ borderRadius: 32, border: "none" }}>
       <Button
         disableRipple
         aria-controls="basic-menu"
@@ -187,7 +187,7 @@ export default function BasicSelect() {
         className="PropertyBtn"
         sx={{
           borderRadius: 10,
-          width: 264,
+          // width: 264,
           height: 70,
           border: "none",
           cursor: "pointer",
@@ -195,9 +195,15 @@ export default function BasicSelect() {
           position: "relative",
           display: "flex",
           alignItems: "center",
+          gap: 2,
           justifyContent: "space-between",
         }}
       >
+        <AddHomeOutlinedIcon
+          sx={{
+            color: "grey",
+          }}
+        />
         <div className="d-flex align-items-start flex-column card-item">
           <span className="DateHead1 monsterrat">My Home(s)</span>
           <p className="property1 monsterrat">
@@ -274,8 +280,9 @@ export default function BasicSelect() {
                         <Button
                           key={card.id}
                           disableRipple
-                          className={`additionalproperty ${selectedCardIndex === index ? "active" : ""
-                            }`}
+                          className={`additionalproperty ${
+                            selectedCardIndex === index ? "active" : ""
+                          }`}
                           // style={{ padding: additionalPadding }}
                           onClick={() => handleCardClick(index)}
                           sx={{
@@ -312,14 +319,15 @@ export default function BasicSelect() {
                       {cards.map((_, index: number) => (
                         <div
                           key={index}
-                          className={`dot ${index === selectedCardIndex ? "active" : ""
-                            }`}
+                          className={`dot ${
+                            index === selectedCardIndex ? "active" : ""
+                          }`}
                           onClick={() => handleCardClick(index)}
                         ></div>
                       ))}
                     </div>
                   )}
-                  <div className="card-name d-flex justify-content-between py-2 align-items-center gy-1">
+                  <div className="card-name d-flex justify-content-between py-2 align-items-center gy-1 ">
                     <span className="CardFont">
                       <h4
                         className="BlueHead"
@@ -340,7 +348,7 @@ export default function BasicSelect() {
                       />
                     </span>
                   </div>
-                  <div className="d-flex justify-content-between py-2 align-items-center pt-0">
+                  <div className="d-flex justify-content-between py-2 align-items-center pt-0 MyAvaNigt">
                     <p className="Available">My Available Nights</p>
                     <div className="d-flex justify-content-center">
                       {years.map((year) => (
@@ -348,8 +356,9 @@ export default function BasicSelect() {
                           disableRipple
                           key={year}
                           onClick={() => handleYearClick(year)}
-                          className={`card-btn1 ${selectedYear === year ? "active" : ""
-                            }`}
+                          className={`card-btn1 ${
+                            selectedYear === year ? "active" : ""
+                          }`}
                           sx={{
                             margin: "2px",
                             padding: "4px",
@@ -368,34 +377,34 @@ export default function BasicSelect() {
                     style={{ marginTop: BoxMargin }}
                   >
                     <div className="d-flex flex-column night-count">
-                      <li>
+                      <li className="Off-Values">
                         {selectedCard.details[selectedYear]?.offSeason || "N/A"}
                       </li>
                       <li style={{ fontSize: BoxList }}>Off-Season Nights</li>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li>
+                      <li className="Off-Values">
                         {selectedCard.details[selectedYear]?.peakSeason ||
                           "N/A"}
                       </li>
                       <li style={{ fontSize: BoxList }}>Peak-Season Nights</li>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li>
+                      <li className="Off-Values">
                         {selectedCard.details[selectedYear]?.peakHoliday ||
                           "N/A"}
                       </li>
                       <li style={{ fontSize: BoxList }}>Peak-Season Holiday</li>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li>
+                      <li className="Off-Values">
                         {selectedCard.details[selectedYear]?.offSeasonHoliday ||
                           "N/A"}
                       </li>
                       <li style={{ fontSize: BoxList }}>Off-Season Holiday</li>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li>
+                      <li className="Off-Values">
                         {selectedCard.details[selectedYear]?.lastMinute ||
                           "N/A"}
                       </li>

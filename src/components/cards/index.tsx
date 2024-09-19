@@ -1,6 +1,6 @@
-
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Box, Typography, Skeleton } from "@mui/material";
 import "./card.css";
 
 interface CardProps {
@@ -9,7 +9,7 @@ interface CardProps {
   title: string;
   share?: string;
   id?: number;
-  showPlusIcon?: boolean; 
+  showPlusIcon?: boolean;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -18,9 +18,9 @@ const Card: React.FC<CardProps> = ({
   title,
   share,
   id,
-
   showPlusIcon,
 }) => {
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -29,26 +29,76 @@ const Card: React.FC<CardProps> = ({
     }
   };
 
-
+  const handleImageLoad = () => {
+    setLoading(false);
+  };
 
   return (
-    
-    <div
+    <Box
       className={`card3 ${showPlusIcon ? "static-card" : ""}`}
       onClick={handleClick}
     >
-      <div className="image-container">
-        <img src={imageUrl} className="card-img-top" loading="lazy" alt={title} />
-      </div>
+      <Box sx={{ position: "relative", width: "100%", height: 200,
+        
+       }} >
+        {loading && (
+          <Skeleton variant="rectangular" width="100%" height="100%" />
+        )}
+        <div className="image-container">
+          <img
+            src={imageUrl}
+            alt={title}
+            onLoad={handleImageLoad}
+            className="card-img-top"
+            style={{
+              display: loading ? "none" : "block",
+              objectFit: "cover",
+            }}
+          />
+        </div>
+      </Box>
 
-      <div className="card-body">
-        <h4 className="card-title">{title}</h4>
-        <span className="card-text">{text}</span>
-        <h6 className="share mt-0">{share}</h6>
-      </div>
+      <Box sx={{
 
-    </div>
-    
+      
+      }} >
+        {loading ? (
+          <>
+            <Skeleton width="60%" height={20} />
+            <Skeleton width="80%" height={16} sx={{ mt: 1 }} />
+            <Skeleton width="40%" height={16} sx={{ mt: 1 }} />
+          </>
+        ) : (
+          <div className="card-body ">
+            <div className="card-BodyHead">
+              <Typography variant="" className="card-title monsterrat">
+                {title}
+              </Typography>
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                className="card-text monsterrat"
+              >
+                {text}
+              </Typography>
+              {share && (
+                <Typography
+                  variant="caption"
+                  color="textSecondary"
+                  className="share monsterrat"
+                >
+                  {share}
+                </Typography>
+              )}
+            </div>
+
+            <div className="View">
+              <button className="ViewBtn">View</button>
+            </div>
+          </div>
+        )}
+      </Box>
+    </Box>
   );
 };
 

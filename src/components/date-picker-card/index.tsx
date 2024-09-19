@@ -38,7 +38,7 @@ const DatePickerCard: React.FC<DatePickerCardProps> = ({
         fullWidth
         value={guests}
         onChange={(e) => setGuests(Number(e.target.value))}
-        className="mt-3 monsterrat"
+        className="mt-3 monsterrat GuestDrop"
       >
         {[1, 2, 3, 4, 5].map((num) => (
           <MenuItem key={num} value={num}>
