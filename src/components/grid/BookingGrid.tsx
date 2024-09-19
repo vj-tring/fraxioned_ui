@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
-import { Button, IconButton } from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { Button } from "@mui/material";
+import ConfirmationModal from "../confirmation-modal"; // Adjust the import path as needed
 
 interface BookingGridProps {
   bookings: Array<{
@@ -29,12 +29,28 @@ const BookingGrid: React.FC<BookingGridProps> = ({
   onCancel,
   activeTab,
 }) => {
+  const [cancelBookingId, setCancelBookingId] = useState<number | null>(null);
+
+  const handleCancelClick = (id: number) => {
+    setCancelBookingId(id);
+  };
+
+  const handleConfirmCancel = () => {
+    if (cancelBookingId !== null) {
+      onCancel(cancelBookingId);
+      setCancelBookingId(null);
+    }
+  };
+
+  const handleCloseCancelModal = () => {
+    setCancelBookingId(null);
+  };
+
   const columns: GridColDef[] = [
     {
       field: "bookingId",
       headerName: "BookingID",
       flex: 1,
-      // width:"10px",
       headerAlign: "center",
       align: "center",
     },
@@ -48,14 +64,12 @@ const BookingGrid: React.FC<BookingGridProps> = ({
     {
       field: "checkinDate",
       headerName: "Check-in",
-      // flex: 1,
       headerAlign: "center",
       align: "center",
     },
     {
       field: "checkoutDate",
       headerName: "Checkout",
-      // flex: 1,
       headerAlign: "center",
       align: "center",
     },
@@ -111,7 +125,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
             variant="outlined"
             color="primary"
             disableRipple
-            onClick={() => onCancel(params.row.id)}
+            onClick={() => handleCancelClick(params.row.id)}
             sx={{
               borderRadius: "15px",
               height: "25px",
@@ -134,7 +148,6 @@ const BookingGrid: React.FC<BookingGridProps> = ({
         height: 300,
         width: "100%",
         border: "none",
-        // boxShadow: "rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px",
         marginTop: "2rem",
       }}
     >
@@ -165,7 +178,6 @@ const BookingGrid: React.FC<BookingGridProps> = ({
             paddingRight: "50px",
             fontFamily: "Montserrat, sans-serif",
           },
-
           "& .MuiDataGrid-footerContainer": {
             display: "none",
           },
@@ -177,6 +189,15 @@ const BookingGrid: React.FC<BookingGridProps> = ({
             color: "#808080",
           },
         }}
+      />
+      <ConfirmationModal
+        show={cancelBookingId !== null}
+        onHide={handleCloseCancelModal}
+        onConfirm={handleConfirmCancel}
+        title="Confirm Cancellation"
+        message="Are you sure you want to cancel this booking?"
+        confirmLabel="Cancel Booking"
+        cancelLabel="Keep Booking"
       />
     </div>
   );

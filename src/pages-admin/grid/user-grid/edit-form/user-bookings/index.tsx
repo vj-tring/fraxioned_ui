@@ -22,6 +22,7 @@ interface Booking {
 
 const UserBookings: React.FC<BookingProps> = ({ userId }) => {
     const [bookings, setBookings] = useState<Booking[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchBookings = async () => {
@@ -34,6 +35,8 @@ const UserBookings: React.FC<BookingProps> = ({ userId }) => {
                 setBookings(fetchedBookings);
             } catch (error) {
                 console.error('Error fetching bookings:', error);
+            } finally {
+                setLoading(false);
             }
         };
         fetchBookings();
@@ -51,6 +54,15 @@ const UserBookings: React.FC<BookingProps> = ({ userId }) => {
     const calculateTotalTransaction = (cleaning: number, pet: number) => {
         return cleaning + pet;
     };
+
+    if (loading) {
+        return <div className={styles.loadingMessage}>Loading bookings...</div>;
+    }
+
+    if (bookings.length === 0) {
+        return <div className={styles.noBookingsMessage}>No bookings available</div>;
+    }
+
 
     return (
         <div className={styles.bookingsContainer}>
