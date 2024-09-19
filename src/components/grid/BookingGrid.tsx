@@ -20,12 +20,15 @@ interface BookingGridProps {
   }>;
   onEdit: (id: number) => void;
   onCancel: (id: number) => void;
+  activeTab: number;
 }
 
 const BookingGrid: React.FC<BookingGridProps> = ({
   bookings,
   onEdit,
   onCancel,
+  activeTab,
+
 }) => {
   const columns: GridColDef[] = [
     {
@@ -70,7 +73,10 @@ const BookingGrid: React.FC<BookingGridProps> = ({
       headerAlign: "center",
       align: "center",
     },
-    {
+  ];
+
+  if (activeTab === 0) {
+    columns.push({
       field: "actions",
       headerName: "Actions",
       headerAlign: "center",
@@ -78,9 +84,6 @@ const BookingGrid: React.FC<BookingGridProps> = ({
       flex: 1,
       renderCell: (params) => (
         <>
-          {/* <IconButton>
-                        <MoreVertIcon />
-                    </IconButton> */}
           <Button
             variant="outlined"
             disableRipple
@@ -115,8 +118,8 @@ const BookingGrid: React.FC<BookingGridProps> = ({
           </Button>
         </>
       ),
-    },
-  ];
+    });
+  }
 
   return (
     <div
