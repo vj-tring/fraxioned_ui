@@ -21,6 +21,7 @@ interface PropertyData {
   houseDescription: string;
   isExclusive: boolean;
   propertyShare: number;
+  propertyRemainingShare: number;
   latitude: number;
   longitude: number;
   isActive: boolean;
@@ -89,7 +90,7 @@ const PropertyGeneralInfo: React.FC = () => {
                 <InfoItem label="Country" value={propertyData.country} />
                 <InfoItem label="Zipcode" value={propertyData.zipcode} />
                 <InfoItem label="Property Share" value={`${propertyData.propertyShare}`} />
-                <InfoItem label="Is Active" value={propertyData.isActive ? 'Yes' : 'No'} />
+                <InfoItem label="Remaining Share" value={`${propertyData.propertyRemainingShare}`} />
               </div>
             </div>
           </div>
