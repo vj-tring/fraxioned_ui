@@ -70,17 +70,29 @@ const Booking = () => {
   const handleCancel = async (id: number) => {
     if (user && user.id) {
       try {
-        await cancelBooking(id, user.id);
-        // After successful cancellation, refetch the bookings
-        dispatch(fetchUserBookings(user.id));
-        // Show success snackbar
-        setSnackbarMessage("Booking successfully canceled.");
-        setSnackbarSeverity("success");
+        const response = await cancelBooking(id, user.id);
+          if (response.data && response.data.status === 400) {
+          setSnackbarMessage(response.data.message || "Failed to cancel booking");
+          setSnackbarSeverity("error");
+        } else {
+          dispatch(fetchUserBookings(user.id));
+          setSnackbarMessage("Booking successfully cancelled.");
+          setSnackbarSeverity("success");
+        }
         setSnackbarOpen(true);
       } catch (error) {
         console.error('Error canceling booking:', error);
-        // Show error snackbar
-        setSnackbarMessage("Error canceling booking. Please try again.");
+        
+        let errorMessage = "An unexpected error occurred while cancelling the booking.";
+        
+        if (error instanceof Error) {
+          errorMessage = error.message;
+        } else if (typeof error === 'object' && error !== null) {
+          const customError = error as { response?: { data?: { message?: string } }; message?: string };
+          errorMessage = customError.response?.data?.message || customError.message || errorMessage;
+        }
+        
+        setSnackbarMessage(errorMessage);
         setSnackbarSeverity("error");
         setSnackbarOpen(true);
       }
