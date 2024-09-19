@@ -245,7 +245,8 @@ export function DatePickerWithRange({
     const userBookings = bookings.filter(
       booking =>
         booking.property.id === selectedPropertyDetails.id &&
-        booking.user.id === currentUser.id
+        booking.user.id === currentUser.id &&
+        !booking.isCancelled 
     );
   
     if (userBookings.length === 0) {
