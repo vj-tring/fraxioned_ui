@@ -64,26 +64,21 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
         return <div className={styles.loading}>Loading...</div>;
     }
 
-    const isAdmin = userData.role.roleName === 'Admin';
+    const isOwner = userData.role.roleName === 'Owner';
 
     return (
         <div className={styles.tabContainer}>
-            <div className={styles.tabWrapper}>
-                <Tabs
-                    value={selectedTab}
-                    onChange={handleTabChange}
-                    aria-label="user edit tabs"
-                    className={styles.tabs}
-                >
-                    <Tab label="General Details" />
-                    {!isAdmin && (
-                        <>
-                            <Tab label="Property" />
-                            <Tab label="Booking" />
-                            <Tab label="Availability" />
-                        </>
-                    )}
-                </Tabs>
+            <Tabs
+                value={selectedTab}
+                onChange={handleTabChange}
+                aria-label="user edit tabs"
+                className={styles.tabs}
+            >
+                <Tab label="General Details" />
+                <Tab label="Property" disabled={!isOwner} />
+                <Tab label="Booking" disabled={!isOwner} />
+                <Tab label="Availability" disabled={!isOwner} />
+
                 <IconButton
                     onClick={handleBackClick}
                     className={styles.backButton}
@@ -91,7 +86,7 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
                 >
                     <ArrowBackIcon />
                 </IconButton>
-            </div>
+            </Tabs>
 
             <div className={styles.content}>
                 {selectedTab === 0 && !isEditing ? (
@@ -107,15 +102,15 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
                     />
                 )}
 
-                {!isAdmin && selectedTab === 1 && (
+                {isOwner && selectedTab === 1 && (
                     <PropertyTab Id={Number(id)} />
                 )}
 
-                {!isAdmin && selectedTab === 2 && (
+                {isOwner && selectedTab === 2 && (
                     <UserBookings userId={Number(id)} />
                 )}
 
-                {!isAdmin && selectedTab === 3 && (
+                {isOwner && selectedTab === 3 && (
                     <Availability userId={Number(id)} />
                 )}
             </div>

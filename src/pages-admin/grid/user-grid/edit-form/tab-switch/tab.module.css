@@ -11,23 +11,12 @@
     overflow: hidden;
 }
 
-.tabWrapper {
-    display: flex;
-    justify-content: space-between;
-    height: 52px;
-    align-items: center;
-    background-color: #ffffff;
-    border-bottom: 1px solid #e0e0e0;
-    padding: 0 10px;
+.backButton
+{
+ margin-left: 700px !important;
+
 }
 
-.tabs {
-    flex-grow: 1;
-}
-
-.backButton {
-    margin-left: 10px !important;
-}
 
 .header {
     display: flex;
@@ -50,6 +39,13 @@
 
 .closeButton:hover {
     color: #e28f25;
+}
+
+.tabs {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    margin-top: 15px;
+    margin-left: 10px;
 }
 
 .content {
