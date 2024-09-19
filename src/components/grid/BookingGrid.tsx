@@ -1,9 +1,8 @@
 import React from "react";
-import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Button, IconButton } from "@mui/material";
-import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import "../grid/BookingGrid.css";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+
 interface BookingGridProps {
   bookings: Array<{
     property: { id: number };
@@ -128,6 +127,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
         height: 300,
         width: "100%",
         border: "none",
+        // boxShadow: "rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px",
         marginTop: "2rem",
       }}
     >
@@ -137,24 +137,12 @@ const BookingGrid: React.FC<BookingGridProps> = ({
         disableRowSelectionOnClick
         rowHeight={40}
         columnHeaderHeight={40}
-        disableDensitySelector
-        disableColumnSelector
-        disableColumnMenu
-        disableColumnFilter
-        
-        slots={{ toolbar: GridToolbar }}
-        slotProps={{
-          toolbar: {
-            showQuickFilter: true,
-            printOptions: { disableToolbarButton: true },
-            csvOptions: { disableToolbarButton: true },
-          },
-        }}
         sx={{
           "& .MuiDataGrid-columnHeader": {
-            backgroundColor: "#c4eaf4",
+            backgroundColor: "#46696E",
             fontWeight: "bold",
-            color: "#808080",
+            color: "white",
+            textTransform:"capitalize",
             paddingRight: "50px",
             fontFamily: "Montserrat, sans-serif",
           },
@@ -167,7 +155,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
           },
           "& .MuiDataGrid-cell": {
             fontFamily: "Montserrat, sans-serif",
-            color: "#808080",
+            color:"#808080"
           },
         }}
       />

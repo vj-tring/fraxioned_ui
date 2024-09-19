@@ -21,22 +21,7 @@ const Booking = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error" >("error");
   const user = useSelector((state: RootState) => state.auth.user);
-  const userBookings = useSelector(
-    (state: RootState) => state.bookings.userBookings || []
-  );
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
-
-  const showSnackbar = (
-    message: string,
-    severity: "error" | "info" | "warning" = "error"
-  ) => {
-    setSnackbarMessage(message);
-    setSnackbarSeverity(severity);
-    setSnackbarOpen(true);
-  };
+  const userBookings = useSelector((state: RootState) => state.bookings.userBookings || []);
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
@@ -136,7 +121,7 @@ const Booking = () => {
             <Tab disableRipple label="Cancelled" className="monsterrat Can" />
             <Tab disableRipple label="All" className="monsterrat All" />
           </Tabs>
-          <div className="CalendarFilter">
+          <div>
             <Button
               disableRipple
               variant="contained"
