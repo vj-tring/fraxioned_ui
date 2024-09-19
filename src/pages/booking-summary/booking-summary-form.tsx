@@ -165,6 +165,26 @@ const BookingSummaryForm: React.FC = () => {
   };
 
   return (
+<>
+
+    {isLoading && !showConfirmation && (
+      <Box
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "rgba(255, 255, 255, 0.8)",
+          zIndex: 1000,
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    )}
     <Box
       my={2}
       sx={{
@@ -181,24 +201,7 @@ const BookingSummaryForm: React.FC = () => {
         position: "relative",
       }}
     >
-      {isLoading && !showConfirmation && (
-        <Box
-          sx={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "rgba(255, 255, 255, 0.8)",
-            zIndex: 1000,
-          }}
-        >
-          <CircularProgress />
-        </Box>
-      )}
+ 
 
       <CustomizedSnackbars
         open={showSnackbar}
@@ -248,7 +251,7 @@ const BookingSummaryForm: React.FC = () => {
                     src={imageDetails[0].imageUrl}
                     alt={`Image ${imageDetails[0].displayOrder}`}
                     loading="lazy"
-                    style={{ width: "100%", height: "300px", objectFit: "cover" }}
+                    style={{ width: "100%", height: "230px", objectFit: "cover" }}
                     className="PropImgHeadHeight"
 
                   />
@@ -413,6 +416,7 @@ const BookingSummaryForm: React.FC = () => {
         </div>
       </div>
     </Box>
+    </>
   );
 };
 
