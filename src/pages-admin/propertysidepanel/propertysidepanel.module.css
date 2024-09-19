@@ -1,4 +1,4 @@
-.propertyPanel {
+/* .propertyPanel {
     top: 60px;
     right: 0;
     height: calc(100vh - 60px);
@@ -13,6 +13,24 @@
     padding-top: 0;
     flex: 1;
     max-width: 16rem;
+} */
+
+
+.propertyPanel {
+    top: 60px;
+    right: 0;
+    height: calc(100vh - 60px);
+    background-color: #fcfcfc;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    color: #333333;
+    overflow-y: auto;
+    font-family: 'Roboto', sans-serif;
+    transition: width 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    padding-top: 0;
+    width: 16rem;
+    flex-shrink: 0;
 }
 
 .menu {

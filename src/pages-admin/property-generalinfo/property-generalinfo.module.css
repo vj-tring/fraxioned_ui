@@ -1,93 +1,159 @@
+.generalInfoContainer {
+  flex: 1;
+  overflow-x: hidden;
+}
+
 .fullContainer {
   display: flex;
   flex-direction: column;
-  background-color: #f5f7fa;
-  flex: 1;
-  height: 100%;
-  margin-right: 15px;
+  min-height: 620px;
+  background-color: #f8f9fa;
+  padding: 20px;
 }
 
 .contentWrapper {
-  padding: 32px;
   background-color: #ffffff;
   border-radius: 8px;
-  width: 100%;
-  flex: 1;
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
-  margin: 0 auto;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  padding: 24px;
+  flex-grow: 1;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
-  border-bottom: 2px solid #f0f0f0;
+  margin-bottom: 24px;
   padding-bottom: 16px;
+  border-bottom: 1px solid #e9ecef;
 }
 
 .title {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: bold;
-  color: #2c3e50;
+  color: #343a40;
   margin: 0;
+}
+
+.propertyCard {
+  display: flex;
+  flex-direction: column;
+  min-height: 420px;
+  margin-top: 30px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.imageContainer {
+  position: relative;
+  overflow: hidden;
+  height: 300px;
+}
+
+.propertyImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.exclusiveTag {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background-color: rgba(52, 58, 64, 0.8);
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.pinIcon {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+}
+
+.infoContainer {
+  flex: 1;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.propertyName {
+  font-size: 24px;
+  font-weight: bold;
+  color: #343a40;
+  margin-bottom: 20px;
+}
+
+.infoInnerContainer {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  flex-grow: 1;
+  overflow-y: auto;
 }
 
 .infoGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 80px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
 }
 
 .infoItem {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  border-radius: 8px;
-  padding: 16px;
-  transition: all 0.3s ease;
 }
 
-
-
 .label {
-  font-weight: bolder;
-  color: #25393b;
-  margin-bottom: 8px;
+  font-weight: 800;
+  color: #4d5154;
   font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  margin-bottom: 4px;
 }
 
 .value {
-  color: #2c3e50;
+  color: #343a40;
   font-size: 16px;
   font-weight: 500;
 }
 
-.loading,
 .error,
 .noData {
   text-align: center;
   padding: 24px;
   font-size: 18px;
-  color: #7f8c8d;
+  color: #dc3545;
+  background-color: #f8d7da;
+  border-radius: 4px;
+  margin-top: 24px;
 }
 
-.error {
-  color: #e74c3c;
-}
-
-@media (max-width: 768px) {
-  .contentWrapper {
-    padding: 16px;
+@media (min-width: 768px) {
+  .propertyCard {
+    flex-direction: row;
+    height: 420px;
   }
 
+  .imageContainer {
+    flex: 0 0 40%;
+    height: auto;
+  }
+
+  .infoContainer {
+    flex: 1;
+  }
+}
+
+@media (max-width: 767px) {
   .infoGrid {
     grid-template-columns: 1fr;
-  }
-
-  .title {
-    font-size: 24px;
   }
 }
