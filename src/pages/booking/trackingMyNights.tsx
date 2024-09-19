@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from "react";
-// import PropImg from "../../assests/room-interior-hotel-bedroom.jpg";
-import PropImg1 from "../../assests/room-interior-hotel-bedroom.jpg";
-import PropImg2 from "../../assests/blue-bear-lake.jpg";
-import PropImg3 from "../../assests/bear-lake-bluffs.jpg";
-import PropImg4 from "../../assests/lake-escape.jpg";
+
 import "../booking/trackingMyNights.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { MenuItem, Select } from "@mui/material";
+import { Image } from "../property-listing-page";
+import { propertyImageapi } from "@/api";
 
 interface Property {
   id: number;
   propertyName?: string;
   address?: string;
   propertyShare?: string;
+  propertyId?: number;
   details: {
     [year: number]: {
       offSeason: string;
@@ -30,7 +29,6 @@ interface Property {
     };
   };
 }
-
 interface RootState {
   properties: {
     cards: Property[];
@@ -47,13 +45,7 @@ const TrackingMyNigts: React.FC = () => {
   const [selectedYear, setSelectedYear] = useState<number>(
     new Date().getFullYear()
   );
-
-  const propertyImages: { [key: number]: string } = {
-    1: PropImg1,
-    2: PropImg2,
-    3: PropImg3,
-    4: PropImg4,
-  };
+  const [imageDetails, setImageDetails] = useState<Image[]>([]);
 
   useEffect(() => {
     if (properties.length > 0) {
@@ -79,9 +71,26 @@ const TrackingMyNigts: React.FC = () => {
   const availableYears = Object.keys(selectedProperty?.details || {}).map(
     (year) => parseInt(year)
   );
-  const imageSrc = selectedPropertyId
-    ? propertyImages[selectedPropertyId]
-    : PropImg1;
+
+  useEffect(() => {
+    const fetchPropertyImages = async () => {
+      try {
+        const response = await propertyImageapi();
+        setImageDetails(response.data.data);
+      } catch (error) {
+        console.error("Error fetching property images:", error);
+      }
+    };
+
+    fetchPropertyImages();
+  }, []);
+
+  const showselectedimage = (id: number) => {
+    const filteredImage = imageDetails
+      .filter((image) => image.property.id === id)
+      .sort((a: Image, b: Image) => a.displayOrder - b.displayOrder);
+    return filteredImage[0]?.imageUrl;
+  };
 
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
@@ -252,7 +261,12 @@ const TrackingMyNigts: React.FC = () => {
 
       <div className="container3 mt-3 pt-4 d-flex">
         <div className="cardImg">
-          <img src={imageSrc} className="PropImg1" alt="Property" />
+          <img
+            src={showselectedimage(selectedProperty?.propertyId ?? 1)}
+            className="PropImg1"
+            alt="Property"
+            loading="lazy"
+          />
           <div className="d-flex flex-column Prop-sec">
             {/* <span className="Prop">Property</span> */}
             <span className="Prop">

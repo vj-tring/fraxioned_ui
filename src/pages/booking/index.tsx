@@ -12,6 +12,7 @@ import { BookingData, fetchUserBookings } from "@/store/slice/auth/bookingSlice"
 import { format } from "date-fns";
 import { cancelBooking } from '@/api';
 import CustomizedSnackbar from '@/components/customized-snackbar';
+import "../booking/booking.css";
 
 const Booking = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -105,12 +106,12 @@ const Booking = () => {
         <Typography variant="h4" className="my-Book mt-5 monsterrat mb-3" gutterBottom>
           My Bookings
         </Typography>
-        <div className="d-flex justify-between">
+        <div className="d-flex justify-between BookHeader">
           <Tabs
             disableRipple
             value={activeTab}
             onChange={handleTabChange}
-            className="monsterrat"
+            className="monsterrat "
             sx={{
               "& .MuiTab-root": { color: "black" },
               "& .MuiTab-root.Mui-selected": { color: "black !important" },

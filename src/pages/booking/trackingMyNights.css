@@ -82,7 +82,7 @@
 }
 
 .Total {
-  /* width: 1000px; */
+  width: 1000px;
   height: 370px;
   margin-left: 30px;
 }
@@ -192,8 +192,11 @@ tr > th {
     flex-direction: column;
     margin-left: 0px !important;
     height: 1000px !important;
-    /* width: 250% !important; */
+    width: 360px !important;
     /* background-color: #88cdd4; */
+  }
+  .OffHead{
+    font-size: 14px !important;
   }
   .OffSea {
     /* height: 140px; */
@@ -213,9 +216,13 @@ tr > th {
   .Total-Holiday > table {
     width: 90% !important;
   }
+  .Off-season {
+    display: flex;
+    width: 100%;
+  }
   .Off-season > li {
-    font-size: 14px;
-    width: 10rem !important;
+    font-size: 12px !important;
+    width: 6rem !important;
   }
   .Container1 {
     margin-left: 0 !important;
