@@ -174,7 +174,7 @@ export default function BasicSelect() {
     cards.length === 1 ? "600" : cards.length === 2 ? "600" : "600";
 
   const formatCardName = (name: string) => {
-    return name.replace(/\s+\(.*\)/, "...");
+    return name.replace(/\s+\(.*\)/, "");
   };
 
   return (
@@ -201,7 +201,7 @@ export default function BasicSelect() {
         <div className="d-flex align-items-start flex-column card-item">
           <span className="DateHead1 monsterrat">My Home(s)</span>
           <p className="property1 monsterrat">
-            {selectedCard ? selectedCard?.name : "Select Property"}
+            {formatCardName(selectedCard ? selectedCard?.name : "Select Property")}
           </p>
         </div>
       </Button>
@@ -325,8 +325,9 @@ export default function BasicSelect() {
                         className="BlueHead"
                         style={{ fontWeight: cardNameWeight }}
                       >
-                        {selectedCard.name} [{selectedCard.share}/
-                        {selectedCard.propertyShare} share]
+                        {formatCardName(selectedCard.name)} 
+                        {/* [{selectedCard.share}/
+                        {selectedCard.propertyShare} share] */}
                       </h4>
                       <p className="BlueFont">{selectedCard.address}</p>
                     </span>

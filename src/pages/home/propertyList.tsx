@@ -102,6 +102,10 @@ const PropertyList: React.FC<PropertyListProps> =({
 
   const Shadow = properties.length >= 4 ? "rgba(0, 0, 0, 0.1) 1px 1px 2px 1px" : "none";
 
+  const formatCardName = (name: string) => {
+    return name.replace(/\s+\(.*\)/, "");
+  };
+
   return (
     <div className="Container1" 
     >
@@ -132,11 +136,11 @@ const PropertyList: React.FC<PropertyListProps> =({
                 <Card
                   key={property.id}
                   imageUrl={propertyImage?.imageUrl || image1}
-                  title={property.name || "No Title"}
+                  title={formatCardName(property.name || "No Title")}
                   text={property.address || "Address not available"}
                   share={
                     property.propertyShare
-                      ? `You Own ${property.propertyShare}th share`
+                      ? `You Own ${property.share}/${property.propertyShare}th share`
                       : "Share information not available"
                   }
                   id={property.id}

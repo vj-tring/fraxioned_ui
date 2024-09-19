@@ -36,7 +36,7 @@ export const fetchPropertySeasonHoliday = createAsyncThunk(
   async (propertyId: number, { rejectWithValue }) => {
     try {
       const response = await getPropertySeasonHoliday(propertyId);
-      console.log('Property Season Holiday Response:', response.data);
+      // console.log('Property Season Holiday Response:', response.data);
       return response.data.data;
     } catch (error) {
       console.error("Fetching property season holiday failed:", error);
