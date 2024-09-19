@@ -68,8 +68,8 @@ const PropertyRules: React.FC = () => {
                 <div className={styles.rulesContainer}>
                     <RuleCard icon={<Users />} title="Guests & Pets">
                         <p>Guests Allowed: {rulesData.noOfGuestsAllowed}</p>
-                        <p>Pets Allowed: {rulesData.noOfPetsAllowed}</p>
                         <p>Pet Policy: {rulesData.petPolicy}</p>
+                        <p>Pets Allowed: {rulesData.noOfPetsAllowed}</p>
                     </RuleCard>
                     <RuleCard icon={<Clock />} title="Check-in/out">
                         <p>Check-in: {formatTime(rulesData.checkInTime)}</p>
