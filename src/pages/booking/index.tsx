@@ -133,6 +133,7 @@ const Booking = () => {
                 backgroundColor: "#88CDD4",
                 textTransform: "capitalize",
               }}
+              className='calendarView'
             >
               View as Calendar
             </Button>
@@ -148,6 +149,8 @@ const Booking = () => {
                 borderRadius: "10px",
                 textTransform: "capitalize",
               }}
+              className='FilterView'
+
             >
               Filter
             </Button>

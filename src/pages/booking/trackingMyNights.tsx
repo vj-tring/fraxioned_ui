@@ -268,7 +268,6 @@ const TrackingMyNigts: React.FC = () => {
             loading="lazy"
           />
           <div className="d-flex flex-column Prop-sec">
-            {/* <span className="Prop">Property</span> */}
             <span className="Prop">
               {selectedProperty?.propertyName || "Select a property"}
             </span>
@@ -276,7 +275,9 @@ const TrackingMyNigts: React.FC = () => {
               {selectedProperty?.address || "Address"}
             </span>
             <span className="Prop">
-              {selectedProperty?.propertyShare || "Ownership"}
+              { selectedProperty?.propertyShare
+                      ? `You Own ${selectedProperty.share}/${selectedProperty?.propertyShare}th share`
+                      : "Share information not available"}
             </span>
           </div>
         </div>
@@ -294,7 +295,6 @@ const TrackingMyNigts: React.FC = () => {
             </div>
             <div className="Total-Nights pt-3 ">
               <table style={{ width: "90%" }}>
-                {/* <tbody> */}
                 <tr>
                   <th>Total Nights</th>
                   <th className="TableValues">
@@ -319,12 +319,10 @@ const TrackingMyNigts: React.FC = () => {
                     {propertyDetails.offRemainingNights}
                   </td>
                 </tr>
-                {/* </tbody> */}
               </table>
             </div>
             <div className="Total-Holiday pt-3">
               <table style={{ width: "90%" }}>
-                {/* <tbody> */}
                 <tr>
                   <th>Total Holidays</th>
                   <th className="TableValues">
@@ -349,7 +347,6 @@ const TrackingMyNigts: React.FC = () => {
                     {propertyDetails.offRemainingHolidayNights}
                   </th>
                 </tr>
-                {/* </tbody> */}
               </table>
             </div>
           </div>
@@ -361,12 +358,9 @@ const TrackingMyNigts: React.FC = () => {
                 {formatDate(propertyDetails.peakSeasonEndDate)}
               </li>
 
-              {/* <li>Dec 31 - May 31</li> */}
-              {/* <li>Sept 21 - Dec 30</li> */}
             </div>
             <div className="Total-Nights pt-4">
               <table style={{ width: "90%" }}>
-                {/* <tbody> */}
                 <tr>
                   <th>Total Nights</th>
                   <th className="TableValues">
@@ -391,12 +385,10 @@ const TrackingMyNigts: React.FC = () => {
                     {propertyDetails.peakRemainingNights}
                   </td>
                 </tr>
-                {/* </tbody> */}
               </table>
             </div>
             <div className="Total-Holiday pt-4">
               <table style={{ width: "90%" }}>
-                {/* <tbody> */}
                 <tr>
                   <th>Total Holidays</th>
                   <td className="TableValues">
@@ -421,7 +413,6 @@ const TrackingMyNigts: React.FC = () => {
                     {propertyDetails.peakRemainingHolidayNights}
                   </td>
                 </tr>
-                {/* </tbody> */}
               </table>
             </div>
           </div>

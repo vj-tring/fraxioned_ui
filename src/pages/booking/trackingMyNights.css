@@ -67,6 +67,7 @@
 }
 .Prop {
   font-weight: 600;
+  font-size: small;
   color: rgb(56, 55, 55) !important;
   margin-top: 5px;
 }
@@ -150,9 +151,14 @@ tr > th {
   }
   .My-nights > p {
     font-size: x-small !important;
+    margin-top: 10px;
   }
   .bar-btn-head {
-    margin-top: 10px;
+    margin-top: 20px;
+  }
+  .calendarView,.FilterView{
+    height: 25px;
+    font-size: x-small !important;
   }
   .bar-btn {
     border-radius: 50px;
@@ -166,19 +172,16 @@ tr > th {
     box-shadow: rgba(4, 66, 77, 0.24) 0px 3px 8px;
   }
   .ProperName {
-    font-size: 10px !important;
+    font-size: 9px !important;
     width: 10% !important;
   }
-  .propertyMenu {
-    height: 35px !important;
-    padding-bottom: 40px !important;
-  }
+ 
   .PropertyButton {
     width: 150px !important ;
   }
   .Year-btn {
     width: 150px !important ;
-    font-size: 10px !important;
+    font-size: 9px !important;
   }
   .Track-btn {
     font-size: 10px !important;
@@ -191,23 +194,25 @@ tr > th {
     display: flex;
     flex-direction: column;
     margin-left: 0px !important;
-    height: 1000px !important;
+    height: 810px !important;
     width: 360px !important;
     /* background-color: #88cdd4; */
   }
-  .OffHead{
+  .OffHead {
     font-size: 14px !important;
   }
   .OffSea {
     /* height: 140px; */
-    margin-left: 30px;
+    padding: 10px;
+    margin-left: 10px !important;
     display: flex;
     flex-direction: column;
     justify-content: space-between !important;
   }
   .PeakSea {
-    margin-top: 100%;
-    margin-left: 30px;
+    margin-top: 60%;
+    padding: 10px;
+    margin-left: 10px;
     display: flex;
     flex-direction: column;
     justify-content: space-between !important;
@@ -226,5 +231,18 @@ tr > th {
   }
   .Container1 {
     margin-left: 0 !important;
+  }
+  .PropImg1 {
+    width: 300px;
+    height: 184px;
+    padding: 0px;
+  }
+  .container3 {
+    padding-top: 0px !important;
+  }
+  .cardImg {
+    padding: 20px;
+    height: 270px;
+    border-radius: 10px;
   }
 }
