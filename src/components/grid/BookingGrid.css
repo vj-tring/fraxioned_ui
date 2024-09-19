@@ -1,0 +1,29 @@
+.GridBtn1 {
+  display: flex;
+  gap: 20px;
+  float: right !important;
+}
+
+.EditFont,
+.DeleteFont {
+  font-size: 20px !important;
+}
+
+@media only screen and (max-width: 480px) {
+  .MuiDataGrid-cell,
+  .MuiDataGrid-columnHeader {
+    font-size: xx-small !important;
+    width: 100px !important;
+  }
+
+  .GridBtn1 {
+    display: flex;
+    gap: 2px !important;
+    float: none !important;
+    /* flex-direction: column; */
+  }
+  .EditFont,
+  .DeleteFont {
+    font-size: 14px !important;
+  }
+}

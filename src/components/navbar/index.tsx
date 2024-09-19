@@ -110,7 +110,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
         bg="light"
         expand="lg"
         className="p-2"
-        style={{ height: "4.3rem" }}
+        // style={{ height: "4.3rem" }}
       >
         {!isAdminDashboard && (
           <Navbar.Brand href="/home" className="p-2">
@@ -118,11 +118,11 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               src={logo}
               height="40"
               width="160"
-              className="d-inline-block align-top"
+              className="d-inline-block align-top Navbar-Img"
               alt="Logo"
               loading="lazy"
             />
-          </Navbar.Brand>
+          </Navbar.Brand> 
         )}
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -148,7 +148,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
           </Nav>
         </Navbar.Collapse>
 
-        <Nav className="ml-auto">
+        <Nav className="ProfileMenu">
           <Box sx={{ display: "flex", alignItems: "center",backgroundColor:"none" }}>
             <IconButton
               onClick={handleClick}
@@ -166,17 +166,18 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                 sx={{
                   borderRadius: 1,
                 }}
+                
               >
-                <Box>
                   <Typography
                     variant="body2"
                     color="textPrimary"
-                    className="monsterrat p-2"
+                    className="monsterrat p-2 UserName"
                     sx={{
                       fontWeight: 600,
                       color: "#00636D",
                       textTransform: "uppercase",
                     }}
+                    
                   >
                     {storedName}
                   </Typography>
@@ -207,7 +208,6 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                     "M"
                   )}
                 </Avatar>
-              </Box>
             </IconButton>
           </Box>
           <Menu

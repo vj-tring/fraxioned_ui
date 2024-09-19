@@ -1,24 +1,24 @@
 .container {
   width: 100%;
   height: 500px;
-  /* border: 1px solid green; */
-  /* box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; */
+}
+.container3 {
+  display: flex;
+  flex-direction: row;
 }
 .bar-btn-head {
   width: 100%;
   display: inline-block;
 }
 .bar-btn {
-  /* border: 1px solid grey; */
   border-radius: 50px;
   width: 40%;
   display: flex;
   float: right;
   height: 50px;
   justify-content: space-between;
-  /* padding-left: 20px; */
   padding-right: 10px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  box-shadow: rgba(4, 66, 77, 0.24) 0px 3px 8px;
 }
 .Track-btn {
   background-color: #88cdd4;
@@ -47,8 +47,6 @@
 }
 .Prop-sec {
   margin-top: 10px;
-
-  /* margin-left: 3px; */
 }
 .Prop1 {
   font-size: small;
@@ -61,14 +59,11 @@
   background-size: cover;
   opacity: 90%;
   padding: 3px;
-  /* border: 1px solid grey; */
 }
 .cardImg {
-  /* box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px; */
   padding: 20px;
   height: 350px;
   border-radius: 10px;
-  /* height: 386px; */
 }
 .Prop {
   font-weight: 600;
@@ -82,28 +77,18 @@
   display: flex;
   justify-content: space-between;
   color: #808080 !important;
-  box-shadow: rgba(14, 63, 126, 0.04) 0px 0px 0px 1px,
-    rgba(42, 51, 69, 0.04) 0px 1px 1px -0.5px,
-    rgba(42, 51, 70, 0.04) 0px 3px 3px -1.5px,
-    rgba(42, 51, 70, 0.04) 0px 6px 6px -3px,
-    rgba(14, 63, 126, 0.04) 0px 12px 12px -6px,
-    rgba(14, 63, 126, 0.04) 0px 24px 24px -12px;
-  /* background-color: aquamarine; */
-  /* padding: 1.5rem; */
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
   border-radius: 10px;
 }
 
 .Total {
-  width: 1000px;
+  /* width: 1000px; */
   height: 370px;
   margin-left: 30px;
-  /* background-color: blue; */
-  /* border: 1px solid grey; */
 }
 
 .Off-season {
   width: 25%;
-  /* background-color: azure; */
   text-align: center;
   padding-top: 50px;
 }
@@ -117,12 +102,9 @@
 }
 .OffSea,
 .PeakSea {
-  /* width: 900px; */
   height: 140px;
   margin-left: 30px;
-  /* border: 1px solid grey; */
   display: flex;
-  /* padding: 20px; */
   justify-content: space-between !important;
 }
 
@@ -158,3 +140,84 @@ tr > th {
   background: none !important;
 }
 
+.My-nights {
+  width: 50%;
+}
+
+@media only screen and (max-width: 480px) {
+  .My-nights > h1 {
+    font-size: medium !important;
+  }
+  .My-nights > p {
+    font-size: x-small !important;
+  }
+  .bar-btn-head {
+    margin-top: 10px;
+  }
+  .bar-btn {
+    border-radius: 50px;
+    width: 100%;
+    display: flex;
+    /* flex-direction: column; */
+    float: right;
+    height: 45px;
+    justify-content: space-between;
+    padding-right: 10px;
+    box-shadow: rgba(4, 66, 77, 0.24) 0px 3px 8px;
+  }
+  .ProperName {
+    font-size: 10px !important;
+    width: 10% !important;
+  }
+  .propertyMenu {
+    height: 35px !important;
+    padding-bottom: 40px !important;
+  }
+  .PropertyButton {
+    width: 150px !important ;
+  }
+  .Year-btn {
+    width: 150px !important ;
+    font-size: 10px !important;
+  }
+  .Track-btn {
+    font-size: 10px !important;
+  }
+  .container3 {
+    display: flex;
+    flex-direction: column;
+  }
+  .Total {
+    display: flex;
+    flex-direction: column;
+    margin-left: 0px !important;
+    height: 1000px !important;
+    /* width: 250% !important; */
+    /* background-color: #88cdd4; */
+  }
+  .OffSea {
+    /* height: 140px; */
+    margin-left: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between !important;
+  }
+  .PeakSea {
+    margin-top: 100%;
+    margin-left: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between !important;
+  }
+  .Total-Nights > table,
+  .Total-Holiday > table {
+    width: 90% !important;
+  }
+  .Off-season > li {
+    font-size: 14px;
+    width: 10rem !important;
+  }
+  .Container1 {
+    margin-left: 0 !important;
+  }
+}

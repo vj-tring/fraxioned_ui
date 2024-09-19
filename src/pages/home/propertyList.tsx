@@ -7,7 +7,7 @@ import { FaPlus } from "react-icons/fa";
 import PorpImg from "../../assests/crown-jewel.jpg";
 import { resetLimits } from "@/store/slice/auth/propertyGuestSlice";
 import { clearDates } from "@/store/slice/datePickerSlice";
-import { User } from '@/store/model';
+import { User } from "@/store/model";
 import { propertyImageapi } from "@/api";
 
 interface Property {
@@ -21,7 +21,6 @@ interface Property {
   country?: string;
   latitude?: string;
   longitude?: string;
-
 }
 
 // Interface for space details
@@ -50,7 +49,6 @@ export interface Image {
   updatedBy: User;
 }
 
-
 interface RootState {
   properties: {
     cards: Property[];
@@ -62,12 +60,10 @@ interface PropertyListProps {
   paddingLeft?: boolean;
 }
 
-const PropertyList: React.FC<PropertyListProps> =({
-  paddingLeft = false }) => {
-  const {
-    cards: properties,
-   
-  } = useSelector((state: RootState) => state.properties);
+const PropertyList: React.FC<PropertyListProps> = ({ paddingLeft = false }) => {
+  const { cards: properties } = useSelector(
+    (state: RootState) => state.properties
+  );
 
   const dispatch = useDispatch();
   const [images, setImages] = useState<Image[]>([]);
@@ -79,7 +75,7 @@ const PropertyList: React.FC<PropertyListProps> =({
     try {
       const response = await propertyImageapi();
       const data = response.data.data as Image[];
-      setImages(data.filter(img => img.displayOrder === 1));
+      setImages(data.filter((img) => img.displayOrder === 1));
     } catch (error) {
       console.error("Error fetching images:", error);
     }
@@ -100,20 +96,22 @@ const PropertyList: React.FC<PropertyListProps> =({
     }
   };
 
-  const Shadow = properties.length >= 4 ? "rgba(0, 0, 0, 0.1) 1px 1px 2px 1px" : "none";
+  const Shadow =
+    properties.length >= 4 ? "rgba(0, 0, 0, 0.1) 1px 1px 2px 1px" : "none";
 
   const formatCardName = (name: string) => {
     return name.replace(/\s+\(.*\)/, "");
   };
 
   return (
-    <div className="Container1" 
-    >
+    <div className="Container1">
       <div>
-        <div className="d-flex flex-row PropImg "
-        style={{
-          marginLeft: paddingLeft ? '-45px' : '3%'
-        }}>
+        <div
+          className="d-flex flex-row Container1 "
+          style={{
+            marginLeft: paddingLeft ? "-45px" : "1%",
+          }}
+        >
           {showCarousel && (
             <div className="carousel-controls">
               <button
@@ -129,9 +127,10 @@ const PropertyList: React.FC<PropertyListProps> =({
             className={`Cardcontainer ${showCarousel ? "carousel" : ""}`}
             ref={carouselRef}
           >
-            {properties.map(property => {
-              // Find the image for the current property
-              const propertyImage = images.find(img => img.property.id === property.id);
+            {properties.map((property) => {
+              const propertyImage = images.find(
+                (img) => img.property.id === property.id
+              );
               return (
                 <Card
                   key={property.id}
@@ -160,9 +159,9 @@ const PropertyList: React.FC<PropertyListProps> =({
                     <FaPlus className="plus-icon" />
                   </a>
                 </div>
-                <div className="card-body">
+                <div className="card-body card-body-plus">
                   <h4 className="card-title">Adventure Awaits...</h4>
-                  <span className="card-text">
+                  <span className="card-text ">
                     Discover your next Fraxioned home at fraxioned.com
                   </span>
                 </div>
