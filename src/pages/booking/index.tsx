@@ -1,14 +1,6 @@
-import React, { useState, useEffect } from "react";
-import {
-  Typography,
-  Box,
-  Tabs,
-  Tab,
-  Button,
-  Modal,
-  IconButton,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import React, { useState, useEffect } from 'react';
+import { Typography, Box, Tabs, Tab, Button, Modal, IconButton } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 import FilterListIcon from "@mui/icons-material/FilterList";
 import BookingGrid from "@/components/grid/BookingGrid";
 import BookingCalendar from "@/components/booking-calendar";
@@ -16,13 +8,10 @@ import TrackingMyNigts from "./trackingMyNights";
 import PropertyList from "../home/propertyList";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store";
-import {
-  BookingData,
-  fetchUserBookings,
-} from "@/store/slice/auth/bookingSlice";
+import { BookingData, fetchUserBookings } from "@/store/slice/auth/bookingSlice";
 import { format } from "date-fns";
-import { cancelBooking } from "@/api";
-import CustomizedSnackbar from "@/components/customized-snackbar";
+import { cancelBooking } from '@/api';
+import CustomizedSnackbar from '@/components/customized-snackbar';
 
 const Booking = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -30,9 +19,7 @@ const Booking = () => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
-    "error"
-  );
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error" >("error");
   const user = useSelector((state: RootState) => state.auth.user);
   const userBookings = useSelector(
     (state: RootState) => state.bookings.userBookings || []
@@ -51,6 +38,16 @@ const Booking = () => {
     setSnackbarOpen(true);
   };
 
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const showSnackbar = (message: string, severity: "error" | "info" | "warning" = "error") => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarOpen(true);
+  };
+
   useEffect(() => {
     if (user && user.id) {
       dispatch(fetchUserBookings(user.id));
@@ -64,16 +61,13 @@ const Booking = () => {
 
   const details = (Array.isArray(userBookings) ? userBookings : [])
     .filter((booking: BookingData) => {
-      if (activeTab === 0)
-        return !booking.isCancelled && booking.isCompleted !== 1;
+      if (activeTab === 0) return !booking.isCancelled && booking.isCompleted !== 1;
       if (activeTab === 1) return booking.isCompleted === 1;
       if (activeTab === 2) return booking.isCancelled;
-      return true;
+      return true; 
     })
     .map((booking: BookingData) => {
-      const guestDetails = `${booking.noOfAdults} Adults, ${
-        booking.noOfChildren
-      } Children, ${booking.noOfPets} Pet${booking.noOfPets > 1 ? "s" : ""}`;
+      const guestDetails = `${booking.noOfAdults} Adults, ${booking.noOfChildren} Children, ${booking.noOfPets} Pet${booking.noOfPets > 1 ? "s" : ""}`;
       return {
         ...booking,
         property: booking.property.propertyName,
@@ -99,7 +93,7 @@ const Booking = () => {
         setSnackbarSeverity("success");
         setSnackbarOpen(true);
       } catch (error) {
-        console.error("Error canceling booking:", error);
+        console.error('Error canceling booking:', error);
         // Show error snackbar
         setSnackbarMessage("Error canceling booking. Please try again.");
         setSnackbarSeverity("error");
@@ -107,7 +101,7 @@ const Booking = () => {
       }
     }
   };
-
+  
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
   };
@@ -123,11 +117,7 @@ const Booking = () => {
   return (
     <>
       <Box sx={{ width: "90%", margin: "auto" }}>
-        <Typography
-          variant="h4"
-          className="my-Book mt-5 monsterrat mb-3"
-          gutterBottom
-        >
+        <Typography variant="h4" className="my-Book mt-5 monsterrat mb-3" gutterBottom>
           My Bookings
         </Typography>
         <div className="d-flex justify-between">
@@ -150,6 +140,7 @@ const Booking = () => {
             <Button
               disableRipple
               variant="contained"
+              onClick={handleOpenCalendar}
               style={{
                 marginLeft: "16px",
                 borderRadius: "10px",
@@ -189,14 +180,7 @@ const Booking = () => {
         </div>
 
         <div className="NewBook">
-          <h1
-            style={{
-              fontSize: "20px",
-              fontWeight: "600",
-              width: "80%",
-              marginTop: "50px",
-            }}
-          >
+          <h1 style={{ fontSize: "20px", fontWeight: "600", width: "80%", marginTop: "50px" }}>
             Create New Bookings
           </h1>
           <PropertyList paddingLeft />
@@ -210,27 +194,26 @@ const Booking = () => {
         aria-labelledby="calendar-modal-title"
         aria-describedby="calendar-modal-description"
       >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "97%",
-            height: "60%",
-            bgcolor: "background.paper",
-            p: 4,
-            borderRadius: "10px",
-            overflow: "auto",
-            padding: "20px",
-            // boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
-          }}
-        >
+        <Box sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '97%',
+          height: '60%',
+          bgcolor: 'background.paper',
+          p: 4,
+          borderRadius: '10px',
+          overflow: 'auto',
+          padding: '20px',
+          // boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
+          
+        }}>
           <IconButton
             aria-label="close"
             onClick={handleCloseCalendar}
             sx={{
-              position: "absolute",
+              position: 'absolute',
               right: 8,
               top: 8,
             }}
@@ -247,6 +230,7 @@ const Booking = () => {
         severity={snackbarSeverity}
       />
     </>
+    
   );
 };
 

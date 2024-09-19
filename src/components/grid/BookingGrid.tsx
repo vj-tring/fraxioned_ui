@@ -21,12 +21,15 @@ interface BookingGridProps {
   }>;
   onEdit: (id: number) => void;
   onCancel: (id: number) => void;
+  activeTab: number;
 }
 
 const BookingGrid: React.FC<BookingGridProps> = ({
   bookings,
   onEdit,
   onCancel,
+  activeTab,
+
 }) => {
   const columns: GridColDef[] = [
     {
@@ -65,33 +68,59 @@ const BookingGrid: React.FC<BookingGridProps> = ({
       align: "center",
     },
     {
+      field: "totalNights",
+      headerName: "TotalNights",
+      flex: 1,
+      headerAlign: "center",
+      align: "center",
+    },
+  ];
+
+  if (activeTab === 0) {
+    columns.push({
       field: "actions",
       headerName: "Actions",
       headerAlign: "center",
       align: "center",
       flex: 1,
       renderCell: (params) => (
-        <div className="GridBtn1">
-          <div onClick={() => onEdit(params.row.id)}>
-            <ModeEditOutlineOutlinedIcon
-              // sx={{
-              //   fontSize: "14px",
-              // }}
-              className="EditFont"
-            />
-          </div>
-          <div onClick={() => onCancel(params.row.id)}>
-            <DeleteOutlineOutlinedIcon
-              // sx={{
-              //   fontSize: "14px",
-              // }}
-              className="DeleteFont"
-            />
-          </div>
-        </div>
+        <>
+          <Button
+            variant="outlined"
+            disableRipple
+            onClick={() => onEdit(params.row.id)}
+            sx={{
+              marginRight: 1,
+              height: "25px",
+              fontSize: "12px",
+              borderRadius: "15px",
+              border: "1px solid black",
+              color: "#808080",
+              fontFamily: "Montserrat, sans-serif",
+            }}
+          >
+            Edit
+          </Button>
+          <Button
+            variant="outlined"
+            color="primary"
+            disableRipple
+            onClick={() => onCancel(params.row.id)}
+            sx={{
+              borderRadius: "15px",
+              height: "25px",
+              fontSize: "12px",
+              border: "1px solid black",
+              color: "#808080",
+              fontFamily: "Montserrat, sans-serif",
+            }}
+          >
+            Cancel
+          </Button>
+        </>
       ),
-    },
-  ];
+    });
+  }
 
   return (
     <div
