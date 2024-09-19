@@ -21,12 +21,15 @@ interface BookingGridProps {
   }>;
   onEdit: (id: number) => void;
   onCancel: (id: number) => void;
+  activeTab: number;
 }
 
 const BookingGrid: React.FC<BookingGridProps> = ({
   bookings,
   onEdit,
   onCancel,
+  activeTab,
+
 }) => {
   const columns: GridColDef[] = [
     {
@@ -65,6 +68,18 @@ const BookingGrid: React.FC<BookingGridProps> = ({
       align: "center",
     },
     {
+
+      field: "totalNights",
+      headerName: "TotalNights",
+      flex: 1,
+      headerAlign: "center",
+      align: "center",
+    },
+  ];
+
+  if (activeTab === 0) {
+    columns.push({
+
       field: "actions",
       headerName: "Actions",
       headerAlign: "center",
@@ -89,9 +104,10 @@ const BookingGrid: React.FC<BookingGridProps> = ({
             />
           </div>
         </div>
+
       ),
-    },
-  ];
+    });
+  }
 
   return (
     <div

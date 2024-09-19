@@ -27,6 +27,11 @@ interface DatePickerWithRangeProps extends React.HTMLAttributes<HTMLDivElement> 
   initialRange?: DateRange;
   selectingFrom?: boolean;
   userId?: string;
+  fetchBookingsOnMount?: boolean;
+  externalBookedDates?: Date[];
+  hideBookedDates?: boolean;
+  propertyColor: string;
+  disableStrikethrough?: boolean;
 }
 
 export function DatePickerWithRange({
@@ -35,6 +40,12 @@ export function DatePickerWithRange({
   initialRange,
   selectingFrom,
   userId,
+  showEndCalendar = true,
+  fetchBookingsOnMount = false,
+  externalBookedDates = [], 
+  hideBookedDates = false,
+  propertyColor,
+  disableStrikethrough = false,
 }: DatePickerWithRangeProps) {
   const today = new Date();
   const endDate = new Date(today.getFullYear() + 5, 11, 31);
@@ -64,11 +75,17 @@ export function DatePickerWithRange({
   const MILLISECONDS_IN_A_DAY = 1000 * 60 * 60 * 24;
 
   useEffect(() => {
+    if (fetchBookingsOnMount) {
+      dispatch(fetchBookings());
+    }
+  }, [dispatch, fetchBookingsOnMount]);
+
+  useEffect(() => {
     dispatch(fetchBookings());
   }, [dispatch]);
 
   useEffect(() => {
-    console.log('Bookings in component:', bookings);
+    // console.log('Bookings in component:', bookings);
   }, [bookings]);
 
   useEffect(() => {
@@ -106,11 +123,14 @@ export function DatePickerWithRange({
   };
 
   const bookedDates = React.useMemo(() => {
+    if (externalBookedDates.length > 0) {
+      return externalBookedDates;
+    }
     if (!selectedPropertyDetails) return [];
 
     const dates = bookings
-      .filter(booking => booking.property.id === selectedPropertyDetails.id)
-      .flatMap(booking => {
+    .filter(booking => booking.property.id === selectedPropertyDetails.id && !booking.isCancelled)
+    .flatMap(booking => {
         if (!booking.checkinDate || !booking.checkoutDate) return [];
         const start = new Date(booking.checkinDate);
         const end = new Date(booking.checkoutDate);
@@ -120,11 +140,11 @@ export function DatePickerWithRange({
         }
         return dates;
       });
-    console.log('Generated bookedDates for property:', selectedPropertyDetails.id, dates);
     return dates;
-  }, [bookings, selectedPropertyDetails]);
+  }, [bookings, selectedPropertyDetails, externalBookedDates]);
 
   const isBookedDate = (date: Date) => {
+    if (hideBookedDates) return false;
     return bookedDates.some(
       (bookedDate) =>
         date.getFullYear() === bookedDate.getFullYear() &&
@@ -225,7 +245,8 @@ export function DatePickerWithRange({
     const userBookings = bookings.filter(
       booking =>
         booking.property.id === selectedPropertyDetails.id &&
-        booking.user.id === currentUser.id
+        booking.user.id === currentUser.id &&
+        !booking.isCancelled 
     );
   
     if (userBookings.length === 0) {
@@ -465,7 +486,7 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
           disabled={disableDates}
           locale={customLocale}
           modifiers={{
-            booked: bookedDates,
+            booked: hideBookedDates ? [] : bookedDates ,
             unavailable: unavailableDates,
             blue: blueDates,
             holiday: seasonHolidays.map(h => ({
@@ -473,8 +494,14 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
               to: new Date(h.holiday.endDate)
             })),
           }}
+          modifiersStyles={{
+            booked: {
+              backgroundColor: propertyColor,
+              color: 'white',
+            },
+          }}
           modifiersClassNames={{
-            booked: 'booked-date',
+            booked: disableStrikethrough ? 'booked-date-no-strike' : 'booked-date',
             unavailable: 'unavailable-date',
             blue: 'blue-date',
             holiday: 'holiday-date',
@@ -488,9 +515,14 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
         </div>
       </div>
       <style>{`
-        .booked-date {
+         .booked-date {
           color: gray;
           text-decoration: line-through;
+        }
+
+        .booked-date-no-strike {
+          color: white;
+          // background-color: ${propertyColor} !important;
         }
   
         .unavailable-date {
@@ -518,16 +550,18 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
             <div><b className="bold">Off Nights : </b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.offRemainingNights || 'N/A'} Nights</div>
           </div>
         </div> */}
+                {showEndCalendar && (
         <div className="flex items-center justify-between end-calendar">
           <div className='stay-length'>
-              <div><b className="bold">Nights: [Peak -</b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.peakRemainingNights || '0'} , <b className="bold">Off -</b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.offRemainingNights || '0'}]</div>
-              <div><b className="bold">Peak Season :</b> [{formatDate(selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.peakSeasonStartDate)} - {formatDate(selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.peakSeasonEndDate)}] </div>  
-              <div><b className="bold">Max Stay :</b> {selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.maximumStayLength || '0'} Nights</div>
+            <div><b className="bold">Nights: [Peak -</b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.peakRemainingNights || '0'} , <b className="bold">Off -</b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.offRemainingNights || '0'}]</div>
+            <div><b className="bold">Peak Season :</b> [{formatDate(selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.peakSeasonStartDate)} - {formatDate(selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.peakSeasonEndDate)}] </div>  
+            <div><b className="bold">Max Stay :</b> {selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.maximumStayLength || '0'} Nights</div>
           </div>
           <div onClick={clearDatesHandler} className="btn-clear">
             Clear dates
           </div>
         </div>
+      )}
     </div>
   );
 }

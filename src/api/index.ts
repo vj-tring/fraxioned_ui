@@ -24,6 +24,11 @@ export const getProperties = () =>
 export const getRoles = () =>
     axiosInstance.get('/v1/roles');
 
+
+export const cancelBooking = (bookingId: number, userId: number) =>
+    axiosInstance.post(`/v1/bookings/${bookingId}/${userId}/cancel`);
+
+
 //sendinvite api
 export const sendInvite = async (payload: any) =>
     axiosInstance.post('/v1/authentication/invite', payload);
