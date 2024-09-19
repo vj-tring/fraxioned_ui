@@ -5,24 +5,32 @@ import Box from "@mui/material/Box";
 import { confirmBooking, setNotes } from "@/store/slice/auth/bookingSlice";
 import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "@/store";
-import { Button, CircularProgress, SvgIcon, Typography, Skeleton } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  SvgIcon,
+  Typography,
+  Skeleton,
+} from "@mui/material";
 import CustomizedSnackbars from "../../components/customized-snackbar";
 import { keyframes } from "@mui/system";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import img1 from "../../assests/bear-lake-bluffs.jpg";
-import img2 from "../../assests/blue-bear-lake.jpg";
-import img3 from "../../assests/crown-jewel.jpg";
-import img4 from "../../assests/lake-escape.jpg";
+
 import { resetLimits } from "@/store/slice/auth/propertyGuestSlice";
 import { clearDates } from "@/store/slice/datePickerSlice";
-import { selectSelectedPropertyDetails, User } from "@/store/slice/auth/property-slice";
+import {
+  selectSelectedPropertyDetails,
+  User,
+} from "@/store/slice/auth/property-slice";
 import { propertyImageapi } from "@/api";
 
 const mockBooking = {
   property: { id: "3" },
   checkinDate: new Date().toISOString(),
-  checkoutDate: new Date(new Date().setDate(new Date().getDate() + 2)).toISOString(),
+  checkoutDate: new Date(
+    new Date().setDate(new Date().getDate() + 2)
+  ).toISOString(),
   noOfAdults: 2,
   noOfChildren: 1,
   noOfPets: 0,
@@ -72,7 +80,10 @@ export interface Image {
 }
 
 const CheckIcon: React.FC = () => (
-  <SvgIcon viewBox="0 0 24 24" sx={{ fontSize: 40, color: "#4CAF50", marginRight: "3px" }}>
+  <SvgIcon
+    viewBox="0 0 24 24"
+    sx={{ fontSize: 40, color: "#4CAF50", marginRight: "3px" }}
+  >
     <path d="M10 15.172l-3.707-3.707 1.414-1.414L10 12.343l7.293-7.293 1.414 1.414L10 15.172z" />
   </SvgIcon>
 );
@@ -90,7 +101,9 @@ const BookingSummaryForm: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { currentBooking } = useSelector((state: RootState) => state.bookings);
-  const currentBookingId = useSelector((state: RootState) => state.properties.selectedCard?.id);
+  const currentBookingId = useSelector(
+    (state: RootState) => state.properties.selectedCard?.id
+  );
 
   const [notes, setNotesValue] = useState<string>(currentBooking?.notes || "");
   const [isLoading, setIsLoading] = useState(false);
@@ -99,10 +112,14 @@ const BookingSummaryForm: React.FC = () => {
   const booking = currentBooking || mockBooking;
   const checkinDate = new Date(booking.checkinDate);
   const checkoutDate = new Date(booking.checkoutDate);
-  const totalNights = Math.ceil((checkoutDate.getTime() - checkinDate.getTime()) / (1000 * 60 * 60 * 24));
+  const totalNights = Math.ceil(
+    (checkoutDate.getTime() - checkinDate.getTime()) / (1000 * 60 * 60 * 24)
+  );
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "success"
+  );
   const [imageDetails, setImageDetails] = useState<Image[]>([]);
 
   useEffect(() => {
@@ -110,7 +127,8 @@ const BookingSummaryForm: React.FC = () => {
       try {
         const response = await propertyImageapi();
         const filterById = response.data.data.filter(
-          (image: Image) => image.property?.id === currentBookingId && image.displayOrder
+          (image: Image) =>
+            image.property?.id === currentBookingId && image.displayOrder
         );
         const sortedImages = filterById.sort(
           (a: Image, b: Image) => a.displayOrder - b.displayOrder
@@ -135,7 +153,9 @@ const BookingSummaryForm: React.FC = () => {
     try {
       dispatch(setNotes(notes));
       const { season, totalAmountDue, ...bookingPayload } = booking;
-      const result = await dispatch(confirmBooking({ ...bookingPayload, notes })).unwrap();
+      const result = await dispatch(
+        confirmBooking({ ...bookingPayload, notes })
+      ).unwrap();
       setIsLoading(false);
       setSnackbarMessage(result.message);
       setSnackbarSeverity("success");
@@ -165,6 +185,26 @@ const BookingSummaryForm: React.FC = () => {
   };
 
   return (
+    <>
+          {isLoading && !showConfirmation && (
+        <Box
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(255, 255, 255, 0.9)",
+            zIndex: 1000,
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      )}
+
     <Box
       my={2}
       sx={{
@@ -181,24 +221,6 @@ const BookingSummaryForm: React.FC = () => {
         position: "relative",
       }}
     >
-      {isLoading && !showConfirmation && (
-        <Box
-          sx={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "rgba(255, 255, 255, 0.8)",
-            zIndex: 1000,
-          }}
-        >
-          <CircularProgress />
-        </Box>
-      )}
 
       <CustomizedSnackbars
         open={showSnackbar}
@@ -206,7 +228,7 @@ const BookingSummaryForm: React.FC = () => {
         message={snackbarMessage}
         severity={snackbarSeverity}
       />
-      
+
       {showConfirmation && (
         <Box
           sx={{
@@ -241,29 +263,32 @@ const BookingSummaryForm: React.FC = () => {
           <Row className="RowImg">
             <Col sm={11}>
               {isLoading ? (
-                <Skeleton variant="rectangular" width="100%" height={200} />
+                <Skeleton variant="rectangular" width="100%" height={250} />
+              ) : imageDetails[0] ? (
+                <img
+                  src={imageDetails[0].imageUrl}
+                  alt={`Image ${imageDetails[0].displayOrder}`}
+                  loading="lazy"
+                  style={{ width: "100%", height: "250px", objectFit: "cover" }}
+                  className="PropImgHeadHeight"
+                />
               ) : (
-                imageDetails[0] ? (
-                  <img
-                    src={imageDetails[0].imageUrl}
-                    alt={`Image ${imageDetails[0].displayOrder}`}
-                    loading="lazy"
-                    style={{ width: "100%", height: "300px", objectFit: "cover" }}
-                    className="PropImgHeadHeight"
-
-                  />
-                ) : (
-                  <div className="placeholder-image">No Image</div>
-                )
+                <div className="placeholder-image">No Image</div>
               )}
             </Col>
           </Row>
           <Row className="mt-3 SumImg">
             {isLoading ? (
               <>
-                <Col sm={4}><Skeleton variant="rectangular" width="100%" height={150} /></Col>
-                <Col sm={4}><Skeleton variant="rectangular" width="100%" height={150} /></Col>
-                <Col sm={4}><Skeleton variant="rectangular" width="100%" height={150} /></Col>
+                <Col sm={4}>
+                  <Skeleton variant="rectangular" width="100%" height={130} />
+                </Col>
+                <Col sm={4}>
+                  <Skeleton variant="rectangular" width="100%" height={130} />
+                </Col>
+                <Col sm={4}>
+                  <Skeleton variant="rectangular" width="100%" height={130} />
+                </Col>
               </>
             ) : (
               imageDetails.slice(1, 4).map((image, index) => (
@@ -272,7 +297,11 @@ const BookingSummaryForm: React.FC = () => {
                     src={image.imageUrl}
                     alt={`Image ${image.displayOrder}`}
                     loading="lazy"
-                    style={{ width: "100%", height: "150px", objectFit: "cover" }}
+                    style={{
+                      width: "100%",
+                      height: "130px",
+                      objectFit: "cover",
+                    }}
                     className="PropImgHeight"
                   />
                 </Col>
@@ -287,7 +316,7 @@ const BookingSummaryForm: React.FC = () => {
             {isLoading ? (
               <>
                 <Skeleton width="60%" height={20} />
-                <Skeleton width="80%" height={16} sx={{ mt: 1 }} />
+                <Skeleton width="100%" height={16} sx={{ mt: 1 }} />
                 <Skeleton width="40%" height={16} sx={{ mt: 1 }} />
                 <Skeleton width="50%" height={16} sx={{ mt: 1 }} />
                 <Skeleton width="50%" height={16} sx={{ mt: 1 }} />
@@ -299,17 +328,23 @@ const BookingSummaryForm: React.FC = () => {
                 <div>
                   <div className="property">Property</div>
                   <div className="colon">:</div>
-                  <div className="value">{selectedPropertyDetails?.propertyName || "N/A"}</div>
+                  <div className="value">
+                    {selectedPropertyDetails?.propertyName || "N/A"}
+                  </div>
                 </div>
                 <div>
                   <div className="property">Check-in</div>
                   <div className="colon">:</div>
-                  <div className="value">{formatDate(new Date(checkinDate))}</div>
+                  <div className="value">
+                    {formatDate(new Date(checkinDate))}
+                  </div>
                 </div>
                 <div>
                   <div className="property">Check-out</div>
                   <div className="colon">:</div>
-                  <div className="value">{formatDate(new Date(checkoutDate))}</div>
+                  <div className="value">
+                    {formatDate(new Date(checkoutDate))}
+                  </div>
                 </div>
                 <div>
                   <div className="property">Total Nights</div>
@@ -413,6 +448,7 @@ const BookingSummaryForm: React.FC = () => {
         </div>
       </div>
     </Box>
+    </>
   );
 };
 
