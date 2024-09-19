@@ -23,7 +23,7 @@ interface TabSwitchProps {
 const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
     const [selectedTab, setSelectedTab] = useState(0);
     const [isEditing, setIsEditing] = useState(false);
-    const [userData, setUserData] = useState(null);
+    const [userData, setUserData] = useState<any>(null);
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
 
@@ -64,19 +64,26 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
         return <div className={styles.loading}>Loading...</div>;
     }
 
+    const isAdmin = userData.role.roleName === 'Admin';
+
     return (
         <div className={styles.tabContainer}>
-            <Tabs
-                value={selectedTab}
-                onChange={handleTabChange}
-                aria-label="user edit tabs"
-                className={styles.tabs}
-            >
-                <Tab label="General Details" />
-                <Tab label="Property" />
-                <Tab label="Booking" />
-                <Tab label="Availability" />
-
+            <div className={styles.tabWrapper}>
+                <Tabs
+                    value={selectedTab}
+                    onChange={handleTabChange}
+                    aria-label="user edit tabs"
+                    className={styles.tabs}
+                >
+                    <Tab label="General Details" />
+                    {!isAdmin && (
+                        <>
+                            <Tab label="Property" />
+                            <Tab label="Booking" />
+                            <Tab label="Availability" />
+                        </>
+                    )}
+                </Tabs>
                 <IconButton
                     onClick={handleBackClick}
                     className={styles.backButton}
@@ -84,9 +91,7 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
                 >
                     <ArrowBackIcon />
                 </IconButton>
-
-
-            </Tabs>
+            </div>
 
             <div className={styles.content}>
                 {selectedTab === 0 && !isEditing ? (
@@ -102,15 +107,15 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
                     />
                 )}
 
-                {selectedTab === 1 && (
+                {!isAdmin && selectedTab === 1 && (
                     <PropertyTab Id={Number(id)} />
                 )}
 
-                {selectedTab === 2 && (
+                {!isAdmin && selectedTab === 2 && (
                     <UserBookings userId={Number(id)} />
                 )}
 
-                {selectedTab === 3 && (
+                {!isAdmin && selectedTab === 3 && (
                     <Availability userId={Number(id)} />
                 )}
             </div>
