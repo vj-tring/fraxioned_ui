@@ -176,6 +176,7 @@ const bookingSlice = createSlice({
     error: null as string | null,
     successMessage: null as string | null,
     isLoading: false,
+    bookingSummary: null as BookingSummaryResponse | null, // Add this line
   } as BookingState,
   reducers: {
     clearBookingMessages: (state) => {
@@ -251,8 +252,7 @@ const bookingSlice = createSlice({
       .addCase(bookingSummary.pending, (state) => {
         state.isLoading = true;
         state.error = null;
-        state.successMessage = null;
-      })
+        state.successMessage = "Booking summary created successfully";      })
       .addCase(
         bookingSummary.fulfilled,
         (state, action: PayloadAction<BookingSummaryResponse>) => {

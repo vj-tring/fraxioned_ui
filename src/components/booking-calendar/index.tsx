@@ -78,10 +78,6 @@ const BookingCalendar = () => {
               <DatePickerWithRange
                 key={`${property.id}-${selectedDate.getTime()}`}
                 userId={userId}
-                initialRange={{
-                  from: new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1),
-                  to: new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0),
-                }}
                 onSelect={(range) => {
                   console.log(`Selected range for ${property.name}:`, range);
                 }}
