@@ -155,8 +155,8 @@ const BookingSearchBar: React.FC = () => {
       console.log("Submitting booking data:", bookingData);
       const result = await dispatch(bookingSummary(bookingData)).unwrap();
 
-      if (result) {
-        console.log("Booking summary created successfully:", result);
+      if (result && !result.error) {
+        console.log('Booking summary created successfully:', result);
 
         const updatedBookingData = {
           ...bookingData,
@@ -168,13 +168,18 @@ const BookingSearchBar: React.FC = () => {
 
         await dispatch(saveBooking(updatedBookingData));
         navigate("/home/booking-summary");
-      }
-    } catch (error) {
-      console.error("Error during booking process:", error);
-      showSnackbar(
-        "An error occurred while processing your booking. Please try again.",
-        "error"
-      );
+      }else {
+        // Handle any errors returned in the result
+        throw new Error(result.message || "An error occurred while processing your booking.");
+    } 
+  }
+ catch (error: any) {
+  console.error("Error during booking process:", error);
+  if (error.statusCode === 403) {
+    showSnackbar(error.message || "An error occurred while processing your booking. Please check your try again..", "error");
+  } else {
+    showSnackbar(error.message || "An error occurred while processing your booking. Please try again.", "error");
+  }
     }
   };
 
