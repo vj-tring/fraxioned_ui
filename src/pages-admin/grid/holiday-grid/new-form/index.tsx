@@ -120,7 +120,9 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
                 year: Number(year),
                 startDate: startDate?.toISOString().split('T')[0],
                 endDate: endDate?.toISOString().split('T')[0],
-                properties: selectedProperties.map(id => ({ id })),
+                properties: allPropertiesSelected
+                    ? properties.map(property => ({ id: property.id }))
+                    : selectedProperties.map(id => ({ id })),
                 createdBy: {
                     id: userId,
                 },
@@ -134,21 +136,27 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
         }
     };
 
+
+
+
     const handlePropertyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = event.target;
-        const propertyId = parseInt(name);
-        if (checked) {
-            setSelectedProperties(prev => [...prev, propertyId]);
+        if (name === 'allProperties') {
+            handleAllPropertiesChange(checked);
         } else {
-            setSelectedProperties(prev => prev.filter(id => id !== propertyId));
+            const propertyId = parseInt(name);
+            if (checked) {
+                setSelectedProperties(prev => [...prev, propertyId]);
+            } else {
+                setSelectedProperties(prev => prev.filter(id => id !== propertyId));
+            }
+            updateAllPropertiesSelected();
         }
-        updateAllPropertiesSelected();
     };
 
 
 
-    const handleAllPropertiesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { checked } = event.target;
+    const handleAllPropertiesChange = (checked: boolean) => {
         setAllPropertiesSelected(checked);
         if (checked) {
             setSelectedProperties(properties.map(property => property.id));
@@ -241,20 +249,22 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
                                     Select Properties
                                 </Typography>
                                 <FormControl component="fieldset" className={styles.checkboxGroup} error={!!propertiesError}>
-                                    {/* <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={allPropertiesSelected}
-                                                onChange={handleAllPropertiesChange}
-                                                name="allProperties"
-                                            />
-                                        }
-                                        // label="All Properties"
-                                        className={styles.formControlLabel}
-                                    /> */}
                                     <div className={styles.scrollableContainer}>
                                         <FormGroup>
                                             <Grid container>
+                                                <Grid item xs={12}>
+                                                    <FormControlLabel
+                                                        control={
+                                                            <Checkbox
+                                                                checked={allPropertiesSelected}
+                                                                onChange={(e) => handlePropertyChange(e)}
+                                                                name="allProperties"
+                                                            />
+                                                        }
+                                                        label="All Properties"
+                                                        className={styles.formControlLabel}
+                                                    />
+                                                </Grid>
                                                 {properties.map((property) => (
                                                     <Grid item xs={6} key={property.id}>
                                                         <FormControlLabel
