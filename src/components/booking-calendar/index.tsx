@@ -4,13 +4,14 @@ import './booking-calendar.css';
 import { DatePickerWithRange } from '../calender';
 import { fetchProperties } from '@/store/slice/auth/property-slice';
 import { fetchUserBookings } from '@/store/slice/auth/bookingSlice';
+import { AppDispatch } from '@/store';
 
 const predefinedColors = ['#87CEEB', '#FFA500', '#b94ccf', '#FF33A1', '#A133FF', '#33FFA1'];
 
 const BookingCalendar = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [activeProperty, setActiveProperty] = useState<string | null>(null);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const userId = useSelector((state: any) => state.auth.user?.id);
   const { cards: properties, loading: propertiesLoading } = useSelector((state: any) => state.properties);
@@ -36,11 +37,15 @@ const BookingCalendar = () => {
     color: predefinedColors[index % predefinedColors.length], 
   }));
 
-  // Function to get booked dates for a specific property
   const getBookedDatesForProperty = (propertyId: number) => {
+    if (!Array.isArray(userBookings)) {
+      console.warn('userBookings is not an array:', userBookings);
+      return [];
+    }
+  
     const bookedDates = userBookings
-    .filter((booking: any) => booking.property.id === propertyId && !booking.isCancelled)
-    .flatMap((booking: any) => {
+      .filter((booking: any) => booking.property.id === propertyId && !booking.isCancelled)
+      .flatMap((booking: any) => {
         const start = new Date(booking.checkinDate);
         const end = new Date(booking.checkoutDate);
         const dates = [];
@@ -87,6 +92,7 @@ const BookingCalendar = () => {
                 hideBookedDates={getBookedDatesForProperty(property.id).length === 0}
                 propertyColor={property.color}
                 disableStrikethrough={true}
+                isViewOnly={true} 
               />
             </div>
           ))}
@@ -97,19 +103,13 @@ const BookingCalendar = () => {
               <DatePickerWithRange
                 key={`${property.id}-${selectedDate.getTime()}`}
                 userId={userId}
-                initialRange={{
-                  from: new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1),
-                  to: new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0),
-                }}
-                onSelect={(range) => {
-                  console.log(`Selected range for ${property.name}:`, range);
-                }}
                 showEndCalendar={false}
                 fetchBookingsOnMount={activeProperty === property.id}
                 externalBookedDates={getBookedDatesForProperty(property.id)}
                 hideBookedDates={getBookedDatesForProperty(property.id).length === 0}
                 propertyColor={property.color}
                 disableStrikethrough={true}
+                isViewOnly={true} 
               />
             </div>
           ))}
