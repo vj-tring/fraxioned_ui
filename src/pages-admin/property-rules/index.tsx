@@ -4,6 +4,7 @@ import { getProperrtDetailsbyId } from '@/api';
 import EditButton from '@/components/edit';
 import styles from './propertyrules.module.css';
 import Loader from '@/components/loader';
+import { Users, Dog, Clock, Wifi, Calendar, Moon, Sun } from 'lucide-react';
 
 interface PropertyRulesData {
     noOfGuestsAllowed: number;
@@ -64,29 +65,42 @@ const PropertyRules: React.FC = () => {
                     <h2 className={styles.title}>Property Rules</h2>
                     <EditButton onClick={handleEdit} />
                 </div>
-                <div className={styles.rulesGrid}>
-                    <InfoItem label="Guests Allowed" value={rulesData.noOfGuestsAllowed} />
-                    <InfoItem label="Pet Policy" value={rulesData.petPolicy} />
-                    <InfoItem label="Pets Allowed" value={rulesData.noOfPetsAllowed} />
-                    <InfoItem label="Check-in Time" value={formatTime(rulesData.checkInTime)} />
-                    <InfoItem label="Check-out Time" value={formatTime(rulesData.checkOutTime)} />
-                    <InfoItem label="WiFi Network" value={rulesData.wifiNetwork} />
-                    <InfoItem label="Peak Season Start" value={rulesData.peakSeasonStartDate} />
-                    <InfoItem label="Peak Season End" value={rulesData.peakSeasonEndDate} />
-                    <InfoItem label="Peak Season Alloted Nights" value={rulesData.peakSeasonAllottedNights} />
-                    <InfoItem label="Off Season Alloted Nights" value={rulesData.offSeasonAllottedNights} />
-                    <InfoItem label="Peak Season Alloted Holiday Nights" value={rulesData.peakSeasonAllottedHolidayNights} />
-                    <InfoItem label="Off Season Alloted Holiday Nights" value={rulesData.offSeasonAllottedHolidayNights} />
+                <div className={styles.rulesContainer}>
+                    <RuleCard icon={<Users />} title="Guests & Pets">
+                        <p>Guests Allowed: {rulesData.noOfGuestsAllowed}</p>
+                        <p>Pet Policy: {rulesData.petPolicy}</p>
+                        <p>Pets Allowed: {rulesData.noOfPetsAllowed}</p>
+                    </RuleCard>
+                    <RuleCard icon={<Clock />} title="Check-in/out">
+                        <p>Check-in: {formatTime(rulesData.checkInTime)}</p>
+                        <p>Check-out: {formatTime(rulesData.checkOutTime)}</p>
+                    </RuleCard>
+                    <RuleCard icon={<Wifi />} title="WiFi">
+                        <p>Network: {rulesData.wifiNetwork}</p>
+                    </RuleCard>
+                    <RuleCard icon={<Calendar />} title="Season Dates">
+                        <p>Peak Start: {rulesData.peakSeasonStartDate}</p>
+                        <p>Peak End: {rulesData.peakSeasonEndDate}</p>
+                    </RuleCard>
+                    <RuleCard icon={<Sun />} title="Peak Season">
+                        <p>Allotted Nights: {rulesData.peakSeasonAllottedNights}</p>
+                        <p>Holiday Nights: {rulesData.peakSeasonAllottedHolidayNights}</p>
+                    </RuleCard>
+                    <RuleCard icon={<Moon />} title="Off Season">
+                        <p>Allotted Nights: {rulesData.offSeasonAllottedNights}</p>
+                        <p>Holiday Nights: {rulesData.offSeasonAllottedHolidayNights}</p>
+                    </RuleCard>
                 </div>
             </div>
         </div>
     );
 };
 
-const InfoItem: React.FC<{ label: string; value: string | number }> = ({ label, value }) => (
-    <div className={styles.infoItem}>
-        <span className={styles.label}>{label}:</span>
-        <span className={styles.value}>{value}</span>
+const RuleCard: React.FC<{ icon: React.ReactNode; title: string; children: React.ReactNode }> = ({ icon, title, children }) => (
+    <div className={styles.ruleCard}>
+        <div className={styles.cardIcon}>{icon}</div>
+        <h3 className={styles.cardTitle}>{title}</h3>
+        <div className={styles.cardContent}>{children}</div>
     </div>
 );
 
