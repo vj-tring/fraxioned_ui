@@ -7,18 +7,20 @@
 
 .sidebar {
     width: 260px;
-    height: 635px;
+    height: 100vh;
     background-color: #ffffff;
     padding: 2rem;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
 }
 
 .sidebarTitle {
-    font-size: 1.2rem;
+    font-size: 20px;
+    font-weight: bolder;
+    margin-left: 24px;
     color: #333;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
-    border-bottom: 2px solid #e0e0e0;
 }
 
 .typeList {
@@ -59,6 +61,7 @@
 
 .title {
     font-size: 2rem;
+    cursor: pointer;
     font-weight: bold;
     color: #333;
 }
@@ -99,7 +102,8 @@
 }
 
 .addButton:hover {
-    background-color: #d4eced;
+    background-color: #e99e3d;
+    border-color: #e28f25;
 }
 
 .addButton svg {
@@ -115,7 +119,7 @@
 
 .amenitiesGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 2rem;
 }
 
@@ -123,15 +127,35 @@
     background-color: #fbfeff;
     border-radius: 8px;
     padding: 1.5rem;
-    box-shadow: 4px 4px 8px rgba(0.5, 0, 0.5, 0.05);
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.05);
+    height: 210px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.amenitiesGrid.singleTypeView {
+    grid-template-columns: 1fr;
+}
+
+.amenityGroup.fullHeight {
+    height: auto;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .amenityType {
-    font-size: 1.5rem;
+    font-size: 17px;
+    font-weight: 700;
     color: #333;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
     border-bottom: 2px solid #e0e0e0;
+}
+
+.amenityList {
+    flex-grow: 1;
 }
 
 .amenityItem {
@@ -207,6 +231,21 @@
     color: #333;
 }
 
+.moreLink {
+    color: #383838;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    text-align: right;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    font-size: 14px;
+}
+
+.moreLink:hover {
+    color: #88cdd4;
+    font-weight: bold;
+}
+
 .newAmenityForm {
     background-color: white;
     border-radius: 8px;
@@ -256,6 +295,7 @@
 
     .sidebar {
         width: 100%;
+        height: auto;
         padding: 1rem;
     }
 
@@ -285,5 +325,10 @@
 
     .amenitiesGrid {
         grid-template-columns: 1fr;
+    }
+
+    .amenityGroup,
+    .amenityGroup.fullHeight {
+        width: 100%;
     }
 }

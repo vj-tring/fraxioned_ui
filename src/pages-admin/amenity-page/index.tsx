@@ -161,6 +161,15 @@ const AmenityManagement: React.FC = () => {
         setAmenityToDelete(null);
     };
 
+    const handleResetView = () => {
+        setActiveType(null);
+        setSearchTerm('');
+    };
+
+    const handleMoreClick = (type: string) => {
+        setActiveType(type);
+    };
+
     const filteredAmenities = Object.entries(amenities).reduce((acc, [type, amenitiesList]) => {
         const filtered = amenitiesList.filter(amenity =>
             amenity.amenityName.toLowerCase().includes(searchTerm.toLowerCase())
@@ -191,7 +200,7 @@ const AmenityManagement: React.FC = () => {
             </div>
             <div className={styles.mainContent}>
                 <div className={styles.header}>
-                    <h1 className={styles.title}>Amenity Management</h1>
+                    <h1 className={styles.title} onClick={handleResetView}>Amenity Management</h1>
                     <div className={styles.actions}>
                         <div className={styles.searchBar}>
                             <Search size={20} />
@@ -214,42 +223,50 @@ const AmenityManagement: React.FC = () => {
                             onAmenityAdded={handleAmenityAdded}
                         />
                     )}
-                    <div className={styles.amenitiesGrid}>
+                    <div className={`${styles.amenitiesGrid} ${activeType ? styles.singleTypeView : ''}`}>
                         {Object.entries(filteredAmenities)
                             .filter(([type]) => !activeType || type === activeType)
                             .map(([type, amenitiesList]) => (
-                                <div key={type} className={styles.amenityGroup}>
+                                <div key={type} className={`${styles.amenityGroup} ${activeType ? styles.fullHeight : ''}`}>
                                     <h2 className={styles.amenityType}>{type}</h2>
-                                    {amenitiesList.map((amenity) => (
-                                        <div key={amenity.id} className={styles.amenityItem}>
-                                            {editingAmenity?.id === amenity.id ? (
-                                                <>
-                                                    <input
-                                                        type="text"
-                                                        value={editingAmenity.amenityName}
-                                                        onChange={(e) => setEditingAmenity({ ...editingAmenity, amenityName: e.target.value })}
-                                                        className={styles.editInput}
-                                                    />
-                                                    <div className={styles.actionButtons}>
-                                                        <button onClick={handleSave} className={styles.saveButton}><Check size={16} /></button>
-                                                        <button onClick={handleCancel} className={styles.cancelButton}><X size={16} /></button>
-                                                    </div>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <span>{amenity.amenityName}</span>
-                                                    <div className={styles.actionButtons}>
-                                                        <button onClick={() => handleEdit(amenity)} className={styles.editButton}>
-                                                            <Edit2 size={16} />
-                                                        </button>
-                                                        <button onClick={() => handleDeleteClick(amenity)} className={styles.deleteButton}>
-                                                            <Trash2 size={16} />
-                                                        </button>
-                                                    </div>
-                                                </>
-                                            )}
-                                        </div>
-                                    ))}
+                                    <div className={styles.amenityList}>
+                                        {(activeType ? amenitiesList : amenitiesList.slice(0, 2)).map((amenity) => (
+                                            <div key={amenity.id} className={styles.amenityItem}>
+
+                                                {editingAmenity?.id === amenity.id ? (
+                                                    <>
+                                                        <input
+                                                            type="text"
+                                                            value={editingAmenity.amenityName}
+                                                            onChange={(e) => setEditingAmenity({ ...editingAmenity, amenityName: e.target.value })}
+                                                            className={styles.editInput}
+                                                        />
+                                                        <div className={styles.actionButtons}>
+                                                            <button onClick={handleSave} className={styles.saveButton}><Check size={16} /></button>
+                                                            <button onClick={handleCancel} className={styles.cancelButton}><X size={16} /></button>
+                                                        </div>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <span>{amenity.amenityName}</span>
+                                                        <div className={styles.actionButtons}>
+                                                            <button onClick={() => handleEdit(amenity)} className={styles.editButton}>
+                                                                <Edit2 size={16} />
+                                                            </button>
+                                                            <button onClick={() => handleDeleteClick(amenity)} className={styles.deleteButton}>
+                                                                <Trash2 size={16} />
+                                                            </button>
+                                                        </div>
+                                                    </>
+                                                )}
+                                            </div>
+                                        ))}
+                                        {!activeType && amenitiesList.length > 2 && (
+                                            <div className={styles.moreLink} onClick={() => handleMoreClick(type)}>
+                                                More...
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             ))}
                     </div>
