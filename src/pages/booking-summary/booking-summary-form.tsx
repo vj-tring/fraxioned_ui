@@ -251,7 +251,7 @@ const BookingSummaryForm: React.FC = () => {
                     src={imageDetails[0].imageUrl}
                     alt={`Image ${imageDetails[0].displayOrder}`}
                     loading="lazy"
-                    style={{ width: "100%", height: "230px", objectFit: "cover" }}
+                    style={{ width: "100%", height: "240px", objectFit: "cover" }}
                     className="PropImgHeadHeight"
 
                   />

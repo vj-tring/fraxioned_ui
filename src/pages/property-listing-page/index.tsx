@@ -285,7 +285,7 @@ const PropertyListingPage = () => {
           </div>
         </div>
 
-        <div className="d-flex pt-2 h-100">
+        <div className="d-flex pt-2 h-100  PropertyFlex">
           <div className="col-6 col-md-7 GridWidth h-100">
             <div id="myShare" className="mt-4">
               <Showmore

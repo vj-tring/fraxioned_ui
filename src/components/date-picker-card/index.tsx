@@ -30,7 +30,7 @@ const DatePickerCard: React.FC<DatePickerCardProps> = ({
       <Typography variant="h5" className="selectDate mb-2 monsterrat">
         Select Dates
       </Typography>
-      <PopoverCalendar withBorder  paddingTop />
+      <PopoverCalendar withBorder paddingTop />
 
       <TextField
         select

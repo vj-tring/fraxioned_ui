@@ -447,7 +447,7 @@
   /* opacity: 1; */
   font-size: x-small !important;
   text-transform: uppercase;
-
+  font-weight: 700;
   text-wrap: balance;
 }
 
@@ -530,5 +530,18 @@
     display: flex;
     /* flex-direction: column; */
     flex-wrap: wrap;
+  }
+
+  .night-count li:nth-child(2) {
+    /* opacity: 1; */
+    font-size: xx-small !important;
+    text-transform: uppercase;
+    font-weight: 700;
+    max-width: 120px;
+    text-wrap: wrap !important;
+  }
+  .Off-Values {
+    font-size: 10px !important;
+    font-weight: 600 !important;
   }
 }
