@@ -22,10 +22,10 @@ import FormDialog from "../register-form-modal";
 import { ListItemText } from "@mui/material";
 import LockResetOutlinedIcon from "@mui/icons-material/LockResetOutlined";
 import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined";
-import ConfirmationNumberOutlinedIcon from '@mui/icons-material/ConfirmationNumberOutlined';
-import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
-import LiveHelpOutlinedIcon from '@mui/icons-material/LiveHelpOutlined';
-import ContactPageOutlinedIcon from '@mui/icons-material/ContactPageOutlined';
+import ConfirmationNumberOutlinedIcon from "@mui/icons-material/ConfirmationNumberOutlined";
+import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
+import LiveHelpOutlinedIcon from "@mui/icons-material/LiveHelpOutlined";
+import ContactPageOutlinedIcon from "@mui/icons-material/ContactPageOutlined";
 interface CustomNavbarProps {
   logo?: string;
   links?: {
@@ -122,7 +122,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               alt="Logo"
               loading="lazy"
             />
-          </Navbar.Brand> 
+          </Navbar.Brand>
         )}
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -149,16 +149,24 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
         </Navbar.Collapse>
 
         <Nav className="ProfileMenu">
-          <Box sx={{ display: "flex", alignItems: "center",backgroundColor:"none" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              backgroundColor: "none",
+            }}
+          >
             <IconButton
               onClick={handleClick}
               size="small"
-              sx={{ ml: 2, '.MuiIconButton-root:hover': { backgroundColor: "none" } }}
+              sx={{
+                ml: 2,
+                ".MuiIconButton-root:hover": { backgroundColor: "none" },
+              }}
               aria-controls={open ? "account-menu" : undefined}
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
               disableRipple
-      
             >
               <Box
                 display="flex"
@@ -166,48 +174,46 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                 sx={{
                   borderRadius: 1,
                 }}
-                
               >
-                  <Typography
-                    variant="body2"
-                    color="textPrimary"
-                    className="monsterrat p-2 UserName"
-                    sx={{
-                      fontWeight: 600,
-                      color: "#00636D",
-                      textTransform: "uppercase",
-                    }}
-                    
-                  >
-                    {storedName}
-                  </Typography>
-                </Box>
-                <Avatar
+                <Typography
+                  variant="body2"
+                  color="textPrimary"
+                  className="monsterrat p-2 UserName"
                   sx={{
-                    width: 32,
-                    height: 32,
-                    cursor: "pointer",
-                    marginLeft: 1,
+                    fontWeight: 600,
+                    color: "#00636D",
+                    textTransform: "uppercase",
                   }}
                 >
-                  {userImage ? (
-                    <img
-                      src={userImage}
-                      alt="User"
-                      loading="lazy"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        borderRadius: "50%",
-                      }}
-                    />
-                  ) : userName ? (
-                    userName.charAt(0).toUpperCase()
-                  ) : (
-                    "M"
-                  )}
-                </Avatar>
+                  {storedName}
+                </Typography>
+              </Box>
+              <Avatar
+                sx={{
+                  width: 32,
+                  height: 32,
+                  cursor: "pointer",
+                  marginLeft: 1,
+                }}
+              >
+                {userImage ? (
+                  <img
+                    src={userImage}
+                    alt="User"
+                    loading="lazy"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      borderRadius: "50%",
+                    }}
+                  />
+                ) : userName ? (
+                  userName.charAt(0).toUpperCase()
+                ) : (
+                  "M"
+                )}
+              </Avatar>
             </IconButton>
           </Box>
           <Menu
@@ -238,90 +244,86 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               },
             }}
           >
+            {!isAdmin && (
+              <React.Fragment>
+                <MenuItem
+                  style={{
+                    height: "2.4rem",
+                  }}
+                >
+                  <ListItemIcon>
+                    <ConfirmationNumberOutlinedIcon
+                      style={{
+                        width: "80%",
+                      }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText>Tickets</ListItemText>
+                </MenuItem>
 
-            
-                {!isAdmin && (
-<>
-             <MenuItem
-              // onClick={handleResetPasswordClick}
-              style={{
-                height: "2.4rem",
-              }}
-            >
-              <ListItemIcon>
-                <ConfirmationNumberOutlinedIcon
+                <MenuItem
+                  // onClick={handleResetPasswordClick}
                   style={{
-                    width: "80%",
+                    height: "2.4rem",
                   }}
-                />
-              </ListItemIcon>
-              <ListItemText>Tickets</ListItemText>
-            </MenuItem>
-           
-            <MenuItem
-              // onClick={handleResetPasswordClick}
-              style={{
-                height: "2.4rem",
-              }}
-            >
-              <ListItemIcon>
-                <MenuBookOutlinedIcon
+                >
+                  <ListItemIcon>
+                    <MenuBookOutlinedIcon
+                      style={{
+                        width: "80%",
+                      }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText>GuideBooks</ListItemText>
+                </MenuItem>
+                <MenuItem
+                  // onClick={handleResetPasswordClick}
                   style={{
-                    width: "80%",
+                    height: "2.4rem",
                   }}
-                />
-              </ListItemIcon>
-              <ListItemText>GuideBooks</ListItemText>
-            </MenuItem>
-            <MenuItem
-              // onClick={handleResetPasswordClick}
-              style={{
-                height: "2.4rem",
-              }}
-            >
-              <ListItemIcon>
-                <LiveHelpOutlinedIcon
+                >
+                  <ListItemIcon>
+                    <LiveHelpOutlinedIcon
+                      style={{
+                        width: "80%",
+                      }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText>Faq</ListItemText>
+                </MenuItem>
+                <MenuItem
+                  // onClick={handleResetPasswordClick}
                   style={{
-                    width: "80%",
+                    height: "2.4rem",
                   }}
-                />
-              </ListItemIcon>
-              <ListItemText>Faq</ListItemText>
-            </MenuItem>
-            <MenuItem
-              // onClick={handleResetPasswordClick}
-              style={{
-                height: "2.4rem",
-              }}
-            >
-              <ListItemIcon>
-                <ContactPageOutlinedIcon
+                >
+                  <ListItemIcon>
+                    <ContactPageOutlinedIcon
+                      style={{
+                        width: "80%",
+                      }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText>Contact us</ListItemText>
+                </MenuItem>
+                <MenuItem
+                  onClick={handleResetPasswordClick}
                   style={{
-                    width: "80%",
+                    height: "2.4rem",
                   }}
-                />
-              </ListItemIcon>
-              <ListItemText>Contact us</ListItemText>
-            </MenuItem>
-            <MenuItem
-              onClick={handleResetPasswordClick}
-              style={{
-                height: "2.4rem",
-              }}
-            >
-              <ListItemIcon>
-                <LockResetOutlinedIcon
-                  style={{
-                    width: "80%",
-                  }}
-                />
-              </ListItemIcon>
-              <ListItemText>Reset</ListItemText>
-            </MenuItem>
-
-            </>
+                >
+                  <ListItemIcon>
+                    <LockResetOutlinedIcon
+                      style={{
+                        width: "80%",
+                      }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText>Reset</ListItemText>
+                </MenuItem>
+              </React.Fragment>
             )}
-            
+
             {isAdmin && (
               <MenuItem
                 onClick={handleAddAccountClick}

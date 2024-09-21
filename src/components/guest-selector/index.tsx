@@ -11,11 +11,8 @@ import PetsIcon from "@mui/icons-material/Pets";
 import "./guest-selector.css";
 import { RootState } from "@/store/reducers";
 import { CircleMinus, CirclePlus } from "lucide-react";
-import {
-  updateCount,
-  resetLimits,
-} from "@/store/slice/auth/propertyGuestSlice";
-import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined";
+import { updateCount } from "@/store/slice/auth/propertyGuestSlice";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 const names = [
   { label: "Adults", description: "Ages 13 or above", icon: <PeopleIcon /> },
   {
@@ -60,9 +57,8 @@ const MultipleSelect: React.FC = () => {
         Children: currentBooking.Children,
         Pets: currentBooking.Pets,
       });
-      // dispatch(resetLimits());
     }
-  }, [bookingSuccessMessage, dispatch]);
+  }, [bookingSuccessMessage, currentBooking, dispatch]);
 
   const validateCounts = () => {
     if (!selectedPropertyLimits) return;
@@ -168,13 +164,17 @@ const MultipleSelect: React.FC = () => {
           border: "none",
           cursor: "pointer",
           paddingRight: 9,
-          gap:2
+          gap: 2,
         }}
       >
-
-        <PersonAddAlt1OutlinedIcon sx={{
-          color:"grey"
-        }} />
+        <HomeOutlinedIcon
+          sx={{
+            color: "grey",
+            marginBottom: "12px",
+            fontSize:"24px"
+          }}
+          className="HomeBtn"
+        />
 
         <div className="d-flex align-items-start flex-column">
           <span className="DateHead1 monsterrat">Who</span>
@@ -196,10 +196,9 @@ const MultipleSelect: React.FC = () => {
           },
         }}
       >
-        {names.map((item) => (
-          <>
+        {names.map((item, index) => (
+          <React.Fragment key={item.label}>
             <MenuItem
-              key={item.label}
               sx={{
                 borderRadius: 0,
                 width: "100%",
@@ -255,7 +254,7 @@ const MultipleSelect: React.FC = () => {
                 </div>
               </div>
             </MenuItem>
-            {!(names.indexOf(item) === names.length - 1) && (
+            {index < names.length - 1 && (
               <hr
                 style={{
                   opacity: 0.08,
@@ -263,7 +262,7 @@ const MultipleSelect: React.FC = () => {
                 }}
               />
             )}
-          </>
+          </React.Fragment>
         ))}
         {validationMessage && (
           <div className="validationMsg monsterrat">

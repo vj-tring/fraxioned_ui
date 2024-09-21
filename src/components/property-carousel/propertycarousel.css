@@ -15,7 +15,7 @@
   display: flex;
 }
 .calenderIcon {
-  margin-top: 4px;
+  margin-top: 2px;
   /* position: absolute; */
   /* visibility: hidden; */
 }
@@ -543,5 +543,25 @@
   .Off-Values {
     font-size: 10px !important;
     font-weight: 600 !important;
+  }
+  .HomeBtn {
+    margin-left: 20px;
+    margin-top: 15px;
+    font-size: 27px !important;
+  }
+  .calenderIcon {
+    margin-top: 10px !important;
+    /* position: absolute; */
+    /* visibility: hidden; */
+  }
+  .AddHome {
+    margin-top: 15px;
+  }
+  .navbar-toggler {
+    border: none;
+  }
+  .navbar-toggler:focus {
+    border: none !important;
+    outline: none !important;
   }
 }
