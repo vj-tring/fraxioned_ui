@@ -329,9 +329,10 @@
   display: flex;
   /* border: 1px solid grey; */
   padding: 5px;
-
+  text-transform: uppercase;
   /* flex-direction: row-reverse !important; */
   align-items: center;
+  text-wrap: balance;
 }
 .BlueHead {
   margin: 0 !important;
@@ -465,9 +466,10 @@
   border: 1px solid #7c7875 !important;
   color: #7c7875 !important;
   margin-left: 0.5rem;
+  /* justify-content: end !important; */
   /* box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px; */
 }
-.property-name {
+.property-names {
   font-size: 0.8rem !important;
   /* padding-top: px; */
 }

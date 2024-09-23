@@ -295,7 +295,7 @@ export default function BasicSelect() {
                           }}
                         >
                           <div className="d-flex flex-column align-items-center p-1.5">
-                            <h4 className="property-name">
+                            <h4 className="property-names">
                               {formatCardName(card.name)}
                             </h4>
                           </div>
