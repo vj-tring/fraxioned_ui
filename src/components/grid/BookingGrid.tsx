@@ -1,35 +1,31 @@
 import React, { useState } from "react";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
-import ConfirmationModal from "../confirmation-modal"; // Adjust the import path as needed
+import ConfirmationModal from "../confirmation-modal";
+import EditBookingModal from "@/pages/booking/bookingEdit";
 
 interface BookingGridProps {
   bookings: Array<{
-    property: { id: number };
-    propertyName: string;
+    id: number;
+    bookingId: string;
+    property: string;
     checkinDate: string;
     checkoutDate: string;
-    noOfAdults: number;
-    noOfChildren: number;
-    noOfPets: number;
-    isLastMinuteBooking: boolean;
-    cleaningFee: number;
-    petFee: number;
-    notes?: string;
     guest: string;
+    createdAt: string;
+    totalNights: number;
   }>;
-  onEdit: (id: number) => void;
   onCancel: (id: number) => void;
   activeTab: number;
 }
 
 const BookingGrid: React.FC<BookingGridProps> = ({
   bookings,
-  onEdit,
   onCancel,
   activeTab,
 }) => {
   const [cancelBookingId, setCancelBookingId] = useState<number | null>(null);
+  const [editBookingId, setEditBookingId] = useState<number | null>(null);
 
   const handleCancelClick = (id: number) => {
     setCancelBookingId(id);
@@ -46,54 +42,22 @@ const BookingGrid: React.FC<BookingGridProps> = ({
     setCancelBookingId(null);
   };
 
+  const handleEditClick = (id: number) => {
+    setEditBookingId(id);
+  };
+
+  const handleCloseEditModal = () => {
+    setEditBookingId(null);
+  };
+
   const columns: GridColDef[] = [
-    {
-      field: "bookingId",
-      headerName: "BookingID",
-      flex: 1,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "property",
-      headerName: "Property",
-      flex: 1,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "checkinDate",
-      headerName: "Check-in",
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "checkoutDate",
-      headerName: "Checkout",
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "guest",
-      headerName: "Guests",
-      flex: 1,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "createdAt",
-      headerName: "Booked",
-      flex: 1,
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "totalNights",
-      headerName: "TotalNights",
-      flex: 1,
-      headerAlign: "center",
-      align: "center",
-    },
+    { field: "bookingId", headerName: "BookingID", flex: 1, headerAlign: "center", align: "center" },
+    { field: "property", headerName: "Property", flex: 1, headerAlign: "center", align: "center" },
+    { field: "checkinDate", headerName: "Check-in", headerAlign: "center", align: "center" },
+    { field: "checkoutDate", headerName: "Checkout", headerAlign: "center", align: "center" },
+    { field: "guest", headerName: "Guests", flex: 1, headerAlign: "center", align: "center" },
+    { field: "createdAt", headerName: "Booked", flex: 1, headerAlign: "center", align: "center" },
+    { field: "totalNights", headerName: "TotalNights", flex: 1, headerAlign: "center", align: "center" },
   ];
 
   if (activeTab === 0) {
@@ -108,7 +72,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
           <Button
             variant="outlined"
             disableRipple
-            onClick={() => onEdit(params.row.id)}
+            onClick={() => handleEditClick(params.row.id)}
             sx={{
               marginRight: 1,
               height: "25px",
@@ -141,6 +105,8 @@ const BookingGrid: React.FC<BookingGridProps> = ({
       ),
     });
   }
+
+  const editingBooking = editBookingId ? bookings.find(b => b.id === editBookingId) : null;
 
   return (
     <div
@@ -199,6 +165,13 @@ const BookingGrid: React.FC<BookingGridProps> = ({
         confirmLabel="Cancel Booking"
         cancelLabel="Keep Booking"
       />
+      {editingBooking && (
+        <EditBookingModal
+          open={editBookingId !== null}
+          handleClose={handleCloseEditModal}
+          booking={editingBooking}
+        />
+      )}
     </div>
   );
 };

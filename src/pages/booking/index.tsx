@@ -13,6 +13,7 @@ import { format } from "date-fns";
 import { cancelBooking } from '@/api';
 import CustomizedSnackbar from '@/components/customized-snackbar';
 import "../booking/booking.css";
+import EditBookingModal from './bookingEdit';
 
 const Booking = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -20,7 +21,9 @@ const Booking = () => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error" >("error");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("error");
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState<BookingData | null>(null);
   const user = useSelector((state: RootState) => state.auth.user);
   const userBookings = useSelector((state: RootState) => state.bookings.userBookings || []);
 
@@ -28,7 +31,7 @@ const Booking = () => {
     setSnackbarOpen(false);
   };
 
-  const showSnackbar = (message: string, severity: "error" | "info" | "warning" = "error") => {
+  const showSnackbar = (message: string, severity: "error" | "success" = "error") => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setSnackbarOpen(true);
@@ -65,14 +68,30 @@ const Booking = () => {
     });
 
   const handleEdit = (id: number) => {
-    console.log(`Edit clicked for booking id: ${id}`);
+    const bookingToEdit = userBookings.find((booking: BookingData) => booking.id === id);
+    if (bookingToEdit) {
+      setSelectedBooking(bookingToEdit);
+      setEditModalOpen(true);
+    }
+  };
+
+  const handleEditSuccess = () => {
+    if (user && user.id) {
+      dispatch(fetchUserBookings(user.id));
+      showSnackbar("Booking successfully updated.", "success");
+    }
+  };
+
+  const handleEditModalClose = () => {
+    setEditModalOpen(false);
+    setSelectedBooking(null);
   };
 
   const handleCancel = async (id: number) => {
     if (user && user.id) {
       try {
         const response = await cancelBooking(id, user.id);
-          if (response.data && response.data.status === 400) {
+        if (response.data && response.data.status === 400) {
           setSnackbarMessage(response.data.message || "Failed to cancel booking");
           setSnackbarSeverity("error");
         } else {
@@ -162,7 +181,6 @@ const Booking = () => {
                 textTransform: "capitalize",
               }}
               className='FilterView'
-
             >
               Filter
             </Button>
@@ -191,7 +209,6 @@ const Booking = () => {
       <Modal
         open={isCalendarOpen}
         onClose={handleCloseCalendar}
-        // hideBackdrop={true}
         aria-labelledby="calendar-modal-title"
         aria-describedby="calendar-modal-description"
       >
@@ -207,8 +224,6 @@ const Booking = () => {
           borderRadius: '10px',
           overflow: 'auto',
           padding: '20px',
-          // boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
-          
         }}>
           <IconButton
             aria-label="close"
@@ -224,6 +239,16 @@ const Booking = () => {
           <BookingCalendar />
         </Box>
       </Modal>
+
+      {selectedBooking && (
+        <EditBookingModal
+          open={editModalOpen}
+          initialBooking={selectedBooking}
+          handleClose={handleEditModalClose}
+          onEditSuccess={handleEditSuccess}
+        />
+      )}
+
       <CustomizedSnackbar
         open={snackbarOpen}
         handleClose={handleSnackbarClose}
@@ -231,7 +256,6 @@ const Booking = () => {
         severity={snackbarSeverity}
       />
     </>
-    
   );
 };
 
