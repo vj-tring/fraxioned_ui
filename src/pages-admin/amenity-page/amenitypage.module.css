@@ -1,20 +1,55 @@
 .container {
-    width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-    height: calc(100vh - 60px);
     display: flex;
-    flex-direction: column;
-    background-color: #f8f9fa;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    top: 60px;
-    left: 50%;
-    margin-left: 110px;
-    margin-top: 30px;
-    transform: translateX(-50%);
-    overflow: hidden;
+    height: 100vh;
+    background-color: #f0f2f5;
+    font-family: 'Arial', sans-serif;
+}
+
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    background-color: #ffffff;
+    padding: 2rem;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+}
+
+.sidebarTitle {
+    font-size: 20px;
+    font-weight: bolder;
+    margin-left: 24px;
+    color: #333;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+}
+
+.typeList {
+    list-style-type: none;
+    padding: 0;
+}
+
+.typeItem {
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.typeItem:hover {
+    background-color: #e0e0e0;
+}
+
+.typeItem.active {
+    background-color: #d4eced;
+    color: rgb(0, 0, 0);
+}
+
+.mainContent {
+    flex-grow: 1;
+    padding: 2rem;
+    overflow-y: auto;
 }
 
 .header {
@@ -22,65 +57,105 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid #ecf0f1;
-    background-color: #f8f9fa;
-    z-index: 10;
 }
 
 .title {
-    font-size: 30px;
+    font-size: 2rem;
+    cursor: pointer;
     font-weight: bold;
-    color: #2c3e50;
-    margin: 0;
+    color: #333;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+}
+
+.searchBar {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    margin-right: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.searchBar input {
+    border: none;
+    outline: none;
+    margin-left: 0.5rem;
+    font-size: 1rem;
 }
 
 .addButton {
     display: flex;
     align-items: center;
-    justify-content: center;
     background-color: #e28f25;
     color: white;
     border: none;
     padding: 0.75rem 1.5rem;
     font-size: 1rem;
-    border-radius: 5px;
+    border-radius: 20px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .addButton:hover {
-    background-color: #d17f15;
+    background-color: #e99e3d;
+    border-color: #e28f25;
+}
+
+.addButton svg {
+    margin-right: 0.5rem;
 }
 
 .content {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding-right: 1rem;
+    background-color: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
 
 .amenitiesGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 2rem;
 }
 
 .amenityGroup {
-    background-color: #f8f9fa;
-    max-height: 250px;
+    background-color: #fbfeff;
     border-radius: 8px;
     padding: 1.5rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.05);
+    height: 210px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.amenitiesGrid.singleTypeView {
+    grid-template-columns: 1fr;
+}
+
+.amenityGroup.fullHeight {
+    height: auto;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .amenityType {
-    font-size: 1.5rem;
-    color: #34495e;
+    font-size: 17px;
+    font-weight: 700;
+    color: #333;
     margin-bottom: 1rem;
-    border-bottom: 2px solid #ecf0f1;
     padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.amenityList {
+    flex-grow: 1;
 }
 
 .amenityItem {
@@ -88,7 +163,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem 0;
-    border-bottom: 1px solid #ecf0f1;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .amenityItem:last-child {
@@ -112,9 +187,8 @@
     transition: background-color 0.3s ease;
 }
 
-.editButton,
-.deleteButton {
-    color: #e28f25;
+.editButton {
+    color: #4abac6;
 }
 
 .saveButton {
@@ -123,6 +197,10 @@
 
 .cancelButton {
     color: #e74c3c;
+}
+
+.deleteButton {
+    color: #ef958c;
 }
 
 .editButton:hover,
@@ -135,13 +213,37 @@
 .editInput {
     padding: 0.5rem;
     font-size: 1rem;
-    border: 1px solid #e28f25;
+    border: 1px solid #4a90e2;
     border-radius: 4px;
     outline: none;
 }
 
 .editInput:focus {
-    box-shadow: 0 0 0 2px rgba(226, 143, 37, 0.2);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.moreLink {
+    color: #383838;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    text-align: right;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    font-size: 14px;
+}
+
+.moreLink:hover {
+    color: #88cdd4;
+    font-weight: bold;
 }
 
 .newAmenityForm {
@@ -150,15 +252,16 @@
     padding: 1.5rem;
     margin-bottom: 2rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: grid;
-    gap: 1rem;
 }
 
-.newAmenityForm input {
+.newAmenityForm input,
+.newAmenityForm select {
+    width: 100%;
     padding: 0.5rem;
     font-size: 1rem;
-    border: 1px solid #bdc3c7;
+    border: 1px solid #e0e0e0;
     border-radius: 4px;
+    margin-bottom: 1rem;
 }
 
 .newAmenityForm button {
@@ -170,40 +273,34 @@
     transition: background-color 0.3s ease;
 }
 
-.newAmenityForm button:first-of-type {
-    background-color: #2ecc71;
+.newAmenityForm button[type="submit"] {
+    background-color: #4a90e2;
     color: white;
 }
 
-.newAmenityForm button:last-of-type {
-    background-color: #e74c3c;
-    color: white;
+.newAmenityForm button[type="button"] {
+    background-color: #e0e0e0;
+    color: #333;
+    margin-left: 1rem;
 }
 
 .newAmenityForm button:hover {
     opacity: 0.9;
 }
 
-.loading,
-.error {
-    text-align: center;
-    font-size: 1.5rem;
-    margin-top: 2rem;
-}
-
-.error {
-    color: #e74c3c;
-}
-
 @media (max-width: 768px) {
     .container {
-        padding: 1rem;
-        height: calc(100% - 60px);
-        /* Adjust 60px to match your navbar height */
-        border-radius: 0;
+        flex-direction: column;
+    }
+
+    .sidebar {
         width: 100%;
-        left: 0;
-        transform: none;
+        height: auto;
+        padding: 1rem;
+    }
+
+    .mainContent {
+        padding: 1rem;
     }
 
     .header {
@@ -211,8 +308,14 @@
         align-items: flex-start;
     }
 
-    .title {
-        font-size: 2rem;
+    .actions {
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .searchBar {
+        width: 100%;
+        margin-right: 0;
         margin-bottom: 1rem;
     }
 
@@ -224,7 +327,8 @@
         grid-template-columns: 1fr;
     }
 
-    .content {
-        padding-right: 0;
+    .amenityGroup,
+    .amenityGroup.fullHeight {
+        width: 100%;
     }
 }

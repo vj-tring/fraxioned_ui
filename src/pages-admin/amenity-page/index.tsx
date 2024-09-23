@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { amenitiesapi, updateamenities, deleteAmenity } from "@/api";
-import styles from "./amenitypage.module.css";
-import NewAmenityForm from "../property-amenities/new-amenity";
-import { Edit2, Check, X, Trash2 } from "lucide-react";
-import ConfirmationModal from "@/components/confirmation-modal";
-import CustomizedSnackbars from "@/components/customized-snackbar";
+import React, { useState, useEffect } from 'react';
+import { amenitiesapi, updateamenities, deleteAmenity } from '@/api';
+import styles from './amenitypage.module.css';
+import NewAmenityForm from '../property-amenities/new-amenity';
+import { Edit2, Check, X, Trash2 } from 'lucide-react';
+import ConfirmationModal from '@/components/confirmation-modal';
+import CustomizedSnackbars from '@/components/customized-snackbar';
 
 interface Amenity {
   id: number;
@@ -20,17 +20,17 @@ interface SnackbarState {
 }
 
 const AmenityManagement: React.FC = () => {
-  const [amenities, setAmenities] = useState<{ [key: string]: Amenity[] }>({});
-  const [loading, setLoading] = useState(true);
-  const [editingAmenity, setEditingAmenity] = useState<Amenity | null>(null);
-  const [isAddingNew, setIsAddingNew] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [amenityToDelete, setAmenityToDelete] = useState<Amenity | null>(null);
-  const [snackbar, setSnackbar] = useState<SnackbarState>({
-    open: false,
-    message: "",
-    severity: "info",
-  });
+    const [amenities, setAmenities] = useState<{ [key: string]: Amenity[] }>({});
+    const [loading, setLoading] = useState(true);
+    const [editingAmenity, setEditingAmenity] = useState<Amenity | null>(null);
+    const [isAddingNew, setIsAddingNew] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [amenityToDelete, setAmenityToDelete] = useState<Amenity | null>(null);
+    const [snackbar, setSnackbar] = useState<SnackbarState>({
+        open: false,
+        message: '',
+        severity: 'info',
+    });
 
   useEffect(() => {
     fetchAmenities();
@@ -179,104 +179,83 @@ const AmenityManagement: React.FC = () => {
     }
   };
 
-  const handleDeleteCancel = () => {
-    setShowDeleteModal(false);
-    setAmenityToDelete(null);
-  };
+    const handleDeleteCancel = () => {
+        setShowDeleteModal(false);
+        setAmenityToDelete(null);
+    };
 
   if (loading) return <div className={styles.loading}>Loading...</div>;
 
-  return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h1 className={styles.title}>Amenity Management</h1>
-        <button className={styles.addButton} onClick={handleAddNew}>
-          New Amenity
-        </button>
-      </div>
-      <div className={styles.content}>
-        {isAddingNew && (
-          <NewAmenityForm
-            onClose={handleCloseNewAmenityForm}
-            onAmenityAdded={handleAmenityAdded}
-          />
-        )}
-        <div className={styles.amenitiesGrid}>
-          {Object.entries(amenities).map(([type, amenitiesList]) => (
-            <div key={type} className={styles.amenityGroup}>
-              <h2 className={styles.amenityType}>{type}</h2>
-              {amenitiesList.map((amenity) => (
-                <div key={amenity.id} className={styles.amenityItem}>
-                  {editingAmenity?.id === amenity.id ? (
-                    <>
-                      <input
-                        type="text"
-                        value={editingAmenity.amenityName}
-                        onChange={(e) =>
-                          setEditingAmenity({
-                            ...editingAmenity,
-                            amenityName: e.target.value,
-                          })
-                        }
-                        className={styles.editInput}
-                      />
-                      <div className={styles.actionButtons}>
-                        <button
-                          onClick={handleSave}
-                          className={styles.saveButton}
-                        >
-                          <Check size={16} />
-                        </button>
-                        <button
-                          onClick={handleCancel}
-                          className={styles.cancelButton}
-                        >
-                          <X size={16} />
-                        </button>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <span>{amenity.amenityName}</span>
-                      <div className={styles.actionButtons}>
-                        <button
-                          onClick={() => handleEdit(amenity)}
-                          className={styles.editButton}
-                        >
-                          <Edit2 size={16} />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteClick(amenity)}
-                          className={styles.deleteButton}
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
-                    </>
-                  )}
-                </div>
-              ))}
+    return (
+        <div className={styles.container}>
+            <div className={styles.header}>
+                <h1 className={styles.title}>Amenity Management</h1>
+                <button className={styles.addButton} onClick={handleAddNew}>
+                    New Amenity
+                </button>
             </div>
-          ))}
+            <div className={styles.content}>
+                {isAddingNew && (
+                    <NewAmenityForm
+                        onClose={handleCloseNewAmenityForm}
+                        onAmenityAdded={handleAmenityAdded}
+                    />
+                )}
+                <div className={styles.amenitiesGrid}>
+                    {Object.entries(amenities).map(([type, amenitiesList]) => (
+                        <div key={type} className={styles.amenityGroup}>
+                            <h2 className={styles.amenityType}>{type}</h2>
+                            {amenitiesList.map((amenity) => (
+                                <div key={amenity.id} className={styles.amenityItem}>
+                                    {editingAmenity?.id === amenity.id ? (
+                                        <>
+                                            <input
+                                                type="text"
+                                                value={editingAmenity.amenityName}
+                                                onChange={(e) => setEditingAmenity({ ...editingAmenity, amenityName: e.target.value })}
+                                                className={styles.editInput}
+                                            />
+                                            <div className={styles.actionButtons}>
+                                                <button onClick={handleSave} className={styles.saveButton}><Check size={16} /></button>
+                                                <button onClick={handleCancel} className={styles.cancelButton}><X size={16} /></button>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <span>{amenity.amenityName}</span>
+                                            <div className={styles.actionButtons}>
+                                                <button onClick={() => handleEdit(amenity)} className={styles.editButton}>
+                                                    <Edit2 size={16} />
+                                                </button>
+                                                <button onClick={() => handleDeleteClick(amenity)} className={styles.deleteButton}>
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <ConfirmationModal
+                show={showDeleteModal}
+                onHide={handleDeleteCancel}
+                onConfirm={handleDeleteConfirm}
+                title="Delete Amenity"
+                message={`Are you sure you want to delete the amenity "${amenityToDelete?.amenityName}"?`}
+                confirmLabel="Delete"
+                cancelLabel="Cancel"
+            />
+            <CustomizedSnackbars
+                open={snackbar.open}
+                handleClose={handleSnackbarClose}
+                message={snackbar.message}
+                severity={snackbar.severity}
+            />
         </div>
-      </div>
-      <ConfirmationModal
-        show={showDeleteModal}
-        onHide={handleDeleteCancel}
-        onConfirm={handleDeleteConfirm}
-        title="Delete Amenity"
-        message={`Are you sure you want to delete the amenity "${amenityToDelete?.amenityName}"?`}
-        confirmLabel="Delete"
-        cancelLabel="Cancel"
-      />
-      <CustomizedSnackbars
-        open={snackbar.open}
-        handleClose={handleSnackbarClose}
-        message={snackbar.message}
-        severity={snackbar.severity}
-      />
-    </div>
-  );
+    );
 };
 
 export default AmenityManagement;
