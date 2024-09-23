@@ -27,6 +27,8 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
     const navigate = useNavigate();
     const location = useLocation();
 
+    const userId = parseInt(id || '0', 10);
+
     const getCurrentTab = () => {
         const searchParams = new URLSearchParams(location.search);
         return parseInt(searchParams.get('tab') || '0', 10);
@@ -37,17 +39,17 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await getUserById(Number(id));
+                const response = await getUserById(userId);
                 setUserData(response.data.user);
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
         };
 
-        if (id) {
+        if (userId) {
             fetchUserData();
         }
-    }, [id]);
+    }, [userId]);
 
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
@@ -104,7 +106,7 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
             <div className={styles.content}>
                 {selectedTab === 0 && !isEditing ? (
                     <UserForm
-                        userId={Number(id)}
+                        userId={userId}
                         onEditClick={handleEditClick}
                     />
                 ) : selectedTab === 0 && isEditing && (
@@ -116,15 +118,15 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
                 )}
 
                 {isOwner && selectedTab === 1 && (
-                    <PropertyTab Id={Number(id)} />
+                    <PropertyTab userId={userId} />
                 )}
 
                 {isOwner && selectedTab === 2 && (
-                    <UserBookings userId={Number(id)} />
+                    <UserBookings userId={userId} />
                 )}
 
                 {isOwner && selectedTab === 3 && (
-                    <Availability userId={Number(id)} />
+                    <Availability userId={userId} />
                 )}
             </div>
         </div>

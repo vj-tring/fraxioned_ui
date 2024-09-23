@@ -110,7 +110,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
         bg="light"
         expand="lg"
         className="p-2"
-        // style={{ height: "4.3rem" }}
+      // style={{ height: "4.3rem" }}
       >
         {!isAdminDashboard && (
           <Navbar.Brand href="/home" className="p-2">
@@ -149,6 +149,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
         </Navbar.Collapse>
 
         <Nav className="ProfileMenu">
+
           <Box
             sx={{
               display: "flex",
@@ -156,6 +157,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               backgroundColor: "none",
             }}
           >
+
             <IconButton
               onClick={handleClick}
               size="small"
@@ -167,6 +169,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
               disableRipple
+
             >
               <Box
                 display="flex"
@@ -174,6 +177,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                 sx={{
                   borderRadius: 1,
                 }}
+
               >
                 <Typography
                   variant="body2"
@@ -184,6 +188,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                     color: "#00636D",
                     textTransform: "uppercase",
                   }}
+
                 >
                   {storedName}
                 </Typography>
@@ -244,9 +249,14 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               },
             }}
           >
+
+
+
             {!isAdmin && (
-              <React.Fragment>
+              <>
                 <MenuItem
+                  // onClick={handleResetPasswordClick}
+
                   style={{
                     height: "2.4rem",
                   }}
@@ -321,7 +331,9 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                   </ListItemIcon>
                   <ListItemText>Reset</ListItemText>
                 </MenuItem>
-              </React.Fragment>
+
+              </>
+
             )}
 
             {isAdmin && (
@@ -350,6 +362,23 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                 opacity: 0.12,
               }}
             />
+
+            <MenuItem
+              onClick={handleResetPasswordClick}
+              style={{
+                height: "2.4rem",
+              }}
+            >
+              <ListItemIcon>
+                <LockResetOutlinedIcon
+                  style={{
+                    width: "80%",
+                  }}
+                />
+              </ListItemIcon>
+              <ListItemText>Reset</ListItemText>
+            </MenuItem>
+
 
             <MenuItem
               onClick={handleLogoutClick}

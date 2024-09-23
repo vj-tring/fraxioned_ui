@@ -13,13 +13,6 @@ interface UserProperty {
   acquisitionDate: string;
   isActive: number;
   year: number;
-  user: {
-    id: number;
-    firstName: string;
-    lastName: string;
-    isActive: number;
-    lastLoginTime: string;
-  };
 }
 
 interface PropertyResponse {
@@ -36,10 +29,10 @@ interface PropertyResponse {
 }
 
 interface PropertyTabProps {
-  Id: number;
+  userId: number;
 }
 
-const PropertyTab: React.FC<PropertyTabProps> = ({ Id }) => {
+const PropertyTab: React.FC<PropertyTabProps> = ({ userId }) => {
   const [propertyData, setPropertyData] = useState<PropertyResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,7 +42,7 @@ const PropertyTab: React.FC<PropertyTabProps> = ({ Id }) => {
   useEffect(() => {
     const fetchPropertyData = async () => {
       try {
-        const response = await getUserProperties(Id);
+        const response = await getUserProperties(userId);
         setPropertyData(response.data);
       } catch (err) {
         console.error("Error fetching property data:", err);
@@ -60,7 +53,7 @@ const PropertyTab: React.FC<PropertyTabProps> = ({ Id }) => {
     };
 
     fetchPropertyData();
-  }, [Id]);
+  }, [userId]);
 
   if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography color="error">{error}</Typography>;
@@ -68,79 +61,75 @@ const PropertyTab: React.FC<PropertyTabProps> = ({ Id }) => {
   return (
     <div className={styles.propertyTabContainer}>
       <div className={styles.cardGrid}>
-        {propertyData.length > 0 &&
-          propertyData.map((prop: PropertyResponse, index: number) => {
-            const userProperty = prop.userProperties.find(
-              (userProp) => userProp.user.id === Id
-            );
+        {propertyData.map((prop: PropertyResponse, index: number) => {
+          const userProperty = prop.userProperties[0]; 
+          if (!userProperty) return null;
 
-            if (!userProperty) return null;
+          const shareFraction = `${userProperty.noOfShare}/${prop.propertyShare}`;
+          const randomImage = images[index % images.length];
 
-            const shareFraction = `${userProperty.noOfShare}/${prop.propertyShare}`;
-            const randomImage = images[index % images.length];
-
-            return (
-              <Card key={index} className={styles.propertyCard}>
-                <CardContent className={styles.cardContent}>
-                  <div className={styles.imageContainer}>
-                    {randomImage ? (
-                      <img src={randomImage} alt={prop.propertyName} className={styles.propertyImage} />
-                    ) : (
-                      <div className={styles.noImage}>
-                        <ImageIcon size={48} />
-                        <Typography variant="body2">No image available</Typography>
-                      </div>
-                    )}
-                  </div>
-                  <div className={styles.propertyInfo}>
-                    <Typography variant="h6" className={styles.propertyName}>
-                      {prop.propertyName}
-                    </Typography>
-                    <Chip
-                      label={prop.isActive ? "Active" : "Inactive"}
-                      color={prop.isActive ? "success" : "error"}
-                      size="small"
-                      className={styles.statusChip}
-                    />
-                    <div className={styles.detailsContainer}>
-                      <div className={styles.detailItem}>
-                        <Typography variant="subtitle2" className={styles.detailLabel}>
-                          Address
-                        </Typography>
-                        <Typography variant="body2" className={styles.detailValue}>
-                          {prop.address}
-                        </Typography>
-                      </div>
-                      <div className={styles.detailItem}>
-                        <Typography variant="subtitle2" className={styles.detailLabel}>
-                          Location
-                        </Typography>
-                        <Typography variant="body2" className={styles.detailValue}>
-                          {`${prop.city}, ${prop.state}, ${prop.country} ${prop.zipcode}`}
-                        </Typography>
-                      </div>
-                      <div className={styles.detailItem}>
-                        <Typography variant="subtitle2" className={styles.detailLabel}>
-                          Shares
-                        </Typography>
-                        <Typography variant="body2" className={styles.detailValue}>
-                          {shareFraction}
-                        </Typography>
-                      </div>
-                      <div className={styles.detailItem}>
-                        <Typography variant="subtitle2" className={styles.detailLabel}>
-                          Acquired
-                        </Typography>
-                        <Typography variant="body2" className={styles.detailValue}>
-                          {new Date(userProperty.acquisitionDate).toLocaleDateString()}
-                        </Typography>
-                      </div>
+          return (
+            <Card key={index} className={styles.propertyCard}>
+              <CardContent className={styles.cardContent}>
+                <div className={styles.imageContainer}>
+                  {randomImage ? (
+                    <img src={randomImage} alt={prop.propertyName} className={styles.propertyImage} />
+                  ) : (
+                    <div className={styles.noImage}>
+                      <ImageIcon size={48} />
+                      <Typography variant="body2">No image available</Typography>
+                    </div>
+                  )}
+                </div>
+                <div className={styles.propertyInfo}>
+                  <Typography variant="h6" className={styles.propertyName}>
+                    {prop.propertyName}
+                  </Typography>
+                  <Chip
+                    label={prop.isActive ? "Active" : "Inactive"}
+                    color={prop.isActive ? "success" : "error"}
+                    size="small"
+                    className={styles.statusChip}
+                  />
+                  <div className={styles.detailsContainer}>
+                    <div className={styles.detailItem}>
+                      <Typography variant="subtitle2" className={styles.detailLabel}>
+                        Address
+                      </Typography>
+                      <Typography variant="body2" className={styles.detailValue}>
+                        {prop.address}
+                      </Typography>
+                    </div>
+                    <div className={styles.detailItem}>
+                      <Typography variant="subtitle2" className={styles.detailLabel}>
+                        Location
+                      </Typography>
+                      <Typography variant="body2" className={styles.detailValue}>
+                        {`${prop.city}, ${prop.state}, ${prop.country} ${prop.zipcode}`}
+                      </Typography>
+                    </div>
+                    <div className={styles.detailItem}>
+                      <Typography variant="subtitle2" className={styles.detailLabel}>
+                        Shares
+                      </Typography>
+                      <Typography variant="body2" className={styles.detailValue}>
+                        {shareFraction}
+                      </Typography>
+                    </div>
+                    <div className={styles.detailItem}>
+                      <Typography variant="subtitle2" className={styles.detailLabel}>
+                        Acquired
+                      </Typography>
+                      <Typography variant="body2" className={styles.detailValue}>
+                        {new Date(userProperty.acquisitionDate).toLocaleDateString()}
+                      </Typography>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
     </div>
   );
