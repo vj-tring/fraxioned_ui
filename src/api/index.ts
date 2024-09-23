@@ -81,6 +81,7 @@ export const createBooking = (bookingData: void) =>
 export const createBookingSummary = (bookingData: void) =>
     axiosInstance.post(`/v1/bookings/booking/booking-summary`, bookingData);
 
+//get all bookings
 export const getBookings = () =>
     axiosInstance.get('/v1/bookings');
 

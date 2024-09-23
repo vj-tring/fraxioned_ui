@@ -42,12 +42,16 @@ const SidePanel: React.FC<SidePanelProps> = ({ isOpen, toggleSidebar }) => {
     };
 
     const isActive = (path: string) => {
+        if (path === '/admin/bookings') {
+            return location.pathname.startsWith('/admin/bookings') || location.pathname === '/admin/bookings-grid';
+        }
         if (path === '/admin/property') {
             return location.pathname.startsWith('/admin/property');
         }
         if (path === '/admin/user') {
             return location.pathname.startsWith('/admin/user');
         }
+
 
         return location.pathname === path;
     };
