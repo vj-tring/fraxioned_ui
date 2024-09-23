@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { Calendar as BigCalendar, momentLocalizer } from 'react-big-calendar';
 import moment from "moment";
-import Dialog  from "@mui/material/Dialog";
-import DialogTitle  from "@mui/material/DialogTitle";
-import DialogContent  from "@mui/material/DialogContent";
-import DialogActions  from "@mui/material/DialogActions";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import BookingButton from "../bookingbutton";
 import './big-calender.css'
 
 const localizer = momentLocalizer(moment);
@@ -127,6 +128,7 @@ const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
 
     return (
         <div className={`calendar-container ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
+            <BookingButton />
             <BigCalendar
                 localizer={localizer}
                 events={events}
