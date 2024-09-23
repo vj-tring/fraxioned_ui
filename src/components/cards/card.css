@@ -1,12 +1,12 @@
 /* General Styles */
 .card3 {
-  width: 250px;
+  width: 240px;
   height: 310px;
   display: flex;
   flex-direction: column;
   border: none;
   padding: 15px;
-  margin-right: 40px;
+  margin-right: 20px;
   position: relative;
   cursor: pointer;
 }
@@ -84,8 +84,9 @@
 .Cardcontainer {
   display: flex;
   width: 100%;
-  margin: 15px;
-  padding: 15px;
+  margin: 5px;
+  padding: 5px;
+  margin-bottom: 55px;
   white-space: nowrap;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 2px 1px;
@@ -108,7 +109,7 @@
   color: rgb(207, 206, 206);
   font-size: 24px;
   cursor: pointer;
-  border-radius: 5%;
+  border-radius: 50%;
   margin-top: 20%;
   height: 40px;
   width: 40px;
@@ -124,6 +125,7 @@
   background-color: #bab9b8;
   box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
   color: #ffffff;
+  margin-right: 10px;
 }
 
 .FadeProp {

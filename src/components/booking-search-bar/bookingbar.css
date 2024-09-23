@@ -87,3 +87,19 @@
 .active1 {
   border-radius: 25px;
 }
+
+@media only screen and (max-width: 400px) {
+  .calendar-popover {
+     margin-top: 6px;
+     position: relative;
+     bottom: 180px;
+  }
+  .error-msg-container{
+    padding: 7px;
+    padding-top: 10px;
+  }
+  .error-msg{
+    font-size: x-small !important;
+
+  }
+}

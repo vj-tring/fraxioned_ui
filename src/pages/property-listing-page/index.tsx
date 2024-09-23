@@ -13,6 +13,7 @@ import {
   DialogTitle,
   IconButton,
   Box,
+  Skeleton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Logo from "../../assets/images/fraxionedpng.png";
@@ -96,6 +97,8 @@ interface RootState {
 }
 
 const PropertyListingPage = () => {
+  const [loading, setLoading] = useState(true);
+
   const { cards: properties } = useSelector(
     (state: RootState) => state.properties
   );
@@ -103,6 +106,7 @@ const PropertyListingPage = () => {
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(
     null
   );
+
   const { id } = useParams<{ id: string }>();
 
   const [currentImage, setCurrentImage] = useState<number>(0);
@@ -128,6 +132,7 @@ const PropertyListingPage = () => {
       } else {
         setSelectedProperty(displayProperties[0]);
       }
+      // setLoading(false);
     }
   }, [displayProperties, id, dispatch]);
 
@@ -169,40 +174,68 @@ const PropertyListingPage = () => {
     console.log("Check availability:", { checkInDate, checkOutDate, guests });
   };
 
+  const handleImageLoad = () => {
+    setLoading(false);
+  };
+
   return (
     <div className="container-fluid d-flex flex-column gap-4 px-14">
       <div className="img-row pt-4 px-12">
         <Grid container spacing={1}>
           <Grid item xs={12} md={6}>
-            {imageDetails.slice(0, 1).map((image, index) => (
-              <img
-                key={index}
-                src={image.imageUrl}
-                alt={image.imageName}
-                loading="lazy"
-                className={`img-fluid img1 cornertop ${
-                  currentImage === index ? "active" : ""
-                }`}
-                onClick={() => setCurrentImage(index)}
-              />
-            ))}
+           {loading && (
+          <Skeleton variant="rectangular" width="100%" height="200px" />
+        )}
+              {imageDetails.slice(0, 1).map((image, index) => (
+                <img
+                  key={index}
+                  src={image.imageUrl}
+                  alt={image.imageName}
+                  // loading="lazy"
+                  onLoad={handleImageLoad}
+                  className={`img-fluid img1 cornertop ${
+                    currentImage === index ? "active" : ""
+                  }`}
+                  style={{
+                    display: loading ? "none" : "block",
+                    objectFit: "cover",
+                  }}
+                  onClick={() => setCurrentImage(index)}
+                />
+              ))
+}
           </Grid>
 
           <Grid item xs={12} md={6}>
             <Grid container spacing={1}>
-              {imageDetails.slice(1, 5).map((image, index) => (
-                <Grid item xs={6} key={index}>
-                  <img
-                    src={image.imageUrl}
-                    alt={image.imageName}
-                    loading="lazy"
-                    className={`img-fluid image ${
-                      currentImage === index + 1 ? "active" : ""
-                    }`}
-                    onClick={() => setCurrentImage(index + 1)}
-                  />
-                </Grid>
-              ))}
+              {loading
+                ? Array.from({ length: 4 }).map((_, index) => (
+                    <Grid item xs={6} key={index}>
+                      <Skeleton
+                        variant="rectangular"
+                        width="100%"
+                        height={100}
+                      />
+                    </Grid>
+                  ))
+                : imageDetails.slice(1, 5).map((image, index) => (
+                    <Grid item xs={6} key={index}>
+                      <img
+                        src={image.imageUrl}
+                        alt={image.imageName}
+                        onLoad={handleImageLoad}
+                        // loading="lazy"
+                        className={`img-fluid image ${
+                          currentImage === index + 1 ? "active" : ""
+                        }`}
+                        style={{
+                          display: loading ? "none" : "block",
+                          objectFit: "cover",
+                        }}
+                        onClick={() => setCurrentImage(index + 1)}
+                      />
+                    </Grid>
+                  ))}
 
               {imageDetails.length > 5 && (
                 <Grid item xs={12}>
@@ -226,40 +259,46 @@ const PropertyListingPage = () => {
           </Grid>
         </Grid>
       </div>
-
       <div className="px-12 d-flex flex-column">
-        {selectedProperty && (
+        {loading ? (
           <>
-            <Typography variant="h4" className="PropertyName monsterrat">
-              {selectedProperty &&
-              (selectedProperty.id === 1 || selectedProperty.id === 2)
-                ? "Paradise Shores"
-                : selectedProperty?.name || "Property Name"}
-            </Typography>
-
-            <Box
-              display="flex"
-              alignItems="flex-end"
-              gap={0.5}
-              className="monsterrat location"
-            >
-              <img
-                src={Logo}
-                alt="Logo"
-                style={{ width: 26, height: 26 }}
-                loading="lazy"
-              />
-              <Typography
-                variant="h6"
-                className="PropertyAddress monsterrat"
-                style={{ opacity: 0.9, fontWeight: "bolder" }}
-              >
-                {selectedProperty.address || "Property Address"}
-              </Typography>
-            </Box>
+            <Skeleton variant="text" width="60%" height={40} />
+            <Skeleton variant="text" width="80%" height={30} />
+            <Skeleton variant="text" width="40%" height={30} />
           </>
-        )}
+        ) : (
+          selectedProperty && (
+            <>
+              <Typography variant="h4" className="PropertyName monsterrat">
+                {selectedProperty &&
+                (selectedProperty.id === 1 || selectedProperty.id === 2)
+                  ? "Paradise Shores"
+                  : selectedProperty?.name || "Property Name"}
+              </Typography>
 
+              <Box
+                display="flex"
+                alignItems="flex-end"
+                gap={0.5}
+                className="monsterrat location"
+              >
+                <img
+                  src={Logo}
+                  alt="Logo"
+                  style={{ width: 26, height: 26 }}
+                  // loading="lazy"
+                />
+                <Typography
+                  variant="h6"
+                  className="PropertyAddress monsterrat"
+                  style={{ opacity: 0.9, fontWeight: "bolder" }}
+                >
+                  {selectedProperty.address || "Property Address"}
+                </Typography>
+              </Box>
+            </>
+          )
+        )}
         <div className="Blue-row pb-3 pt-5">
           <div>
             <a href="#myShare" smooth={true} duration={200}>
@@ -364,7 +403,7 @@ const PropertyListingPage = () => {
                       src={image.imageUrl}
                       alt={image.imageName}
                       style={{ width: "100%", height: "auto" }}
-                      loading="lazy"
+                      // loading="lazy"
                     />
                   </Card>
                 </Grid>

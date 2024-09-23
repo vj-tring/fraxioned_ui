@@ -327,11 +327,15 @@ body {
     height: 27px !important;
   }
   .end-calendar {
-    width: 141% !important;
+    /* width: 141% !important; */
   }
   .stay-length,
   .btn-clear {
     font-size: 6px !important;
+  }
+  .stay-length {
+
+    gap: 10px !important;
   }
   .img1 {
     height: 187px;
@@ -368,10 +372,11 @@ body {
   .ThingsHead {
     padding: 0px !important ;
   }
-  .shwmore,.addDate{
+  .shwmore,
+  .addDate {
     font-size: 10px !important;
   }
-  .ThingstoHead{
+  .ThingstoHead {
     font-size: small !important;
   }
 }

@@ -186,6 +186,7 @@ const MultipleSelect: React.FC = () => {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
+        className="GuestCard"
         PaperProps={{
           style: {
             width: 380,
@@ -199,6 +200,7 @@ const MultipleSelect: React.FC = () => {
         {names.map((item, index) => (
           <React.Fragment key={item.label}>
             <MenuItem
+            className="GuestMenuItem"
               sx={{
                 borderRadius: 0,
                 width: "100%",
@@ -208,17 +210,17 @@ const MultipleSelect: React.FC = () => {
               }}
               disableRipple
             >
-              <div className="d-flex justify-content-between align-items-center gap-2.5 w-100 monsterrat">
+              <div className="d-flex justify-content-between align-items-center gap-2.5 w-100 monsterrat ">
                 <Avatar
                   sx={{
                     backgroundColor: "#DF9526",
                   }}
-                  className="monsterrat"
+                  className="monsterrat GuestIcon"
                 >
                   {item.icon}
                 </Avatar>
-                <div className="w-50">
-                  <b>{item.label}</b>
+                <div className="w-50 ">
+                  <b className="labelItem">  {item.label}</b>
                   <p className="DescFont monsterrat">{item.description}</p>
                 </div>
                 <div className="d-flex justify-content-around w-50 text-center">

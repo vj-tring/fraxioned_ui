@@ -38,9 +38,7 @@ const Card: React.FC<CardProps> = ({
       className={`card3 ${showPlusIcon ? "static-card" : ""}`}
       onClick={handleClick}
     >
-      <Box sx={{ position: "relative", width: "100%", height: 200,
-        
-       }} >
+      <Box sx={{ position: "relative", width: "100%", height: 200 }}>
         {loading && (
           <Skeleton variant="rectangular" width="100%" height="100%" />
         )}
@@ -58,10 +56,7 @@ const Card: React.FC<CardProps> = ({
         </div>
       </Box>
 
-      <Box sx={{
-
-      
-      }} >
+      <Box sx={{}}>
         {loading ? (
           <>
             <Skeleton width="60%" height={20} />
