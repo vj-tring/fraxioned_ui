@@ -348,7 +348,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                 opacity: 0.12,
               }}
             />
-
+            {isAdmin && (
             <MenuItem
               onClick={handleResetPasswordClick}
               style={{
@@ -364,7 +364,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               </ListItemIcon>
               <ListItemText>Reset</ListItemText>
             </MenuItem>
-
+            )}
 
             <MenuItem
               onClick={handleLogoutClick}
