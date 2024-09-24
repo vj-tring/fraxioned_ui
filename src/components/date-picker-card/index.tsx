@@ -1,36 +1,64 @@
-import React from "react";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from 'framer-motion';
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
-// import Grid from '@mui/material/Grid';
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import Button from "@mui/material/Button";
-// import DatePicker from 'react-datepicker';
+import { styled } from '@mui/material/styles';
 import "react-datepicker/dist/react-datepicker.css";
 import "./date-picker.css";
 import PopoverCalendar from "../booking-search-bar/PopoverCalendar";
+import MultipleSelect from "../guest-selector";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import { DateRange } from "react-day-picker";
+
+interface CustomButtonProps {
+  isAvailable: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+  className?: string;
+}
+
+const CustomButton = styled('button')<CustomButtonProps>(({ isAvailable }) => ({
+  width: '100%',
+  height: '50px',
+  textAlign: 'center',
+  borderRadius: '50px',
+  border: 'none',
+  cursor: 'pointer',
+  fontFamily: 'Montserrat, sans-serif',
+  fontWeight: 500,
+  fontSize: '16px',
+  color: '#fff',
+  transition: 'background-color 0.3s',
+  backgroundColor: isAvailable ? '#e8aa6c' : '#88CDD4',
+  '&:hover': {
+    backgroundColor: isAvailable ? '#e49f63' : '#7abec5',
+  },
+}));
 
 interface DatePickerCardProps {
-  checkInDate: Date | null;
-  checkOutDate: Date | null;
   guests: number;
-  setCheckInDate: (date: Date | null) => void;
-  setCheckOutDate: (date: Date | null) => void;
   setGuests: (count: number) => void;
   onCheckAvailability: () => void;
+  isAvailable: boolean;
+  onNavigateToSummary: () => void;
+  dateRange: DateRange | undefined;
+  onDateRangeSelect: (range: DateRange | undefined) => void;
 }
 
 const DatePickerCard: React.FC<DatePickerCardProps> = ({
-  guests,
-  setGuests,
   onCheckAvailability,
+  isAvailable,
+  onNavigateToSummary,
+  dateRange,
+  onDateRangeSelect,
 }) => {
   return (
     <Card className="cards bg-light p-4 monsterrat">
       <Typography variant="h5" className="selectDate mb-2 monsterrat">
         Select Dates
       </Typography>
-      <PopoverCalendar withBorder paddingTop />
+      <PopoverCalendar withBorder  paddingTop />
 
       <TextField
         select
