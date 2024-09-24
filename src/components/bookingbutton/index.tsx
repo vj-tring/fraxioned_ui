@@ -1,19 +1,13 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styles from './booking.module.css';
 
 const BookingButton: React.FC = () => {
-    const navigate = useNavigate();
-
-    const handleClick = () => {
-        navigate('/admin/bookings-grid');
-    };
-
     return (
-        <div className={styles.bookingButtonContainer}>
-            <button className={styles.bookingButton} onClick={handleClick}>
-                Bookings
-            </button>
+        <div className={styles.bookingLinkContainer}>
+            <Link to="/admin/bookings-grid" className={styles.bookingLink}>
+                Go to Bookings
+            </Link>
         </div>
     );
 };
