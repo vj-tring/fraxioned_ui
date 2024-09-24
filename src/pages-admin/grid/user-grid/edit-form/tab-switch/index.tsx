@@ -13,7 +13,7 @@ import PropertyTab from '../propertyUser';
 import UserBookings from '../user-bookings';
 import Availability from '../availablity';
 import styles from './tab.module.css';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { getUserById } from '@/api';
 
 interface TabSwitchProps {
@@ -21,26 +21,41 @@ interface TabSwitchProps {
 }
 
 const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
-    const [selectedTab, setSelectedTab] = useState(0);
     const [isEditing, setIsEditing] = useState(false);
     const [userData, setUserData] = useState<any>(null);
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const userId = parseInt(id || '0', 10);
+
+    const getCurrentTab = () => {
+        const searchParams = new URLSearchParams(location.search);
+        return parseInt(searchParams.get('tab') || '0', 10);
+    };
+
+    const [selectedTab, setSelectedTab] = useState(getCurrentTab());
 
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await getUserById(Number(id));
+                const response = await getUserById(userId);
                 setUserData(response.data.user);
             } catch (error) {
                 console.error('Error fetching user data:', error);
             }
         };
 
-        if (id) {
+        if (userId) {
             fetchUserData();
         }
-    }, [id]);
+    }, [userId]);
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        searchParams.set('tab', selectedTab.toString());
+        navigate(`${location.pathname}?${searchParams.toString()}`, { replace: true });
+    }, [selectedTab, navigate, location.pathname]);
 
     const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
         setSelectedTab(newValue);
@@ -76,7 +91,7 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
             >
                 <Tab label="General Details" />
                 <Tab label="Property" disabled={!isOwner} />
-                <Tab label="Booking" disabled={!isOwner} />
+                <Tab label="Booking" />
                 <Tab label="Availability" disabled={!isOwner} />
 
                 <IconButton
@@ -91,7 +106,7 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
             <div className={styles.content}>
                 {selectedTab === 0 && !isEditing ? (
                     <UserForm
-                        userId={Number(id)}
+                        userId={userId}
                         onEditClick={handleEditClick}
                     />
                 ) : selectedTab === 0 && isEditing && (
@@ -103,15 +118,15 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
                 )}
 
                 {isOwner && selectedTab === 1 && (
-                    <PropertyTab Id={Number(id)} />
+                    <PropertyTab userId={userId} />
                 )}
 
                 {isOwner && selectedTab === 2 && (
-                    <UserBookings userId={Number(id)} />
+                    <UserBookings userId={userId} />
                 )}
 
                 {isOwner && selectedTab === 3 && (
-                    <Availability userId={Number(id)} />
+                    <Availability userId={userId} />
                 )}
             </div>
         </div>

@@ -1,17 +1,9 @@
 //@ts-nocheck
 import * as React from "react";
-
 import { addDays, format, addYears } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
 import { DateRange } from "react-day-picker";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import "./calender.css";
 import calendarData from "./calendarData.json";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +13,7 @@ import {  clearBookingMessages, fetchBookings } from '../../store/slice/auth/boo
 import { useEffect } from "react";
 import { RootState } from "@/store/reducers";
 import { setDateRange, setErrorMessage, setIsCalendarOpen, clearDates, setStartDate, setStartDateSelected, setSelectedYear, setValidationMessage, clearValidationMessage, clearPartial } from "@/store/slice/datePickerSlice";
+import { AppDispatch } from "@/store";
 
 interface DatePickerWithRangeProps extends React.HTMLAttributes<HTMLDivElement> {
   onSelect?: (range: DateRange | undefined) => void;
@@ -32,29 +25,28 @@ interface DatePickerWithRangeProps extends React.HTMLAttributes<HTMLDivElement> 
   hideBookedDates?: boolean;
   propertyColor: string;
   disableStrikethrough?: boolean;
+  showEndCalendar?: boolean;
+  isViewOnly?: boolean;
 }
 
 export function DatePickerWithRange({
   className,
   onSelect,
-  initialRange,
-  selectingFrom,
-  userId,
   showEndCalendar = true,
   fetchBookingsOnMount = false,
   externalBookedDates = [], 
   hideBookedDates = false,
   propertyColor,
   disableStrikethrough = false,
+  isViewOnly,
 }: DatePickerWithRangeProps) {
   const today = new Date();
   const endDate = new Date(today.getFullYear() + 5, 11, 31);
   const checkInEndDate = addDays(today, 730);
   const checkOutEndDate = addYears(today, 5);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const bookings = useSelector((state: RootState) => state.bookings.bookings);
-  const bookingState = useSelector((state: RootState) => state.bookings);
   // const bookingError = bookingState?.error;
   // const bookingSuccessMessage = bookingState?.successMessage;
   // const isBookingLoading = bookingState?.isLoading;
@@ -72,7 +64,6 @@ export function DatePickerWithRange({
 
   const unavailableDates = calendarData.unavailableDates.map(date => new Date(date));
   const blueDates = calendarData.blueDates.map(date => new Date(date));
-  const MILLISECONDS_IN_A_DAY = 1000 * 60 * 60 * 24;
 
   useEffect(() => {
     if (fetchBookingsOnMount) {
@@ -129,7 +120,7 @@ export function DatePickerWithRange({
     if (!selectedPropertyDetails) return [];
 
     const dates = bookings
-    .filter(booking => booking.property.id === selectedPropertyDetails.id && !booking.isCancelled)
+    .filter(booking => String(booking.property.id) === String(selectedPropertyDetails.id) && !booking.isCancelled)
     .flatMap(booking => {
         if (!booking.checkinDate || !booking.checkoutDate) return [];
         const start = new Date(booking.checkinDate);
@@ -171,11 +162,6 @@ export function DatePickerWithRange({
     );
   };
 
-  const isAfterUnavailableDate = (date: Date) => {
-    return unavailableDates.some(
-      (unavailableDate) => date.getTime() > unavailableDate.getTime()
-    );
-  };
 
   const isDayBeforeBookedDate = (date: Date) => {
     return bookedDates.some(
@@ -186,11 +172,6 @@ export function DatePickerWithRange({
     );
   };
 
-  const isAfterBookedDate = (date: Date) => {
-    return bookedDates.some(
-      (bookedDate) => date.getTime() > bookedDate.getTime()
-    );
-  };
 
   const isHolidayDate = (date: Date) => {
     return seasonHolidays.some(holiday =>
@@ -225,11 +206,6 @@ export function DatePickerWithRange({
     }
   };
 
-  const isDateSpanningBookedDates = (start: Date, end: Date) => {
-    return bookedDates.some(
-      (bookedDate) => bookedDate > start && bookedDate < end
-    );
-  };
 
   const isLastMinuteBooking = (checkInDate: Date) => {
     const diffInDays =
@@ -479,7 +455,7 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
           mode="range"
           defaultMonth={dateRange?.from}
           selected={dateRange}
-          onSelect={handleDateChange}
+          onSelect={isViewOnly ? undefined :handleDateChange}
           numberOfMonths={2}
           fromDate={today}
           toDate={endDate}
