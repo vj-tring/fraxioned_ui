@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getPropertyById } from '@/api';
+import { getPropertyById, getProperrtDetailsbyId } from '@/api';
 import EditButton from '@/components/edit';
 import styles from './property-generalinfo.module.css';
 import imageone from '../../assests/bear-lake-bluffs.jpg';
@@ -30,9 +30,17 @@ interface PropertyData {
   updatedAt: string;
 }
 
+interface PropertyDetails {
+  noOfBedrooms: number;
+  noOfBathrooms: number;
+  squareFootage: string;
+  cleaningFee: number;
+}
+
 const PropertyGeneralInfo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [propertyData, setPropertyData] = useState<PropertyData | null>(null);
+  const [propertyDetails, setPropertyDetails] = useState<PropertyDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -41,19 +49,28 @@ const PropertyGeneralInfo: React.FC = () => {
   const randomImage = images[Math.floor(Math.random() * images.length)];
 
   useEffect(() => {
-    const fetchPropertyData = async () => {
+    const fetchData = async () => {
       try {
-        const response = await getPropertyById(Number(id));
-        setPropertyData(response.data);
+        const [propertyResponse, detailsResponse] = await Promise.all([
+          getPropertyById(Number(id)),
+          getProperrtDetailsbyId(Number(id))
+        ]);
+        setPropertyData(propertyResponse.data);
+        setPropertyDetails({
+          noOfBedrooms: detailsResponse.data.noOfBedrooms,
+          noOfBathrooms: detailsResponse.data.noOfBathrooms,
+          squareFootage: detailsResponse.data.squareFootage,
+          cleaningFee: detailsResponse.data.cleaningFee
+        });
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching property details:', err);
-        setError('Failed to fetch property details. Please try again.');
+        console.error('Error fetching property data:', err);
+        setError('Failed to fetch property data. Please try again.');
         setLoading(false);
       }
     };
 
-    fetchPropertyData();
+    fetchData();
   }, [id]);
 
   const handleEdit = () => {
@@ -62,7 +79,7 @@ const PropertyGeneralInfo: React.FC = () => {
 
   if (loading) return <Loader />;
   if (error) return <div className={styles.error}>{error}</div>;
-  if (!propertyData) return <div className={styles.noData}>No property data found.</div>;
+  if (!propertyData || !propertyDetails) return <div className={styles.noData}>No property data found.</div>;
 
   return (
     <div className={styles.fullContainer}>
@@ -81,17 +98,47 @@ const PropertyGeneralInfo: React.FC = () => {
           </div>
           <div className={styles.infoContainer}>
             <h3 className={styles.propertyName}>{propertyData.propertyName}</h3>
-            <div className={styles.infoInnerContainer}>
-              <div className={styles.infoGrid}>
-                <InfoItem label="OwnerRez Property ID" value={propertyData.ownerRezPropId} />
-                <InfoItem label="Address" value={propertyData.address} />
-                <InfoItem label="City" value={propertyData.city} />
-                <InfoItem label="State" value={propertyData.state} />
-                <InfoItem label="Country" value={propertyData.country} />
-                <InfoItem label="Zipcode" value={propertyData.zipcode} />
-                <InfoItem label="Property Share" value={`${propertyData.propertyShare}`} />
-                <InfoItem label="Remaining Share" value={`${propertyData.propertyRemainingShare}`} />
+            <div className={styles.infoBlock}>
+              <div className={styles.infoColumns}>
+                <div className={styles.addressColumn}>
+                  <div className={styles.infoRow}>
+                    <span className={styles.infoLabel}>Address:</span>
+                    <span className={styles.infoValue}>
+                      {`${propertyData.address}, ${propertyData.city}, ${propertyData.state}, ${propertyData.country}, ${propertyData.zipcode}`}
+                    </span>
+                  </div>
+                  <div className={styles.infoRow}>
+                    <span className={styles.infoLabel}>Square Footage:</span>
+                    <span className={styles.infoValue}>{propertyDetails.squareFootage} sq ft</span>
+                  </div>
+                </div>
+                <div className={styles.detailsColumn}>
+                  <div className={styles.infoRow}>
+                    <span className={styles.infoLabel}>Property Share:</span>
+                    <span className={styles.infoValue}>{propertyData.propertyShare}</span>
+                  </div>
+                  <div className={styles.infoRow}>
+                    <span className={styles.infoLabel}>Bedrooms:</span>
+                    <span className={styles.infoValue}>{propertyDetails.noOfBedrooms}</span>
+                  </div>
+                  <div className={styles.infoRow}>
+                    <span className={styles.infoLabel}>Bathrooms:</span>
+                    <span className={styles.infoValue}>{propertyDetails.noOfBathrooms}</span>
+                  </div>
+                  <div className={styles.infoRow}>
+                    <span className={styles.infoLabel}>Share left:</span>
+                    <span className={styles.infoValue}>{propertyData.propertyRemainingShare}</span>
+                  </div>
+                  <div className={styles.infoRow}>
+                    <span className={styles.infoLabel}>Cleaning fee:</span>
+                    <span className={styles.infoValue}>{propertyDetails.cleaningFee}</span>
+                  </div>
+                </div>
               </div>
+            </div>
+            <div className={styles.infoBlock}>
+              <h4 className={styles.descriptionTitle}>Description</h4>
+              <p className={styles.description}>{propertyData.houseDescription}</p>
             </div>
           </div>
         </div>
@@ -99,12 +146,5 @@ const PropertyGeneralInfo: React.FC = () => {
     </div>
   );
 };
-
-const InfoItem: React.FC<{ label: string; value: string | number }> = ({ label, value }) => (
-  <div className={styles.infoItem}>
-    <span className={styles.label}>{label}</span>
-    <span className={styles.value}>{value}</span>
-  </div>
-);
 
 export default PropertyGeneralInfo;

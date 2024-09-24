@@ -201,3 +201,8 @@ export const propertyspaceapi = () =>
 
 export const propertyspacetypesapi = () =>
     axiosInstance.get(`/v1/space-types`);
+
+export const getpropertycodes = () =>
+    axiosInstance.get(`/v1/property-codes`);
+
+
