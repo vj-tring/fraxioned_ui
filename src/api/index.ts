@@ -206,3 +206,5 @@ export const getpropertycodes = () =>
     axiosInstance.get(`/v1/property-codes`);
 
 
+
+
