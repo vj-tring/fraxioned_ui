@@ -11,19 +11,23 @@ import PetsIcon from "@mui/icons-material/Pets";
 import "./guest-selector.css";
 import { RootState } from "@/store/reducers";
 import { CircleMinus, CirclePlus } from "lucide-react";
-import { updateCount } from "@/store/slice/auth/propertyGuestSlice";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import {
+  updateCount,
+} from "@/store/slice/auth/propertyGuestSlice";
+import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined";
+
+
 const names = [
   { label: "Adults", description: "Ages 13 or above", icon: <PeopleIcon /> },
-  {
-    label: "Children",
-    description: "Ages 2 to 12",
-    icon: <ChildFriendlyIcon />,
-  },
+  { label: "Children",description: "Ages 2 to 12", icon: <ChildFriendlyIcon />,},
   { label: "Pets", description: "Bringing a service?", icon: <PetsIcon /> },
 ];
 
-const MultipleSelect: React.FC = () => {
+interface MultipleSelectProps {
+  showIcons?: boolean;
+}
+
+const MultipleSelect: React.FC<MultipleSelectProps> = ({ showIcons = true }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
@@ -57,8 +61,9 @@ const MultipleSelect: React.FC = () => {
         Children: currentBooking.Children,
         Pets: currentBooking.Pets,
       });
+      // dispatch(resetLimits());
     }
-  }, [bookingSuccessMessage, currentBooking, dispatch]);
+  }, [bookingSuccessMessage, dispatch]);
 
   const validateCounts = () => {
     if (!selectedPropertyLimits) return;
@@ -150,7 +155,7 @@ const MultipleSelect: React.FC = () => {
   }, [open]);
 
   return (
-    <Box sx={{ width: "20%" }}>
+    <Box sx={{ width: showIcons ? "20%" : "100%" }}>
       <Button
         disableRipple
         aria-controls="basic-menu"
@@ -158,26 +163,20 @@ const MultipleSelect: React.FC = () => {
         onClick={handleOpen}
         className="PropertyBtn"
         sx={{
-          borderRadius: 10,
-          width: 200,
-          height: 70,
+          width: showIcons ? 200 : "100%",
+          height: showIcons ? 70 : 56,
           border: "none",
           cursor: "pointer",
-          paddingRight: 9,
+          paddingRight: showIcons ? 9 : 2,
           gap: 2,
+          justifyContent: showIcons ? "flex-start" : "space-between",
         }}
       >
-        <HomeOutlinedIcon
-          sx={{
-            color: "grey",
-            marginBottom: "12px",
-            fontSize:"24px"
-          }}
-          className="HomeBtn"
-        />
 
-        <div className="d-flex align-items-start flex-column">
-          <span className="DateHead1 monsterrat">Who</span>
+        {showIcons && (<PersonAddAlt1OutlinedIcon sx={{color:"grey"}} />)}
+
+        <div className="d-flex align-items-start flex-column" style={{ paddingLeft: showIcons ? 0 : 15 }}>
+          <span className="DateHead1 monsterrat" >Who</span>
           <p className="property1 monsterrat">{getTotalGuests()} guests</p>
         </div>
       </Button>
@@ -186,57 +185,57 @@ const MultipleSelect: React.FC = () => {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        className="GuestCard"
         PaperProps={{
           style: {
-            width: 380,
-            borderRadius: "10px !important",
+            width: showIcons ? 380 : 370,
+            borderRadius: "10px",
             maxHeight: "400px",
             overflowY: "auto",
             padding: ".2rem 0",
           },
         }}
       >
-        {names.map((item, index) => (
-          <React.Fragment key={item.label}>
+        {names.map((item) => (
+          <>
             <MenuItem
-            className="GuestMenuItem"
+              key={item.label}
               sx={{
-                borderRadius: 0,
                 width: "100%",
-                padding: "0 2rem",
+                padding: showIcons ? "0 2rem" : "0.5rem 2.5rem",
                 margin: ".5rem 0",
-                height: "4rem",
+                height: showIcons ? "4rem" : "auto",
               }}
               disableRipple
             >
-              <div className="d-flex justify-content-between align-items-center gap-2.5 w-100 monsterrat ">
+            <div className={`d-flex justify-content-between align-items-center ${showIcons ? 'gap-2.5' : 'gap-2.5'} w-100 monsterrat`}>
+            {showIcons && (
                 <Avatar
                   sx={{
                     backgroundColor: "#DF9526",
                   }}
-                  className="monsterrat GuestIcon"
+                  className="monsterrat"
                 >
                   {item.icon}
                 </Avatar>
-                <div className="w-50 ">
-                  <b className="labelItem">  {item.label}</b>
+              )}
+                 <div className={showIcons ? "w-40" : ""}>
+                  <b>{item.label}</b>
                   <p className="DescFont monsterrat">{item.description}</p>
                 </div>
-                <div className="d-flex justify-content-around w-50 text-center">
-                  <button
+                <div className={`d-flex justify-content-around ${showIcons ? 'w-50' : 'w-40'} text-center`}>
+                <button
                     className=" monsterrat"
                     disabled={counts[item.label] === 0}
                     onClick={() => handleCountChange(item.label, "decrease")}
                   >
-                    <CircleMinus size={29} strokeWidth={0.75} color="grey" />
+                  <CircleMinus size={showIcons ? 29 : 29} strokeWidth={0.75} color="grey" />
                   </button>
                   <p className="Ad-count monsterrat">{counts[item.label]}</p>
                   <button
                     onClick={() => handleCountChange(item.label, "increase")}
                   >
                     <CirclePlus
-                      size={29}
+                      size={showIcons ? 29 : 29}
                       strokeWidth={0.75}
                       className={`${
                         item.label === "Pets"
@@ -246,17 +245,17 @@ const MultipleSelect: React.FC = () => {
                           : ""
                       } ${
                         item.label === "Adults" || item.label === "Children"
-                          ? counts.Adults === noOfguest
-                            ? "circleplusdisable"
-                            : "circleplus"
-                          : ""
-                      } `}
+                        ? counts.Adults + counts.Children === noOfguest
+                          ? "circleplusdisable"
+                          : "circleplus"
+                        : ""
+                    } `}
                     />
                   </button>
                 </div>
               </div>
             </MenuItem>
-            {index < names.length - 1 && (
+            {!(names.indexOf(item) === names.length - 1) && (
               <hr
                 style={{
                   opacity: 0.08,
@@ -264,7 +263,7 @@ const MultipleSelect: React.FC = () => {
                 }}
               />
             )}
-          </React.Fragment>
+          </>
         ))}
         {validationMessage && (
           <div className="validationMsg monsterrat">

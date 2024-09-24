@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from "framer-motion";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 import "react-datepicker/dist/react-datepicker.css";
 import "./date-picker.css";
 import PopoverCalendar from "../booking-search-bar/PopoverCalendar";
@@ -18,21 +18,21 @@ interface CustomButtonProps {
   className?: string;
 }
 
-const CustomButton = styled('button')<CustomButtonProps>(({ isAvailable }) => ({
-  width: '100%',
-  height: '50px',
-  textAlign: 'center',
-  borderRadius: '50px',
-  border: 'none',
-  cursor: 'pointer',
-  fontFamily: 'Montserrat, sans-serif',
+const CustomButton = styled("button")<CustomButtonProps>(({ isAvailable }) => ({
+  width: "100%",
+  height: "50px",
+  textAlign: "center",
+  borderRadius: "50px",
+  border: "none",
+  cursor: "pointer",
+  fontFamily: "Montserrat, sans-serif",
   fontWeight: 500,
-  fontSize: '16px',
-  color: '#fff',
-  transition: 'background-color 0.3s',
-  backgroundColor: isAvailable ? '#e8aa6c' : '#88CDD4',
-  '&:hover': {
-    backgroundColor: isAvailable ? '#e49f63' : '#7abec5',
+  fontSize: "16px",
+  color: "#fff",
+  transition: "background-color 0.3s",
+  backgroundColor: isAvailable ? "#e8aa6c" : "#88CDD4",
+  "&:hover": {
+    backgroundColor: isAvailable ? "#e49f63" : "#7abec5",
   },
 }));
 
@@ -58,31 +58,46 @@ const DatePickerCard: React.FC<DatePickerCardProps> = ({
       <Typography variant="h5" className="selectDate mb-2 monsterrat">
         Select Dates
       </Typography>
-      <PopoverCalendar withBorder  paddingTop />
-
-      <TextField
-        select
-        label="Guests"
-        fullWidth
-        value={guests}
-        onChange={(e) => setGuests(Number(e.target.value))}
-        className="mt-3 monsterrat GuestDrop"
+      <Box
+        sx={{
+          border: "1px solid #ccc",
+          borderRadius: "4px",
+          "& .MuiButton-root": {
+            width: "100%",
+            justifyContent: "flex-start",
+            padding: "10px",
+            "& .MuiButton-startIcon": {
+              marginRight: "10px",
+            },
+          },
+        }}
       >
-        {[1, 2, 3, 4, 5].map((num) => (
-          <MenuItem key={num} value={num}>
-            {num} Guest{num > 1 ? "s" : ""}
-          </MenuItem>
-        ))}
-      </TextField>
+        <PopoverCalendar
+          dateRange={dateRange}
+          onSelect={onDateRangeSelect}
+          paddingTop
+        />
+        <Divider sx={{ borderColor: "#666" }} />
+        <MultipleSelect showIcons={false} />
+      </Box>
 
-      <Button
-        variant="contained"
-        color="primary"
-        className="availability w-100 mt-3 monsterrat"
-        onClick={onCheckAvailability}
-      >
-        Check Availability
-      </Button>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={isAvailable ? "book" : "check"}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3 }}
+        >
+          <CustomButton
+            className="mt-3"
+            onClick={isAvailable ? onNavigateToSummary : onCheckAvailability}
+            isAvailable={isAvailable}
+          >
+            {isAvailable ? "Book Now" : "Check Availability"}
+          </CustomButton>
+        </motion.div>
+      </AnimatePresence>
     </Card>
   );
 };
