@@ -8,13 +8,20 @@ interface BookingGridProps {
   bookings: Array<{
     id: number;
     bookingId: string;
-    property: string;
+    property: { id: number; propertyName: string };
     checkinDate: string;
     checkoutDate: string;
-    guest: string;
+    noOfAdults: number;
+    noOfChildren: number;
+    noOfPets: number;
+    isLastMinuteBooking: boolean;
+    cleaningFee: number;
+    petFee: number;
+    notes?: string;
     createdAt: string;
     totalNights: number;
   }>;
+  onEdit: (id: number) => void;
   onCancel: (id: number) => void;
   activeTab: number;
 }
@@ -26,9 +33,18 @@ const BookingGrid: React.FC<BookingGridProps> = ({
 }) => {
   const [cancelBookingId, setCancelBookingId] = useState<number | null>(null);
   const [editBookingId, setEditBookingId] = useState<number | null>(null);
+  const [gridBookings, setGridBookings] = useState(bookings);
 
   const handleCancelClick = (id: number) => {
     setCancelBookingId(id);
+  };
+
+  const handleUpdateBooking = (updatedBooking: any) => {
+    setGridBookings(prevBookings =>
+      prevBookings.map(booking =>
+        booking.id === updatedBooking.id ? { ...booking, ...updatedBooking } : booking
+      )
+    );
   };
 
   const handleConfirmCancel = () => {
@@ -156,15 +172,31 @@ const BookingGrid: React.FC<BookingGridProps> = ({
           },
         }}
       />
-      <ConfirmationModal
-        show={cancelBookingId !== null}
-        onHide={handleCloseCancelModal}
-        onConfirm={handleConfirmCancel}
-        title="Confirm Cancellation"
-        message="Are you sure you want to cancel this booking?"
-        confirmLabel="Cancel Booking"
-        cancelLabel="Keep Booking"
-      />
+<ConfirmationModal
+  show={cancelBookingId !== null}
+  onHide={handleCloseCancelModal}
+  onConfirm={handleConfirmCancel}
+  title="Confirm Cancellation"
+  message={
+    <>
+      Are you sure you want to cancel this booking?
+      <br />
+      <br />
+      <strong  style={{ marginBottom: 10 }}>Cancellation Policy Reminder:</strong>
+
+      <ul>
+        <li style={{ marginBottom: 20, marginTop: 20}}>
+          Cancelling a stay that has more than 7 nights will return the total booked nights to your annual total.
+        </li>
+        <li>
+          Cancellations made after check-in will still incur a cleaning fee.
+        </li>
+      </ul>
+    </>
+  }
+  confirmLabel="Cancel Booking"
+  cancelLabel="Keep Booking"
+/>
       {editingBooking && (
         <EditBookingModal
           open={editBookingId !== null}

@@ -419,7 +419,6 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
       dispatch(setDateRange(newDateRange));
       if (onSelect) onSelect(newDateRange);
 
-      // Keep the calendar open if only the start or end date is selected
       if (newStartDate && !newEndDate) {
         dispatch(setIsCalendarOpen(true));
       } else if (newStartDate && newEndDate) {

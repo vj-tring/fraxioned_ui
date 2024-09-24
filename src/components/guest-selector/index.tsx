@@ -13,7 +13,6 @@ import { RootState } from "@/store/reducers";
 import { CircleMinus, CirclePlus } from "lucide-react";
 import {
   updateCount,
-  resetLimits,
 } from "@/store/slice/auth/propertyGuestSlice";
 import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined";
 const names = [
@@ -26,7 +25,17 @@ const names = [
   { label: "Pets", description: "Bringing a service?", icon: <PetsIcon /> },
 ];
 
-const MultipleSelect: React.FC = () => {
+
+interface MultipleSelectProps {
+  isEditMode?: boolean;
+  initialCount: number;
+  initialCounts?: { [key: string]: number };
+  onChange: (newCount: number) => void;
+  onClose: () => void;
+}
+
+
+const MultipleSelect: React.FC<MultipleSelectProps> = ({ isEditMode = false, initialCount, onChange, onClose, initialCounts, }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
@@ -39,13 +48,19 @@ const MultipleSelect: React.FC = () => {
     (state: RootState) => state.bookings.successMessage
   );
   const [counts, setCountsLocal] = useState<{ [key: string]: number }>({
-    Adults: 1,
-    Children: 0,
-    Pets: 0,
+    Adults: initialCounts?.Adults || 1,
+    Children: initialCounts?.Children || 0,
+    Pets: initialCounts?.Pets || 0,
   });
   const [validationMessage, setValidationMessage] = useState<string>("");
   const [noOfguest, setNoOfGuestsAllowed] = useState<number>(0);
   const [noOfPets, setNoOfPetsAllowed] = useState<number>(0);
+
+  useEffect(() => {
+    if (initialCounts) {
+      setCountsLocal(initialCounts);
+    }
+  }, [initialCounts]);
 
   useEffect(() => {
     validateCounts();
@@ -93,43 +108,53 @@ const MultipleSelect: React.FC = () => {
   };
 
   const getTotalGuests = () => {
-    return counts.Adults + counts.Children;
+    return isEditMode ? initialCount : counts.Adults + counts.Children;
   };
-
   const handleCountChange = (name: string, action: "increase" | "decrease") => {
     if (!selectedPropertyLimits) {
       setValidationMessage("Please select a property before making changes.");
-
       return;
     }
-    const maxLimit =
-      name === "Pets"
-        ? selectedPropertyLimits.noOfPetsAllowed
-        : selectedPropertyLimits.noOfGuestsAllowed;
+
+    const { noOfGuestsAllowed, noOfPetsAllowed } = selectedPropertyLimits;
     const currentCount = counts[name];
-    let newCount: number = currentCount;
+    let newCount = currentCount;
+
     if (action === "increase") {
-      if (name === "Pets" && newCount > maxLimit - 1) {
-        setValidationMessage(`You can't have more than ${maxLimit} pets.`);
-        return;
-      } else if (
-        name !== "Pets" &&
-        counts.Adults + counts.Children > maxLimit - 1
-      ) {
-        setValidationMessage(`You can't have more than ${maxLimit} guests.`);
-        return;
+      if (name === "Pets") {
+        if (currentCount >= noOfPetsAllowed) {
+          setValidationMessage(`You can't have more than ${noOfPetsAllowed} pets.`);
+          return;
+        }
       } else {
-        newCount = currentCount + 1;
+        const totalGuests = counts.Adults + counts.Children;
+        if (totalGuests >= noOfGuestsAllowed) {
+          setValidationMessage(`You can't have more than ${noOfGuestsAllowed} guests.`);
+          return;
+        }
       }
+      newCount = currentCount + 1;
     } else {
+      if (name === "Adults" && currentCount <= 1) {
+        setValidationMessage("At least one adult is required.");
+        return;
+      }
       newCount = Math.max(currentCount - 1, 0);
     }
 
-    dispatch(updateCount({ name, count: newCount }));
     setCountsLocal((prevCounts) => ({
       ...prevCounts,
       [name]: newCount,
     }));
+
+    dispatch(updateCount({ name, count: newCount }));
+
+    const newTotalGuests = name === "Pets" 
+      ? counts.Adults + counts.Children 
+      : (counts.Adults + counts.Children - currentCount + newCount);
+
+    onChange(newTotalGuests);
+    validateCounts();
   };
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -155,30 +180,34 @@ const MultipleSelect: React.FC = () => {
 
   return (
     <Box sx={{ width: "20%" }}>
-      <Button
-        disableRipple
-        aria-controls="basic-menu"
-        aria-haspopup="true"
-        onClick={handleOpen}
-        className="PropertyBtn"
-        sx={{
-          borderRadius: 10,
-          width: 200,
-          height: 70,
-          border: "none",
-          cursor: "pointer",
-          paddingRight: 9,
-          gap:2
-        }}
-      >
-
+    <Button
+      disableRipple
+      aria-controls="basic-menu"
+      aria-haspopup="true"
+      onClick={handleOpen}
+      className="PropertyBtn"
+      sx={{
+        borderRadius:!isEditMode ? 10: 10,
+        width: !isEditMode ? 200 : 173,
+        height: !isEditMode ? 70 : 40,
+        border: "none",
+        cursor: "pointer",
+        paddingRight: 9,
+        paddingTop: isEditMode ? 0 : -6,
+        gap: 2,
+        marginBottom: !isEditMode ? 0 : -5
+      }}
+    >
+      {!isEditMode && (
         <PersonAddAlt1OutlinedIcon sx={{
-          color:"grey"
+          color: "grey"
         }} />
+      )}
+
 
         <div className="d-flex align-items-start flex-column">
-          <span className="DateHead1 monsterrat">Who</span>
-          <p className="property1 monsterrat">{getTotalGuests()} guests</p>
+           <span className="DateHead1 monsterrat">Who</span>
+           <p className="property1 monsterrat">{getTotalGuests()} guests</p>
         </div>
       </Button>
       <Menu
@@ -210,15 +239,17 @@ const MultipleSelect: React.FC = () => {
               disableRipple
             >
               <div className="d-flex justify-content-between align-items-center gap-2.5 w-100 monsterrat">
-                <Avatar
-                  sx={{
-                    backgroundColor: "#DF9526",
-                  }}
-                  className="monsterrat"
-                >
-                  {item.icon}
-                </Avatar>
-                <div className="w-50">
+                {!isEditMode && (
+                  <Avatar
+                    sx={{
+                      backgroundColor: "#DF9526",
+                    }}
+                    className="monsterrat"
+                  >
+                    {item.icon}
+                  </Avatar>
+                )}
+                <div className={isEditMode ? "w-75" : "w-50"}>
                   <b>{item.label}</b>
                   <p className="DescFont monsterrat">{item.description}</p>
                 </div>
