@@ -11,15 +11,16 @@ import PetsIcon from "@mui/icons-material/Pets";
 import "./guest-selector.css";
 import { RootState } from "@/store/reducers";
 import { CircleMinus, CirclePlus } from "lucide-react";
-import {
-  updateCount,
-} from "@/store/slice/auth/propertyGuestSlice";
+import { updateCount } from "@/store/slice/auth/propertyGuestSlice";
 import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined";
-
 
 const names = [
   { label: "Adults", description: "Ages 13 or above", icon: <PeopleIcon /> },
-  { label: "Children",description: "Ages 2 to 12", icon: <ChildFriendlyIcon />,},
+  {
+    label: "Children",
+    description: "Ages 2 to 12",
+    icon: <ChildFriendlyIcon />,
+  },
   { label: "Pets", description: "Bringing a service?", icon: <PetsIcon /> },
 ];
 
@@ -27,7 +28,9 @@ interface MultipleSelectProps {
   showIcons?: boolean;
 }
 
-const MultipleSelect: React.FC<MultipleSelectProps> = ({ showIcons = true }) => {
+const MultipleSelect: React.FC<MultipleSelectProps> = ({
+  showIcons = true,
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
@@ -172,11 +175,15 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({ showIcons = true }) => 
           justifyContent: showIcons ? "flex-start" : "space-between",
         }}
       >
+        {showIcons && <PersonAddAlt1OutlinedIcon sx={{ color: "grey",
+          marginBottom:"10px"
+         }} />}
 
-        {showIcons && (<PersonAddAlt1OutlinedIcon sx={{color:"grey"}} />)}
-
-        <div className="d-flex align-items-start flex-column" style={{ paddingLeft: showIcons ? 0 : 15 }}>
-          <span className="DateHead1 monsterrat" >Who</span>
+        <div
+          className="d-flex align-items-start flex-column"
+          style={{ paddingLeft: showIcons ? 0 : 15 }}
+        >
+          <span className="DateHead1 monsterrat">Who</span>
           <p className="property1 monsterrat">{getTotalGuests()} guests</p>
         </div>
       </Button>
@@ -207,28 +214,40 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({ showIcons = true }) => 
               }}
               disableRipple
             >
-            <div className={`d-flex justify-content-between align-items-center ${showIcons ? 'gap-2.5' : 'gap-2.5'} w-100 monsterrat`}>
-            {showIcons && (
-                <Avatar
-                  sx={{
-                    backgroundColor: "#DF9526",
-                  }}
-                  className="monsterrat"
-                >
-                  {item.icon}
-                </Avatar>
-              )}
-                 <div className={showIcons ? "w-40" : ""}>
+              <div
+                className={`d-flex justify-content-between align-items-center ${
+                  showIcons ? "gap-2.5" : "gap-2.5"
+                } w-100 monsterrat`}
+              >
+                {showIcons && (
+                  <Avatar
+                    sx={{
+                      backgroundColor: "#DF9526",
+                    }}
+                    className="monsterrat "
+                  >
+                    {item.icon}
+                  </Avatar>
+                )}
+                <div className={showIcons ? "w-40" : ""}>
                   <b>{item.label}</b>
                   <p className="DescFont monsterrat">{item.description}</p>
                 </div>
-                <div className={`d-flex justify-content-around ${showIcons ? 'w-50' : 'w-40'} text-center`}>
-                <button
+                <div
+                  className={`d-flex justify-content-around ${
+                    showIcons ? "w-50" : "w-40"
+                  } text-center`}
+                >
+                  <button
                     className=" monsterrat"
                     disabled={counts[item.label] === 0}
                     onClick={() => handleCountChange(item.label, "decrease")}
                   >
-                  <CircleMinus size={showIcons ? 29 : 29} strokeWidth={0.75} color="grey" />
+                    <CircleMinus
+                      size={showIcons ? 29 : 29}
+                      strokeWidth={0.75}
+                      color="grey"
+                    />
                   </button>
                   <p className="Ad-count monsterrat">{counts[item.label]}</p>
                   <button
@@ -245,11 +264,11 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({ showIcons = true }) => 
                           : ""
                       } ${
                         item.label === "Adults" || item.label === "Children"
-                        ? counts.Adults + counts.Children === noOfguest
-                          ? "circleplusdisable"
-                          : "circleplus"
-                        : ""
-                    } `}
+                          ? counts.Adults + counts.Children === noOfguest
+                            ? "circleplusdisable"
+                            : "circleplus"
+                          : ""
+                      } `}
                     />
                   </button>
                 </div>
