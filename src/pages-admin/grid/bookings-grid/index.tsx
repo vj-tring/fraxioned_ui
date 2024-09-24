@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { getBookings, userdetails, getProperties } from '@/api';
 import styles from './bookingsgrid.module.css';
-import { Alert, Snackbar, IconButton, Paper, InputBase, Button } from '@mui/material';
+import { Alert, Snackbar, IconButton, Paper, InputBase, Button, Link } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import SearchIcon from '@mui/icons-material/Search';
 import ConfirmationModal from '@/components/confirmation-modal';
 import { ClearIcon } from '@mui/x-date-pickers/icons';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 interface User {
     id: number;
@@ -48,7 +49,6 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
     const [bookingToDelete, setBookingToDelete] = useState<Booking | null>(null);
     const [filterValue, setFilterValue] = useState('');
     const navigate = useNavigate();
-
 
     useEffect(() => {
         const fetchBookingsUsersAndProperties = async () => {
@@ -132,7 +132,6 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
 
     const handleCalendarClick = () => {
         navigate('/admin/bookings')
-
     };
 
     const handleCancelDelete = () => {
@@ -191,10 +190,10 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
         { field: 'bookingId', headerName: 'Booking ID', width: 150, align: 'center', headerAlign: 'center' },
         { field: 'userName', headerName: 'User Name', width: 150, align: 'center', headerAlign: 'center' },
         { field: 'propertyName', headerName: 'Property Name', width: 200, align: 'center', headerAlign: 'center' },
-        { field: 'checkinDate', headerName: 'Check-in Date', width: 180, align: 'center', headerAlign: 'center' },
-        { field: 'checkoutDate', headerName: 'Check-out Date', width: 180, align: 'center', headerAlign: 'center' },
+        { field: 'checkinDate', headerName: 'Check-in Date', width: 220, align: 'center', headerAlign: 'center' },
+        { field: 'checkoutDate', headerName: 'Check-out Date', width: 200, align: 'center', headerAlign: 'center' },
         { field: 'isCancelled', headerName: 'Cancelled', width: 100, align: 'center', headerAlign: 'center', renderCell: (params) => (params.row.isCancelled ? 'Yes' : 'No') },
-        { field: 'isCompleted', headerName: 'Completed', width: 110, align: 'center', headerAlign: 'center', renderCell: (params) => (params.row.isCompleted ? 'Yes' : 'No') },
+        { field: 'isCompleted', headerName: 'Completed', width: 120, align: 'center', headerAlign: 'center', renderCell: (params) => (params.row.isCompleted ? 'Yes' : 'No') },
         {
             field: 'actions',
             headerName: 'Actions',
@@ -233,18 +232,28 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
                             </IconButton>
                         )}
                     </Paper>
-                    <Button
-                        variant="contained"
-                        className={styles.calendarButton}
+                    <Link
+                        component="button"
+                        variant="body2"
                         onClick={handleCalendarClick}
+                        className={styles.calendarLink}
                     >
-                        Calendar
-                    </Button>
-
+                        Go to Calendar
+                    </Link>
                 </div>
             </div>
 
             <div className={styles.dataGridWrapper}>
+                <div className={styles.exportButtonContainer}>
+                    <Button
+                        variant="contained"
+                        startIcon={<FileDownloadIcon />}
+                        onClick={handleExportCSV}
+                        className={styles.exportButton}
+                    >
+                        Export
+                    </Button>
+                </div>
                 <DataGrid
                     rows={filteredBookings}
                     columns={columns}
@@ -255,10 +264,10 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
                     }}
                     pageSizeOptions={[5, 10, 25]}
                     disableRowSelectionOnClick
+                    disableColumnMenu
+                    disableDensitySelector
+                    disableColumnFilter
                     className={`${styles.dataGrid} ${styles.dataGridPadding}`}
-                    slots={{
-                        toolbar: GridToolbar,
-                    }}
                 />
             </div>
 
