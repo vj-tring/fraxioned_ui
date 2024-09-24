@@ -90,20 +90,6 @@ body {
   border: 1px solid white;
 }
 
-.availability {
-  width: 200px;
-  height: 50px;
-  text-align: center;
-  border-radius: 50px !important;
-  background-color: #88cdd4 !important;
-  border: none;
-}
-
-.availability:hover {
-  background-color: #88cdd4;
-  border: none;
-}
-
 .DatePicker {
   padding: 0;
   white-space: normal;
