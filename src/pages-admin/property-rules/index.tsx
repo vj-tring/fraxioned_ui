@@ -1,47 +1,54 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getProperrtDetailsbyId } from '@/api';
+import { getProperrtDetailsbyId, getpropertycodes } from '@/api';
 import EditButton from '@/components/edit';
 import styles from './propertyrules.module.css';
 import Loader from '@/components/loader';
-import { Users, Dog, Clock, Wifi, Calendar, Moon, Sun } from 'lucide-react';
+import { Users, Clock, Wifi, Calendar, Home, DollarSign, PawPrint } from 'lucide-react';
 
 interface PropertyRulesData {
     noOfGuestsAllowed: number;
     noOfPetsAllowed: number;
     checkInTime: number;
     checkOutTime: number;
+    feePerPet: number;
+    squareFootage: number;
     wifiNetwork: string;
     peakSeasonStartDate: string;
     peakSeasonEndDate: string;
     petPolicy: string;
-    peakSeasonAllottedNights: string;
-    offSeasonAllottedNights: string;
-    peakSeasonAllottedHolidayNights: string;
-    offSeasonAllottedHolidayNights: string;
-    lastMinuteBookingAllottedNights: string;
+}
+
+interface PropertyCode {
+    propertyCodeType: string;
+    propertyCode: string;
 }
 
 const PropertyRules: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [rulesData, setRulesData] = useState<PropertyRulesData | null>(null);
+    const [propertyCodes, setPropertyCodes] = useState<PropertyCode[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchRulesData = async () => {
+        const fetchData = async () => {
             try {
-                const response = await getProperrtDetailsbyId(Number(id));
-                setRulesData(response.data);
+                const [rulesResponse, codesResponse] = await Promise.all([
+                    getProperrtDetailsbyId(Number(id)),
+                    getpropertycodes()
+                ]);
+                setRulesData(rulesResponse.data);
+                setPropertyCodes(codesResponse.data);
                 setLoading(false);
             } catch (err) {
-                console.error('Error fetching property rules:', err);
-                setError('Failed to fetch property rules. Please try again.');
+                console.error('Error fetching data:', err);
+                setError('Failed to fetch property data. Please try again.');
                 setLoading(false);
             }
         };
-        fetchRulesData();
+        fetchData();
     }, [id]);
 
     const handleEdit = () => {
@@ -52,6 +59,11 @@ const PropertyRules: React.FC = () => {
         const ampm = hour >= 12 ? 'PM' : 'AM';
         const formattedHour = hour % 12 || 12;
         return `${formattedHour}:00 ${ampm}`;
+    };
+
+    const getWifiPassword = (): string => {
+        const wifiPassword = propertyCodes.find(code => code.propertyCodeType === "Wifi Password");
+        return wifiPassword ? wifiPassword.propertyCode : "Not available";
     };
 
     if (loading) return <Loader />;
@@ -66,42 +78,35 @@ const PropertyRules: React.FC = () => {
                     <EditButton onClick={handleEdit} />
                 </div>
                 <div className={styles.rulesContainer}>
-                    <RuleCard icon={<Users />} title="Guests & Pets">
-                        <p>Guests Allowed: {rulesData.noOfGuestsAllowed}</p>
-                        <p>Pet Policy: {rulesData.petPolicy}</p>
-                        <p>Pets Allowed: {rulesData.noOfPetsAllowed}</p>
-                    </RuleCard>
-                    <RuleCard icon={<Clock />} title="Check-in/out">
-                        <p>Check-in: {formatTime(rulesData.checkInTime)}</p>
-                        <p>Check-out: {formatTime(rulesData.checkOutTime)}</p>
-                    </RuleCard>
-                    <RuleCard icon={<Wifi />} title="WiFi">
-                        <p>Network: {rulesData.wifiNetwork}</p>
-                    </RuleCard>
-                    <RuleCard icon={<Calendar />} title="Season Dates">
-                        <p>Peak Start: {rulesData.peakSeasonStartDate}</p>
-                        <p>Peak End: {rulesData.peakSeasonEndDate}</p>
-                    </RuleCard>
-                    <RuleCard icon={<Sun />} title="Peak Season">
-                        <p>Allotted Nights: {rulesData.peakSeasonAllottedNights}</p>
-                        <p>Holiday Nights: {rulesData.peakSeasonAllottedHolidayNights}</p>
-                    </RuleCard>
-                    <RuleCard icon={<Moon />} title="Off Season">
-                        <p>Allotted Nights: {rulesData.offSeasonAllottedNights}</p>
-                        <p>Holiday Nights: {rulesData.offSeasonAllottedHolidayNights}</p>
-                    </RuleCard>
+                    <div className={`${styles.ruleCard} ${styles.seasonCard}`}>
+                        <div className={styles.cardIcon}><Calendar size={24} /></div>
+                        <div className={styles.cardContent}>
+                            <h3 className={styles.cardTitle}>Season Dates</h3>
+                            <p><Calendar size={16} /> Peak Start: {rulesData.peakSeasonStartDate}</p>
+                            <p><Calendar size={16} /> Peak End: {rulesData.peakSeasonEndDate}</p>
+                        </div>
+                    </div>
+                    <div className={styles.ruleCard}>
+                        <div className={styles.cardIcon}><Users size={24} /></div>
+                        <div className={styles.cardContent}>
+                            <h3 className={styles.cardTitle}>Guests & Pets</h3>
+                            <p><Users size={16} /> Guests: {rulesData.noOfGuestsAllowed}</p>
+                            <p><PawPrint size={16} /> Pets: {rulesData.noOfPetsAllowed}</p>
+                            <p><DollarSign size={16} /> Pet Fee: ${rulesData.feePerPet}/pet</p>
+                        </div>
+                    </div>
+                    <div className={styles.ruleCard}>
+                        <div className={styles.cardIcon}><Clock size={24} /></div>
+                        <div className={styles.cardContent}>
+                            <h3 className={styles.cardTitle}>Check-in/out</h3>
+                            <p><Clock size={16} /> In: {formatTime(rulesData.checkInTime)}</p>
+                            <p><Clock size={16} /> Out: {formatTime(rulesData.checkOutTime)}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     );
 };
-
-const RuleCard: React.FC<{ icon: React.ReactNode; title: string; children: React.ReactNode }> = ({ icon, title, children }) => (
-    <div className={styles.ruleCard}>
-        <div className={styles.cardIcon}>{icon}</div>
-        <h3 className={styles.cardTitle}>{title}</h3>
-        <div className={styles.cardContent}>{children}</div>
-    </div>
-);
 
 export default PropertyRules;
