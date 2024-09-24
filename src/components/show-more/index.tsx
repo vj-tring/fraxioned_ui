@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Button, Typography, Grid, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 import './show-more.css';
 
 interface ShowMoreProps {
@@ -49,7 +48,6 @@ const Showmore: React.FC<ShowMoreProps> = ({ description }) => {
         <DialogTitle className='d-flex justify-content-between'>
           <Typography variant="h6" className='monsterrat'>Property Details</Typography>
           <IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
-            <CloseIcon />
           </IconButton>
         </DialogTitle>
         <DialogContent>
