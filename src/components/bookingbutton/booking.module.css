@@ -2,23 +2,33 @@
     position: absolute;
     right: 65px;
     top: 24px;
+    display: flex;
+    align-items: center;
 }
 
 .bookingLink {
-    color: #62a2a9;
-    font-size: 15px;
-    font-weight: 700;
-    text-decoration: none;
-    transition: all 0.3s ease;
+    color: #62a2a9 !important;
+    font-size: 14px !important;
+    text-decoration: underline !important;
+    display: flex;
+    align-items: center;
 }
 
 .bookingLink:hover {
-    color: #62a2a9;
-    font-size: 15px;
-    font-weight: 700;
-    text-decoration: underline;
+    color: #91d3db !important;
 }
 
 .bookingLink:active {
-    color: #00b8cc;
+    color: #00b8cc !important;
+}
+
+.line {
+    color: #7dcad3 !important;
+    margin-right: 10px;
+}
+
+.icon {
+    margin-right: 5px;
+    color: #7dcad3 !important;
+
 }

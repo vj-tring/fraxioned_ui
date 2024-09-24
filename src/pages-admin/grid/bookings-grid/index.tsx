@@ -190,10 +190,10 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
         { field: 'bookingId', headerName: 'Booking ID', width: 150, align: 'center', headerAlign: 'center' },
         { field: 'userName', headerName: 'User Name', width: 150, align: 'center', headerAlign: 'center' },
         { field: 'propertyName', headerName: 'Property Name', width: 200, align: 'center', headerAlign: 'center' },
-        { field: 'checkinDate', headerName: 'Check-in Date', width: 180, align: 'center', headerAlign: 'center' },
-        { field: 'checkoutDate', headerName: 'Check-out Date', width: 180, align: 'center', headerAlign: 'center' },
+        { field: 'checkinDate', headerName: 'Check-in Date', width: 220, align: 'center', headerAlign: 'center' },
+        { field: 'checkoutDate', headerName: 'Check-out Date', width: 200, align: 'center', headerAlign: 'center' },
         { field: 'isCancelled', headerName: 'Cancelled', width: 100, align: 'center', headerAlign: 'center', renderCell: (params) => (params.row.isCancelled ? 'Yes' : 'No') },
-        { field: 'isCompleted', headerName: 'Completed', width: 110, align: 'center', headerAlign: 'center', renderCell: (params) => (params.row.isCompleted ? 'Yes' : 'No') },
+        { field: 'isCompleted', headerName: 'Completed', width: 120, align: 'center', headerAlign: 'center', renderCell: (params) => (params.row.isCompleted ? 'Yes' : 'No') },
         {
             field: 'actions',
             headerName: 'Actions',
