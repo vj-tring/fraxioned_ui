@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import styles from './property-image.module.css'
+import styles from './property-image.module.css';
 import { getProperties } from '@/api';
+import { MenuItem, Select, FormControl, InputLabel, SelectChangeEvent } from '@mui/material';
 
 interface PropertyType {
     id: number | string;
@@ -15,6 +16,7 @@ interface PropertyImageProps {
 
 const PropertyImage: React.FC<PropertyImageProps> = ({ onPropertySelect, selectedPropertyId }) => {
     const [propertyTypes, setPropertyTypes] = useState<PropertyType[]>([]);
+    const [dropdownValue, setDropdownValue] = useState<number | string>('');
 
     useEffect(() => {
         const colors = [
@@ -47,21 +49,38 @@ const PropertyImage: React.FC<PropertyImageProps> = ({ onPropertySelect, selecte
         return () => clearInterval(intervalId);
     }, []);
 
+    const handleChange = (event: SelectChangeEvent<number | string>) => {
+        const selectedValue = event.target.value as number | string;
+        setDropdownValue(selectedValue);
+        onPropertySelect(selectedValue);
+    };
+
     return (
-        <div className={styles.propertyImageContainer}>
-            {propertyTypes.map((property) => (
-                <div
-                    key={property.id}
-                    className={`${styles.propertyType} ${selectedPropertyId === property.id ? styles.selected : ''}`}
-                    onClick={() => onPropertySelect(property.id)}
+        <div className={styles.container}>
+            <FormControl variant="outlined" className={styles.dropdownContainer}>
+                <InputLabel id="property-select-label">Select Property</InputLabel>
+                <Select
+                    labelId="property-select-label"
+                    value={dropdownValue}
+                    onChange={handleChange}
+                    label="Select Property"
+                    MenuProps={{
+                        PaperProps: {
+                            style: {
+                                maxHeight: 200,
+                                borderColor:'grey'
+                            },
+                        },
+                    }}
+                    sx={{ height: '50px' }}
                 >
-                    <div
-                        className={styles.colorBox}
-                        style={{ backgroundColor: property.color }}
-                    ></div>
-                    <span className={styles.propertyName}>{property.propertyName}</span>
-                </div>
-            ))}
+                    {propertyTypes.map((property) => (
+                        <MenuItem key={property.id} value={property.id}>
+                            {property.propertyName}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </FormControl>
         </div>
     );
 };
