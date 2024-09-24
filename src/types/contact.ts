@@ -5,3 +5,4 @@ export interface ContactMessage {
   message: string
   subject: string
 }
+  
