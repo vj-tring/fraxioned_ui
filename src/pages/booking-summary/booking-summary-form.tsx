@@ -16,10 +16,7 @@ import CustomizedSnackbars from "../../components/customized-snackbar";
 import { keyframes } from "@mui/system";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import img1 from "../../assests/bear-lake-bluffs.jpg";
-import img2 from "../../assests/blue-bear-lake.jpg";
-import img3 from "../../assests/crown-jewel.jpg";
-import img4 from "../../assests/lake-escape.jpg";
+
 import { resetLimits } from "@/store/slice/auth/propertyGuestSlice";
 import { clearDates } from "@/store/slice/datePickerSlice";
 import {
@@ -167,7 +164,7 @@ const BookingSummaryForm: React.FC = () => {
       setIsVisible(true);
       setTimeout(() => {
         navigate("/home/booking");
-      }, 3000);
+      }, 1000);
     } catch (error) {
       setSnackbarMessage((error as string) || "Failed to confirm booking");
       setSnackbarSeverity("error");
@@ -207,9 +204,9 @@ const BookingSummaryForm: React.FC = () => {
           }}
         >
           <CircularProgress
-            size="80px"
+            size="50px"
             sx={{
-              color: "#4BB543",
+              color: "#DC9751"
             }}
           />
         </Box>
@@ -236,12 +233,13 @@ const BookingSummaryForm: React.FC = () => {
           //   isVisible ? "translate-y-0" : "translate-y-full"
           // }`}
         >
-          <Box className="relative">
+          <Box className="relative BookedCheck">
             <CheckCircle size={100} className="text-green-500" />
             <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              <Box className="w-8 h-8 bg-green-500 rounded-full animate-ping" />
+              <Box className="w-8 h-8 bg-green-500 rounded-full animate-ping " />
             </Box>
           </Box>
+          <div className="BookConfirm">Booking Confirmed</div>
         </Box>
       )}
       <Box
@@ -266,35 +264,6 @@ const BookingSummaryForm: React.FC = () => {
           message={snackbarMessage}
           severity={snackbarSeverity}
         />
-
-        {/* {showConfirmation && (
-        <Box
-          sx={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "white",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 1000,
-            color: "#4CAF50",
-            animation: `${fadeIn} 1s ease-in-out`,
-          }}
-        >
-          <Typography
-            variant="h2"
-            component="h1"
-            sx={{ marginTop: 2, fontSize: "24px" }}
-          >
-            <CheckIcon />
-            Booking Successful
-          </Typography>
-        </Box>
-      )} */}
 
         <div className="Booking-Summary">
           <div className="SummaryImg">

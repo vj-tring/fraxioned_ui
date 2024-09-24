@@ -296,3 +296,34 @@
     border: none;
   }
 }
+
+.BookedCheck
+{
+  transition: all 0.5s ease-out;
+  animation: txt 5s infinite;
+}
+
+.BookConfirm {
+  font-size: 24px !important;
+  margin-left: 11px;
+  animation: txt 15s infinite;
+  transition: all 0.5s ease-out;
+}
+
+@keyframes txt {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 3;
+  }
+  50% {
+    opacity: 6;
+  }
+  75% {
+    opacity: 8;
+  }
+  100% {
+    opacity: 10;
+  }
+}

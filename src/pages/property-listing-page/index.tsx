@@ -508,13 +508,14 @@ const PropertyListingPage = () => {
           </DialogTitle>
           <DialogContent>
             <Grid container spacing={2}>
-              {loadingImages
+              {!loadingImages
                 ? Array.from({ length: 6 }).map((_, index) => (
                     <Grid item xs={12} sm={6} md={4} key={index}>
                       <Skeleton
                         variant="rectangular"
                         width="100%"
                         height={200}
+                        
                       />
                     </Grid>
                   ))
@@ -525,7 +526,6 @@ const PropertyListingPage = () => {
                           src={image.imageUrl}
                           alt={image.imageName}
                           style={{ width: "100%", height: "auto" }}
-                          
                           loading="lazy"
                         />
                       </Card>
