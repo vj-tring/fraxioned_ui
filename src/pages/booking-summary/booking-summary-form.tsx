@@ -27,6 +27,7 @@ import {
   User,
 } from "@/store/slice/auth/property-slice";
 import { propertyImageapi } from "@/api";
+import { CheckCircle } from "lucide-react";
 
 const mockBooking = {
   property: { id: "3" },
@@ -125,6 +126,7 @@ const BookingSummaryForm: React.FC = () => {
   );
   const [imageDetails, setImageDetails] = useState<Image[]>([]);
   const [bookingSuccess, setBookingSuccess] = useState(false); // New state for booking success
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const fetchPropertyImages = async () => {
@@ -160,15 +162,12 @@ const BookingSummaryForm: React.FC = () => {
       const result = await dispatch(
         confirmBooking({ ...bookingPayload, notes })
       ).unwrap();
-      setIsLoading(false);
-      // setSnackbarMessage(result.message);
-      // setSnackbarSeverity("success");
-      // setShowSnackbar(true);
-      setBookingSuccess(true); // Set success state
 
+      setBookingSuccess(true);
+      setIsVisible(true);
       setTimeout(() => {
         navigate("/home/booking");
-      }, 1000);
+      }, 3000);
     } catch (error) {
       setSnackbarMessage((error as string) || "Failed to confirm booking");
       setSnackbarSeverity("error");
@@ -192,7 +191,7 @@ const BookingSummaryForm: React.FC = () => {
 
   return (
     <>
-      {isLoading && !bookingSuccess && (
+      {isLoading && !isVisible && !bookingSuccess && (
         <Box
           sx={{
             position: "absolute",
@@ -205,19 +204,18 @@ const BookingSummaryForm: React.FC = () => {
             alignItems: "center",
             backgroundColor: "white",
             zIndex: 1000,
-            borderColor: "#4BB543",
           }}
         >
           <CircularProgress
             size="80px"
             sx={{
               color: "#4BB543",
-           
             }}
           />
         </Box>
       )}
-      {bookingSuccess && (
+
+      {isVisible && bookingSuccess && (
         <Box
           sx={{
             position: "absolute",
@@ -228,11 +226,22 @@ const BookingSummaryForm: React.FC = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "rgba(255, 255, 255, 0.8)",
+            backgroundColor: "white",
             zIndex: 1000,
+            opacity: isVisible ? 1 : 0,
+            transform: isVisible ? "translateY(0)" : "translateY(20px)",
+            transition: "opacity 0.5s ease, transform 2s ease",
           }}
+          // className={`transition-transform duration-1000 ease-out ${
+          //   isVisible ? "translate-y-0" : "translate-y-full"
+          // }`}
         >
-          <CheckIcon />
+          <Box className="relative">
+            <CheckCircle size={100} className="text-green-500" />
+            <Box className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <Box className="w-8 h-8 bg-green-500 rounded-full animate-ping" />
+            </Box>
+          </Box>
         </Box>
       )}
       <Box
