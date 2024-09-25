@@ -175,7 +175,7 @@ const ViewBookings: React.FC<BookingProps> = ({ openEvent, handleClose, eventId 
                                 <span className={styles.detailLabel}>Fees</span>
                                 <span className={styles.detailValue}>{`Cleaning: $${booking.cleaningFee}, Pet: $${booking.petFee}`}</span>
                             </div>
-                            <div className={styles.detailItem}>
+                             <div className={styles.detailItem}>
                                 <Block className={styles.detailIcon} />
                                 <span className={styles.detailLabel}>Cancelled</span>
                                 <span className={styles.detailValue}>{booking.isCancelled ? 'Yes' : 'No'}</span>
