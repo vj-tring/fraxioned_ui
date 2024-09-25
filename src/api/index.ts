@@ -87,6 +87,7 @@ export const modifyBooking = (bookingId: number, updatedBookingData: any) =>
 export const createBookingSummary = (bookingData: void) =>
     axiosInstance.post(`/v1/bookings/booking/booking-summary`, bookingData);
 
+//get all bookings
 export const getBookings = () =>
     axiosInstance.get('/v1/bookings');
 
@@ -206,3 +207,16 @@ export const propertyspaceapi = () =>
 
 export const propertyspacetypesapi = () =>
     axiosInstance.get(`/v1/space-types`);
+
+export const getpropertycodes = () =>
+    axiosInstance.get(`/v1/property-codes`);
+
+export const userbookingCancelapi = (id: number, user: number) => {
+    return axiosInstance.post(`/v1/bookings/${id}/${user}/cancel`);
+};
+
+
+
+
+
+

@@ -9,32 +9,38 @@ interface BookingProps {
 interface Booking {
     id: number;
     bookingId: string;
-    propertyName: string;
     checkinDate: string;
     checkoutDate: string;
     totalNights: number;
-    noOfAdults: number;
-    noOfChildren: number;
+    noOfGuests: number;
     noOfPets: number;
-    cleaningFee: number;
-    petFee: number;
+    noOfAdults: number | null;
+    noOfChildren: number | null;
+    cleaningFee: number | null;
+    petFee: number | null;
+    property: {
+        id: number;
+        propertyName: string;
+    };
 }
 
 const UserBookings: React.FC<BookingProps> = ({ userId }) => {
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchBookings = async () => {
             try {
                 const response = await getUserBookings(userId);
-                const fetchedBookings = response.data.map((booking: any) => ({
-                    ...booking,
-                    propertyName: booking.property.propertyName
-                }));
-                setBookings(fetchedBookings);
+                if (Array.isArray(response.data)) {
+                    setBookings(response.data);
+                } else {
+                    setError('No bookings available');
+                }
             } catch (error) {
                 console.error('Error fetching bookings:', error);
+                setError('Error fetching bookings. Please try again later.');
             } finally {
                 setLoading(false);
             }
@@ -51,25 +57,30 @@ const UserBookings: React.FC<BookingProps> = ({ userId }) => {
         });
     };
 
-    const calculateTotalTransaction = (cleaning: number, pet: number) => {
-        return cleaning + pet;
+    const calculateTotalTransaction = (cleaning: number | null, pet: number | null) => {
+        const cleaningFee = cleaning || 0;
+        const petFee = pet || 0;
+        return cleaningFee + petFee;
     };
 
     if (loading) {
         return <div className={styles.loadingMessage}>Loading bookings...</div>;
     }
 
-    if (bookings.length === 0) {
-        return <div className={styles.noBookingsMessage}>No bookings available</div>;
+    if (error) {
+        return <div className={styles.errorMessage}>{error}</div>;
     }
 
+    if (bookings.length === 0) {
+        return <div className={styles.noBookingsMessage}>No booking available</div>;
+    }
 
     return (
         <div className={styles.bookingsContainer}>
             {bookings.map((booking) => (
                 <div key={booking.id} className={styles.bookingTile}>
                     <div className={styles.tileHeader}>
-                        <h3 className={styles.propertyName}>{booking.propertyName}</h3>
+                        <h3 className={styles.propertyName}>{booking.property.propertyName}</h3>
                         <span className={styles.bookingId}>{booking.bookingId}</span>
                     </div>
                     <div className={styles.tileContent}>
@@ -90,11 +101,11 @@ const UserBookings: React.FC<BookingProps> = ({ userId }) => {
                             </div>
                             <div className={styles.infoItem}>
                                 <span className={styles.infoLabel}>Adults: </span>
-                                <span className={styles.infoValue}>{booking.noOfAdults}</span>
+                                <span className={styles.infoValue}>{booking.noOfAdults ?? 'N/A'}</span>
                             </div>
                             <div className={styles.infoItem}>
                                 <span className={styles.infoLabel}>Children: </span>
-                                <span className={styles.infoValue}>{booking.noOfChildren}</span>
+                                <span className={styles.infoValue}>{booking.noOfChildren ?? 'N/A'}</span>
                             </div>
                             <div className={styles.infoItem}>
                                 <span className={styles.infoLabel}>Pets: </span>
@@ -104,11 +115,15 @@ const UserBookings: React.FC<BookingProps> = ({ userId }) => {
                         <div className={styles.feeSection}>
                             <div className={styles.feeItem}>
                                 <span className={styles.feeLabel}>Cleaning Fee: </span>
-                                <span className={styles.feeValue}>${booking.cleaningFee.toFixed(2)}</span>
+                                <span className={styles.feeValue}>
+                                    {booking.cleaningFee !== null ? `$${booking.cleaningFee.toFixed(2)}` : 'N/A'}
+                                </span>
                             </div>
                             <div className={styles.feeItem}>
                                 <span className={styles.feeLabel}>Pet Fee: </span>
-                                <span className={styles.feeValue}>${booking.petFee.toFixed(2)}</span>
+                                <span className={styles.feeValue}>
+                                    {booking.petFee !== null ? `$${booking.petFee.toFixed(2)}` : 'N/A'}
+                                </span>
                             </div>
                         </div>
                         <div className={styles.totalTransaction}>

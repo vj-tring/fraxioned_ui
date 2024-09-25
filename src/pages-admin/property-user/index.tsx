@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './userproperty.module.css';
 import userImage from '../../assets/images/profile.jpeg';
+import pic1 from '../../assets/images/photo1.jpeg';
+import pic2 from '../../assets/images/photo2.jpeg';
 import { getuserbyproperty, userdetails } from '@/api';
 
 interface User {
