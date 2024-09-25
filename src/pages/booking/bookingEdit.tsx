@@ -204,7 +204,7 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
           <Grid item xs={3}>
             <Typography className="multiple-select-container">
               <MultipleSelect
-                isEditMode={true}
+                showIcons={false}
                 initialCount={guestCount}
                 initialCounts={guestCounts}
                 onChange={handleGuestChange}
