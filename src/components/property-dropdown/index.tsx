@@ -13,7 +13,7 @@ interface Property {
 }
 
 interface PropertyDropdownProps {
-    onPropertySelect: (propertyId: number) => void;
+    onPropertySelect: (propertyId: number | null) => void;
 }
 
 const PropertyDropdown: React.FC<PropertyDropdownProps> = ({ onPropertySelect }) => {
@@ -34,7 +34,7 @@ const PropertyDropdown: React.FC<PropertyDropdownProps> = ({ onPropertySelect })
         fetchProperties();
     }, []);
 
-    const handleSelect = (propertyId: number) => {
+    const handleSelect = (propertyId: number | null) => {
         setSelectedProperty(propertyId);
         setIsOpen(false);
         onPropertySelect(propertyId);
@@ -43,11 +43,12 @@ const PropertyDropdown: React.FC<PropertyDropdownProps> = ({ onPropertySelect })
     return (
         <div className={styles.propertyDropdownContainer}>
             <div className={styles.propertyDropdown} onClick={() => setIsOpen(!isOpen)}>
-                <span>{selectedProperty ? properties.find(p => p.id === selectedProperty)?.propertyName : 'Select Property'}</span>
+                <span>{selectedProperty === null ? 'All Properties' : properties.find(p => p.id === selectedProperty)?.propertyName || 'Select Property'}</span>
                 <i className={`${styles.arrow} ${isOpen ? styles.up : styles.down}`}></i>
             </div>
             {isOpen && (
                 <ul className={styles.propertyDropdownList}>
+                    <li key="all" onClick={() => handleSelect(null)}>All Properties</li>
                     {properties.map((property) => (
                         <li key={property.id} onClick={() => handleSelect(property.id)}>
                             {property.propertyName}

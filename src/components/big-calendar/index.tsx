@@ -2,20 +2,30 @@ import React, { useState, useEffect } from "react";
 import { Calendar as BigCalendar, momentLocalizer } from 'react-big-calendar';
 import moment from "moment";
 import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
+import imageone from '../../assests/bear-lake-bluffs.jpg';
+import imagetwo from '../../assests/crown-jewel.jpg';
+import imagethree from '../../assests/blue-bear-lake.jpg';
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import BookingButton from "../bookingbutton";
 import PropertyDropdown from "../property-dropdown";
-import { getBookings } from '@/api';
+import { getBookings, userdetails } from '@/api';
 import './big-calender.css';
+import { Edit, CalendarToday, Person, Home, CheckCircle, CancelOutlined, AccessTime, Group } from '@mui/icons-material';
 
 const localizer = momentLocalizer(moment);
 
+interface User {
+    id: number;
+    firstName: string;
+    lastName: string;
+}
+
 interface Booking {
     id: number;
+    createdAt: string;
     bookingId: string;
     checkinDate: string;
     checkoutDate: string;
@@ -24,6 +34,9 @@ interface Booking {
     property: {
         id: number;
         propertyName: string;
+    };
+    user: {
+        id: number;
     };
 }
 
@@ -34,6 +47,8 @@ interface Event {
     end: Date;
     desc: string;
     propertyId: number;
+    userId: number;
+    createdAt: string;
 }
 
 const propertyColors: { [key: number]: string } = {
@@ -41,46 +56,84 @@ const propertyColors: { [key: number]: string } = {
     2: '#e28f25',
     3: '#c7eaee',
     4: '#88cdd4',
-    5: '#33FFF1',
-    6: '#F1FF33',
 };
 
+
 const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
-    const [events, setEvents] = useState<Event[]>([]);
+    const [allEvents, setAllEvents] = useState<Event[]>([]);
+    const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
     const [selectedProperty, setSelectedProperty] = useState<number | null>(null);
     const [openEvent, setOpenEvent] = useState(false);
     const [clickedEvent, setClickedEvent] = useState<Event | null>(null);
+    const [users, setUsers] = useState<User[]>([]);
 
     useEffect(() => {
-        if (selectedProperty !== null) {
-            fetchBookings();
-        }
-    }, [selectedProperty]);
+        fetchAllBookings();
+        fetchUsers();
+    }, []);
 
-    const fetchBookings = async () => {
+    useEffect(() => {
+        if (selectedProperty === null) {
+            setFilteredEvents(allEvents);
+        } else {
+            const filtered = allEvents.filter(event => event.propertyId === selectedProperty);
+            setFilteredEvents(filtered);
+        }
+    }, [selectedProperty, allEvents]);
+
+    const fetchAllBookings = async () => {
         try {
             const response = await getBookings();
             const bookings: Booking[] = response.data;
-            const filteredBookings = bookings.filter(booking => booking.property.id === selectedProperty);
 
-            const newEvents: Event[] = filteredBookings.map(booking => ({
+            const newEvents: Event[] = bookings.map(booking => ({
                 id: booking.id,
                 title: `${booking.bookingId} : ${booking.property.propertyName}`,
                 start: new Date(booking.checkinDate),
                 end: new Date(booking.checkoutDate),
                 desc: `Guests: ${booking.noOfGuests}, Nights: ${booking.totalNights}`,
                 propertyId: booking.property.id,
+                userId: booking.user.id,
+                createdAt: booking.createdAt,
             }));
 
-            setEvents(newEvents);
+            setAllEvents(newEvents);
+            setFilteredEvents(newEvents);
         } catch (error) {
             console.error('Error fetching bookings:', error);
+        }
+    };
+
+    const fetchUsers = async () => {
+        try {
+            const response = await userdetails();
+            setUsers(response.data.users);
+        } catch (error) {
+            console.error('Error fetching users:', error);
         }
     };
 
     const handleEventSelected = (event: Event) => {
         setOpenEvent(true);
         setClickedEvent(event);
+    };
+
+    const getPropertyImage = (propertyId: number) => {
+        switch (propertyId) {
+            case 1:
+                return imageone;
+            case 2:
+                return imagetwo;
+            case 3:
+                return imagethree;
+            default:
+                return imageone; // Default image
+        }
+    };
+
+
+    const handleEditClick = () => {
+        console.log("Edit button clicked");
     };
 
     const handleClose = () => {
@@ -92,49 +145,103 @@ const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
         return {
             style: {
                 backgroundColor,
-                borderRadius: '5px',
-                opacity: 0.8,
                 color: 'white',
-                border: '0px',
-                display: 'block'
+                border: 'none',
+                borderRadius: '2px',
+                opacity: 0.8,
+                display: 'block',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
             }
         };
     };
 
+    const handlePropertySelect = (propertyId: number | null) => {
+        setSelectedProperty(propertyId);
+    };
+
+    const getUserName = (userId: number) => {
+        const user = users.find(u => u.id === userId);
+        return user ? `${user.firstName} ${user.lastName}` : 'Unknown User';
+    };
+
+    const handleEdit = () => {
+        console.log("Edit clicked for event:", clickedEvent);
+    };
+
     return (
         <div className={`calendar-container ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
-            <PropertyDropdown onPropertySelect={setSelectedProperty} />
-            <BookingButton />
+            <div className="calendar-header">
+                <PropertyDropdown onPropertySelect={handlePropertySelect} />
+                <BookingButton />
+            </div>
             <BigCalendar
                 localizer={localizer}
-                events={events}
+                events={filteredEvents}
                 views={["month", "week", "day"]}
                 defaultView="month"
                 defaultDate={new Date()}
                 onSelectEvent={(event: Event) => handleEventSelected(event)}
                 eventPropGetter={eventStyleGetter}
+                className="calendar-view"
             />
 
-            <Dialog
+<Dialog
                 open={openEvent}
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"
+                className="booking-dialog"
             >
-                <DialogTitle id="form-dialog-title">
-                    Booking Details
-                </DialogTitle>
-                <DialogContent>
+                <div className="dialog-header">
+                    <h2 className="dialog-title">Booking Details</h2>
+                    <button onClick={handleEdit} className="edit-button">
+                        <Edit />
+                    </button>
+                </div>
+                <DialogContent className="dialog-content">
                     {clickedEvent && (
-                        <>
-                            <p><strong>Property:</strong> {clickedEvent.title.split(': ')[1]}</p>
-                            <p><strong>Check-in:</strong> {moment(clickedEvent.start).format('MMMM Do YYYY, h:mm a')}</p>
-                            <p><strong>Check-out:</strong> {moment(clickedEvent.end).format('MMMM Do YYYY, h:mm a')}</p>
-                            <p>{clickedEvent.desc}</p>
-                        </>
+                        <div className="booking-details-container">
+                            <div className="booking-info">
+                                <div className="detail-item">
+                                    <Home className="detail-icon" />
+                                    <span className="detail-label">Property</span>
+                                    <span className="detail-value">{clickedEvent.title.split(': ')[1]}</span>
+                                </div>
+                                <div className="detail-item">
+                                    <Person className="detail-icon" />
+                                    <span className="detail-label">User</span>
+                                    <span className="detail-value">{getUserName(clickedEvent.userId)}</span>
+                                </div>
+                                <div className="detail-item">
+                                    <CheckCircle className="detail-icon" />
+                                    <span className="detail-label">Check-in</span>
+                                    <span className="detail-value">{moment(clickedEvent.start).format('MMMM Do YYYY, h:mm a')}</span>
+                                </div>
+                                <div className="detail-item">
+                                    <CancelOutlined className="detail-icon" />
+                                    <span className="detail-label">Check-out</span>
+                                    <span className="detail-value">{moment(clickedEvent.end).format('MMMM Do YYYY, h:mm a')}</span>
+                                </div>
+                                <div className="detail-item">
+                                    <CalendarToday className="detail-icon" />
+                                    <span className="detail-label">Booked on</span>
+                                    <span className="detail-value">{moment(clickedEvent.createdAt).format('MMMM Do YYYY')}</span>
+                                </div>
+                                <div className="detail-item detail-description">
+                                    <Group className="detail-icon" />
+                                    <span className="detail-label">Additional Info</span>
+                                    <span className="detail-value">{clickedEvent.desc}</span>
+                                </div>
+                            </div>
+                            <div className="booking-image">
+                                <img src={getPropertyImage(clickedEvent.propertyId)} alt="Property" />
+                            </div>
+                        </div>
                     )}
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
+                <DialogActions className="dialog-actions">
+                    <Button onClick={handleClose} color="primary" className="close-button">
                         Close
                     </Button>
                 </DialogActions>
