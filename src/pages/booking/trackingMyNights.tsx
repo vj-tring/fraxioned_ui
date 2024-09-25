@@ -184,7 +184,7 @@ const TrackingMyNigts: React.FC = () => {
               "& .MuiSelect-select": {
                 padding: "10px 14px",
               },
-              
+
               "& .MuiOutlinedInput-notchedOutline": {
                 border: "none",
               },
@@ -195,8 +195,8 @@ const TrackingMyNigts: React.FC = () => {
                 color: "#ffffff",
                 display: "none",
               },
-              ".MuiOutlinedInput-root:hover":{
-                boxShadow:"none "
+              ".MuiOutlinedInput-root:hover": {
+                boxShadow: "none ",
               },
               backgroundColor: "none",
             }}

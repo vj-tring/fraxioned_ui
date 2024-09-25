@@ -99,7 +99,7 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
     dispatch(clearDates());
     fetchImages();
     fetchAdditionalProperties();
-  }, [dispatch]);
+  }, [dispatch,fetchAdditionalProperties]);
 
   const scroll = (scrollOffset: number) => {
     if (carouselRef.current) {
@@ -137,7 +137,7 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
             </div>
           )}
           <div
-            style={{ boxShadow: Shadow }}
+            // style={{ boxShadow: Shadow }}
             className={`Cardcontainer ${showCarousel ? "carousel" : ""}`}
             ref={carouselRef}
           >
@@ -153,7 +153,7 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
                   text={property.address || "Address not available"}
                   share={
                     property.propertyShare
-                      ? `You Own ${property.share}/${property.propertyShare}th share`
+                      ? `You Own ${property?.share}/${property.propertyShare}th share`
                       : "Share information not available"
                   }
                   id={property.id}
@@ -197,29 +197,31 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
 
         {/* Render additional properties based on user properties count */}
       </div>
-      <div className="AddProps ">
-        {properties.length <= 4 &&
-          additionalProperties.map((property) => {
-            const propertyImage = images.find(
-              (img) => img.property.id === property.id
-            );
-            return (
-              <Card
-                key={property.id}
-                imageUrl={propertyImage?.imageUrl || image1}
-                title={formatCardName(property.propertyName || "No Title")}
-                text={property.address || "Address not available"}
-                share={
-                  property.propertyShare
-                    ? `You Own ${property.share}/${property.propertyShare}th share`
-                    : "Share information not available"
-                }
-                id={property.id}
-                tag="Hot Listing" // Pass the tag here
-              />
-            );
-          })}
-      </div>
+      <a href="https://www.fraxioned.com/" target="_blank">
+        <div className="AddProps ">
+          {properties.length <= 4 &&
+            additionalProperties.map((property) => {
+              const propertyImage = images.find(
+                (img) => img.property.id === property.id
+              );
+              return (
+                <Card
+                  key={property.id}
+                  imageUrl={propertyImage?.imageUrl || image1}
+                  title={formatCardName(property.propertyName || "No Title")}
+                  text={property.address || "Address not available"}
+                  share={
+                    property.propertyShare
+                      ? `You Own ${property.share}/${property.propertyShare}th share`
+                      : "Share information not available"
+                  }
+                  // id={property.id}
+                  tag="Hot Listing" // Pass the tag here
+                />
+              );
+            })}
+        </div>
+      </a>
     </div>
   );
 };

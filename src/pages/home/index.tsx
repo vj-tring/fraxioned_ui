@@ -53,7 +53,6 @@ const Home: React.FC = () => {
   useEffect(() => {
     dispatch(resetLimits());
     dispatch(clearDates());
-    
   }, [dispatch]);
 
   return (

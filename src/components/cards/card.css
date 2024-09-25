@@ -1,4 +1,3 @@
-/* General Styles */
 .card3 {
   width: 240px;
   height: 200px;
@@ -9,6 +8,12 @@
   margin-right: 15px;
   position: relative;
   cursor: pointer;
+}
+.Container1{
+  /* padding: 10px 30px; */
+}
+.Cardcontainer{
+  /* padding: 15px; */
 }
 
 .card-BodyHead {
@@ -108,11 +113,11 @@
   display: flex;
   width: 100%;
   /* margin: 5px; */
-  /* padding: 5px; */
+  /* padding: 15px; */
   margin-bottom: 55px;
   white-space: nowrap;
   border-radius: 5px;
-  box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 2px 1px;
+  /* box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 2px 1px; */
 }
 
 /* Carousel styles */
@@ -297,6 +302,7 @@
   .Container1 {
     display: flex;
     flex-direction: column;
+    
   }
   .carousel-controls {
     visibility: hidden;
@@ -415,16 +421,10 @@
 
 .AddProps {
   display: flex;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+  /* box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px; */
   margin-bottom: 20px;
   border-radius: 10px;
   transition: all 500ms ease-in-out;
 
   /* margin-right: 5px !important; */
-}
-.card3:hover {
-  margin-top: 5px;
-  cursor: pointer;
-  /* box-shadow: 0px 12px 30px 0px rgba(0, 0, 0, 0.2); */
-  transition: all 800ms cubic-bezier(0.19, 1, 0.22, 1);
 }
