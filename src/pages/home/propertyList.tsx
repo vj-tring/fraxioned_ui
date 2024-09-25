@@ -99,7 +99,7 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
     dispatch(clearDates());
     fetchImages();
     fetchAdditionalProperties();
-  }, [dispatch,fetchAdditionalProperties]);
+  }, [dispatch]);
 
   const scroll = (scrollOffset: number) => {
     if (carouselRef.current) {
