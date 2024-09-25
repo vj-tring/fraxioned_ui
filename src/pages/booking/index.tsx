@@ -45,7 +45,7 @@ const Booking = () => {
 
   const formattedDate = (dateString: string) => {
     const date = new Date(dateString);
-    return format(date, "MMM do, yyyy hh:mm a");
+    return format(date, "MMM do, yyyy");
   };
 
   const details = (Array.isArray(userBookings) ? userBookings : [])
@@ -60,6 +60,7 @@ const Booking = () => {
       return {
         ...booking,
         property: booking.property.propertyName,
+        propertyId: booking.property.id,
         guest: guestDetails,
         checkinDate: formattedDate(booking.checkinDate),
         checkoutDate: formattedDate(booking.checkoutDate),
@@ -76,10 +77,10 @@ const Booking = () => {
   };
 
   const handleEditSuccess = () => {
-    if (user && user.id) {
-      dispatch(fetchUserBookings(user.id));
-      showSnackbar("Booking successfully updated.", "success");
-    }
+    // if (user && user.id) {
+    //   dispatch(fetchUserBookings(user.id));
+    //   showSnackbar("Booking successfully updated.", "success");
+    // }
   };
 
   const handleEditModalClose = () => {
@@ -189,7 +190,6 @@ const Booking = () => {
 
         <BookingGrid
           bookings={details}
-          onEdit={handleEdit}
           onCancel={handleCancel}
           activeTab={activeTab}
         />

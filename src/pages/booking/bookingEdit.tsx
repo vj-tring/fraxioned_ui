@@ -3,32 +3,47 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Modal, Box, Typography, Button, Grid } from '@mui/material';
 import { DatePickerWithRange } from '@/components/calender';
 import { DateRange } from 'react-day-picker';
-import { modifyBooking } from '@/api';
 import './bookingEdit.css'
 import MultipleSelect from '@/components/guest-selector';
 import { RootState } from '@/store/reducers';
-import { initializeCounts, updateCount } from '@/store/slice/auth/propertyGuestSlice';
+import { initializeCounts } from '@/store/slice/auth/propertyGuestSlice';
+import { format } from 'date-fns';
+import { updateBooking } from '@/store/slice/auth/bookingSlice';
 
 const style = {
-  position: 'absolute',
+  position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 721,
+  width: 731,
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
   borderRadius: 2,
 };
 
+const dateBoxStyle = {
+  border: '1px solid gray',
+  borderRadius: '10px',
+  padding: '3px',
+  paddingLeft: '10px',
+  paddingRight: '10px',
+  display: 'flex',
+  flexDirection: 'column' as const,
+  alignItems: 'flex-start',
+  justifyContent: 'space-between',
+  height: '50px',
+  width: '240px',
+};
+
 interface EditBookingModalProps {
   open: boolean;
   booking: any;
   handleClose: () => void;
-  onUpdateBooking: (updatedBooking: any) => void;
+  onUpdateSuccess: (updatedBooking: any) => void;
 }
 
-const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, handleClose, onUpdateBooking }) => {
+const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, handleClose, onUpdateSuccess }) => {
   const dispatch = useDispatch();
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
   const [displayDates, setDisplayDates] = useState({ checkinDate: '', checkoutDate: '' });
@@ -39,6 +54,8 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
   const [guestCount, setGuestCount] = useState<number>(0);
 
   const guestCounts = useSelector((state: RootState) => state.limits.counts);
+  const updateStatus = useSelector((state: RootState) => state.bookings.successMessage);
+  const updateError = useSelector((state: RootState) => state.bookings.error);
 
   useEffect(() => {
     if (booking) {
@@ -58,6 +75,21 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
       }));
     }
   }, [booking, dispatch]);
+
+  useEffect(() => {
+    if (updateStatus === "Booking updated successfully") {
+      onUpdateSuccess(booking);
+      handleClose();
+    }
+    if (updateError) {
+      setDateError(updateError);
+    }
+  }, [updateStatus, updateError, onUpdateSuccess, booking, handleClose]);
+
+  const formattedDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return format(date, "MMM do, yyyy");
+  };
 
   const handleDateSelect = (range: DateRange | undefined) => {
     setDateRange(range);
@@ -86,17 +118,13 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
 
   const updateDisplayDates = (range: DateRange) => {
     setDisplayDates({
-      checkinDate: range.from!.toLocaleDateString().split('T')[0], 
-      checkoutDate: range.to!.toLocaleDateString().split('T')[0], 
+      checkinDate: formattedDate(range.from!), 
+      checkoutDate: formattedDate(range.to!), 
     });
   };
 
   const handleGuestChange = (newCount: number) => {
     setGuestCount(newCount);
-  };
-
-  const handleGuestSelectorClose = () => {
-    // Any additional logic you want to run when the guest selector closes
   };
 
   const handleSubmit = async () => {
@@ -124,14 +152,7 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
         petFee: booking.petFee
       };
 
-      const response = await modifyBooking(booking.id, updatedBookingData);
-
-      if (response.status === 200) {
-        onUpdateBooking(updatedBookingData);
-        handleClose();
-      } else {
-        throw new Error('Failed to update booking');
-      }
+      dispatch(updateBooking({ bookingId: booking.id, updatedData: updatedBookingData }));
     } catch (error) {
       console.error('Error updating booking:', error);
       if (error instanceof Error) {
@@ -153,25 +174,32 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
     >
       <Box sx={style}>
         <Typography id="edit-booking-modal" variant="h4" component="h2" mb={2}>
-          Modify Your Bookings
+          Modify Your Booking
         </Typography>
         <hr />
         <Grid container spacing={2} mt={1}>
-          <Grid item xs={4}>
-            <Typography variant="subtitle1" fontWeight="bold">
-              Booking Id
+          <Grid item xs={3} ml={3}>
+           <Typography>
+           # {booking?.bookingId}
             </Typography>
             <Typography>
-              {booking?.bookingId}
+            {booking?.property.propertyName}
             </Typography>
           </Grid>
-          <Grid item xs={4}>
-            <Typography variant="subtitle1" fontWeight="bold">
-              Property Name
-            </Typography>
-            <Typography>
-              {booking?.property}
-            </Typography>
+          <Grid item xs={5}>
+               <Box sx={dateBoxStyle}>
+              <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
+                <Box>
+                  <Typography variant="caption" sx={{ fontWeight: 'bold', fontSize: '14px' }}>Check-in</Typography>
+                  <Typography variant="body2" sx={{color: 'gray'}}>{displayDates.checkinDate}</Typography>
+                </Box>
+                <div className="vl"></div>
+                <Box>
+                  <Typography variant="caption" sx={{ fontWeight: 'bold', fontSize: '14px' }}>Check-out</Typography>
+                  <Typography variant="body2" sx={{color: 'gray'}} >{displayDates.checkoutDate}</Typography>
+                </Box>
+              </Box>
+            </Box> 
           </Grid>
           <Grid item xs={3}>
             <Typography className="multiple-select-container">
@@ -180,7 +208,7 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
                 initialCount={guestCount}
                 initialCounts={guestCounts}
                 onChange={handleGuestChange}
-                onClose={handleGuestSelectorClose}
+                onClose={() => {}}
               />
             </Typography>
           </Grid>
@@ -191,11 +219,11 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
             />
           </Grid>
         </Grid>
-        {/* {dateError && (
+        {dateError && (
           <Typography color="error" mt={2}>
             {dateError}
           </Typography>
-        )} */}
+        )}
         <Box mt={2} display="flex" justifyContent="flex-end">
           <Button variant="outlined" color="secondary" onClick={handleClose} sx={{ mr: 1 }}>
             Cancel
