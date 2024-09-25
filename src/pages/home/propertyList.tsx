@@ -76,17 +76,10 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
       const allProperties = response.data as Property[];
       // console.log("allprop", allProperties);
       const numberOfUserProperties = properties.length;
-      let numberOfPropertiesToShow = 0;
+      // let numberOfPropertiesToShow = 0;
 
-      if (numberOfUserProperties === 1) {
-        numberOfPropertiesToShow = 4;
-      } else if (numberOfUserProperties === 2) {
-        numberOfPropertiesToShow = 3;
-      } else if (numberOfUserProperties >= 3) {
-        numberOfPropertiesToShow = 2;
-      } else if (numberOfUserProperties <= 4) {
-        numberOfPropertiesToShow = 1;
-      }
+      const numberOfPropertiesToShow = Math.min(Math.max(5 - numberOfUserProperties, 1), 4);
+
 
       setAdditionalProperties(allProperties.slice(0, numberOfPropertiesToShow));
     } catch (error) {
