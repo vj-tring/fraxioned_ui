@@ -1,5 +1,5 @@
 .calendar-container {
-    margin-top: 20px;
+    margin-top: 16px;
     height: 600px;
     width: 900px;
     padding: 20px;
@@ -153,7 +153,7 @@
     align-items: center;
     padding: 18px 30px;
     background-color: #f8f9fa;
-    border-bottom: 1px solid #e0e6ed;
+    /* border-bottom: 1px solid #e0e6ed; */
 }
 
 .dialog-title {

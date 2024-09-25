@@ -9,7 +9,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import SearchIcon from '@mui/icons-material/Search';
 import ConfirmationModal from '@/components/confirmation-modal';
 import { ClearIcon } from '@mui/x-date-pickers/icons';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import ViewBookings from '@/components/userbooking-form';
+
 
 interface User {
     id: number;
@@ -49,6 +52,8 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [bookingToDelete, setBookingToDelete] = useState<Booking | null>(null);
     const [filterValue, setFilterValue] = useState('');
+    const [selectedBookingId, setSelectedBookingId] = useState<number | null>(null);
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [showSuccessSnackbar, setShowSuccessSnackbar] = useState(false);
     const navigate = useNavigate();
 
@@ -122,6 +127,17 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
     const handleDeleteClick = (booking: Booking) => {
         setBookingToDelete(booking);
         setShowDeleteConfirmation(true);
+    };
+
+
+    const handleViewClick = (id: number) => {
+        setSelectedBookingId(id);
+        setIsViewModalOpen(true);
+    };
+
+    const handleCloseViewModal = () => {
+        setIsViewModalOpen(false);
+        setSelectedBookingId(null);
     };
 
 
@@ -209,26 +225,37 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
     const columns: GridColDef[] = [
         { field: 'bookingId', headerName: 'Booking ID', width: 120, align: 'center', headerAlign: 'center' },
         { field: 'userName', headerName: 'User Name', width: 120, align: 'center', headerAlign: 'center' },
-        { field: 'propertyName', headerName: 'Property Name', width: 190, align: 'center', headerAlign: 'center' },
+        { field: 'propertyName', headerName: 'Property Name', width: 170, align: 'center', headerAlign: 'center' },
         { field: 'checkinDate', headerName: 'Check-in Date', width: 190, align: 'center', headerAlign: 'center' },
         { field: 'checkoutDate', headerName: 'Check-out Date', width: 150, align: 'center', headerAlign: 'center' },
-        { 
-            field: 'isLastMinuteBooking', 
-            headerName: 'Last Min Booking', 
-            width: 150, 
-            align: 'center', 
+        {
+            field: 'isLastMinuteBooking',
+            headerName: 'Last Min Booking',
+            width: 130,
+            align: 'center',
             headerAlign: 'center',
             renderCell: (params) => (params.row.isLastMinuteBooking ? 'Yes' : 'No')
         },
-        { field: 'isCancelled', headerName: 'Cancelled', width: 100, align: 'center', headerAlign: 'center', renderCell: (params) => (params.row.isCancelled ? 'Yes' : 'No') },
+        { field: 'isCancelled', headerName: 'Cancelled', width: 90, align: 'center', headerAlign: 'center', renderCell: (params) => (params.row.isCancelled ? 'Yes' : 'No') },
         { field: 'isCompleted', headerName: 'Completed', width: 120, align: 'center', headerAlign: 'center', renderCell: (params) => (params.row.isCompleted ? 'Yes' : 'No') },
         {
             field: 'actions',
             headerName: 'Actions',
-            width: 120,
+            width: 180,
             renderCell: (params) => (
                 <>
-                    <IconButton aria-label="edit" color="primary" onClick={() => handleEditClick(params.row.id)}>
+                    <IconButton
+                        aria-label="view"
+                        color="primary"
+                        onClick={() => handleViewClick(params.row.id)}
+                    >
+                        <VisibilityIcon />
+                    </IconButton>
+                    <IconButton
+                        aria-label="edit"
+                        color="primary"
+                        onClick={() => handleEditClick(params.row.id)}
+                    >
                         <EditIcon />
                     </IconButton>
                     <IconButton
@@ -239,7 +266,6 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
                     >
                         <DeleteIcon />
                     </IconButton>
-
                 </>
             ),
         },
@@ -276,6 +302,12 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
                     </Link>
                 </div>
             </div>
+
+            <ViewBookings
+                openEvent={isViewModalOpen}
+                handleClose={handleCloseViewModal}
+                eventId={selectedBookingId || 0}
+            />
 
             <div className={styles.dataGridWrapper}>
                 <div className={styles.exportButtonContainer}>

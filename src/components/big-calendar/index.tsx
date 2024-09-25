@@ -13,7 +13,7 @@ import BookingButton from "../bookingbutton";
 import PropertyDropdown from "../property-dropdown";
 import { getBookings, userdetails } from '@/api';
 import './big-calender.css';
-import { Edit, CalendarToday, Person, Home, CheckCircle, CancelOutlined, AccessTime, Group } from '@mui/icons-material';
+import { Edit, CalendarToday, Person, Home, CheckCircle, CancelOutlined, Group } from '@mui/icons-material';
 
 const localizer = momentLocalizer(moment);
 
@@ -28,6 +28,7 @@ interface Booking {
     createdAt: string;
     bookingId: string;
     checkinDate: string;
+    isLastMinuteBooking: number;
     checkoutDate: string;
     totalNights: number;
     noOfGuests: number;
@@ -127,7 +128,7 @@ const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             case 3:
                 return imagethree;
             default:
-                return imageone; // Default image
+                return imageone;
         }
     };
 
@@ -187,7 +188,7 @@ const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                 className="calendar-view"
             />
 
-<Dialog
+            <Dialog
                 open={openEvent}
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"

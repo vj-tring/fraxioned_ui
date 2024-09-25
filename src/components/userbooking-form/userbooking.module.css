@@ -1,0 +1,198 @@
+.bookingDialog .MuiDialog-paper {
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100% !important;
+    max-width: 1200px !important;
+    height: auto !important;
+    max-height: 90vh;
+    overflow: hidden;
+}
+
+.dialogHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 36px;
+    background-color: #f8f9fa;
+}
+
+.dialogTitle {
+    color: #2c3e50;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.editButton {
+    color: 00636d;
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.editButton:hover {
+    background-color: #c7eaee;
+    transform: scale(1.1);
+}
+
+.dialogContent {
+    padding: 36px;
+    background-color: #ffffff;
+}
+
+.bookingDetailsContainer {
+    display: flex;
+    gap: 48px;
+}
+
+.bookingInfo {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.bookingInfo {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-right: 24px;
+}
+
+.bookingImage img {
+    height: 350px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.detailItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 16px;
+    color: #34495e;
+    padding: 8px 0;
+    border-bottom: 1px solid #e0e6ed;
+}
+
+.detailItem:last-child {
+    border-bottom: none;
+}
+
+.detailIcon {
+    color: #00636d;
+    font-size: 24px;
+    min-width: 24px;
+}
+
+.detailLabel {
+    font-weight: 600;
+    color: #7a8686;
+    width: 110px;
+    /* Slightly reduced width */
+    flex-shrink: 0;
+    /* Prevent label from shrinking */
+}
+
+.detailValue {
+    font-weight: 600;
+    font-size: 14px;
+    /* Slightly smaller font size */
+    color: #2c3e50;
+    flex: 1;
+}
+
+.detailDescription {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #e0e6ed;
+}
+
+.dialogActions {
+    padding: 18px 36px;
+    border-top: 1px solid #e0e6ed;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.closeButton {
+    background-color: #00636d !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 1px 2px 0 rgba(0, 0, 0, 0.19);
+    color: white !important;
+    padding: 12px 24px !important;
+    height: 40px;
+    border-radius: 6px !important;
+    text-transform: uppercase !important;
+    font-weight: 600 !important;
+    font-size: 16px !important;
+    transition: background-color 0.3s ease !important;
+}
+
+.closeButton:hover {
+    background-color: #95d4db !important;
+}
+
+@media (max-width: 1024px) {
+    .bookingDetailsContainer {
+        flex-direction: column;
+    }
+
+    .bookingInfo,
+    .bookingImage {
+        flex: 1;
+    }
+
+    .bookingImage img {
+        max-height: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .dialogHeader {
+        padding: 20px 24px;
+    }
+
+    .dialogTitle {
+        font-size: 24px;
+    }
+
+    .dialogContent {
+        padding: 24px;
+    }
+
+    .bookingInfo {
+        padding-right: 0;
+    }
+
+    .detailItem {
+        font-size: 14px;
+    }
+
+    .detailLabel {
+        width: 100px;
+    }
+
+    .detailIcon {
+        font-size: 20px;
+        min-width: 20px;
+    }
+
+    .editButton {
+        width: 40px;
+        height: 40px;
+    }
+
+    .closeButton {
+        padding: 10px 20px !important;
+        height: 36px;
+        font-size: 14px !important;
+    }
+}
