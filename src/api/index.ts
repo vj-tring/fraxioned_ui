@@ -205,4 +205,12 @@ export const propertyspacetypesapi = () =>
 export const getpropertycodes = () =>
     axiosInstance.get(`/v1/property-codes`);
 
+export const userbookingCancelapi = (id: number, user: number) => {
+    return axiosInstance.post(`/v1/bookings/${id}/${user}/cancel`);
+};
+
+
+
+
+
 
