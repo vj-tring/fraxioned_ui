@@ -8,7 +8,7 @@ import PorpImg from "../../assests/crown-jewel.jpg";
 import { resetLimits } from "@/store/slice/auth/propertyGuestSlice";
 import { clearDates } from "@/store/slice/datePickerSlice";
 import { User } from "@/store/model";
-import { propertyImageapi } from "@/api";
+import { propertyImageapi, getProperties } from "@/api"; // Ensure getProperties is imported
 
 interface Property {
   id: number;
@@ -23,30 +23,11 @@ interface Property {
   longitude?: string;
 }
 
-// Interface for space details
-interface Space {
-  id: number;
-  name: string;
-}
-
-// Interface for space type details
-interface SpaceType {
-  id: number;
-  name: string;
-  space: Space;
-}
-
+// Image interface
 export interface Image {
-  createdAt: string;
-  updatedAt: string;
   id: number;
   imageUrl: string;
-  imageName: string;
-  displayOrder: number;
-  spaceType: SpaceType;
   property: Property;
-  createdBy: User;
-  updatedBy: User;
 }
 
 interface RootState {
@@ -56,17 +37,18 @@ interface RootState {
     error: string | null;
   };
 }
-interface PropertyListProps {
-  paddingLeft?: boolean;
-}
 
-const PropertyList: React.FC<PropertyListProps> = ({ paddingLeft = false }) => {
+const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
+  paddingLeft = false,
+}) => {
   const { cards: properties } = useSelector(
     (state: RootState) => state.properties
   );
-
   const dispatch = useDispatch();
   const [images, setImages] = useState<Image[]>([]);
+  const [additionalProperties, setAdditionalProperties] = useState<Property[]>(
+    []
+  );
   const carouselRef = useRef<HTMLDivElement>(null);
   const showCarousel = properties.length > 4;
   const showPlusIcon = true;
@@ -81,10 +63,42 @@ const PropertyList: React.FC<PropertyListProps> = ({ paddingLeft = false }) => {
     }
   };
 
+  const fetchAdditionalProperties = async () => {
+    try {
+      const response = await getProperties();
+
+      // console.log("API Response:", response);
+
+      if (!Array.isArray(response.data)) {
+        throw new Error("Unexpected response format");
+      }
+
+      const allProperties = response.data as Property[];
+      // console.log("allprop", allProperties);
+      const numberOfUserProperties = properties.length;
+      let numberOfPropertiesToShow = 0;
+
+      if (numberOfUserProperties === 1) {
+        numberOfPropertiesToShow = 4;
+      } else if (numberOfUserProperties === 2) {
+        numberOfPropertiesToShow = 3;
+      } else if (numberOfUserProperties >= 3) {
+        numberOfPropertiesToShow = 2;
+      } else if (numberOfUserProperties <= 4) {
+        numberOfPropertiesToShow = 1;
+      }
+
+      setAdditionalProperties(allProperties.slice(0, numberOfPropertiesToShow));
+    } catch (error) {
+      console.error("Error fetching properties:", error.message || error);
+    }
+  };
+
   useEffect(() => {
     dispatch(resetLimits());
     dispatch(clearDates());
     fetchImages();
+    fetchAdditionalProperties();
   }, [dispatch]);
 
   const scroll = (scrollOffset: number) => {
@@ -104,10 +118,10 @@ const PropertyList: React.FC<PropertyListProps> = ({ paddingLeft = false }) => {
   };
 
   return (
-    <div className="Container1">
+    <div className={` Container1 ${properties.length > 5 ? "" : "flex"}`}>
       <div>
         <div
-          className="d-flex flex-row Container1 "
+          className="d-flex flex-row Container"
           style={{
             marginLeft: paddingLeft ? "-45px" : "1%",
           }}
@@ -146,6 +160,7 @@ const PropertyList: React.FC<PropertyListProps> = ({ paddingLeft = false }) => {
                 />
               );
             })}
+
             {showPlusIcon && (
               <div className="FadeProp">
                 <div className="image-container">
@@ -161,7 +176,7 @@ const PropertyList: React.FC<PropertyListProps> = ({ paddingLeft = false }) => {
                 </div>
                 <div className="card-body card-body-plus">
                   <h4 className="card-title">Adventure Awaits...</h4>
-                  <span className="card-text ">
+                  <span className="card-text">
                     Discover your next Fraxioned home at fraxioned.com
                   </span>
                 </div>
@@ -179,6 +194,31 @@ const PropertyList: React.FC<PropertyListProps> = ({ paddingLeft = false }) => {
             </div>
           )}
         </div>
+
+        {/* Render additional properties based on user properties count */}
+      </div>
+      <div className="AddProps ">
+        {properties.length <= 4 &&
+          additionalProperties.map((property) => {
+            const propertyImage = images.find(
+              (img) => img.property.id === property.id
+            );
+            return (
+              <Card
+                key={property.id}
+                imageUrl={propertyImage?.imageUrl || image1}
+                title={formatCardName(property.propertyName || "No Title")}
+                text={property.address || "Address not available"}
+                share={
+                  property.propertyShare
+                    ? `You Own ${property.share}/${property.propertyShare}th share`
+                    : "Share information not available"
+                }
+                id={property.id}
+                tag="Hot Listing" // Pass the tag here
+              />
+            );
+          })}
       </div>
     </div>
   );

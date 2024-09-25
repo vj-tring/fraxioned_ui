@@ -176,7 +176,7 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({
         }}
       >
         {showIcons && <PersonAddAlt1OutlinedIcon sx={{ color: "grey",
-          marginBottom:"10px"
+          // marginBottom:"10px"
          }} />}
 
         <div

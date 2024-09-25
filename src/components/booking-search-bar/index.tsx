@@ -205,11 +205,12 @@ const BookingSearchBar: React.FC = () => {
           >
             {" "}
             <PopoverTrigger asChild>
-              <div className="check-in">
+              <div className="check-in gap-3">
                 <CalendarMonthOutlinedIcon
                   className="calenderIcon"
                   sx={{
                     color: "grey",
+
                   }}
                 />
 
@@ -235,11 +236,12 @@ const BookingSearchBar: React.FC = () => {
 
           <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
             <PopoverTrigger>
-              <div className="check-out">
+              <div className="check-out gap-3">
                 <CalendarMonthOutlinedIcon
                   className="calenderIcon"
                   sx={{
                     color: "grey",
+
                   }}
                 />
 
