@@ -149,7 +149,7 @@ const Booking = () => {
             >
               View as Calendar
             </Button>
-            <Button
+            {/* <Button
               variant="outlined"
               disableRipple
               color="primary"
@@ -165,7 +165,7 @@ const Booking = () => {
 
             >
               Filter
-            </Button>
+            </Button> */}
           </div>
         </div>
 

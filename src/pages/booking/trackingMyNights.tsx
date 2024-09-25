@@ -183,8 +183,8 @@ const TrackingMyNigts: React.FC = () => {
               borderRadius: "50px",
               "& .MuiSelect-select": {
                 padding: "10px 14px",
-                // fontSize: "16px",
               },
+              
               "& .MuiOutlinedInput-notchedOutline": {
                 border: "none",
               },
@@ -194,6 +194,9 @@ const TrackingMyNigts: React.FC = () => {
               "& .MuiSelect-icon": {
                 color: "#ffffff",
                 display: "none",
+              },
+              ".MuiOutlinedInput-root:hover":{
+                boxShadow:"none "
               },
               backgroundColor: "none",
             }}
@@ -237,7 +240,6 @@ const TrackingMyNigts: React.FC = () => {
                 boxShadow: "none ",
               },
               backgroundColor: "none",
-              // border:"none",
             }}
           >
             {availableYears.map((year) => (
@@ -253,7 +255,6 @@ const TrackingMyNigts: React.FC = () => {
           </Select>
           {/* <hr className="vl mt-3"></hr> */}
           <button className="Track-btn">
-            <span>Track</span>
             <FontAwesomeIcon icon={faSearch} style={{ color: "#ffffff" }} />
           </button>
         </div>
@@ -275,9 +276,9 @@ const TrackingMyNigts: React.FC = () => {
               {selectedProperty?.address || "Address"}
             </span>
             <span className="Prop">
-              { selectedProperty?.propertyShare
-                      ? `You Own ${selectedProperty.share}/${selectedProperty?.propertyShare}th share`
-                      : "Share information not available"}
+              {selectedProperty?.propertyShare
+                ? `You Own ${selectedProperty.share}/${selectedProperty?.propertyShare}th share`
+                : "Share information not available"}
             </span>
           </div>
         </div>
@@ -357,7 +358,6 @@ const TrackingMyNigts: React.FC = () => {
                 {formatDate(propertyDetails.peakSeasonStartDate)} -{" "}
                 {formatDate(propertyDetails.peakSeasonEndDate)}
               </li>
-
             </div>
             <div className="Total-Nights pt-4">
               <table style={{ width: "90%" }}>
