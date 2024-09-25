@@ -4,7 +4,7 @@ import { useAuthHelpers } from './useAuthHelper';
 
 // Create an Axios instance
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3008/api',
+    baseURL: 'http://192.168.1.47:3008/api',
     timeout: 10000,
 });
 
@@ -19,6 +19,7 @@ axiosInstance.interceptors.request.use(
         const searchParams = new URLSearchParams(window.location.search);
         const resetToken = searchParams.get('resetToken');
 
+        // If the access token exists, set it in the Authorization header
         if (userId && token) {
             console.log("setting the header")
             config.headers['user-id'] = userId;
