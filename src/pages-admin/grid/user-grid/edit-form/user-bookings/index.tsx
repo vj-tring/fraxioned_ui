@@ -27,14 +27,20 @@ interface Booking {
 const UserBookings: React.FC<BookingProps> = ({ userId }) => {
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchBookings = async () => {
             try {
                 const response = await getUserBookings(userId);
-                setBookings(response.data);
+                if (Array.isArray(response.data)) {
+                    setBookings(response.data);
+                } else {
+                    setError('No bookings available');
+                }
             } catch (error) {
                 console.error('Error fetching bookings:', error);
+                setError('Error fetching bookings. Please try again later.');
             } finally {
                 setLoading(false);
             }
@@ -61,8 +67,12 @@ const UserBookings: React.FC<BookingProps> = ({ userId }) => {
         return <div className={styles.loadingMessage}>Loading bookings...</div>;
     }
 
+    if (error) {
+        return <div className={styles.errorMessage}>{error}</div>;
+    }
+
     if (bookings.length === 0) {
-        return <div className={styles.noBookingsMessage}>No bookings available</div>;
+        return <div className={styles.noBookingsMessage}>No booking available</div>;
     }
 
     return (
