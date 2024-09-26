@@ -158,7 +158,7 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
             })}
 
             {showPlusIcon && (
-              <div className="FadeProp">
+              <div className="FadeProp ">
                 <div className="image-container">
                   <a href="https://www.fraxioned.com/" target="_blank">
                     <img
