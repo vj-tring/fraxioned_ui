@@ -406,10 +406,15 @@ const PropertyListingPage = () => {
               />
               <Typography
                 variant="h6"
-                className="PropertyAddress monsterrat"
+                className="PropertyAddress monsterrat "
                 style={{ opacity: 0.9, fontWeight: "bolder" }}
               >
-                {selectedProperty.address || "Property Address"}
+                
+                <div>{selectedProperty.address || "Property Address"}</div>,
+                <div>{selectedProperty.city || "Property Address"}</div>,
+                <div>{selectedProperty.state || "Property Address"}</div>,
+                <div>{selectedProperty.country || "Property Address"}</div>,
+                <div>{selectedProperty.zipcode || "Property Address"}</div>
               </Typography>
             </Box>
           </>
@@ -515,7 +520,6 @@ const PropertyListingPage = () => {
                         variant="rectangular"
                         width="100%"
                         height={200}
-                        
                       />
                     </Grid>
                   ))
