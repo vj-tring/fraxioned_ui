@@ -208,11 +208,11 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
                     imageUrl={propertyImage?.imageUrl || image1}
                     title={formatCardName(property.propertyName || "No Title")}
                     text={property.address || "Address not available"}
-                    share={
-                      property.propertyShare
-                        ? `You Own ${property.share}/${property.propertyShare}th share`
-                        : "Share information not available"
-                    }
+                    // share={
+                    //   property.propertyShare
+                    //     ? `You Own ${property.share}/${property.propertyShare}th share`
+                    //     : "Share information not available"
+                    // }
                     // id={property.id}
                     tag="Hot Listing" // Pass the tag here
                   />

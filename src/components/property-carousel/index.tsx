@@ -155,7 +155,7 @@ export default function BasicSelect() {
   const showCarousel = cards.length > 0;
   const showCarouselControls = cards.length > 1;
   const cardItemWidth =
-    cards.length === 1 ? "380px" : cards.length === 2 ? "380px" : "520px";
+    cards.length === 1 ? "520px" : cards.length === 2 ? "380px" : "520px";
   const buttonSize = {
     width:
       cards.length === 1 ? "3.7rem" : cards.length === 2 ? "3.7rem" : "5rem",
@@ -169,7 +169,7 @@ export default function BasicSelect() {
   const BoxMargin =
     cards.length === 1 ? "0px" : cards.length === 2 ? "0px" : "8px";
   const cardItemHeight =
-    cards.length === 1 ? "232px" : cards.length === 2 ? "232px" : "280px";
+    cards.length === 1 ? "272px" : cards.length === 2 ? "232px" : "280px";
   const cardNameWeight =
     cards.length === 1 ? "600" : cards.length === 2 ? "600" : "600";
 
@@ -332,7 +332,7 @@ export default function BasicSelect() {
                       ))}
                     </div>
                   )}
-                  <div className="card-name d-flex justify-content-between py-2 align-items-center gy-1 ">
+                  <div className="card-name d-flex justify-content-between align-items-center gy-1 ">
                     <span className="CardFont">
                       <h4
                         className="BlueHead"
@@ -343,6 +343,9 @@ export default function BasicSelect() {
                         {selectedCard.propertyShare} share] */}
                       </h4>
                       <p className="BlueFont">{selectedCard.address}</p>
+                      <p className="BlueFont">{selectedCard.city}</p>
+                      <p className="BlueFont">{selectedCard.state}</p>
+                      <p className="BlueFont">{selectedCard.zipcode}</p>
                     </span>
                     <span className={`CardImage ${imageClass}`}>
                       <img

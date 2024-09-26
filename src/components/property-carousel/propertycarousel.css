@@ -360,13 +360,13 @@
 
 .BlueFont {
   position: relative;
-  height: 2rem;
+  /* height: 2rem; */
   margin: 0 !important;
   font-size: 0.7rem !important;
   opacity: 1 !important;
   text-wrap: wrap;
   font-weight: 600 !important;
-  margin-bottom: 28px !important;
+  /* margin-bottom: 28px !important; */
 }
 
 .image1 {
@@ -386,7 +386,7 @@
   bottom: 10px;
   left: 289px;
   width: 80%;
-  height: 30%;
+  height: 33%;
   border-radius: 5px;
   padding: 2px;
   object-fit: cover;
@@ -484,7 +484,7 @@
 }
 
 .additionalproperty {
-  width: 9rem !important;
+  width: 10rem !important;
   border-radius: 4px !important;
   text-transform: capitalize !important;
   border: 1px solid #7c7875 !important;
