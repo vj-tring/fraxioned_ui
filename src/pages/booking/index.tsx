@@ -24,6 +24,7 @@ import { format } from "date-fns";
 import { cancelBooking } from "@/api";
 import CustomizedSnackbar from "@/components/customized-snackbar";
 import "../booking/booking.css";
+import EditBookingModal from './bookingEdit';
 import { fetchProperties } from "@/store/slice/auth/property-slice";
 
 const Booking = () => {
@@ -32,9 +33,9 @@ const Booking = () => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
-    "error"
-  );
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("error");
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState<BookingData | null>(null);
   const user = useSelector((state: RootState) => state.auth.user);
   const userBookings = useSelector(
     (state: RootState) => state.bookings.userBookings || []
@@ -63,7 +64,7 @@ const Booking = () => {
 
   const formattedDate = (dateString: string) => {
     const date = new Date(dateString);
-    return format(date, "MMM do, yyyy hh:mm a");
+    return format(date, "MMM do, yyyy");
   };
 
   const details = (Array.isArray(userBookings) ? userBookings : [])
@@ -81,6 +82,7 @@ const Booking = () => {
       return {
         ...booking,
         property: booking.property.propertyName,
+        propertyId: booking.property.id,
         guest: guestDetails,
         checkinDate: formattedDate(booking.checkinDate),
         checkoutDate: formattedDate(booking.checkoutDate),
@@ -89,7 +91,23 @@ const Booking = () => {
     });
 
   const handleEdit = (id: number) => {
-    console.log(`Edit clicked for booking id: ${id}`);
+    const bookingToEdit = userBookings.find((booking: BookingData) => booking.id === id);
+    if (bookingToEdit) {
+      setSelectedBooking(bookingToEdit);
+      setEditModalOpen(true);
+    }
+  };
+
+  const handleEditSuccess = () => {
+    // if (user && user.id) {
+    //   dispatch(fetchUserBookings(user.id));
+    //   showSnackbar("Booking successfully updated.", "success");
+    // }
+  };
+
+  const handleEditModalClose = () => {
+    setEditModalOpen(false);
+    setSelectedBooking(null);
   };
 
   const handleCancel = async (id: number) => {
@@ -97,9 +115,8 @@ const Booking = () => {
       try {
         const response = await cancelBooking(id, user.id);
         if (response.data && response.data.status === 400) {
-          setSnackbarMessage(
-            response.data.message || "Failed to cancel booking"
-          );
+          setSnackbarMessage(response.data.message || "Failed to cancel booking");
+
           setSnackbarSeverity("error");
         } else {
           dispatch(fetchUserBookings(user.id));
@@ -199,7 +216,6 @@ const Booking = () => {
                 textTransform: "capitalize",
               }}
               className='FilterView'
-
             >
               Filter
             </Button> */}
@@ -208,7 +224,6 @@ const Booking = () => {
 
         <BookingGrid
           bookings={details}
-          onEdit={handleEdit}
           onCancel={handleCancel}
           activeTab={activeTab}
         />
@@ -235,26 +250,23 @@ const Booking = () => {
       <Modal
         open={isCalendarOpen}
         onClose={handleCloseCalendar}
-        // hideBackdrop={true}
         aria-labelledby="calendar-modal-title"
         aria-describedby="calendar-modal-description"
       >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "97%",
-            height: "60%",
-            bgcolor: "background.paper",
-            p: 4,
-            borderRadius: "10px",
-            overflow: "auto",
-            padding: "20px",
-            // boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
-          }}
-        >
+        <Box sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '97%',
+          height: '60%',
+          bgcolor: 'background.paper',
+          p: 4,
+          borderRadius: '10px',
+          overflow: 'auto',
+          padding: '20px',
+        }}>
+
           <IconButton
             aria-label="close"
             onClick={handleCloseCalendar}
@@ -269,6 +281,16 @@ const Booking = () => {
           <BookingCalendar />
         </Box>
       </Modal>
+
+      {selectedBooking && (
+        <EditBookingModal
+          open={editModalOpen}
+          initialBooking={selectedBooking}
+          handleClose={handleEditModalClose}
+          onEditSuccess={handleEditSuccess}
+        />
+      )}
+
       <CustomizedSnackbar
         open={snackbarOpen}
         handleClose={handleSnackbarClose}
