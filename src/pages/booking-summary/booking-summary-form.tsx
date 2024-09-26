@@ -199,7 +199,7 @@ const BookingSummaryForm: React.FC = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "white",
+            backgroundColor: "rgb(255, 255, 255, 0.5)",
             zIndex: 1000,
           }}
         >
