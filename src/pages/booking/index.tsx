@@ -1,6 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Typography, Box, Tabs, Tab, Button, Modal, IconButton } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
+import React, { useState, useEffect } from "react";
+import {
+  Typography,
+  Box,
+  Tabs,
+  Tab,
+  Button,
+  Modal,
+  IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import BookingGrid from "@/components/grid/BookingGrid";
 import BookingCalendar from "@/components/booking-calendar";
@@ -8,12 +16,16 @@ import TrackingMyNigts from "./trackingMyNights";
 import PropertyList from "../home/propertyList";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store";
-import { BookingData, fetchUserBookings } from "@/store/slice/auth/bookingSlice";
+import {
+  BookingData,
+  fetchUserBookings,
+} from "@/store/slice/auth/bookingSlice";
 import { format } from "date-fns";
-import { cancelBooking } from '@/api';
-import CustomizedSnackbar from '@/components/customized-snackbar';
+import { cancelBooking } from "@/api";
+import CustomizedSnackbar from "@/components/customized-snackbar";
 import "../booking/booking.css";
 import EditBookingModal from './bookingEdit';
+import { fetchProperties } from "@/store/slice/auth/property-slice";
 
 const Booking = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -25,21 +37,28 @@ const Booking = () => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<BookingData | null>(null);
   const user = useSelector((state: RootState) => state.auth.user);
-  const userBookings = useSelector((state: RootState) => state.bookings.userBookings || []);
+  const userBookings = useSelector(
+    (state: RootState) => state.bookings.userBookings || []
+  );
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
 
-  const showSnackbar = (message: string, severity: "error" | "success" = "error") => {
+  const showSnackbar = (
+    message: string,
+    severity: "error" | "info" | "warning" = "error"
+  ) => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setSnackbarOpen(true);
   };
-
   useEffect(() => {
     if (user && user.id) {
+      console.log("user", user);
+
       dispatch(fetchUserBookings(user.id));
+      dispatch(fetchProperties(user.id));
     }
   }, [user, dispatch]);
 
@@ -50,13 +69,16 @@ const Booking = () => {
 
   const details = (Array.isArray(userBookings) ? userBookings : [])
     .filter((booking: BookingData) => {
-      if (activeTab === 0) return !booking.isCancelled && booking.isCompleted !== 1;
+      if (activeTab === 0)
+        return !booking.isCancelled && booking.isCompleted !== 1;
       if (activeTab === 1) return booking.isCompleted === 1;
       if (activeTab === 2) return booking.isCancelled;
-      return true; 
+      return true;
     })
     .map((booking: BookingData) => {
-      const guestDetails = `${booking.noOfAdults} Adults, ${booking.noOfChildren} Children, ${booking.noOfPets} Pet${booking.noOfPets > 1 ? "s" : ""}`;
+      const guestDetails = `${booking.noOfAdults} Adults, ${
+        booking.noOfChildren
+      } Children, ${booking.noOfPets} Pet${booking.noOfPets > 1 ? "s" : ""}`;
       return {
         ...booking,
         property: booking.property.propertyName,
@@ -94,6 +116,7 @@ const Booking = () => {
         const response = await cancelBooking(id, user.id);
         if (response.data && response.data.status === 400) {
           setSnackbarMessage(response.data.message || "Failed to cancel booking");
+
           setSnackbarSeverity("error");
         } else {
           dispatch(fetchUserBookings(user.id));
@@ -102,24 +125,31 @@ const Booking = () => {
         }
         setSnackbarOpen(true);
       } catch (error) {
-        console.error('Error canceling booking:', error);
-        
-        let errorMessage = "An unexpected error occurred while cancelling the booking.";
-        
+        console.error("Error canceling booking:", error);
+
+        let errorMessage =
+          "An unexpected error occurred while cancelling the booking.";
+
         if (error instanceof Error) {
           errorMessage = error.message;
-        } else if (typeof error === 'object' && error !== null) {
-          const customError = error as { response?: { data?: { message?: string } }; message?: string };
-          errorMessage = customError.response?.data?.message || customError.message || errorMessage;
+        } else if (typeof error === "object" && error !== null) {
+          const customError = error as {
+            response?: { data?: { message?: string } };
+            message?: string;
+          };
+          errorMessage =
+            customError.response?.data?.message ||
+            customError.message ||
+            errorMessage;
         }
-        
+
         setSnackbarMessage(errorMessage);
         setSnackbarSeverity("error");
         setSnackbarOpen(true);
       }
     }
   };
-  
+
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
   };
@@ -135,7 +165,11 @@ const Booking = () => {
   return (
     <>
       <Box sx={{ width: "90%", margin: "auto" }}>
-        <Typography variant="h4" className="my-Book mt-5 monsterrat mb-3" gutterBottom>
+        <Typography
+          variant="h4"
+          className="my-Book mt-5 monsterrat mb-3"
+          gutterBottom
+        >
           My Bookings
         </Typography>
         <div className="d-flex justify-between BookHeader">
@@ -165,11 +199,11 @@ const Booking = () => {
                 backgroundColor: "#88CDD4",
                 textTransform: "capitalize",
               }}
-              className='calendarView'
+              className="calendarView"
             >
               View as Calendar
             </Button>
-            <Button
+            {/* <Button
               variant="outlined"
               disableRipple
               color="primary"
@@ -184,7 +218,7 @@ const Booking = () => {
               className='FilterView'
             >
               Filter
-            </Button>
+            </Button> */}
           </div>
         </div>
 
@@ -199,7 +233,14 @@ const Booking = () => {
         </div>
 
         <div className="NewBook">
-          <h1 style={{ fontSize: "20px", fontWeight: "600", width: "80%", marginTop: "50px" }}>
+          <h1
+            style={{
+              fontSize: "20px",
+              fontWeight: "600",
+              width: "80%",
+              marginTop: "50px",
+            }}
+          >
             Create New Bookings
           </h1>
           <PropertyList paddingLeft />
@@ -225,11 +266,12 @@ const Booking = () => {
           overflow: 'auto',
           padding: '20px',
         }}>
+
           <IconButton
             aria-label="close"
             onClick={handleCloseCalendar}
             sx={{
-              position: 'absolute',
+              position: "absolute",
               right: 8,
               top: 8,
             }}

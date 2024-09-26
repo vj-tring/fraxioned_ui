@@ -77,7 +77,6 @@ body {
 
 .selectDate {
   font-weight: 600;
-  /* text-align: center; */
   font-weight: 600 !important;
 }
 
@@ -170,6 +169,13 @@ body {
   .PropertyName {
     font-size: medium !important;
   }
+
+  .propertyDetails {
+    width: 100%;
+  }
+  .GridWidth {
+    width: 100% !important;
+  }
   .PropertyAddress {
     font-size: small !important;
   }
@@ -189,17 +195,14 @@ body {
 
     text-align: left !important;
   }
+
   .GridWidth1 {
-    width: 87% !important;
+    width: 100% !important;
   }
-  .cards {
-    width: 73% !important;
-    margin-right: 135px !important;
-    padding: 1rem !important;
-  }
+
   .MainCard1 > div > div > span,
   .MainCard1 > div > div > p {
-    font-size: 7px !important;
+    font-size: 10px !important;
     width: max-content !important;
   }
   .selectDate {
@@ -207,23 +210,12 @@ body {
   }
   .GuestDrop {
     font-size: 12px !important;
-    /* padding: 1px 10px !important; */
   }
   .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
-    padding: 3.5px 10px !important;
+    padding: 8px 10px !important;
     font-size: 10px !important;
   }
-  /* .MainCard1 {
-    height: 34px !important;
-    width: 145px !important;
-  }
-  .vl {
-    visibility: visible !important;
-    height: 20px !important;
-  }
-  .DateHead1 {
-    height: 10px !important;
-  } */
+
   .availability {
     font-size: xx-small !important;
     height: 30px !important;
@@ -247,37 +239,130 @@ body {
     border: 1px solid #80808044;
     font-size: 7px !important;
     border-radius: 20px !important;
-    width: 93px !important;
-    height: 98% !important;
+    width: 50px !important;
+    height: 100% !important;
+  }
+
+  .propertyDetails .active {
+    border: 1px solid orange !important;
+    color: orange !important;
   }
   .box1 > div > li {
     display: flex;
- 
-    font-weight: 600;
-
-    font-size: 8px !important;
+    font-size: xx-small !important;
+    text-transform: uppercase;
+    font-weight: 700;
+    max-width: 120px;
+    text-wrap: wrap !important;
   }
   .propertyDetailsYear {
     width: 300px !important;
   }
-  .box1{
+  .box1 {
     padding: 10px;
   }
-  .Box-list1{
+  .Box-list1 {
     text-wrap: wrap !important;
   }
   .checkIn {
     font-size: small !important;
   }
-  .singleDevice{
+  .singleDevice {
     display: flex;
     flex-direction: column !important;
   }
-  .RoomsRes{
+  .RoomsRes {
     width: 100% !important;
   }
-  .AmenRes{
-    display: flex; 
+  .AmenRes {
+    display: flex;
     flex-direction: column !important;
+  }
+
+  .PropertyFlex {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .property1 {
+    padding-left: 14px;
+    padding-top: 2px;
+  }
+
+  .DateHead1 {
+    text-transform: capitalize;
+    padding-top: 6px;
+    padding-left: 14px;
+    color: black;
+    font-weight: 555 !important;
+    font-size: small;
+  }
+  .rdp-button {
+    font-size: x-small !important;
+    padding: 0px !important;
+  }
+  .normalcalendar .calendar {
+    width: 79% !important;
+  }
+  .w-11 {
+    width: 38px !important;
+    font-size: xx-small !important;
+  }
+
+  .h-10 {
+    height: 27px !important;
+  }
+  .end-calendar {
+    /* width: 141% !important; */
+  }
+  .stay-length,
+  .btn-clear {
+    font-size: 6px !important;
+  }
+  .stay-length {
+
+    gap: 10px !important;
+  }
+  .img1 {
+    height: 187px;
+    width: 800px;
+  }
+  .image {
+    height: 100px;
+  }
+  .show-more-overlay {
+    width: 100px;
+    height: 30px !important;
+    padding: 0px !important;
+  }
+  .show-more-overlay > span {
+    font-size: xx-small !important;
+    text-wrap: nowrap;
+  }
+  .AmenRes > div > div {
+    font-size: x-small;
+  }
+  .singleDevice {
+    display: flex;
+  }
+  .cards {
+    width: 100%;
+  }
+  .ShowMoreAmenities {
+    font-size: 1rem !important;
+    width: 300px;
+  }
+  .RuleList {
+    font-size: 0.67rem !important;
+  }
+  .ThingsHead {
+    padding: 0px !important ;
+  }
+  .shwmore,
+  .addDate {
+    font-size: 10px !important;
+  }
+  .ThingstoHead {
+    font-size: small !important;
   }
 }
