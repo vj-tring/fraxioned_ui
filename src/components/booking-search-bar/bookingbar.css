@@ -21,11 +21,11 @@
   width: 60%;
   height: 60px;
   border-radius: 50px;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
     rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
-  margin-top: -167px;
+  margin-top: -137px;
   font-size: small;
   padding: 10px 0px 10px 10px !important;
   border: none !important;
@@ -68,7 +68,7 @@
 .DateHead2 {
   font-weight: 600;
   margin-right: 7px;
-}
+} 
 
 .whoGuest {
   padding-top: 5px;
@@ -86,20 +86,4 @@
 
 .active1 {
   border-radius: 25px;
-}
-
-@media only screen and (max-width: 400px) {
-  .calendar-popover {
-     margin-top: 6px;
-     position: relative;
-     bottom: 180px;
-  }
-  .error-msg-container{
-    padding: 7px;
-    padding-top: 10px;
-  }
-  .error-msg{
-    font-size: x-small !important;
-
-  }
 }

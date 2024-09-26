@@ -449,7 +449,7 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
   };
   return (
     <div className={cn("gri flex flex-column calendar", className)}>
-      <div className="calendarDiv">
+      <div>
      
         <Calendar
           mode="range"

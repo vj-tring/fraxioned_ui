@@ -22,12 +22,8 @@
 }
 .Track-btn {
   background-color: #88cdd4;
-  /* border-radius: 50px; */
-  width: 3.5rem;
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
+  border-radius: 50px;
+  width: 7.5rem;
   height: 2rem;
   margin-top: 8px;
   color: white;
@@ -160,8 +156,7 @@ tr > th {
   .bar-btn-head {
     margin-top: 20px;
   }
-  .calendarView,
-  .FilterView {
+  .calendarView,.FilterView{
     height: 25px;
     font-size: x-small !important;
   }
@@ -180,12 +175,9 @@ tr > th {
     font-size: 9px !important;
     width: 10% !important;
   }
-
+ 
   .PropertyButton {
     width: 150px !important ;
-  }
-  .PropertyButton:hover {
-    box-shadow: none !important;
   }
   .Year-btn {
     width: 150px !important ;

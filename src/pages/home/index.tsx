@@ -55,6 +55,7 @@ const Home: React.FC = () => {
     dispatch(clearDates());
   }, [dispatch]);
 
+ 
   return (
     <div className="home-content">
       <div className="HomeImg"></div>
@@ -63,10 +64,12 @@ const Home: React.FC = () => {
 
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
-
+       
       <div className="Container1">
         <PropertyList />
       </div>
+
+
     </div>
   );
 };

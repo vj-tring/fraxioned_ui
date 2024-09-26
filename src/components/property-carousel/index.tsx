@@ -187,6 +187,7 @@ export default function BasicSelect() {
         className="PropertyBtn"
         sx={{
           borderRadius: 10,
+          // width: 264,
           height: 70,
           border: "none",
           cursor: "pointer",
@@ -201,16 +202,12 @@ export default function BasicSelect() {
         <AddHomeOutlinedIcon
           sx={{
             color: "grey",
-            // marginBottom:"10px"
           }}
-          className="AddHome"
         />
         <div className="d-flex align-items-start flex-column card-item">
           <span className="DateHead1 monsterrat">My Home(s)</span>
           <p className="property1 monsterrat">
-            {formatCardName(
-              selectedCard ? selectedCard?.name : "Select Property"
-            )}
+            {formatCardName(selectedCard ? selectedCard?.name : "Select Property")}
           </p>
         </div>
       </Button>
@@ -295,7 +292,7 @@ export default function BasicSelect() {
                           }}
                         >
                           <div className="d-flex flex-column align-items-center p-1.5">
-                            <h4 className="property-names">
+                            <h4 className="property-name">
                               {formatCardName(card.name)}
                             </h4>
                           </div>
@@ -336,7 +333,7 @@ export default function BasicSelect() {
                         className="BlueHead"
                         style={{ fontWeight: cardNameWeight }}
                       >
-                        {formatCardName(selectedCard.name)}
+                        {formatCardName(selectedCard.name)} 
                         {/* [{selectedCard.share}/
                         {selectedCard.propertyShare} share] */}
                       </h4>
@@ -380,46 +377,38 @@ export default function BasicSelect() {
                     style={{ marginTop: BoxMargin }}
                   >
                     <div className="d-flex flex-column night-count">
-                      <div className="Off-Values">
+                      <li className="Off-Values">
                         {selectedCard.details[selectedYear]?.offSeason || "N/A"}
-                      </div>
-                      <div style={{ fontSize: BoxList }}>Off-Season Nights</div>
+                      </li>
+                      <li style={{ fontSize: BoxList }}>Off-Season Nights</li>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <div className="Off-Values">
+                      <li className="Off-Values">
                         {selectedCard.details[selectedYear]?.peakSeason ||
                           "N/A"}
-                      </div>
-                      <div style={{ fontSize: BoxList }}>
-                        Peak-Season Nights
-                      </div>
+                      </li>
+                      <li style={{ fontSize: BoxList }}>Peak-Season Nights</li>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <div className="Off-Values">
+                      <li className="Off-Values">
                         {selectedCard.details[selectedYear]?.peakHoliday ||
                           "N/A"}
-                      </div>
-                      <div style={{ fontSize: BoxList }}>
-                        Peak-Season Holiday
-                      </div>
+                      </li>
+                      <li style={{ fontSize: BoxList }}>Peak-Season Holiday</li>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <div className="Off-Values">
+                      <li className="Off-Values">
                         {selectedCard.details[selectedYear]?.offSeasonHoliday ||
                           "N/A"}
-                      </div>
-                      <div style={{ fontSize: BoxList }}>
-                        Off-Season Holiday
-                      </div>
+                      </li>
+                      <li style={{ fontSize: BoxList }}>Off-Season Holiday</li>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <div className="Off-Values">
+                      <li className="Off-Values">
                         {selectedCard.details[selectedYear]?.lastMinute ||
                           "N/A"}
-                      </div>
-                      <div style={{ fontSize: BoxList }}>
-                        Last Minute Booking
-                      </div>
+                      </li>
+                      <li style={{ fontSize: BoxList }}>Last Minute Booking</li>
                     </div>
                   </div>
                 </div>

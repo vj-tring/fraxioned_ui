@@ -15,7 +15,6 @@ import Home from '../../pages/home';
 import PropertyListingPage from '../property-listing-page';
 import Booking from '../booking';
 import BookingSummary from '../booking-summary/pages';
-import FooterScreen from '../footerScreen';
 
 const Dashboard: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -62,8 +61,7 @@ const Dashboard: React.FC = () => {
           <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
       </>
-      {/* <Footer /> */}
-      <FooterScreen/>
+      <Footer />
     </>
   );
 };

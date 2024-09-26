@@ -100,10 +100,10 @@
 :global(.MuiOutlinedInput-root) {
     border-radius: 4px;
 }
-/* 
+
 :global(.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline) {
     border-color: #e28f25;
-} */
+}
 
 :global(.MuiInputLabel-root.Mui-focused) {
     color: #e28f25;
