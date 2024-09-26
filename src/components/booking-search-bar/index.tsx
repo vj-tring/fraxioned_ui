@@ -156,7 +156,7 @@ const BookingSearchBar: React.FC = () => {
       const result = await dispatch(bookingSummary(bookingData)).unwrap();
 
       if (result && !result.error) {
-        console.log("Booking summary created successfully:", result);
+        console.log('Booking summary created successfully:', result);
 
         const updatedBookingData = {
           ...bookingData,
@@ -168,26 +168,18 @@ const BookingSearchBar: React.FC = () => {
 
         await dispatch(saveBooking(updatedBookingData));
         navigate("/home/booking-summary");
-      } else {
-        throw new Error(
-          result.message || "An error occurred while processing your booking."
-        );
-      }
-    } catch (error: any) {
-      console.error("Error during booking process:", error);
-      if (error.statusCode === 403) {
-        showSnackbar(
-          error.message ||
-            "An error occurred while processing your booking. Please check your try again..",
-          "error"
-        );
-      } else {
-        showSnackbar(
-          error.message ||
-            "An error occurred while processing your booking. Please try again.",
-          "error"
-        );
-      }
+      }else {
+        // Handle any errors returned in the result
+        throw new Error(result.message || "An error occurred while processing your booking.");
+    } 
+  }
+ catch (error: any) {
+  console.error("Error during booking process:", error);
+  if (error.statusCode === 403) {
+    showSnackbar(error.message || "An error occurred while processing your booking. Please check your try again..", "error");
+  } else {
+    showSnackbar(error.message || "An error occurred while processing your booking. Please try again.", "error");
+  }
     }
   };
 
@@ -205,12 +197,11 @@ const BookingSearchBar: React.FC = () => {
           >
             {" "}
             <PopoverTrigger asChild>
-              <div className="check-in gap-3">
+              <div className="check-in">
                 <CalendarMonthOutlinedIcon
                   className="calenderIcon"
                   sx={{
                     color: "grey",
-
                   }}
                 />
 
@@ -236,12 +227,11 @@ const BookingSearchBar: React.FC = () => {
 
           <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
             <PopoverTrigger>
-              <div className="check-out gap-3">
+              <div className="check-out">
                 <CalendarMonthOutlinedIcon
                   className="calenderIcon"
                   sx={{
                     color: "grey",
-
                   }}
                 />
 

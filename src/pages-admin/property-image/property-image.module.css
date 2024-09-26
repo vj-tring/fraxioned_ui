@@ -1,59 +1,42 @@
 .propertyImageContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 12px;
-  padding: 10px;
-  border-radius: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding: 10px;
+    border-radius: 8px;
 }
 
 .propertyType {
-  display: flex;
-  align-items: center;
-  font-size: 14px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
 }
 
 .colorBox {
-  width: 20px;
-  height: 20px;
-  margin-right: 5px;
-  border-radius: 4px;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    border-radius: 4px;
 }
 
 .propertyName {
-  cursor: pointer;
-  color: #333;
+    cursor: pointer;
+    color: #333;
 }
 
 .propertyName:hover {
-  cursor: pointer;
-  color: #683131;
-  font-weight: bold;
+    cursor: pointer;
+    color: #683131;
+    font-weight: bold;
 }
 
 .propertyName:active {
-  cursor: pointer;
-  color: #683131;
-  font-weight: bold;
+    cursor: pointer;
+    color: #683131;
+    font-weight: bold;
 }
 
 .selected {
-  font-weight: bold;
-}
-
-@media only screen and (max-width: 400px) {
-  .propertyImageContainer {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: initial;
-    gap: 9px !important;
-    padding: 10px;
-  }
-
-  .propertyType {
-    font-size: x-small;
-  }
-  .colorBox {
-    height: 10px;
-  }
+    font-weight: bold;
 }

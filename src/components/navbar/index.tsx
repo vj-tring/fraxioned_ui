@@ -22,10 +22,10 @@ import FormDialog from "../register-form-modal";
 import { ListItemText } from "@mui/material";
 import LockResetOutlinedIcon from "@mui/icons-material/LockResetOutlined";
 import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined";
-import ConfirmationNumberOutlinedIcon from "@mui/icons-material/ConfirmationNumberOutlined";
-import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
-import LiveHelpOutlinedIcon from "@mui/icons-material/LiveHelpOutlined";
-import ContactPageOutlinedIcon from "@mui/icons-material/ContactPageOutlined";
+import ConfirmationNumberOutlinedIcon from '@mui/icons-material/ConfirmationNumberOutlined';
+import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
+import LiveHelpOutlinedIcon from '@mui/icons-material/LiveHelpOutlined';
+import ContactPageOutlinedIcon from '@mui/icons-material/ContactPageOutlined';
 interface CustomNavbarProps {
   logo?: string;
   links?: {
@@ -110,7 +110,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
         bg="light"
         expand="lg"
         className="p-2"
-        // style={{ height: "4.3rem" }}
+      // style={{ height: "4.3rem" }}
       >
         {!isAdminDashboard && (
           <Navbar.Brand href="/home" className="p-2">
@@ -149,24 +149,16 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
         </Navbar.Collapse>
 
         <Nav className="ProfileMenu">
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              backgroundColor: "none",
-            }}
-          >
+          <Box sx={{ display: "flex", alignItems: "center", backgroundColor: "none" }}>
             <IconButton
               onClick={handleClick}
               size="small"
-              sx={{
-                ml: 2,
-                ".MuiIconButton-root:hover": { backgroundColor: "none" },
-              }}
+              sx={{ ml: 2, '.MuiIconButton-root:hover': { backgroundColor: "none" } }}
               aria-controls={open ? "account-menu" : undefined}
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
               disableRipple
+
             >
               <Box
                 display="flex"
@@ -174,6 +166,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                 sx={{
                   borderRadius: 1,
                 }}
+
               >
                 <Typography
                   variant="body2"
@@ -184,6 +177,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                     color: "#00636D",
                     textTransform: "uppercase",
                   }}
+
                 >
                   {storedName}
                 </Typography>
@@ -244,11 +238,12 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               },
             }}
           >
+
+
             {!isAdmin && (
               <>
                 <MenuItem
                   // onClick={handleResetPasswordClick}
-
                   style={{
                     height: "2.4rem",
                   }}
@@ -323,6 +318,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                   </ListItemIcon>
                   <ListItemText>Reset</ListItemText>
                 </MenuItem>
+
               </>
             )}
 
@@ -353,21 +349,21 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               }}
             />
             {isAdmin && (
-              <MenuItem
-                onClick={handleResetPasswordClick}
-                style={{
-                  height: "2.4rem",
-                }}
-              >
-                <ListItemIcon>
-                  <LockResetOutlinedIcon
-                    style={{
-                      width: "80%",
-                    }}
-                  />
-                </ListItemIcon>
-                <ListItemText>Reset</ListItemText>
-              </MenuItem>
+            <MenuItem
+              onClick={handleResetPasswordClick}
+              style={{
+                height: "2.4rem",
+              }}
+            >
+              <ListItemIcon>
+                <LockResetOutlinedIcon
+                  style={{
+                    width: "80%",
+                  }}
+                />
+              </ListItemIcon>
+              <ListItemText>Reset</ListItemText>
+            </MenuItem>
             )}
 
             <MenuItem

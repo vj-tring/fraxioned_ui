@@ -80,13 +80,6 @@ svg {
   background-size: cover;
   background-position: center;
   opacity: 80%;
-
-  /* background: rgba(255, 255, 255, 0.192); */
-  backdrop-filter: blur(30px);
-  /* height: 250px; */
-  /* width: 600px; */
-  /* border-radius: 15px; */
-  /* border: 1px solid rgba(43, 43, 43, 0.568); */
 }
 
 .icons {

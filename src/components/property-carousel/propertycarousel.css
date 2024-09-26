@@ -15,7 +15,7 @@
   display: flex;
 }
 .calenderIcon {
-  margin-top: 7px;
+  margin-top: 4px;
   /* position: absolute; */
   /* visibility: hidden; */
 }
@@ -27,7 +27,6 @@
 }
 .btn-book {
   border-radius: 50px;
-  
 }
 
 @media only screen and (max-width: 1300px) {
@@ -330,10 +329,9 @@
   display: flex;
   /* border: 1px solid grey; */
   padding: 5px;
-  text-transform: uppercase;
+
   /* flex-direction: row-reverse !important; */
   align-items: center;
-  text-wrap: balance;
 }
 .BlueHead {
   margin: 0 !important;
@@ -449,7 +447,7 @@
   /* opacity: 1; */
   font-size: x-small !important;
   text-transform: uppercase;
-  font-weight: 700;
+
   text-wrap: balance;
 }
 
@@ -467,10 +465,9 @@
   border: 1px solid #7c7875 !important;
   color: #7c7875 !important;
   margin-left: 0.5rem;
-  /* justify-content: end !important; */
   /* box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px; */
 }
-.property-names {
+.property-name {
   font-size: 0.8rem !important;
   /* padding-top: px; */
 }
@@ -533,38 +530,5 @@
     display: flex;
     /* flex-direction: column; */
     flex-wrap: wrap;
-  }
-
-  .night-count li:nth-child(2) {
-    /* opacity: 1; */
-    font-size: xx-small !important;
-    text-transform: uppercase;
-    font-weight: 700;
-    max-width: 120px;
-    text-wrap: wrap !important;
-  }
-  .Off-Values {
-    font-size: 10px !important;
-    font-weight: 600 !important;
-  }
-  .HomeBtn {
-    margin-left: 20px;
-    margin-top: 15px;
-    font-size: 27px !important;
-  }
-  .calenderIcon {
-    margin-top: 10px !important;
-    /* position: absolute; */
-    /* visibility: hidden; */
-  }
-  .AddHome {
-    margin-top: 15px;
-  }
-  .navbar-toggler {
-    border: none;
-  }
-  .navbar-toggler:focus {
-    border: none !important;
-    outline: none !important;
   }
 }
