@@ -24,19 +24,13 @@ const names = [
   { label: "Pets", description: "Bringing a service?", icon: <PetsIcon /> },
 ];
 
-
-
 interface MultipleSelectProps {
   showIcons?: boolean;
-  initialCount: number;
-  initialCounts?: { [key: string]: number };
-  onChange: (newCount: number) => void;
-  onClose: () => void;
 }
 
-
-const MultipleSelect: React.FC<MultipleSelectProps> = ({ showIcons = true, initialCount, onChange, onClose, initialCounts, }) => {
-
+const MultipleSelect: React.FC<MultipleSelectProps> = ({
+  showIcons = true,
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
@@ -49,19 +43,13 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({ showIcons = true, initi
     (state: RootState) => state.bookings.successMessage
   );
   const [counts, setCountsLocal] = useState<{ [key: string]: number }>({
-    Adults: initialCounts?.Adults || 1,
-    Children: initialCounts?.Children || 0,
-    Pets: initialCounts?.Pets || 0,
+    Adults: 1,
+    Children: 0,
+    Pets: 0,
   });
   const [validationMessage, setValidationMessage] = useState<string>("");
   const [noOfguest, setNoOfGuestsAllowed] = useState<number>(0);
   const [noOfPets, setNoOfPetsAllowed] = useState<number>(0);
-
-  useEffect(() => {
-    if (initialCounts) {
-      setCountsLocal(initialCounts);
-    }
-  }, [initialCounts]);
 
   useEffect(() => {
     validateCounts();
@@ -109,53 +97,43 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({ showIcons = true, initi
   };
 
   const getTotalGuests = () => {
-    return showIcons ? initialCount : counts.Adults + counts.Children;
+    return counts.Adults + counts.Children;
   };
+
   const handleCountChange = (name: string, action: "increase" | "decrease") => {
     if (!selectedPropertyLimits) {
       setValidationMessage("Please select a property before making changes.");
+
       return;
     }
-
-    const { noOfGuestsAllowed, noOfPetsAllowed } = selectedPropertyLimits;
+    const maxLimit =
+      name === "Pets"
+        ? selectedPropertyLimits.noOfPetsAllowed
+        : selectedPropertyLimits.noOfGuestsAllowed;
     const currentCount = counts[name];
-    let newCount = currentCount;
-
+    let newCount: number = currentCount;
     if (action === "increase") {
-      if (name === "Pets") {
-        if (currentCount >= noOfPetsAllowed) {
-          setValidationMessage(`You can't have more than ${noOfPetsAllowed} pets.`);
-          return;
-        }
-      } else {
-        const totalGuests = counts.Adults + counts.Children;
-        if (totalGuests >= noOfGuestsAllowed) {
-          setValidationMessage(`You can't have more than ${noOfGuestsAllowed} guests.`);
-          return;
-        }
-      }
-      newCount = currentCount + 1;
-    } else {
-      if (name === "Adults" && currentCount <= 1) {
-        setValidationMessage("At least one adult is required.");
+      if (name === "Pets" && newCount > maxLimit - 1) {
+        setValidationMessage(`You can't have more than ${maxLimit} pets.`);
         return;
+      } else if (
+        name !== "Pets" &&
+        counts.Adults + counts.Children > maxLimit - 1
+      ) {
+        setValidationMessage(`You can't have more than ${maxLimit} guests.`);
+        return;
+      } else {
+        newCount = currentCount + 1;
       }
+    } else {
       newCount = Math.max(currentCount - 1, 0);
     }
 
+    dispatch(updateCount({ name, count: newCount }));
     setCountsLocal((prevCounts) => ({
       ...prevCounts,
       [name]: newCount,
     }));
-
-    dispatch(updateCount({ name, count: newCount }));
-
-    const newTotalGuests = name === "Pets" 
-      ? counts.Adults + counts.Children 
-      : (counts.Adults + counts.Children - currentCount + newCount);
-
-    onChange(newTotalGuests);
-    validateCounts();
   };
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -180,7 +158,6 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({ showIcons = true, initi
   }, [open]);
 
   return (
-
     <Box sx={{ width: showIcons ? "20%" : "100%" }}>
       <Button
         disableRipple
@@ -237,19 +214,22 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({ showIcons = true, initi
               }}
               disableRipple
             >
-
-            <div className={`d-flex justify-content-between align-items-center ${showIcons ? 'gap-2.5' : 'gap-2.5'} w-100 monsterrat`}>
-            {showIcons && (
-                <Avatar
-                  sx={{
-                    backgroundColor: "#DF9526",
-                  }}
-                  className="monsterrat"
-                >
-                  {item.icon}
-                </Avatar>
-              )}
-                 <div className={showIcons ? "w-40" : ""}>
+              <div
+                className={`d-flex justify-content-between align-items-center ${
+                  showIcons ? "gap-2.5" : "gap-2.5"
+                } w-100 monsterrat`}
+              >
+                {showIcons && (
+                  <Avatar
+                    sx={{
+                      backgroundColor: "#DF9526",
+                    }}
+                    className="monsterrat "
+                  >
+                    {item.icon}
+                  </Avatar>
+                )}
+                <div className={showIcons ? "w-40" : ""}>
                   <b>{item.label}</b>
                   <p className="DescFont monsterrat">{item.description}</p>
                 </div>
