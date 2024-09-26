@@ -14,18 +14,24 @@ import ResetPasswordModal from "../reset-password-modal";
 import { NavLink } from "react-router-dom";
 import useNavbarHandler from "./navbar-handler";
 import Typography from "@mui/material/Typography";
-import "./navbar.css";
+import "./navbar.module.css";
+import CloseIcon from "@mui/icons-material/Close";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/reducers";
 import { useLocation } from "react-router-dom";
 import FormDialog from "../register-form-modal";
-import { ListItemText } from "@mui/material";
+import { ListItemText, Modal } from "@mui/material";
 import LockResetOutlinedIcon from "@mui/icons-material/LockResetOutlined";
+import styles from "./navbar.module.css";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined";
 import ConfirmationNumberOutlinedIcon from "@mui/icons-material/ConfirmationNumberOutlined";
 import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 import LiveHelpOutlinedIcon from "@mui/icons-material/LiveHelpOutlined";
 import ContactPageOutlinedIcon from "@mui/icons-material/ContactPageOutlined";
+import UserForm from "@/pages-admin/grid/user-grid/edit-form/userform";
+import EditForm from "@/pages-admin/grid/user-grid/edit-form/useredit";
+import { getUserById } from "@/api";
 interface CustomNavbarProps {
   logo?: string;
   links?: {
@@ -47,6 +53,15 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
 }) => {
   const location = useLocation();
   const isAdminDashboard = location.pathname.startsWith("/admin");
+  const [showUserForm, setShowUserForm] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [userData, setUserData] = useState<any>(null);
+  const [userFormData, setUserFormData] = useState<any>(null);
+
+  const userFormStyles = {
+    userForm: styles.userForm,
+    header: styles.userFormHeader,
+  };
 
   const {
     showInviteModal,
@@ -71,6 +86,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
     const firstName = userData?.firstName || "";
     const lastName = userData?.lastName || "";
     setStoredName(`${firstName} ${lastName}`);
+    setUserData(userData);
   }, []);
 
   const open = Boolean(anchorEl);
@@ -103,7 +119,38 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
   const handleCloseNewAccountModal = () => {
     setOpenNewAccountDialog(false);
   };
+  const handleProfileClick = () => {
+    const userId = userData?.id || 0;
+    const fetchUserData = async () => {
+      try {
+        const response = await getUserById(userId);
+        console.log("user Response", response.data.user);
+        setUserFormData(response.data.user);
+        console.log("userFormData", userFormData);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
 
+    if (userId) {
+      fetchUserData();
+    }
+    setShowUserForm(true);
+    handleClose();
+  };
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleUpdateSuccess = () => {
+    setIsEditing(false);
+  };
+
+  const handleCloseUserForm = () => {
+    setShowUserForm(false);
+    setIsEditing(false);
+  };
   return (
     <>
       <Navbar
@@ -247,6 +294,21 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
             {!isAdmin && (
               <>
                 <MenuItem
+                  onClick={handleProfileClick}
+                  style={{
+                    height: "2.4rem",
+                  }}
+                >
+                  <ListItemIcon>
+                    <AccountCircleOutlinedIcon
+                      style={{
+                        width: "80%",
+                      }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText>Profile</ListItemText>
+                </MenuItem>
+                <MenuItem
                   // onClick={handleResetPasswordClick}
 
                   style={{
@@ -328,6 +390,23 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
 
             {isAdmin && (
               <MenuItem
+                onClick={handleProfileClick}
+                style={{
+                  height: "2.4rem",
+                }}
+              >
+                <ListItemIcon>
+                  <AccountCircleOutlinedIcon
+                    style={{
+                      width: "80%",
+                    }}
+                  />
+                </ListItemIcon>
+                <ListItemText>Profile</ListItemText>
+              </MenuItem>
+            )}
+            {isAdmin && (
+              <MenuItem
                 onClick={handleAddAccountClick}
                 style={{
                   height: "2.4rem",
@@ -389,6 +468,67 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
         </Nav>
       </Navbar>
 
+      <Modal
+        open={showUserForm}
+        onClose={handleCloseUserForm}
+        aria-labelledby="user-form-modal"
+        aria-describedby="user-form-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 1200,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+          }}
+        >
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseUserForm}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          {!isEditing ? (
+            <>
+              <div className={styles.header}>
+                <h2>My Profile</h2>
+              </div>
+              <UserForm
+                userId={userData?.id}
+                onEditClick={handleEditClick}
+                header=""
+                editButtonName="Edit"
+                customStyles={userFormStyles}
+                showActiveStatus={false}
+              />
+            </>
+          ) : (
+            <>
+              <div className={styles.header}>
+                <h2>Edit</h2>
+              </div>
+              <EditForm
+                user={userFormData}
+                onClose={() => setIsEditing(false)}
+                onUserUpdated={handleUpdateSuccess}
+                showCloseIcon={false}
+                formTitle={""}
+              />
+            </>
+          )}
+        </Box>
+      </Modal>
+
       <InviteModal show={showInviteModal} onHide={handleCloseInviteModal} />
       <ConfirmationModal
         show={showLogoutModal}
@@ -398,6 +538,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
         message="Are you sure you want to log out?"
         confirmLabel="Logout"
         cancelLabel="Cancel"
+        children={undefined}
       />
       <FormDialog
         open={openNewAccountDialog}
