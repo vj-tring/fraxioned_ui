@@ -5,7 +5,7 @@
   margin-bottom: 10px;
 }
 
-.MultiItems:hover{
+.MultiItems:hover {
   background: none !important;
 }
 .MutliselectBtn:hover {
@@ -34,12 +34,8 @@
 .dynamicMsg {
   font-size: 12px;
   font-weight: 400;
-  padding: 12px 19px 10px 40px ;
+  padding: 12px 19px 10px 40px;
 }
-
-/* .MultiIte {
-  padding-top: 9px;
-} */
 
 .css-1tzgs8d-MuiAvatar-root {
   background: none !important;
@@ -52,15 +48,15 @@
 
 .itemLabel {
   padding-top: 13px !important;
-  color:rgb(74, 74, 74) ;
+  color: rgb(74, 74, 74);
 }
 
-.DateHead1{
+.DateHead1 {
   margin-right: 48px !important;
   /* font-weight: 600 !important; */
 }
 
-.DateHead4{
+.DateHead4 {
   text-transform: capitalize;
   color: black;
   margin-right: 48px !important;
@@ -108,14 +104,11 @@
   justify-content: center;
 }
 
-
-
 .Inc-circle.enabled {
   background-color: #ffffff; /* Original background color */
   cursor: pointer;
   opacity: 1;
 }
-
 
 .Ad-count {
   font-size: 14px;
@@ -133,21 +126,19 @@
   margin: 5px;
 }
 
-.validationMsg{
- border-top: '1px solid #ddd';
- font-size: 12px;
- font-weight: 500;
- text-align: -webkit-match-parent;
- padding: 12px 19px 5px 40px ;
+.validationMsg {
+  border-top: "1px solid #ddd";
+  font-size: 12px;
+  font-weight: 500;
+  text-align: -webkit-match-parent;
+  padding: 12px 19px 5px 40px;
 }
-
 
 .css-ur8j0y-MuiButtonBase-root-MuiMenuItem-root:hover {
   -webkit-text-decoration: none;
   text-decoration: none;
-  background-color:transparent !important;
+  background-color: transparent !important;
 }
-
 
 /* Styles for the increase button */
 button.monsterrat {
@@ -164,11 +155,31 @@ button.monsterrat:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
-.circleplusdisable{
+.circleplusdisable {
   color: #c7c7c7;
   cursor: pointer;
 }
-.circleplus{
+.circleplus {
   color: grey;
   cursor: pointer;
+}
+
+@media only screen and (max-width: 400px) {
+  .GuestCard {
+    width: 350px !important;
+  }
+  .GuestIcon {
+    width: 30px !important;
+    height: 30px !important;
+    font-size: small !important;
+  }
+  .DescFont{
+    font-size: x-small !important;
+  }
+  .labelItem{
+    font-size: small !important;
+  }
+  .GuestMenuItem{
+    margin: 1px !important;
+  }
 }
