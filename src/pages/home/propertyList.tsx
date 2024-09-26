@@ -9,7 +9,7 @@ import { resetLimits } from "@/store/slice/auth/propertyGuestSlice";
 import { clearDates } from "@/store/slice/datePickerSlice";
 import { User } from "@/store/model";
 import { propertyImageapi, getProperties } from "@/api"; // Ensure getProperties is imported
-
+import { fetchProperties } from "@/store/slice/auth/property-slice";
 interface Property {
   id: number;
   name?: string;
@@ -41,6 +41,8 @@ interface RootState {
 const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
   paddingLeft = false,
 }) => {
+  // const userId = useSelector((state: any) => state.auth.user?.id);
+  const additionalPropertiesLength = 4;
   const { cards: properties } = useSelector(
     (state: RootState) => state.properties
   );
@@ -63,23 +65,21 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
     }
   };
 
+  console.log("properties", properties);
   const fetchAdditionalProperties = async () => {
     try {
       const response = await getProperties();
-
-      // console.log("API Response:", response);
 
       if (!Array.isArray(response.data)) {
         throw new Error("Unexpected response format");
       }
 
       const allProperties = response.data as Property[];
-      // console.log("allprop", allProperties);
       const numberOfUserProperties = properties.length;
-      // let numberOfPropertiesToShow = 0;
 
-      const numberOfPropertiesToShow = Math.min(Math.max(5 - numberOfUserProperties, 1), 4);
-
+      console.log("proplength", numberOfUserProperties);
+      const numberOfPropertiesToShow = 5 - numberOfUserProperties;
+      console.log("numberOfPropertiesToShow", numberOfPropertiesToShow);
 
       setAdditionalProperties(allProperties.slice(0, numberOfPropertiesToShow));
     } catch (error) {
@@ -90,9 +90,12 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
   useEffect(() => {
     dispatch(resetLimits());
     dispatch(clearDates());
+
     fetchImages();
     fetchAdditionalProperties();
   }, [dispatch]);
+
+  // console.log("userid", userId);
 
   const scroll = (scrollOffset: number) => {
     if (carouselRef.current) {
@@ -103,8 +106,8 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
     }
   };
 
-  const Shadow =
-    properties.length >= 4 ? "rgba(0, 0, 0, 0.1) 1px 1px 2px 1px" : "none";
+  // const Shadow =
+  //   properties.length >= 4 ? "rgba(0, 0, 0, 0.1) 1px 1px 2px 1px" : "none";
 
   const formatCardName = (name: string) => {
     return name.replace(/\s+\(.*\)/, "");
@@ -193,26 +196,28 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
       <a href="https://www.fraxioned.com/" target="_blank">
         <div className="AddProps ">
           {properties.length <= 4 &&
-            additionalProperties.map((property) => {
-              const propertyImage = images.find(
-                (img) => img.property.id === property.id
-              );
-              return (
-                <Card
-                  key={property.id}
-                  imageUrl={propertyImage?.imageUrl || image1}
-                  title={formatCardName(property.propertyName || "No Title")}
-                  text={property.address || "Address not available"}
-                  share={
-                    property.propertyShare
-                      ? `You Own ${property.share}/${property.propertyShare}th share`
-                      : "Share information not available"
-                  }
-                  // id={property.id}
-                  tag="Hot Listing" // Pass the tag here
-                />
-              );
-            })}
+            additionalProperties
+              .slice(0, additionalPropertiesLength - properties.length)
+              .map((property) => {
+                const propertyImage = images.find(
+                  (img) => img.property.id === property.id
+                );
+                return (
+                  <Card
+                    key={property.id}
+                    imageUrl={propertyImage?.imageUrl || image1}
+                    title={formatCardName(property.propertyName || "No Title")}
+                    text={property.address || "Address not available"}
+                    share={
+                      property.propertyShare
+                        ? `You Own ${property.share}/${property.propertyShare}th share`
+                        : "Share information not available"
+                    }
+                    // id={property.id}
+                    tag="Hot Listing" // Pass the tag here
+                  />
+                );
+              })}
         </div>
       </a>
     </div>
