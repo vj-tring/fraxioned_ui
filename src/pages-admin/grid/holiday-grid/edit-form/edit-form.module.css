@@ -220,9 +220,9 @@
     transition: all 0.3s ease;
 }
 
-:global(.MuiOutlinedInput-root:hover) {
+/* :global(.MuiOutlinedInput-root:hover) {
     box-shadow: 0 2px 8px rgba(255, 107, 0, 0.1);
-}
+} */
 
 /* :global(.MuiOutlinedInput-root.Mui-focused) {
     box-shadow: 0 2px 8px rgba(255, 107, 0, 0.2);
