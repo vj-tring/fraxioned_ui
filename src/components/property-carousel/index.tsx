@@ -169,7 +169,7 @@ export default function BasicSelect() {
   const BoxMargin =
     cards.length === 1 ? "0px" : cards.length === 2 ? "0px" : "8px";
   const cardItemHeight =
-    cards.length === 1 ? "232px" : cards.length === 2 ? "232px" : "270px";
+    cards.length === 1 ? "232px" : cards.length === 2 ? "232px" : "280px";
   const cardNameWeight =
     cards.length === 1 ? "600" : cards.length === 2 ? "600" : "600";
 
@@ -291,13 +291,13 @@ export default function BasicSelect() {
                           sx={{
                             flex: "0 0 auto",
                             margin: "2px",
-                            padding: "5px",
+                            // padding: "5px",
                             display: "flex",
                             justifyContent: "center",
                           }}
                         >
                           <div className="d-flex flex-column align-items-center p-1.5">
-                            <h4 className="property-name">
+                            <h4 className="property-names">
                               {formatCardName(card.name)}
                             </h4>
                           </div>
@@ -353,30 +353,33 @@ export default function BasicSelect() {
                       />
                     </span>
                   </div>
-                  <div className="d-flex justify-content-between py-2 align-items-center pt-0 MyAvaNigt">
-                    <div className="d-flex justify-content-center">
-                      {years.map((year) => (
-                        <Button
-                          disableRipple
-                          key={year}
-                          onClick={() => handleYearClick(year)}
-                          className={`card-btn1 ${
-                            selectedYear === year ? "active" : ""
-                          }`}
-                          sx={{
-                            margin: "2px",
-                            padding: "4px",
-                            paddingTop: "7px",
-                            borderRadius: 16,
-                            ...buttonSize,
-                          }}
-                        >
-                          {year}
-                        </Button>
-                      ))}
+                  <div className="   mt-3  AvailYear">
+                    <div className="d-flex justify-content-between py-2 align-items-center pt-0 MyAvaNigt">
+                      <div className="d-flex justify-content-center">
+                        {years.map((year) => (
+                          <Button
+                            disableRipple
+                            key={year}
+                            onClick={() => handleYearClick(year)}
+                            className={`card-btn1 ${
+                              selectedYear === year ? "active" : ""
+                            }`}
+                            sx={{
+                              margin: "2px",
+                              padding: "4px",
+                              paddingTop: "7px",
+                              borderRadius: 16,
+                              ...buttonSize,
+                            }}
+                          >
+                            {year}
+                          </Button>
+                        ))}
+                      </div>
                     </div>
+                    <p className="AvailableNight">My Available Nights</p>
                   </div>
-                  <p className="AvailableNight">My Available Nights</p>
+
                   <div
                     className="box d-flex justify-content-around py-1"
                     style={{
