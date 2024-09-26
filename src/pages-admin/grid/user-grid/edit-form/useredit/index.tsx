@@ -62,9 +62,10 @@ interface EditFormProps {
     onClose: () => void;
     onUserUpdated: () => void;
     showCloseIcon?: boolean; 
+    formTitle: string;
 }
 
-const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated, showCloseIcon = true }) => {
+const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated, showCloseIcon = true, formTitle = "Edit User" }) => {
     const [formData, setFormData] = useState<UserData>(user);
     const [error, setError] = useState<string | null>(null);
     const [roles, setRoles] = useState<Role[]>([]);
@@ -157,7 +158,7 @@ const EditForm: React.FC<EditFormProps> = ({ user, onClose, onUserUpdated, showC
     return (
         <div className={styles.editFormContainer}>
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                <Typography variant="h6" className={styles.formTitle}>Edit User</Typography>
+                <Typography variant="h6" className={styles.formTitle}>{formTitle}</Typography>
                 {showCloseIcon && (
                     <IconButton onClick={onClose} aria-label="close" className={styles.closeButton}>
                         <CloseIcon />

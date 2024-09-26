@@ -14,7 +14,7 @@ import ResetPasswordModal from "../reset-password-modal";
 import { NavLink } from "react-router-dom";
 import useNavbarHandler from "./navbar-handler";
 import Typography from "@mui/material/Typography";
-import "./navbar.css";
+import "./navbar.module.css";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/reducers";
@@ -22,8 +22,8 @@ import { useLocation } from "react-router-dom";
 import FormDialog from "../register-form-modal";
 import { ListItemText, Modal } from "@mui/material";
 import LockResetOutlinedIcon from "@mui/icons-material/LockResetOutlined";
-import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import styles from './navbar.module.css';
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined";
 import ConfirmationNumberOutlinedIcon from "@mui/icons-material/ConfirmationNumberOutlined";
 import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
@@ -57,6 +57,11 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState<any>(null);
   const [userFormData, setUserFormData] = useState<any>(null);
+
+  const userFormStyles = {
+    userForm: styles.userForm,
+    header: styles.userFormHeader,
+  };
 
   const {
     showInviteModal,
@@ -301,7 +306,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                       }}
                     />
                   </ListItemIcon>
-                  <ListItemText>Profile</ListItemText >
+                  <ListItemText>Profile</ListItemText>
                 </MenuItem>
                 <MenuItem
                   // onClick={handleResetPasswordClick}
@@ -493,14 +498,26 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
             <CloseIcon />
           </IconButton>
           {!isEditing ? (
-            <UserForm userId={userData?.id} onEditClick={handleEditClick} header="Profile" editButtonName="Edit" />
+            <><div className={styles.header}><h2>My Profile</h2></div>
+              <UserForm
+                userId={userData?.id}
+                onEditClick={handleEditClick}
+                header=""
+                editButtonName="Edit"
+                customStyles={userFormStyles}
+                showActiveStatus = {false}
+              />
+            </>
           ) : (
-            <EditForm
-              user={userFormData}
-              onClose={() => setIsEditing(false)}
-              onUserUpdated={handleUpdateSuccess}
-              showCloseIcon={false}
-            />
+            <><div className={styles.header}><h2>Edit</h2></div>
+              <EditForm
+                user={userFormData}
+                onClose={() => setIsEditing(false)}
+                onUserUpdated={handleUpdateSuccess}
+                showCloseIcon={false}
+                formTitle={""}
+              />
+            </>
           )}
         </Box>
       </Modal>

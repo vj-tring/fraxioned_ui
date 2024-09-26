@@ -11,7 +11,7 @@ import {
   Clock,
 } from "lucide-react";
 import defaultProfile from "../../../../../assets/images/profile.jpeg";
-import styles from "./userform.module.css";
+import defaultStyles from "./userform.module.css";
 
 interface User {
   id: number;
@@ -42,9 +42,28 @@ interface UserFormProps {
   onEditClick: () => void;
   header: string;
   editButtonName: string;
+  showActiveStatus: boolean;
+  customStyles?: {
+    userForm?: string;
+    header?: string;
+    editButton?: string;
+    content?: string;
+    profileSection?: string;
+    imageContainer?: string;
+    profileImage?: string;
+    role?: string;
+    status?: string;
+    activeStatus?: string;
+    inactiveStatus?: string;
+    detailsSection?: string;
+    detailItem?: string;
+    error?: string;
+  };
+  
 }
 
-const UserForm: React.FC<UserFormProps> = ({ userId, onEditClick, header = "User Details", editButtonName = "Edit Profile" }) => {
+const UserForm: React.FC<UserFormProps> = ({ userId, onEditClick, header = "User Details", editButtonName = "Edit Profile", customStyles = {}, showActiveStatus = true
+}) => {
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -61,6 +80,23 @@ const UserForm: React.FC<UserFormProps> = ({ userId, onEditClick, header = "User
 
     fetchUser();
   }, [userId]);
+  const styles = {
+    userForm: customStyles.userForm || defaultStyles.userForm,
+    header: customStyles.header || defaultStyles.header,
+    editButton: customStyles.editButton || defaultStyles.editButton,
+    content: customStyles.content || defaultStyles.content,
+    profileSection: customStyles.profileSection || defaultStyles.profileSection,
+    imageContainer: customStyles.imageContainer || defaultStyles.imageContainer,
+    profileImage: customStyles.profileImage || defaultStyles.profileImage,
+    role: customStyles.role || defaultStyles.role,
+    status: customStyles.status || defaultStyles.status,
+    activeStatus: customStyles.activeStatus || defaultStyles.activeStatus,
+    inactiveStatus: customStyles.inactiveStatus || defaultStyles.inactiveStatus,
+    detailsSection: customStyles.detailsSection || defaultStyles.detailsSection,
+    detailItem: customStyles.detailItem || defaultStyles.detailItem,
+    error: customStyles.error || defaultStyles.error,
+  };
+
 
   if (error) return <div className={styles.error}>{error}</div>;
   if (!user) return <div className={styles.error}>User not found</div>;
@@ -87,13 +123,13 @@ const UserForm: React.FC<UserFormProps> = ({ userId, onEditClick, header = "User
             {user.firstName} {user.lastName}
           </h3>
           <p className={styles.role}>{user.role.roleName}</p>
-          <p
+          {showActiveStatus && (<p
             className={`${styles.status} ${
               user.isActive ? styles.activeStatus : styles.inactiveStatus
             }`}
           >
             {user.isActive ? "Active" : "Inactive"}
-          </p>
+          </p>)}
         </div>
         <div className={styles.detailsSection}>
           <div className={styles.detailItem}>
