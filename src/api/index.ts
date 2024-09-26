@@ -25,10 +25,6 @@ export const getRoles = () =>
     axiosInstance.get('/v1/roles');
 
 
-export const cancelBooking = (bookingId: number, userId: number) =>
-    axiosInstance.post(`/v1/bookings/${bookingId}/${userId}/cancel`);
-
-
 //sendinvite api
 export const sendInvite = async (payload: any) =>
     axiosInstance.post('/v1/authentication/invite', payload);
@@ -74,8 +70,18 @@ export const propertyseasonholidaydelete = (id: number) =>
 export const getPropertySeasonHoliday = (propertyId: number) =>
     axiosInstance.get(`/v1/property-season-holidays/property/${propertyId}`);
 
+//create booking
 export const createBooking = (bookingData: void) =>
     axiosInstance.post(`/v1/bookings/booking`, bookingData);
+
+//cancel Booking
+export const cancelBooking = (bookingId: number, userId: number) =>
+    axiosInstance.post(`/v1/bookings/${bookingId}/${userId}/cancel`);
+
+//modify Booking
+
+export const modifyBooking = (bookingId: number, updatedBookingData: any) =>
+    axiosInstance.patch(`/v1/bookings/booking/${bookingId}`, updatedBookingData);
 
 //transaction details
 export const createBookingSummary = (bookingData: void) =>
@@ -204,5 +210,13 @@ export const propertyspacetypesapi = () =>
 
 export const getpropertycodes = () =>
     axiosInstance.get(`/v1/property-codes`);
+
+export const userbookingCancelapi = (id: number, user: number) => {
+    return axiosInstance.post(`/v1/bookings/${id}/${user}/cancel`);
+};
+
+
+
+
 
 

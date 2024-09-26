@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { getBookings, userdetails, getProperties } from '@/api';
+import { getBookings, userdetails, getProperties, userbookingCancelapi } from '@/api';
 import styles from './bookingsgrid.module.css';
 import { Alert, Snackbar, IconButton, Paper, InputBase, Button, Link } from '@mui/material';
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import SearchIcon from '@mui/icons-material/Search';
 import ConfirmationModal from '@/components/confirmation-modal';
 import { ClearIcon } from '@mui/x-date-pickers/icons';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import ViewBookings from '@/components/userbooking-form';
+
 
 interface User {
     id: number;
@@ -29,6 +32,7 @@ interface Booking {
     checkoutDate: string;
     totalNights: number;
     noOfGuests: number;
+    isLastMinuteBooking: number;
     noOfPets: number;
     isCancelled: boolean;
     isCompleted: boolean;
@@ -48,6 +52,9 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [bookingToDelete, setBookingToDelete] = useState<Booking | null>(null);
     const [filterValue, setFilterValue] = useState('');
+    const [selectedBookingId, setSelectedBookingId] = useState<number | null>(null);
+    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const [showSuccessSnackbar, setShowSuccessSnackbar] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -76,6 +83,7 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
                     isCancelled: booking.isCancelled,
                     isCompleted: booking.isCompleted,
                     cleaningFee: booking.cleaningFee,
+                    isLastMinuteBooking: booking.isLastMinuteBooking === 1,
                     petFee: booking.petFee,
                     userId: booking.user.id,
                     propertyId: booking.property.id,
@@ -121,14 +129,40 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
         setShowDeleteConfirmation(true);
     };
 
+
+    const handleViewClick = (id: number) => {
+        setSelectedBookingId(id);
+        setIsViewModalOpen(true);
+    };
+
+    const handleCloseViewModal = () => {
+        setIsViewModalOpen(false);
+        setSelectedBookingId(null);
+    };
+
+
     const handleConfirmDelete = async () => {
         if (bookingToDelete === null) return;
 
-        console.log('Delete booking with id:', bookingToDelete.id);
+        try {
+            await userbookingCancelapi(bookingToDelete.id, bookingToDelete.userId);
+
+            const updatedBookings = bookings.map(booking =>
+                booking.id === bookingToDelete.id ? { ...booking, isCancelled: true } : booking
+            );
+            setBookings(updatedBookings);
+            setFilteredBookings(updatedBookings);
+
+            setShowSuccessSnackbar(true);
+        } catch (err) {
+            setError('Failed to cancel the booking. Please try again.');
+            setShowErrorSnackbar(true);
+        }
 
         setShowDeleteConfirmation(false);
         setBookingToDelete(null);
     };
+
 
     const handleCalendarClick = () => {
         navigate('/admin/bookings')
@@ -146,6 +180,7 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
             'Property Name',
             'Check-in Date',
             'Check-out Date',
+            'LastMinuteBooking',
             'Total Nights',
             'Number of Guests',
             'Number of Pets',
@@ -161,6 +196,7 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
                 booking.bookingId,
                 booking.userName,
                 booking.propertyName,
+                booking.isLastMinuteBooking,
                 booking.checkinDate,
                 booking.checkoutDate,
                 booking.totalNights,
@@ -187,23 +223,47 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
     };
 
     const columns: GridColDef[] = [
-        { field: 'bookingId', headerName: 'Booking ID', width: 150, align: 'center', headerAlign: 'center' },
-        { field: 'userName', headerName: 'User Name', width: 150, align: 'center', headerAlign: 'center' },
-        { field: 'propertyName', headerName: 'Property Name', width: 200, align: 'center', headerAlign: 'center' },
-        { field: 'checkinDate', headerName: 'Check-in Date', width: 220, align: 'center', headerAlign: 'center' },
-        { field: 'checkoutDate', headerName: 'Check-out Date', width: 200, align: 'center', headerAlign: 'center' },
-        { field: 'isCancelled', headerName: 'Cancelled', width: 100, align: 'center', headerAlign: 'center', renderCell: (params) => (params.row.isCancelled ? 'Yes' : 'No') },
+        { field: 'bookingId', headerName: 'Booking ID', width: 120, align: 'center', headerAlign: 'center' },
+        { field: 'userName', headerName: 'User Name', width: 120, align: 'center', headerAlign: 'center' },
+        { field: 'propertyName', headerName: 'Property Name', width: 170, align: 'center', headerAlign: 'center' },
+        { field: 'checkinDate', headerName: 'Check-in Date', width: 190, align: 'center', headerAlign: 'center' },
+        { field: 'checkoutDate', headerName: 'Check-out Date', width: 150, align: 'center', headerAlign: 'center' },
+        {
+            field: 'isLastMinuteBooking',
+            headerName: 'Last Min Booking',
+            width: 130,
+            align: 'center',
+            headerAlign: 'center',
+            renderCell: (params) => (params.row.isLastMinuteBooking ? 'Yes' : 'No')
+        },
+        { field: 'isCancelled', headerName: 'Cancelled', width: 90, align: 'center', headerAlign: 'center', renderCell: (params) => (params.row.isCancelled ? 'Yes' : 'No') },
         { field: 'isCompleted', headerName: 'Completed', width: 120, align: 'center', headerAlign: 'center', renderCell: (params) => (params.row.isCompleted ? 'Yes' : 'No') },
         {
             field: 'actions',
             headerName: 'Actions',
-            width: 120,
+            width: 180,
             renderCell: (params) => (
                 <>
-                    <IconButton aria-label="edit" color="primary" onClick={() => handleEditClick(params.row.id)}>
+                    <IconButton
+                        aria-label="view"
+                        color="primary"
+                        onClick={() => handleViewClick(params.row.id)}
+                    >
+                        <VisibilityIcon />
+                    </IconButton>
+                    <IconButton
+                        aria-label="edit"
+                        color="primary"
+                        onClick={() => handleEditClick(params.row.id)}
+                    >
                         <EditIcon />
                     </IconButton>
-                    <IconButton aria-label="delete" color="secondary" onClick={() => handleDeleteClick(params.row)}>
+                    <IconButton
+                        aria-label="delete"
+                        color="secondary"
+                        onClick={() => handleDeleteClick(params.row)}
+                        disabled={params.row.isCancelled}
+                    >
                         <DeleteIcon />
                     </IconButton>
                 </>
@@ -243,6 +303,12 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
                 </div>
             </div>
 
+            <ViewBookings
+                openEvent={isViewModalOpen}
+                handleClose={handleCloseViewModal}
+                eventId={selectedBookingId || 0}
+            />
+
             <div className={styles.dataGridWrapper}>
                 <div className={styles.exportButtonContainer}>
                     <Button
@@ -270,15 +336,14 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
                     className={`${styles.dataGrid} ${styles.dataGridPadding}`}
                 />
             </div>
-
             <ConfirmationModal
                 show={showDeleteConfirmation}
-                onHide={handleCancelDelete}
+                onHide={() => setShowDeleteConfirmation(false)}
                 onConfirm={handleConfirmDelete}
-                title="Confirm Delete"
-                message="Are you sure you want to delete this booking?"
-                confirmLabel="Delete"
-                cancelLabel="Cancel"
+                title="Confirm Cancellation"
+                message="Are you sure you want to cancel this booking?"
+                confirmLabel="Cancel Booking"
+                cancelLabel="Keep Booking"
             />
 
             <Snackbar
@@ -289,6 +354,17 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
             >
                 <Alert onClose={() => setShowErrorSnackbar(false)} severity="error" sx={{ width: '100%' }}>
                     {error}
+                </Alert>
+            </Snackbar>
+
+            <Snackbar
+                open={showSuccessSnackbar}
+                autoHideDuration={6000}
+                onClose={() => setShowSuccessSnackbar(false)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert onClose={() => setShowSuccessSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+                    Booking cancelled successfully.
                 </Alert>
             </Snackbar>
         </div>

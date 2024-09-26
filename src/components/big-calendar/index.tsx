@@ -1,231 +1,250 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Calendar as BigCalendar, momentLocalizer } from 'react-big-calendar';
 import moment from "moment";
 import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
+import imageone from '../../assests/bear-lake-bluffs.jpg';
+import imagetwo from '../../assests/crown-jewel.jpg';
+import imagethree from '../../assests/blue-bear-lake.jpg';
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import BookingButton from "../bookingbutton";
-import './big-calender.css'
+import PropertyDropdown from "../property-dropdown";
+import { getBookings, userdetails } from '@/api';
+import './big-calender.css';
+import { Edit, CalendarToday, Person, Home, CheckCircle, CancelOutlined, Group } from '@mui/icons-material';
 
 const localizer = momentLocalizer(moment);
 
+interface User {
+    id: number;
+    firstName: string;
+    lastName: string;
+}
+
+interface Booking {
+    id: number;
+    createdAt: string;
+    bookingId: string;
+    checkinDate: string;
+    isLastMinuteBooking: number;
+    checkoutDate: string;
+    totalNights: number;
+    noOfGuests: number;
+    property: {
+        id: number;
+        propertyName: string;
+    };
+    user: {
+        id: number;
+    };
+}
+
 interface Event {
-    id?: number;
+    id: number;
     title: string;
     start: Date;
     end: Date;
     desc: string;
+    propertyId: number;
+    userId: number;
+    createdAt: string;
 }
 
-const bookedDates: Event[] = [
-    {
-        id: 1,
-        title: "Booked",
-        start: new Date("2024-08-01T10:00:00"),
-        end: new Date("2024-08-03T11:00:00"),
-        desc: "Booked"
-    },
-    {
-        id: 2,
-        title: "Booked",
-        start: new Date("2024-08-06T18:00:00"),
-        end: new Date("2024-08-06T22:00:00"),
-        desc: "Party"
-    },
-    {
-        id: 3,
-        title: "Booked",
-        start: new Date("2024-08-09T17:00:00"),
-        end: new Date("2024-08-13T18:30:00"),
-        desc: "Personal training"
-    }
-];
+const propertyColors: { [key: number]: string } = {
+    1: '#88cdd4',
+    2: '#e28f25',
+    3: '#c7eaee',
+    4: '#88cdd4',
+};
+
 
 const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
-    const [events, setEvents] = useState<Event[]>((bookedDates));
-    const [title, setTitle] = useState("");
-    const [start, setStart] = useState<Date | null>(null);
-    const [end, setEnd] = useState<Date | null>(null);
-    const [desc, setDesc] = useState("");
-    const [openSlot, setOpenSlot] = useState(false);
+    const [allEvents, setAllEvents] = useState<Event[]>([]);
+    const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
+    const [selectedProperty, setSelectedProperty] = useState<number | null>(null);
     const [openEvent, setOpenEvent] = useState(false);
     const [clickedEvent, setClickedEvent] = useState<Event | null>(null);
+    const [users, setUsers] = useState<User[]>([]);
 
-    const handleClose = () => {
-        setOpenEvent(false);
-        setOpenSlot(false);
+    useEffect(() => {
+        fetchAllBookings();
+        fetchUsers();
+    }, []);
+
+    useEffect(() => {
+        if (selectedProperty === null) {
+            setFilteredEvents(allEvents);
+        } else {
+            const filtered = allEvents.filter(event => event.propertyId === selectedProperty);
+            setFilteredEvents(filtered);
+        }
+    }, [selectedProperty, allEvents]);
+
+    const fetchAllBookings = async () => {
+        try {
+            const response = await getBookings();
+            const bookings: Booking[] = response.data;
+
+            const newEvents: Event[] = bookings.map(booking => ({
+                id: booking.id,
+                title: `${booking.bookingId} : ${booking.property.propertyName}`,
+                start: new Date(booking.checkinDate),
+                end: new Date(booking.checkoutDate),
+                desc: `Guests: ${booking.noOfGuests}, Nights: ${booking.totalNights}`,
+                propertyId: booking.property.id,
+                userId: booking.user.id,
+                createdAt: booking.createdAt,
+            }));
+
+            setAllEvents(newEvents);
+            setFilteredEvents(newEvents);
+        } catch (error) {
+            console.error('Error fetching bookings:', error);
+        }
     };
 
-    const handleSlotSelected = (slotInfo: { start: Date; end: Date }) => {
-        setTitle("");
-        setDesc("");
-        setStart(slotInfo.start);
-        setEnd(slotInfo.end);
-        setOpenSlot(true);
+    const fetchUsers = async () => {
+        try {
+            const response = await userdetails();
+            setUsers(response.data.users);
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
     };
 
     const handleEventSelected = (event: Event) => {
         setOpenEvent(true);
         setClickedEvent(event);
-        setStart(event.start);
-        setEnd(event.end);
-        setTitle(event.title);
-        setDesc(event.desc);
     };
 
-    const handleStartTime = (date: moment.Moment | null) => {
-        setStart(date?.toDate() || null);
-    };
-
-    const handleEndTime = (date: moment.Moment | null) => {
-        setEnd(date?.toDate() || null);
-    };
-
-    const setNewAppointment = () => {
-        if (start && end) {
-            const appointment = { title, start, end, desc };
-            setEvents([...events, appointment]);
+    const getPropertyImage = (propertyId: number) => {
+        switch (propertyId) {
+            case 1:
+                return imageone;
+            case 2:
+                return imagetwo;
+            case 3:
+                return imagethree;
+            default:
+                return imageone;
         }
     };
 
-    const updateEvent = () => {
-        if (clickedEvent && start && end) {
-            const updatedEvents = events.map(event =>
-                event === clickedEvent ? { ...event, title, desc, start, end } : event
-            );
-            setEvents(updatedEvents);
-        }
+
+    const handleEditClick = () => {
+        console.log("Edit button clicked");
     };
 
-    const deleteEvent = () => {
-        const updatedEvents = events.filter(event => event.start !== start);
-        setEvents(updatedEvents);
+    const handleClose = () => {
+        setOpenEvent(false);
     };
 
-    const eventActions = [
-        <Button onClick={handleClose}>Cancel</Button>,
-        <Button color="secondary" onClick={() => { deleteEvent(); handleClose(); }}>
-            Delete
-        </Button>,
-        <Button color="primary" onClick={() => { updateEvent(); handleClose(); }}>
-            Confirm Edit
-        </Button>
-    ];
+    const eventStyleGetter = (event: Event) => {
+        const backgroundColor = propertyColors[event.propertyId] || '#999999';
+        return {
+            style: {
+                backgroundColor,
+                color: 'white',
+                border: 'none',
+                borderRadius: '2px',
+                opacity: 0.8,
+                display: 'block',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
+            }
+        };
+    };
 
-    const appointmentActions = [
-        <Button color="secondary" onClick={handleClose}>Cancel</Button>,
-        <Button color="primary" onClick={() => { setNewAppointment(); handleClose(); }}>
-            Submit
-        </Button>
-    ];
+    const handlePropertySelect = (propertyId: number | null) => {
+        setSelectedProperty(propertyId);
+    };
+
+    const getUserName = (userId: number) => {
+        const user = users.find(u => u.id === userId);
+        return user ? `${user.firstName} ${user.lastName}` : 'Unknown User';
+    };
+
+    const handleEdit = () => {
+        console.log("Edit clicked for event:", clickedEvent);
+    };
 
     return (
         <div className={`calendar-container ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
-            <BookingButton />
+            <div className="calendar-header">
+                <PropertyDropdown onPropertySelect={handlePropertySelect} />
+                <BookingButton />
+            </div>
             <BigCalendar
                 localizer={localizer}
-                events={events}
+                events={filteredEvents}
                 views={["month", "week", "day"]}
-                timeslots={2}
                 defaultView="month"
                 defaultDate={new Date()}
-                selectable={true}
                 onSelectEvent={(event: Event) => handleEventSelected(event)}
-                onSelectSlot={(slotInfo: { start: Date; end: Date }) => handleSlotSelected(slotInfo)}
+                eventPropGetter={eventStyleGetter}
+                className="calendar-view"
             />
-
-            <Dialog
-                open={openSlot}
-                onClose={handleClose}
-                aria-labelledby="form-dialog-title"
-            >
-                <DialogTitle id="form-dialog-title">
-                    {`Book an appointment on ${moment(start).format("MMMM Do YYYY")}`}
-                </DialogTitle>
-                <DialogContent>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="title"
-                        label="Title"
-                        fullWidth
-                        onChange={e => setTitle(e.target.value)}
-                    />
-                    <TextField
-                        margin="dense"
-                        id="description"
-                        label="Description"
-                        fullWidth
-                        onChange={e => setDesc(e.target.value)}
-                    />
-                    <LocalizationProvider dateAdapter={AdapterMoment}>
-                        <TimePicker
-                            label="Start Time"
-                            value={moment(start)}
-                            onChange={handleStartTime}
-                        />
-                        <TimePicker
-                            label="End Time"
-                            value={moment(end)}
-                            onChange={handleEndTime}
-                        />
-                    </LocalizationProvider>
-                </DialogContent>
-                <DialogActions>
-                    {appointmentActions}
-                </DialogActions>
-            </Dialog>
 
             <Dialog
                 open={openEvent}
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"
+                className="booking-dialog"
             >
-                <DialogTitle id="form-dialog-title">
-                    {`View/Edit Appointment of ${moment(start).format("MMMM Do YYYY")}`}
-                </DialogTitle>
-                <DialogContent>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="title"
-                        label="Title"
-                        fullWidth
-                        defaultValue={title}
-                        onChange={e => setTitle(e.target.value)}
-                    />
-                    <TextField
-                        margin="dense"
-                        id="description"
-                        label="Description"
-                        fullWidth
-                        defaultValue={desc}
-                        onChange={e => setDesc(e.target.value)}
-                    />
-                    <LocalizationProvider dateAdapter={AdapterMoment}>
-                        <TimePicker
-                            label="Start Time"
-                            value={moment(start)}
-                            onChange={handleStartTime}
-                            className="time-picker"
-                        />
-                        <TimePicker
-                            label="End Time"
-                            value={moment(end)}
-                            onChange={handleEndTime}
-                            className="custom-time-picker"
-                        />
-                    </LocalizationProvider>
+                <div className="dialog-header">
+                    <h2 className="dialog-title">Booking Details</h2>
+                    <button onClick={handleEdit} className="edit-button">
+                        <Edit />
+                    </button>
+                </div>
+                <DialogContent className="dialog-content">
+                    {clickedEvent && (
+                        <div className="booking-details-container">
+                            <div className="booking-info">
+                                <div className="detail-item">
+                                    <Home className="detail-icon" />
+                                    <span className="detail-label">Property</span>
+                                    <span className="detail-value">{clickedEvent.title.split(': ')[1]}</span>
+                                </div>
+                                <div className="detail-item">
+                                    <Person className="detail-icon" />
+                                    <span className="detail-label">User</span>
+                                    <span className="detail-value">{getUserName(clickedEvent.userId)}</span>
+                                </div>
+                                <div className="detail-item">
+                                    <CheckCircle className="detail-icon" />
+                                    <span className="detail-label">Check-in</span>
+                                    <span className="detail-value">{moment(clickedEvent.start).format('MMMM Do YYYY, h:mm a')}</span>
+                                </div>
+                                <div className="detail-item">
+                                    <CancelOutlined className="detail-icon" />
+                                    <span className="detail-label">Check-out</span>
+                                    <span className="detail-value">{moment(clickedEvent.end).format('MMMM Do YYYY, h:mm a')}</span>
+                                </div>
+                                <div className="detail-item">
+                                    <CalendarToday className="detail-icon" />
+                                    <span className="detail-label">Booked on</span>
+                                    <span className="detail-value">{moment(clickedEvent.createdAt).format('MMMM Do YYYY')}</span>
+                                </div>
+                                <div className="detail-item detail-description">
+                                    <Group className="detail-icon" />
+                                    <span className="detail-label">Additional Info</span>
+                                    <span className="detail-value">{clickedEvent.desc}</span>
+                                </div>
+                            </div>
+                            <div className="booking-image">
+                                <img src={getPropertyImage(clickedEvent.propertyId)} alt="Property" />
+                            </div>
+                        </div>
+                    )}
                 </DialogContent>
-                <DialogActions>
-                    {eventActions}
+                <DialogActions className="dialog-actions">
+                    <Button onClick={handleClose} color="primary" className="close-button">
+                        Close
+                    </Button>
                 </DialogActions>
             </Dialog>
         </div>

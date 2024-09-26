@@ -15,10 +15,11 @@ axiosInstance.interceptors.request.use(
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         const session = JSON.parse(localStorage.getItem('session') || '{}');
         const userId = user.id;
-        const token = session.token;
+            const token = session.token;
         const searchParams = new URLSearchParams(window.location.search);
         const resetToken = searchParams.get('resetToken');
 
+        // If the access token exists, set it in the Authorization header
         if (userId && token) {
             console.log("setting the header")
             config.headers['user-id'] = userId;

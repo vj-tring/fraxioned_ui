@@ -273,14 +273,13 @@ const AmenityManagement: React.FC = () => {
                 </div>
             </div>
             <ConfirmationModal
-                show={showDeleteModal}
-                onHide={handleDeleteCancel}
-                onConfirm={handleDeleteConfirm}
-                title="Delete Amenity"
-                message={`Are you sure you want to delete the amenity "${amenityToDelete?.amenityName}"?`}
-                confirmLabel="Delete"
-                cancelLabel="Cancel"
-            />
+          show={showDeleteModal}
+          onHide={handleDeleteCancel}
+          onConfirm={handleDeleteConfirm}
+          title="Delete Amenity"
+          message={`Are you sure you want to delete the amenity "${amenityToDelete?.amenityName}"?`}
+          confirmLabel="Delete"
+          cancelLabel="Cancel" children={undefined}            />
             <CustomizedSnackbars
                 open={snackbar.open}
                 handleClose={handleSnackbarClose}

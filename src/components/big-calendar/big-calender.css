@@ -1,131 +1,296 @@
 .calendar-container {
-    margin-top: 60px;
-    height: calc(100vh - 145px);
-    padding: 20px;
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
-    transition: margin-left 0.3s ease, width 0.3s ease;
+  margin-top: 16px;
+  height: 600px;
+  width: 900px;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
+  transition: margin-left 0.3s ease, width 0.3s ease;
 }
 
 .calendar-container.sidebar-open {
-    margin-left: 60px;
-    width: calc(100% - 120px);
+  margin-left: 25px;
+  width: calc(100% - 40px);
 }
 
 .calendar-container.sidebar-closed {
-    margin-left: 80px;
-    width: calc(100% - 120px);
+  margin-left: 80px;
+  width: calc(100% - 120px);
 }
 
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.calendar-view {
+  height: calc(100% - 50px);
+}
 
 .rbc-calendar {
-    font-family: 'Roboto', sans-serif;
-    color: #333333;
+  font-family: 'Roboto', sans-serif;
+  color: #333333;
 }
 
 .rbc-header {
-    padding: 12px 0;
-    font-weight: 500;
-    background-color: #f5f7fa;
-    border-bottom: 1px solid #e0e0e0;
+  padding: 12px 0;
+  font-weight: 500;
+  background-color: #f5f7fa;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .rbc-month-view {
-    border: none;
-    border-radius: 8px;
-    overflow: hidden;
+  border: none;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .rbc-day-bg {
-    transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .rbc-day-bg:hover {
-    background-color: rgba(0, 120, 212, 0.05);
+  background-color: rgba(0, 120, 212, 0.05);
 }
 
 .rbc-off-range-bg {
-    background-color: #f8f9fa;
+  background-color: #f8f9fa;
 }
 
 .rbc-today {
-    background-color: rgba(0, 120, 212, 0.1);
+  background-color: rgba(0, 120, 212, 0.1);
 }
 
 .rbc-event {
-    background-color: rgba(0, 120, 212, 0.8);
-    border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+  background-color: rgba(0, 120, 212, 0.8);
+  border-radius: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+  padding: 2px 5px;
+  height: 20px !important;
+  font-size: 12px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .rbc-event:hover {
-    background-color: rgba(0, 120, 212, 1);
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  background-color: rgba(0, 120, 212, 1);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  z-index: 1000;
 }
 
 .rbc-event-content {
-    font-size: 0.85em;
-    font-weight: 500;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .rbc-toolbar {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .rbc-toolbar button {
-    color: #333;
-    background-color: #fff;
-    border: 1px solid #d9d9d9;
-    border-radius: 4px;
-    padding: 6px 12px;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 500;
-    transition: all 0.3s ease;
+  color: #333;
+  background-color: #fff;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
 .rbc-toolbar button:hover {
-    background-color: #f0f0f0;
-    border-color: #bfbfbf;
+  background-color: #f0f0f0;
+  border-color: #bfbfbf;
 }
 
 .rbc-toolbar button.rbc-active {
-    background-color: rgba(61, 61, 61, 0.1);
+  background-color: rgba(61, 61, 61, 0.1);
+  border-color: #a9a9a9;
 }
 
 .rbc-date-cell {
-    padding: 4px;
-    font-weight: 500;
-    opacity: 0.8;
-    transition: opacity 0.3s ease;
-}
-
-.rbc-date-cell:hover {
-    opacity: 1;
-}
-
-.rbc-date-cell.rbc-now {
-    font-weight: 700;
-    color: #0078d4;
+  padding: 5px;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .rbc-row-segment {
-    padding: 2px 4px;
+  padding: 0 1px 1px 1px;
 }
 
-.rbc-show-more {
-    background-color: transparent;
-    color: #0078d4;
-    font-weight: 500;
+.rbc-event-label {
+  display: none;
 }
 
-.rbc-show-more:hover {
-    background-color: rgba(0, 120, 212, 0.1);
+.rbc-day-slot .rbc-event,
+.rbc-month-row .rbc-event {
+  border: none;
 }
 
-.rbc-current-time-indicator {
-    background-color: #e74c3c;
-    height: 2px;
+.booking-dialog .MuiDialog-paper {
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 900px !important;
+  max-width: 95vw;
+  height: auto !important;
+  max-height: 90vh;
+  overflow: hidden;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 30px;
+  background-color: #f8f9fa;
+  /* border-bottom: 1px solid #e0e6ed; */
+}
+
+.dialog-title {
+  color: #2c3e50;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.edit-button {
+  background-color: #98dae2;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.edit-button:hover {
+  background-color: #c7eaee;
+  transform: scale(1.1);
+}
+
+.dialog-content {
+  padding: 30px;
+  background-color: #ffffff;
+}
+
+.booking-details-container {
+  display: flex;
+  gap: 30px;
+}
+
+.booking-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.booking-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.booking-image img {
+  max-width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  color: #34495e;
+}
+
+.detail-icon {
+  color: #95cbd1;
+  font-size: 24px;
+}
+
+.detail-label {
+  font-weight: 700;
+  color: #7a8686;
+  width: 120px;
+}
+
+.detail-value {
+  font-weight: 500;
+  color: #2c3e50;
+  flex: 1;
+}
+
+.detail-description {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e6ed;
+}
+
+.dialog-actions {
+  padding: 14px 30px;
+  /* background-color: #f9fafc; */
+  border-top: 1px solid #e0e6ed;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.close-button {
+  background-color: #98dae2 !important;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
+  color: white !important;
+  padding: 10px 20px !important;
+  height: 34px;
+  border-radius: 4px !important;
+  text-transform: uppercase !important;
+  font-weight: 600 !important;
+  transition: background-color 0.3s ease !important;
+}
+
+.close-button:hover {
+  background-color: #95d4db !important;
+}
+
+@media (max-width: 768px) {
+  .booking-dialog .MuiDialog-paper {
+      width: 95vw !important;
+  }
+
+  .booking-details-container {
+      flex-direction: column;
+  }
+
+  .booking-image {
+      order: -1;
+  }
+
+  .booking-image img {
+      max-height: 200px;
+  }
+
+  .detail-item {
+      font-size: 14px;
+  }
+
+  .detail-label {
+      width: 100px;
+  }
 }

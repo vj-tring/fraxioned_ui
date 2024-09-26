@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './userproperty.module.css';
-import userImage from '../../assets/images/profile.jpeg';
 import { getuserbyproperty, userdetails } from '@/api';
+import { User, Building, Users, Calendar, Hash } from 'lucide-react';
 
 interface User {
   id: number;
   firstName: string;
   lastName: string;
-  imageURL: string | null;
-  addressLine1: string | null;
-  addressLine2: string | null;
-  state: string | null;
-  country: string | null;
-  city: string | null;
-  zipcode: string | null;
 }
 
 interface PropertyUser {
@@ -27,11 +20,6 @@ interface PropertyDetails {
   propertyId: number;
   propertyName: string;
   propertyShare: number;
-  address: string;
-  city: string;
-  state: string;
-  country: string;
-  zipcode: number;
   owners: PropertyUser[];
 }
 
@@ -76,39 +64,45 @@ const PropertyUsers: React.FC = () => {
 
   return (
     <div className={styles.propertyUsersContainer}>
-      <h2 className={styles.title}>{propertyDetails.propertyName} - Users</h2>
-      {propertyDetails.owners.length === 0 ? (
-        <div className={styles.noUsers}>No Users available for this property.</div>
-      ) : (
-        <div className={styles.userCardContainer}>
-          {propertyDetails.owners.map((owner) => {
+      <h2 className={styles.title}>
+        <Building size={24} className={styles.titleIcon} />
+        {propertyDetails.propertyName} - Users
+      </h2>
+      <div className={styles.cardContainer}>
+        {propertyDetails.owners.length === 0 ? (
+          <div className={styles.noUsers}>No Users available for this property.</div>
+        ) : (
+          propertyDetails.owners.map((owner) => {
             const user = userDetails[owner.userId];
             return (
               <div key={owner.userId} className={styles.userCard}>
-                <div className={styles.userImageContainer}>
-                  <img
-                    src={user?.imageURL || userImage}
-                    alt={`${user?.firstName} ${user?.lastName}`}
-                    className={styles.userImage}
-                  />
+                <div className={styles.userInfo}>
+                  <User size={20} className={styles.icon} />
+                  <span className={styles.userName}>
+                    {user ? `${user.firstName} ${user.lastName}` : `User ${owner.userId}`}
+                  </span>
                 </div>
                 <div className={styles.userInfo}>
-                  <h3 className={styles.userName}>
-                    {user ? `${user.firstName} ${user.lastName}` : `User ${owner.userId}`}
-                  </h3>
-                  <p className={styles.userId}>ID: {owner.userId}</p>
-                  <p className={styles.userShares}>
+                  <Hash size={20} className={styles.icon} />
+                  <span className={styles.userId}>ID: {owner.userId}</span>
+                </div>
+                <div className={styles.userInfo}>
+                  <Users size={20} className={styles.icon} />
+                  <span className={styles.userShares}>
                     Shares: {owner.noOfShare}/{propertyDetails.propertyShare}
-                  </p>
-                  <p className={styles.userAcquisitionDate}>
-                    Acquisition Date: {new Date(owner.acquisitionDate).toLocaleDateString()}
-                  </p>
+                  </span>
+                </div>
+                <div className={styles.userInfo}>
+                  <Calendar size={20} className={styles.icon} />
+                  <span className={styles.userAcquisitionDate}>
+                    Acquired: {new Date(owner.acquisitionDate).toLocaleDateString()}
+                  </span>
                 </div>
               </div>
             );
-          })}
-        </div>
-      )}
+          })
+        )}
+      </div>
     </div>
   );
 };
