@@ -298,11 +298,13 @@
 .card-btn1 {
   text-transform: none;
   border: 1px solid lightgrey !important;
-  border-radius: 18px !important;
+  border-radius: 9px !important;
   background: white !important;
   font-size: 0.64rem !important;
   color: #7c7875 !important;
+ 
 }
+
 
 /* Style for active button */
 
@@ -341,6 +343,8 @@
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
+  z-index: 10; 
+  position: relative !important; 
 }
 
 .currentproperty {
@@ -354,12 +358,14 @@
 }
 
 .BlueFont {
+  position: relative;
   height: 2rem;
   margin: 0 !important;
   font-size: 0.7rem !important;
-  opacity: 0.7 !important;
+  opacity: 1.0 !important;
   text-wrap: wrap;
-  font-weight: 500 !important;
+  font-weight: 600 !important;
+  margin-bottom: 28px !important;
 }
 
 .image1 {
@@ -372,27 +378,36 @@
 /* Propertyitem.css */
 
 /* Base styles for images */
+
 .CardImage img {
-  height: 100%;
+  position:absolute;
+  top: 65px;
+  bottom: 10px;
+  left:289px;
+  width: 80%;
+  height: 49%;
+  object-fit:cover;
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 /* Style for single card (or general style) */
 .CardImage.single-card img {
-  width: 60px;
-  height: 45px;
+  width: 80px;
+  height: 80px;
 }
 
 /* Style for multiple cards */
 .CardImage.multiple-cards img {
-  width: 90px;
+  width: 240px;
+}
+.AvailableNight {
+  font-size: x-small;
+  font-weight: 800;
+  margin-bottom: 3.5px;
+
 }
 
-.Available {
-  font-weight: 600;
-  margin: 0 !important;
-}
 
 .Box-list {
   font-size: 7px;
@@ -440,8 +455,11 @@
 }
 
 .Off-Values {
-  font-size: 20px !important;
-  font-weight: 600 !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  margin-bottom: 0px;
+  position: relative;
+  
 }
 .night-count li:nth-child(2) {
   /* opacity: 1; */
@@ -459,22 +477,24 @@
 
 .additionalproperty {
   width: 9rem !important;
-  /* padding: .60rem 2rem !important; */
-  border-radius: 2rem !important;
+  border-radius: 6px !important;
   text-transform: capitalize !important;
   border: 1px solid #7c7875 !important;
-  color: #7c7875 !important;
-  margin-left: 0.5rem;
-  /* box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px; */
+  color: #1a1a19 !important;
+  margin-left: 0;
+  background-color: rgba(255, 255, 255, 0.9); 
+  cursor: pointer;
 }
 .property-name {
   font-size: 0.8rem !important;
   /* padding-top: px; */
+  padding-left: 15px !important;
 }
 .dots-container {
   display: flex;
   justify-content: center;
   margin-top: 8px;
+  z-index: 10; 
 }
 
 .dot {
@@ -510,21 +530,21 @@
   }
   .BlueHead {
     font-size: 0.7rem;
-  }
+    font-weight: 100;
+   
+}
+
   .CardImage {
-    width: 55px;
-    height: 36px;
+    width: 100px;
+    height: 100px;
   }
-  .Available {
-    font-size: x-small;
-    color: black !important;
-    font-weight: 600 !important;
-  }
+  
   .card-btn1 {
     width: 1rem !important;
     height: 20px !important;
     padding: 1px !important;
     min-width: 53px !important;
+
   }
   .box {
     display: flex;

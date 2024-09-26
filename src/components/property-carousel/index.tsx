@@ -221,6 +221,7 @@ export default function BasicSelect() {
             position: "fixed",
             maxHeight: "60vh",
             overflowY: "auto",
+            //maxWidth: "70vh",
           },
         }}
         sx={{ borderRadius: 32 }}
@@ -261,7 +262,7 @@ export default function BasicSelect() {
                       <IconButton
                         onClick={handlePrevious}
                         disableRipple
-                        sx={{ padding: 0 }}
+                        sx={{ padding: 0}}
                         disabled={selectedCardIndex === 0}
                       >
                         <NavigatePreviousOutlinedIcon />
@@ -287,8 +288,10 @@ export default function BasicSelect() {
                           onClick={() => handleCardClick(index)}
                           sx={{
                             flex: "0 0 auto",
-                            margin: "7px",
-                            padding: "4px",
+                            margin: "2px",
+                            padding: "5px",
+                            display: "flex",
+                            justifyContent: "center",
                           }}
                         >
                           <div className="d-flex flex-column align-items-center p-1.5">
@@ -349,7 +352,7 @@ export default function BasicSelect() {
                     </span>
                   </div>
                   <div className="d-flex justify-content-between py-2 align-items-center pt-0 MyAvaNigt">
-                    <p className="Available">My Available Nights</p>
+                 
                     <div className="d-flex justify-content-center">
                       {years.map((year) => (
                         <Button
@@ -362,7 +365,7 @@ export default function BasicSelect() {
                           sx={{
                             margin: "2px",
                             padding: "4px",
-                            paddingTop: "5px",
+                            paddingTop: "7px",
                             borderRadius: 16,
                             ...buttonSize,
                           }}
@@ -372,45 +375,47 @@ export default function BasicSelect() {
                       ))}
                     </div>
                   </div>
+                  <p className="AvailableNight">My Available Nights</p>
                   <div
                     className="box d-flex justify-content-around py-1"
-                    style={{ marginTop: BoxMargin }}
+                    style={{ marginTop:"0px", height:"57px", borderRadius: "8px"}}
                   >
                     <div className="d-flex flex-column night-count">
                       <li className="Off-Values">
                         {selectedCard.details[selectedYear]?.offSeason || "N/A"}
                       </li>
-                      <li style={{ fontSize: BoxList }}>Off-Season Nights</li>
+                      <li style={{ fontSize: BoxList , fontWeight: "650"}}>Off-Season Nights</li>
                     </div>
                     <div className="d-flex flex-column night-count">
                       <li className="Off-Values">
                         {selectedCard.details[selectedYear]?.peakSeason ||
                           "N/A"}
                       </li>
-                      <li style={{ fontSize: BoxList }}>Peak-Season Nights</li>
+                      <li style={{ fontSize: BoxList, fontWeight: "650" }}>Peak-Season Nights</li>
                     </div>
                     <div className="d-flex flex-column night-count">
                       <li className="Off-Values">
                         {selectedCard.details[selectedYear]?.peakHoliday ||
                           "N/A"}
                       </li>
-                      <li style={{ fontSize: BoxList }}>Peak-Season Holiday</li>
+                      <li style={{ fontSize: BoxList, fontWeight: "650" }}>Peak-Season Holiday</li>
                     </div>
                     <div className="d-flex flex-column night-count">
                       <li className="Off-Values">
                         {selectedCard.details[selectedYear]?.offSeasonHoliday ||
                           "N/A"}
                       </li>
-                      <li style={{ fontSize: BoxList }}>Off-Season Holiday</li>
+                      <li style={{ fontSize: BoxList , fontWeight: "650" }}>Off-Season Holiday</li>
                     </div>
                     <div className="d-flex flex-column night-count">
                       <li className="Off-Values">
                         {selectedCard.details[selectedYear]?.lastMinute ||
                           "N/A"}
                       </li>
-                      <li style={{ fontSize: BoxList }}>Last Minute Booking</li>
+                      <li style={{ fontSize: BoxList, fontWeight: "650" }}>Last Minute Booking</li>
                     </div>
                   </div>
+                  
                 </div>
               )}
             </div>
