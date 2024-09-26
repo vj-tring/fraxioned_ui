@@ -22,7 +22,7 @@ import { useLocation } from "react-router-dom";
 import FormDialog from "../register-form-modal";
 import { ListItemText, Modal } from "@mui/material";
 import LockResetOutlinedIcon from "@mui/icons-material/LockResetOutlined";
-import styles from './navbar.module.css';
+import styles from "./navbar.module.css";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined";
 import ConfirmationNumberOutlinedIcon from "@mui/icons-material/ConfirmationNumberOutlined";
@@ -499,18 +499,24 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
             <CloseIcon />
           </IconButton>
           {!isEditing ? (
-            <><div className={styles.header}><h2>My Profile</h2></div>
+            <>
+              <div className={styles.header}>
+                <h2>My Profile</h2>
+              </div>
               <UserForm
                 userId={userData?.id}
                 onEditClick={handleEditClick}
                 header=""
                 editButtonName="Edit"
                 customStyles={userFormStyles}
-                showActiveStatus = {false}
+                showActiveStatus={false}
               />
             </>
           ) : (
-            <><div className={styles.header}><h2>Edit</h2></div>
+            <>
+              <div className={styles.header}>
+                <h2>Edit</h2>
+              </div>
               <EditForm
                 user={userFormData}
                 onClose={() => setIsEditing(false)}
@@ -532,6 +538,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
         message="Are you sure you want to log out?"
         confirmLabel="Logout"
         cancelLabel="Cancel"
+        children={undefined}
       />
       <FormDialog
         open={openNewAccountDialog}
