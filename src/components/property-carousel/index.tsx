@@ -386,48 +386,59 @@ export default function BasicSelect() {
                     }}
                   >
                     <div className="d-flex flex-column night-count">
-                      <li className="Off-Values">
-                        {selectedCard.details[selectedYear]?.offSeason || "N/A"}
-                      </li>
-                      <li style={{ fontSize: BoxList, fontWeight: "650" }}>
-                        Off-Season Nights
-                      </li>
+                      <ul>
+                        <li className="Off-Values">
+                          {selectedCard.details[selectedYear]?.offSeason ||
+                            "N/A"}
+                        </li>
+                        <li style={{ fontSize: BoxList, fontWeight: "650" }}>
+                          Off-Season Nights
+                        </li>
+                      </ul>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li className="Off-Values">
-                        {selectedCard.details[selectedYear]?.peakSeason ||
-                          "N/A"}
-                      </li>
-                      <li style={{ fontSize: BoxList, fontWeight: "650" }}>
-                        Peak-Season Nights
-                      </li>
+                      <ul>
+                        <li className="Off-Values">
+                          {selectedCard.details[selectedYear]?.peakSeason ||
+                            "N/A"}
+                        </li>
+                        <li style={{ fontSize: BoxList, fontWeight: "650" }}>
+                          Peak-Season Nights
+                        </li>
+                      </ul>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li className="Off-Values">
-                        {selectedCard.details[selectedYear]?.peakHoliday ||
-                          "N/A"}
-                      </li>
-                      <li style={{ fontSize: BoxList, fontWeight: "650" }}>
-                        Peak-Season Holiday
-                      </li>
+                      <ul>
+                        <li className="Off-Values">
+                          {selectedCard.details[selectedYear]?.peakHoliday ||
+                            "N/A"}
+                        </li>
+                        <li style={{ fontSize: BoxList, fontWeight: "650" }}>
+                          Peak-Season Holiday
+                        </li>
+                      </ul>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li className="Off-Values">
-                        {selectedCard.details[selectedYear]?.offSeasonHoliday ||
-                          "N/A"}
-                      </li>
-                      <li style={{ fontSize: BoxList, fontWeight: "650" }}>
-                        Off-Season Holiday
-                      </li>
+                      <ul>
+                        <li className="Off-Values">
+                          {selectedCard.details[selectedYear]
+                            ?.offSeasonHoliday || "N/A"}
+                        </li>
+                        <li style={{ fontSize: BoxList, fontWeight: "650" }}>
+                          Off-Season Holiday
+                        </li>
+                      </ul>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li className="Off-Values">
-                        {selectedCard.details[selectedYear]?.lastMinute ||
-                          "N/A"}
-                      </li>
-                      <li style={{ fontSize: BoxList, fontWeight: "650" }}>
-                        Last Minute Booking
-                      </li>
+                      <ul>
+                        <li className="Off-Values">
+                          {selectedCard.details[selectedYear]?.lastMinute ||
+                            "N/A"}{" "}
+                        </li>
+                        <li style={{ fontSize: BoxList, fontWeight: "650" }}>
+                          Last Minute Booking
+                        </li>
+                      </ul>
                     </div>
                   </div>
                 </div>
