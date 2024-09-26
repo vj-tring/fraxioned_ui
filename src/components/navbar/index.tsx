@@ -310,6 +310,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                 </MenuItem>
                 <MenuItem
                   // onClick={handleResetPasswordClick}
+
                   style={{
                     height: "2.4rem",
                   }}
