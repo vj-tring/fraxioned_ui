@@ -156,7 +156,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
       <Navbar
         bg="light"
         expand="lg"
-        className="p-2"
+        className={`p-2 ${styles.navbar}`}
         // style={{ height: "4.3rem" }}
       >
         {!isAdminDashboard && (
@@ -165,7 +165,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
               src={logo}
               height="40"
               width="160"
-              className="d-inline-block align-top Navbar-Img"
+              className={`d-inline-block align-top ${styles["Navbar-Img"]}`}
               alt="Logo"
               loading="lazy"
             />
@@ -173,7 +173,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
         )}
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto">
+          <Nav className={`mr-auto ${styles["navbar-links"]}`}>
             {links.map((link, index) => (
               <NavLink
                 key={index}
@@ -184,7 +184,9 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                   }
                 }}
                 className={({ isActive }) =>
-                  `nav-link ${isActive ? "active" : ""}`
+                  `nav-link ${isActive ? styles.active : ""} ${
+                    styles["nav-link-with-margin"]
+                  }`
                 }
                 style={{ textDecoration: "none" }}
                 aria-disabled={link.disabled ? "true" : "false"}
@@ -195,7 +197,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
           </Nav>
         </Navbar.Collapse>
 
-        <Nav className="ProfileMenu">
+        <Nav className={styles.ProfileMenu}>
           <Box
             sx={{
               display: "flex",
@@ -225,7 +227,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                 <Typography
                   variant="body2"
                   color="textPrimary"
-                  className="monsterrat p-2 UserName"
+                  className={`monsterrat p-2 ${styles["UserName"]}`}
                   sx={{
                     fontWeight: 600,
                     color: "#00636D",
