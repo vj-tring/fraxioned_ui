@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './booking-calendar.css';
 import { DatePickerWithRange } from '../calender';
@@ -9,6 +9,8 @@ import { AppDispatch } from '@/store';
 const predefinedColors = ['#87CEEB', '#FFA500', '#b94ccf', '#FF33A1', '#A133FF', '#33FFA1'];
 
 const BookingCalendar = () => {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [activeProperty, setActiveProperty] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
 
   const userId = useSelector((state: any) => state.auth.user?.id);
@@ -66,6 +68,7 @@ const BookingCalendar = () => {
               key={property.id} 
               className="property-name" 
               style={{ color: property.color }}
+              onClick={() => setActiveProperty(property.id)}
             >
               {property.name}
             </span>
@@ -78,9 +81,13 @@ const BookingCalendar = () => {
           {propertiesWithColors.slice(0, 2).map((property: any) => (
             <div key={property.id} className="property-calendar">
               <DatePickerWithRange
-                key={property.id}
+                key={`${property.id}-${selectedDate.getTime()}`}
                 userId={userId}
+                onSelect={(range) => {
+                  console.log(`Selected range for ${property.name}:`, range);
+                }}
                 showEndCalendar={false}
+                fetchBookingsOnMount={activeProperty === property.id}
                 externalBookedDates={getBookedDatesForProperty(property.id)}
                 hideBookedDates={getBookedDatesForProperty(property.id).length === 0}
                 propertyColor={property.color}
@@ -94,9 +101,10 @@ const BookingCalendar = () => {
           {propertiesWithColors.slice(2).map((property: any) => (
             <div key={property.id} className="property-calendar">
               <DatePickerWithRange
-                key={property.id}
+                key={`${property.id}-${selectedDate.getTime()}`}
                 userId={userId}
                 showEndCalendar={false}
+                fetchBookingsOnMount={activeProperty === property.id}
                 externalBookedDates={getBookedDatesForProperty(property.id)}
                 hideBookedDates={getBookedDatesForProperty(property.id).length === 0}
                 propertyColor={property.color}
