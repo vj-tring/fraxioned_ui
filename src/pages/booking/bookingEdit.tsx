@@ -9,7 +9,7 @@ import { RootState } from '@/store/reducers';
 import { initializeCounts } from '@/store/slice/auth/propertyGuestSlice';
 import { format } from 'date-fns';
 import { fetchUserBookings, updateBooking } from '@/store/slice/auth/bookingSlice';
-import { fetchProperties, selectProperty } from '@/store/slice/auth/property-slice';
+import { selectProperty } from '@/store/slice/auth/property-slice';
 import { AppDispatch } from '@/store';
 
 const style = {
@@ -229,7 +229,7 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
             <DatePickerWithRange
               onSelect={handleDateSelect}
               initialRange={dateRange}
-            />
+              propertyColor={''}            />
           </Grid>
         </Grid>
         {dateError && (
