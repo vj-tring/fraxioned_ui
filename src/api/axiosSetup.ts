@@ -4,7 +4,7 @@ import { useAuthHelpers } from './useAuthHelper';
 
 // Create an Axios instance
 const axiosInstance = axios.create({
-    baseURL: 'http://192.168.1.47:3008/api',
+    baseURL: 'http://localhost:3008/api',
     timeout: 10000,
 });
 
@@ -15,7 +15,7 @@ axiosInstance.interceptors.request.use(
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         const session = JSON.parse(localStorage.getItem('session') || '{}');
         const userId = user.id;
-            const token = session.token;
+        const token = session.token;
         const searchParams = new URLSearchParams(window.location.search);
         const resetToken = searchParams.get('resetToken');
 

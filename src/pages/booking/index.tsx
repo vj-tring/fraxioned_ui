@@ -15,7 +15,7 @@ import BookingCalendar from "@/components/booking-calendar";
 import TrackingMyNigts from "./trackingMyNights";
 import PropertyList from "../home/propertyList";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store";
+import { AppDispatch } from "@/store";
 import {
   BookingData,
   fetchUserBookings,
@@ -26,6 +26,7 @@ import CustomizedSnackbar from "@/components/customized-snackbar";
 import "../booking/booking.css";
 import EditBookingModal from './bookingEdit';
 import { fetchProperties } from "@/store/slice/auth/property-slice";
+import { RootState } from "@/store/reducers";
 
 const Booking = () => {
   const dispatch = useDispatch<AppDispatch>();

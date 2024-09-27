@@ -4,8 +4,10 @@ import { Button, Grid, Typography } from "@mui/material";
 import ConfirmationModal from "../confirmation-modal";
 import EditBookingModal from "@/pages/booking/bookingEdit";
 import CancelPolicy from "../cancel-policy";
-import { useDispatch } from "react-redux";
-import { fetchBookings } from "@/store/slice/auth/bookingSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBookings, fetchUserBookings } from "@/store/slice/auth/bookingSlice";
+import { RootState } from "@/store/reducers";
+import { AppDispatch } from "@/store";
 
 interface BookingGridProps {
   bookings: Array<{
@@ -38,6 +40,8 @@ const BookingGrid: React.FC<BookingGridProps> = ({
   const [editBookingId, setEditBookingId] = useState<number | null>(null);
   const [gridBookings, setGridBookings] = useState(bookings);
   const [showCancelPopup, setShowCancelPopup] = useState(false);
+  const userId = useSelector((state: RootState) => state.auth.user.id);
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleCancelClick = (id: number) => {
     setCancelBookingId(id);
@@ -75,6 +79,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
  
   const handleEditSuccess = (updatedBooking: any) => {
     handleUpdateBooking(updatedBooking);
+    dispatch(fetchUserBookings(userId));
     handleCloseEditModal();
   };
 
