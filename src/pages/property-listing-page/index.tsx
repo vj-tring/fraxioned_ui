@@ -410,10 +410,10 @@ const PropertyListingPage = () => {
                 style={{ opacity: 0.9, fontWeight: "bolder" }}
               >
                 
-                <div>{selectedProperty.address || "Property Address"}</div>,
-                <div>{selectedProperty.city || "Property Address"}</div>,
-                <div>{selectedProperty.state || "Property Address"}</div>,
-                <div>{selectedProperty.country || "Property Address"}</div>,
+                <div>{selectedProperty.address || "Property Address"},</div>
+                <div>{selectedProperty.city || "Property Address"},</div>
+                <div>{selectedProperty.state || "Property Address"},</div>
+                <div>{selectedProperty.country || "Property Address"},</div>
                 <div>{selectedProperty.zipcode || "Property Address"}</div>
               </Typography>
             </Box>

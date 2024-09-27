@@ -305,7 +305,7 @@
   .Container1 {
     display: flex;
     flex-direction: column;
-    max-width: 10rem;
+    /* max-width: 10rem; */
   }
   .carousel-controls {
     visibility: hidden;

@@ -1,18 +1,19 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import "./home.css";
 import BookingSearchBar from "../../components/booking-search-bar";
 // import Card from "../../components/cards";
 import { useSelector } from "react-redux";
 // import image1 from "../../assests/bear-lake-bluffs.jpg";
 // import { FaPlus } from "react-icons/fa";
-import { mockProperties } from "./mockData";
+// import { mockProperties } from "./mockData";
 // import PorpImg from "../../assests/crown-jewel.jpg";
 import { resetLimits } from "@/store/slice/auth/propertyGuestSlice";
 import { useDispatch } from "react-redux";
 import { clearDates } from "@/store/slice/datePickerSlice";
 import PropertyList from "./propertyList";
-import TrackingMyNigts from "../booking/trackingMyNights";
-import { fetchProperties } from "@/store/slice/auth/property-slice";
+import BackgroundBeamsDemo from "./backgroundHome";
+// import TrackingMyNigts from "../booking/trackingMyNights";
+// import { fetchProperties } from "@/store/slice/auth/property-slice";
 
 interface Property {
   id: number;
@@ -31,7 +32,7 @@ interface RootState {
 
 const Home: React.FC = () => {
   const {
-    cards: properties,
+    // cards: properties,
     loading,
     error,
   } = useSelector((state: RootState) => state.properties);
@@ -44,18 +45,18 @@ const Home: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  const displayProperties = properties.length ? properties : mockProperties;
-  const showCarousel = displayProperties.length > 4;
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const showPlusIcon = true;
-  const scroll = (scrollOffset: number) => {
-    if (carouselRef.current) {
-      carouselRef.current.scrollBy({
-        left: scrollOffset,
-        behavior: "smooth",
-      });
-    }
-  };
+  // const displayProperties = properties.length ? properties : mockProperties;
+  // const showCarousel = displayProperties.length > 4;
+  // const carouselRef = useRef<HTMLDivElement>(null);
+  // const showPlusIcon = true;
+  // const scroll = (scrollOffset: number) => {
+  //   if (carouselRef.current) {
+  //     carouselRef.current.scrollBy({
+  //       left: scrollOffset,
+  //       behavior: "smooth",
+  //     });
+  //   }
+  // };
 
   useEffect(() => {
     dispatch(resetLimits());
@@ -74,6 +75,7 @@ const Home: React.FC = () => {
       <div className="Container1">
         <PropertyList />
       </div>
+      <BackgroundBeamsDemo/>
     </div>
   );
 };
