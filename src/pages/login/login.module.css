@@ -82,8 +82,8 @@
   transition: border-color 0.3s ease;
 }
 
-.inputGroup input[type='text']:focus,
-.inputGroup input[type='password']:focus {
+.inputGroup input[type='text'],
+.inputGroup input[type='password'] {
   border-color: #e8aa6c;
   outline: none;
 }
