@@ -494,7 +494,7 @@ const PropertyListingPage = () => {
           />
         </div>
         <div id="info">
-          <ThingsToKnow />
+          <ThingsToKnow propId={Number(id) || Number(0)} />
         </div>
         <Dialog open={dialogOpen} onClose={handleClose} fullWidth maxWidth="md">
           <DialogTitle className="d-flex justify-content-between">
