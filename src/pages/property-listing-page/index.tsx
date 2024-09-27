@@ -37,7 +37,8 @@ import CustomizedSnackbar from "@/components/customized-snackbar";
 import calendarData from "@/components/calender/calendarData.json";
 import { DateRange } from "react-day-picker";
 import DatePickerCard from "../../components/date-picker-card";
-import { Skeleton } from "@mui/material"; // Ensure you have this import
+import { Skeleton } from "@mui/material"; 
+import { RootState } from "@/store/reducers";
 
 interface Property {
   id: number;
@@ -50,6 +51,7 @@ interface Property {
   country?: string;
   latitude?: string;
   longitude?: string;
+  zipcode?: string
 }
 
 interface Space {
@@ -76,7 +78,7 @@ export interface Image {
   updatedBy: User;
 }
 
-interface RootState {
+interface PropertyRootState {
   auth: any;
   properties: {
     cards: Property[];
@@ -123,16 +125,16 @@ const PropertyListingPage = () => {
   );
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const userId = useSelector((state: RootState) => state.auth.user.id);
-  const currentUser = useSelector((state: RootState) => state.auth.user);
+  const userId = useSelector((state: PropertyRootState) => state.auth.user.id);
+  const currentUser = useSelector((state: PropertyRootState) => state.auth.user);
   const selectedPropertyDetails = useSelector(selectSelectedPropertyDetails);
   const calendarError = useSelector(
-    (state: RootState) => state.datePicker.errorMessage
+    (state: PropertyRootState) => state.datePicker.errorMessage
   );
   const [isAvailable, setIsAvailable] = useState(false);
   const counts = useSelector((state: RootState) => state.limits.counts);
 
-  const [loadingImages, setLoadingImages] = useState(true); // Step 1: Loading state
+  const [loadingImages, setLoadingImages] = useState(true);
 
   useEffect(() => {
     dispatch(fetchProperties(userId));
