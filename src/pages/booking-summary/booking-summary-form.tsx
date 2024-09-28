@@ -199,7 +199,7 @@ const BookingSummaryForm: React.FC = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "white",
+            backgroundColor: "rgb(255, 255, 255, 0.5)",
             zIndex: 1000,
           }}
         >
@@ -289,7 +289,7 @@ const BookingSummaryForm: React.FC = () => {
               </Col>
             </Row>
             <Row className="mt-3 SumImg">
-              {isLoading ? (
+              {/* {isLoading ? (
                 <>
                   <Col sm={4}>
                     <Skeleton variant="rectangular" width="100%" height={150} />
@@ -301,7 +301,8 @@ const BookingSummaryForm: React.FC = () => {
                     <Skeleton variant="rectangular" width="100%" height={150} />
                   </Col>
                 </>
-              ) : (
+              ) : ( */}
+              {
                 imageDetails.slice(1, 4).map((image, index) => (
                   <Col sm={4} key={index}>
                     <img
@@ -317,14 +318,15 @@ const BookingSummaryForm: React.FC = () => {
                     />
                   </Col>
                 ))
-              )}
+              }
+              {/* )} */}
             </Row>
           </div>
 
           <div className="BookSum">
             <h1 className="SummaryHead">BOOKING SUMMARY</h1>
             <div className="ListSum mt-3">
-              {isLoading ? (
+              {/* {isLoading ? (
                 <>
                   <Skeleton width="60%" height={20} />
                   <Skeleton width="80%" height={16} sx={{ mt: 1 }} />
@@ -334,7 +336,7 @@ const BookingSummaryForm: React.FC = () => {
                   <Skeleton width="50%" height={16} sx={{ mt: 1 }} />
                   <Skeleton width="50%" height={16} sx={{ mt: 1 }} />
                 </>
-              ) : (
+              ) : ( */}
                 <>
                   <div>
                     <div className="property">Property</div>
@@ -383,21 +385,21 @@ const BookingSummaryForm: React.FC = () => {
                     <div className="value">{booking.season || "N/A"}</div>
                   </div>
                 </>
-              )}
+              {/* )} */}
             </div>
           </div>
 
           <div className="PaySum">
             <h1 className="SummaryHead">PAYMENTS SUMMARY</h1>
             <div className="ListSum mt-3">
-              {isLoading ? (
+              {/* {isLoading ? (
                 <>
                   <Skeleton width="60%" height={20} />
                   <Skeleton width="80%" height={16} sx={{ mt: 1 }} />
                   <Skeleton width="40%" height={16} sx={{ mt: 1 }} />
                   <Skeleton width="50%" height={16} sx={{ mt: 1 }} />
                 </>
-              ) : (
+              ) : ( */}
                 <>
                   <div>
                     <div className="property">Cleaning Fee</div>
@@ -420,7 +422,7 @@ const BookingSummaryForm: React.FC = () => {
                     <div className="value">{formatDate(new Date())}</div>
                   </div>
                 </>
-              )}
+              {/* )} */}
             </div>
 
             <div className="Notes">

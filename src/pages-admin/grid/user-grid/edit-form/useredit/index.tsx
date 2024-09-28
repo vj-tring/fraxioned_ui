@@ -183,7 +183,7 @@ const EditForm: React.FC<EditFormProps> = ({
             <CloseIcon />
           </IconButton>
         )}
-      </Box>
+          </Box>
 
       <form onSubmit={handleSubmit} className={styles.form}>
         <Grid container spacing={2}>

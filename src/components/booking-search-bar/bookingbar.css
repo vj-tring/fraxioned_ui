@@ -15,6 +15,9 @@
 .padding {
   padding-top: 3px;
 }
+.gap-3 {
+  gap: 0.75rem !important;
+}
 .card {
   display: flex;
   flex-direction: row;

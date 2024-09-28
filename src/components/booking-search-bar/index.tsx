@@ -28,7 +28,7 @@ const BookingSearchBar: React.FC = () => {
   const [activeDate, setActiveDate] = useState<"check-in" | "check-out" | null>(
     null
   );
-  const bookingdetails = useSelector(
+  const bookingdetails = useSelector( 
     (state: RootState) => state.datePicker.dateRange
   );
 
@@ -42,7 +42,7 @@ const BookingSearchBar: React.FC = () => {
   }, [bookingdetails]);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
   const bookingState = useSelector((state: RootState) => state.bookings);
   const isBookingLoading = bookingState?.isLoading;
   const [errorMessage] = React.useState<string | null>(null);
