@@ -148,14 +148,20 @@ const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                 backgroundColor,
                 color: 'white',
                 border: 'none',
-                borderRadius: '2px',
-                opacity: 0.8,
-                display: 'block',
+                borderRadius: '0px',
+                display: 'flex',
                 overflow: 'hidden',
                 whiteSpace: 'nowrap',
-                textOverflow: 'ellipsis',
             }
         };
+    };
+
+    const EventComponent = ({ event }: { event: Event }) => {
+        return (
+            <div className="custom-event">
+                <div className="event-content">{event.title}</div>
+            </div>
+        );
     };
 
     const handlePropertySelect = (propertyId: number | null) => {
@@ -183,9 +189,12 @@ const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                 views={["month", "week", "day"]}
                 defaultView="month"
                 defaultDate={new Date()}
-                onSelectEvent={(event: Event) => handleEventSelected(event)}
+                onSelectEvent={(event) => handleEventSelected(event)}
                 eventPropGetter={eventStyleGetter}
                 className="calendar-view"
+                components={{
+                    event: EventComponent
+                }}
             />
 
             <Dialog
@@ -203,6 +212,9 @@ const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                 <DialogContent className="dialog-content">
                     {clickedEvent && (
                         <div className="booking-details-container">
+                            <div className="booking-image">
+                                <img src={getPropertyImage(clickedEvent.propertyId)} alt="Property" />
+                            </div>
                             <div className="booking-info">
                                 <div className="detail-item">
                                     <Home className="detail-icon" />
@@ -234,9 +246,6 @@ const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                                     <span className="detail-label">Additional Info</span>
                                     <span className="detail-value">{clickedEvent.desc}</span>
                                 </div>
-                            </div>
-                            <div className="booking-image">
-                                <img src={getPropertyImage(clickedEvent.propertyId)} alt="Property" />
                             </div>
                         </div>
                     )}

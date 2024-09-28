@@ -182,9 +182,9 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
            <Typography>
            # {booking?.bookingId}
             </Typography>
-            <Typography>
+            {/* <Typography>
             {booking?.property.propertyName}
-            </Typography>
+            </Typography> */}
           </Grid>
           <Grid item xs={5}>
                <Box sx={dateBoxStyle}>

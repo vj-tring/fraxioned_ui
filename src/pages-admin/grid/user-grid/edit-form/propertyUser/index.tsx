@@ -60,77 +60,61 @@ const PropertyTab: React.FC<PropertyTabProps> = ({ userId }) => {
 
   return (
     <div className={styles.propertyTabContainer}>
-      <div className={styles.cardGrid}>
-        {propertyData.map((prop: PropertyResponse, index: number) => {
-          const userProperty = prop.userProperties[0]; 
-          if (!userProperty) return null;
+      {propertyData.map((prop: PropertyResponse, index: number) => {
+        const userProperty = prop.userProperties[0];
+        if (!userProperty) return null;
 
-          const shareFraction = `${userProperty.noOfShare}/${prop.propertyShare}`;
-          const randomImage = images[index % images.length];
+        const shareFraction = `${userProperty.noOfShare}/${prop.propertyShare}`;
+        const randomImage = images[index % images.length];
 
-          return (
-            <Card key={index} className={styles.propertyCard}>
-              <CardContent className={styles.cardContent}>
-                <div className={styles.imageContainer}>
-                  {randomImage ? (
-                    <img src={randomImage} alt={prop.propertyName} className={styles.propertyImage} />
-                  ) : (
-                    <div className={styles.noImage}>
-                      <ImageIcon size={48} />
-                      <Typography variant="body2">No image available</Typography>
-                    </div>
-                  )}
+        return (
+          <Card key={index} className={styles.propertyTile}>
+            <div className={styles.imageWrapper}>
+              {randomImage ? (
+                <img src={randomImage} alt={prop.propertyName} className={styles.propertyImage} />
+              ) : (
+                <div className={styles.noImage}>
+                  <ImageIcon size={24} />
                 </div>
-                <div className={styles.propertyInfo}>
-                  <Typography variant="h6" className={styles.propertyName}>
-                    {prop.propertyName}
+              )}
+            </div>
+            <CardContent className={styles.propertyInfo}>
+              <div className={styles.headerRow}>
+                <Typography variant="h6" className={styles.propertyName}>
+                  {prop.propertyName}
+                </Typography>
+                {/* <Chip
+                  label={prop.isActive ? "Active" : "Inactive"}
+                  color={prop.isActive ? "success" : "error"}
+                  size="small"
+                  className={styles.statusChip}
+                /> */}
+              </div>
+              <Typography variant="body2" className={styles.address}>
+                {prop.address}, {prop.city}
+              </Typography>
+              <div className={styles.detailsGrid}>
+                <div className={styles.detailItem}>
+                  <Typography variant="caption" className={styles.detailLabel}>
+                    Shares
                   </Typography>
-                  <Chip
-                    label={prop.isActive ? "Active" : "Inactive"}
-                    color={prop.isActive ? "success" : "error"}
-                    size="small"
-                    className={styles.statusChip}
-                  />
-                  <div className={styles.detailsContainer}>
-                    <div className={styles.detailItem}>
-                      <Typography variant="subtitle2" className={styles.detailLabel}>
-                        Address
-                      </Typography>
-                      <Typography variant="body2" className={styles.detailValue}>
-                        {prop.address}
-                      </Typography>
-                    </div>
-                    <div className={styles.detailItem}>
-                      <Typography variant="subtitle2" className={styles.detailLabel}>
-                        Location
-                      </Typography>
-                      <Typography variant="body2" className={styles.detailValue}>
-                        {`${prop.city}, ${prop.state}, ${prop.country} ${prop.zipcode}`}
-                      </Typography>
-                    </div>
-                    <div className={styles.detailItem}>
-                      <Typography variant="subtitle2" className={styles.detailLabel}>
-                        Shares
-                      </Typography>
-                      <Typography variant="body2" className={styles.detailValue}>
-                        {shareFraction}
-                      </Typography>
-                    </div>
-                    <div className={styles.detailItem}>
-                      <Typography variant="subtitle2" className={styles.detailLabel}>
-                        Acquired
-                      </Typography>
-                      <Typography variant="body2" className={styles.detailValue}>
-                        {new Date(userProperty.acquisitionDate).toLocaleDateString()}
-                      </Typography>
-                    </div>
-                  </div>
+                  <Typography variant="body2" className={styles.detailValue}>
+                    {shareFraction}
+                  </Typography>
                 </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+                <div className={styles.detailItem}>
+                  <Typography variant="caption" className={styles.detailLabel}>
+                    Acquired
+                  </Typography>
+                  <Typography variant="body2" className={styles.detailValue}>
+                    {new Date(userProperty.acquisitionDate).toLocaleDateString()}
+                  </Typography>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      })}
     </div>
   );
 };

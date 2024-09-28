@@ -77,6 +77,17 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  position: relative;
+  left: 6%;
+  width: 80% !important;
+}
+
+.rbc-event.rbc-start-row {
+  left: 50% !important;
+}
+
+.rbc-event.rbc-end-row {
+  width: calc(50% + 25%) !important;
 }
 
 .rbc-event:hover {
@@ -91,6 +102,12 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  position: relative;
+  z-index: 1;
+}
+
+.rbc-event:not(.rbc-event) {
+  border-radius: 0 !important;
 }
 
 .rbc-toolbar {
@@ -120,7 +137,7 @@
 
 .rbc-date-cell {
   padding: 5px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
 }
 
@@ -153,7 +170,6 @@
   align-items: center;
   padding: 18px 30px;
   background-color: #f8f9fa;
-  /* border-bottom: 1px solid #e0e6ed; */
 }
 
 .dialog-title {
@@ -164,7 +180,7 @@
 }
 
 .edit-button {
-  background-color: #00636d;
+  background-color: #288b96;
   color: white;
   border: none;
   border-radius: 50%;
@@ -219,11 +235,11 @@
   align-items: center;
   gap: 10px;
   font-size: 16px;
-  color: #34495e;
+  color: #288b96;
 }
 
 .detail-icon {
-  color: #00636d;
+  color: #288b96;
   font-size: 24px;
 }
 
@@ -247,14 +263,14 @@
 
 .dialog-actions {
   padding: 14px 30px;
-  /* background-color: #f9fafc; */
+  background-color: #f9fafc;
   border-top: 1px solid #e0e6ed;
   display: flex;
   justify-content: flex-end;
 }
 
 .close-button {
-  background-color: #00636d !important;
+  background-color: #288b96 !important;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
   color: white !important;
   padding: 10px 20px !important;
@@ -267,6 +283,12 @@
 
 .close-button:hover {
   background-color: #95d4db !important;
+}
+
+.diagonal-cut {
+  position: absolute;
+  top: 0;
+  bottom: 0;
 }
 
 @media (max-width: 768px) {
