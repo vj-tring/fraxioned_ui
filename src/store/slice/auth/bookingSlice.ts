@@ -22,41 +22,46 @@ export interface BookingData {
   cleaningFee: number;
   petFee: number;
   createdAt: string;
-  notes?: string; // Added notes field
+  notes?: string;
 }
 
 interface BookingSummaryResponse {
-  adults: number;
-  bookingId: string;
-  checkIn: string;
-  checkInTime: number;
-  checkOut: string;
-  checkOutTime: number;
-  children: number;
-  cleaningFee: number;
-  dateOfCharge: string;
-  holiday: string;
-  isLastMinuteBooking: boolean;
-  noOfGuests: number;
-  offHolidayNights: number;
-  offNights: number;
-  peakHolidayNights: number;
-  peakNights: number;
-  petFee: number;
-  pets: number;
-  property: { id: number };
-  season: string;
-  totalAmountDue: number;
-  totalNights: number;
+  message: string;
+  data: {
+    propertyId: number;
+    propertyName: string;
+    checkIn: string;
+    checkOut: string;
+    totalNights: number;
+    noOfGuests: number;
+    adults: number;
+    children: number;
+    pets: number;
+    season: string;
+    holiday: string;
+    totalAmountDue: number;
+    dateOfCharge: string;
+    bookingId: string;
+    cleaningFee: number;
+    petFee: number;
+    isLastMinuteBooking: boolean;
+    peakNights: number;
+    offNights: number;
+    peakHolidayNights: number;
+    offHolidayNights: number;
+    checkInTime: number;
+    checkOutTime: number;
+  };
+  statusCode: number;
 }
 
 interface ConfirmBookingResponse {
   message: string;
-  data: any; // Replace with actual data type if possible
+  data: any;
 }
 
 interface BookingState {
-  bookings: BookingData[]; // Added bookings array to state
+  bookings: BookingData[];
   currentBooking: BookingData | null;
   userBookings: BookingData[];
   error: string | null;
@@ -288,16 +293,16 @@ const bookingSlice = createSlice({
           if (state.currentBooking) {
             state.currentBooking = {
               ...state.currentBooking,
-              season: action.payload.season,
-              cleaningFee: action.payload.cleaningFee,
-              petFee: action.payload.petFee,
-              totalAmountDue: action.payload.totalAmountDue,
-              noOfAdults: action.payload.adults,
-              noOfChildren: action.payload.children,
-              noOfPets: action.payload.pets,
-              checkinDate: action.payload.checkIn,
-              checkoutDate: action.payload.checkOut,
-              isLastMinuteBooking: action.payload.isLastMinuteBooking,
+              season: action.payload.data.season,
+              cleaningFee: action.payload.data.cleaningFee,
+              petFee: action.payload.data.petFee,
+              totalAmountDue: action.payload.data.totalAmountDue,
+              noOfAdults: action.payload.data.adults,
+              noOfChildren: action.payload.data.children,
+              noOfPets: action.payload.data.pets,
+              checkinDate: action.payload.data.checkIn,
+              checkoutDate: action.payload.data.checkOut,
+              isLastMinuteBooking: action.payload.data.isLastMinuteBooking,
             };
           }
           state.isLoading = false;

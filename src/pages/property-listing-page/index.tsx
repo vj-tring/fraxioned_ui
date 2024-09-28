@@ -274,15 +274,15 @@ const PropertyListingPage = () => {
       console.log("Submitting booking data:", bookingData);
       const result = await dispatch(bookingSummary(bookingData)).unwrap();
 
-      if (result && !result.error) {
+      if (result) {
         console.log("Booking summary created successfully:", result);
 
         const updatedBookingData = {
           ...bookingData,
-          season: result.season,
-          cleaningFee: result.cleaningFee,
-          petFee: result.petFee,
-          totalAmountDue: result.totalAmountDue,
+          season: result.data.season,
+          cleaningFee: result.data.cleaningFee,
+          petFee: result.data.petFee,
+          totalAmountDue: result.data.totalAmountDue,
         };
 
         await dispatch(saveBooking(updatedBookingData));
