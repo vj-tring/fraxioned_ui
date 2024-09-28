@@ -108,7 +108,7 @@ const Login: React.FC = () => {
                 type="text"
                 placeholder="Email"
                 value={email}
-                autoFocus
+                // autoFocus
                 onChange={handleEmailChange}
                 onBlur={handleEmailBlur}
                 className={emailError ? styles.errorInput : ''}

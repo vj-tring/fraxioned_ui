@@ -14,7 +14,8 @@ import PropertyList from "./propertyList";
 import BackgroundBeamsDemo from "./backgroundHome";
 // import TrackingMyNigts from "../booking/trackingMyNights";
 // import { fetchProperties } from "@/store/slice/auth/property-slice";
-
+import dashboardAcc from "./dashboardAcc";
+import DashboardAcc from "./dashboardAcc";
 interface Property {
   id: number;
   propertyName?: string;
@@ -75,7 +76,8 @@ const Home: React.FC = () => {
       <div className="Container1">
         <PropertyList />
       </div>
-      <BackgroundBeamsDemo/>
+      {/* <DashboardAcc/> */}
+      {/* <BackgroundBeamsDemo/> */}
     </div>
   );
 };

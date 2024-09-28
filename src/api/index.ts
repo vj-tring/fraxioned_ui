@@ -174,7 +174,7 @@ export const updateamenities = (id: number, updateData: {
 }) => axiosInstance.patch(`/v1/amenities/amenity/${id}`, updateData);
 
 export const propertyImageapi = () =>
-    axiosInstance.get(`/v1/propertyImages`);
+    axiosInstance.get(`/v1/property-images`);
 
 export const deleteAmenity = (id: number) =>
     axiosInstance.delete(`/v1/amenities/amenity/${id}`);

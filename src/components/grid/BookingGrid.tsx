@@ -79,14 +79,14 @@ const BookingGrid: React.FC<BookingGridProps> = ({
   };
 
   const columns: GridColDef[] = [
-    { field: "bookingId", headerName: "BookingID", flex: 1, headerAlign: "center", align: "center" },
+    { field: "bookingId", headerName: "BookingID", width:170, headerAlign: "center", align: "center" },
     // { field: "propertyId", headerName: "PropertyID", flex: 1, headerAlign: "center", align: "center" },
-    { field: "property", headerName: "Property", flex: 1, headerAlign: "center", align: "center" },
-    { field: "checkinDate", headerName: "Check-in", headerAlign: "center", align: "center" },
-    { field: "checkoutDate", headerName: "Checkout", headerAlign: "center", align: "center" },
-    { field: "guest", headerName: "Guests", flex: 1, headerAlign: "center", align: "center" },
-    { field: "createdAt", headerName: "Booked", flex: 1, headerAlign: "center", align: "center" },
-    { field: "totalNights", headerName: "TotalNights", flex: 1, headerAlign: "center", align: "center" },
+    { field: "property", headerName: "Property", width:170, headerAlign: "center", align: "center" },
+    { field: "checkinDate", headerName: "Check-in", headerAlign: "center", align: "center", width:170 },
+    { field: "checkoutDate", headerName: "Checkout", headerAlign: "center", align: "center", width:170 },
+    { field: "guest", headerName: "Guests", width:170, headerAlign: "center", align: "center" },
+    { field: "createdAt", headerName: "Booked", width:170, headerAlign: "center", align: "center" },
+    { field: "totalNights", headerName: "TotalNights", width:170, headerAlign: "center", align: "center" },
   ];
 
   if (activeTab === 0) {
