@@ -15,7 +15,7 @@ import BookingCalendar from "@/components/booking-calendar";
 import TrackingMyNigts from "./trackingMyNights";
 import PropertyList from "../home/propertyList";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/store";
+import { AppDispatch } from "@/store";
 import {
   BookingData,
   fetchUserBookings,
@@ -26,6 +26,7 @@ import CustomizedSnackbar from "@/components/customized-snackbar";
 import "../booking/booking.css";
 import EditBookingModal from './bookingEdit';
 import { fetchProperties } from "@/store/slice/auth/property-slice";
+import { RootState } from "@/store/reducers";
 
 const Booking = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -40,6 +41,7 @@ const Booking = () => {
   const userBookings = useSelector(
     (state: RootState) => state.bookings.userBookings || []
   );
+  const properties = useSelector((state: RootState) => state.properties.cards || []);
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
@@ -53,6 +55,7 @@ const Booking = () => {
     setSnackbarSeverity(severity);
     setSnackbarOpen(true);
   };
+
   useEffect(() => {
     if (user && user.id) {
       console.log("user", user);
@@ -258,7 +261,7 @@ const Booking = () => {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: '97%',
+          width: properties.length === 1 ? '50%' : '97%',
           height: '60%',
           bgcolor: 'background.paper',
           p: 4,
@@ -278,7 +281,7 @@ const Booking = () => {
           >
             <CloseIcon />
           </IconButton>
-          <BookingCalendar />
+          <BookingCalendar properties={properties} />
         </Box>
       </Modal>
 

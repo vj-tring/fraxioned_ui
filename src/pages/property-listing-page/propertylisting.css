@@ -132,6 +132,8 @@ body {
 
 .PropertyAddress {
   font-size: 1.1rem !important;
+  display: flex;
+  gap: 6px;
 }
 
 .ThingstoHead {

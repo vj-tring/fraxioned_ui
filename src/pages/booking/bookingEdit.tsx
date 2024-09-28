@@ -8,7 +8,9 @@ import MultipleSelect from '@/components/guest-selector';
 import { RootState } from '@/store/reducers';
 import { initializeCounts } from '@/store/slice/auth/propertyGuestSlice';
 import { format } from 'date-fns';
-import { updateBooking } from '@/store/slice/auth/bookingSlice';
+import { fetchUserBookings, updateBooking } from '@/store/slice/auth/bookingSlice';
+import { selectProperty } from '@/store/slice/auth/property-slice';
+import { AppDispatch } from '@/store';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -44,7 +46,7 @@ interface EditBookingModalProps {
 }
 
 const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, handleClose, onUpdateSuccess }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
   const [displayDates, setDisplayDates] = useState({ checkinDate: '', checkoutDate: '' });
   const [dateError, setDateError] = useState<string | null>(null);
@@ -52,10 +54,17 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
   const [disabledDates, setDisabledDates] = useState<Date[]>([]);
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
   const [guestCount, setGuestCount] = useState<number>(0);
-
+  const userId = useSelector((state: any) => state.auth.user?.id);
   const guestCounts = useSelector((state: RootState) => state.limits.counts);
   const updateStatus = useSelector((state: RootState) => state.bookings.successMessage);
   const updateError = useSelector((state: RootState) => state.bookings.error);
+
+  
+  useEffect(() => {
+    if (booking?.propertyId) {
+      dispatch(selectProperty(booking?.propertyId));
+    }
+  }, [dispatch, booking?.propertyId, userId]);
 
   useEffect(() => {
     if (booking) {
@@ -137,7 +146,7 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
     try {
       const updatedBookingData = {
         user: { id: booking.user.id },
-        property: { id: 6 },
+        property: { id: booking?.propertyId },
         updatedBy: { id: booking.user.id },
         checkinDate: dateRange.from.toISOString(),
         checkoutDate: dateRange.to.toISOString(),
@@ -153,6 +162,9 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
       };
 
       dispatch(updateBooking({ bookingId: booking.id, updatedData: updatedBookingData }));
+      dispatch(fetchUserBookings(userId));
+
+
     } catch (error) {
       console.error('Error updating booking:', error);
       if (error instanceof Error) {
@@ -163,6 +175,7 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
     } finally {
       setIsSubmitting(false);
     }
+
   };
 
   return (
@@ -182,9 +195,9 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
            <Typography>
            # {booking?.bookingId}
             </Typography>
-            {/* <Typography>
-            {booking?.property.propertyName}
-            </Typography> */}
+            <Typography>
+            {booking?.property}
+            </Typography>
           </Grid>
           <Grid item xs={5}>
                <Box sx={dateBoxStyle}>
@@ -216,7 +229,7 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
             <DatePickerWithRange
               onSelect={handleDateSelect}
               initialRange={dateRange}
-            />
+              propertyColor={''}            />
           </Grid>
         </Grid>
         {dateError && (
