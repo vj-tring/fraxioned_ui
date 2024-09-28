@@ -54,6 +54,7 @@ const Booking = () => {
     setSnackbarSeverity(severity);
     setSnackbarOpen(true);
   };
+
   useEffect(() => {
     if (user && user.id) {
       console.log("user", user);
@@ -279,7 +280,7 @@ const Booking = () => {
           >
             <CloseIcon />
           </IconButton>
-          <BookingCalendar />
+          <BookingCalendar properties={properties} />
         </Box>
       </Modal>
 
