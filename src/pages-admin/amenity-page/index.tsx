@@ -5,6 +5,9 @@ import NewAmenityForm from '../property-amenities/new-amenity';
 import { Edit2, Check, X, Trash2, Plus, Search } from 'lucide-react';
 import ConfirmationModal from '@/components/confirmation-modal';
 import CustomizedSnackbars from '@/components/customized-snackbar';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import { IconButton } from '@mui/material';
+
 
 interface Amenity {
     id: number;
@@ -134,24 +137,18 @@ const AmenityManagement: React.FC = () => {
                 const response = await deleteAmenity(amenityToDelete.id);
                 if (response.data.success) {
                     showSnackbar('Amenity deleted successfully', 'success');
-                    setTimeout(() => {
-                        setShowDeleteModal(false);
-                        setAmenityToDelete(null);
-                    }, 500);
+                    setShowDeleteModal(false);
+                    setAmenityToDelete(null);
                     await fetchAmenities();
                 } else {
                     showSnackbar(response.data.message || 'Failed to delete amenity. Please try again.', 'error');
-                    setTimeout(() => {
-                        setShowDeleteModal(false);
-                        setAmenityToDelete(null);
-                    }, 500);
+                    setShowDeleteModal(false);
+                    setAmenityToDelete(null);
                 }
             } catch (err: any) {
                 showSnackbar(err.response?.data?.message || 'Failed to delete amenity. Please try again.', 'error');
-                setTimeout(() => {
-                    setShowDeleteModal(false);
-                    setAmenityToDelete(null);
-                }, 500);
+                setShowDeleteModal(false);
+                setAmenityToDelete(null);
             }
         }
     };
@@ -161,13 +158,8 @@ const AmenityManagement: React.FC = () => {
         setAmenityToDelete(null);
     };
 
-    const handleResetView = () => {
-        setActiveType(null);
-        setSearchTerm('');
-    };
-
-    const handleMoreClick = (type: string) => {
-        setActiveType(type);
+    const handleTypeClick = (type: string) => {
+        setActiveType(type === activeType ? null : type);
     };
 
     const filteredAmenities = Object.entries(amenities).reduce((acc, [type, amenitiesList]) => {
@@ -184,102 +176,102 @@ const AmenityManagement: React.FC = () => {
 
     return (
         <div className={styles.container}>
-            <div className={styles.sidebar}>
-                <h2 className={styles.sidebarTitle}>Amenity Types</h2>
-                <ul className={styles.typeList}>
+            <div className={styles.header}>
+                <h1 className={styles.title}>Amenity Management</h1>
+                <div className={styles.actions}>
+                    <div className={styles.searchBar}>
+                        <Search size={20} />
+                        <input
+                            type="text"
+                            placeholder="Search amenities..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+                    <button className={styles.addButton} onClick={handleAddNew}>
+                        <Plus size={20} />
+                        New Amenity
+                    </button>
+
+                    <IconButton
+                        onClick={() => window.location.reload()}
+                        className={styles.refreshIcon}
+                        aria-label="refresh"
+                    >
+                        <RefreshIcon />
+                    </IconButton>
+                </div>
+            </div>
+            <div className={styles.content}>
+                {isAddingNew && (
+                    <NewAmenityForm
+                        onClose={handleCloseNewAmenityForm}
+                        onAmenityAdded={handleAmenityAdded}
+                    />
+                )}
+                <div className={styles.typeFilter}>
                     {Object.keys(amenities).map(type => (
-                        <li
+                        <button
                             key={type}
-                            className={`${styles.typeItem} ${activeType === type ? styles.active : ''}`}
-                            onClick={() => setActiveType(type === activeType ? null : type)}
+                            className={`${styles.typeButton} ${activeType === type ? styles.active : ''}`}
+                            onClick={() => handleTypeClick(type)}
                         >
                             {type}
-                        </li>
-                    ))}
-                </ul>
-            </div>
-            <div className={styles.mainContent}>
-                <div className={styles.header}>
-                    <h1 className={styles.title} onClick={handleResetView}>Amenity Management</h1>
-                    <div className={styles.actions}>
-                        <div className={styles.searchBar}>
-                            <Search size={20} />
-                            <input
-                                type="text"
-                                placeholder="Search amenities..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                        </div>
-                        <button className={styles.addButton} onClick={handleAddNew}>
-                            New Amenity
                         </button>
-                    </div>
+                    ))}
                 </div>
-                <div className={styles.content}>
-                    {isAddingNew && (
-                        <NewAmenityForm
-                            onClose={handleCloseNewAmenityForm}
-                            onAmenityAdded={handleAmenityAdded}
-                        />
-                    )}
-                    <div className={`${styles.amenitiesGrid} ${activeType ? styles.singleTypeView : ''}`}>
-                        {Object.entries(filteredAmenities)
-                            .filter(([type]) => !activeType || type === activeType)
-                            .map(([type, amenitiesList]) => (
-                                <div key={type} className={`${styles.amenityGroup} ${activeType ? styles.fullHeight : ''}`}>
-                                    <h2 className={styles.amenityType}>{type}</h2>
-                                    <div className={styles.amenityList}>
-                                        {(activeType ? amenitiesList : amenitiesList.slice(0, 2)).map((amenity) => (
-                                            <div key={amenity.id} className={styles.amenityItem}>
-
-                                                {editingAmenity?.id === amenity.id ? (
-                                                    <>
-                                                        <input
-                                                            type="text"
-                                                            value={editingAmenity.amenityName}
-                                                            onChange={(e) => setEditingAmenity({ ...editingAmenity, amenityName: e.target.value })}
-                                                            className={styles.editInput}
-                                                        />
-                                                        <div className={styles.actionButtons}>
-                                                            <button onClick={handleSave} className={styles.saveButton}><Check size={16} /></button>
-                                                            <button onClick={handleCancel} className={styles.cancelButton}><X size={16} /></button>
-                                                        </div>
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <span>{amenity.amenityName}</span>
-                                                        <div className={styles.actionButtons}>
-                                                            <button onClick={() => handleEdit(amenity)} className={styles.editButton}>
-                                                                <Edit2 size={16} />
-                                                            </button>
-                                                            <button onClick={() => handleDeleteClick(amenity)} className={styles.deleteButton}>
-                                                                <Trash2 size={16} />
-                                                            </button>
-                                                        </div>
-                                                    </>
-                                                )}
-                                            </div>
-                                        ))}
-                                        {!activeType && amenitiesList.length > 2 && (
-                                            <div className={styles.moreLink} onClick={() => handleMoreClick(type)}>
-                                                More...
-                                            </div>
-                                        )}
-                                    </div>
+                <div className={styles.amenitiesGrid}>
+                    {Object.entries(filteredAmenities)
+                        .filter(([type]) => !activeType || type === activeType)
+                        .map(([type, amenitiesList]) => (
+                            <div key={type} className={styles.amenityGroup}>
+                                <h2 className={styles.amenityType}>{type}</h2>
+                                <div className={styles.amenityList}>
+                                    {amenitiesList.map((amenity) => (
+                                        <div key={amenity.id} className={styles.amenityItem}>
+                                            {editingAmenity?.id === amenity.id ? (
+                                                <>
+                                                    <input
+                                                        type="text"
+                                                        value={editingAmenity.amenityName}
+                                                        onChange={(e) => setEditingAmenity({ ...editingAmenity, amenityName: e.target.value })}
+                                                        className={styles.editInput}
+                                                    />
+                                                    <div className={styles.actionButtons}>
+                                                        <button onClick={handleSave} className={styles.saveButton}><Check size={16} /></button>
+                                                        <button onClick={handleCancel} className={styles.cancelButton}><X size={16} /></button>
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <span>{amenity.amenityName}</span>
+                                                    <div className={styles.actionButtons}>
+                                                        <button onClick={() => handleEdit(amenity)} className={styles.editButton}>
+                                                            <Edit2 size={16} />
+                                                        </button>
+                                                        <button onClick={() => handleDeleteClick(amenity)} className={styles.deleteButton}>
+                                                            <Trash2 size={16} />
+                                                        </button>
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
-                    </div>
+                            </div>
+                        ))}
                 </div>
             </div>
             <ConfirmationModal
-          show={showDeleteModal}
-          onHide={handleDeleteCancel}
-          onConfirm={handleDeleteConfirm}
-          title="Delete Amenity"
-          message={`Are you sure you want to delete the amenity "${amenityToDelete?.amenityName}"?`}
-          confirmLabel="Delete"
-          cancelLabel="Cancel" children={undefined}            />
+                show={showDeleteModal}
+                onHide={handleDeleteCancel}
+                onConfirm={handleDeleteConfirm}
+                title="Delete Amenity"
+                message={`Are you sure you want to delete the amenity "${amenityToDelete?.amenityName}"?`}
+                confirmLabel="Delete"
+                cancelLabel="Cancel"
+                children={undefined}
+            />
             <CustomizedSnackbars
                 open={snackbar.open}
                 handleClose={handleSnackbarClose}
