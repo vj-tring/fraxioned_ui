@@ -11,7 +11,7 @@ import { resetLimits } from "@/store/slice/auth/propertyGuestSlice";
 import { useDispatch } from "react-redux";
 import { clearDates } from "@/store/slice/datePickerSlice";
 import PropertyList from "./propertyList";
-import TrackingMyNigts from "../booking/trackingMyNights";
+import TrackingMyNigts from "../../components/tracking-nights/trackingMyNights";
 import { fetchProperties } from "@/store/slice/auth/property-slice";
 
 interface Property {

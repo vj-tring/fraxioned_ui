@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-
-import "../booking/trackingMyNights.css";
+import './trackingMyNights.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { MenuItem, Select } from "@mui/material";
-import { Image } from "../property-listing-page";
+import { Image } from "../../pages/property-listing-page";
 import { propertyImageapi } from "@/api";
 
 interface Property {
@@ -39,12 +38,8 @@ interface RootState {
 
 const TrackingMyNigts: React.FC = () => {
   const properties = useSelector((state: RootState) => state.properties.cards);
-  const [selectedPropertyId, setSelectedPropertyId] = useState<number | null>(
-    null
-  );
-  const [selectedYear, setSelectedYear] = useState<number>(
-    new Date().getFullYear()
-  );
+  const [selectedPropertyId, setSelectedPropertyId] = useState<number | null>(null);
+  const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
   const [imageDetails, setImageDetails] = useState<Image[]>([]);
 
   useEffect(() => {

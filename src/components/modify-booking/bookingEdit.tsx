@@ -12,7 +12,7 @@ import { fetchUserBookings, updateBooking } from '@/store/slice/auth/bookingSlic
 import { selectProperty } from '@/store/slice/auth/property-slice';
 import { AppDispatch } from '@/store';
 
-const style = {
+const MODAL_STYLE = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
@@ -24,7 +24,7 @@ const style = {
   borderRadius: 2,
 };
 
-const dateBoxStyle = {
+const DATE_BOX_STYLE = {
   border: '1px solid gray',
   borderRadius: '10px',
   padding: '3px',
@@ -51,22 +51,18 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
   const [displayDates, setDisplayDates] = useState({ checkinDate: '', checkoutDate: '' });
   const [dateError, setDateError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [disabledDates, setDisabledDates] = useState<Date[]>([]);
-  const [isCalendarVisible, setIsCalendarVisible] = useState(false);
+  const [isCalendarOpen, setIsCalendarVisible] = useState(false);
   const [guestCount, setGuestCount] = useState<number>(0);
   const userId = useSelector((state: any) => state.auth.user?.id);
   const guestCounts = useSelector((state: RootState) => state.limits.counts);
   const updateStatus = useSelector((state: RootState) => state.bookings.successMessage);
   const updateError = useSelector((state: RootState) => state.bookings.error);
 
-  
   useEffect(() => {
     if (booking?.propertyId) {
       dispatch(selectProperty(booking?.propertyId));
     }
-  }, [dispatch, booking?.propertyId, userId]);
 
-  useEffect(() => {
     if (booking) {
       setDateRange({
         from: new Date(booking.checkinDate),
@@ -83,9 +79,7 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
         Pets: booking.noOfPets
       }));
     }
-  }, [booking, dispatch]);
 
-  useEffect(() => {
     if (updateStatus === "Booking updated successfully") {
       onUpdateSuccess(booking);
       handleClose();
@@ -93,7 +87,7 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
     if (updateError) {
       setDateError(updateError);
     }
-  }, [updateStatus, updateError, onUpdateSuccess, booking, handleClose]);
+  }, [booking, dispatch, updateStatus, updateError, onUpdateSuccess, handleClose, booking?.propertyId, userId]);
 
   const formattedDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -105,32 +99,17 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
     setDateError(null);
     
     if (range?.from && range?.to) {
-      updateDisabledDates(range);
       updateDisplayDates(range);
       setIsCalendarVisible(false);
     }
   }
 
-  const updateDisabledDates = (newRange: DateRange) => {
-    const updatedDisabledDates = disabledDates.filter(date => {
-      return date < newRange.from! || date > newRange.to!;
-    });
-    
-    let currentDate = new Date(newRange.from!);
-    while (currentDate <= newRange.to!) {
-      updatedDisabledDates.push(new Date(currentDate));
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-    
-    setDisabledDates(updatedDisabledDates);
-  };
-
-  const updateDisplayDates = (range: DateRange) => {
-    setDisplayDates({
-      checkinDate: formattedDate(range.from!), 
-      checkoutDate: formattedDate(range.to!), 
-    });
-  };
+const updateDisplayDates = (range: DateRange) => {
+  setDisplayDates({
+    checkinDate: formattedDate(range.from!.toISOString()), 
+    checkoutDate: formattedDate(range.to!.toISOString()), 
+  });
+};
 
   const handleGuestChange = (newCount: number) => {
     setGuestCount(newCount);
@@ -185,7 +164,7 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
       aria-labelledby="edit-booking-modal"
       aria-describedby="modal-to-edit-booking"
     >
-      <Box sx={style}>
+      <Box sx={MODAL_STYLE}>
         <Typography id="edit-booking-modal" variant="h4" component="h2" mb={2}>
           Modify Your Booking
         </Typography>
@@ -200,7 +179,7 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
             </Typography>
           </Grid>
           <Grid item xs={5}>
-               <Box sx={dateBoxStyle}>
+               <Box sx={DATE_BOX_STYLE}>
               <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
                 <Box>
                   <Typography variant="caption" sx={{ fontWeight: 'bold', fontSize: '14px' }}>Check-in</Typography>

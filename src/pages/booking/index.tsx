@@ -12,7 +12,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import BookingGrid from "@/components/grid/BookingGrid";
 import BookingCalendar from "@/components/booking-calendar";
-import TrackingMyNigts from "./trackingMyNights";
+import TrackingMyNigts from "../../components/tracking-nights/trackingMyNights";
 import PropertyList from "../home/propertyList";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/store";
@@ -24,7 +24,7 @@ import { format } from "date-fns";
 import { cancelBooking } from "@/api";
 import CustomizedSnackbar from "@/components/customized-snackbar";
 import "../booking/booking.css";
-import EditBookingModal from './bookingEdit';
+import EditBookingModal from '../../components/modify-booking/bookingEdit';
 import { fetchProperties } from "@/store/slice/auth/property-slice";
 import { RootState } from "@/store/reducers";
 

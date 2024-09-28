@@ -120,13 +120,6 @@ export const fetchUserBookings = createAsyncThunk(
   }
 );
 
-// export const saveBooking = createAsyncThunk(
-//   'bookings/saveBooking',
-//   async (bookingData: BookingData) => {
-//     return bookingData;
-//   }
-// );
-
 export const bookingSummary = createAsyncThunk<
   BookingSummaryResponse,
   BookingData,

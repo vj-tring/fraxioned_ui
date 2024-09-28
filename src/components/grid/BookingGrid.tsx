@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { Button, Grid, Typography } from "@mui/material";
-import ConfirmationModal from "../confirmation-modal";
-import EditBookingModal from "@/pages/booking/bookingEdit";
 import CancelPolicy from "../cancel-policy";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchBookings,
   fetchUserBookings,
 } from "@/store/slice/auth/bookingSlice";
 import { AppDispatch } from "@/store";
 import { RootState } from "@/store/reducers";
+import EditBookingModal from "../modify-booking/bookingEdit";
 
 interface BookingGridProps {
   bookings: Array<{
