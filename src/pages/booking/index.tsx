@@ -41,6 +41,7 @@ const Booking = () => {
   const userBookings = useSelector(
     (state: RootState) => state.bookings.userBookings || []
   );
+  const properties = useSelector((state: RootState) => state.properties.cards || []);
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
@@ -260,7 +261,7 @@ const Booking = () => {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: '97%',
+          width: properties.length === 1 ? '50%' : '97%',
           height: '60%',
           bgcolor: 'background.paper',
           p: 4,
