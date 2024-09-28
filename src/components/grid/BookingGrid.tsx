@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { Button, Grid, Typography } from "@mui/material";
-import ConfirmationModal from "../confirmation-modal";
 import EditBookingModal from "@/pages/booking/bookingEdit";
 import CancelPolicy from "../cancel-policy";
 import { useDispatch, useSelector } from "react-redux";
@@ -239,6 +238,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
       />
       {showCancelPopup && (
         <Grid
+          component={'div'}
           container
           spacing={2}
           direction="column"

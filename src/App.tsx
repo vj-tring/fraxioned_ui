@@ -9,7 +9,7 @@ import ResetPassword from './pages/reset-password';
 import Dashboard from './pages/dashboard';
 import BookingSummary from './pages/booking-summary/pages';
 import AdminDashboard from './pages-admin/admin-dashboard';
-import ScrollToTop from './ScrollToTop';
+import ScrollToTop from './components/ScrollToTop';
 
 interface PrivateRouteProps {
   element: React.ComponentType;
@@ -25,7 +25,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ element: Element, allowedRo
   if (user?.roleId && allowedRoles.includes(user.roleId)) {
     return <Element />;
   }
-  return <Navigate to="/home" />;
+  return <Navigate to="/" />;
 };
 
 function App() {
@@ -34,13 +34,13 @@ function App() {
       <Router>
         <ScrollToTop>
           <Routes>
-            <Route path="/" element={<Navigate to="/login" />} />
+            {/* <Route path="/" element={<Navigate to="/login" />} /> */}
             <Route path="/login" element={<Login />} />
             <Route path="/forgotPassword" element={<ForgetPassword />} />
             <Route path="/recover" element={<Change />} />
             <Route path="/bookingSummary" element={<BookingSummary />} />
             <Route path="/resetPassword" element={<ResetPassword onClose={() => {}} />} />
-            <Route path="/home/*" element={<PrivateRoute element={Dashboard} allowedRoles={[2, 3]} />} />
+            <Route path="/*" element={<PrivateRoute element={Dashboard} allowedRoles={[2, 3]} />} />
             <Route path="/admin/*" element={<PrivateRoute element={AdminDashboard} allowedRoles={[1]} />} />
           </Routes>
         </ScrollToTop>

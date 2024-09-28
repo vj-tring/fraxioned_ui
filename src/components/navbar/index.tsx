@@ -124,9 +124,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
     const fetchUserData = async () => {
       try {
         const response = await getUserById(userId);
-        console.log("user Response", response.data.user);
         setUserFormData(response.data.user);
-        console.log("userFormData", userFormData);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -160,7 +158,7 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
         // style={{ height: "4.3rem" }}
       >
         {!isAdminDashboard && (
-          <Navbar.Brand href="/home" className="p-2">
+          <Navbar.Brand href="/" className="p-2">
             <img
               src={logo}
               height="40"

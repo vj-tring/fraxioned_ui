@@ -21,7 +21,6 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   message,
   confirmLabel,
   cancelLabel,
-  children,
 }) => {
   return (
     <Modal show={show} onHide={onHide} centered className="confirmation-modal">
@@ -30,7 +29,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p className="modal-message">{children}</p>
+        <p className="modal-message">{message}</p>
       </Modal.Body>
       <Modal.Footer>
         <button className="btn-cancel" onClick={onHide}>

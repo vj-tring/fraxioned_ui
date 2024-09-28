@@ -4,7 +4,7 @@ import { useAuthHelpers } from './useAuthHelper';
 
 // Create an Axios instance
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3008/api',
+    baseURL: 'http://localhost:3008/api/v1',
     timeout: 10000,
 });
 

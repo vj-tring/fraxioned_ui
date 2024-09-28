@@ -311,7 +311,7 @@ const PropertyListingPage = () => {
   };
 
   const handleNavigateToSummary = () => {
-    navigate("/home/booking-summary");
+    navigate("/booking-summary");
   };
 
   return (
