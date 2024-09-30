@@ -217,6 +217,10 @@ export function DatePickerWithRange({
     if (startDate.toDateString() === today.toDateString()) {
       return true;
     }
+
+    if (!Array.isArray(bookings) || bookings.length === 0) {
+      return true;
+    }
   
     const userBookings = bookings.filter(
       booking =>
