@@ -5,12 +5,13 @@ import {
   getBookings,
   getUserBookings,
   modifyBooking,
-} from "../../../api/index"; // Ensure these imports are correct
+} from "../../../api/index"; 
 
 export interface BookingData {
   property: {
-    propertyName: any; id: string 
-};
+    propertyName: any;
+    id: string 
+  };
   propertyName: string;
   propertyId: string;
   checkinDate: string;
@@ -22,7 +23,7 @@ export interface BookingData {
   cleaningFee: number;
   petFee: number;
   createdAt: string;
-  notes?: string; // Added notes field
+  notes?: string;
 }
 
 interface BookingSummaryResponse {
@@ -160,8 +161,6 @@ export const confirmBooking = createAsyncThunk<
     try {
       const {
         propertyName,
-        noOfInfants,
-        confirmationCode,
         cleaningFee,
         petFee,
         ...filteredBookingData
