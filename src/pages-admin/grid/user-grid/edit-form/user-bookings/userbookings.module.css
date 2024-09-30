@@ -1,94 +1,103 @@
 .bookingsContainer {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-    padding: 1.5rem;
-    font-family: 'Arial', sans-serif;
+    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+    font-family: 'Inter', sans-serif;
 }
 
-.bookingCard {
+.bookingTile {
     background-color: #ffffff;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
 }
 
-.bookingCard:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+.tileHeader {
+    background: #f0f4f8;
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e0e6ed;
 }
 
-.cardHeader {
-    background-color: #f0f8ff;
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid #e0e0e0;
+.headerIcon {
+    color: #4a5568;
 }
 
 .propertyName {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
-    color: #333;
+    color: #2d3748;
+    text-align: right;
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 1rem;
 }
 
 .bookingId {
-    display: block;
-    font-size: 0.8rem;
-    color: #666;
-    margin-top: 0.25rem;
+    font-size: 0.80rem;
+    font-weight: 600;
+    color: #718096;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    background-color: #e2e8f0;
 }
 
-.cardContent {
-    padding: 1rem;
-}
-
-.dateInfo, .guestInfo, .feeInfo {
+.tileContent {
+    padding: 0.5rem;
     display: flex;
     justify-content: space-between;
-    margin-bottom: 0.75rem;
 }
 
-.label {
-    font-size: 0.85rem;
-    color: #666;
-    font-weight: 500;
+.infoSection, .feesSection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
-.value {
-    font-size: 0.9rem;
-    color: #333;
+.infoItem, .feeItem, .totalItem {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+    color: #4a5568;
+}
+
+.infoItem svg, .feeItem svg, .totalItem svg {
+    margin-right: 0.5rem;
+    color: #4a5568;
+}
+
+.totalItem {
+    margin-top: 0.5rem;
     font-weight: 600;
-}
-
-.totalTransaction {
-    background-color: #f9f9f9;
-    padding: 0.75rem;
-    border-radius: 6px;
-    margin-top: 0.75rem;
-    text-align: right;
-}
-
-.totalTransaction .label {
-    font-size: 0.9rem;
-    font-weight: 600;
-}
-
-.totalTransaction .value {
-    font-size: 1.1rem;
-    color: #2c3e50;
-    margin-left: 0.5rem;
+    color: #2d3748;
 }
 
 .message {
     text-align: center;
     font-size: 1rem;
-    color: #666;
-    padding: 2rem;
+    font-weight: 600;
+    color: #4a5568;
+    padding: 1rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .bookingsContainer {
         grid-template-columns: 1fr;
+    }
+
+    .tileContent {
+        flex-direction: column;
+        gap: 0.75rem;
     }
 }

@@ -1,124 +1,279 @@
 .propertyTabContainer {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  .propertyTile {
-    display: flex;
-    height: 150px;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
-  }
-  
-  .propertyTile:hover {
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    transform: translateY(-2px);
-  }
-  
-  .imageWrapper {
-    width: 120px;
-    height: 150px;
-    overflow: hidden;
-    position: relative;
-  }
-  
-  .propertyImage {
-    width: 100%;
-    max-width: 130px;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .noImage {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f0f0f0;
-    color: #999;
-  }
-  
-  .propertyInfo {
-    flex: 1;
-    padding: 12px !important;
-    display: flex;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow-y: auto;
+}
+
+.loadingText,
+.errorText {
+  text-align: center;
+  font-size: 1.1rem;
+  margin-top: 16px;
+}
+
+.errorText {
+  color: #d32f2f;
+}
+
+.propertyCard {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  background: #fff;
+}
+
+.propertyContent {
+  display: flex;
+  flex-direction: row;
+}
+
+.propertyLeftContent {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  background-color: #f9fafc;
+}
+
+.propertyImageWrapper {
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+}
+
+.propertyImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  padding: 8px;
+}
+
+.propertyNoImage {
+  width: 100%;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e0e0e0;
+  color: #adb5bd;
+}
+
+.propertyInfo {
+  padding: 12px !important;
+}
+
+.propertyInfoContainer {
+  background-color: #ffffff;
+  border-radius: 6px;
+  padding: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.propertyName {
+  font-size: 1.1rem !important;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 6px !important;
+}
+
+.propertyAddress {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  margin-bottom: 8px !important;
+}
+
+.propertyDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.propertyDetailItem {
+  display: flex;
+}
+
+.propertyDetailLabel {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.propertyDetailValue {
+  font-size: 0.85rem;
+  margin-left: 10px;
+}
+
+.propertyRightContent {
+  width: 74%;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.propertyYearSelector {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  justify-content: flex-end;
+}
+
+.propertyYearButton {
+  min-width: 70px !important;
+  border-color: #5ebec2 !important;
+  color: #5ebec2 !important;
+  padding: 4px 8px !important;
+}
+
+.propertyYearButtonSelected {
+  background-color: #5ebec2 !important;
+  color: #ffffff !important;
+}
+
+.propertyAvailabilityContainer {
+  background-color: #f0f4f8;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.propertyAvailabilityInfo {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.nightInfoBlock {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.peakBlock {
+  background-color: #e3f2fd;
+  border: 1px solid #bbdefb;
+}
+
+.offBlock {
+  background-color: #f1f8e9;
+  border: 1px solid #dcedc8;
+}
+
+.lastMinuteBlock {
+  background-color: #fff3e0;
+  border: 1px solid #ffe0b2;
+  flex: 0 0 25%;
+}
+
+.seasonTitle {
+  font-size: 1rem !important;
+  font-weight: 600;
+  color: #34495e;
+  margin-bottom: 12px !important;
+  text-align: center;
+}
+
+.nightInfoContent {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.nightInfoColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.nightInfoSubtitle {
+  font-size: 0.85rem !important;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 8px !important;
+}
+
+.nightInfoRow {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.nightInfoLabel {
+  font-size: 0.8rem;
+  color: #7f8c8d;
+}
+
+.nightInfoValue {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #5ebec2;
+}
+
+@media (max-width: 1024px) {
+  .propertyContent {
     flex-direction: column;
-  }
-  
-  .headerRow {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 4px;
-  }
-  
-  .propertyName {
-    font-size: 1rem !important;
-    font-weight: 600 !important;
-    color: #333;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 70%;
-  }
-  
-  .statusChip {
-    font-size: 0.675rem !important;
-    height: 20px !important;
-  }
-  
-  .address {
-    font-size: 0.8rem !important;
-    color: #5d5b5b;
-    margin-bottom: 8px !important;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .detailsGrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-top: auto;
-  }
-  
-  .detailItem {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .detailLabel {
-    font-size: 12px !important;
-    color: #888;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
   }
 
-  .MuiTypography-root
-  {
-    line-height: 2.43 !important;
+  .propertyLeftContent,
+  .propertyRightContent {
+    width: 100%;
   }
-  
-  .detailValue {
-    font-size: 0.8rem !important;
-    color: #333;
-    font-weight: 500;
+
+  .propertyImageWrapper {
+    height: 200px;
   }
-  
-  @media (max-width: 600px) {
-    .propertyTabContainer {
-      grid-template-columns: 1fr;
-    }
-  
-    .propertyTile {
-      width: 100%;
-    }
+
+  .propertyAvailabilityInfo {
+    flex-direction: column;
   }
+
+  .nightInfoBlock {
+    margin-bottom: 12px;
+  }
+
+  .lastMinuteBlock {
+    flex: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .propertyTabContainer {
+    padding: 16px;
+  }
+
+  .propertyYearSelector {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .propertyYearButton {
+    min-width: 65px !important;
+  }
+
+  .nightInfoContent {
+    flex-direction: column;
+  }
+
+  .nightInfoColumn {
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .propertyYearButton {
+    min-width: 55px !important;
+    font-size: 0.75rem !important;
+  }
+
+  .seasonTitle {
+    font-size: 0.95rem !important;
+  }
+
+  .nightInfoLabel,
+  .nightInfoValue {
+    font-size: 0.75rem;
+  }
+}

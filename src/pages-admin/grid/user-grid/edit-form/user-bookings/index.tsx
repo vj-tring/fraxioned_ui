@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getUserBookings } from '@/api';
 import styles from './userbookings.module.css';
+import { Calendar, Users, DollarSign, Sparkles } from 'lucide-react';
 
 interface BookingProps {
     userId: number;
@@ -68,53 +69,35 @@ const UserBookings: React.FC<BookingProps> = ({ userId }) => {
     return (
         <div className={styles.bookingsContainer}>
             {bookings.map((booking) => (
-                <div key={booking.id} className={styles.bookingCard}>
-                    <div className={styles.cardHeader}>
-                        <h3 className={styles.propertyName}>{booking.property.propertyName}</h3>
+                <div key={booking.id} className={styles.bookingTile}>
+                    <div className={styles.tileHeader}>
                         <span className={styles.bookingId}>{booking.bookingId}</span>
+                        <h3 className={styles.propertyName}>{booking.property.propertyName}</h3>
                     </div>
-                    <div className={styles.cardContent}>
-                        <div className={styles.dateInfo}>
-                            <div>
-                                <span className={styles.label}>Check-in:</span>
-                                <span className={styles.value}>{formatDate(booking.checkinDate)}</span>
+                    <div className={styles.tileContent}>
+                        <div className={styles.infoSection}>
+                            <div className={styles.infoItem}>
+                                <Calendar size={14} />
+                                <span>{formatDate(booking.checkinDate)} - {formatDate(booking.checkoutDate)}</span>
                             </div>
-                            <div>
-                                <span className={styles.label}>Check-out:</span>
-                                <span className={styles.value}>{formatDate(booking.checkoutDate)}</span>
-                            </div>
-                        </div>
-                        <div className={styles.guestInfo}>
-                            <div>
-                                <span className={styles.label}>Guests:</span>
-                                <span className={styles.value}>
-                                    {booking.noOfAdults || 0} Adults, {booking.noOfChildren || 0} Children
-                                </span>
-                            </div>
-                            <div>
-                                <span className={styles.label}>Pets:</span>
-                                <span className={styles.value}>{booking.noOfPets}</span>
+                            <div className={styles.infoItem}>
+                                <Users size={14} />
+                                <span>{booking.noOfAdults || 0} Adults, {booking.noOfChildren || 0} Children, {booking.noOfPets} Pets</span>
                             </div>
                         </div>
-                        <div className={styles.feeInfo}>
-                            <div>
-                                <span className={styles.label}>Cleaning Fee:</span>
-                                <span className={styles.value}>
-                                    {booking.cleaningFee !== null ? `$${booking.cleaningFee.toFixed(2)}` : 'N/A'}
-                                </span>
+                        <div className={styles.feesSection}>
+                            <div className={styles.feeItem}>
+                                <Sparkles size={14} />
+                                <span>Cleaning: ${booking.cleaningFee?.toFixed(2) || 'N/A'}</span>
                             </div>
-                            <div>
-                                <span className={styles.label}>Pet Fee:</span>
-                                <span className={styles.value}>
-                                    {booking.petFee !== null ? `$${booking.petFee.toFixed(2)}` : 'N/A'}
-                                </span>
+                            <div className={styles.feeItem}>
+                                <Sparkles size={14} />
+                                <span>Pet: ${booking.petFee?.toFixed(2) || 'N/A'}</span>
                             </div>
-                        </div>
-                        <div className={styles.totalTransaction}>
-                            <span className={styles.label}>Total:</span>
-                            <span className={styles.value}>
-                                ${calculateTotalTransaction(booking.cleaningFee, booking.petFee).toFixed(2)}
-                            </span>
+                            <div className={styles.totalItem}>
+                                <DollarSign size={14} />
+                                <span>Total: ${calculateTotalTransaction(booking.cleaningFee, booking.petFee).toFixed(2)}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
