@@ -10,6 +10,7 @@ import Dashboard from './pages/dashboard';
 import BookingSummary from './pages/booking-summary/pages';
 import AdminDashboard from './pages-admin/admin-dashboard';
 import ScrollToTop from './components/ScrollToTop';
+import {ApiInterceptor} from './api/axiosSetup';
 
 interface PrivateRouteProps {
   element: React.ComponentType;
@@ -33,6 +34,7 @@ function App() {
     <Provider store={store}>
       <Router>
         <ScrollToTop>
+          <ApiInterceptor />
           <Routes>
             {/* <Route path="/" element={<Navigate to="/login" />} /> */}
             <Route path="/login" element={<Login />} />
