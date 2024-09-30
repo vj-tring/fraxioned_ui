@@ -4,7 +4,7 @@ import { DatePickerWithRange } from '.';
 import { addDays } from 'date-fns';
 import '@testing-library/jest-dom';
 
-jest.mock('@/lib/utils', () => ({
+jest.mock('@/utils', () => ({
   cn: jest.fn(),
 }));
 
