@@ -152,7 +152,7 @@ export function DatePickerWithRange({
     if (externalBookedDates.length > 0) {
       return externalBookedDates;
     }
-    if (!selectedPropertyDetails) return [];
+    if (!selectedPropertyDetails || !Array.isArray(bookings)) return [];
 
     const dates = bookings
       .filter(
@@ -255,6 +255,10 @@ export function DatePickerWithRange({
       return true;
     }
 
+    if (!Array.isArray(bookings) || bookings.length === 0) {
+      return true;
+    }
+  
     const userBookings = bookings.filter(
       (booking) =>
         booking.property.id === selectedPropertyDetails.id &&

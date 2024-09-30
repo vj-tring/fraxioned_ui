@@ -8,11 +8,10 @@ import { AppDispatch } from '@/store';
 
 const predefinedColors = ['#87CEEB', '#FFA500', '#b94ccf', '#FF33A1', '#A133FF', '#33FFA1'];
 
-const BookingCalendar = () => {
+const BookingCalendar = ({ properties }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const userId = useSelector((state: any) => state.auth.user?.id);
-  const { cards: properties, loading: propertiesLoading } = useSelector((state: any) => state.properties);
   const { userBookings, isLoading: bookingsLoading } = useSelector((state: any) => state.bookings);
 
   useEffect(() => {
@@ -26,7 +25,7 @@ const BookingCalendar = () => {
     console.log('User Bookings:', userBookings);
   }, [userBookings]);
 
-  if (propertiesLoading || bookingsLoading) {
+  if (bookingsLoading) {
     return <div>Loading...</div>;
   }
 
