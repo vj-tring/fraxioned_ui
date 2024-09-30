@@ -188,10 +188,9 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                     styles["nav-link-with-margin"]
                   }`
                 }
-                style={{ 
+                style={{
                   textDecoration: "none",
-        
-                 }}
+                }}
                 aria-disabled={link.disabled ? "true" : "false"}
               >
                 {link.name}

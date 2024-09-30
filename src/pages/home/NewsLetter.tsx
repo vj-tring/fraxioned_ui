@@ -1,9 +1,9 @@
-import * as React from "react";
+// import * as React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import CardActionArea from "@mui/material/CardActionArea";
+// import CardActionArea from "@mui/material/CardActionArea";
 import NewsImg from "../../assests/LivingRoom.jpg";
 export default function NewsLetter() {
   return (
@@ -14,11 +14,11 @@ export default function NewsLetter() {
         height: 300,
         overflowY: "scroll",
         borderRadius: "10px",
-        boxShadow:'none',
+        // boxShadow: "none",
         // border:'1px solid #ccc',
       }}
     >
-      <CardActionArea disableRipple sx={{}}>
+      <div>
         <CardContent
           sx={{
             padding: 1,
@@ -53,7 +53,7 @@ export default function NewsLetter() {
           image={NewsImg}
           alt="green iguana"
         />
-      </CardActionArea>
+      </div>
     </Card>
   );
 }
