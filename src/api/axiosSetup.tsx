@@ -1,8 +1,7 @@
 import axios from "axios";
-import { createAuthHelpers } from "./useAuthHelper";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "@/components/snackbar-provider";
-import { useEffect, useRef } from "react";
+import React, { ReactNode, useLayoutEffect } from "react";
 
 // const navigate = useNavigate();
 // const { showSnackbar } = useSnackbar();
@@ -14,15 +13,19 @@ const axiosInstance = axios.create({
   timeout: 10000,
 });
 
-function ApiInterceptor() {
+interface AxiosInterceptorProps {
+  children: ReactNode;
+}
+const AxiosInterceptor: React.FC<AxiosInterceptorProps> = ({ children }) => {
   const navigate = useNavigate();
   const { showSnackbar } = useSnackbar();
-  const { handleUnauthorized } = createAuthHelpers(navigate, showSnackbar);
-  const interceptorsAdded = useRef(false);
-  useEffect(() => {
-    if (!interceptorsAdded.current) {
-      // Add a request interceptor
-      const interceptor = axiosInstance.interceptors.request.use(
+  console.log("setting the header");
+  useLayoutEffect(() => {
+    let requestInterceptor: number;
+    let responseInterceptor: number;
+
+    const addInterceptors = () => {
+      requestInterceptor = axiosInstance.interceptors.request.use(
         (config) => {
           // Get the access token from local storage or state
           const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -34,7 +37,7 @@ function ApiInterceptor() {
 
           // If the access token exists, set it in the Authorization header
           if (userId && token) {
-            console.log("setting the header");
+            
             config.headers["user-id"] = userId;
             config.headers["access-token"] = token;
           }
@@ -64,34 +67,48 @@ function ApiInterceptor() {
       );
 
       // Add a response interceptor
-      const requestInterceptor = axiosInstance.interceptors.response.use(
+      responseInterceptor = axiosInstance.interceptors.response.use(
         (response) => {
           // Any status code that lies within the range of 2xx causes this function to trigger
           return response;
         },
         (error) => {
-          // Any status codes that falls outside the range of 2xx causes this function to trigger
-          // You can handle specific errors here (e.g., refresh token on 401, show notifications on error, etc.)
-          if (error.response.status === 401) {
-            console.log("error", error);
+          try {
+            const config = error.config;
+            const requiresAuth =
+              config.headers["user-id"] && config.headers["access-token"];
 
-            handleUnauthorized();
-            interceptorsAdded.current = false; // Reset to allow reinitialization
-
+            if (
+              requiresAuth &&
+              error.response &&
+              (error.response.status === 401 || error.response.status === 403)
+            ) {
+              localStorage.clear();
+              showSnackbar(
+                "Your session is invalid. Please log in again.",
+                "error"
+              );
+              navigate("/login");
+            }
+          } catch (interceptorError) {
+            console.error("Error in response interceptor:", interceptorError);
           }
           return Promise.reject(error);
         }
       );
-      interceptorsAdded.current = true;
-      return () => {
-        axiosInstance.interceptors.request.eject(interceptor);
-        axiosInstance.interceptors.response.eject(requestInterceptor);
-      };
-      
-    }
-  }, [handleUnauthorized]);
+    };
+    addInterceptors();
+    return () => {
+      if (requestInterceptor) {
+        axiosInstance.interceptors.request.eject(requestInterceptor);
+      }
+      if (responseInterceptor) {
+        axiosInstance.interceptors.response.eject(responseInterceptor);
+      }
+    };
+  }, [navigate]);
 
-  return null;
-}
+  return <>{children}</>;
+};
 
-export { ApiInterceptor, axiosInstance };
+export { AxiosInterceptor, axiosInstance };
