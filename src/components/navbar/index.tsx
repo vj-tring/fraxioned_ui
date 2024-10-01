@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navbar } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import NavbarLinks from "../navbar-links";
 import ProfileMenu from "../profile-menu";
 import UserProfileModal from "../user-profile-modal";
@@ -10,6 +11,8 @@ import ResetPasswordModal from "../reset-password-modal";
 import FormDialog from "../register-form-modal";
 import styles from "./navbar.module.css";
 import { getUserById } from "@/api";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/reducers";
 
 interface CustomNavbarProps {
   logo?: string;
@@ -40,6 +43,7 @@ const CustomNavbar = ({
     handleCloseResetPasswordModal,
     handleOpenResetPasswordModal,
   } = useNavbarHandler();
+  const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
 
   const [showUserForm, setShowUserForm] = useState(false);
   const [userData, setUserData] = useState<any>(null);
@@ -87,11 +91,15 @@ const CustomNavbar = ({
   return (
     <>
       <Navbar bg="light" expand="lg" className={`p-2 ${styles.navbar}`}>
-        <Navbar.Brand href="/">
-          <img src={logo} height="40" width="160" alt="Logo" />
-        </Navbar.Brand>
+        {!isAdmin && (
+          <Navbar.Brand>
+            <Link to="/">
+              <img src={logo} height="40" width="160" alt="Logo" />
+            </Link>
+          </Navbar.Brand>
+        )}
         <Navbar.Toggle />
-        <Navbar.Collapse >
+        <Navbar.Collapse>
           <NavbarLinks links={links} />
           <ProfileMenu
             userImage={userImage}
