@@ -9,7 +9,7 @@ import React, { ReactNode, useLayoutEffect } from "react";
 
 // Create an Axios instance
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:3008/api/v1",
+  baseURL: "http://192.168.1.47:3008/api/v1",
   timeout: 10000,
 });
 
@@ -19,11 +19,10 @@ interface AxiosInterceptorProps {
 const AxiosInterceptor: React.FC<AxiosInterceptorProps> = ({ children }) => {
   const navigate = useNavigate();
   const { showSnackbar } = useSnackbar();
-  console.log("setting the header");
   useLayoutEffect(() => {
     let requestInterceptor: number;
     let responseInterceptor: number;
-
+    
     const addInterceptors = () => {
       requestInterceptor = axiosInstance.interceptors.request.use(
         (config) => {
