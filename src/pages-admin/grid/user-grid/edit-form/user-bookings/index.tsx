@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getUserBookings } from '@/api';
 import styles from './userbookings.module.css';
-import { Calendar, Users, DollarSign, Sparkles, Home } from 'lucide-react';
+import { Calendar, Users, DollarSign, Sparkles, Home, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface BookingProps {
     userId: number;
@@ -29,6 +29,7 @@ const UserBookings: React.FC<BookingProps> = ({ userId }) => {
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [expandedProperties, setExpandedProperties] = useState<Record<number, boolean>>({});
 
     useEffect(() => {
         const fetchBookings = async () => {
@@ -36,6 +37,11 @@ const UserBookings: React.FC<BookingProps> = ({ userId }) => {
                 const response = await getUserBookings(userId);
                 if (Array.isArray(response.data)) {
                     setBookings(response.data);
+                    // Set the first property to be expanded by default
+                    if (response.data.length > 0) {
+                        const firstPropertyId = response.data[0].property.id;
+                        setExpandedProperties({ [firstPropertyId]: true });
+                    }
                 } else {
                     setError('No bookings available');
                 }
@@ -76,6 +82,13 @@ const UserBookings: React.FC<BookingProps> = ({ userId }) => {
         }, {} as Record<number, { propertyName: string; bookings: Booking[] }>);
     };
 
+    const togglePropertyExpansion = (propertyId: number) => {
+        setExpandedProperties(prev => ({
+            ...prev,
+            [propertyId]: !prev[propertyId]
+        }));
+    };
+
     if (loading) return <div className={styles.message}>Loading bookings...</div>;
     if (error) return <div className={styles.message}>{error}</div>;
     if (bookings.length === 0) return <div className={styles.message}>No bookings available</div>;
@@ -86,41 +99,53 @@ const UserBookings: React.FC<BookingProps> = ({ userId }) => {
         <div className={styles.pageContainer}>
             {Object.entries(groupedBookings).map(([propertyId, { propertyName, bookings }]) => (
                 <div key={propertyId} className={styles.propertyContainer}>
-                    <h2 className={styles.propertyTitle}>
-                        <Home className={styles.icon} size={20} />
-                        {propertyName}
-                    </h2>
-                    <div className={styles.bookingsContainer}>
-                        {bookings.map((booking) => (
-                            <div key={booking.id} className={styles.bookingTile}>
-                                <div className={styles.bookingId}># {booking.bookingId}</div>
-                                <div className={styles.bookingDetails}>
-                                    <div className={styles.dateRange}>
-                                        <Calendar size={14} />
-                                        <span>{formatDate(booking.checkinDate)} - {formatDate(booking.checkoutDate)}</span>
-                                    </div>
-                                    <div className={styles.guests}>
-                                        <Users size={14} />
-                                        <span>{booking.noOfAdults || 0} Adults, {booking.noOfChildren || 0} Children, {booking.noOfPets} Pets</span>
-                                    </div>
-                                </div>
-                                <div className={styles.bookingFees}>
-                                    <div className={styles.feeItem}>
-                                        <Sparkles size={14} />
-                                        <span>Cleaning: ${booking.cleaningFee?.toFixed(2) || 'N/A'}</span>
-                                    </div>
-                                    <div className={styles.feeItem}>
-                                        <Sparkles size={14} />
-                                        <span>Pet: ${booking.petFee?.toFixed(2) || 'N/A'}</span>
-                                    </div>
-                                    <div className={styles.totalItem}>
-                                        <DollarSign size={14} />
-                                        <span>Total: ${calculateTotalTransaction(booking.cleaningFee, booking.petFee).toFixed(2)}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+                    <div 
+                        className={styles.propertyHeader}
+                        onClick={() => togglePropertyExpansion(Number(propertyId))}
+                    >
+                        <h2 className={styles.propertyTitle}>
+                            <Home className={styles.icon} size={20} />
+                            {propertyName}
+                        </h2>
+                        {expandedProperties[Number(propertyId)] ? (
+                            <ChevronUp className={styles.icon} size={20} />
+                        ) : (
+                            <ChevronDown className={styles.icon} size={20} />
+                        )}
                     </div>
+                    {expandedProperties[Number(propertyId)] && (
+                        <div className={styles.bookingsContainer}>
+                            {bookings.map((booking) => (
+                                <div key={booking.id} className={styles.bookingTile}>
+                                    <div className={styles.bookingId}># {booking.bookingId}</div>
+                                    <div className={styles.bookingDetails}>
+                                        <div className={styles.dateRange}>
+                                            <Calendar size={14} />
+                                            <span>{formatDate(booking.checkinDate)} - {formatDate(booking.checkoutDate)}</span>
+                                        </div>
+                                        <div className={styles.guests}>
+                                            <Users size={14} />
+                                            <span>{booking.noOfAdults || 0} Adults, {booking.noOfChildren || 0} Children, {booking.noOfPets} Pets</span>
+                                        </div>
+                                    </div>
+                                    <div className={styles.bookingFees}>
+                                        <div className={styles.feeItem}>
+                                            <Sparkles size={14} />
+                                            <span>Cleaning: ${booking.cleaningFee?.toFixed(2) || 'N/A'}</span>
+                                        </div>
+                                        <div className={styles.feeItem}>
+                                            <Sparkles size={14} />
+                                            <span>Pet: ${booking.petFee?.toFixed(2) || 'N/A'}</span>
+                                        </div>
+                                        <div className={styles.totalItem}>
+                                            <DollarSign size={14} />
+                                            <span>Total: ${calculateTotalTransaction(booking.cleaningFee, booking.petFee).toFixed(2)}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             ))}
         </div>

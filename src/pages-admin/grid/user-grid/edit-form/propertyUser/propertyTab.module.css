@@ -30,7 +30,6 @@
   display: flex;
   flex-direction: row;
   height: 100%;
-  /* Ensure full height */
 }
 
 
@@ -40,7 +39,15 @@
   flex-direction: column;
   background-color: #f9fafc;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  /* Consistent box shadow */
+}
+
+.propertyRightContent {
+  width: 78%;
+  background-color: #f9fafc;
+  padding: 2px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .propertyImageWrapper {
@@ -71,10 +78,7 @@
 }
 
 .propertyInfoContainer {
-  /* background-color: #ffffff;
-  border-radius: 19px; */
   padding: 12px;
-  /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); */
 }
 
 .propertyName {
@@ -108,21 +112,12 @@
   margin-left: 10px;
 }
 
-.propertyRightContent {
-  width: 78%;
-  background-color: #f9fafc;
-  padding: 2px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-}
-
 .propertyYearSelector {
   display: flex;
   gap: 8px;
   justify-content: flex-end;
   padding: 6px;
-  height: 14%;
+  height: 16%;
 }
 
 .propertyYearButton {
@@ -139,20 +134,16 @@
 
 .propertyAvailabilityContainer {
   height: 90%;
-  /* Increase height of availability container */
-  background-color: #f0f4f8;
   border-radius: 10px;
   padding: 6px;
   overflow-y: auto;
-  /* Add scrolling if content exceeds container */
 }
 
 .propertyAvailabilityInfo {
   display: flex;
   justify-content: space-between;
-  gap: 15px;
+  gap: 6px;
   height: 100%;
-  /* Take full height of container */
 }
 
 .nightInfoBlock {
@@ -174,18 +165,21 @@
 }
 
 .peakBlock {
-  background-color: #e3f2fd;
-  border: 1px solid #bbdefb;
+  background-color: #fffdfd;
+  border: 1px solid #e2e2e2;
+  border-radius: 5px;
 }
 
 .offBlock {
-  background-color: #f1f8e9;
-  border: 1px solid #dcedc8;
+  background-color: #fffdfd;
+  border: 1px solid #e2e2e2;
+  border-radius: 5px;
 }
 
 .lastMinuteBlock {
-  background-color: #fff3e0;
-  border: 1px solid #ffe0b2;
+  background-color: #fffdfd;
+  border: 1px solid #e2e2e2;
+  border-radius: 5px;
   flex: 0 0 25%;
 }
 
@@ -202,14 +196,13 @@
   justify-content: space-between;
   gap: 14px;
   flex-grow: 1;
-  /* Allow content to grow and fill the block */
 
 }
 
 .nightInfoColumn {
   flex: 1;
   display: flex;
-  gap: 3px;
+  gap: 4px;
   flex-direction: column;
 }
 
