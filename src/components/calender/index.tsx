@@ -1,4 +1,4 @@
-//@ts-check
+
 import * as React from "react";
 import { addDays, format, addYears } from "date-fns";
 import { DateRange } from "react-day-picker";
@@ -78,7 +78,7 @@ export function DatePickerWithRange({
     if (onSelect) onSelect(undefined);
   };
 
-  const bookedDates = React.useMemo(() => {
+ const bookedDates = React.useMemo(() => {
     if (externalBookedDates.length > 0) {
       return externalBookedDates;
     }
@@ -118,6 +118,7 @@ export function DatePickerWithRange({
     );
   };
 
+// Function to check if the given date is the day before the unavailable dates to throw an error check-out only.
   const isDayBeforeUnavailableDate = (date: Date) => {
     return unavailableDates.some(
       (unavailableDate) =>
@@ -127,15 +128,15 @@ export function DatePickerWithRange({
     );
   };
 
-
-  const isDayBeforeBookedDate = (date: Date) => {
-    return bookedDates.some(
-      (bookedDate) =>
-        date.getFullYear() === bookedDate.getFullYear() &&
-        date.getMonth() === bookedDate.getMonth() &&
-        date.getDate() === bookedDate.getDate() - 1
-    );
-  };
+// Function to check if the given date is the day before the booked dates to throw an error check-out only.
+const isDayBeforeBookedDate = (date: Date) => {
+  return bookedDates.some(
+    (bookedDate) =>
+      date.getFullYear() === bookedDate.getFullYear() &&
+      date.getMonth() === bookedDate.getMonth() &&
+      date.getDate() === bookedDate.getDate() - 1
+  );
+};
 
 
   const isHolidayDate = (date: Date) => {
@@ -385,8 +386,8 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
   const customLocale = {
     code: calendarData.locale.code,
     localize: {
-      day: (n) => calendarData.locale.days[n],
-      month: (n) => calendarData.locale.months[n],
+      day: (n: any) => calendarData.locale.days[n],
+      month: (n: any) => calendarData.locale.months[n],
     },
     formatLong: {
       date: () => calendarData.locale.dateFormat,
