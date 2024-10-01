@@ -2,6 +2,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "@/components/snackbar-provider";
 import React, { ReactNode, useLayoutEffect } from "react";
+import { BACKEND_URL } from "@/constants";
 
 // const navigate = useNavigate();
 // const { showSnackbar } = useSnackbar();
@@ -9,7 +10,7 @@ import React, { ReactNode, useLayoutEffect } from "react";
 
 // Create an Axios instance
 const axiosInstance = axios.create({
-  baseURL: "http://192.168.1.47:3008/api/v1",
+  baseURL: BACKEND_URL,
   timeout: 10000,
 });
 
