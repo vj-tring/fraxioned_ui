@@ -29,13 +29,18 @@
 .propertyContent {
   display: flex;
   flex-direction: row;
+  height: 100%;
+  /* Ensure full height */
 }
 
+
 .propertyLeftContent {
-  width: 30%;
+  width: 28%;
   display: flex;
   flex-direction: column;
   background-color: #f9fafc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /* Consistent box shadow */
 }
 
 .propertyImageWrapper {
@@ -62,21 +67,20 @@
 }
 
 .propertyInfo {
-  padding: 12px !important;
+  padding: 0px !important;
 }
 
 .propertyInfoContainer {
-  background-color: #ffffff;
-  border-radius: 6px;
+  /* background-color: #ffffff;
+  border-radius: 19px; */
   padding: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); */
 }
 
 .propertyName {
   font-size: 1.1rem !important;
   font-weight: 600;
   color: #2c3e50;
-  margin-bottom: 6px !important;
 }
 
 .propertyAddress {
@@ -87,7 +91,6 @@
 
 .propertyDetails {
   display: flex;
-  flex-direction: column;
   gap: 6px;
 }
 
@@ -106,17 +109,20 @@
 }
 
 .propertyRightContent {
-  width: 74%;
-  padding: 12px;
+  width: 78%;
+  background-color: #f9fafc;
+  padding: 2px;
   display: flex;
   flex-direction: column;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 }
 
 .propertyYearSelector {
   display: flex;
   gap: 8px;
-  margin-bottom: 16px;
   justify-content: flex-end;
+  padding: 6px;
+  height: 14%;
 }
 
 .propertyYearButton {
@@ -132,15 +138,21 @@
 }
 
 .propertyAvailabilityContainer {
+  height: 90%;
+  /* Increase height of availability container */
   background-color: #f0f4f8;
   border-radius: 10px;
-  padding: 16px;
+  padding: 6px;
+  overflow-y: auto;
+  /* Add scrolling if content exceeds container */
 }
 
 .propertyAvailabilityInfo {
   display: flex;
   justify-content: space-between;
-  gap: 16px;
+  gap: 15px;
+  height: 100%;
+  /* Take full height of container */
 }
 
 .nightInfoBlock {
@@ -150,6 +162,15 @@
   padding: 12px;
   border-radius: 6px;
   transition: all 0.3s ease;
+  height: 100%;
+  /* Take full height of container */
+}
+
+.peakBlock,
+.offBlock,
+.lastMinuteBlock {
+  display: flex;
+  flex-direction: column;
 }
 
 .peakBlock {
@@ -179,17 +200,21 @@
 .nightInfoContent {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
+  gap: 14px;
+  flex-grow: 1;
+  /* Allow content to grow and fill the block */
+
 }
 
 .nightInfoColumn {
   flex: 1;
   display: flex;
+  gap: 3px;
   flex-direction: column;
 }
 
 .nightInfoSubtitle {
-  font-size: 0.85rem !important;
+  font-size: 0.95rem !important;
   font-weight: 600;
   color: #495057;
   margin-bottom: 8px !important;
@@ -202,7 +227,7 @@
 }
 
 .nightInfoLabel {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: #7f8c8d;
 }
 
@@ -215,6 +240,8 @@
 @media (max-width: 1024px) {
   .propertyContent {
     flex-direction: column;
+    height: auto;
+    /* Reset height for mobile view */
   }
 
   .propertyLeftContent,
@@ -224,6 +251,16 @@
 
   .propertyImageWrapper {
     height: 200px;
+  }
+
+  .propertyYearSelector {
+    height: auto;
+    /* Reset height for mobile view */
+  }
+
+  .propertyAvailabilityContainer {
+    height: auto;
+    /* Reset height for mobile view */
   }
 
   .propertyAvailabilityInfo {
@@ -254,11 +291,12 @@
   }
 
   .nightInfoContent {
-    flex-direction: column;
+    flex-direction: row;
   }
 
   .nightInfoColumn {
-    margin-bottom: 10px;
+    margin-bottom: 0;
+    margin-right: 10px;
   }
 }
 
@@ -270,6 +308,15 @@
 
   .seasonTitle {
     font-size: 0.95rem !important;
+  }
+
+  .nightInfoContent {
+    flex-direction: column;
+  }
+
+  .nightInfoColumn {
+    margin-bottom: 10px;
+    margin-right: 0;
   }
 
   .nightInfoLabel,

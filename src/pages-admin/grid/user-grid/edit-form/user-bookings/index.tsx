@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getUserBookings } from '@/api';
-import styles from './userbookings.module.css';
-import { Calendar, Users, DollarSign, Sparkles } from 'lucide-react';
+import styles from './UserBookings.module.css';
+import { Calendar, Users, DollarSign, Sparkles, Home } from 'lucide-react';
 
 interface BookingProps {
     userId: number;
@@ -62,43 +62,64 @@ const UserBookings: React.FC<BookingProps> = ({ userId }) => {
         return (cleaning || 0) + (pet || 0);
     };
 
+    const groupBookingsByProperty = (bookings: Booking[]) => {
+        return bookings.reduce((acc, booking) => {
+            const { property } = booking;
+            if (!acc[property.id]) {
+                acc[property.id] = {
+                    propertyName: property.propertyName,
+                    bookings: []
+                };
+            }
+            acc[property.id].bookings.push(booking);
+            return acc;
+        }, {} as Record<number, { propertyName: string; bookings: Booking[] }>);
+    };
+
     if (loading) return <div className={styles.message}>Loading bookings...</div>;
     if (error) return <div className={styles.message}>{error}</div>;
     if (bookings.length === 0) return <div className={styles.message}>No bookings available</div>;
 
+    const groupedBookings = groupBookingsByProperty(bookings);
+
     return (
-        <div className={styles.bookingsContainer}>
-            {bookings.map((booking) => (
-                <div key={booking.id} className={styles.bookingTile}>
-                    <div className={styles.tileHeader}>
-                        <span className={styles.bookingId}>{booking.bookingId}</span>
-                        <h3 className={styles.propertyName}>{booking.property.propertyName}</h3>
-                    </div>
-                    <div className={styles.tileContent}>
-                        <div className={styles.infoSection}>
-                            <div className={styles.infoItem}>
-                                <Calendar size={14} />
-                                <span>{formatDate(booking.checkinDate)} - {formatDate(booking.checkoutDate)}</span>
+        <div className={styles.pageContainer}>
+            {Object.entries(groupedBookings).map(([propertyId, { propertyName, bookings }]) => (
+                <div key={propertyId} className={styles.propertyContainer}>
+                    <h2 className={styles.propertyTitle}>
+                        <Home className={styles.icon} size={20} />
+                        {propertyName}
+                    </h2>
+                    <div className={styles.bookingsContainer}>
+                        {bookings.map((booking) => (
+                            <div key={booking.id} className={styles.bookingTile}>
+                                <div className={styles.bookingId}># {booking.bookingId}</div>
+                                <div className={styles.bookingDetails}>
+                                    <div className={styles.dateRange}>
+                                        <Calendar size={14} />
+                                        <span>{formatDate(booking.checkinDate)} - {formatDate(booking.checkoutDate)}</span>
+                                    </div>
+                                    <div className={styles.guests}>
+                                        <Users size={14} />
+                                        <span>{booking.noOfAdults || 0} Adults, {booking.noOfChildren || 0} Children, {booking.noOfPets} Pets</span>
+                                    </div>
+                                </div>
+                                <div className={styles.bookingFees}>
+                                    <div className={styles.feeItem}>
+                                        <Sparkles size={14} />
+                                        <span>Cleaning: ${booking.cleaningFee?.toFixed(2) || 'N/A'}</span>
+                                    </div>
+                                    <div className={styles.feeItem}>
+                                        <Sparkles size={14} />
+                                        <span>Pet: ${booking.petFee?.toFixed(2) || 'N/A'}</span>
+                                    </div>
+                                    <div className={styles.totalItem}>
+                                        <DollarSign size={14} />
+                                        <span>Total: ${calculateTotalTransaction(booking.cleaningFee, booking.petFee).toFixed(2)}</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div className={styles.infoItem}>
-                                <Users size={14} />
-                                <span>{booking.noOfAdults || 0} Adults, {booking.noOfChildren || 0} Children, {booking.noOfPets} Pets</span>
-                            </div>
-                        </div>
-                        <div className={styles.feesSection}>
-                            <div className={styles.feeItem}>
-                                <Sparkles size={14} />
-                                <span>Cleaning: ${booking.cleaningFee?.toFixed(2) || 'N/A'}</span>
-                            </div>
-                            <div className={styles.feeItem}>
-                                <Sparkles size={14} />
-                                <span>Pet: ${booking.petFee?.toFixed(2) || 'N/A'}</span>
-                            </div>
-                            <div className={styles.totalItem}>
-                                <DollarSign size={14} />
-                                <span>Total: ${calculateTotalTransaction(booking.cleaningFee, booking.petFee).toFixed(2)}</span>
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </div>
             ))}

@@ -91,17 +91,35 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
 
   const renderNightInfoBlock = (userProperty: UserProperty, season: 'peak' | 'off' | 'lastMinute') => {
     const getNightInfo = (type: string) => {
+      let value: number;
       switch (season) {
         case 'peak':
-          return userProperty[`peak${type}Nights` as keyof UserProperty];
+          value = userProperty[`peak${type}Nights` as keyof UserProperty] as number;
+          break;
         case 'off':
-          return userProperty[`off${type}Nights` as keyof UserProperty];
+          value = userProperty[`off${type}Nights` as keyof UserProperty] as number;
+          break;
         case 'lastMinute':
-          return userProperty[`lastMinute${type}Nights` as keyof UserProperty];
+          value = userProperty[`lastMinute${type}Nights` as keyof UserProperty] as number;
+          break;
         default:
-          return 0;
+          value = 0;
       }
+      return value !== null && value !== undefined ? value : 0;
     };
+
+    const renderNightInfoRow = (label: string, usedType: string, totalType: string) => {
+      const used = getNightInfo(usedType);
+      const total = getNightInfo(totalType);
+      return (
+        <div className={styles.nightInfoRow}>
+          <span className={styles.nightInfoLabel}>{label}:</span>
+          <span className={styles.nightInfoValue}>{used}/{total}</span>
+        </div>
+      );
+    };
+
+
 
     return (
       <div className={`${styles.nightInfoBlock} ${styles[`${season}Block`]}`}>
@@ -110,43 +128,17 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
         </Typography>
         <div className={styles.nightInfoContent}>
           <div className={styles.nightInfoColumn}>
-            <Typography variant="caption" className={styles.nightInfoSubtitle}>Nights</Typography>
-            <div className={styles.nightInfoRow}>
-              <span className={styles.nightInfoLabel}>Total:</span>
-              <span className={styles.nightInfoValue}>{getNightInfo('Allotted')}</span>
-            </div>
-            <div className={styles.nightInfoRow}>
-              <span className={styles.nightInfoLabel}>Used:</span>
-              <span className={styles.nightInfoValue}>{getNightInfo('Used')}</span>
-            </div>
-            <div className={styles.nightInfoRow}>
-              <span className={styles.nightInfoLabel}>Booked:</span>
-              <span className={styles.nightInfoValue}>{getNightInfo('Booked')}</span>
-            </div>
-            <div className={styles.nightInfoRow}>
-              <span className={styles.nightInfoLabel}>Remaining:</span>
-              <span className={styles.nightInfoValue}>{getNightInfo('Remaining')}</span>
-            </div>
+            <Typography variant="caption" className={styles.nightInfoSubtitle}>Regular Nights</Typography>
+            {renderNightInfoRow('Used', 'Used', 'Allotted')}
+            {renderNightInfoRow('Booked', 'Booked', 'Allotted')}
+            {renderNightInfoRow('Remaining', 'Remaining', 'Allotted')}
           </div>
           {season !== 'lastMinute' && (
             <div className={styles.nightInfoColumn}>
               <Typography variant="caption" className={styles.nightInfoSubtitle}>Holiday Nights</Typography>
-              <div className={styles.nightInfoRow}>
-                <span className={styles.nightInfoLabel}>Total:</span>
-                <span className={styles.nightInfoValue}>{getNightInfo('AllottedHoliday')}</span>
-              </div>
-              <div className={styles.nightInfoRow}>
-                <span className={styles.nightInfoLabel}>Used:</span>
-                <span className={styles.nightInfoValue}>{getNightInfo('UsedHoliday')}</span>
-              </div>
-              <div className={styles.nightInfoRow}>
-                <span className={styles.nightInfoLabel}>Booked:</span>
-                <span className={styles.nightInfoValue}>{getNightInfo('BookedHoliday')}</span>
-              </div>
-              <div className={styles.nightInfoRow}>
-                <span className={styles.nightInfoLabel}>Remaining:</span>
-                <span className={styles.nightInfoValue}>{getNightInfo('RemainingHoliday')}</span>
-              </div>
+              {renderNightInfoRow('Used', 'UsedHoliday', 'AllottedHoliday')}
+              {renderNightInfoRow('Booked', 'BookedHoliday', 'AllottedHoliday')}
+              {renderNightInfoRow('Remaining', 'RemainingHoliday', 'AllottedHoliday')}
             </div>
           )}
         </div>
