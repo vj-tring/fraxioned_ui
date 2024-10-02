@@ -203,15 +203,32 @@ const AmenityManagement: React.FC = () => {
             <div className={styles.amenityList}>
                 {amenitiesList.slice(0, 2).map((amenity) => (
                     <div key={amenity.id} className={styles.amenityItem}>
-                        <span>{amenity.amenityName}</span>
-                        <div className={styles.actionButtons}>
-                            <button onClick={() => handleEdit(amenity)} className={styles.editButton}>
-                                <Edit2 size={16} />
-                            </button>
-                            <button onClick={() => handleDeleteClick(amenity)} className={styles.deleteButton}>
-                                <Trash2 size={16} />
-                            </button>
-                        </div>
+                        {editingAmenity?.id === amenity.id ? (
+                            <>
+                                <input
+                                    type="text"
+                                    value={editingAmenity.amenityName}
+                                    onChange={(e) => setEditingAmenity({ ...editingAmenity, amenityName: e.target.value })}
+                                    className={styles.editInput}
+                                />
+                                <div className={styles.actionButtons}>
+                                    <button onClick={handleSave} className={styles.saveButton}><Check size={16} /></button>
+                                    <button onClick={handleCancel} className={styles.cancelButton}><X size={16} /></button>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <span>{amenity.amenityName}</span>
+                                <div className={styles.actionButtons}>
+                                    <button onClick={() => handleEdit(amenity)} className={styles.editButton}>
+                                        <Edit2 size={16} />
+                                    </button>
+                                    <button onClick={() => handleDeleteClick(amenity)} className={styles.deleteButton}>
+                                        <Trash2 size={16} />
+                                    </button>
+                                </div>
+                            </>
+                        )}
                     </div>
                 ))}
                 {amenitiesList.length > 2 && (
@@ -222,6 +239,7 @@ const AmenityManagement: React.FC = () => {
             </div>
         </div>
     );
+
 
     const AmenityPopup: React.FC<{ type: string; amenities: Amenity[] }> = ({ type, amenities }) => (
         <div className={styles.popupOverlay} onClick={closePopup}>

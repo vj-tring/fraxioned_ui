@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './propertyamenities.module.css';
-import { amenitiesapi, getAmenitiesById, updateamenityforproperty, updateamenities } from '@/api';
-import NewAmenityForm from './new-amenity';
-import { Pencil, Check, X } from 'lucide-react';
+import { amenitiesapi, getAmenitiesById, updateamenityforproperty } from '@/api';
+import { Pencil, Check, X, ChevronRight, Edit, } from 'lucide-react';
 import CustomizedSnackbars from '@/components/customized-snackbar';
+import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 
 interface Amenity {
   id: number;
@@ -24,7 +24,6 @@ const PropertyAmenities: React.FC = () => {
   const [amenities, setAmenities] = useState<{ [key: string]: Amenity[] }>({});
   const [loading, setLoading] = useState(true);
   const [selectedAmenities, setSelectedAmenities] = useState<number[]>([]);
-  const [showNewAmenityForm, setShowNewAmenityForm] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editingAmenity, setEditingAmenity] = useState<Amenity | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -33,6 +32,8 @@ const PropertyAmenities: React.FC = () => {
     message: '',
     severity: 'info',
   });
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedType, setSelectedType] = useState('');
 
   useEffect(() => {
     fetchAmenities();
@@ -52,6 +53,15 @@ const PropertyAmenities: React.FC = () => {
 
   const showSnackbar = (message: string, severity: 'success' | 'info' | 'warning' | 'error') => {
     setSnackbar({ open: true, message, severity });
+  };
+
+  const handleMoreClick = (type: string) => {
+    setSelectedType(type);
+    setDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
   };
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
@@ -116,26 +126,14 @@ const PropertyAmenities: React.FC = () => {
       const response = await updateamenityforproperty(updateData);
       showSnackbar('Amenities updated successfully!', 'success');
       console.log('Update response:', response);
+      setDialogOpen(false);
     } catch (err) {
       showSnackbar('Failed to update amenities. Please try again.', 'error');
       console.error('Update error:', err);
     }
   };
 
-  const handleCloseNewAmenityForm = () => {
-    setShowNewAmenityForm(false);
-  };
-
-  const handleNewAmenityAdded = () => {
-    fetchAmenities();
-    setShowNewAmenityForm(false);
-    showSnackbar('New amenity added successfully!', 'success');
-  };
-
-  const toggleEditMode = async () => {
-    if (editMode && editingAmenity) {
-      await saveEdit();
-    }
+  const toggleEditMode = () => {
     setEditMode(!editMode);
     setEditingAmenity(null);
   };
@@ -150,35 +148,19 @@ const PropertyAmenities: React.FC = () => {
     }
   };
 
-  const saveEdit = async () => {
+  const saveEdit = () => {
     if (editingAmenity) {
-      try {
-        const updateData = {
-          updatedBy: {
-            id: 1
-          },
-          amenityName: editingAmenity.amenityName,
-          amenityDescription: editingAmenity.amenityDescription || "",
-          amenityType: editingAmenity.amenityType
-        };
-
-        await updateamenities(editingAmenity.id, updateData);
-
-        setAmenities(prev => {
-          const newAmenities = { ...prev };
-          const typeArray = newAmenities[editingAmenity.amenityType];
-          const index = typeArray.findIndex(a => a.id === editingAmenity.id);
-          if (index !== -1) {
-            typeArray[index] = editingAmenity;
-          }
-          return newAmenities;
-        });
-        setEditingAmenity(null);
-        showSnackbar('Amenity updated successfully!', 'success');
-      } catch (err) {
-        showSnackbar('Failed to update amenity. Please try again.', 'error');
-        console.error('Update error:', err);
-      }
+      setAmenities(prev => {
+        const newAmenities = { ...prev };
+        const typeArray = newAmenities[editingAmenity.amenityType];
+        const index = typeArray.findIndex(a => a.id === editingAmenity.id);
+        if (index !== -1) {
+          typeArray[index] = editingAmenity;
+        }
+        return newAmenities;
+      });
+      setEditingAmenity(null);
+      showSnackbar('Amenity updated successfully!', 'success');
     }
   };
 
@@ -199,62 +181,98 @@ const PropertyAmenities: React.FC = () => {
             <button className={styles.updateButton} onClick={handleUpdate}>Update</button>
           </div>
         </div>
-        <div className={styles.amenitiesGrid}>
-          {Object.entries(amenities).map(([type, amenitiesList]) => (
-            <div key={type} className={styles.amenityGroup}>
-              <h2 className={styles.amenityType}>{type}</h2>
-              {amenitiesList.map((amenity) => (
-                <div key={amenity.id} className={styles.amenityItem}>
-                  <input
-                    type="checkbox"
-                    checked={selectedAmenities.includes(amenity.id)}
-                    onChange={() => handleCheckboxChange(amenity.id)}
-                    className={styles.checkbox}
-                  />
-                  {editMode && editingAmenity?.id === amenity.id ? (
-                    <div className={styles.editingWrapper}>
-                      <input
-                        ref={inputRef}
-                        type="text"
-                        value={editingAmenity.amenityName}
-                        onChange={handleEditChange}
-                        className={styles.editInput}
-                      />
-                      <button onClick={saveEdit} className={styles.editButton}>
-                        <Check size={16} />
-                      </button>
-                      <button onClick={cancelEdit} className={styles.editButton}>
-                        <X size={16} />
-                      </button>
+        <div className={styles.amenitiesScrollContainer}>
+          <div className={styles.amenitiesGrid}>
+            {Object.entries(amenities).map(([type, amenitiesList]) => (
+              <div key={type} className={styles.amenityGroup}>
+                <h2 className={styles.amenityType}>{type}</h2>
+                <div className={styles.amenityList}>
+                  {amenitiesList.slice(0, 3).map((amenity) => (
+                    <div key={amenity.id} className={styles.amenityItem}>
+                      <label className={styles.checkboxLabel}>
+                        <input
+                          type="checkbox"
+                          checked={selectedAmenities.includes(amenity.id)}
+                          onChange={() => handleCheckboxChange(amenity.id)}
+                          className={styles.checkbox}
+                        />
+                        <span className={styles.checkmark}></span>
+                        {editMode && editingAmenity?.id === amenity.id ? (
+                          <div className={styles.editingWrapper}>
+                            <input
+                              ref={inputRef}
+                              type="text"
+                              value={editingAmenity.amenityName}
+                              onChange={handleEditChange}
+                              className={styles.editInput}
+                            />
+                            <button onClick={saveEdit} className={styles.editButton}>
+                              <Check size={16} />
+                            </button>
+                            <button onClick={cancelEdit} className={styles.editButton}>
+                              <X size={16} />
+                            </button>
+                          </div>
+                        ) : (
+                          <span className={styles.amenityName}>
+                            {amenity.amenityName}
+                            {editMode && (
+                              <button onClick={() => startEditing(amenity)} className={styles.editButton}>
+                                <Pencil size={16} />
+                              </button>
+                            )}
+                          </span>
+                        )}
+                      </label>
                     </div>
-                  ) : (
-                    <span className={styles.amenityName}>
-                      {amenity.amenityName}
-                      {editMode && (
-                        <button onClick={() => startEditing(amenity)} className={styles.editButton}>
-                          <Pencil size={16} />
-                        </button>
-                      )}
-                    </span>
-                  )}
+                  ))}
                 </div>
-              ))}
-            </div>
-          ))}
+                {amenitiesList.length > 3 && (
+                  <button className={styles.moreButton} onClick={() => handleMoreClick(type)}>
+                    More <ChevronRight size={16} />
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-      {showNewAmenityForm && (
-        <NewAmenityForm
-          onClose={handleCloseNewAmenityForm}
-          onAmenityAdded={handleNewAmenityAdded}
-        />
-      )}
       <CustomizedSnackbars
         open={snackbar.open}
         handleClose={handleCloseSnackbar}
         message={snackbar.message}
         severity={snackbar.severity}
       />
+      <Dialog
+        open={dialogOpen}
+        onClose={handleCloseDialog}
+        classes={{ paper: styles.dialogPaper }}
+      >
+        <DialogTitle className={styles.dialogTitle}>
+          {selectedType} Amenities
+          <button onClick={handleUpdate} className={styles.dialogUpdateButton}>
+            <Edit size={16} />
+          </button>
+        </DialogTitle>
+        <DialogContent className={styles.dialogContent}>
+          <div className={styles.dialogAmenityList}>
+            {amenities[selectedType]?.map((amenity) => (
+              <div key={amenity.id} className={styles.dialogAmenityItem}>
+                <label className={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={selectedAmenities.includes(amenity.id)}
+                    onChange={() => handleCheckboxChange(amenity.id)}
+                    className={styles.checkbox}
+                  />
+                  <span className={styles.checkmark}></span>
+                  <span className={styles.amenityName}>{amenity.amenityName}</span>
+                </label>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

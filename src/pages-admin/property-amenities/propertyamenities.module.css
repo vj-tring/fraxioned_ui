@@ -2,9 +2,9 @@
   display: flex;
   flex-direction: column;
   background-color: #f5f7fa;
-  flex: 1;
-  height: 100%;
+  height: 100vh;
   margin-right: 15px;
+  overflow: hidden;
 }
 
 .contentWrapper {
@@ -12,9 +12,11 @@
   background-color: #ffffff;
   border-radius: 8px;
   width: 100%;
-  flex: 1;
+  height: 100%;
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .header {
@@ -38,7 +40,8 @@
   gap: 10px;
 }
 
-.updateButton {
+.updateButton,
+.editButton {
   background-color: #e28f25;
   color: white;
   border: none;
@@ -50,58 +53,114 @@
 }
 
 .updateButton:hover,
-.updateButton.active {
-  background-color: #e28f25;
-
-}
-
-.addButton {
-  background-color: #e28f25;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.addButton:hover {
+.editButton:hover {
   background-color: #e59d40;
+}
+
+.amenitiesScrollContainer {
+  flex-grow: 1;
+  overflow-y: auto;
 }
 
 .amenitiesGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 20px;
 }
 
 .amenityGroup {
   border-radius: 8px;
-  padding: 16px;
+  width: 300px;
+  padding: 12px;
+  background-color: #fdfdfd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
 }
+
 
 .amenityType {
   font-weight: bold;
   color: #25393b;
-  margin-bottom: 16px;
-  font-size: 18px;
+  margin-bottom: 12px;
+  font-size: 15px;
   text-transform: capitalize;
+  border-bottom: 1px solid #c6c5c4;
+  padding-bottom: 8px;
+}
+
+.amenityList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .amenityItem {
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px;
   font-size: 16px;
   color: #2c3e50;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
 }
 
-.checkbox {
-  margin-right: 12px;
+.amenityItem:hover {
+  background-color: #f0f0f0;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 35px;
+  cursor: pointer;
+  font-size: 16px;
+  user-select: none;
+}
+
+.checkboxLabel input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #e7e6e6;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.checkboxLabel:hover input~.checkmark {
+  background-color: #ccc;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkboxLabel input:checked~.checkmark:after {
+  display: block;
+}
+
+.checkboxLabel .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid #7dced7;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
 }
 
 .amenityName {
+  font-size: 14px;
   display: flex;
   align-items: center;
   width: 100%;
@@ -116,7 +175,7 @@
 .editInput {
   flex-grow: 1;
   padding: 4px 8px;
-  font-size: 16px;
+  font-size: 14px;
   border: 1px solid #e28f25;
   border-radius: 4px;
   transition: all 0.3s ease;
@@ -141,29 +200,94 @@
   color: #e59d40;
 }
 
-.error,
-.loading {
-  text-align: center;
+.moreButton {
+  background: none;
+  border: none;
+  color: #e28f25;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  margin-top: 12px;
+  transition: color 0.3s ease;
+}
+
+.moreButton:hover {
+  color: #e59d40;
+}
+
+/* Dialog Styles */
+.dialogPaper {
+  min-width: 680px;
+  max-width: 500px;
+  border-radius: 8px;
+}
+
+.dialogTitle {
+  color: rgb(73, 73, 73);
+  padding: 16px;
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dialogContent {
   padding: 24px;
+  margin-top: 10px !important;
+}
+
+.dialogAmenityList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.dialogAmenityItem {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: #2c3e50;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+
+.dialogUpdateButton {
+  background-color: #e28f25;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dialogUpdateButton:hover {
+  background-color: #e59d40;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
   font-size: 18px;
   color: #2c3e50;
-}
-
-.error {
-  color: #e74c3c;
-}
-
-.updateStatus {
-  margin-top: 20px;
-  text-align: center;
-  font-weight: bold;
-  color: #2ecc71;
 }
 
 @media (max-width: 768px) {
   .contentWrapper {
     padding: 16px;
-    width: calc(100% - 32px);
   }
 
   .amenitiesGrid {
@@ -176,5 +300,10 @@
 
   .buttonGroup {
     flex-direction: column;
+  }
+
+  .dialogPaper {
+    width: 90%;
+    max-width: none;
   }
 }
