@@ -27,6 +27,9 @@ interface DatePickerWithRangeProps extends React.HTMLAttributes<HTMLDivElement> 
   disableStrikethrough?: boolean;
   showEndCalendar?: boolean;
   isViewOnly?: boolean;
+  currentBookingDates?: { from: Date; to: Date };
+  isEditMode?: boolean;
+  currentBookingId?: string;
 }
 
 export function DatePickerWithRange({
@@ -39,6 +42,9 @@ export function DatePickerWithRange({
   propertyColor,
   disableStrikethrough = false,
   isViewOnly,
+  isEditMode = false,
+  currentBookingDates,
+  currentBookingId,
 }: DatePickerWithRangeProps) {
   const today = new Date();
   const endDate = new Date(today.getFullYear() + 5, 11, 31);
@@ -136,12 +142,18 @@ export function DatePickerWithRange({
 
   const isBookedDate = (date: Date) => {
     if (hideBookedDates) return false;
+   
     return bookedDates.some(
       (bookedDate) =>
         date.getFullYear() === bookedDate.getFullYear() &&
         date.getMonth() === bookedDate.getMonth() &&
         date.getDate() === bookedDate.getDate()
     );
+  };
+
+  const isCurrentBookingDate = (date: Date) => {
+    if (!isEditMode || !currentBookingDates || !currentBookingId) return false;
+    return date >= currentBookingDates.from && date <= currentBookingDates.to;
   };
 
   const isUnavailableDate = (date: Date) => {
@@ -226,7 +238,9 @@ export function DatePickerWithRange({
       booking =>
         booking.property.id === selectedPropertyDetails.id &&
         booking.user.id === currentUser.id &&
-        !booking.isCancelled 
+        !booking.isCancelled &&
+        !currentBookingDates
+        
     );
   
     if (userBookings.length === 0) {
@@ -460,19 +474,23 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
           defaultMonth={dateRange?.from}
           selected={dateRange}
           onSelect={isViewOnly ? undefined :handleDateChange}
+          isViewOnly={true}
           numberOfMonths={2}
           fromDate={today}
           toDate={endDate}
           disabled={disableDates}
           locale={customLocale}
           modifiers={{
-            booked: hideBookedDates ? [] : bookedDates ,
+            booked: hideBookedDates ? [] : bookedDates,
             unavailable: unavailableDates,
             blue: blueDates,
             holiday: seasonHolidays.map(h => ({
               from: new Date(h.holiday.startDate),
               to: new Date(h.holiday.endDate)
             })),
+            currentBooking: isEditMode && currentBookingDates ? [
+              { from: currentBookingDates.from, to: currentBookingDates.to }
+            ] : [],
           }}
           modifiersStyles={{
             booked: {
@@ -482,9 +500,16 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
           }}
           modifiersClassNames={{
             booked: disableStrikethrough ? 'booked-date-no-strike' : 'booked-date',
+              //         booked: (date) => {
+              // if (isCurrentBookingDate(date)) {
+              //   return 'current-booking-date';
+              // }
+              // return 'booked-date';
+              // },
             unavailable: 'unavailable-date',
             blue: 'blue-date',
             holiday: 'holiday-date',
+            currentBooking: 'current-booking-date',
           }}
         />
       <div className="error-msg-container ml-5 flex justify-start">
@@ -499,6 +524,11 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
           color: gray;
           text-decoration: line-through;
         }
+
+         .currentBooking: {
+            backgroundColor: 'lightblue',
+            color: 'black',
+          },
 
         .booked-date-no-strike {
           color: white;
