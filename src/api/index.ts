@@ -168,17 +168,17 @@ export const updateamenities = (id: number, updateData: {
 }) => axiosInstance.patch(`/v1/amenities/amenity/${id}`, updateData);
 
 export const propertyImageapi = () =>
-    axiosInstance.get(`/v1/propertyImages`);
+    axiosInstance.get(`/v1/property-images`);
 
 export const deleteAmenity = (id: number) =>
     axiosInstance.delete(`/v1/amenities/amenity/${id}`);
 
 export const getpropertyImageById = (id: number) =>
-    axiosInstance.get(`/v1/propertyImages/propertyImage/${id}`);
+    axiosInstance.get(`/v1/property-images/property-image/${id}`);
 
 export const propertyImageuploadapi = (formData: FormData) => {
     console.log('to backend', formData)
-    return axiosInstance.post(`/v1/propertyImages`, formData, {
+    return axiosInstance.post(`/v1/property-images`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
             'Accept': '*/*'
@@ -187,11 +187,11 @@ export const propertyImageuploadapi = (formData: FormData) => {
 };
 export const propertyImageeditapi = (id: number, formData: FormData) => {
     console.log('to backend', formData);
-    return axiosInstance.patch(`/v1/propertyImages/propertyImage/${id}`, formData);
+    return axiosInstance.patch(`/v1/property-images/property-image/${id}`, formData);
 };
 
 export const deletetpropertyImageById = (id: number) =>
-    axiosInstance.delete(`/v1/propertyImages/propertyImage/${id}`);
+    axiosInstance.delete(`/v1/property-images/property-image/${id}`);
 
 export const getUserBookings = (userId: number) =>
     axiosInstance.get(`/v1/bookings/user/${userId}`);
@@ -201,3 +201,22 @@ export const propertyspaceapi = () =>
 
 export const propertyspacetypesapi = () =>
     axiosInstance.get(`/v1/space-types`);
+
+export const getPropertyDocuments = () =>
+    axiosInstance.get('/api/v1/propertyDocuments');
+
+export const getPropertyDocument = (id: number) =>
+    axiosInstance.get(`/api/v1/propertyDocuments/propertyDocument/${id}`);
+
+export const createPropertyDocument = (formData: FormData) =>
+    axiosInstance.post('/api/v1/propertyDocuments', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    });
+
+export const updatePropertyDocument = (id: number, formData: FormData) =>
+    axiosInstance.patch(`/api/v1/propertyDocuments/propertyDocument/${id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    });
+
+export const deletePropertyDocument = (id: number) =>
+    axiosInstance.delete(`/api/v1/propertyDocuments/propertyDocument/${id}`);

@@ -15,6 +15,8 @@ import Availability from '../availablity';
 import styles from './tab.module.css';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { getUserById } from '@/api';
+import is from 'date-fns/locale/is/index';
+import DocumentManagerCard from '../document';
 
 interface TabSwitchProps {
     onUserUpdated: () => void;
@@ -93,6 +95,7 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
                 <Tab label="Property" disabled={!isOwner} />
                 <Tab label="Booking" />
                 <Tab label="Availability" disabled={!isOwner} />
+                <Tab label="Document"  />
 
                 <IconButton
                     onClick={handleBackClick}
@@ -127,6 +130,9 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
 
                 {isOwner && selectedTab === 3 && (
                     <Availability userId={userId} />
+                )}
+                { selectedTab === 4 && (
+                    <DocumentManagerCard/>
                 )}
             </div>
         </div>

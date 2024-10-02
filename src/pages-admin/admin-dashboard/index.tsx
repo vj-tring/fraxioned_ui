@@ -22,6 +22,7 @@ import BookingGrid from '../grid/bookings-grid';
 import fraxionedLogo from '../../assets/images/fraxioned.png'
 import userImage from '../../assets/images/profile.jpeg'
 import './admin-dashboard.css'
+import { PropertyDocuments } from '../property-documents';
 
 const AdminDashboard: React.FC = () => {
     const navigate = useNavigate()
@@ -132,6 +133,14 @@ const AdminDashboard: React.FC = () => {
                                 <PropertySidePanel isOpen={true} />
                                 <div className="property-info-content">
                                     <UserProperty />
+                                </div>
+                            </div>
+                        } />
+                        <Route path="/property/:id/documents" element={
+                            <div className="property-details-container">
+                                <PropertySidePanel isOpen={true} />
+                                <div className="property-info-content">
+                                    <PropertyDocuments />
                                 </div>
                             </div>
                         } />
