@@ -1,7 +1,7 @@
 .pageContainer {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 12px;
     font-family: 'Inter', sans-serif;
     padding: 1.5rem;
 }

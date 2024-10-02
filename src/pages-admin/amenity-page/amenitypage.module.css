@@ -9,6 +9,76 @@
     background-color: #f5f6f7;
 }
 
+.popupOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popupContent {
+    background-color: white;
+    border-radius: 10px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.popupTitle {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.popupAmenityList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.popupAmenityItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    padding: 10px;
+    background-color: #f5f6f7;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.popupAmenityItem:hover {
+    background-color: #e0e0e0;
+}
+
+.closePopupButton {
+    display: block;
+    margin: 20px auto 0;
+    padding: 10px 20px;
+    background-color: #4abac6;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.closePopupButton:hover {
+    background-color: #3d9da8;
+}
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -30,35 +100,19 @@
     gap: 1rem;
 }
 
-.searchBar {
-    display: flex;
-    align-items: center;
-    background-color: white;
-    border-radius: 20px;
-    width: 300px;
-    padding: 0.5rem 1rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.searchBar input {
-    border: none;
-    outline: none;
-    margin-left: 0.5rem;
-    font-size: 1rem;
-    width: 100%;
-}
-
 .dropdown {
     position: relative;
+    width: 254px;
 }
 
 .dropdownToggle {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: space-between;
+    width: 100%;
     background-color: white;
     border: 1px solid #e0e0e0;
-    padding: 8px;
+    padding: 8px 12px;
     font-size: 1rem;
     border-radius: 6px;
     cursor: pointer;
@@ -69,25 +123,61 @@
     background-color: #f5f5f5;
 }
 
+.selectedText {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+}
+
+.chevronIcon {
+    flex-shrink: 0;
+    margin-left: 8px;
+}
+
 .dropdownMenu {
     position: absolute;
     top: 100%;
     left: 0;
     z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    min-width: 200px;
-    padding: 0.5rem 0;
+    width: 100%;
     margin: 0.125rem 0 0;
-    font-size: 1rem;
-    color: #212529;
-    text-align: left;
-    list-style: none;
     background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid rgba(0,0,0,.15);
+    border: 1px solid rgba(0, 0, 0, .15);
     border-radius: 0.25rem;
-    box-shadow: 0 0.5rem 1rem rgba(0,0,0,.175);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, .175);
+}
+
+.dropdownSearch {
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background-color: #fff;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.dropdownSearchInput {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    padding: 4px;
+    font-size: 14px;
+    background: transparent;
+}
+
+.dropdownOptions {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 0.5rem 0;
+    scrollbar-width: thin;
+    scrollbar-color: #4abac6 #f5f5f5;
+}
+
+.searchIcon {
+    color: #666;
+    margin-right: 8px;
 }
 
 .dropdownMenu button {
@@ -97,22 +187,57 @@
     text-align: left;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .dropdownMenu button:hover {
     background-color: #f8f9fa;
 }
 
+.dropdownOptions::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dropdownOptions::-webkit-scrollbar-track {
+    background: #f5f5f5;
+}
+
+.dropdownOptions::-webkit-scrollbar-thumb {
+    background-color: #4abac6;
+    border-radius: 3px;
+}
+
+.dropdownOption {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 8px 12px;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #333;
+    font-size: 14px;
+}
+
+.dropdownOption:hover {
+    background-color: #f8f9fa;
+}
+
+
 .addButton {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
     background-color: #4abac6;
     color: white;
     border: none;
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    border-radius: 20px;
+    padding: 0.50rem 0.7rem;
+    font-size: 14px;
+    border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
@@ -264,6 +389,22 @@
     .container {
         padding: 1rem;
     }
+
+    .popupContent {
+        width: 95%;
+        padding: 1rem;
+    }
+
+    .dropdownMenu {
+        position: fixed;
+        top: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 300px;
+        margin-top: 0.5rem;
+    }
+
 
     .header {
         flex-direction: column;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { amenitiesapi, updateamenities, deleteAmenity } from '@/api';
 import styles from './amenitypage.module.css';
 import NewAmenityForm from '../property-amenities/new-amenity';
-import { Edit2, Check, X, Trash2, Plus, Search, ChevronDown } from 'lucide-react';
+import { Edit2, Check, X, Trash2, Plus, ChevronDown, Search } from 'lucide-react';
 import ConfirmationModal from '@/components/confirmation-modal';
 import CustomizedSnackbars from '@/components/customized-snackbar';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -26,7 +26,9 @@ const AmenityManagement: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [editingAmenity, setEditingAmenity] = useState<Amenity | null>(null);
     const [isAddingNew, setIsAddingNew] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [dropdownSearch, setDropdownSearch] = useState('');
     const [amenityToDelete, setAmenityToDelete] = useState<Amenity | null>(null);
     const [snackbar, setSnackbar] = useState<SnackbarState>({
         open: false,
@@ -59,6 +61,14 @@ const AmenityManagement: React.FC = () => {
             return;
         }
         setSnackbar({ ...snackbar, open: false });
+    };
+
+    const filteredAmenityTypes = Object.keys(amenities).filter(type =>
+        type.toLowerCase().includes(dropdownSearch.toLowerCase())
+    )
+
+    const handleDropdownSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setDropdownSearch(e.target.value);
     };
 
     const fetchAmenities = async () => {
@@ -161,10 +171,20 @@ const AmenityManagement: React.FC = () => {
     const handleTypeSelect = (type: string) => {
         setSelectedType(type);
         setIsDropdownOpen(false);
+        setShowPopup(true);
+    };
+
+    const closePopup = () => {
+        setShowPopup(false);
+        setSelectedType('All amenities');
+        setEditingAmenity(null);
     };
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
+        if (!isDropdownOpen) {
+            setDropdownSearch('');
+        }
     };
 
     const filteredAmenities = Object.entries(amenities).reduce((acc, [type, amenitiesList]) => {
@@ -177,45 +197,68 @@ const AmenityManagement: React.FC = () => {
         return acc;
     }, {} as { [key: string]: Amenity[] });
 
-    const renderAmenityGroup = (type: string, amenitiesList: Amenity[], showAll: boolean = false) => (
+    const renderAmenityGroup = (type: string, amenitiesList: Amenity[]) => (
         <div key={type} className={styles.amenityGroup}>
             <h2 className={styles.amenityType}>{type}</h2>
             <div className={styles.amenityList}>
-                {(showAll ? amenitiesList : amenitiesList.slice(0, 2)).map((amenity) => (
+                {amenitiesList.slice(0, 2).map((amenity) => (
                     <div key={amenity.id} className={styles.amenityItem}>
-                        {editingAmenity?.id === amenity.id ? (
-                            <>
-                                <input
-                                    type="text"
-                                    value={editingAmenity.amenityName}
-                                    onChange={(e) => setEditingAmenity({ ...editingAmenity, amenityName: e.target.value })}
-                                    className={styles.editInput}
-                                />
-                                <div className={styles.actionButtons}>
-                                    <button onClick={handleSave} className={styles.saveButton}><Check size={16} /></button>
-                                    <button onClick={handleCancel} className={styles.cancelButton}><X size={16} /></button>
-                                </div>
-                            </>
-                        ) : (
-                            <>
-                                <span>{amenity.amenityName}</span>
-                                <div className={styles.actionButtons}>
-                                    <button onClick={() => handleEdit(amenity)} className={styles.editButton}>
-                                        <Edit2 size={16} />
-                                    </button>
-                                    <button onClick={() => handleDeleteClick(amenity)} className={styles.deleteButton}>
-                                        <Trash2 size={16} />
-                                    </button>
-                                </div>
-                            </>
-                        )}
+                        <span>{amenity.amenityName}</span>
+                        <div className={styles.actionButtons}>
+                            <button onClick={() => handleEdit(amenity)} className={styles.editButton}>
+                                <Edit2 size={16} />
+                            </button>
+                            <button onClick={() => handleDeleteClick(amenity)} className={styles.deleteButton}>
+                                <Trash2 size={16} />
+                            </button>
+                        </div>
                     </div>
                 ))}
-                {!showAll && amenitiesList.length > 2 && (
-                    <a href={`#${type}`} className={styles.moreLink} onClick={() => handleTypeSelect(type)}>
+                {amenitiesList.length > 2 && (
+                    <button className={styles.moreLink} onClick={() => handleTypeSelect(type)}>
                         more...
-                    </a>
+                    </button>
                 )}
+            </div>
+        </div>
+    );
+
+    const AmenityPopup: React.FC<{ type: string; amenities: Amenity[] }> = ({ type, amenities }) => (
+        <div className={styles.popupOverlay} onClick={closePopup}>
+            <div className={styles.popupContent} onClick={(e) => e.stopPropagation()}>
+                <h2 className={styles.popupTitle}>{type}</h2>
+                <div className={styles.popupAmenityList}>
+                    {amenities.map((amenity) => (
+                        <div key={amenity.id} className={styles.popupAmenityItem}>
+                            {editingAmenity?.id === amenity.id ? (
+                                <>
+                                    <input
+                                        type="text"
+                                        value={editingAmenity.amenityName}
+                                        onChange={(e) => setEditingAmenity({ ...editingAmenity, amenityName: e.target.value })}
+                                        className={styles.editInput}
+                                    />
+                                    <div className={styles.actionButtons}>
+                                        <button onClick={handleSave} className={styles.saveButton}><Check size={16} /></button>
+                                        <button onClick={handleCancel} className={styles.cancelButton}><X size={16} /></button>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <span>{amenity.amenityName}</span>
+                                    <div className={styles.actionButtons}>
+                                        <button onClick={() => handleEdit(amenity)} className={styles.editButton}>
+                                            <Edit2 size={16} />
+                                        </button>
+                                        <button onClick={() => handleDeleteClick(amenity)} className={styles.deleteButton}>
+                                            <Trash2 size={16} />
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );
@@ -227,25 +270,37 @@ const AmenityManagement: React.FC = () => {
             <div className={styles.header}>
                 <h1 className={styles.title}>Amenity Management</h1>
                 <div className={styles.actions}>
-                    <div className={styles.searchBar}>
-                        <Search size={20} />
-                        <input
-                            type="text"
-                            placeholder="Search amenities..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-                    </div>
                     <div className={styles.dropdown}>
                         <button className={styles.dropdownToggle} onClick={toggleDropdown}>
-                            {selectedType} <ChevronDown size={20} />
+                            <span className={styles.selectedText}>{selectedType}</span>
+                            <ChevronDown size={20} className={styles.chevronIcon} />
                         </button>
                         {isDropdownOpen && (
                             <div className={styles.dropdownMenu}>
-                                <button onClick={() => handleTypeSelect('All amenities')}>All amenities</button>
-                                {Object.keys(amenities).map(type => (
-                                    <button key={type} onClick={() => handleTypeSelect(type)}>{type}</button>
-                                ))}
+                                <div className={styles.dropdownSearch}>
+                                    <Search size={16} className={styles.searchIcon} />
+                                    <input
+                                        type="text"
+                                        placeholder="Search amenity types..."
+                                        value={dropdownSearch}
+                                        onChange={handleDropdownSearchChange}
+                                        className={styles.dropdownSearchInput}
+                                    />
+                                </div>
+                                <div className={styles.dropdownOptions}>
+
+                                    <button onClick={() => handleTypeSelect('All amenities')}>All amenities</button>
+                                    {filteredAmenityTypes.map(type => (
+                                        <button
+                                            key={type}
+                                            className={styles.dropdownOption}
+                                            onClick={() => handleTypeSelect(type)}
+                                        >
+                                            {type}
+                                        </button>
+                                    ))}
+
+                                </div>
                             </div>
                         )}
                     </div>
@@ -270,15 +325,19 @@ const AmenityManagement: React.FC = () => {
                     />
                 )}
                 <div className={styles.amenitiesGrid}>
-                    {selectedType === 'All amenities' ? (
-                        Object.entries(filteredAmenities).map(([type, amenitiesList]) => 
-                            renderAmenityGroup(type, amenitiesList)
-                        )
-                    ) : (
-                        renderAmenityGroup(selectedType, filteredAmenities[selectedType] || [], true)
+                    {Object.entries(filteredAmenities).map(([type, amenitiesList]) =>
+                        renderAmenityGroup(type, amenitiesList)
                     )}
                 </div>
             </div>
+
+            {showPopup && selectedType !== 'All amenities' && (
+                <AmenityPopup
+                    type={selectedType}
+                    amenities={filteredAmenities[selectedType] || []}
+                />
+            )}
+
             <ConfirmationModal
                 show={showDeleteModal}
                 onHide={handleDeleteCancel}
