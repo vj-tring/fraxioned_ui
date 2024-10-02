@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Amenity, fetchAmenities } from '../../store/slice/amenitiesSlice';
+import { PropertyAmenity, fetchAmenities } from '../../store/slice/amenitiesSlice';
 import {
   Box,
   Button,
@@ -39,20 +39,21 @@ const allRooms: Room[] = [
   { name: "Living Room", image: Bedroom1Image, Bed: "Spacious Living Area" },
   { name: "Guest Room", image: KingBedImage, Bed: "Comfortable Guest Bed" },
 ];
-  
-const groupAmenitiesByType = (data: Amenity[]) => {
-  return data.reduce((acc, amenity) => {
-    if (!acc[amenity.amenityType]) {
-      acc[amenity.amenityType] = [];
+
+const groupAmenitiesByGroup = (data: PropertyAmenity[]) => {
+  return data.reduce((acc, propertyAmenity) => {
+    const groupName = propertyAmenity.amenity.amenityGroup.name;
+    if (!acc[groupName]) {
+      acc[groupName] = [];
     }
-    acc[amenity.amenityType].push(amenity);
+    acc[groupName].push(propertyAmenity.amenity);
     return acc;
-  }, {} as { [key: string]: Amenity[] });
+  }, {} as { [key: string]: PropertyAmenity['amenity'][] });
 };
 
 const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { amenities, loading, error } = useSelector((state: RootState) => state.amenities);
+  const { propertyAmenities, loading, error } = useSelector((state: RootState) => state.amenities);
   const [page, setPage] = useState(1);
   const [showAllAmenities, setShowAllAmenities] = useState(false);
   const [open, setOpen] = useState(false);
@@ -79,11 +80,11 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   );
   const totalPages = Math.ceil(allRooms.length / ITEMS_PER_PAGE);
 
+  const groupedAmenities = groupAmenitiesByGroup(propertyAmenities);
+  const allAmenities = propertyAmenities.map(pa => pa.amenity);
   const displayedAmenities = showAllAmenities
-    ? amenities
-    : amenities.slice(0, AMENITIES_PER_PAGE);
-
-  const groupedAmenities = groupAmenitiesByType(amenities);
+    ? allAmenities
+    : allAmenities.slice(0, AMENITIES_PER_PAGE);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -145,7 +146,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
 
         <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
           <Button disableRipple onClick={handleShowMoreClick} className="ShowMoreAmenities" sx={{ border: '1px solid grey' }}>
-            show all {amenities.length} Amenities
+            show all {allAmenities.length} Amenities
           </Button>
         </Box>
       </Box>
@@ -153,11 +154,11 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
       <Dialog open={open} onClose={handleShowLessClick} fullWidth maxWidth="md">
         <DialogTitle>Amenities</DialogTitle>
         <DialogContent>
-          {Object.keys(groupedAmenities).map((type) => (
-            <Box key={type} sx={{ marginBottom: 2 }}>
-              <Typography variant="h6" className="monsterrat">{type}</Typography>
+          {Object.keys(groupedAmenities).map((groupName) => (
+            <Box key={groupName} sx={{ marginBottom: 2 }}>
+              <Typography variant="h6" className="monsterrat">{groupName}</Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                {groupedAmenities[type].map((amenity, index) => (
+                {groupedAmenities[groupName].map((amenity, index) => (
                   <Typography key={index} variant="body2" className="monsterrat">
                     {amenity.amenityName}
                   </Typography>

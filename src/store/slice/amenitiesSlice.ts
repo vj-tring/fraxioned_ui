@@ -1,21 +1,38 @@
 import { propertyAmenitiesapi } from '@/api';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+export interface AmenityGroup {
+  id: number;
+  name: string;
+}
+
 export interface Amenity {
   id: number;
   amenityName: string;
   amenityDescription: string;
-  amenityType: string;
+  amenityGroup: AmenityGroup;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PropertyAmenity {
+  id: number;
+  property: { id: number };
+  amenity: Amenity;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: { id: number };
+  updatedBy: { id: number };
 }
 
 export interface AmenitiesState {
-  amenities: Amenity[];
+  propertyAmenities: PropertyAmenity[];
   loading: boolean;
   error: string | null;
 }
 
 const initialState: AmenitiesState = {
-  amenities: [],
+  propertyAmenities: [],
   loading: false,
   error: null,
 };
@@ -24,7 +41,7 @@ export const fetchAmenities = createAsyncThunk(
   'amenities/fetchPropertyAmenities',
   async (propertyId: number) => {
     const response = await propertyAmenitiesapi(propertyId);
-    return response.data.data.map((item: any) => item.amenity);
+    return response.data.data;
   }
 );
 
@@ -40,7 +57,7 @@ const amenitiesSlice = createSlice({
       })
       .addCase(fetchAmenities.fulfilled, (state, action) => {
         state.loading = false;
-        state.amenities = action.payload;
+        state.propertyAmenities = action.payload;
       })
       .addCase(fetchAmenities.rejected, (state, action) => {
         state.loading = false;
