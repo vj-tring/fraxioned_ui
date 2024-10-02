@@ -226,7 +226,7 @@ export const updatePropertyDocument = (id: number, formData: FormData) =>
 
 export const deletePropertyDocument = (id: number) =>
     axiosInstance.delete(`/api/v1/propertyDocuments/propertyDocument/${id}`);
-=======
+
 export const getpropertycodes = () =>
     axiosInstance.get(`/v1/property-codes`);
 
