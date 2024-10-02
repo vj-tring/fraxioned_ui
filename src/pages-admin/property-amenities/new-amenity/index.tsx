@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import styles from './addamenity.module.css';
-import { addamenity, amenitiesapi } from '@/api';
+import { addamenity, getamenitygroup, addamenitygroup } from '@/api';
 import Loader from '@/components/loader';
 import { AiOutlinePlus, AiOutlineSave, AiOutlineClose } from 'react-icons/ai';
 
-interface Amenity {
-    amenityType: string;
+interface AmenityGroup {
+    id: number;
+    name: string;
 }
 
 interface NewAmenityFormProps {
@@ -14,58 +15,80 @@ interface NewAmenityFormProps {
 }
 
 const NewAmenityForm: React.FC<NewAmenityFormProps> = ({ onClose, onAmenityAdded }) => {
-    const [amenityType, setAmenityType] = useState('');
+    const [selectedAmenityGroup, setSelectedAmenityGroup] = useState<AmenityGroup | null>(null);
     const [customAmenityType, setCustomAmenityType] = useState('');
     const [showCustomAmenityInput, setShowCustomAmenityInput] = useState(false);
     const [amenityName, setAmenityName] = useState('');
     const [amenityDescription, setAmenityDescription] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [amenityTypes, setAmenityTypes] = useState<string[]>([]);
+    const [amenityGroups, setAmenityGroups] = useState<AmenityGroup[]>([]);
     const [error, setError] = useState('');
 
     useEffect(() => {
-        const fetchAmenityTypes = async () => {
+        const fetchAmenityGroups = async () => {
             try {
-                const response = await amenitiesapi();
-                const distinctAmenityTypes = Array.from(new Set(
-                    (response.data.data as Amenity[]).map((item: Amenity) => item.amenityType)
-                ));
-                setAmenityTypes(distinctAmenityTypes);
+                const response = await getamenitygroup();
+                if (response.data && response.data.data) {
+                    setAmenityGroups(response.data.data);
+                }
             } catch (error) {
-                console.error('Error fetching amenity types:', error);
-                setError('Failed to load amenity types. Please try again.');
+                console.error('Error fetching amenity groups:', error);
+                setError('Failed to load amenity groups. Please try again.');
             }
         };
-        fetchAmenityTypes();
+        fetchAmenityGroups();
     }, []);
 
-    const handleAddCustomAmenityType = () => {
-        if (customAmenityType && !amenityTypes.includes(customAmenityType)) {
-            setAmenityTypes([...amenityTypes, customAmenityType]);
-            setAmenityType(customAmenityType);
+    const handleAddCustomAmenityType = async () => {
+        if (customAmenityType && !amenityGroups.some(group => group.name === customAmenityType)) {
+            setIsLoading(true);
+            try {
+                const data = {
+                    createdBy: {
+                        id: 1
+                    },
+                    name: customAmenityType
+                };
+                const response = await addamenitygroup(data);
+                if (response.data && response.data.data) {
+                    const newGroup: AmenityGroup = response.data.data;
+                    setAmenityGroups([...amenityGroups, newGroup]);
+                    setSelectedAmenityGroup(newGroup);
+                }
+                setShowCustomAmenityInput(false);
+                setCustomAmenityType('');
+            } catch (error) {
+                console.error('Failed to add new amenity group:', error);
+                setError('Failed to add new amenity group. Please try again.');
+            } finally {
+                setIsLoading(false);
+            }
+        } else {
+            setShowCustomAmenityInput(false);
+            setCustomAmenityType('');
         }
-        setShowCustomAmenityInput(false);
-        setCustomAmenityType('');
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
 
-        if (!amenityType || !amenityName) {
-            setError('Amenity Type and Name are required.');
+        if (!selectedAmenityGroup || !amenityName) {
+            setError('Amenity Group and Name are required.');
             return;
         }
         setIsLoading(true);
 
         try {
             const data = {
+                amenityGroup: {
+                    id: selectedAmenityGroup.id
+                },
                 createdBy: {
                     id: 1
                 },
                 amenityName,
-                amenityDescription,
-                amenityType
+                amenityDescription
             };
             await addamenity(data);
             onAmenityAdded();
@@ -95,19 +118,22 @@ const NewAmenityForm: React.FC<NewAmenityFormProps> = ({ onClose, onAmenityAdded
                 {error && <p className={styles.errorMessage}>{error}</p>}
                 <form onSubmit={handleSubmit} className={styles.form}>
                     <div className={styles.formGroup}>
-                        <label htmlFor="amenityType" className={styles.label}>Amenity Type*</label>
+                        <label htmlFor="amenityGroup" className={styles.label}>Amenity Group*</label>
                         <div className={styles.amenityTypeContainer}>
                             <select
-                                id="amenityType"
-                                value={amenityType}
-                                onChange={(e) => setAmenityType(e.target.value)}
+                                id="amenityGroup"
+                                value={selectedAmenityGroup?.id || ''}
+                                onChange={(e) => {
+                                    const selected = amenityGroups.find(group => group.id === Number(e.target.value));
+                                    setSelectedAmenityGroup(selected || null);
+                                }}
                                 className={styles.selectInput}
                                 required
                             >
-                                <option value="">Select Amenity Type</option>
-                                {amenityTypes.map((type) => (
-                                    <option key={type} value={type}>
-                                        {type}
+                                <option value="">Select Amenity Group</option>
+                                {amenityGroups.map((group) => (
+                                    <option key={group.id} value={group.id}>
+                                        {group.name}
                                     </option>
                                 ))}
                             </select>
@@ -127,7 +153,7 @@ const NewAmenityForm: React.FC<NewAmenityFormProps> = ({ onClose, onAmenityAdded
                                     type="text"
                                     value={customAmenityType}
                                     onChange={(e) => setCustomAmenityType(e.target.value)}
-                                    placeholder="Enter new amenity type"
+                                    placeholder="Enter new amenity group"
                                     className={styles.customAmenityInput}
                                 />
                                 <button

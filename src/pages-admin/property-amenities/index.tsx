@@ -2,15 +2,18 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './propertyamenities.module.css';
 import { amenitiesapi, getAmenitiesById, updateamenityforproperty } from '@/api';
-import { Pencil, Check, X, ChevronRight, Edit, } from 'lucide-react';
+import { Pencil, Check, X, ChevronRight, Edit } from 'lucide-react';
 import CustomizedSnackbars from '@/components/customized-snackbar';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 
 interface Amenity {
   id: number;
   amenityName: string;
-  amenityType: string;
   amenityDescription?: string;
+  amenityGroup: {
+    id: number;
+    name: string;
+  };
 }
 
 interface SnackbarState {
@@ -33,7 +36,7 @@ const PropertyAmenities: React.FC = () => {
     severity: 'info',
   });
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedType, setSelectedType] = useState('');
+  const [selectedGroup, setSelectedGroup] = useState('');
 
   useEffect(() => {
     fetchAmenities();
@@ -55,8 +58,8 @@ const PropertyAmenities: React.FC = () => {
     setSnackbar({ open: true, message, severity });
   };
 
-  const handleMoreClick = (type: string) => {
-    setSelectedType(type);
+  const handleMoreClick = (group: string) => {
+    setSelectedGroup(group);
     setDialogOpen(true);
   };
 
@@ -74,7 +77,7 @@ const PropertyAmenities: React.FC = () => {
   const fetchAmenities = async () => {
     try {
       const response = await amenitiesapi();
-      const groupedAmenities = groupAmenitiesByType(response.data.data);
+      const groupedAmenities = groupAmenitiesByGroup(response.data.data);
       setAmenities(groupedAmenities);
       setLoading(false);
     } catch (err) {
@@ -93,12 +96,13 @@ const PropertyAmenities: React.FC = () => {
     }
   };
 
-  const groupAmenitiesByType = (data: Amenity[]) => {
+  const groupAmenitiesByGroup = (data: Amenity[]) => {
     return data.reduce((acc, amenity) => {
-      if (!acc[amenity.amenityType]) {
-        acc[amenity.amenityType] = [];
+      const group = amenity.amenityGroup.name;
+      if (!acc[group]) {
+        acc[group] = [];
       }
-      acc[amenity.amenityType].push(amenity);
+      acc[group].push(amenity);
       return acc;
     }, {} as { [key: string]: Amenity[] });
   };
@@ -123,13 +127,11 @@ const PropertyAmenities: React.FC = () => {
         }
       };
 
-      const response = await updateamenityforproperty(updateData);
+      await updateamenityforproperty(updateData);
       showSnackbar('Amenities updated successfully!', 'success');
-      console.log('Update response:', response);
       setDialogOpen(false);
     } catch (err) {
       showSnackbar('Failed to update amenities. Please try again.', 'error');
-      console.error('Update error:', err);
     }
   };
 
@@ -152,10 +154,10 @@ const PropertyAmenities: React.FC = () => {
     if (editingAmenity) {
       setAmenities(prev => {
         const newAmenities = { ...prev };
-        const typeArray = newAmenities[editingAmenity.amenityType];
-        const index = typeArray.findIndex(a => a.id === editingAmenity.id);
+        const groupArray = newAmenities[editingAmenity.amenityGroup.name];
+        const index = groupArray.findIndex(a => a.id === editingAmenity.id);
         if (index !== -1) {
-          typeArray[index] = editingAmenity;
+          groupArray[index] = editingAmenity;
         }
         return newAmenities;
       });
@@ -183,9 +185,9 @@ const PropertyAmenities: React.FC = () => {
         </div>
         <div className={styles.amenitiesScrollContainer}>
           <div className={styles.amenitiesGrid}>
-            {Object.entries(amenities).map(([type, amenitiesList]) => (
-              <div key={type} className={styles.amenityGroup}>
-                <h2 className={styles.amenityType}>{type}</h2>
+            {Object.entries(amenities).map(([group, amenitiesList]) => (
+              <div key={group} className={styles.amenityGroup}>
+                <h2 className={styles.amenityType}>{group}</h2>
                 <div className={styles.amenityList}>
                   {amenitiesList.slice(0, 3).map((amenity) => (
                     <div key={amenity.id} className={styles.amenityItem}>
@@ -228,7 +230,7 @@ const PropertyAmenities: React.FC = () => {
                   ))}
                 </div>
                 {amenitiesList.length > 3 && (
-                  <button className={styles.moreButton} onClick={() => handleMoreClick(type)}>
+                  <button className={styles.moreButton} onClick={() => handleMoreClick(group)}>
                     More <ChevronRight size={16} />
                   </button>
                 )}
@@ -249,14 +251,14 @@ const PropertyAmenities: React.FC = () => {
         classes={{ paper: styles.dialogPaper }}
       >
         <DialogTitle className={styles.dialogTitle}>
-          {selectedType} Amenities
+          {selectedGroup} Amenities
           <button onClick={handleUpdate} className={styles.dialogUpdateButton}>
             <Edit size={16} />
           </button>
         </DialogTitle>
         <DialogContent className={styles.dialogContent}>
           <div className={styles.dialogAmenityList}>
-            {amenities[selectedType]?.map((amenity) => (
+            {amenities[selectedGroup]?.map((amenity) => (
               <div key={amenity.id} className={styles.dialogAmenityItem}>
                 <label className={styles.checkboxLabel}>
                   <input
@@ -266,7 +268,7 @@ const PropertyAmenities: React.FC = () => {
                     className={styles.checkbox}
                   />
                   <span className={styles.checkmark}></span>
-                  <span className={styles.amenityName}>{amenity.amenityName}</span>
+                  {amenity.amenityName}
                 </label>
               </div>
             ))}
