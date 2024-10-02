@@ -483,7 +483,7 @@ const PropertyListingPage = () => {
           }}
         />
         <div id="rooms" className="mt-5">
-          <SingleDevice propertyId={selectedProperty?.id}/>
+          <SingleDevice propertyId={id}/>
         </div>
         <div id="location">
           <MapEmbed

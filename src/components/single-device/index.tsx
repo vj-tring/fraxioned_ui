@@ -87,8 +87,8 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   );
   const totalPages = Math.ceil(allRooms.length / ITEMS_PER_PAGE);
 
-  const groupedAmenities = groupAmenitiesByGroup(propertyAmenities);
-  const allAmenities = propertyAmenities.map((pa) => pa.amenity);
+  const groupedAmenities = groupAmenitiesByGroup(propertyAmenities || []);
+  const allAmenities = propertyAmenities ? propertyAmenities.map((pa) => pa.amenity) : [];
   const displayedAmenities = showAllAmenities
     ? allAmenities
     : allAmenities.slice(0, AMENITIES_PER_PAGE);
@@ -122,53 +122,57 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
           </Box>
         </Box>
 
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
-          {paginatedRooms.map((room: Room, index: number) => (
-            <Box
-              key={index}
-              sx={{
-                flex: "1 1 calc(50% - 1rem)",
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <Card
+        {allRooms.length === 0 ? (
+          <Typography variant="body1">No rooms available.</Typography>
+        ) : (
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
+            {paginatedRooms.map((room: Room, index: number) => (
+              <Box
+                key={index}
                 sx={{
+                  flex: "1 1 calc(50% - 1rem)",
                   display: "flex",
                   flexDirection: "column",
-                  height: "70%",
-                  width: "100%",
                 }}
               >
-                <CardMedia
-                  component="img"
-                  height="100%"
-                  image={room.image}
-                  alt={room.name}
-                  sx={{ objectFit: "cover" }}
-                />
-              </Card>
-              <CardContent sx={{ padding: 1, paddingTop: 2 }}>
-                <Typography
-                  variant="h6"
-                  sx={{ fontSize: 15, fontWeight: 600 }}
-                  className="monsterrat"
+                <Card
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "70%",
+                    width: "100%",
+                  }}
                 >
-                  {room.name}
-                </Typography>
-                {room.Bed && (
+                  <CardMedia
+                    component="img"
+                    height="100%"
+                    image={room.image}
+                    alt={room.name}
+                    sx={{ objectFit: "cover" }}
+                  />
+                </Card>
+                <CardContent sx={{ padding: 1, paddingTop: 2 }}>
                   <Typography
-                    variant="body1"
-                    sx={{ fontSize: 12 }}
+                    variant="h6"
+                    sx={{ fontSize: 15, fontWeight: 600 }}
                     className="monsterrat"
                   >
-                    {room.Bed}
+                    {room.name}
                   </Typography>
-                )}
-              </CardContent>
-            </Box>
-          ))}
-        </Box>
+                  {room.Bed && (
+                    <Typography
+                      variant="body1"
+                      sx={{ fontSize: 12 }}
+                      className="monsterrat"
+                    >
+                      {room.Bed}
+                    </Typography>
+                  )}
+                </CardContent>
+              </Box>
+            ))}
+          </Box>
+        )}
       </Box>
 
       <Box
@@ -177,34 +181,38 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
         <Typography variant="h6" className="monsterrat checkIn">
           Amenities
         </Typography>
-        <Box sx={{ display: "flex", gap: 2 }} className="AmenRes">
-          <Box sx={{ flex: 1 }}>
-            {displayedAmenities
-              .slice(0, Math.ceil(displayedAmenities.length / 2))
-              .map((amenity, index) => (
-                <Box key={index} sx={{ marginBottom: 1 }}>
-                  <Typography variant="body2" className="monsterrat">
-                    {amenity.amenityName}
-                  </Typography>
-                </Box>
-              ))}
-          </Box>
+        {propertyAmenities && propertyAmenities.length > 0 ? (
+          <Box sx={{ display: "flex", gap: 2 }} className="AmenRes">
+            <Box sx={{ flex: 1 }}>
+              {displayedAmenities
+                .slice(0, Math.ceil(displayedAmenities.length / 2))
+                .map((amenity, index) => (
+                  <Box key={index} sx={{ marginBottom: 1 }}>
+                    <Typography variant="body2" className="monsterrat">
+                      {amenity.amenityName}
+                    </Typography>
+                  </Box>
+                ))}
+            </Box>
 
-          <Box sx={{ flex: 1 }}>
-            {displayedAmenities
-              .slice(
-                Math.ceil(displayedAmenities.length / 2),
-                displayedAmenities.length
-              )
-              .map((amenity, index) => (
-                <Box key={index} sx={{ marginBottom: 1 }}>
-                  <Typography variant="body2" className="monsterrat">
-                    {amenity.amenityName}
-                  </Typography>
-                </Box>
-              ))}
+            <Box sx={{ flex: 1 }}>
+              {displayedAmenities
+                .slice(
+                  Math.ceil(displayedAmenities.length / 2),
+                  displayedAmenities.length
+                )
+                .map((amenity, index) => (
+                  <Box key={index} sx={{ marginBottom: 1 }}>
+                    <Typography variant="body2" className="monsterrat">
+                      {amenity.amenityName}
+                    </Typography>
+                  </Box>
+                ))}
+            </Box>
           </Box>
-        </Box>
+        ) : (
+          <Typography variant="body1">No amenities available.</Typography>
+        )}
 
         <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
           <Button
