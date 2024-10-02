@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { PropertyAmenity, fetchAmenities } from '../../store/slice/amenitiesSlice';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  PropertyAmenity,
+  fetchAmenities,
+} from "../../store/slice/amenitiesSlice";
 import {
   Box,
   Button,
@@ -12,11 +15,13 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-} from '@mui/material';
-import CustomPagination from '../custom-pagination';
-import './single-device.css';
-import { AppDispatch } from '@/store';
-import { RootState } from '@/store/reducers';
+  IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import CustomPagination from "../custom-pagination";
+import "./single-device.css";
+import { AppDispatch } from "@/store";
+import { RootState } from "@/store/reducers";
 import Bedroom1Image from "../../assets/images/bedroom1.jpg";
 import KingBedImage from "../../assets/images/bedroom1.jpg";
 
@@ -48,12 +53,14 @@ const groupAmenitiesByGroup = (data: PropertyAmenity[]) => {
     }
     acc[groupName].push(propertyAmenity.amenity);
     return acc;
-  }, {} as { [key: string]: PropertyAmenity['amenity'][] });
+  }, {} as { [key: string]: PropertyAmenity["amenity"][] });
 };
 
 const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { propertyAmenities, loading, error } = useSelector((state: RootState) => state.amenities);
+  const { propertyAmenities, loading, error } = useSelector(
+    (state: RootState) => state.amenities
+  );
   const [page, setPage] = useState(1);
   const [showAllAmenities, setShowAllAmenities] = useState(false);
   const [open, setOpen] = useState(false);
@@ -81,7 +88,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const totalPages = Math.ceil(allRooms.length / ITEMS_PER_PAGE);
 
   const groupedAmenities = groupAmenitiesByGroup(propertyAmenities);
-  const allAmenities = propertyAmenities.map(pa => pa.amenity);
+  const allAmenities = propertyAmenities.map((pa) => pa.amenity);
   const displayedAmenities = showAllAmenities
     ? allAmenities
     : allAmenities.slice(0, AMENITIES_PER_PAGE);
@@ -90,29 +97,71 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   if (error) return <div>{error}</div>;
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 10 }} className="singleDevice">
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, width: '50%' }} className="RoomsRes">
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography variant="h6" component="div" className="monsterrat checkIn">
+    <Box
+      sx={{ display: "flex", flexDirection: "row", gap: 10 }}
+      className="singleDevice"
+    >
+      <Box
+        sx={{ display: "flex", flexDirection: "column", gap: 3, width: "50%" }}
+        className="RoomsRes"
+      >
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography
+            variant="h6"
+            component="div"
+            className="monsterrat checkIn"
+          >
             Rooms
           </Typography>
           <Box>
-            <CustomPagination page={page} totalPages={totalPages} onPageChange={handlePageChange} />
+            <CustomPagination
+              page={page}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
           </Box>
         </Box>
 
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
           {paginatedRooms.map((room: Room, index: number) => (
-            <Box key={index} sx={{ flex: '1 1 calc(50% - 1rem)', display: 'flex', flexDirection: 'column' }}>
-              <Card sx={{ display: 'flex', flexDirection: 'column', height: '70%', width: '100%' }}>
-                <CardMedia component="img" height="100%" image={room.image} alt={room.name} sx={{ objectFit: 'cover' }} />
+            <Box
+              key={index}
+              sx={{
+                flex: "1 1 calc(50% - 1rem)",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <Card
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  height: "70%",
+                  width: "100%",
+                }}
+              >
+                <CardMedia
+                  component="img"
+                  height="100%"
+                  image={room.image}
+                  alt={room.name}
+                  sx={{ objectFit: "cover" }}
+                />
               </Card>
               <CardContent sx={{ padding: 1, paddingTop: 2 }}>
-                <Typography variant="h6" sx={{ fontSize: 15, fontWeight: 600 }} className="monsterrat">
+                <Typography
+                  variant="h6"
+                  sx={{ fontSize: 15, fontWeight: 600 }}
+                  className="monsterrat"
+                >
                   {room.name}
                 </Typography>
                 {room.Bed && (
-                  <Typography variant="body1" sx={{ fontSize: 12 }} className="monsterrat">
+                  <Typography
+                    variant="body1"
+                    sx={{ fontSize: 12 }}
+                    className="monsterrat"
+                  >
                     {room.Bed}
                   </Typography>
                 )}
@@ -122,44 +171,85 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
         </Box>
       </Box>
 
-      <Box sx={{ width: '50%', display: 'flex', flexDirection: 'column', gap: 3 }}>
+      <Box
+        sx={{ width: "50%", display: "flex", flexDirection: "column", gap: 3 }}
+      >
         <Typography variant="h6" className="monsterrat checkIn">
           Amenities
         </Typography>
-        <Box sx={{ display: 'flex', gap: 2 }} className="AmenRes">
+        <Box sx={{ display: "flex", gap: 2 }} className="AmenRes">
           <Box sx={{ flex: 1 }}>
-            {displayedAmenities.slice(0, Math.ceil(displayedAmenities.length / 2)).map((amenity, index) => (
-              <Box key={index} sx={{ marginBottom: 1 }}>
-                <Typography variant="body2" className="monsterrat">{amenity.amenityName}</Typography>
-              </Box>
-            ))}
+            {displayedAmenities
+              .slice(0, Math.ceil(displayedAmenities.length / 2))
+              .map((amenity, index) => (
+                <Box key={index} sx={{ marginBottom: 1 }}>
+                  <Typography variant="body2" className="monsterrat">
+                    {amenity.amenityName}
+                  </Typography>
+                </Box>
+              ))}
           </Box>
 
           <Box sx={{ flex: 1 }}>
-            {displayedAmenities.slice(Math.ceil(displayedAmenities.length / 2), displayedAmenities.length).map((amenity, index) => (
-              <Box key={index} sx={{ marginBottom: 1 }}>
-                <Typography variant="body2" className="monsterrat">{amenity.amenityName}</Typography>
-              </Box>
-            ))}
+            {displayedAmenities
+              .slice(
+                Math.ceil(displayedAmenities.length / 2),
+                displayedAmenities.length
+              )
+              .map((amenity, index) => (
+                <Box key={index} sx={{ marginBottom: 1 }}>
+                  <Typography variant="body2" className="monsterrat">
+                    {amenity.amenityName}
+                  </Typography>
+                </Box>
+              ))}
           </Box>
         </Box>
 
-        <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
-          <Button disableRipple onClick={handleShowMoreClick} className="ShowMoreAmenities" sx={{ border: '1px solid grey' }}>
+        <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
+          <Button
+            disableRipple
+            onClick={handleShowMoreClick}
+            className="ShowMoreAmenities"
+            sx={{ border: "1px solid grey" }}
+          >
             show all {allAmenities.length} Amenities
           </Button>
         </Box>
       </Box>
 
-      <Dialog open={open} onClose={handleShowLessClick} fullWidth maxWidth="md">
-        <DialogTitle>Amenities</DialogTitle>
+      <Dialog
+        open={open}
+        onClose={handleShowLessClick}
+        fullWidth
+        maxWidth="md"
+        className="aminityPopup"
+      >
+        <DialogTitle>
+          <Typography variant="h3" className="aminityPopupTitle">Amenities</Typography>
+          <IconButton
+            edge="end"
+            color="inherit"
+            onClick={handleShowLessClick}
+            aria-label="close"
+            sx={{ position: "absolute", right: 8, top: 8, paddingRight: 3 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
         <DialogContent>
           {Object.keys(groupedAmenities).map((groupName) => (
             <Box key={groupName} sx={{ marginBottom: 2 }}>
-              <Typography variant="h6" className="monsterrat">{groupName}</Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+              <Typography variant="h6" className="monsterrat amenityGroupName">
+                {groupName}
+              </Typography>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
                 {groupedAmenities[groupName].map((amenity, index) => (
-                  <Typography key={index} variant="body2" className="monsterrat">
+                  <Typography
+                    key={index}
+                    variant="body2"
+                    className="monsterrat amenityName"
+                  >
                     {amenity.amenityName}
                   </Typography>
                 ))}
@@ -167,11 +257,6 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
             </Box>
           ))}
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleShowLessClick} color="primary">
-            Close
-          </Button>
-        </DialogActions>
       </Dialog>
     </Box>
   );
