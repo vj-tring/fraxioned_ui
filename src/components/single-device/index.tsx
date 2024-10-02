@@ -1,39 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Amenity, fetchAmenities } from '../../store/slice/amenitiesSlice';
 import {
+  Box,
+  Button,
+  Typography,
   Card,
   CardMedia,
   CardContent,
-  Typography,
-  Grid,
-  ListItem,
-  Box,
-  Button,
-} from "@mui/material";
-import {
-  Kitchen,
-  AcUnit,
-  Wifi,
-  LocalParking,
-  Tv,
-  Pool,
-  Spa,
-  FitnessCenter,
-  SmokeFree,
-  LocalBar,
-} from "@mui/icons-material";
-import Bedroom1Image from "../../assets/images/bedroom1.jpg"; // Ensure these paths are correct
-import KingBedImage from "../../assets/images/bedroom1.jpg"; // Ensure these paths are correct
-import CustomPagination from "../custom-pagination";
-import "./single-device.css";
-interface Room {
-  name: string;
-  image: string;
-  Bed?: string; // Optional description for bed type
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '@mui/material';
+import CustomPagination from '../custom-pagination';
+import './single-device.css';
+import { AppDispatch } from '@/store';
+import { RootState } from '@/store/reducers';
+import Bedroom1Image from "../../assets/images/bedroom1.jpg";
+import KingBedImage from "../../assets/images/bedroom1.jpg";
+
+interface SingleDeviceProps {
+  propertyId: number;
 }
 
-interface Amenities {
-  amenities: { name: string; icon: React.ReactNode }[];
+interface Room {
+  image: string;
+  name: string;
+  Bed?: string;
 }
+
+const ITEMS_PER_PAGE = 2;
+const AMENITIES_PER_PAGE = 12;
 
 const allRooms: Room[] = [
   { name: "Bedroom 1", image: Bedroom1Image, Bed: "King size Bed" },
@@ -41,40 +39,38 @@ const allRooms: Room[] = [
   { name: "Living Room", image: Bedroom1Image, Bed: "Spacious Living Area" },
   { name: "Guest Room", image: KingBedImage, Bed: "Comfortable Guest Bed" },
 ];
-
-const allAmenities: Amenities = {
-  amenities: [
-    { name: "Kitchen", icon: <Kitchen /> },
-    { name: "Air Conditioning", icon: <AcUnit /> },
-    { name: "Wi-Fi", icon: <Wifi /> },
-    { name: "Parking", icon: <LocalParking /> },
-    { name: "TV", icon: <Tv /> },
-    { name: "Pool", icon: <Pool /> },
-    { name: "Spa", icon: <Spa /> },
-    { name: "Fitness Center", icon: <FitnessCenter /> },
-    { name: "Smoke-Free", icon: <SmokeFree /> },
-    { name: "Bar", icon: <LocalBar /> },
-  ],
+  
+const groupAmenitiesByType = (data: Amenity[]) => {
+  return data.reduce((acc, amenity) => {
+    if (!acc[amenity.amenityType]) {
+      acc[amenity.amenityType] = [];
+    }
+    acc[amenity.amenityType].push(amenity);
+    return acc;
+  }, {} as { [key: string]: Amenity[] });
 };
 
-const ITEMS_PER_PAGE = 2;
-const AMENITIES_PER_PAGE = 12;
-
-const SingleDevice: React.FC = () => {
+const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { amenities, loading, error } = useSelector((state: RootState) => state.amenities);
   const [page, setPage] = useState(1);
   const [showAllAmenities, setShowAllAmenities] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  // Adjusted to match the expected signature
+  useEffect(() => {
+    dispatch(fetchAmenities(propertyId));
+  }, [dispatch, propertyId]);
+
   const handlePageChange = (value: number) => {
     setPage(value);
   };
 
   const handleShowMoreClick = () => {
-    setShowAllAmenities(true);
+    setOpen(true);
   };
 
   const handleShowLessClick = () => {
-    setShowAllAmenities(false);
+    setOpen(false);
   };
 
   const paginatedRooms = allRooms.slice(
@@ -84,75 +80,38 @@ const SingleDevice: React.FC = () => {
   const totalPages = Math.ceil(allRooms.length / ITEMS_PER_PAGE);
 
   const displayedAmenities = showAllAmenities
-    ? allAmenities.amenities
-    : allAmenities.amenities.slice(0, AMENITIES_PER_PAGE);
+    ? amenities
+    : amenities.slice(0, AMENITIES_PER_PAGE);
+
+  const groupedAmenities = groupAmenitiesByType(amenities);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "row", gap: 10 }} 
-    className="singleDevice"
-    >
-      <Box
-        sx={{ display: "flex", flexDirection: "column", gap: 3, width: "50%" }}
-
-        className="RoomsRes"
-      >
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography
-            variant="h6"
-            component="div"
-            className="monsterrat checkIn"
-          >
+    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 10 }} className="singleDevice">
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, width: '50%' }} className="RoomsRes">
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Typography variant="h6" component="div" className="monsterrat checkIn">
             Rooms
           </Typography>
           <Box>
-            <CustomPagination
-              page={page}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
+            <CustomPagination page={page} totalPages={totalPages} onPageChange={handlePageChange} />
           </Box>
         </Box>
 
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
-          {paginatedRooms.map((room, index) => (
-            <Box
-              key={index}
-              sx={{
-                flex: "1 1 calc(50% - 1rem)",
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <Card
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  height: "70%",
-                  width: "100%",
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  height="100%"
-                  image={room.image}
-                  alt={room.name}
-                  sx={{ objectFit: "cover" }}
-                />
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+          {paginatedRooms.map((room: Room, index: number) => (
+            <Box key={index} sx={{ flex: '1 1 calc(50% - 1rem)', display: 'flex', flexDirection: 'column' }}>
+              <Card sx={{ display: 'flex', flexDirection: 'column', height: '70%', width: '100%' }}>
+                <CardMedia component="img" height="100%" image={room.image} alt={room.name} sx={{ objectFit: 'cover' }} />
               </Card>
               <CardContent sx={{ padding: 1, paddingTop: 2 }}>
-                <Typography
-                  variant="h6"
-                  sx={{ fontSize: 15, fontWeight: 600 }}
-                  className="monsterrat"
-                >
+                <Typography variant="h6" sx={{ fontSize: 15, fontWeight: 600 }} className="monsterrat">
                   {room.name}
                 </Typography>
                 {room.Bed && (
-                  <Typography
-                    variant="body1"
-                    sx={{ fontSize: 12 }}
-                    className="monsterrat"
-                  >
+                  <Typography variant="body1" sx={{ fontSize: 12 }} className="monsterrat">
                     {room.Bed}
                   </Typography>
                 )}
@@ -162,71 +121,57 @@ const SingleDevice: React.FC = () => {
         </Box>
       </Box>
 
-      <Box
-        sx={{ width: "50%", display: "flex", flexDirection: "column", gap: 3 }}
-      >
-        
+      <Box sx={{ width: '50%', display: 'flex', flexDirection: 'column', gap: 3 }}>
         <Typography variant="h6" className="monsterrat checkIn">
           Amenities
         </Typography>
-        <Box sx={{ display: "flex", gap: 2 }}
-         className="AmenRes"
-        >
+        <Box sx={{ display: 'flex', gap: 2 }} className="AmenRes">
           <Box sx={{ flex: 1 }}>
-            {displayedAmenities.slice(0, 5).map((amenity, index) => (
-              <Box
-                key={index}
-                sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}
-              >
-                <Box
-                  sx={{ display: "flex", alignItems: "center", marginRight: 2 }}
-                >
-                  {amenity.icon}
-                </Box>
-                <div className="monsterrat">{amenity.name}</div>
+            {displayedAmenities.slice(0, Math.ceil(displayedAmenities.length / 2)).map((amenity, index) => (
+              <Box key={index} sx={{ marginBottom: 1 }}>
+                <Typography variant="body2" className="monsterrat">{amenity.amenityName}</Typography>
               </Box>
             ))}
           </Box>
 
           <Box sx={{ flex: 1 }}>
-            {displayedAmenities.slice(5, 10).map((amenity, index) => (
-              <Box
-                key={index}
-                sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}
-              >
-                <Box
-                  sx={{ display: "flex", alignItems: "center", marginRight: 2 }}
-                >
-                  {amenity.icon}
-                </Box>
-                <div className="monsterrat">{amenity.name}</div>
+            {displayedAmenities.slice(Math.ceil(displayedAmenities.length / 2), displayedAmenities.length).map((amenity, index) => (
+              <Box key={index} sx={{ marginBottom: 1 }}>
+                <Typography variant="body2" className="monsterrat">{amenity.amenityName}</Typography>
               </Box>
             ))}
           </Box>
         </Box>
 
-        <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-          {!showAllAmenities ? (
-            <Button
-              disableRipple
-              onClick={handleShowMoreClick}
-              className="ShowMoreAmenities "
-              sx={{ border: "1px solid grey" }}
-            >
-              show all 60 Amenities
-            </Button>
-          ) : (
-            <Button
-              disableRipple
-              onClick={handleShowLessClick}
-              className="ShowMoreAmenities"
-              sx={{ border: "1px solid grey" }}
-            >
-              Show Less Amenities
-            </Button>
-          )}
+        <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+          <Button disableRipple onClick={handleShowMoreClick} className="ShowMoreAmenities" sx={{ border: '1px solid grey' }}>
+            show all {amenities.length} Amenities
+          </Button>
         </Box>
       </Box>
+
+      <Dialog open={open} onClose={handleShowLessClick} fullWidth maxWidth="md">
+        <DialogTitle>Amenities</DialogTitle>
+        <DialogContent>
+          {Object.keys(groupedAmenities).map((type) => (
+            <Box key={type} sx={{ marginBottom: 2 }}>
+              <Typography variant="h6" className="monsterrat">{type}</Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                {groupedAmenities[type].map((amenity, index) => (
+                  <Typography key={index} variant="body2" className="monsterrat">
+                    {amenity.amenityName}
+                  </Typography>
+                ))}
+              </Box>
+            </Box>
+          ))}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleShowLessClick} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

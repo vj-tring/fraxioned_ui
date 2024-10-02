@@ -135,7 +135,6 @@ const PropertyListingPage = () => {
   const counts = useSelector((state: RootState) => state.limits.counts);
 
   const [loadingImages, setLoadingImages] = useState(true);
-
   useEffect(() => {
     dispatch(fetchProperties(userId));
   }, [dispatch, userId]);
@@ -484,7 +483,7 @@ const PropertyListingPage = () => {
           }}
         />
         <div id="rooms" className="mt-5">
-          <SingleDevice />
+          <SingleDevice propertyId={selectedProperty?.id}/>
         </div>
         <div id="location">
           <MapEmbed
