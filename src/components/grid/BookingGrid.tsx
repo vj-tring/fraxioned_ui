@@ -1,12 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
-import ConfirmationModal from "../confirmation-modal"; // Adjust the import path as needed
+import { Button, Grid, Typography } from "@mui/material";
+import ConfirmationModal from "../confirmation-modal";
+import EditBookingModal from "@/pages/booking/bookingEdit";
+import CancelPolicy from "../cancel-policy";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchBookings,
+  fetchUserBookings,
+} from "@/store/slice/auth/bookingSlice";
+import { AppDispatch } from "@/store";
+import { RootState } from "@/store/reducers";
 
 interface BookingGridProps {
   bookings: Array<{
-    property: { id: number };
-    propertyName: string;
+    id: number;
+    bookingId: string;
+    property: { id: number; propertyName: string };
     checkinDate: string;
     checkoutDate: string;
     noOfAdults: number;
@@ -16,7 +26,8 @@ interface BookingGridProps {
     cleaningFee: number;
     petFee: number;
     notes?: string;
-    guest: string;
+    createdAt: string;
+    totalNights: number;
   }>;
   onEdit: (id: number) => void;
   onCancel: (id: number) => void;
@@ -25,25 +36,56 @@ interface BookingGridProps {
 
 const BookingGrid: React.FC<BookingGridProps> = ({
   bookings,
-  onEdit,
   onCancel,
   activeTab,
 }) => {
   const [cancelBookingId, setCancelBookingId] = useState<number | null>(null);
+  const [editBookingId, setEditBookingId] = useState<number | null>(null);
+  const [gridBookings, setGridBookings] = useState(bookings);
+  const [showCancelPopup, setShowCancelPopup] = useState(false);
+  const userId = useSelector((state: RootState) => state.auth.user?.id);
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleCancelClick = (id: number) => {
     setCancelBookingId(id);
+    setShowCancelPopup(true);
+  };
+
+  const handleUpdateBooking = (updatedBooking: any) => {
+    setGridBookings((prevBookings) =>
+      prevBookings.map((booking) =>
+        booking.id === updatedBooking.id
+          ? { ...booking, ...updatedBooking }
+          : booking
+      )
+    );
   };
 
   const handleConfirmCancel = () => {
     if (cancelBookingId !== null) {
       onCancel(cancelBookingId);
       setCancelBookingId(null);
+      setShowCancelPopup(false);
     }
   };
 
   const handleCloseCancelModal = () => {
     setCancelBookingId(null);
+    setShowCancelPopup(false);
+  };
+
+  const handleEditClick = (id: number) => {
+    setEditBookingId(id);
+  };
+
+  const handleCloseEditModal = () => {
+    setEditBookingId(null);
+  };
+
+  const handleEditSuccess = (updatedBooking: any) => {
+    handleUpdateBooking(updatedBooking);
+    dispatch(fetchUserBookings(userId));
+    handleCloseEditModal();
   };
 
   const columns: GridColDef[] = [
@@ -54,6 +96,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
       headerAlign: "center",
       align: "center",
     },
+    // { field: "propertyId", headerName: "PropertyID", flex: 1, headerAlign: "center", align: "center" },
     {
       field: "property",
       headerName: "Property",
@@ -108,7 +151,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
           <Button
             variant="outlined"
             disableRipple
-            onClick={() => onEdit(params.row.id)}
+            onClick={() => handleEditClick(params.row.id)}
             sx={{
               marginRight: 1,
               height: "25px",
@@ -141,6 +184,10 @@ const BookingGrid: React.FC<BookingGridProps> = ({
       ),
     });
   }
+
+  const editingBooking = editBookingId
+    ? bookings.find((b) => b.id === editBookingId)
+    : null;
 
   return (
     <div
@@ -190,15 +237,48 @@ const BookingGrid: React.FC<BookingGridProps> = ({
           },
         }}
       />
-      <ConfirmationModal
-        show={cancelBookingId !== null}
-        onHide={handleCloseCancelModal}
-        onConfirm={handleConfirmCancel}
-        title="Confirm Cancellation"
-        message="Are you sure you want to cancel this booking?"
-        confirmLabel="Cancel Booking"
-        cancelLabel="Keep Booking"
-      />
+      {showCancelPopup && (
+        <Grid
+          container
+          spacing={2}
+          direction="column"
+          justify="center"
+          alignItems="flex-start"
+          style={{
+            position: "absolute",
+            top: "57%",
+            left: "50%",
+            width: "70%",
+            height: "70%",
+            transform: "translate(-50%, -50%)",
+            backgroundColor: "white",
+            padding: "20px",
+            borderRadius: "8px",
+            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.4)",
+          }}
+        >
+          <Typography
+            variant="h5"
+            mb={3}
+            gutterBottom
+            sx={{ fontWeight: "bold" }}
+          >
+            Confirm Cancellation
+          </Typography>
+          <CancelPolicy
+            onConfirm={handleConfirmCancel}
+            onCancel={handleCloseCancelModal}
+          />
+        </Grid>
+      )}
+      {editingBooking && (
+        <EditBookingModal
+          open={editBookingId !== null}
+          handleClose={handleCloseEditModal}
+          booking={editingBooking}
+          onUpdateSuccess={handleEditSuccess}
+        />
+      )}
     </div>
   );
 };

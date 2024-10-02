@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './booking-calendar.css';
 import { DatePickerWithRange } from '../calender';
@@ -8,13 +8,10 @@ import { AppDispatch } from '@/store';
 
 const predefinedColors = ['#87CEEB', '#FFA500', '#b94ccf', '#FF33A1', '#A133FF', '#33FFA1'];
 
-const BookingCalendar = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [activeProperty, setActiveProperty] = useState<string | null>(null);
+const BookingCalendar = ({ properties }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const userId = useSelector((state: any) => state.auth.user?.id);
-  const { cards: properties, loading: propertiesLoading } = useSelector((state: any) => state.properties);
   const { userBookings, isLoading: bookingsLoading } = useSelector((state: any) => state.bookings);
 
   useEffect(() => {
@@ -28,7 +25,7 @@ const BookingCalendar = () => {
     console.log('User Bookings:', userBookings);
   }, [userBookings]);
 
-  if (propertiesLoading || bookingsLoading) {
+  if (bookingsLoading) {
     return <div>Loading...</div>;
   }
 
@@ -68,7 +65,6 @@ const BookingCalendar = () => {
               key={property.id} 
               className="property-name" 
               style={{ color: property.color }}
-              onClick={() => setActiveProperty(property.id)}
             >
               {property.name}
             </span>
@@ -81,13 +77,9 @@ const BookingCalendar = () => {
           {propertiesWithColors.slice(0, 2).map((property: any) => (
             <div key={property.id} className="property-calendar">
               <DatePickerWithRange
-                key={`${property.id}-${selectedDate.getTime()}`}
+                key={property.id}
                 userId={userId}
-                onSelect={(range) => {
-                  console.log(`Selected range for ${property.name}:`, range);
-                }}
                 showEndCalendar={false}
-                fetchBookingsOnMount={activeProperty === property.id}
                 externalBookedDates={getBookedDatesForProperty(property.id)}
                 hideBookedDates={getBookedDatesForProperty(property.id).length === 0}
                 propertyColor={property.color}
@@ -101,10 +93,9 @@ const BookingCalendar = () => {
           {propertiesWithColors.slice(2).map((property: any) => (
             <div key={property.id} className="property-calendar">
               <DatePickerWithRange
-                key={`${property.id}-${selectedDate.getTime()}`}
+                key={property.id}
                 userId={userId}
                 showEndCalendar={false}
-                fetchBookingsOnMount={activeProperty === property.id}
                 externalBookedDates={getBookedDatesForProperty(property.id)}
                 hideBookedDates={getBookedDatesForProperty(property.id).length === 0}
                 propertyColor={property.color}

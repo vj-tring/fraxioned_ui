@@ -37,6 +37,8 @@ import CustomizedSnackbar from "@/components/customized-snackbar";
 import calendarData from "@/components/calender/calendarData.json";
 import { DateRange } from "react-day-picker";
 import DatePickerCard from "../../components/date-picker-card";
+import { Skeleton } from "@mui/material"; 
+import { RootState } from "@/store/reducers";
 
 interface Property {
   id: number;
@@ -49,6 +51,7 @@ interface Property {
   country?: string;
   latitude?: string;
   longitude?: string;
+  zipcode?: string
 }
 
 interface Space {
@@ -75,7 +78,7 @@ export interface Image {
   updatedBy: User;
 }
 
-interface RootState {
+interface PropertyRootState {
   auth: any;
   properties: {
     cards: Property[];
@@ -102,9 +105,13 @@ interface RootState {
 }
 
 const PropertyListingPage = () => {
-  const { cards: properties } = useSelector((state: RootState) => state.properties);
+  const { cards: properties } = useSelector(
+    (state: RootState) => state.properties
+  );
   const displayProperties = properties.length ? properties : mockProperties;
-  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(
+    null
+  );
   const { id } = useParams<{ id: string }>();
   const [currentImage, setCurrentImage] = useState<number>(0);
   const [guests, setGuests] = useState<number>(1);
@@ -113,16 +120,21 @@ const PropertyListingPage = () => {
   const [imageDetails, setImageDetails] = useState<Image[]>([]);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("error");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "error"
+  );
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const userId = useSelector((state: RootState) => state.auth.user.id);
-  const currentUser = useSelector((state: RootState) => state.auth.user);
+  const userId = useSelector((state: PropertyRootState) => state.auth.user.id);
+  const currentUser = useSelector((state: PropertyRootState) => state.auth.user);
   const selectedPropertyDetails = useSelector(selectSelectedPropertyDetails);
-  const calendarError = useSelector((state: RootState) => state.datePicker.errorMessage);
+  const calendarError = useSelector(
+    (state: PropertyRootState) => state.datePicker.errorMessage
+  );
   const [isAvailable, setIsAvailable] = useState(false);
   const counts = useSelector((state: RootState) => state.limits.counts);
 
+  const [loadingImages, setLoadingImages] = useState(true);
 
   useEffect(() => {
     dispatch(fetchProperties(userId));
@@ -151,12 +163,14 @@ const PropertyListingPage = () => {
         }
         const response = await propertyImageapi();
         const filterById = response.data.data.filter(
-          (image: Image) => image.property?.id === propertyId && image.displayOrder
+          (image: Image) =>
+            image.property?.id === propertyId && image.displayOrder
         );
         const sortedImages = filterById.sort(
           (a: Image, b: Image) => a.displayOrder - b.displayOrder
         );
         setImageDetails(sortedImages);
+        setLoadingImages(false);
       } catch (error) {
         console.error("Error fetching property images:", error);
       }
@@ -176,7 +190,10 @@ const PropertyListingPage = () => {
     setSnackbarOpen(false);
   };
 
-  const showSnackbar = (message: string, severity: "error" | "info" | "warning" = "error") => {
+  const showSnackbar = (
+    message: string,
+    severity: "error" | "info" | "warning" = "error"
+  ) => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setSnackbarOpen(true);
@@ -184,7 +201,8 @@ const PropertyListingPage = () => {
 
   const isLastMinuteBooking = (checkInDate: Date) => {
     const today = new Date();
-    const diffInDays = (checkInDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
+    const diffInDays =
+      (checkInDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
     return diffInDays <= calendarData.bookingRules.lastMinuteBooking.maxDays;
   };
 
@@ -192,10 +210,12 @@ const PropertyListingPage = () => {
     setDateRange(range);
   };
 
-
   const handleCheckAvailability = async () => {
     if (calendarError) {
-      showSnackbar("You can't book the date you have selected. Please choose a valid date range.", "error");
+      showSnackbar(
+        "You can't book the date you have selected. Please choose a valid date range.",
+        "error"
+      );
       return;
     }
 
@@ -255,7 +275,7 @@ const PropertyListingPage = () => {
       const result = await dispatch(bookingSummary(bookingData)).unwrap();
 
       if (result && !result.error) {
-        console.log('Booking summary created successfully:', result);
+        console.log("Booking summary created successfully:", result);
 
         const updatedBookingData = {
           ...bookingData,
@@ -268,14 +288,24 @@ const PropertyListingPage = () => {
         await dispatch(saveBooking(updatedBookingData));
         setIsAvailable(true);
       } else {
-        throw new Error(result.message || "An error occurred while processing your booking.");
+        throw new Error(
+          result.message || "An error occurred while processing your booking."
+        );
       }
     } catch (error: any) {
       console.error("Error during booking process:", error);
       if (error.statusCode === 403) {
-        showSnackbar(error.message || "An error occurred while processing your booking. Please check your try again.", "error");
+        showSnackbar(
+          error.message ||
+            "An error occurred while processing your booking. Please check your try again.",
+          "error"
+        );
       } else {
-        showSnackbar(error.message || "An error occurred while processing your booking. Please try again.", "error");
+        showSnackbar(
+          error.message ||
+            "An error occurred while processing your booking. Please try again.",
+          "error"
+        );
       }
     }
   };
@@ -289,35 +319,57 @@ const PropertyListingPage = () => {
       <div className="img-row pt-4 px-12">
         <Grid container spacing={1}>
           <Grid item xs={12} md={6}>
-            {imageDetails.slice(0, 1).map((image, index) => (
-              <img
-                key={index}
-                src={image.imageUrl}
-                alt={image.imageName}
-                loading="lazy"
-                className={`img-fluid img1 cornertop ${currentImage === index ? "active" : ""}`}
-                onClick={() => setCurrentImage(index)}
-              />
-            ))}
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Grid container spacing={1}>
-              {imageDetails.slice(1, 5).map((image, index) => (
-                <Grid item xs={6} key={index}>
+            {loadingImages ? ( // Step 2: Display Skeleton
+              <Skeleton variant="rectangular" width="100%" height={400} />
+            ) : (
+              imageDetails
+                .slice(0, 1)
+                .map((image, index) => (
                   <img
+                    key={index}
                     src={image.imageUrl}
                     alt={image.imageName}
                     loading="lazy"
-                    className={`img-fluid image ${currentImage === index + 1 ? "active" : ""}`}
-                    onClick={() => setCurrentImage(index + 1)}
+                    className={`img-fluid img1 cornertop ${
+                      currentImage === index ? "active" : ""
+                    }`}
+                    onClick={() => setCurrentImage(index)}
                   />
-                </Grid>
-              ))}
+                ))
+            )}
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Grid container spacing={1}>
+              {loadingImages // Step 2: Display Skeleton for thumbnails
+                ? Array.from({ length: 4 }).map((_, index) => (
+                    <Grid item xs={6} key={index}>
+                      <Skeleton
+                        variant="rectangular"
+                        width="100%"
+                        height={195}
+                      />
+                    </Grid>
+                  ))
+                : imageDetails.slice(1, 5).map((image, index) => (
+                    <Grid item xs={6} key={index}>
+                      <img
+                        src={image.imageUrl}
+                        alt={image.imageName}
+                        loading="lazy"
+                        className={`img-fluid image ${
+                          currentImage === index + 1 ? "active" : ""
+                        }`}
+                        onClick={() => setCurrentImage(index + 1)}
+                      />
+                    </Grid>
+                  ))}
               {imageDetails.length > 5 && (
                 <Grid item xs={12}>
                   <div className="image-container">
                     <div className="show-more-overlay">
-                      <PiDotsNineBold style={{ fontSize: ".87rem", fontWeight: "bolder" }} />
+                      <PiDotsNineBold
+                        style={{ fontSize: ".87rem", fontWeight: "bolder" }}
+                      />
                       <Typography
                         variant="button"
                         onClick={handleClickOpen}
@@ -337,18 +389,31 @@ const PropertyListingPage = () => {
         {selectedProperty && (
           <>
             <Typography variant="h4" className="PropertyName monsterrat">
-              {selectedProperty && (selectedProperty.id === 1 || selectedProperty.id === 2)
-                ? "Paradise Shores"
-                : selectedProperty?.name || "Property Name"}
+              {selectedProperty?.name || "Property Name"}
             </Typography>
-            <Box display="flex" alignItems="flex-end" gap={0.5} className="monsterrat location">
-              <img src={Logo} alt="Logo" style={{ width: 26, height: 26 }} loading="lazy" />
+            <Box
+              display="flex"
+              alignItems="flex-end"
+              gap={0.5}
+              className="monsterrat location"
+            >
+              <img
+                src={Logo}
+                alt="Logo"
+                style={{ width: 26, height: 26 }}
+                loading="lazy"
+              />
               <Typography
                 variant="h6"
-                className="PropertyAddress monsterrat"
+                className="PropertyAddress monsterrat "
                 style={{ opacity: 0.9, fontWeight: "bolder" }}
               >
-                {selectedProperty.address || "Property Address"}
+                
+                <div>{selectedProperty.address || "Property Address"}</div>,
+                <div>{selectedProperty.city || "Property Address"}</div>,
+                <div>{selectedProperty.state || "Property Address"}</div>,
+                <div>{selectedProperty.country || "Property Address"}</div>,
+                <div>{selectedProperty.zipcode || "Property Address"}</div>
               </Typography>
             </Box>
           </>
@@ -356,7 +421,9 @@ const PropertyListingPage = () => {
         <div className="Blue-row pb-3 pt-5">
           <div>
             <a href="#myShare" smooth={true} duration={200}>
-              <h1 className="Blue-rowshare" style={{ fontWeight: "bolder" }}>My Share</h1>
+              <h1 className="Blue-rowshare" style={{ fontWeight: "bolder" }}>
+                My Share
+              </h1>
             </a>
           </div>
           <div>
@@ -379,7 +446,9 @@ const PropertyListingPage = () => {
           <div className="col-6 col-md-7 GridWidth h-100">
             <div id="myShare" className="mt-4">
               <Showmore
-                description={selectedProperty ? selectedProperty?.houseDescription : ""}
+                description={
+                  selectedProperty ? selectedProperty?.houseDescription : ""
+                }
               />
             </div>
             <div id="availableNights">
@@ -390,20 +459,20 @@ const PropertyListingPage = () => {
               <DatePickerWithRange
                 onSelect={handleDateRangeSelect}
                 initialRange={dateRange}
-                propertyColor={""}              
+                propertyColor={""}
               />
             </div>
           </div>
           <div className="py-4 GridWidth1 position-relative">
-          <DatePickerCard
-            guests={guests}
-            setGuests={setGuests}
-            onCheckAvailability={handleCheckAvailability}
-            isAvailable={isAvailable}
-            onNavigateToSummary={handleNavigateToSummary}
-            dateRange={dateRange}
-            onDateRangeSelect={handleDateRangeSelect}
-          />
+            <DatePickerCard
+              guests={guests}
+              setGuests={setGuests}
+              onCheckAvailability={handleCheckAvailability}
+              isAvailable={isAvailable}
+              onNavigateToSummary={handleNavigateToSummary}
+              dateRange={dateRange}
+              onDateRangeSelect={handleDateRangeSelect}
+            />
           </div>
         </div>
         <hr
@@ -421,7 +490,9 @@ const PropertyListingPage = () => {
           <MapEmbed
             city={selectedProperty ? selectedProperty?.city : "Garden City"}
             state={selectedProperty ? selectedProperty?.state : "Utah"}
-            country={selectedProperty ? selectedProperty?.country : "United State"}
+            country={
+              selectedProperty ? selectedProperty?.country : "United State"
+            }
           />
         </div>
         <div id="info">
@@ -430,24 +501,39 @@ const PropertyListingPage = () => {
         <Dialog open={dialogOpen} onClose={handleClose} fullWidth maxWidth="md">
           <DialogTitle className="d-flex justify-content-between">
             <Typography variant="h6">More Photos</Typography>
-            <IconButton edge="end" color="inherit" onClick={handleClose} aria-label="close">
+            <IconButton
+              edge="end"
+              color="inherit"
+              onClick={handleClose}
+              aria-label="close"
+            >
               <CloseIcon />
             </IconButton>
           </DialogTitle>
           <DialogContent>
             <Grid container spacing={2}>
-              {imageDetails.map((image, index) => (
-                <Grid item xs={12} sm={6} md={4} key={index}>
-                  <Card>
-                    <img
-                      src={image.imageUrl}
-                      alt={image.imageName}
-                      style={{ width: "100%", height: "auto" }}
-                      loading="lazy"
-                    />
-                  </Card>
-                </Grid>
-              ))}
+              {!loadingImages
+                ? Array.from({ length: 6 }).map((_, index) => (
+                    <Grid item xs={12} sm={6} md={4} key={index}>
+                      <Skeleton
+                        variant="rectangular"
+                        width="100%"
+                        height={200}
+                      />
+                    </Grid>
+                  ))
+                : imageDetails.map((image, index) => (
+                    <Grid item xs={12} sm={6} md={4} key={index}>
+                      <Card>
+                        <img
+                          src={image.imageUrl}
+                          alt={image.imageName}
+                          style={{ width: "100%", height: "auto" }}
+                          loading="lazy"
+                        />
+                      </Card>
+                    </Grid>
+                  ))}
             </Grid>
           </DialogContent>
           <DialogActions>
@@ -456,6 +542,7 @@ const PropertyListingPage = () => {
             </Button>
           </DialogActions>
         </Dialog>
+
         <CustomizedSnackbar
           open={snackbarOpen}
           handleClose={handleSnackbarClose}

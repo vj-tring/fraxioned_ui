@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { clearDates } from "@/store/slice/datePickerSlice";
 import PropertyList from "./propertyList";
 import TrackingMyNigts from "../booking/trackingMyNights";
+import { fetchProperties } from "@/store/slice/auth/property-slice";
 
 interface Property {
   id: number;
@@ -34,6 +35,12 @@ const Home: React.FC = () => {
     loading,
     error,
   } = useSelector((state: RootState) => state.properties);
+  // const userId = useSelector((state: any) => state.auth.user?.id);
+
+  // useEffect(() => {
+  //   const data = fetchProperties(userId);
+  //   console.log("data", data);
+  // }, []);
 
   const dispatch = useDispatch();
 
@@ -55,7 +62,6 @@ const Home: React.FC = () => {
     dispatch(clearDates());
   }, [dispatch]);
 
- 
   return (
     <div className="home-content">
       <div className="HomeImg"></div>
@@ -64,12 +70,10 @@ const Home: React.FC = () => {
 
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
-       
+
       <div className="Container1">
         <PropertyList />
       </div>
-
-
     </div>
   );
 };

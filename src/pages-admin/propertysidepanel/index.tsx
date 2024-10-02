@@ -63,6 +63,7 @@ const PropertySidePanel: React.FC<PropertySidePanelProps> = ({ isOpen }) => {
         { icon: <FaUser />, label: 'Users', path: `/admin/property/${id}/users`, enabled: true },
         { icon: <FaMapMarkerAlt />, label: 'Location', path: `/admin/property/${id}/location`, enabled: false },
         { icon: <FaFile />, label: 'Documents', path: `/admin/property/${id}/documents`, enabled: true },
+
     ];
 
     return (

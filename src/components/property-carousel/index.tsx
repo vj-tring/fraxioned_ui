@@ -155,7 +155,7 @@ export default function BasicSelect() {
   const showCarousel = cards.length > 0;
   const showCarouselControls = cards.length > 1;
   const cardItemWidth =
-    cards.length === 1 ? "380px" : cards.length === 2 ? "380px" : "520px";
+    cards.length === 1 ? "520px" : cards.length === 2 ? "380px" : "520px";
   const buttonSize = {
     width:
       cards.length === 1 ? "3.7rem" : cards.length === 2 ? "3.7rem" : "5rem",
@@ -169,7 +169,7 @@ export default function BasicSelect() {
   const BoxMargin =
     cards.length === 1 ? "0px" : cards.length === 2 ? "0px" : "8px";
   const cardItemHeight =
-    cards.length === 1 ? "232px" : cards.length === 2 ? "232px" : "270px";
+    cards.length === 1 ? "272px" : cards.length === 2 ? "232px" : "280px";
   const cardNameWeight =
     cards.length === 1 ? "600" : cards.length === 2 ? "600" : "600";
 
@@ -207,7 +207,9 @@ export default function BasicSelect() {
         <div className="d-flex align-items-start flex-column card-item">
           <span className="DateHead1 monsterrat">My Home(s)</span>
           <p className="property1 monsterrat">
-            {formatCardName(selectedCard ? selectedCard?.name : "Select Property")}
+            {formatCardName(
+              selectedCard ? selectedCard?.name : "Select Property"
+            )}
           </p>
         </div>
       </Button>
@@ -221,6 +223,7 @@ export default function BasicSelect() {
             position: "fixed",
             maxHeight: "60vh",
             overflowY: "auto",
+            //maxWidth: "70vh",
           },
         }}
         sx={{ borderRadius: 32 }}
@@ -287,12 +290,14 @@ export default function BasicSelect() {
                           onClick={() => handleCardClick(index)}
                           sx={{
                             flex: "0 0 auto",
-                            margin: "7px",
-                            padding: "4px",
+                            margin: "2px",
+                            // padding: "5px",
+                            display: "flex",
+                            justifyContent: "center",
                           }}
                         >
                           <div className="d-flex flex-column align-items-center p-1.5">
-                            <h4 className="property-name">
+                            <h4 className="property-names">
                               {formatCardName(card.name)}
                             </h4>
                           </div>
@@ -327,17 +332,20 @@ export default function BasicSelect() {
                       ))}
                     </div>
                   )}
-                  <div className="card-name d-flex justify-content-between py-2 align-items-center gy-1 ">
+                  <div className="card-name d-flex justify-content-between align-items-center gy-1 ">
                     <span className="CardFont">
                       <h4
                         className="BlueHead"
                         style={{ fontWeight: cardNameWeight }}
                       >
-                        {formatCardName(selectedCard.name)} 
+                        {formatCardName(selectedCard.name)}
                         {/* [{selectedCard.share}/
                         {selectedCard.propertyShare} share] */}
                       </h4>
                       <p className="BlueFont">{selectedCard.address}</p>
+                      <p className="BlueFont">{selectedCard.city}</p>
+                      <p className="BlueFont">{selectedCard.state}</p>
+                      <p className="BlueFont">{selectedCard.zipcode}</p>
                     </span>
                     <span className={`CardImage ${imageClass}`}>
                       <img
@@ -348,67 +356,95 @@ export default function BasicSelect() {
                       />
                     </span>
                   </div>
-                  <div className="d-flex justify-content-between py-2 align-items-center pt-0 MyAvaNigt">
-                    <p className="Available">My Available Nights</p>
-                    <div className="d-flex justify-content-center">
-                      {years.map((year) => (
-                        <Button
-                          disableRipple
-                          key={year}
-                          onClick={() => handleYearClick(year)}
-                          className={`card-btn1 ${
-                            selectedYear === year ? "active" : ""
-                          }`}
-                          sx={{
-                            margin: "2px",
-                            padding: "4px",
-                            paddingTop: "5px",
-                            borderRadius: 16,
-                            ...buttonSize,
-                          }}
-                        >
-                          {year}
-                        </Button>
-                      ))}
+                  <div className="   mt-3  AvailYear">
+                    <div className="d-flex justify-content-between py-2 align-items-center pt-0 MyAvaNigt">
+                      <div className="d-flex justify-content-center">
+                        {years.map((year) => (
+                          <Button
+                            disableRipple
+                            key={year}
+                            onClick={() => handleYearClick(year)}
+                            className={`card-btn1 ${
+                              selectedYear === year ? "active" : ""
+                            }`}
+                            sx={{
+                              margin: "2px",
+                              padding: "4px",
+                              paddingTop: "7px",
+                              borderRadius: 16,
+                              ...buttonSize,
+                            }}
+                          >
+                            {year}
+                          </Button>
+                        ))}
+                      </div>
                     </div>
+                    <p className="AvailableNight">My Available Nights</p>
                   </div>
+
                   <div
                     className="box d-flex justify-content-around py-1"
-                    style={{ marginTop: BoxMargin }}
+                    style={{
+                      marginTop: "0px",
+                      height: "57px",
+                      borderRadius: "8px",
+                    }}
                   >
                     <div className="d-flex flex-column night-count">
-                      <li className="Off-Values">
-                        {selectedCard.details[selectedYear]?.offSeason || "N/A"}
-                      </li>
-                      <li style={{ fontSize: BoxList }}>Off-Season Nights</li>
+                      <ul>
+                        <li className="Off-Values">
+                          {selectedCard.details[selectedYear]?.offSeason ||
+                            "N/A"}
+                        </li>
+                        <li style={{ fontSize: BoxList, fontWeight: "650" }}>
+                          Off-Season Nights
+                        </li>
+                      </ul>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li className="Off-Values">
-                        {selectedCard.details[selectedYear]?.peakSeason ||
-                          "N/A"}
-                      </li>
-                      <li style={{ fontSize: BoxList }}>Peak-Season Nights</li>
+                      <ul>
+                        <li className="Off-Values">
+                          {selectedCard.details[selectedYear]?.peakSeason ||
+                            "N/A"}
+                        </li>
+                        <li style={{ fontSize: BoxList, fontWeight: "650" }}>
+                          Peak-Season Nights
+                        </li>
+                      </ul>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li className="Off-Values">
-                        {selectedCard.details[selectedYear]?.peakHoliday ||
-                          "N/A"}
-                      </li>
-                      <li style={{ fontSize: BoxList }}>Peak-Season Holiday</li>
+                      <ul>
+                        <li className="Off-Values">
+                          {selectedCard.details[selectedYear]?.peakHoliday ||
+                            "N/A"}
+                        </li>
+                        <li style={{ fontSize: BoxList, fontWeight: "650" }}>
+                          Peak-Season Holiday
+                        </li>
+                      </ul>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li className="Off-Values">
-                        {selectedCard.details[selectedYear]?.offSeasonHoliday ||
-                          "N/A"}
-                      </li>
-                      <li style={{ fontSize: BoxList }}>Off-Season Holiday</li>
+                      <ul>
+                        <li className="Off-Values">
+                          {selectedCard.details[selectedYear]
+                            ?.offSeasonHoliday || "N/A"}
+                        </li>
+                        <li style={{ fontSize: BoxList, fontWeight: "650" }}>
+                          Off-Season Holiday
+                        </li>
+                      </ul>
                     </div>
                     <div className="d-flex flex-column night-count">
-                      <li className="Off-Values">
-                        {selectedCard.details[selectedYear]?.lastMinute ||
-                          "N/A"}
-                      </li>
-                      <li style={{ fontSize: BoxList }}>Last Minute Booking</li>
+                      <ul>
+                        <li className="Off-Values">
+                          {selectedCard.details[selectedYear]?.lastMinute ||
+                            "N/A"}{" "}
+                        </li>
+                        <li style={{ fontSize: BoxList, fontWeight: "650" }}>
+                          Last Minute Booking
+                        </li>
+                      </ul>
                     </div>
                   </div>
                 </div>
