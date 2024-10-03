@@ -318,14 +318,11 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
         onHide={handleCancelDelete}
         onConfirm={handleConfirmDelete}
         title="Confirm Delete"
-        message={
-          selectedPropertyId === "all"
-            ? "Are you sure you want to delete this holiday?"
-            : "Are you sure you want to remove this holiday from the property?"
-        }
+        message={selectedPropertyId === "all"
+          ? "Are you sure you want to delete this holiday?"
+          : "Are you sure you want to remove this holiday from the property?"}
         confirmLabel="Delete"
-        cancelLabel="Cancel"
-      />
+        cancelLabel="Cancel" children={undefined}      />
 
       <Snackbar
         open={showErrorSnackbar}

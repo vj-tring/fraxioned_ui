@@ -11,9 +11,10 @@
 }
 .Container1 {
   margin-left: 20px;
+  margin-right: 15px;
   /* max-width: 10rem; */
 }
-.Cardcontainer{
+.Cardcontainer {
   /* padding: 15px; */
 }
 
@@ -305,7 +306,7 @@
   .Container1 {
     display: flex;
     flex-direction: column;
-    max-width: 10rem;
+    /* max-width: 10rem; */
   }
   .carousel-controls {
     visibility: hidden;

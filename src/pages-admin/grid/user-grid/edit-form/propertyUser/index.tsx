@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Card, CardContent, Typography, Chip } from "@mui/material";
+import React, { useState, useEffect } from 'react';
+import { Button, Card, CardContent, Typography } from "@mui/material";
 import { getUserProperties } from "@/api";
 import styles from "./propertyTab.module.css";
 import { Image as ImageIcon } from "lucide-react";
@@ -13,6 +13,30 @@ interface UserProperty {
   acquisitionDate: string;
   isActive: number;
   year: number;
+  peakAllottedNights: number;
+  peakUsedNights: number;
+  peakBookedNights: number;
+  peakCancelledNights: number;
+  peakLostNights: number;
+  peakRemainingNights: number;
+  peakAllottedHolidayNights: number;
+  peakUsedHolidayNights: number;
+  peakBookedHolidayNights: number;
+  peakRemainingHolidayNights: number;
+  offAllottedNights: number;
+  offUsedNights: number;
+  offBookedNights: number;
+  offCancelledNights: number;
+  offLostNights: number;
+  offRemainingNights: number;
+  offAllottedHolidayNights: number;
+  offUsedHolidayNights: number;
+  offBookedHolidayNights: number;
+  offRemainingHolidayNights: number;
+  lastMinuteAllottedNights: number;
+  lastMinuteUsedNights: number;
+  lastMinuteBookedNights: number;
+  lastMinuteRemainingNights: number;
 }
 
 interface PropertyResponse {
@@ -28,14 +52,15 @@ interface PropertyResponse {
   propertyShare: number;
 }
 
-interface PropertyTabProps {
+interface EnhancedPropertyTabProps {
   userId: number;
 }
 
-const PropertyTab: React.FC<PropertyTabProps> = ({ userId }) => {
+const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
   const [propertyData, setPropertyData] = useState<PropertyResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedYears, setSelectedYears] = useState<{ [key: number]: number }>({});
 
   const images = [imageone, imagetwo, imagethree];
 
@@ -44,6 +69,12 @@ const PropertyTab: React.FC<PropertyTabProps> = ({ userId }) => {
       try {
         const response = await getUserProperties(userId);
         setPropertyData(response.data);
+
+        const initialYears: { [key: number]: number } = {};
+        response.data.forEach((prop: PropertyResponse) => {
+          initialYears[prop.propertyId] = new Date().getFullYear();
+        });
+        setSelectedYears(initialYears);
       } catch (err) {
         console.error("Error fetching property data:", err);
         setError("Failed to fetch property details. Please try again.");
@@ -55,82 +86,137 @@ const PropertyTab: React.FC<PropertyTabProps> = ({ userId }) => {
     fetchPropertyData();
   }, [userId]);
 
-  if (loading) return <Typography>Loading...</Typography>;
-  if (error) return <Typography color="error">{error}</Typography>;
+  if (loading) return <Typography className={styles.loadingText}>Loading...</Typography>;
+  if (error) return <Typography className={styles.errorText} color="error">{error}</Typography>;
+
+  const renderNightInfoBlock = (userProperty: UserProperty, season: 'peak' | 'off' | 'lastMinute') => {
+    const getNightInfo = (type: string) => {
+      let value: number;
+      switch (season) {
+        case 'peak':
+          value = userProperty[`peak${type}Nights` as keyof UserProperty] as number;
+          break;
+        case 'off':
+          value = userProperty[`off${type}Nights` as keyof UserProperty] as number;
+          break;
+        case 'lastMinute':
+          value = userProperty[`lastMinute${type}Nights` as keyof UserProperty] as number;
+          break;
+        default:
+          value = 0;
+      }
+      return value !== null && value !== undefined ? value : 0;
+    };
+
+    const renderNightInfoRow = (label: string, usedType: string, totalType: string) => {
+      const used = getNightInfo(usedType);
+      const total = getNightInfo(totalType);
+      return (
+        <div className={styles.nightInfoRow}>
+          <span className={styles.nightInfoLabel}>{label}:</span>
+          <span className={styles.nightInfoValue}>{used}/{total}</span>
+        </div>
+      );
+    };
+
+
+
+    return (
+      <div className={`${styles.nightInfoBlock} ${styles[`${season}Block`]}`}>
+        <Typography variant="subtitle2" className={styles.seasonTitle}>
+          {season === 'lastMinute' ? 'Last Minute' : `${season.charAt(0).toUpperCase() + season.slice(1)} Season`}
+        </Typography>
+        <div className={styles.nightInfoContent}>
+          <div className={styles.nightInfoColumn}>
+            <Typography variant="caption" className={styles.nightInfoSubtitle}>Regular Nights</Typography>
+            {renderNightInfoRow('Used', 'Used', 'Allotted')}
+            {renderNightInfoRow('Booked', 'Booked', 'Allotted')}
+            {renderNightInfoRow('Remaining', 'Remaining', 'Allotted')}
+          </div>
+          {season !== 'lastMinute' && (
+            <div className={styles.nightInfoColumn}>
+              <Typography variant="caption" className={styles.nightInfoSubtitle}>Holiday Nights</Typography>
+              {renderNightInfoRow('Used', 'UsedHoliday', 'AllottedHoliday')}
+              {renderNightInfoRow('Booked', 'BookedHoliday', 'AllottedHoliday')}
+              {renderNightInfoRow('Remaining', 'RemainingHoliday', 'AllottedHoliday')}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className={styles.propertyTabContainer}>
-      <div className={styles.cardGrid}>
-        {propertyData.map((prop: PropertyResponse, index: number) => {
-          const userProperty = prop.userProperties[0]; 
-          if (!userProperty) return null;
+      {propertyData.map((prop: PropertyResponse, index: number) => {
+        const userProperty = prop.userProperties.find(up => up.year === selectedYears[prop.propertyId]);
+        if (!userProperty) return null;
 
-          const shareFraction = `${userProperty.noOfShare}/${prop.propertyShare}`;
-          const randomImage = images[index % images.length];
+        const shareFraction = `${userProperty.noOfShare}/${prop.propertyShare}`;
+        const randomImage = images[index % images.length];
 
-          return (
-            <Card key={index} className={styles.propertyCard}>
-              <CardContent className={styles.cardContent}>
-                <div className={styles.imageContainer}>
+        return (
+          <Card key={prop.propertyId} className={styles.propertyCard}>
+            <div className={styles.propertyContent}>
+              <div className={styles.propertyLeftContent}>
+                <div className={styles.propertyImageWrapper}>
                   {randomImage ? (
                     <img src={randomImage} alt={prop.propertyName} className={styles.propertyImage} />
                   ) : (
-                    <div className={styles.noImage}>
-                      <ImageIcon size={48} />
-                      <Typography variant="body2">No image available</Typography>
+                    <div className={styles.propertyNoImage}>
+                      <ImageIcon size={24} />
                     </div>
                   )}
                 </div>
-                <div className={styles.propertyInfo}>
-                  <Typography variant="h6" className={styles.propertyName}>
-                    {prop.propertyName}
-                  </Typography>
-                  <Chip
-                    label={prop.isActive ? "Active" : "Inactive"}
-                    color={prop.isActive ? "success" : "error"}
-                    size="small"
-                    className={styles.statusChip}
-                  />
-                  <div className={styles.detailsContainer}>
-                    <div className={styles.detailItem}>
-                      <Typography variant="subtitle2" className={styles.detailLabel}>
-                        Address
-                      </Typography>
-                      <Typography variant="body2" className={styles.detailValue}>
-                        {prop.address}
-                      </Typography>
-                    </div>
-                    <div className={styles.detailItem}>
-                      <Typography variant="subtitle2" className={styles.detailLabel}>
-                        Location
-                      </Typography>
-                      <Typography variant="body2" className={styles.detailValue}>
-                        {`${prop.city}, ${prop.state}, ${prop.country} ${prop.zipcode}`}
-                      </Typography>
-                    </div>
-                    <div className={styles.detailItem}>
-                      <Typography variant="subtitle2" className={styles.detailLabel}>
-                        Shares
-                      </Typography>
-                      <Typography variant="body2" className={styles.detailValue}>
-                        {shareFraction}
-                      </Typography>
-                    </div>
-                    <div className={styles.detailItem}>
-                      <Typography variant="subtitle2" className={styles.detailLabel}>
-                        Acquired
-                      </Typography>
-                      <Typography variant="body2" className={styles.detailValue}>
-                        {new Date(userProperty.acquisitionDate).toLocaleDateString()}
-                      </Typography>
+                <CardContent className={styles.propertyInfo}>
+                  <div className={styles.propertyInfoContainer}>
+                    <Typography variant="h6" className={styles.propertyName}>
+                      {prop.propertyName}
+                    </Typography>
+                    <Typography variant="body2" className={styles.propertyAddress}>
+                      {prop.address}, {prop.city}, {prop.state}, {prop.zipcode}
+                    </Typography>
+                    <div className={styles.propertyDetails}>
+                      <div className={styles.propertyDetailItem}>
+                        <span className={styles.propertyDetailLabel}>Shares:</span>
+                        <span className={styles.propertyDetailValue}>{shareFraction}</span>
+                      </div>
+                      <div className={styles.propertyDetailItem}>
+                        <span className={styles.propertyDetailLabel}>Acquired:</span>
+                        <span className={styles.propertyDetailValue}>
+                          {new Date(userProperty.acquisitionDate).toLocaleDateString()}
+                        </span>
+                      </div>
                     </div>
                   </div>
+                </CardContent>
+              </div>
+              <div className={styles.propertyRightContent}>
+                <div className={styles.propertyYearSelector}>
+                  {prop.userProperties.map((up) => (
+                    <Button
+                      key={up.year}
+                      variant={selectedYears[prop.propertyId] === up.year ? "contained" : "outlined"}
+                      size="small"
+                      onClick={() => setSelectedYears(prev => ({ ...prev, [prop.propertyId]: up.year }))}
+                      className={`${styles.propertyYearButton} ${selectedYears[prop.propertyId] === up.year ? styles.propertyYearButtonSelected : ''}`}
+                    >
+                      {up.year}
+                    </Button>
+                  ))}
                 </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+                <div className={styles.propertyAvailabilityContainer}>
+                  <div className={styles.propertyAvailabilityInfo}>
+                    {renderNightInfoBlock(userProperty, 'peak')}
+                    {renderNightInfoBlock(userProperty, 'off')}
+                    {renderNightInfoBlock(userProperty, 'lastMinute')}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Card>
+        );
+      })}
     </div>
   );
 };
