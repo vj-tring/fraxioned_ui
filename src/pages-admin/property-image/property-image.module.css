@@ -38,22 +38,33 @@
 }
 
 .selected {
-  font-weight: bold;
+    font-weight: bold;
 }
 
-@media only screen and (max-width: 400px) {
-  .propertyImageContainer {
+.dropdownContainer {
+    display: flex; 
+    width: 20%;
+    margin-top: 10px;          
+    justify-content: flex-end;
+    /* border: 1px solid grey !important;  */
+    border-radius: 4px;   
+    height: 50px; 
+         
+}
+
+
+.MuiSelect-root {
+    height: 100%;          
+    padding: 0;           
+}
+
+.dropdownMenu {
+    width: 50%;
+}
+.container {
     display: flex;
     flex-direction: column;
-    flex-wrap: initial;
-    gap: 9px !important;
-    padding: 10px;
-  }
-
-  .propertyType {
-    font-size: x-small;
-  }
-  .colorBox {
-    height: 10px;
-  }
+    align-items: flex-end; 
+    margin-top:-8px;
+    margin-bottom: 8px;      
 }
