@@ -180,11 +180,11 @@ export const deleteAmenity = (id: number) =>
     axiosInstance.delete(`/v1/amenities/amenity/${id}`);
 
 export const getpropertyImageById = (id: number) =>
-    axiosInstance.get(`/v1/propertyImages/propertyImage/${id}`);
+    axiosInstance.get(`/v1/property-images/property-image/${id}`);
 
 export const propertyImageuploadapi = (formData: FormData) => {
     console.log('to backend', formData)
-    return axiosInstance.post(`/v1/propertyImages`, formData, {
+    return axiosInstance.post(`/v1/property-images`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
             'Accept': '*/*'
@@ -193,11 +193,11 @@ export const propertyImageuploadapi = (formData: FormData) => {
 };
 export const propertyImageeditapi = (id: number, formData: FormData) => {
     console.log('to backend', formData);
-    return axiosInstance.patch(`/v1/propertyImages/propertyImage/${id}`, formData);
+    return axiosInstance.patch(`/v1/property-images/property-image/${id}`, formData);
 };
 
 export const deletetpropertyImageById = (id: number) =>
-    axiosInstance.delete(`/v1/propertyImages/propertyImage/${id}`);
+    axiosInstance.delete(`/v1/property-images/property-image/${id}`);
 
 export const getUserBookings = (userId: number) =>
     axiosInstance.get(`/v1/bookings/user/${userId}`);
