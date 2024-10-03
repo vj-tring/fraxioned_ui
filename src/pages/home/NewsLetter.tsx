@@ -15,7 +15,7 @@ export default function NewsLetter() {
         marginTop:"12px",
         marginBottom:"20px",
 
-        // overflowY: "scroll",
+        overflowY: "scroll",
         borderRadius: "10px",
         // boxShadow: "none",
         // border:'1px solid #ccc',
@@ -56,7 +56,7 @@ export default function NewsLetter() {
         <CardMedia
           component="img"
           height="50"
-          className="NewsImg mt-4"
+          className="NewsImg mt-2"
           image={NewsImg}
           alt="green iguana"
         />
