@@ -1,39 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
+  PropertyAmenity,
+  fetchAmenities,
+} from "../../store/slice/amenitiesSlice";
+import {
+  Box,
+  Button,
+  Typography,
   Card,
   CardMedia,
   CardContent,
-  Typography,
-  Grid,
-  ListItem,
-  Box,
-  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton,
 } from "@mui/material";
-import {
-  Kitchen,
-  AcUnit,
-  Wifi,
-  LocalParking,
-  Tv,
-  Pool,
-  Spa,
-  FitnessCenter,
-  SmokeFree,
-  LocalBar,
-} from "@mui/icons-material";
-import Bedroom1Image from "../../assets/images/bedroom1.jpg"; // Ensure these paths are correct
-import KingBedImage from "../../assets/images/bedroom1.jpg"; // Ensure these paths are correct
+import CloseIcon from "@mui/icons-material/Close";
 import CustomPagination from "../custom-pagination";
 import "./single-device.css";
-interface Room {
-  name: string;
-  image: string;
-  Bed?: string; // Optional description for bed type
+import { AppDispatch } from "@/store";
+import { RootState } from "@/store/reducers";
+import Bedroom1Image from "../../assets/images/bedroom1.jpg";
+import KingBedImage from "../../assets/images/bedroom1.jpg";
+
+interface SingleDeviceProps {
+  propertyId: number;
 }
 
-interface Amenities {
-  amenities: { name: string; icon: React.ReactNode }[];
+interface Room {
+  image: string;
+  name: string;
+  Bed?: string;
 }
+
+const ITEMS_PER_PAGE = 2;
+const AMENITIES_PER_PAGE = 12;
 
 const allRooms: Room[] = [
   { name: "Bedroom 1", image: Bedroom1Image, Bed: "King size Bed" },
@@ -42,39 +45,40 @@ const allRooms: Room[] = [
   { name: "Guest Room", image: KingBedImage, Bed: "Comfortable Guest Bed" },
 ];
 
-const allAmenities: Amenities = {
-  amenities: [
-    { name: "Kitchen", icon: <Kitchen /> },
-    { name: "Air Conditioning", icon: <AcUnit /> },
-    { name: "Wi-Fi", icon: <Wifi /> },
-    { name: "Parking", icon: <LocalParking /> },
-    { name: "TV", icon: <Tv /> },
-    { name: "Pool", icon: <Pool /> },
-    { name: "Spa", icon: <Spa /> },
-    { name: "Fitness Center", icon: <FitnessCenter /> },
-    { name: "Smoke-Free", icon: <SmokeFree /> },
-    { name: "Bar", icon: <LocalBar /> },
-  ],
+const groupAmenitiesByGroup = (data: PropertyAmenity[]) => {
+  return data.reduce((acc, propertyAmenity) => {
+    const groupName = propertyAmenity.amenity.amenityGroup.name;
+    if (!acc[groupName]) {
+      acc[groupName] = [];
+    }
+    acc[groupName].push(propertyAmenity.amenity);
+    return acc;
+  }, {} as { [key: string]: PropertyAmenity["amenity"][] });
 };
 
-const ITEMS_PER_PAGE = 2;
-const AMENITIES_PER_PAGE = 12;
-
-const SingleDevice: React.FC = () => {
+const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { propertyAmenities, loading, error } = useSelector(
+    (state: RootState) => state.amenities
+  );
   const [page, setPage] = useState(1);
   const [showAllAmenities, setShowAllAmenities] = useState(false);
+  const [open, setOpen] = useState(false);
 
-  // Adjusted to match the expected signature
+  useEffect(() => {
+    dispatch(fetchAmenities(propertyId));
+  }, [dispatch, propertyId]);
+
   const handlePageChange = (value: number) => {
     setPage(value);
   };
 
   const handleShowMoreClick = () => {
-    setShowAllAmenities(true);
+    setOpen(true);
   };
 
   const handleShowLessClick = () => {
-    setShowAllAmenities(false);
+    setOpen(false);
   };
 
   const paginatedRooms = allRooms.slice(
@@ -83,17 +87,22 @@ const SingleDevice: React.FC = () => {
   );
   const totalPages = Math.ceil(allRooms.length / ITEMS_PER_PAGE);
 
+  const groupedAmenities = groupAmenitiesByGroup(propertyAmenities || []);
+  const allAmenities = propertyAmenities ? propertyAmenities.map((pa) => pa.amenity) : [];
   const displayedAmenities = showAllAmenities
-    ? allAmenities.amenities
-    : allAmenities.amenities.slice(0, AMENITIES_PER_PAGE);
+    ? allAmenities
+    : allAmenities.slice(0, AMENITIES_PER_PAGE);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "row", gap: 10 }} 
-    className="singleDevice"
+    <Box
+      sx={{ display: "flex", flexDirection: "row", gap: 10 }}
+      className="singleDevice"
     >
       <Box
         sx={{ display: "flex", flexDirection: "column", gap: 3, width: "50%" }}
-
         className="RoomsRes"
       >
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -113,120 +122,150 @@ const SingleDevice: React.FC = () => {
           </Box>
         </Box>
 
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
-          {paginatedRooms.map((room, index) => (
-            <Box
-              key={index}
-              sx={{
-                flex: "1 1 calc(50% - 1rem)",
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <Card
+        {allRooms.length === 0 ? (
+          <Typography variant="body1">No rooms available.</Typography>
+        ) : (
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
+            {paginatedRooms.map((room: Room, index: number) => (
+              <Box
+                key={index}
                 sx={{
+                  flex: "1 1 calc(50% - 1rem)",
                   display: "flex",
                   flexDirection: "column",
-                  height: "70%",
-                  width: "100%",
                 }}
               >
-                <CardMedia
-                  component="img"
-                  height="100%"
-                  image={room.image}
-                  alt={room.name}
-                  sx={{ objectFit: "cover" }}
-                />
-              </Card>
-              <CardContent sx={{ padding: 1, paddingTop: 2 }}>
-                <Typography
-                  variant="h6"
-                  sx={{ fontSize: 15, fontWeight: 600 }}
-                  className="monsterrat"
+                <Card
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "70%",
+                    width: "100%",
+                  }}
                 >
-                  {room.name}
-                </Typography>
-                {room.Bed && (
+                  <CardMedia
+                    component="img"
+                    height="100%"
+                    image={room.image}
+                    alt={room.name}
+                    sx={{ objectFit: "cover" }}
+                  />
+                </Card>
+                <CardContent sx={{ padding: 1, paddingTop: 2 }}>
                   <Typography
-                    variant="body1"
-                    sx={{ fontSize: 12 }}
+                    variant="h6"
+                    sx={{ fontSize: 15, fontWeight: 600 }}
                     className="monsterrat"
                   >
-                    {room.Bed}
+                    {room.name}
                   </Typography>
-                )}
-              </CardContent>
-            </Box>
-          ))}
-        </Box>
+                  {room.Bed && (
+                    <Typography
+                      variant="body1"
+                      sx={{ fontSize: 12 }}
+                      className="monsterrat"
+                    >
+                      {room.Bed}
+                    </Typography>
+                  )}
+                </CardContent>
+              </Box>
+            ))}
+          </Box>
+        )}
       </Box>
 
       <Box
         sx={{ width: "50%", display: "flex", flexDirection: "column", gap: 3 }}
       >
-        
         <Typography variant="h6" className="monsterrat checkIn">
           Amenities
         </Typography>
-        <Box sx={{ display: "flex", gap: 2 }}
-         className="AmenRes"
-        >
-          <Box sx={{ flex: 1 }}>
-            {displayedAmenities.slice(0, 5).map((amenity, index) => (
-              <Box
-                key={index}
-                sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}
-              >
-                <Box
-                  sx={{ display: "flex", alignItems: "center", marginRight: 2 }}
-                >
-                  {amenity.icon}
-                </Box>
-                <div className="monsterrat">{amenity.name}</div>
-              </Box>
-            ))}
-          </Box>
+        {propertyAmenities && propertyAmenities.length > 0 ? (
+          <Box sx={{ display: "flex", gap: 2 }} className="AmenRes">
+            <Box sx={{ flex: 1 }}>
+              {displayedAmenities
+                .slice(0, Math.ceil(displayedAmenities.length / 2))
+                .map((amenity, index) => (
+                  <Box key={index} sx={{ marginBottom: 1 }}>
+                    <Typography variant="body2" className="monsterrat">
+                      {amenity.amenityName}
+                    </Typography>
+                  </Box>
+                ))}
+            </Box>
 
-          <Box sx={{ flex: 1 }}>
-            {displayedAmenities.slice(5, 10).map((amenity, index) => (
-              <Box
-                key={index}
-                sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}
-              >
-                <Box
-                  sx={{ display: "flex", alignItems: "center", marginRight: 2 }}
-                >
-                  {amenity.icon}
-                </Box>
-                <div className="monsterrat">{amenity.name}</div>
-              </Box>
-            ))}
+            <Box sx={{ flex: 1 }}>
+              {displayedAmenities
+                .slice(
+                  Math.ceil(displayedAmenities.length / 2),
+                  displayedAmenities.length
+                )
+                .map((amenity, index) => (
+                  <Box key={index} sx={{ marginBottom: 1 }}>
+                    <Typography variant="body2" className="monsterrat">
+                      {amenity.amenityName}
+                    </Typography>
+                  </Box>
+                ))}
+            </Box>
           </Box>
-        </Box>
+        ) : (
+          <Typography variant="body1">No amenities available.</Typography>
+        )}
 
         <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-          {!showAllAmenities ? (
-            <Button
-              disableRipple
-              onClick={handleShowMoreClick}
-              className="ShowMoreAmenities "
-              sx={{ border: "1px solid grey" }}
-            >
-              show all 60 Amenities
-            </Button>
-          ) : (
-            <Button
-              disableRipple
-              onClick={handleShowLessClick}
-              className="ShowMoreAmenities"
-              sx={{ border: "1px solid grey" }}
-            >
-              Show Less Amenities
-            </Button>
-          )}
+          <Button
+            disableRipple
+            onClick={handleShowMoreClick}
+            className="ShowMoreAmenities"
+            sx={{ border: "1px solid grey" }}
+          >
+            show all {allAmenities.length} Amenities
+          </Button>
         </Box>
       </Box>
+
+      <Dialog
+        open={open}
+        onClose={handleShowLessClick}
+        fullWidth
+        maxWidth="md"
+        className="aminityPopup"
+      >
+        <DialogTitle>
+          <Typography variant="h3" className="aminityPopupTitle">Amenities</Typography>
+          <IconButton
+            edge="end"
+            color="inherit"
+            onClick={handleShowLessClick}
+            aria-label="close"
+            sx={{ position: "absolute", right: 8, top: 8, paddingRight: 3 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          {Object.keys(groupedAmenities).map((groupName) => (
+            <Box key={groupName} sx={{ marginBottom: 2 }}>
+              <Typography variant="h6" className="monsterrat amenityGroupName">
+                {groupName}
+              </Typography>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                {groupedAmenities[groupName].map((amenity, index) => (
+                  <Typography
+                    key={index}
+                    variant="body2"
+                    className="monsterrat amenityName"
+                  >
+                    {amenity.amenityName}
+                  </Typography>
+                ))}
+              </Box>
+            </Box>
+          ))}
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };

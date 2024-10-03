@@ -1,10 +1,50 @@
 .ShowMoreAmenities {
     color: black !important;
-    border: 1px soild black !important;
-    border-radius: p4x !important;
+    border: 1px solid black !important;
+    border-radius: 4px !important;
     font-size: small !important;
     text-transform: capitalize !important;
     padding: .6rem .96rem !important;
     font-weight: 500 !important;
     font-family: 'Montserrat', sans-serif !important;
 }
+
+.aminityPopup .MuiDialog-paper {
+    border-radius: 20px;
+}
+
+.aminityPopup .MuiDialogTitle-root {
+    padding: 16px 24px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+}
+
+.aminityPopupTitle.css-gepadz-MuiTypography-root {
+    font-size: 2rem;
+
+}
+
+.aminityPopup .MuiDialogContent-root {
+    padding: 24px;
+}
+
+.aminityPopup .MuiDialogActions-root {
+    padding: 16px 24px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.aminityPopup .MuiButton-root {
+    font-family: 'Montserrat', sans-serif;
+    text-transform: capitalize;
+    font-weight: 500;
+    
+}
+
+.monsterrat.amenityGroupName {
+    font-size: 1.25rem !important; 
+    margin-bottom: 10px;
+  }
+  
+.monsterrat.amenityName {
+    font-size: 1rem !important;
+  }

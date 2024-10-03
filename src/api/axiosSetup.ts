@@ -8,7 +8,7 @@ const axiosInstance = axios.create({
     timeout: 10000,
 });
 
-// Add a request interceptor
+// Add a r  equest interceptor
 axiosInstance.interceptors.request.use(
     (config) => {
         // Get the access token from local storage or state

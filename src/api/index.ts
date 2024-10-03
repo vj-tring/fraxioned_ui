@@ -147,6 +147,9 @@ export const propertydetailsapi = () =>
 export const amenitiesapi = () =>
     axiosInstance.get(`/v1/amenities`);
 
+export const propertyAmenitiesapi = (id: number ) =>
+    axiosInstance.get(`/v1/property-amenities/property/${id}`);
+
 export const getpropertyamenityByid = () =>
     axiosInstance.get(`/v1/property-amenities`);
 
