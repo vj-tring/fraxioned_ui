@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './propertyamenities.module.css';
 import { amenitiesapi, getAmenitiesById, updateamenityforproperty } from '@/api';
-import { Pencil, Check, X, ChevronRight, Edit } from 'lucide-react';
+import { Pencil, Check, X, ChevronRight, Save } from 'lucide-react';
 import CustomizedSnackbars from '@/components/customized-snackbar';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 
@@ -253,7 +253,7 @@ const PropertyAmenities: React.FC = () => {
         <DialogTitle className={styles.dialogTitle}>
           {selectedGroup} Amenities
           <button onClick={handleUpdate} className={styles.dialogUpdateButton}>
-            <Edit size={16} />
+            Update
           </button>
         </DialogTitle>
         <DialogContent className={styles.dialogContent}>

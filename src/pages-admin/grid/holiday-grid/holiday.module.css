@@ -9,6 +9,11 @@
   margin-left: 100px;
 }
 
+.refreshIcon {
+  margin-left: 1170px !important;
+  color: #4fbbc7 !important;
+}
+
 .dataGridPadding {
   padding: 0 16px !important;
 }
@@ -74,10 +79,6 @@
   border-bottom: 1px solid #e0e0e0;
 }
 
-.dataGrid :global(.MuiDataGrid-row:hover) {
-  background-color: #f8f8f8;
-}
-
 .dataGrid :global(.MuiCheckbox-root) {
   color: #1976d2;
 }
@@ -124,15 +125,18 @@
   .title {
     font-size: 19px !important;
   }
+
   .titleContainer {
     display: flex;
     flex-direction: row !important;
   }
+
   .addHolidayBtn {
     font-size: 10px !important;
     width: 100px !important;
     height: 25px !important;
   }
+
   .dataGridPadding {
     font-size: x-small !important;
   }
