@@ -96,7 +96,7 @@ export const fetchBookings = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getBookings();
-      console.log("Fetched bookings:", response.data);
+      // console.log("Fetched bookings:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
