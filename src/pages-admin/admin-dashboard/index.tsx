@@ -22,6 +22,7 @@ import BookingGrid from '../grid/bookings-grid';
 import fraxionedLogo from '../../assets/images/fraxioned.png'
 import userImage from '../../assets/images/profile.jpeg'
 import './admin-dashboard.css'
+import ReportsGrid from '../grid/reports-grid';
 
 const AdminDashboard: React.FC = () => {
     const navigate = useNavigate()
@@ -54,6 +55,8 @@ const AdminDashboard: React.FC = () => {
                         <Route path="/user/:id/edit" element={<TabSwitch onUserUpdated={handleUserUpdated} />} />
                         <Route path="/holidays" element={<Holidays isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/user" element={<UserGrid isSidebarOpen={isSidebarOpen} />} />
+                        <Route path="/reports" element={<ReportsGrid isSidebarOpen={isSidebarOpen}   />} />
+
                         <Route path="/property" element={<Property isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/property/:id" element={
                             <div className="property-details-container">
