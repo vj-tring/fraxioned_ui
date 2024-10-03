@@ -5,3 +5,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.MuiFormControl-root .MuiOutlinedInput-notchedOutline{
+  border-color: rgb(208, 205, 205) !important;
+}
