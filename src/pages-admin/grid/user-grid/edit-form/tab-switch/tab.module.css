@@ -1,7 +1,7 @@
 .tabContainer {
     display: flex;
     flex-direction: column;
-    height: 606px;
+    height: 610px;
     margin: 10px;
     margin-right: 20px;
     margin-left: 25px;
@@ -11,12 +11,37 @@
     overflow: hidden;
 }
 
-.backButton
-{
- margin-left: 700px !important;
-
+.tabHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 5px 15px;
 }
 
+.actionButtons {
+    display: flex;
+    align-items: center;
+}
+
+.backButton {
+    background-color: #5299a1 !important;
+    color: white !important;
+    font-weight: 500 !important;
+    font-size: 15px !important;
+    text-transform: none !important;
+    height: 36px;
+    padding: 0 19px !important;
+    border-radius: 4px !important;
+    transition: background-color 0.3s ease !important;
+    margin-left: 10px !important;
+}
+
+.refreshIcon {
+    color: #75c8d1 !important;
+    transition: color 0.3s ease !important;
+}
 
 .header {
     display: flex;
@@ -42,10 +67,7 @@
 }
 
 .tabs {
-    background-color: #ffffff;
-    border-bottom: 1px solid #e0e0e0;
-    margin-top: 15px;
-    margin-left: 10px;
+    flex-grow: 1;
 }
 
 .content {
