@@ -196,7 +196,7 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
       </div>
 
       <div className="NewsLetter">
-        <NewsLetter/>
+        <NewsLetter />
       </div>
 
       {/* <a href="https://www.fraxioned.com/" target="_blank">
