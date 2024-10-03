@@ -6,6 +6,7 @@ import Loader from "@/components/loader";
 import styles from "./propertyphoto.module.css";
 import ConfirmationModal from "@/components/confirmation-modal";
 import EditPhoto from "./edit-propertyphoto";
+import { Box, Skeleton } from "@mui/material";
 
 interface PropertyImage {
   property: any;
@@ -31,6 +32,7 @@ const PropertyPhotos: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
+  const [loading, setLoading] = useState(true);
 
   const refreshPhotos = useCallback(async () => {
     setIsLoading(true);
@@ -68,7 +70,9 @@ const PropertyPhotos: React.FC = () => {
     setSelectedImageId(imageId);
     setShowEditPopup(true);
   };
-
+  const handleImageLoad = () => {
+    setLoading(false);
+  };
   const handleDeleteImage = (e: React.MouseEvent, imageId: number) => {
     e.stopPropagation();
     setImageToDelete(imageId);
@@ -128,43 +132,56 @@ const PropertyPhotos: React.FC = () => {
           </Link>
         </div>
       </div>
-      <div className={styles.photoGridContainer}>
-        <div className={styles.photoGrid}>
-          {images.map((image) => (
-            <div
-              key={image.id}
-              className={styles.photoItem}
-              onClick={() => handleImageClick(image.imageUrl)}
-            >
-              <div className={styles.imageWrapper}>
-                <img
-                  src={image.imageUrl}
-                  alt={image.imageName}
-                  className={styles.propertyImage}
-                />
-                <div className={styles.editOverlay}>
-                  <button
-                    className={styles.iconButton}
-                    onClick={(e) => handleEditImage(e, image.id)}
-                  >
-                    <Edit size={20} />
-                  </button>
-                  <button
-                    className={styles.iconButton}
-                    onClick={(e) => handleDeleteImage(e, image.id)}
-                  >
-                    <Trash2 size={20} />
-                  </button>
+      <Box sx={{ position: "relative", width: "100%", height: 200 }}>
+        <div className={styles.photoGridContainer}>
+          <div className={styles.photoGrid}>
+            {images.map((image) => (
+              <div
+                key={image.id}
+                className={styles.photoItem}
+                onClick={() => handleImageClick(image.imageUrl)}
+              >
+                {loading && (
+                  <Skeleton variant="rectangular" width="100%" height="100%" />
+                )}
+                <div className={styles.imageWrapper}>
+                  <img
+                    src={image.imageUrl}
+                    alt={image.imageName}
+                    className={styles.propertyImage}
+                    onLoad={handleImageLoad}
+                    style={{
+                      // display: loading ? "none" : "block",
+                      // objectFit: "cover",
+                    }}
+                  />
+                  <div className={styles.editOverlay}>
+                    <button
+                      className={styles.iconButton}
+                      onClick={(e) => handleEditImage(e, image.id)}
+                    >
+                      <Edit size={20} />
+                    </button>
+                    <button
+                      className={styles.iconButton}
+                      onClick={(e) => handleDeleteImage(e, image.id)}
+                    >
+                      <Trash2 size={20} />
+                    </button>
+                  </div>
+                </div>
+                <div className={styles.imageInfo}>
+                  <p className={styles.spaceName}>
+                    {image.spaceType.space.name}
+                  </p>
+                  <p className={styles.spaceType}>{image.spaceType.name}</p>
                 </div>
               </div>
-              <div className={styles.imageInfo}>
-                <p className={styles.spaceName}>{image.spaceType.space.name}</p>
-                <p className={styles.spaceType}>{image.spaceType.name}</p>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      </Box>
+
       {selectedImageUrl && (
         <div className={styles.popupOverlay} onClick={handleClosePopup}>
           <div

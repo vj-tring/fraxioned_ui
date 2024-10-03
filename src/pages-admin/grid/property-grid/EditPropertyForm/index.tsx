@@ -273,6 +273,9 @@ const EditPropertyForm: React.FC = () => {
                       onChange={handleInputChange}
                       name="isActive"
                       color="primary"
+                      sx={{
+                        fontSize:'small'
+                      }}
                     />
                   }
                   label="Is Active"

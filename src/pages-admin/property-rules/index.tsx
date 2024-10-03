@@ -90,27 +90,33 @@ const PropertyRules: React.FC = () => {
         </div>
         <div className={styles.rulesContainer}>
           <div className={`${styles.ruleCard} ${styles.seasonCard}`}>
-            <div className={styles.cardIcon}>
-              <Calendar size={24}  color="grey"/>
-            </div>
+            {/* <div className={styles.cardIcon}>
+            </div> */}
             <div className={styles.cardContent}>
-              <h3 className={styles.cardTitle}>Season Dates</h3>
+              <h3 className={styles.cardTitle}>
+                {" "}
+                <Calendar size={14} color="white" />
+                Season Dates
+              </h3>
               <p>
-                <Calendar size={16} /> Peak Start:{" "}
+                <Calendar size={16} color="orange" /> Peak Start:{" "}
                 {rulesData.peakSeasonStartDate}
               </p>
               <p>
-                <Calendar size={16} /> Peak End: {rulesData.peakSeasonEndDate}
+                <Calendar size={16} color="orange" /> Peak End:{" "}
+                {rulesData.peakSeasonEndDate}
               </p>
             </div>
           </div>
 
           <div className={styles.ruleCard}>
-            <div className={styles.cardIcon}>
-              <Users size={24} />
-            </div>
+            {/* <div className={styles.cardIcon}></div> */}
             <div className={styles.cardContent}>
-              <h3 className={styles.cardTitle}>Guests & Pets</h3>
+              <h3 className={styles.cardTitle1}>
+                {" "}
+                <Users size={14} />
+                Guests & Pets
+              </h3>
               <p>
                 <Users size={16} /> Guests: {rulesData.noOfGuestsAllowed}
               </p>
@@ -123,11 +129,13 @@ const PropertyRules: React.FC = () => {
             </div>
           </div>
           <div className={styles.ruleCard}>
-            <div className={styles.cardIcon}>
-              <Clock size={24} />
-            </div>
+            {/* <div className={styles.cardIcon}></div> */}
             <div className={styles.cardContent}>
-              <h3 className={styles.cardTitle}>Check-in/out</h3>
+              <h3 className={styles.cardTitle1}>
+                {" "}
+                <Clock size={14} />
+                Check-in/out
+              </h3>
               <p>
                 <Clock size={16} /> In: {formatTime(rulesData.checkInTime)}
               </p>
