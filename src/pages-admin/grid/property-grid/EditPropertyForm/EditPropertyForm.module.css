@@ -42,13 +42,13 @@
 }
 
 .headerIcon {
-    font-size: 36px;
+    font-size:medium !important;
     color: #e28f25;
     margin-right: 16px;
 }
 
 .formTitle {
-    font-size: 28px !important;
+    font-size: medium !important;
     font-weight: 600 !important;
     color: #333;
     font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
@@ -70,12 +70,12 @@
 }
 
 .inputField {
-    margin-bottom: 16px !important;
+    margin-bottom: 5px !important;
 }
 
 .inputField input,
 .inputField textarea {
-    font-size: 16px;
+    font-size: 14px;
     padding: 12px;
 }
 
@@ -92,10 +92,10 @@
 
 .updateButton,
 .cancelButton {
-    min-width: 120px;
-    font-size: 16px;
+    min-width: 120px !important;
+    font-size: 14px !important  ;
     font-weight: 500;
-    padding: 8px 24px;
+    padding: 4px 20px !important;
     text-transform: none;
 }
 

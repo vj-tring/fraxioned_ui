@@ -10,7 +10,7 @@ import {
   Hash,
   Clock,
 } from "lucide-react";
-import defaultProfile from "../../../../../assests/Fraxioned.jpg";
+import defaultProfile from "../../../../../assets/images/profile.jpeg";
 import defaultStyles from "./userform.module.css";
 
 interface User {
