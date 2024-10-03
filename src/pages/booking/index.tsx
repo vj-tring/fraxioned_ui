@@ -266,7 +266,7 @@ const Booking = () => {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: properties.length === 1 ? '50%' : '85%',
+          width: properties.length === 1 ? '50%' : '93%',
           height: '67%',
           bgcolor: 'background.paper',
           p: 4,
