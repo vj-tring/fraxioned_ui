@@ -40,10 +40,11 @@ export default function NewsLetter() {
             sx={{ color: "black", textAlign: "left" }}
             className="monsterrat mt-2"
           >
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica with over
-            6,000 species, ranging across all continents except Antarctica with
-            over 6,000 species, ranging across all continents except Antarctica
+            Let your customers know how you celebrate Octoberfest or Halloween.
+            Share tips to help your customers prepare for November emails
+            (Thanksgiving Day) or winter. Get customers ready to close out their
+            financial year. Share a fun autumn contest or giveaway. Discount
+            fall merchandise.
           </Typography>
         </CardContent>
         <CardMedia
