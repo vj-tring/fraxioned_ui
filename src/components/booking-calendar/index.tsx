@@ -53,7 +53,7 @@ const BookingCalendar = ({ properties }: { properties: Property[] }) => {
   const renderPropertyCalendar = (property: any, isLast: boolean, isOdd: boolean) => (
     <div 
       key={property.id} 
-      className={`property-calendar ${isLast && isOdd ? 'last-odd' : ''}`}
+      className={`property-calendar-color ${isLast && isOdd ? 'last-odd' : ''}`}
     >
       <h3 style={{ color: property.color, textAlign: 'left', marginLeft: '20px' }}>
         {property.name}
@@ -64,9 +64,9 @@ const BookingCalendar = ({ properties }: { properties: Property[] }) => {
         defaultMonth={new Date()}
         numberOfMonths={2}
         classNames={{
-          head_cell: "text-rounded-md h-9 w-9 font-semibold text-[13px] text-center p-2",
-          day: "h-10 w-9 p-0 font-semibold text-[12px] aria-selected:opacity-100 text-black",
-          cell: "h-6   w-9 text-center p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-full [&:has([aria-selected].day-range-start)]:rounded-l-full [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent focus-within:relative focus-within:z-20",
+          head_cell: "text-rounded-md h-9 w-10 font-semibold text-[13px] text-center p-2",
+          day: "h-10 w-10 p-0 font-semibold text-[12px] aria-selected:opacity-100 text-black",
+          cell: "h-8 w-10 text-center p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-full [&:has([aria-selected].day-range-start)]:rounded-l-full [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent focus-within:relative focus-within:z-20",
 
         }}
         modifiers={{
