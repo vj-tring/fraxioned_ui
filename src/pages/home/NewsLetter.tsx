@@ -11,8 +11,11 @@ export default function NewsLetter() {
       sx={{
         maxWidth: 900,
         padding: 2,
-        height: 300,
-        overflowY: "scroll",
+        height: 280,
+        marginTop:"12px",
+        marginBottom:"20px",
+
+        // overflowY: "scroll",
         borderRadius: "10px",
         // boxShadow: "none",
         // border:'1px solid #ccc',
@@ -21,7 +24,8 @@ export default function NewsLetter() {
       <div>
         <CardContent
           sx={{
-            padding: 1,
+            padding: 0.5,
+
           }}
         >
           <Typography
@@ -30,6 +34,8 @@ export default function NewsLetter() {
             sx={{
               textAlign: "left",
               fontWeight: "600",
+              fontSize:"medium",
+
             }}
             className="monsterrat"
           >
