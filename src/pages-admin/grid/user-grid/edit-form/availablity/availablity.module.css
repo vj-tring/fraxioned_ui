@@ -1,126 +1,134 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
-
 .container {
-    font-family: 'Roboto', sans-serif;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    background-color: #f5f5f5;
-}
-
-.propertyCard {
-    padding: 30px;
-    margin-bottom: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .propertyCard {
     background-color: #ffffff;
-    transition: all 0.3s ease;
-}
-
-.propertyCard:hover {
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
-}
-
-.propertyName {
-    margin-bottom: 25px;
-    font-weight: bold !important;
-    font-size: 24px !important;
-    color: #2c3e50;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-bottom: 2px solid #e28f25;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    padding: 20px;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .propertyCard:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .propertyName {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #88cdd4;
     padding-bottom: 10px;
-}
-
-.yearTabs {
-    margin-bottom: 30px;
-}
-
-.yearTabs button {
-    font-weight: 500;
-    color: #34495e;
-}
-
-.yearDetails {
-    margin-top: 30px;
-}
-
-.seasonCard,
-.lastMinuteCard {
+  }
+  
+  .yearSelector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+  }
+  
+  .yearButton {
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 20px;
+    color: #333;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+  }
+  
+  .yearButton:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .yearButton.active {
+    background-color: #88cdd4;
+    color: #ffffff;
+  }
+  
+  .propertyDetails {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  .seasonSection {
     background-color: #f9f9f9;
     border-radius: 8px;
-    padding: 20px;
-    height: 100%;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-}
-
-.seasonCard:hover,
-.lastMinuteCard:hover {
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.seasonTitle {
-    color: #e28f25;
-    margin-bottom: 20px;
-    font-weight: 600;
-    border-bottom: 1px solid #bdc3c7;
-    padding-bottom: 10px;
-}
-
-.holidayTitle {
-    color: #84cad2;
-    margin-top: 20px;
-    margin-bottom: 15px;
-    font-weight: 500;
-}
-
-.nightsList {
-    list-style-type: none;
-    padding-left: 0;
-}
-
-.nightsList li {
-    margin-bottom: 12px;
-    margin-top: 10px;
-    font-size: 16px;
-    font-weight: 500;
-    color: #34495e;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.nightsList li span {
-    font-weight: 500;
+    padding: 15px;
+  }
+  
+  .sectionTitle {
     color: #2c3e50;
-    background-color: #ecf0f1;
-    padding: 2px 8px;
+    font-size: 18px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #bdc3c7;
+    padding-bottom: 5px;
+  }
+  
+  .subSectionTitle {
+    color: #34495e;
+    font-size: 16px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .nightsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+  }
+  
+  .nightInfo {
+    background-color: #ffffff;
     border-radius: 4px;
-}
-
-.loading,
-.error {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .label {
+    font-size: 12px;
+    color: #7f8c8d;
+    margin-bottom: 4px;
+  }
+  
+  .value {
+    font-size: 16px;
+    font-weight: bold;
+    color: #2c3e50;
+  }
+  
+  .loading,
+  .error {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    font-size: 24px;
+    height: 200px;
+    font-size: 18px;
     color: #34495e;
-}
-
-.error {
+  }
+  
+  .error {
     color: #e74c3c;
-}
-
-@media (max-width: 600px) {
-    .container {
-        padding: 15px;
+  }
+  
+  @media (max-width: 768px) {
+    .propertyDetails {
+      grid-template-columns: 1fr;
     }
-
-    .propertyCard {
-        padding: 20px;
+  
+    .nightsGrid {
+      grid-template-columns: repeat(2, 1fr);
     }
-
-    .nightsList li {
-        font-size: 14px;
-    }
-}
+  }

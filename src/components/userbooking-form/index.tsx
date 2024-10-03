@@ -134,6 +134,9 @@ const ViewBookings: React.FC<BookingProps> = ({ openEvent, handleClose, eventId 
             <DialogContent className={styles.dialogContent}>
                 {booking && (
                     <div className={styles.bookingDetailsContainer}>
+                        <div className={styles.bookingImage}>
+                            <img src={getPropertyImage(booking.property.id)} alt="Property" />
+                        </div>
                         <div className={styles.bookingInfo}>
                             <div className={styles.detailItem}>
                                 <Home className={styles.detailIcon} />
@@ -175,20 +178,16 @@ const ViewBookings: React.FC<BookingProps> = ({ openEvent, handleClose, eventId 
                                 <span className={styles.detailLabel}>Fees</span>
                                 <span className={styles.detailValue}>{`Cleaning: $${booking.cleaningFee}, Pet: $${booking.petFee}`}</span>
                             </div>
-                             <div className={styles.detailItem}>
+                            <div className={styles.detailItem}>
                                 <Block className={styles.detailIcon} />
                                 <span className={styles.detailLabel}>Cancelled</span>
                                 <span className={styles.detailValue}>{booking.isCancelled ? 'Yes' : 'No'}</span>
                             </div>
-
                             <div className={styles.detailItem}>
                                 <Schedule className={styles.detailIcon} />
                                 <span className={styles.detailLabel}>Last-Minute</span>
                                 <span className={styles.detailValue}>{booking.isLastMinuteBooking === 1 ? 'Yes' : 'No'}</span>
                             </div>
-                        </div>
-                        <div className={styles.bookingImage}>
-                            <img src={getPropertyImage(booking.property.id)} alt="Property" />
                         </div>
                     </div>
                 )}

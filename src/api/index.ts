@@ -147,6 +147,9 @@ export const propertydetailsapi = () =>
 export const amenitiesapi = () =>
     axiosInstance.get(`/v1/amenities`);
 
+export const propertyAmenitiesapi = (id: number ) =>
+    axiosInstance.get(`/v1/property-amenities/property/${id}`);
+
 export const getpropertyamenityByid = () =>
     axiosInstance.get(`/v1/property-amenities`);
 
@@ -157,11 +160,11 @@ export const getuserbyproperty = (id: number) =>
     axiosInstance.get(`/v1/properties/property/${id}/details`);
 
 export const addamenity = (data: {
+    amenityGroup: { id: number };
     createdBy: { id: number };
     amenityName: string;
     amenityDescription: string;
-    amenityType: string;
-}) => axiosInstance.post('/v1/amenities/amenity', data);
+  }) => axiosInstance.post('/v1/amenities/amenity', data);
 
 export const updateamenityforproperty = (updateData: { property: { id: number; }; amenities: { id: number; }[]; updatedBy: { id: number; }; }) =>
     axiosInstance.patch(`/v1/property-amenities`, updateData);
@@ -170,7 +173,7 @@ export const updateamenities = (id: number, updateData: {
     updatedBy: { id: number };
     amenityName: string;
     amenityDescription: string;
-    amenityType: string;
+    amenityGroup: { id: number };
 }) => axiosInstance.patch(`/v1/amenities/amenity/${id}`, updateData);
 
 export const propertyImageapi = () =>
@@ -215,7 +218,15 @@ export const userbookingCancelapi = (id: number, user: number) => {
     return axiosInstance.post(`/v1/bookings/${id}/${user}/cancel`);
 };
 
+//add amenity group
+export const addamenitygroup = (data: {
+    createdBy: { id: number };
+    name: string;
+}) => axiosInstance.post('/v1/amenity-groups/amenity-group', data);
 
+//get all amenity groups
+export const getamenitygroup = () =>
+    axiosInstance.get(`/v1/amenity-groups`);
 
 
 
