@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { propertywithDetails } from '../../../api/index';
 import { RootState } from '@/store/reducers';
 
@@ -71,6 +71,9 @@ const limitsSlice = createSlice({
     updateCount: (state, action: { type: string, payload: { name: string, count: number } }) => {
       state.counts[action.payload.name] = action.payload.count;
     },
+    initializeCounts: (state, action: PayloadAction<{ Adults: number; Children: number; Pets: number }>) => {
+      state.counts = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -90,6 +93,6 @@ const limitsSlice = createSlice({
   },
 });
 
-export const { resetLimits, updateCount } = limitsSlice.actions;
+export const { resetLimits, updateCount, initializeCounts } = limitsSlice.actions;
 
 export default limitsSlice.reducer;

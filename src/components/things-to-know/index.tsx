@@ -1,48 +1,84 @@
-import  { useState } from 'react';
-import { Grid, Typography, Button } from '@mui/material'; // Updated import for Material-UI components
-import './things-to-know.css';
-const HouseRules = () => {
+import { useState, useEffect, FC } from "react";
+import { Grid, Typography, Button } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
+import { AppDispatch } from "@/store"; 
+import "./things-to-know.css";
+import {
+  selectPropertyDetails,
+  selectLoading,
+  selectError,
+  fetchPropertyDetailsById,
+} from "@/store/slice/auth/ThingstoknowSlice";
+
+interface HouseRulesProps {
+  prop: number;
+}
+
+const HouseRules: FC<HouseRulesProps> = ({ prop }) => {
   const [showMore, setShowMore] = useState(false);
 
+  const propertyDetails = useSelector(selectPropertyDetails);
+  const loading = useSelector(selectLoading);
+  const error = useSelector(selectError);
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    if (prop) {
+      dispatch(fetchPropertyDetailsById(prop)); 
+    }
+  }, [dispatch, prop]);
+
   const houseRules = [
-    "Check-in after 4:00 PM",
-    "Check-out before 11:00 PM",
-    "9 Guest Maximum",
-    "Please dispose of trash properly.",
-    "Respect your neighbors.",
-    "Keep the noise to a minimum.",
-    "No parties allowed."
+    propertyDetails ? `Check-in after ${propertyDetails.checkInTime}:00 PM` : " ",
+    propertyDetails ? `Check-out before ${propertyDetails.checkOutTime}:00 PM` : " ",
+    propertyDetails ? `${propertyDetails.noOfGuestsAllowed} Guest Maximum` : " ",
+    propertyDetails ? `${propertyDetails.petPolicy}` : " ",
   ];
 
-  const visibleRules = showMore ? houseRules : houseRules.slice(0, 4);
+  const visibleRules = showMore ? houseRules : houseRules.slice(0, 3);
+
+  if (loading) {
+    return <Typography>Loading...</Typography>;
+  }
+
+  if (error) {
+    return <Typography color="error">{error}</Typography>;
+  }
 
   return (
-    <div className='mt-4'>
-      <Typography variant="h6"  className='ThingstoHead monsterrat' gutterBottom >House Rules</Typography>
+    <div className="mt-4">
+      <Typography variant="h6" className="ThingstoHead monsterrat" gutterBottom>
+        House Rules
+      </Typography>
       <Typography variant="body1" paragraph>
-        <ul >
+        <ul>
           {visibleRules.map((rule, index) => (
-            <li key={index} style={{ marginBottom: '8px' }} className='monsterrat1 RuleList
-'>{rule}</li>
+            <li
+              key={index}
+              style={{ marginBottom: "8px" }}
+              className="monsterrat1 RuleList"
+            >
+              {rule}
+            </li>
           ))}
         </ul>
         <Button
           variant="text"
           color="primary"
           onClick={() => setShowMore(!showMore)}
-          style={{ fontSize: '14px',
-            textDecoration: 'underline',
-            textTransform: 'capitalize',
-            color: 'black',
-            fontWeight:'600',
-            margin:0,
-            padding:0
-
-           }}
-           className='monsterrat'
-
+          style={{
+            fontSize: "14px",
+            textDecoration: "underline",
+            textTransform: "capitalize",
+            color: "black",
+            fontWeight: "600",
+            margin: 0,
+            padding: 0,
+          }}
+          className="monsterrat shwmore"
         >
-          {showMore ? '< Show Less ' : 'Show more >'}
+          {showMore ? "< Show Less " : "Show more >"}
         </Button>
       </Typography>
     </div>
@@ -52,40 +88,43 @@ const HouseRules = () => {
 const SafetyAndProperty = () => {
   const [showMore, setShowMore] = useState(false);
 
-  const safetyRules = [
-    "Carbon monoxide alarm",
-    "Smoke alarm.",
-   
-  ];
+  const safetyRules = ["Carbon monoxide alarm", "Smoke alarm."];
 
   const visibleSafetyRules = showMore ? safetyRules : safetyRules.slice(0, 4);
 
   return (
-    <div style={{ padding: '16px' }}>
-      <Typography variant="h6" className='ThingstoHead monsterrat' gutterBottom>Safety & Property</Typography>
+    <div style={{ padding: "16px" }} className="ThingsHead">
+      <Typography variant="h6" className="ThingstoHead monsterrat" gutterBottom>
+        Safety & Property
+      </Typography>
       <Typography variant="body1" paragraph>
-        <ul >
+        <ul>
           {visibleSafetyRules.map((rule, index) => (
-            <li key={index} style={{ marginBottom: '8px' }} className='monsterrat1 RuleList'>{rule}</li>
+            <li
+              key={index}
+              style={{ marginBottom: "8px" }}
+              className="monsterrat1 RuleList"
+            >
+              {rule}
+            </li>
           ))}
         </ul>
         <Button
           variant="text"
           color="primary"
           onClick={() => setShowMore(!showMore)}
-          style={{  fontSize: '14px',
-            textDecoration: 'underline',
-            textTransform: 'capitalize',
-            color: 'black',
-            fontWeight:'600',
-            margin:0,
-            padding:0
-
-           }}
-           className='monsterrat'
-
+          style={{
+            fontSize: "14px",
+            textDecoration: "underline",
+            textTransform: "capitalize",
+            color: "black",
+            fontWeight: "600",
+            margin: 0,
+            padding: 0,
+          }}
+          className="monsterrat shwmore"
         >
-          {showMore ? '< Show Less ' : 'Show more >'}
+          {showMore ? "< Show Less " : "Show more >"}
         </Button>
       </Typography>
     </div>
@@ -97,35 +136,43 @@ const CancellationPolicy = () => {
 
   const policyText = [
     "Add your trip details to get the cancellation details for this stay.",
-
   ];
 
   const visiblePolicyText = showMore ? policyText : policyText.slice(0, 2);
 
   return (
-    <div style={{ padding: '16px' }} >
-      <Typography variant="h6" className='ThingstoHead monsterrat' gutterBottom>Cancellation Policy</Typography>
+    <div style={{ padding: "16px" }} className="ThingsHead">
+      <Typography variant="h6" className="ThingstoHead monsterrat" gutterBottom>
+        Cancellation Policy
+      </Typography>
       <Typography variant="body1" paragraph>
-        <ul >
+        <ul>
           {visiblePolicyText.map((text, index) => (
-            <li key={index} style={{ marginBottom: '8px' }} className='monsterrat1 RuleList'>{text}</li>
+            <li
+              key={index}
+              style={{ marginBottom: "8px" }}
+              className="monsterrat1 RuleList"
+            >
+              {text}
+            </li>
           ))}
         </ul>
         <Button
           variant="text"
           color="primary"
           onClick={() => setShowMore(!showMore)}
-          style={{ fontSize: '14px',
-            textDecoration: 'underline',
-            textTransform: 'capitalize',
-            color: 'black',
-            fontWeight:'600',
-            margin:0,
-            padding:0
-           }}
-           className='monsterrat'
+          style={{
+            fontSize: "14px",
+            textDecoration: "underline",
+            textTransform: "capitalize",
+            color: "black",
+            fontWeight: "600",
+            margin: 0,
+            padding: 0,
+          }}
+          className="monsterrat addDate"
         >
-          {"Add Dates >"} 
+          {"Add Dates >"}
           {/* {showMore ? '< Add dates ' : 'Add Dates >'} */}
         </Button>
       </Typography>
@@ -133,13 +180,19 @@ const CancellationPolicy = () => {
   );
 };
 
-const ThingsToKnow = () => {
+interface Thinkprop {
+  propId : number;
+}
+
+const ThingsToKnow: FC<Thinkprop>= (prop) => {
   return (
-    <div className='mt-3'>
-      <Typography variant="h4"  className='ThingstoHead1 monsterrat'>Things to Know</Typography>
+    <div className="mt-3">
+      <Typography variant="h4" className="ThingstoHead1 monsterrat">
+        Things to Know
+      </Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={4}>
-          <HouseRules />
+          <HouseRules prop={prop.propId} />
         </Grid>
         <Grid item xs={12} sm={4}>
           <SafetyAndProperty />

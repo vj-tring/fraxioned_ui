@@ -1,14 +1,21 @@
-/* General Styles */
 .card3 {
-  width: 250px;
-  height: 310px;
+  width: 240px;
+  height: 200px;
   display: flex;
   flex-direction: column;
   border: none;
   padding: 15px;
-  margin-right: 40px;
+  margin-right: 15px;
   position: relative;
   cursor: pointer;
+}
+.Container1 {
+  margin-left: 20px;
+  margin-right: 15px;
+  /* max-width: 10rem; */
+}
+.Cardcontainer {
+  /* padding: 15px; */
 }
 
 .card-BodyHead {
@@ -81,14 +88,38 @@
   border-radius: 10px;
 }
 
+.firePng {
+  width: 15px;
+  height: 15px;
+  margin-top: 2px;
+}
+.tag {
+  position: absolute;
+  top: 10px;
+  gap: 10px;
+  left: 10px;
+  background-color: #f8d686;
+  color: #940f00;
+  display: flex;
+  border-radius: 5px;
+  font-weight: 500;
+  z-index: 10;
+  padding: 3px 6px;
+}
+.TagName {
+  font-size: small !important;
+  font-weight: 600;
+  text-transform: uppercase;
+}
 .Cardcontainer {
   display: flex;
   width: 100%;
-  margin: 15px;
-  padding: 15px;
+  /* margin: 5px; */
+  /* padding: 15px; */
+  margin-bottom: 55px;
   white-space: nowrap;
   border-radius: 5px;
-  box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 2px 1px;
+  /* box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 2px 1px; */
 }
 
 /* Carousel styles */
@@ -101,7 +132,6 @@
   justify-content: space-between;
   position: relative;
   z-index: 9999;
-  /* box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px; */
 }
 
 .carousel-control {
@@ -109,7 +139,7 @@
   color: rgb(207, 206, 206);
   font-size: 24px;
   cursor: pointer;
-  border-radius: 5%;
+  border-radius: 50%;
   margin-top: 20%;
   height: 40px;
   width: 40px;
@@ -125,11 +155,13 @@
   background-color: #bab9b8;
   box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
   color: #ffffff;
+  margin-right: 10px;
 }
 
 .FadeProp {
   margin-top: 15px;
-  /* margin-left: 20px; */
+  padding-right: 20px;
+  padding-left: 15px;
 }
 
 .flex-row {
@@ -140,7 +172,6 @@
   visibility: hidden;
 }
 
-/* Responsive Styles */
 @media only screen and (max-width: 1024px) {
   .Cardcontainer {
     flex-direction: row;
@@ -171,7 +202,6 @@
   .Cardcontainer {
     display: flex;
     flex-direction: column;
-    /* width: 100%; */
     padding: 0px;
     margin: 5px;
   }
@@ -262,12 +292,30 @@
     border-radius: 10px;
     padding: 0;
   }
+
+  .AddProps {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    width: 100%;
+
+    margin-bottom: 55px;
+    white-space: nowrap;
+    border-radius: 5px;
+  }
+  .Container1 {
+    display: flex;
+    flex-direction: column;
+    /* max-width: 10rem; */
+  }
   .carousel-controls {
     visibility: hidden;
   }
   .Cardcontainer {
     box-shadow: none !important;
+    padding: 5px;
   }
+
   .FadeProp {
     display: flex;
     flex-direction: column;
@@ -370,10 +418,17 @@
     width: 300px;
   }
 
-  .FadeProp{
+  .FadeProp {
     margin-bottom: 10px;
   }
 }
 
-@media only screen and (max-width: 480px) {
+.AddProps {
+  display: flex;
+  /* box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px; */
+  margin-bottom: 20px;
+  border-radius: 10px;
+  transition: all 500ms ease-in-out;
+
+  /* margin-right: 5px !important; */
 }

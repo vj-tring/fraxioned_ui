@@ -8,7 +8,7 @@ const axiosInstance = axios.create({
     timeout: 10000,
 });
 
-// Add a request interceptor
+// Add a r  equest interceptor
 axiosInstance.interceptors.request.use(
     (config) => {
         // Get the access token from local storage or state
@@ -19,6 +19,7 @@ axiosInstance.interceptors.request.use(
         const searchParams = new URLSearchParams(window.location.search);
         const resetToken = searchParams.get('resetToken');
 
+        // If the access token exists, set it in the Authorization header
         if (userId && token) {
             console.log("setting the header")
             config.headers['user-id'] = userId;
