@@ -130,7 +130,8 @@
   left: 0;
   height: 25px;
   width: 25px;
-  background-color: #e7e6e6;
+  border: 1px solid #a3a3a348;
+  background-color: #f8f8f8;
   border-radius: 4px;
   transition: all 0.3s ease;
 }
@@ -154,7 +155,7 @@
   top: 5px;
   width: 5px;
   height: 10px;
-  border: solid #7dced7;
+  border: solid #e28f25;
   border-width: 0 3px 3px 0;
   transform: rotate(45deg);
 }

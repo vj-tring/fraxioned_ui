@@ -9,6 +9,7 @@ import {
 import styles from "./holiday.module.css";
 import NewForm from "@/pages-admin/grid/holiday-grid/new-form";
 import EditForm from "@/pages-admin/grid/holiday-grid/edit-form";
+import RefreshIcon from '@mui/icons-material/Refresh';
 import PropertyImage from "@/pages-admin/property-image";
 import {
   Dialog,
@@ -83,9 +84,9 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
           propertyId === "all"
             ? mappedData
             : mappedData.filter(
-                (h: { propertyId: string | number | null }) =>
-                  h.propertyId === propertyId
-              )
+              (h: { propertyId: string | number | null }) =>
+                h.propertyId === propertyId
+            )
         );
       } catch (err) {
         console.error("Error fetching holidays:", err);
@@ -247,9 +248,8 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
 
   return (
     <div
-      className={`${styles.holidaysContainer} ${
-        isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
-      }`}
+      className={`${styles.holidaysContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
+        }`}
     >
       <div className={styles.titleContainer}>
         <h1 className={styles.title}>Holidays</h1>
@@ -272,6 +272,13 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
       />
       {error && <div className={styles.error}>{error}</div>}
       <div className={styles.dataGridWrapper}>
+        <IconButton
+          onClick={() => window.location.reload()}
+          className={styles.refreshIcon}
+          aria-label="refresh"
+        >
+          <RefreshIcon />
+        </IconButton>
         <DataGrid
           rows={filteredHolidays}
           columns={columns}
@@ -322,7 +329,7 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
           ? "Are you sure you want to delete this holiday?"
           : "Are you sure you want to remove this holiday from the property?"}
         confirmLabel="Delete"
-        cancelLabel="Cancel" children={undefined}      />
+        cancelLabel="Cancel" children={undefined} />
 
       <Snackbar
         open={showErrorSnackbar}
