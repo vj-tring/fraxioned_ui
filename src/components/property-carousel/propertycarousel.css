@@ -15,7 +15,7 @@
   display: flex;
 }
 .calenderIcon {
-  margin-top: 4px;
+  margin-top: 10px;
   /* position: absolute; */
   /* visibility: hidden; */
 }
@@ -317,7 +317,9 @@
 }
 
 .box {
-  border: 1px solid grey;
+  /* border: 1px solid grey; */
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
+    rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
   /* border-top: 1px solid rgb(240, 238, 238); */
   /* height: 53px; */
   text-align: center;
@@ -326,6 +328,7 @@
   font-size: x-large;
   padding: 5px;
   height: 65px !important;
+  margin: 3px;
   /* margin-top: 1px !important; */
 }
 .night-count {
@@ -365,6 +368,7 @@
   font-size: 0.7rem !important;
   opacity: 1 !important;
   text-wrap: wrap;
+  color: rgb(117, 117, 117);
   font-weight: 600 !important;
   /* margin-bottom: 28px !important; */
 }
@@ -388,10 +392,11 @@
   width: 80%;
   height: 33%;
   border-radius: 5px;
-  padding: 2px;
+  padding: 1px;
   object-fit: cover;
   background-repeat: no-repeat;
   background-size: cover;
+  /* border: 2px solid #ffb900; */
 }
 
 /* Style for single card (or general style) */
@@ -487,11 +492,13 @@
   width: 10rem !important;
   border-radius: 4px !important;
   text-transform: capitalize !important;
-  border: 1px solid #7c7875 !important;
+  /* border: 1px solid #7c7875 !important; */
   color: #1a1a19 !important;
   margin-left: 0;
   background-color: rgba(255, 255, 255, 0.9);
   cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
+    rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
 }
 .property-names {
   font-size: 0.8rem !important;
@@ -520,6 +527,8 @@
   color: #faab00 !important;
   background-color: #ffffff; /* or any color you prefer */
   border: 1px solid #faab00 !important;
+  box-shadow: rgba(237, 168, 18, 0.1) 0px 0px 5px 0px,
+    rgba(250, 171, 0, 0.1) 0px 0px 1px 0px;
 }
 
 .CardItem[data-single-card="true"] {
