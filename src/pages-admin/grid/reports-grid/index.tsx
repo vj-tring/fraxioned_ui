@@ -48,7 +48,7 @@ const ReportsGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
         const userIdFromStorage = user ? user.id : '';
 
         // Fetch properties
-        const propertyResponse = await axios.get('http://localhost:3008/api/v1/properties', {
+        const propertyResponse = await axios.get('http://192.168.1.47:3008/api/v1/properties', {
           headers: {
             'user-id': userIdFromStorage,
             'access-token': accessToken,
@@ -56,7 +56,7 @@ const ReportsGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
         });
 
         // Fetch users
-        const userResponse = await axios.get('http://localhost:3008/api/v1/users', {
+        const userResponse = await axios.get('http://192.168.1.47:3008/api/v1/users', {
           headers: {
             'user-id': userIdFromStorage,
             'access-token': accessToken,
@@ -64,7 +64,7 @@ const ReportsGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
         });
 
         // Fetch user properties
-        const userPropertyResponse = await axios.get('http://localhost:3008/api/v1/user-properties', {
+        const userPropertyResponse = await axios.get('http://192.168.1.47:3008/api/v1/user-properties', {
           headers: {
             'user-id': userIdFromStorage,
             'access-token': accessToken,
@@ -205,7 +205,7 @@ const ReportsGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
 
       console.log('Request Data:', requestData);
 
-      const response = await axios.post('http://localhost:3008/api/v1/bookings-report', requestData, {
+      const response = await axios.post('http://192.168.1.47:3008/api/v1/bookings-report', requestData, {
         headers: {
           'user-id': userIdFromStorage,
           'access-token': accessToken,
