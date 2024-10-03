@@ -65,6 +65,7 @@ const BookingCalendar = ({ properties }: { properties: Property[] }) => {
         numberOfMonths={2}
         classNames={{
           head_cell: "text-rounded-md h-9 w-10 font-semibold text-[13px] text-center p-2",
+          day_today: "text-accent-foreground",
           day: "h-10 w-10 p-0 font-semibold text-[12px] aria-selected:opacity-100 text-black",
           cell: "h-8 w-10 text-center p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-full [&:has([aria-selected].day-range-start)]:rounded-l-full [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent focus-within:relative focus-within:z-20",
 
