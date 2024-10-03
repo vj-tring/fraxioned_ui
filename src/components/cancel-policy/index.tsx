@@ -53,7 +53,7 @@ const CancelPolicy: React.FC<CancelPolicyProps> = ({ onConfirm, onCancel }) => {
               </div> */}
               <div className="ml-3">
                 <h3 className="text-sm font-medium text-green-800">Note</h3>
-                <div className="mt-2 text-sm text-green-700">
+                <div className="mt-1 text-sm text-green-700">
                   <p>If you cancel your booking with less than seven nights' notice, you will not be able to reclaim any of your allotted holiday nights for that reservation.</p>
                 </div>
               </div>
