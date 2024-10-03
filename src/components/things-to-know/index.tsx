@@ -24,7 +24,6 @@ const HouseRules: FC<HouseRulesProps> = ({ prop }) => {
   const propertyDetails = useSelector(selectPropertyDetails);
   const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
-console.log("pd:", propertyDetails)
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
