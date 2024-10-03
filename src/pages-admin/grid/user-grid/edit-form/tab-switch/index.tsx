@@ -8,6 +8,7 @@ import styles from "./tab.module.css";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { getUserById } from "@/api";
+import DocumentManagerCard from '../document';
 
 interface TabSwitchProps {
   onUserUpdated: () => void;
@@ -42,6 +43,7 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
     if (userId) {
       fetchUserData();
     }
+  }, [userId]);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -72,8 +74,6 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
   if (!userData) {
     return <div className={styles.loading}>Loading...</div>;
   }
-    
-   }, [userId]);
 
   const isOwner = userData.role.roleName === "Owner";
 
@@ -89,6 +89,7 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
           <Tab label="General Details" />
           <Tab label="Property" disabled={!isOwner} />
           <Tab label="Booking" />
+          <Tab label="Document"  />
         </Tabs>
         <div className={styles.actionButtons}>
           <IconButton
@@ -122,12 +123,12 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
           )
         )}
 
-                {isOwner && selectedTab === 1 && (
-                    <PropertyTab userId={userId} />
-                )}
+        {isOwner && selectedTab === 1 && <PropertyTab userId={userId} />}
 
-                {isOwner && selectedTab === 2 && (
-                    <UserBookings userId={userId} />
+        {isOwner && selectedTab === 2 && <UserBookings userId={userId} />}
+
+        {selectedTab === 3 && (
+                    <DocumentManagerCard/>
                 )}
 
       </div>
