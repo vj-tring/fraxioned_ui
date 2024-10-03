@@ -103,7 +103,7 @@ const EditPropertyForm: React.FC = () => {
         <div className={styles.scrollableContent}>
           <form onSubmit={handleSubmit} className={styles.form}>
             <Grid container spacing={3}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={6} sm={3}>
                 <TextField
                   label="Property Name"
                   name="propertyName"
@@ -115,7 +115,7 @@ const EditPropertyForm: React.FC = () => {
                   className={styles.inputField}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={6} sm={3}>
                 <TextField
                   label="OwnerRez Property ID"
                   name="ownerRezPropId"
@@ -127,7 +127,7 @@ const EditPropertyForm: React.FC = () => {
                   className={styles.inputField}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={6} sm={3}>
                 <TextField
                   label="Address"
                   name="address"
@@ -139,7 +139,7 @@ const EditPropertyForm: React.FC = () => {
                   className={styles.inputField}
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={6} sm={3}>
                 <TextField
                   label="City"
                   name="city"
@@ -151,7 +151,7 @@ const EditPropertyForm: React.FC = () => {
                   className={styles.inputField}
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={6} sm={3}>
                 <TextField
                   label="State"
                   name="state"
@@ -163,7 +163,7 @@ const EditPropertyForm: React.FC = () => {
                   className={styles.inputField}
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={6} sm={3}>
                 <TextField
                   label="Country"
                   name="country"
@@ -175,7 +175,7 @@ const EditPropertyForm: React.FC = () => {
                   className={styles.inputField}
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={6} sm={3}>
                 <TextField
                   label="Zipcode"
                   name="zipcode"
@@ -188,7 +188,7 @@ const EditPropertyForm: React.FC = () => {
                   className={styles.inputField}
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={6} sm={3}>
                 <TextField
                   label="Property Share"
                   name="propertyShare"
@@ -201,18 +201,7 @@ const EditPropertyForm: React.FC = () => {
                   className={styles.inputField}
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  label="Display Order"
-                  name="displayOrder"
-                  type="number"
-                  value={formData.displayOrder}
-                  onChange={handleInputChange}
-                  fullWidth
-                  variant="outlined"
-                  className={styles.inputField}
-                />
-              </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   label="House Description"
@@ -226,7 +215,19 @@ const EditPropertyForm: React.FC = () => {
                   className={styles.inputField}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={6} sm={4}>
+                <TextField
+                  label="Display Order"
+                  name="displayOrder"
+                  type="number"
+                  value={formData.displayOrder}
+                  onChange={handleInputChange}
+                  fullWidth
+                  variant="outlined"
+                  className={styles.inputField}
+                />
+              </Grid>
+              <Grid item xs={6} sm={4}>
                 <TextField
                   label="Latitude"
                   name="latitude"
@@ -238,7 +239,7 @@ const EditPropertyForm: React.FC = () => {
                   className={styles.inputField}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={6} sm={4}>
                 <TextField
                   label="Longitude"
                   name="longitude"
@@ -250,7 +251,7 @@ const EditPropertyForm: React.FC = () => {
                   className={styles.inputField}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={6} sm={6}>
                 <FormControlLabel
                   control={
                     <Checkbox
@@ -272,6 +273,9 @@ const EditPropertyForm: React.FC = () => {
                       onChange={handleInputChange}
                       name="isActive"
                       color="primary"
+                      sx={{
+                        fontSize:'small'
+                      }}
                     />
                   }
                   label="Is Active"
