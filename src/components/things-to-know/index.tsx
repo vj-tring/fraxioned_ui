@@ -13,14 +13,18 @@ import {
 interface HouseRulesProps {
   prop: number;
 }
-
+const convertTo12HourFormat = (hour: number): string => {
+  const period = hour >= 12 ? "PM" : "AM";
+  const adjustedHour = hour % 12 || 12;
+  return `${adjustedHour}:00 ${period}`;
+};
 const HouseRules: FC<HouseRulesProps> = ({ prop }) => {
   const [showMore, setShowMore] = useState(false);
 
   const propertyDetails = useSelector(selectPropertyDetails);
   const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
-
+console.log("pd:", propertyDetails)
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -30,9 +34,9 @@ const HouseRules: FC<HouseRulesProps> = ({ prop }) => {
   }, [dispatch, prop]);
 
   const houseRules = [
-    propertyDetails ? `Check-in after ${propertyDetails.checkInTime}:00 PM` : " ",
-    propertyDetails ? `Check-out before ${propertyDetails.checkOutTime}:00 PM` : " ",
-    propertyDetails ? `${propertyDetails.noOfGuestsAllowed} Guest Maximum` : " ",
+    propertyDetails ? `Check-in after ${convertTo12HourFormat(propertyDetails.checkInTime)}` : " ",
+    propertyDetails ? `Check-out before ${convertTo12HourFormat(propertyDetails.checkOutTime)}` : " ",
+    propertyDetails ? `Maximum ${propertyDetails.noOfGuestsAllowed} Guests Allowed` : " ",
     propertyDetails ? `${propertyDetails.petPolicy}` : " ",
   ];
 
