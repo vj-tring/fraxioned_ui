@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridFilterModel } from '@mui/x-data-grid';
 import { getBookings, userdetails, getProperties, userbookingCancelapi } from '@/api';
 import styles from './bookingsgrid.module.css';
-import { Alert, Snackbar, IconButton, Paper, InputBase, Button, Link } from '@mui/material';
+import { Alert, Snackbar, IconButton, Paper, InputBase, Button, Link, Box } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -11,7 +11,11 @@ import ConfirmationModal from '@/components/confirmation-modal';
 import { ClearIcon } from '@mui/x-date-pickers/icons';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import FilterListIcon from '@mui/icons-material/FilterList';
 import ViewBookings from '@/components/userbooking-form';
+import InlineFilter from '@/components/filterbox';
+import RefreshIcon from '@mui/icons-material/Refresh';
+
 
 
 interface User {
@@ -55,6 +59,10 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
     const [selectedBookingId, setSelectedBookingId] = useState<number | null>(null);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [showSuccessSnackbar, setShowSuccessSnackbar] = useState(false);
+    const [showFilter, setShowFilter] = useState(false);
+    const [filterModel, setFilterModel] = useState<GridFilterModel>({
+        items: [],
+    });
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -120,6 +128,44 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
         setFilterValue(event.target.value);
     };
 
+
+    const handleApplyFilter = (field: string, operator: string, value: string) => {
+        const newFilterModel: GridFilterModel = {
+            items: [
+                {
+                    field,
+                    operator: operator as any,
+                    value,
+                },
+            ],
+        };
+        setFilterModel(newFilterModel);
+
+
+
+        const filteredData = bookings.filter(booking => {
+            const bookingValue = booking[field as keyof Booking];
+            if (typeof bookingValue === 'string') {
+                switch (operator) {
+                    case 'contains':
+                        return bookingValue.toLowerCase().includes(value.toLowerCase());
+                    case 'equals':
+                        return bookingValue.toLowerCase() === value.toLowerCase();
+                    case 'startsWith':
+                        return bookingValue.toLowerCase().startsWith(value.toLowerCase());
+                    case 'endsWith':
+                        return bookingValue.toLowerCase().endsWith(value.toLowerCase());
+                    default:
+                        return true;
+                }
+            }
+            return true;
+        });
+
+        setFilteredBookings(filteredData);
+    };
+
+
     const handleSearchClear = () => {
         setFilterValue('');
     };
@@ -127,6 +173,9 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
     const handleDeleteClick = (booking: Booking) => {
         setBookingToDelete(booking);
         setShowDeleteConfirmation(true);
+    };
+    const handleFilterClick = () => {
+        setShowFilter(!showFilter);
     };
 
 
@@ -310,15 +359,46 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
             />
 
             <div className={styles.dataGridWrapper}>
-                <div className={styles.exportButtonContainer}>
+                <div className={styles.gridActionContainer}>
+
                     <Button
                         variant="contained"
                         startIcon={<FileDownloadIcon />}
                         onClick={handleExportCSV}
-                        className={styles.exportButton}
+                        className={styles.actionButton}
                     >
                         Export
                     </Button>
+
+                    <Box sx={{ position: 'relative' }}>
+                        <Button
+                            variant="contained"
+                            startIcon={<FilterListIcon />}
+                            onClick={handleFilterClick}
+                            className={styles.actionButton}
+                        >
+                            Filter
+                        </Button>
+                        {showFilter && (
+                            <InlineFilter
+                                columns={columns}
+                                onFilter={handleApplyFilter}
+                                onClose={() => setShowFilter(false)}
+                            />
+                        )}
+                    </Box>
+
+                    <IconButton
+                        onClick={() => window.location.reload()}
+                        className={styles.refreshIcon}
+                        aria-label="refresh"
+                    >
+                        <RefreshIcon />
+                    </IconButton>
+
+
+
+
                 </div>
                 <DataGrid
                     rows={filteredBookings}
@@ -332,10 +412,11 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
                     disableRowSelectionOnClick
                     disableColumnMenu
                     disableDensitySelector
-                    disableColumnFilter
+                    filterModel={filterModel}
                     className={`${styles.dataGrid} ${styles.dataGridPadding}`}
                 />
             </div>
+
             <ConfirmationModal
                 show={showDeleteConfirmation}
                 onHide={() => setShowDeleteConfirmation(false)}
@@ -343,8 +424,7 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
                 title="Confirm Cancellation"
                 message="Are you sure you want to cancel this booking?"
                 confirmLabel="Cancel Booking"
-                cancelLabel="Keep Booking"
-            />
+                cancelLabel="Keep Booking" children={undefined} />
 
             <Snackbar
                 open={showErrorSnackbar}

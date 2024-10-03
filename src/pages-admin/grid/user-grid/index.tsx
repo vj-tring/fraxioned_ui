@@ -7,7 +7,6 @@ import { userdetails, propertydetailsapi } from '@/api';
 import Search from '@/pages-admin/search-user';
 import styles from './User.module.css';
 import { useNavigate } from 'react-router-dom';
-import ResetPasswordModal from '@/components/reset-password-modal';
 
 
 interface ContactDetails {

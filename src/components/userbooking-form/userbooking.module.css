@@ -51,11 +51,17 @@
     gap: 48px;
 }
 
-.bookingInfo {
-    flex: 3;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+.bookingImage {
+    flex: 2;
+    margin-top: 20px;
+}
+
+.bookingImage img {
+    width: 100%;
+    height: 75%;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .bookingInfo {
@@ -63,15 +69,6 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding-right: 24px;
-}
-
-.bookingImage img {
-    height: 350px;
-    margin-top: 55px;
-    object-fit: cover;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .detailItem {
@@ -98,15 +95,12 @@
     font-weight: 600;
     color: #7a8686;
     width: 110px;
-    /* Slightly reduced width */
     flex-shrink: 0;
-    /* Prevent label from shrinking */
 }
 
 .detailValue {
     font-weight: 600;
     font-size: 14px;
-    /* Slightly smaller font size */
     color: #2c3e50;
     flex: 1;
 }

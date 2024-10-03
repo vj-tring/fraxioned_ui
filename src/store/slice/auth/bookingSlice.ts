@@ -5,12 +5,13 @@ import {
   getBookings,
   getUserBookings,
   modifyBooking,
-} from "../../../api/index"; // Ensure these imports are correct
+} from "../../../api/index";
 
 export interface BookingData {
   property: {
-    propertyName: any; id: string 
-};
+    propertyName: any;
+    id: string;
+  };
   propertyName: string;
   propertyId: string;
   checkinDate: string;
@@ -81,11 +82,12 @@ export const updateBooking = createAsyncThunk<
       if (response.status === 200) {
         return response.data;
       } else {
-        throw new Error('Failed to update booking');
+        throw new Error("Failed to update booking");
       }
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || "An error occurred while updating the booking"
+        error.response?.data?.message ||
+          "An error occurred while updating the booking"
       );
     }
   }
@@ -96,7 +98,7 @@ export const fetchBookings = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getBookings();
-      console.log("Fetched bookings:", response.data);
+      // console.log("Fetched bookings:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -205,7 +207,7 @@ const bookingSlice = createSlice({
     error: null as string | null,
     successMessage: null as string | null,
     isLoading: false,
-    bookingSummary: null as BookingSummaryResponse | null, 
+    bookingSummary: null as BookingSummaryResponse | null,
   } as BookingState,
   reducers: {
     clearBookingMessages: (state) => {
@@ -281,7 +283,8 @@ const bookingSlice = createSlice({
       .addCase(bookingSummary.pending, (state) => {
         state.isLoading = true;
         state.error = null;
-        state.successMessage = "Booking summary created successfully";      })
+        state.successMessage = "Booking summary created successfully";
+      })
       .addCase(
         bookingSummary.fulfilled,
         (state, action: PayloadAction<BookingSummaryResponse>) => {
@@ -315,25 +318,35 @@ const bookingSlice = createSlice({
         state.error = null;
         state.successMessage = null;
       })
-      .addCase(updateBooking.fulfilled, (state, action: PayloadAction<BookingData>) => {
-        state.isLoading = false;
-        state.error = null;
-        state.successMessage = "Booking updated successfully";
-        // Update the booking in the bookings array
-        const index = state.bookings.findIndex(booking => booking.id === action.payload.id);
-        if (index !== -1) {
-          state.bookings[index] = action.payload;
+      .addCase(
+        updateBooking.fulfilled,
+        (state, action: PayloadAction<BookingData>) => {
+          state.isLoading = false;
+          state.error = null;
+          state.successMessage = "Booking updated successfully";
+          // Update the booking in the bookings array
+          const index = state.bookings.findIndex(
+            (booking) => booking.id === action.payload.id
+          );
+          if (index !== -1) {
+            state.bookings[index] = action.payload;
+          }
+          // Update the booking in the userBookings array if it exists there
+          const userIndex = state.userBookings.findIndex(
+            (booking) => booking.id === action.payload.id
+          );
+          if (userIndex !== -1) {
+            state.userBookings[userIndex] = action.payload;
+          }
+          // Update currentBooking if it's the one being updated
+          if (
+            state.currentBooking &&
+            state.currentBooking.id === action.payload.id
+          ) {
+            state.currentBooking = action.payload;
+          }
         }
-        // Update the booking in the userBookings array if it exists there
-        const userIndex = state.userBookings.findIndex(booking => booking.id === action.payload.id);
-        if (userIndex !== -1) {
-          state.userBookings[userIndex] = action.payload;
-        }
-        // Update currentBooking if it's the one being updated
-        if (state.currentBooking && state.currentBooking.id === action.payload.id) {
-          state.currentBooking = action.payload;
-        }
-      })
+      )
       .addCase(updateBooking.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
