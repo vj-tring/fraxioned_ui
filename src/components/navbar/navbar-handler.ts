@@ -25,7 +25,19 @@ function useNavbarHandler() {
   const handleLogout = async () => {
     console.log('User logged out successfully')
     handleCloseLogoutModal()
+
+    const rememberedEmail = localStorage.getItem('rememberedEmail')
+    const rememberedPassword = localStorage.getItem('rememberedPassword')
+
     localStorage.clear()
+
+    if (rememberedEmail) {
+      localStorage.setItem('rememberedEmail', rememberedEmail)
+    }
+    if (rememberedPassword) {
+      localStorage.setItem('rememberedPassword', rememberedPassword)
+    }
+
     navigate('/login')
   }
 

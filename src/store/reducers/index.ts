@@ -10,6 +10,7 @@ import propertySeasonHolidayReducer from '../slice/auth/propertySeasonHolidaySli
 import bookingReducer from '../slice/auth/bookingSlice';
 import datePickerReducer from '../slice/datePickerSlice';
 import ThingsToKnowReducer from '../slice/auth/ThingstoknowSlice'; 
+import amenitiesReducer from '../slice/amenitiesSlice';
 
 const appReducer = combineReducers({
   auth: authReducer,
@@ -23,6 +24,8 @@ const appReducer = combineReducers({
   bookings: bookingReducer,
   datePicker: datePickerReducer,
   thingsToKnow: ThingsToKnowReducer,
+  amenities: amenitiesReducer,
+
 });
 
 const rootReducer = (

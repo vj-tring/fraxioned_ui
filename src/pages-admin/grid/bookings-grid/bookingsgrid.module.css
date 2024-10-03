@@ -9,6 +9,23 @@
     margin-left: 100px;
 }
 
+.refreshIcon {
+    color: #75c8d1 !important;
+    margin-left: 12px !important;
+    transition: color 0.3s ease !important;
+}
+
+.refreshIcon:hover {
+    color: #5ba3aa !important;
+}
+
+@media (max-width: 768px) {
+    .refreshIcon {
+        margin-left: 0 !important;
+        margin-top: 8px !important;
+    }
+}
+
 .dataGridPadding {
     padding: 0 16px !important;
 }
@@ -43,10 +60,11 @@
     flex-wrap: wrap;
 }
 
+
 .actionsContainer {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: flex-end;
 }
 
 .searchContainer {
@@ -58,6 +76,27 @@
     border-radius: 4px;
     background-color: #ffffff;
     transition: box-shadow 0.3s ease;
+    margin-bottom: 8px;
+}
+
+
+.actionLink {
+    color: #62a2a9 !important;
+    font-size: 15px !important;
+    text-decoration: underline !important;
+    transition: color 0.3s ease;
+    margin-left: 16px !important;
+}
+
+.actionLink:hover {
+    color: #82cfd6 !important;
+    text-decoration: underline !important;
+}
+
+.linksContainer {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
 }
 
 .calendarLink {
@@ -65,7 +104,6 @@
     font-size: 15px !important;
     text-decoration: underline !important;
     transition: color 0.3s ease;
-    margin-top: 8px !important;
     padding-right: 14px !important;
     align-self: flex-end;
 }
@@ -118,24 +156,28 @@
     margin-bottom: 30px;
 }
 
-.exportButtonContainer {
+.gridActionContainer {
     display: flex;
     justify-content: flex-end;
-    padding: 4px 18px 0;
+    padding: 12px 18px;
+    background-color: white;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
 }
 
-.exportButton {
+.actionButton {
     background-color: #75c8d1 !important;
     color: white !important;
-    font-weight: 500;
+    font-weight: 500 !important;
     text-transform: none !important;
-    height: 30px;
-    padding: 6px 16px !important;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+    height: 36px;
+    padding: 0 16px !important;
+    border-radius: 4px !important;
+    transition: background-color 0.3s ease !important;
+    margin-left: 12px !important;
 }
 
-.exportButton:hover {
+.actionButton:hover {
     background-color: #5ba3aa !important;
 }
 
@@ -225,7 +267,31 @@
         padding-right: 0;
     }
 
-    .exportButtonContainer {
-        justify-content: flex-start;
+    .gridActionContainer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .actionButton {
+        margin-left: 0 !important;
+        margin-bottom: 8px !important;
+    }
+
+    .actionButton:last-child {
+        margin-bottom: 0 !important;
+    }
+
+    .linksContainer {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .actionLink {
+        margin-left: 0 !important;
+        margin-top: 8px !important;
+    }
+
+    .actionLink:first-child {
+        margin-top: 0 !important;
     }
 }

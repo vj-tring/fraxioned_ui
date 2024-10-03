@@ -109,7 +109,7 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({ showIcons = true, initi
   };
 
   const getTotalGuests = () => {
-    return showIcons ? initialCount : counts.Adults + counts.Children;
+    return counts.Adults + counts.Children;
   };
   const handleCountChange = (name: string, action: "increase" | "decrease") => {
     if (!selectedPropertyLimits) {
