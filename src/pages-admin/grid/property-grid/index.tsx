@@ -172,7 +172,7 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
           variant="contained"
           color="primary"
           onClick={() => setIsNewFormOpen(true)}
-          sx={{ 
+          sx={{
             backgroundColor: "#00b8cc",
             "&:hover": { backgroundColor: "#00b8cc" },
           }}

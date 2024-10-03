@@ -27,7 +27,7 @@
 }
 
 .title {
-  font-size: 28px;
+  font-size: medium !important;
   font-weight: bold;
   color: #2c3e50;
   margin: 0;
@@ -35,15 +35,15 @@
 
 .buttonGroup {
   display: flex;
-  gap: 10px;
+  gap: 1px;
 }
 
 .updateButton {
-  background-color: #e28f25;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
+  background-color: #ffffff;
+  color: #e28f25;
+  border: 1px solid #e28f25;
+  padding: 5px 15px;
+  font-size: small;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -51,8 +51,7 @@
 
 .updateButton:hover,
 .updateButton.active {
-  background-color: #e28f25;
-
+  background-color: #ffffff;
 }
 
 .addButton {
@@ -72,20 +71,20 @@
 
 .amenitiesGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
 }
 
 .amenityGroup {
   border-radius: 8px;
-  padding: 16px;
+  padding: 10px;
 }
 
 .amenityType {
   font-weight: bold;
   color: #25393b;
   margin-bottom: 16px;
-  font-size: 18px;
+  font-size:medium;
   text-transform: capitalize;
 }
 
@@ -93,7 +92,7 @@
   display: flex;
   align-items: center;
   margin-bottom: 12px;
-  font-size: 16px;
+  font-size: small;
   color: #2c3e50;
 }
 

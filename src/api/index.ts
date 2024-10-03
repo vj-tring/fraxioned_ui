@@ -174,17 +174,17 @@ export const updateamenities = (id: number, updateData: {
 }) => axiosInstance.patch(`/v1/amenities/amenity/${id}`, updateData);
 
 export const propertyImageapi = () =>
-    axiosInstance.get(`/v1/propertyImages`);
+    axiosInstance.get(`/v1/property-images`);
 
 export const deleteAmenity = (id: number) =>
     axiosInstance.delete(`/v1/amenities/amenity/${id}`);
 
 export const getpropertyImageById = (id: number) =>
-    axiosInstance.get(`/v1/propertyImages/propertyImage/${id}`);
+    axiosInstance.get(`/v1/property-images/property-image/${id}`);
 
 export const propertyImageuploadapi = (formData: FormData) => {
     console.log('to backend', formData)
-    return axiosInstance.post(`/v1/propertyImages`, formData, {
+    return axiosInstance.post(`/v1/property-images`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
             'Accept': '*/*'

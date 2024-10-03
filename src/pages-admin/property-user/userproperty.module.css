@@ -7,11 +7,11 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   background-color: #fdfdfd;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 .title {
-  font-size: 24px;
+  font-size: medium;
   font-weight: 600;
   color: #2c3e50;
   border-radius: 5px;
@@ -45,35 +45,66 @@
   padding: 1.25rem;
   transition: all 0.3s ease;
   height: 200px;
-  border-left: 5px solid #88cdd4;
+  /* border-left: 5px solid #88cdd4; */
 }
 
 .userCard:hover {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.userInfo {
+.userInfo1 {
   display: flex;
   align-items: center;
+  /* flex-direction: row; */
+  gap: 15px;
   margin-bottom: 0.75rem;
 }
 
+.userInfo {
+  display: flex;
+  /* flex-direction: row; */
+  align-items: center;
+
+  margin-bottom: 0.75rem;
+}
+
+.usericon {
+  /* border: 1px solid grey; */
+  height: 50px;
+  width: 50px;
+  border-radius: 50px;
+  padding: 2px;
+  background-color:#7f8c8d;
+}
 .icon {
   margin-right: 0.75rem;
   color: #00636d;
 }
 
 .userName {
-  font-size: 1.2rem;
+  font-size: medium;
+  margin-top: 5px;
   font-weight: bold;
   color: #2c3e50;
+}
+.profileDetails {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-between; */
+  width: 220px;
 }
 
 .userId,
 .userShares,
 .userAcquisitionDate {
-  font-size: 1rem;
+  font-size: x-small;
   color: #34495e;
+  margin-top: 5px;
+  font-weight: 600;
+  /* display: flex; */
+  /* flex-wrap: wrap; */
+  text-transform: uppercase;
+  
 }
 
 .loading,

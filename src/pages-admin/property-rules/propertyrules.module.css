@@ -27,7 +27,7 @@
 }
 
 .title {
-  font-size: 24px;
+  font-size: 16px;
   font-weight: bold;
   color: #2c3e50;
   margin: 0;
@@ -38,19 +38,19 @@
   grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
   gap: 25px;
   max-width: 800px;
-  
+
   margin: 0 auto;
 }
 
 .ruleCard {
   background-color: #ffffff;
   border-radius: 8px;
-  padding: 16px;
+  padding: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
   display: flex;
   align-items: flex-start;
-  max-width: 400px;
+  max-width: 300px;
 }
 
 .ruleCard:hover {
@@ -60,14 +60,14 @@
 
 .cardIcon {
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
+  width: 20px;
+  height: 20px;
   background-color: #e9f2ff;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 16px;
+  margin-right: 10px;
   color: #3498db;
 }
 
@@ -85,7 +85,7 @@
 .cardContent p {
   margin: 4px 0;
   font-weight: 600;
-  font-size: 14px;
+  font-size: small;
   color: #34495e;
   display: flex;
   align-items: center;
@@ -99,8 +99,8 @@
 .seasonCard {
   grid-column: 1 / -1;
   background-color: #d4eced;
-  margin-left: 200px;
-  height: 150px;
+  /* margin-left: 200px; */
+  /* height: 150px; */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   border: 2px solid #cfe4e4;
 }
@@ -108,14 +108,17 @@
 .seasonCard .cardIcon {
   background-color: #d4eced;
   margin-top: 10px;
-  margin-left: 35px;
+  /* margin-left: 35px; */
   color: #ffffff;
 }
 
 .seasonCard .cardTitle {
   color: #e28f25;
   font-weight: 700;
-  margin-top: 20px;
+  font-size: medium;
+  /* margin-top: 20px; */
+  margin-bottom: 10px;
+   margin-left: 5px;
 }
 
 .error,
