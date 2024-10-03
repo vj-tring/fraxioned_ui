@@ -117,7 +117,7 @@ export function DatePickerWithRange({
     if (externalBookedDates.length > 0) {
       return externalBookedDates;
     }
-    if (!selectedPropertyDetails) return [];
+    if (!selectedPropertyDetails || !Array.isArray(bookings)) return [];
 
     const dates = bookings
     .filter(booking => String(booking.property.id) === String(selectedPropertyDetails.id) && !booking.isCancelled)
@@ -215,6 +215,10 @@ export function DatePickerWithRange({
   };
   const meetsConsecutiveStayRule = (startDate: Date, endDate: Date) => {
     if (startDate.toDateString() === today.toDateString()) {
+      return true;
+    }
+
+    if (!Array.isArray(bookings) || bookings.length === 0) {
       return true;
     }
   
