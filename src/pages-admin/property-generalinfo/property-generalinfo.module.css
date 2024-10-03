@@ -99,7 +99,8 @@
 .infoBlock {
   background-color: #f8f9fa;
   border-radius: 8px;
-  padding: 20px;
+  padding: 15px;
+  width: 410px;
   height: 270px;
   /* margin-bottom: 10px; */
   margin-top: 10px;
@@ -122,6 +123,7 @@
 .addressColumn,
 .detailsColumn {
   flex: 1;
+  width: 350px;
   /* padding: 0 10px; */
 }
 
