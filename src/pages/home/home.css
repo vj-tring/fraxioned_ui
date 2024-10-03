@@ -119,3 +119,14 @@ svg {
   width: 50px;
   height: 50px;
 }
+
+.NewsImg {
+  height: 150px !important;
+}
+
+.NewsContent:hover {
+  background: none !important;
+}
+.css-71xg00-MuiCardContent-root:hover {
+  background-color: none !important;
+}
