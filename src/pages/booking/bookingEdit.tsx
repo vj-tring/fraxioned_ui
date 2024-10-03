@@ -74,10 +74,11 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
 
   useEffect(() => {
     if (open && bookingRef.current) {
-      setDateRange({
+      const initialDateRange = {
         from: new Date(bookingRef.current.checkinDate),
         to: new Date(bookingRef.current.checkoutDate),
-      });
+      };
+      setDateRange(initialDateRange);
       setDisplayDates({
         checkinDate: bookingRef.current.checkinDate,
         checkoutDate: bookingRef.current.checkoutDate,
@@ -247,11 +248,11 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
               onSelect={handleDateSelect}
               initialRange={dateRange}
               propertyColor={''}    
+              isEditMode={true}
               currentBookingDates={{
                 from: new Date(booking.checkinDate),
                 to: new Date(booking.checkoutDate)
               }}
-              isEditMode={true} 
               currentBookingId={booking.id}
             />
           </Grid>
