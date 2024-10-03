@@ -139,7 +139,7 @@ const EditPropertyRulesForm: React.FC = () => {
                 <div className={styles.scrollableContent}>
                     <form onSubmit={handleSubmit} className={styles.form}>
                         <Grid container spacing={3}>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={3}>
                                 <TextField
                                     fullWidth
                                     label="Peak Season Start Date"
@@ -152,7 +152,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                     }}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={3}>
                                 <TextField
                                     fullWidth
                                     label="Peak Season End Date"
@@ -165,7 +165,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                     }}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={3}>
                                 <TextField
                                     fullWidth
                                     label="Peak Season Allotted Nights"
@@ -175,7 +175,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                     onChange={handleInputChange}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={3}>
                                 <TextField
                                     fullWidth
                                     label="Off Season Allotted Nights"
@@ -185,7 +185,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                     onChange={handleInputChange}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={3}>
                                 <TextField
                                     fullWidth
                                     label="Peak Season Allotted Holiday Nights"
@@ -195,7 +195,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                     onChange={handleInputChange}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={3}>
                                 <TextField
                                     fullWidth
                                     label="Off Season Allotted Holiday Nights"
@@ -205,7 +205,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                     onChange={handleInputChange}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={3}>
                                 <TextField
                                     fullWidth
                                     label="Last Minute Booking Allotted Nights"
@@ -215,7 +215,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                     onChange={handleInputChange}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={3}>
                                 <TextField
                                     fullWidth
                                     label="Number of Guests Allowed"
@@ -225,7 +225,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                     onChange={handleInputChange}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={3}>
                                 <TextField
                                     fullWidth
                                     label="Number of Bedrooms"
@@ -235,7 +235,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                     onChange={handleInputChange}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={3}>
                                 <TextField
                                     fullWidth
                                     label="Number of Bathrooms"
@@ -245,7 +245,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                     onChange={handleInputChange}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={3}>
                                 <TextField
                                     fullWidth
                                     label="Number of Full Bathrooms"
@@ -255,7 +255,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                     onChange={handleInputChange}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={3}>
                                 <TextField
                                     fullWidth
                                     label="Number of Half Bathrooms"
@@ -265,7 +265,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                     onChange={handleInputChange}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={3}>
                                 <TextField
                                     fullWidth
                                     label="Square Footage"
@@ -274,7 +274,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                     onChange={handleInputChange}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={3}>
                                 <TextField
                                     fullWidth
                                     label="Check-in Time"
@@ -287,7 +287,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                     }}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={3}>
                                 <TextField
                                     fullWidth
                                     label="Check-out Time"
@@ -300,7 +300,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                     }}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={3}>
                                 <TextField
                                     fullWidth
                                     label="Cleaning Fee"
@@ -310,7 +310,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                     onChange={handleInputChange}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={3}>
                                 <TextField
                                     fullWidth
                                     label="Number of Pets Allowed"
@@ -320,18 +320,18 @@ const EditPropertyRulesForm: React.FC = () => {
                                     onChange={handleInputChange}
                                 />
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={6} sm={3}>
                                 <TextField
                                     fullWidth
                                     label="Pet Policy"
                                     name="petPolicy"
                                     multiline
-                                    rows={4}
+                                    // rows={4}
                                     value={formData.petPolicy}
                                     onChange={handleInputChange}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={6} sm={3}>
                                 <TextField
                                     fullWidth
                                     label="Fee Per Pet"
@@ -341,7 +341,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                     onChange={handleInputChange}
                                 />
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={6} sm={3}>
                                 <TextField
                                     fullWidth
                                     label="WiFi Network"
