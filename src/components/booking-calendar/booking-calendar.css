@@ -87,7 +87,7 @@
     justify-content: flex-start;
   }
   
-  .last-odd-row .property-calendar.last-odd {
+  .last-odd-row .property-calendar-color.last-odd {
     flex: 0 0 calc(50% - 10px); 
   }
   
