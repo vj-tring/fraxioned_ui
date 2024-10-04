@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './propertyamenities.module.css';
 import { amenitiesapi, getAmenitiesById, updateamenityforproperty } from '@/api';
-import { Pencil, Check, X, ChevronRight, Save } from 'lucide-react';
+import { Pencil, Check, X, ChevronRight } from 'lucide-react';
 import CustomizedSnackbars from '@/components/customized-snackbar';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
+import ConfirmationModal from '@/components/confirmation-modal';
 
 interface Amenity {
   id: number;
@@ -37,6 +38,7 @@ const PropertyAmenities: React.FC = () => {
   });
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState('');
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   useEffect(() => {
     fetchAmenities();
@@ -115,6 +117,10 @@ const PropertyAmenities: React.FC = () => {
     );
   };
 
+  const handleUpdateClick = () => {
+    setShowConfirmModal(true);
+  };
+
   const handleUpdate = async () => {
     try {
       const updateData = {
@@ -130,6 +136,7 @@ const PropertyAmenities: React.FC = () => {
       await updateamenityforproperty(updateData);
       showSnackbar('Amenities updated successfully!', 'success');
       setDialogOpen(false);
+      setShowConfirmModal(false);
     } catch (err) {
       showSnackbar('Failed to update amenities. Please try again.', 'error');
     }
@@ -180,7 +187,7 @@ const PropertyAmenities: React.FC = () => {
         <div className={styles.header}>
           <h1 className={styles.title}>Property Amenities</h1>
           <div className={styles.buttonGroup}>
-            <button className={styles.updateButton} onClick={handleUpdate}>Update</button>
+            <button className={styles.updateButton} onClick={handleUpdateClick}>Update</button>
           </div>
         </div>
         <div className={styles.amenitiesScrollContainer}>
@@ -252,7 +259,7 @@ const PropertyAmenities: React.FC = () => {
       >
         <DialogTitle className={styles.dialogTitle}>
           {selectedGroup} Amenities
-          <button onClick={handleUpdate} className={styles.dialogUpdateButton}>
+          <button onClick={handleUpdateClick} className={styles.dialogUpdateButton}>
             Update
           </button>
         </DialogTitle>
@@ -275,6 +282,15 @@ const PropertyAmenities: React.FC = () => {
           </div>
         </DialogContent>
       </Dialog>
+      <ConfirmationModal
+        show={showConfirmModal}
+        onHide={() => setShowConfirmModal(false)}
+        onConfirm={handleUpdate}
+        title="Confirm Update"
+        message="Are you sure you want to update the amenities for this property?"
+        confirmLabel="Update"
+        cancelLabel="Cancel" children={undefined}      >
+      </ConfirmationModal>
     </div>
   );
 };

@@ -8,6 +8,11 @@
     min-height: 100vh;
 }
 
+.notFoundMessage {
+    font-family: 'Roboto', 'Arial', sans-serif;
+    color: #333;
+}
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -115,7 +120,7 @@
 .groupHeader {
     display: flex;
     align-items: center;
-    height: 45px;
+    height: 42px;
     background-color: #f8f9fa;
     padding: 1rem;
     cursor: pointer;
@@ -144,6 +149,40 @@
     font-weight: 600;
 }
 
+.groupSearchContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0.6rem 1.0rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.groupSearchHeading {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.groupSearchBar {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 8px;
+    padding: 0.4rem 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.groupSearchBar input {
+    border: none;
+    outline: none;
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+    width: 200px;
+}
+
 .amenityItems {
     padding: 1rem;
 }
@@ -152,7 +191,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem;
+    padding: 0.2rem;
     border-bottom: 1px solid #e0e0e0;
     transition: background-color 0.3s;
 }
@@ -213,7 +252,8 @@
 
 .editInput {
     flex-grow: 1;
-    padding: 0.5rem;
+    padding: 0.4rem;
+    height: 35px;
     font-size: 16px;
     border: 2px solid #c7eaee;
     border-radius: 4px;
@@ -267,5 +307,19 @@
 
     .actionButtons {
         align-self: flex-end;
+    }
+
+    .groupSearchContainer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .groupSearchBar {
+        width: 100%;
+    }
+
+    .groupSearchBar input {
+        width: 100%;
     }
 }

@@ -30,6 +30,7 @@ interface SnackbarState {
 
 const AmenityManagement: React.FC = () => {
     const [amenities, setAmenities] = useState<{ [key: string]: Amenity[] }>({});
+    const [groupSearchTerms, setGroupSearchTerms] = useState<{ [key: string]: string }>({});
     const [amenityGroups, setAmenityGroups] = useState<AmenityGroup[]>([]);
     const [loading, setLoading] = useState(true);
     const [editingAmenity, setEditingAmenity] = useState<Amenity | null>(null);
@@ -72,6 +73,10 @@ const AmenityManagement: React.FC = () => {
             showSnackbar('Failed to fetch amenities', 'error');
             setLoading(false);
         }
+    };
+
+    const handleGroupSearch = (group: string, term: string) => {
+        setGroupSearchTerms(prev => ({ ...prev, [group]: term }));
     };
 
     const groupAmenitiesByType = (data: Amenity[]) => {
@@ -180,12 +185,11 @@ const AmenityManagement: React.FC = () => {
     };
 
     const filteredAmenities = Object.entries(amenities).reduce((acc, [group, amenitiesList]) => {
+        const groupSearchTerm = groupSearchTerms[group] || '';
         const filtered = amenitiesList.filter(amenity =>
-            amenity.amenityName.toLowerCase().includes(searchTerm.toLowerCase())
+            amenity.amenityName.toLowerCase().includes(groupSearchTerm.toLowerCase())
         );
-        if (filtered.length > 0) {
-            acc[group] = filtered;
-        }
+        acc[group] = filtered;
         return acc;
     }, {} as { [key: string]: Amenity[] });
 
@@ -237,45 +241,63 @@ const AmenityManagement: React.FC = () => {
                             </div>
                             {expandedGroups.includes(group) && (
                                 <div className={styles.amenityItems}>
-                                    {amenitiesList.map((amenity) => (
-                                        <div key={amenity.id} className={styles.amenityItem}>
-                                            {editingAmenity?.id === amenity.id ? (
-                                                <input
-                                                    type="text"
-                                                    value={editingAmenity.amenityName}
-                                                    onChange={(e) => setEditingAmenity({ ...editingAmenity, amenityName: e.target.value })}
-                                                    className={styles.editInput}
-                                                />
-                                            ) : (
-                                                <span className={styles.amenityName}>{amenity.amenityName}</span>
-                                            )}
-                                            <div className={styles.actionButtons}>
-                                                {editingAmenity?.id === amenity.id ? (
-                                                    <>
-                                                        <Tooltip title="Save" arrow>
-                                                            <button onClick={handleSave} className={styles.saveButton}>Save</button>
-                                                        </Tooltip>
-                                                        <Tooltip title="Cancel" arrow>
-                                                            <button onClick={handleCancel} className={styles.cancelButton}>Cancel</button>
-                                                        </Tooltip>
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <Tooltip title="Edit" arrow>
-                                                            <button onClick={() => handleEdit(amenity)} className={styles.editButton}>
-                                                                <Edit2 size={16} />
-                                                            </button>
-                                                        </Tooltip>
-                                                        <Tooltip title="Delete" arrow>
-                                                            <button onClick={() => handleDeleteClick(amenity)} className={styles.deleteButton}>
-                                                                <Trash2 size={16} />
-                                                            </button>
-                                                        </Tooltip>
-                                                    </>
-                                                )}
-                                            </div>
+                                    <div className={styles.groupSearchContainer}>
+                                        <h3 className={styles.groupSearchHeading}>{group} amenity list</h3>
+                                        <div className={styles.groupSearchBar}>
+                                            <Search size={20} />
+                                            <input
+                                                type="text"
+                                                placeholder={`Search in ${group}...`}
+                                                value={groupSearchTerms[group] || ''}
+                                                onChange={(e) => handleGroupSearch(group, e.target.value)}
+                                            />
                                         </div>
-                                    ))}
+                                    </div>
+                                    {amenitiesList.length > 0 ? (
+                                        amenitiesList.map((amenity) => (
+                                            <div key={amenity.id} className={styles.amenityItem}>
+                                                {editingAmenity?.id === amenity.id ? (
+                                                    <input
+                                                        type="text"
+                                                        value={editingAmenity.amenityName}
+                                                        onChange={(e) => setEditingAmenity({ ...editingAmenity, amenityName: e.target.value })}
+                                                        className={styles.editInput}
+                                                    />
+                                                ) : (
+                                                    <span className={styles.amenityName}>{amenity.amenityName}</span>
+                                                )}
+                                                <div className={styles.actionButtons}>
+                                                    {editingAmenity?.id === amenity.id ? (
+                                                        <>
+                                                            <Tooltip title="Save" arrow>
+                                                                <button onClick={handleSave} className={styles.saveButton}>Save</button>
+                                                            </Tooltip>
+                                                            <Tooltip title="Cancel" arrow>
+                                                                <button onClick={handleCancel} className={styles.cancelButton}>Cancel</button>
+                                                            </Tooltip>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <Tooltip title="Edit" arrow>
+                                                                <button onClick={() => handleEdit(amenity)} className={styles.editButton}>
+                                                                    <Edit2 size={16} />
+                                                                </button>
+                                                            </Tooltip>
+                                                            <Tooltip title="Delete" arrow>
+                                                                <button onClick={() => handleDeleteClick(amenity)} className={styles.deleteButton}>
+                                                                    <Trash2 size={16} />
+                                                                </button>
+                                                            </Tooltip>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className={styles.notFoundMessage}>
+                                            No amenities found in {group} for this search.
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>
@@ -289,7 +311,7 @@ const AmenityManagement: React.FC = () => {
                 title="Delete Amenity"
                 message={`Are you sure you want to delete the amenity "${amenityToDelete?.amenityName}"?`}
                 confirmLabel="Delete"
-                cancelLabel="Cancel" children={undefined} />
+                cancelLabel="Cancel" children={undefined}            />
             <CustomizedSnackbars
                 open={snackbar.open}
                 handleClose={handleSnackbarClose}
