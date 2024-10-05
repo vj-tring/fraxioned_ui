@@ -16,7 +16,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import { updateuserapi, getRoles } from "@/api";
-import styles from "./useresit.module.css";
+import styles from "./useredit.module.css";
 import { User, Role, ContactDetails } from "@/types";
 
 interface EditFormProps {
