@@ -145,7 +145,10 @@ export const propertydetailsapi = () =>
     axiosInstance.get(`/properties/properties-with-details`);
 
 export const amenitiesapi = () =>
-    axiosInstance.get(`/amenities`);
+    axiosInstance.get(`/v1/amenities`);
+
+export const propertyAmenitiesapi = (id: number ) =>
+    axiosInstance.get(`/v1/property-amenities/property/${id}`);
 
 export const getpropertyamenityByid = () =>
     axiosInstance.get(`/property-amenities`);
@@ -157,11 +160,13 @@ export const getuserbyproperty = (id: number) =>
     axiosInstance.get(`/properties/property/${id}/details`);
 
 export const addamenity = (data: {
+    amenityGroup: { id: number };
     createdBy: { id: number };
     amenityName: string;
     amenityDescription: string;
     amenityType: string;
 }) => axiosInstance.post('/amenities/amenity', data);
+  }) => axiosInstance.post('/v1/amenities/amenity', data);
 
 export const updateamenityforproperty = (updateData: { property: { id: number; }; amenities: { id: number; }[]; updatedBy: { id: number; }; }) =>
     axiosInstance.patch(`/property-amenities`, updateData);
@@ -172,19 +177,21 @@ export const updateamenities = (id: number, updateData: {
     amenityDescription: string;
     amenityType: string;
 }) => axiosInstance.patch(`/amenities/amenity/${id}`, updateData);
+    amenityGroup: { id: number };
+}) => axiosInstance.patch(`/v1/amenities/amenity/${id}`, updateData);
 
 export const propertyImageapi = () =>
-    axiosInstance.get(`/property-images`);
+    axiosInstance.get(`/v1/property-images`);
 
 export const deleteAmenity = (id: number) =>
     axiosInstance.delete(`/amenities/amenity/${id}`);
 
 export const getpropertyImageById = (id: number) =>
-    axiosInstance.get(`/propertyImages/propertyImage/${id}`);
+    axiosInstance.get(`/v1/property-images/property-image/${id}`);
 
 export const propertyImageuploadapi = (formData: FormData) => {
     console.log('to backend', formData)
-    return axiosInstance.post(`/propertyImages`, formData, {
+    return axiosInstance.post(`/v1/property-images`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
             'Accept': '*/*'
@@ -193,11 +200,11 @@ export const propertyImageuploadapi = (formData: FormData) => {
 };
 export const propertyImageeditapi = (id: number, formData: FormData) => {
     console.log('to backend', formData);
-    return axiosInstance.patch(`/propertyImages/propertyImage/${id}`, formData);
+    return axiosInstance.patch(`/v1/property-images/property-image/${id}`, formData);
 };
 
 export const deletetpropertyImageById = (id: number) =>
-    axiosInstance.delete(`/propertyImages/propertyImage/${id}`);
+    axiosInstance.delete(`/v1/property-images/property-image/${id}`);
 
 export const getUserBookings = (userId: number) =>
     axiosInstance.get(`/bookings/user/${userId}`);
@@ -206,7 +213,26 @@ export const propertyspaceapi = () =>
     axiosInstance.get(`/spaces`);
 
 export const propertyspacetypesapi = () =>
-    axiosInstance.get(`/space-types`);
+    axiosInstance.get(`/v1/space-types`);
+
+export const getPropertyDocuments = () =>
+    axiosInstance.get('/api/v1/propertyDocuments');
+
+export const getPropertyDocument = (id: number) =>
+    axiosInstance.get(`/api/v1/propertyDocuments/propertyDocument/${id}`);
+
+export const createPropertyDocument = (formData: FormData) =>
+    axiosInstance.post('/api/v1/propertyDocuments', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    });
+
+export const updatePropertyDocument = (id: number, formData: FormData) =>
+    axiosInstance.patch(`/api/v1/propertyDocuments/propertyDocument/${id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    });
+
+export const deletePropertyDocument = (id: number) =>
+    axiosInstance.delete(`/api/v1/propertyDocuments/propertyDocument/${id}`);
 
 export const getpropertycodes = () =>
     axiosInstance.get(`/property-codes`);
@@ -215,7 +241,15 @@ export const userbookingCancelapi = (id: number, user: number) => {
     return axiosInstance.post(`/bookings/${id}/${user}/cancel`);
 };
 
+//add amenity group
+export const addamenitygroup = (data: {
+    createdBy: { id: number };
+    name: string;
+}) => axiosInstance.post('/v1/amenity-groups/amenity-group', data);
 
+//get all amenity groups
+export const getamenitygroup = () =>
+    axiosInstance.get(`/v1/amenity-groups`);
 
 
 

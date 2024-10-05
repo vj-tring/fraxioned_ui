@@ -336,7 +336,7 @@ export default function BasicSelect() {
                       </h4>
                       <p className="BlueFont">{selectedCard.address}</p>
                       <p className="BlueFont">{selectedCard.city}</p>
-                      <p className="BlueFont">{selectedCard.state}</p>
+                      <p className="BlueFont">{selectedCard.state},</p>
                       <p className="BlueFont">{selectedCard.zipcode}</p>
                     </span>
                     <span className={`CardImage ${imageClass}`}>

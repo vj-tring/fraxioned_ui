@@ -135,7 +135,6 @@ const PropertyListingPage = () => {
   const counts = useSelector((state: RootState) => state.limits.counts);
 
   const [loadingImages, setLoadingImages] = useState(true);
-
   useEffect(() => {
     dispatch(fetchProperties(userId));
   }, [dispatch, userId]);
@@ -409,10 +408,10 @@ const PropertyListingPage = () => {
                 style={{ opacity: 0.9, fontWeight: "bolder" }}
               >
                 
-                <div>{selectedProperty.address || "Property Address"}</div>,
-                <div>{selectedProperty.city || "Property Address"}</div>,
-                <div>{selectedProperty.state || "Property Address"}</div>,
-                <div>{selectedProperty.country || "Property Address"}</div>,
+                <div>{selectedProperty.address || "Property Address"},</div>
+                <div>{selectedProperty.city || "Property Address"},</div>
+                <div>{selectedProperty.state || "Property Address"},</div>
+                <div>{selectedProperty.country || "Property Address"},</div>
                 <div>{selectedProperty.zipcode || "Property Address"}</div>
               </Typography>
             </Box>
@@ -484,7 +483,7 @@ const PropertyListingPage = () => {
           }}
         />
         <div id="rooms" className="mt-5">
-          <SingleDevice />
+          <SingleDevice propertyId={id}/>
         </div>
         <div id="location">
           <MapEmbed
@@ -496,7 +495,7 @@ const PropertyListingPage = () => {
           />
         </div>
         <div id="info">
-          <ThingsToKnow />
+          <ThingsToKnow propId={Number(id) || Number(0)} />
         </div>
         <Dialog open={dialogOpen} onClose={handleClose} fullWidth maxWidth="md">
           <DialogTitle className="d-flex justify-content-between">

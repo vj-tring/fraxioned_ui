@@ -133,6 +133,8 @@ body {
 .PropertyAddress {
   font-size: 1.1rem !important;
   display: flex;
+  /* flex-direction: column; */
+  font-size: smaller !important;
   gap: 6px;
 }
 
