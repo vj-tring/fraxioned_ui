@@ -108,7 +108,7 @@ const ForgetPassword: React.FC = () => {
             </div>
             <div className={styles.formFooter}>
               <label className={styles.remember}>
-                <input type="checkbox" /> Remember password?
+                {/* <input type="checkbox" /> Remember password? */}
               </label>
               <Link to="/" className={styles.forgotPassword}>
                 Login here!

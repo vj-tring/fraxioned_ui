@@ -1,4 +1,4 @@
-//@ts-nocheck
+
 import * as React from "react";
 import { addDays, format, addYears } from "date-fns";
 import { DateRange } from "react-day-picker";
@@ -10,10 +10,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchProperties, selectSelectedPropertyDetails } from "@/store/slice/auth/property-slice";
 import { fetchPropertySeasonHoliday, selectPropertySeasonHolidays } from '@/store/slice/auth/propertySeasonHolidaySlice';
 import {  clearBookingMessages, fetchBookings } from '../../store/slice/auth/bookingSlice';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { RootState } from "@/store/reducers";
 import { setDateRange, setErrorMessage, setIsCalendarOpen, clearDates, setStartDate, setStartDateSelected, setSelectedYear, setValidationMessage, clearValidationMessage, clearPartial } from "@/store/slice/datePickerSlice";
 import { AppDispatch } from "@/store";
+import LastMinuteBookingDialog from "../last-minute-dialog";
 
 interface DatePickerWithRangeProps extends React.HTMLAttributes<HTMLDivElement> {
   onSelect?: (range: DateRange | undefined) => void;
@@ -67,9 +68,11 @@ export function DatePickerWithRange({
   // const currentBooking = useSelector((state: RootState) => state.bookings?.currentBooking);
   const currentUser = useSelector((state: RootState) => state.auth.user);
   const validationMessage = useSelector((state: RootState) => state.datePicker.validationMessage);
-
+  const [isLastMinutePopupOpen, setIsLastMinutePopupOpen] = useState(false);
+  const [tempDateRange, setTempDateRange] = useState<DateRange | null>(null);
   const unavailableDates = calendarData.unavailableDates.map(date => new Date(date));
   const blueDates = calendarData.blueDates.map(date => new Date(date));
+  const [isRegularBookingSelected, setIsRegularBookingSelected] = useState(false);
 
   useEffect(() => {
     if (fetchBookingsOnMount) {
@@ -310,47 +313,53 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
   return hoursDifference < 24;
 };
 
-  const handleDateChange = (range: DateRange | undefined) => {
-    if (range?.from) {
-      const newStartDate = range.from;
-      let newEndDate = range.to;
-  
-      dispatch(setSelectedYear(newStartDate.getFullYear()));
-  
-      if (!meetsConsecutiveStayRule(newStartDate, newEndDate || newStartDate)) {
-        dispatch(setErrorMessage('There must be at least 5 nights between your bookings at this property.'));
-        dispatch(clearPartial());
-        if (onSelect) onSelect(undefined);
+const handleDateChange = (range: DateRange | undefined) => {
+  if (range?.from) {
+    const newStartDate = range.from;
+    let newEndDate = range.to;
+
+    dispatch(setSelectedYear(newStartDate.getFullYear()));
+
+    if (!meetsConsecutiveStayRule(newStartDate, newEndDate || newStartDate)) {
+      dispatch(setErrorMessage('There must be at least 5 nights between your bookings at this property.'));
+      dispatch(clearPartial());
+      if (onSelect) onSelect(undefined);
+      return;
+    }
+    dispatch(setStartDate(newStartDate));
+    dispatch(setStartDateSelected(true));
+
+    if (isBookingTooCloseToCheckin(newStartDate)) {
+      dispatch(setErrorMessage('Booking must be made at least 24 hours before the check-in time'));
+      dispatch(clearPartial());
+      if (onSelect) onSelect(undefined);
+      return;
+    }
+
+    const lastMinuteBooking = isLastMinuteBooking(newStartDate);
+
+    if (lastMinuteBooking && !isRegularBookingSelected) {
+      if (!newEndDate) {
+        setTempDateRange({ from: newStartDate, to: undefined });
+        setIsLastMinutePopupOpen(true);
         return;
+      } else {
+        const nightsSelected = (newEndDate.getTime() - newStartDate.getTime()) / (1000 * 60 * 60 * 24);
+        if (nightsSelected > calendarData.bookingRules.lastMinuteBooking.maxNights) {
+          dispatch(setErrorMessage(`Maximum ${calendarData.bookingRules.lastMinuteBooking.maxNights} nights allowed for last-minute bookings`));
+          return;
+        }
       }
-      dispatch(setStartDate(newStartDate));
-      dispatch(setStartDateSelected(true));
+    }
 
-      // if (newEndDate) {
-      //   if (!meetsConsecutiveStayRule(newStartDate, newEndDate)) {
-      //     dispatch(setErrorMessage('There must be at least 5 nights between your bookings at this property.'));
-      //     dispatch(clearPartial());
-      //     if (onSelect) onSelect(undefined);
-      //     return;
-      //   }
-      // }
+    const peakSeasonStart = new Date(selectedPropertyDetails.peakSeasonStartDate);
+    const peakSeasonEnd = new Date(selectedPropertyDetails.peakSeasonEndDate);
+    let peakNights = 0;
+    let offNights = 0;
+    let peakHolidayNights = 0;
+    let offHolidayNights = 0;
 
-      if (isBookingTooCloseToCheckin(newStartDate)) {
-        dispatch(setErrorMessage('Booking must be made at least 24 hours before the check-in time'));
-        dispatch(clearPartial());
-        if (onSelect) onSelect(undefined);
-        return;
-      }
-
-      const lastMinuteBooking = isLastMinuteBooking(newStartDate);
-      const peakSeasonStart = new Date(
-        selectedPropertyDetails.peakSeasonStartDate
-      );
-      const peakSeasonEnd = new Date(selectedPropertyDetails.peakSeasonEndDate);
-      let peakNights = 0;
-      let offNights = 0;
-      let peakHolidayNights = 0;
-      let offHolidayNights = 0;
+    if (newEndDate) {
       for (let d = new Date(newStartDate); d < newEndDate; d.setDate(d.getDate() + 1)) {
         if (d >= peakSeasonStart && d <= peakSeasonEnd) {
           peakNights++;
@@ -386,72 +395,73 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
         return;
       }
 
-      if (newEndDate) {
-        const nextBookedDate = bookedDates.find(
-          (bookedDate) => bookedDate > newStartDate
-        );
-        const nextUnavailableDate = unavailableDates.find(
-          (unavailableDate) => unavailableDate > newStartDate
-        );
-        if (
-          (nextBookedDate && newEndDate > nextBookedDate) ||
-          (nextUnavailableDate && newEndDate > nextUnavailableDate)
-        ) {
-          newEndDate = undefined;
-          dispatch(setErrorMessage(
-            "Cannot select over booked dates. Please clear and try again."
-          ));
-        } else {
-          const nightsSelected =
-            (newEndDate.getTime() - newStartDate.getTime()) /
-            (1000 * 60 * 60 * 24);
-          if (lastMinuteBooking) {
-            if (nightsSelected < calendarData.bookingRules.lastMinuteBooking.minNights) {
-              dispatch(setErrorMessage(`Minimum ${calendarData.bookingRules.lastMinuteBooking.minNights} night(s) required for last-minute bookings`));
-            } else if (nightsSelected > calendarData.bookingRules.lastMinuteBooking.maxNights) {
-              dispatch(setErrorMessage(`Maximum ${calendarData.bookingRules.lastMinuteBooking.maxNights} nights allowed for last-minute bookings`));
-            } else if (selectedPropertyDetails.details[selectedYear]?.lastMinuteRemainingNights == 0) {
-              dispatch(setErrorMessage(`You don't have sufficient last-minute remaining nights to select this checkout date`));
-            } else {
-              dispatch(setErrorMessage(null));
-            }
+      const nextBookedDate = bookedDates.find((bookedDate) => bookedDate > newStartDate);
+      const nextUnavailableDate = unavailableDates.find((unavailableDate) => unavailableDate > newStartDate);
+      if (
+        (nextBookedDate && newEndDate > nextBookedDate) ||
+        (nextUnavailableDate && newEndDate > nextUnavailableDate)
+      ) {
+        newEndDate = undefined;
+        dispatch(setErrorMessage(
+          "Cannot select over booked dates. Please clear and try again."
+        ));
+      } else {
+        const nightsSelected =
+          (newEndDate.getTime() - newStartDate.getTime()) /
+          (1000 * 60 * 60 * 24);
+        
+        if (lastMinuteBooking && !isRegularBookingSelected) {
+          if (nightsSelected < calendarData.bookingRules.lastMinuteBooking.minNights) {
+            dispatch(setErrorMessage(`Minimum ${calendarData.bookingRules.lastMinuteBooking.minNights} nights required for last-minute bookings`));
+          } else if (nightsSelected > calendarData.bookingRules.lastMinuteBooking.maxNights) {
+            dispatch(setErrorMessage(`Maximum ${calendarData.bookingRules.lastMinuteBooking.maxNights} nights allowed for last-minute bookings`));
+          } else if (selectedPropertyDetails.details[selectedYear]?.lastMinuteRemainingNights < nightsSelected) {
+            dispatch(setErrorMessage(`You don't have sufficient last-minute remaining nights to select this checkout date`));
           } else {
-            if (nightsSelected < calendarData.bookingRules.regularBooking.minNights) {
-              dispatch(setErrorMessage(`Minimum ${calendarData.bookingRules.regularBooking.minNights} nights required`));
-            } else if (nightsSelected > selectedPropertyDetails?.details[selectedYear]?.maximumStayLength) {
-              dispatch(setErrorMessage('Your booking request has exceeded the maximum stay length'));
-            } else {
-              dispatch(setErrorMessage(null));
-            }
+            dispatch(setErrorMessage(null));
+            const newDateRange = { from: newStartDate, to: newEndDate };
+            dispatch(setDateRange(newDateRange));
+            if (onSelect) onSelect(newDateRange);
+          }
+        } else {
+          if (nightsSelected < calendarData.bookingRules.regularBooking.minNights) {
+            dispatch(setErrorMessage(`Minimum ${calendarData.bookingRules.regularBooking.minNights} nights required`));
+          } else if (nightsSelected > selectedPropertyDetails?.details[selectedYear]?.maximumStayLength) {
+            dispatch(setErrorMessage('Your booking request has exceeded the maximum stay length'));
+          } else {
+            dispatch(setErrorMessage(null));
+            const newDateRange = { from: newStartDate, to: newEndDate };
+            dispatch(setDateRange(newDateRange));
+            if (onSelect) onSelect(newDateRange);
           }
         }
-        dispatch(setStartDateSelected(false));
-      } else {
-        if (
-          isDayBeforeBookedDate(newStartDate) ||
-          isDayBeforeUnavailableDate(newStartDate)
-        ) {
-          dispatch(setErrorMessage("Check out only"));
-        } else {
-          dispatch(setErrorMessage(null));
-        }
       }
-
+      dispatch(setStartDateSelected(false));
+    } else {
+      if (
+        isDayBeforeBookedDate(newStartDate) ||
+        isDayBeforeUnavailableDate(newStartDate)
+      ) {
+        dispatch(setErrorMessage("Check out only"));
+      } else {
+        dispatch(setErrorMessage(null));
+      }
       const newDateRange = { from: newStartDate, to: newEndDate };
       dispatch(setDateRange(newDateRange));
       if (onSelect) onSelect(newDateRange);
-
-      // Keep the calendar open if only the start or end date is selected
-      if (newStartDate && !newEndDate) {
-        dispatch(setIsCalendarOpen(true));
-      } else if (newStartDate && newEndDate) {
-        dispatch(setIsCalendarOpen(false));
-      }
-    } else {
-      dispatch(clearDates());
-      if (onSelect) onSelect(undefined);
     }
-  };
+
+    if (newStartDate && !newEndDate) {
+      dispatch(setIsCalendarOpen(true));
+    } else if (newStartDate && newEndDate) {
+      dispatch(setIsCalendarOpen(false));
+    }
+  } else {
+    dispatch(clearDates());
+    setIsRegularBookingSelected(false);
+    if (onSelect) onSelect(undefined);
+  }
+};
 
   const customLocale = {
     code: calendarData.locale.code,
@@ -469,6 +479,24 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
     const date = new Date(dateString);
     return format(date, "d MMM");
   };
+
+  const handleLastMinuteChoice = (choice: 'lastMinute' | 'regular') => {
+    setIsLastMinutePopupOpen(false);
+    setIsRegularBookingSelected(choice === 'regular');
+    if (tempDateRange?.from) {
+      if (choice === 'lastMinute') {
+        // For last-minute bookings, set the maximum end date to 3 nights from start
+        const maxLastMinuteEndDate = addDays(tempDateRange.from, calendarData.bookingRules.lastMinuteBooking.maxNights);
+        dispatch(setDateRange({ from: tempDateRange.from, to: undefined }));
+        dispatch(setIsCalendarOpen(true));
+      } else {
+        // For regular bookings, allow selection up to the maximum stay length
+        dispatch(setDateRange({ from: tempDateRange.from, to: undefined }));
+        dispatch(setIsCalendarOpen(true));
+      }
+    }
+  };
+  
   return (
     <div className={cn("gri flex flex-column calendar", className)}>
       <div className="calendarDiv">
@@ -582,6 +610,11 @@ const isBookingTooCloseToCheckin = (checkinDate: Date) => {
           </div>
         </div>
       )}
+      <LastMinuteBookingDialog
+        isOpen={isLastMinutePopupOpen}
+        onClose={() => setIsLastMinutePopupOpen(false)}
+        onChoice={handleLastMinuteChoice}
+      />
     </div>
   );
 }
