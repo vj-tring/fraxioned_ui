@@ -1,22 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Box,
   Avatar,
   IconButton,
   Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
   Typography,
 } from "@mui/material";
-import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined";
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import LockResetOutlinedIcon from "@mui/icons-material/LockResetOutlined";
-import ConfirmationNumberOutlinedIcon from "@mui/icons-material/ConfirmationNumberOutlined";
-import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
-import LiveHelpOutlinedIcon from "@mui/icons-material/LiveHelpOutlined";
-import ContactPageOutlinedIcon from "@mui/icons-material/ContactPageOutlined";
+import MenuOptions from "./menu-options";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/reducers";
 import styles from "./profile.module.css";
@@ -31,6 +21,7 @@ interface ProfileMenuProps {
   onNewAccountClick: () => void;
 }
 
+
 const ProfileMenu: React.FC<ProfileMenuProps> = ({
   userImage,
   userName,
@@ -41,15 +32,15 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
   onNewAccountClick,
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [storedName, setStoredName] = useState("");
+  const [storedName, setStoredName] = useState<string>("");
   const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
 
   useEffect(() => {
     const userDataString = localStorage.getItem("user");
-    const userData = userDataString ? JSON.parse(userDataString) : null;
-    const firstName = userData?.firstName || "";
-    const lastName = userData?.lastName || "";
-    setStoredName(`${firstName} ${lastName}`);
+    if (userDataString) {
+      const { firstName, lastName } = JSON.parse(userDataString);
+      setStoredName(`${firstName || ""} ${lastName || ""}`);
+    }
   }, []);
 
   const open = Boolean(anchorEl);
@@ -57,36 +48,40 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
     onProfileMenuClick();
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const handleMenuItemClick = (callback: () => void) => {
-    callback();
-    handleClose();
-  };
+
+  const handleClose = () => setAnchorEl(null);
+
+  const handleMenuItemClick = useCallback(
+    (callback: () => void) => {
+      callback();
+      handleClose();
+    },
+    []
+  );
+
   return (
     <>
-      <IconButton onClick={handleClick} size="small" sx={{
-        ":hover": {
-          bgcolor: "transparent",
-        },
-        ":active":{
-            bgcolor: "transparent",
-        }
-        
-      }} disableRipple>
+      <IconButton
+        onClick={handleClick}
+        size="small"
+        sx={{
+          ":hover": { bgcolor: "transparent" },
+          ":active": { bgcolor: "transparent" },
+        }}
+        disableRipple
+      >
         <Box display="flex" alignItems="center">
           <Typography
             variant="body2"
-            color="textPrimary"
-            className={`monsterrat p-2 ${styles["UserName"]}`}
             sx={{
               fontWeight: 600,
               color: "#00636D",
               textTransform: "uppercase",
+              padding: "0.5rem",
             }}
+            className={`monsterrat ${styles.UserName}`}
           >
-            {storedName}
+            {storedName || userName}
           </Typography>
           <Avatar sx={{ width: 32, height: 32 }}>
             {userImage ? (
@@ -132,114 +127,17 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
           },
         }}
       >
-        <MenuItem onClick={() => handleMenuItemClick(onProfileClick)}>
-          <ListItemIcon>
-            <AccountCircleOutlinedIcon />
-          </ListItemIcon>
-          <ListItemText>Profile</ListItemText>
-        </MenuItem>
-        {!isAdmin && (
-          <>
-            <MenuItem
-              // onClick={handleResetPasswordClick}
-
-              style={{
-                height: "2.4rem",
-              }}
-            >
-              <ListItemIcon>
-                <ConfirmationNumberOutlinedIcon
-                  style={{
-                    width: "80%",
-                  }}
-                />
-              </ListItemIcon>
-              <ListItemText>Tickets</ListItemText>
-            </MenuItem>
-
-            <MenuItem
-              // onClick={handleResetPasswordClick}
-              style={{
-                height: "2.4rem",
-              }}
-            >
-              <ListItemIcon>
-                <MenuBookOutlinedIcon
-                  style={{
-                    width: "80%",
-                  }}
-                />
-              </ListItemIcon>
-              <ListItemText>GuideBooks</ListItemText>
-            </MenuItem>
-            <MenuItem
-              // onClick={handleResetPasswordClick}
-              style={{
-                height: "2.4rem",
-              }}
-            >
-              <ListItemIcon>
-                <LiveHelpOutlinedIcon
-                  style={{
-                    width: "80%",
-                  }}
-                />
-              </ListItemIcon>
-              <ListItemText>Faq</ListItemText>
-            </MenuItem>
-            <MenuItem
-              // onClick={handleResetPasswordClick}
-              style={{
-                height: "2.4rem",
-              }}
-            >
-              <ListItemIcon>
-                <ContactPageOutlinedIcon
-                  style={{
-                    width: "80%",
-                  }}
-                />
-              </ListItemIcon>
-              <ListItemText>Contact us</ListItemText>
-            </MenuItem>
-          </>
-        )}
-        {isAdmin && (
-          <MenuItem
-            onClick={() => handleMenuItemClick(onNewAccountClick)}
-            style={{
-              height: "2.4rem",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <ListItemIcon>
-              <PersonAddAlt1OutlinedIcon
-                style={{
-                  width: "80%",
-                }}
-              />
-            </ListItemIcon>
-            <ListItemText>Send Invite</ListItemText>
-          </MenuItem>
-        )}
-        <MenuItem onClick={() => handleMenuItemClick(onResetPasswordClick)}>
-          <ListItemIcon>
-            <LockResetOutlinedIcon />
-          </ListItemIcon>
-          <ListItemText>Reset Password</ListItemText>
-        </MenuItem>
-        <hr className="opacity-15 my-1.5" />
-        <MenuItem onClick={() => handleMenuItemClick(onLogoutClick)}>
-          <ListItemIcon>
-            <LogoutOutlinedIcon />
-          </ListItemIcon>
-          <ListItemText>Logout</ListItemText>
-        </MenuItem>
+        <MenuOptions
+          isAdmin={isAdmin}
+          handleMenuItemClick={handleMenuItemClick}
+          onProfileClick={onProfileClick}
+          onNewAccountClick={onNewAccountClick}
+          onResetPasswordClick={onResetPasswordClick}
+          onLogoutClick={onLogoutClick}
+        />
       </Menu>
     </>
   );
 };
 
-export default ProfileMenu;
+export default React.memo(ProfileMenu);

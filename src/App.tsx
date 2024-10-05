@@ -15,7 +15,7 @@ import Dashboard from "./pages/dashboard";
 import BookingSummary from "./pages/booking-summary/pages";
 import AdminDashboard from "./pages-admin/admin-dashboard";
 import ScrollToTop from "./components/ScrollToTop";
-import { AxiosInterceptor } from "./api/axiosSetup";
+import AxiosInterceptor from "./api/axiosSetup";
 
 interface PrivateRouteProps {
   element: React.ComponentType;
@@ -28,9 +28,11 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
 }) => {
   const token = localStorage.getItem("session");
   const user = JSON.parse(localStorage.getItem("user") || "{}");
+  console.log(token)
   if (!token) {
     return <Navigate to="/login" />;
   }
+
   if (user?.roleId && allowedRoles.includes(user.roleId)) {
     return <Element />;
   }

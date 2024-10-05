@@ -385,7 +385,7 @@ const AmenityManagement: React.FC = () => {
                 title="Delete Amenity"
                 message={`Are you sure you want to delete the amenity "${amenityToDelete?.amenityName}"?`}
                 confirmLabel="Delete"
-                cancelLabel="Cancel" children={undefined} />
+                cancelLabel="Cancel" />
             <CustomizedSnackbars
                 open={snackbar.open}
                 handleClose={handleSnackbarClose}

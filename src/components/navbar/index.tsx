@@ -13,6 +13,7 @@ import styles from "./navbar.module.css";
 import { getUserById } from "@/api";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/reducers";
+import { User } from "@/types";
 
 interface CustomNavbarProps {
   logo?: string;
@@ -46,8 +47,8 @@ const CustomNavbar = ({
   const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
 
   const [showUserForm, setShowUserForm] = useState(false);
-  const [userData, setUserData] = useState<any>(null);
-  const [userFormData, setUserFormData] = useState<any>(null);
+  const [userData, setUserData] = useState<User | null>(null);
+  const [userFormData, setUserFormData] = useState<User>();
   const [openNewAccountDialog, setOpenNewAccountDialog] = useState(false);
 
   const handleOpenNewAccountModal = () => {
@@ -66,9 +67,7 @@ const CustomNavbar = ({
   const fetchUserData = async (userId: number) => {
     try {
       const response = await getUserById(userId);
-      console.log("user Response", response.data.user);
       setUserFormData(response.data.user);
-      console.log("userFormData", userData);
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
@@ -113,11 +112,13 @@ const CustomNavbar = ({
         </Navbar.Collapse>
       </Navbar>
 
-      <UserProfileModal
-        userData={userFormData}
-        showUserForm={showUserForm}
-        handleClose={handleCloseUserForm}
-      />
+      {userFormData && (
+        <UserProfileModal
+          userData={userFormData}
+          showUserForm={showUserForm}
+          handleClose={handleCloseUserForm}
+        />
+      )}
       <InviteModal show={showInviteModal} onHide={handleCloseLogoutModal} />
       <ConfirmationModal
         show={showLogoutModal}
@@ -127,7 +128,6 @@ const CustomNavbar = ({
         message="Are you sure you want to log out?"
         confirmLabel="Logout"
         cancelLabel="Cancel"
-        children={undefined}
       />
       <FormDialog
         open={openNewAccountDialog}

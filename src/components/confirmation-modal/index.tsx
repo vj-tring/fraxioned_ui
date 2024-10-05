@@ -10,7 +10,6 @@ interface ConfirmationModalProps {
   message: string;
   confirmLabel: string;
   cancelLabel: string;
-  children: React.ReactNode;
 }
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({

@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Modal, Box, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import UserForm from "@/pages-admin/grid/user-grid/edit-form/userform";
-import EditForm from "@/pages-admin/grid/user-grid/edit-form/useredit";
+import UserForm from "@/pages-admin/grid/user-grid/edit-form/user-form";
+import EditForm from "@/pages-admin/grid/user-grid/edit-form/user-edit";
 import styles from "./user-profile.module.css";
+import { User } from "@/types";
 
 interface UserProfileModalProps {
-  userData: any;
+  userData: User;
   showUserForm: boolean;
   handleClose: () => void;
 }
+
 const userFormStyles = {
   userForm: styles.userForm,
   header: styles.userFormHeader,
@@ -20,9 +22,11 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
   showUserForm,
   handleClose,
 }) => {
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
-  const handleEditClick = () => setIsEditing(true);
+  // Handlers wrapped with useCallback to prevent re-creation on every render
+  const handleEditClick = useCallback(() => setIsEditing(true), []);
+  const handleCloseEditForm = useCallback(() => setIsEditing(false), []);
 
   return (
     <Modal
@@ -51,11 +55,12 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
         >
           <CloseIcon />
         </IconButton>
+
         {!isEditing ? (
           <>
             <h2 className={styles.header}>My Profile</h2>
             <UserForm
-              userId={userData?.id}
+              user={userData}
               onEditClick={handleEditClick}
               header=""
               editButtonName="Edit"
@@ -68,9 +73,9 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
             <h2 className={styles.header}>Edit Profile</h2>
             <EditForm
               user={userData}
-              onClose={() => setIsEditing(false)}
+              onClose={handleCloseEditForm}
               onUserUpdated={handleClose}
-              formTitle={""}
+              formTitle=""
             />
           </>
         )}

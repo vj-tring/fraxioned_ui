@@ -84,6 +84,7 @@ const AxiosInterceptor: React.FC<AxiosInterceptorProps> = ({ children }) => {
               (error.response.status === 401 || error.response.status === 403)
             ) {
               localStorage.clear();
+              console.log("inside auth helpers");
               showSnackbar(
                 "Your session is invalid. Please log in again.",
                 "error"
@@ -111,4 +112,5 @@ const AxiosInterceptor: React.FC<AxiosInterceptorProps> = ({ children }) => {
   return <>{children}</>;
 };
 
-export { AxiosInterceptor, axiosInstance };
+export { axiosInstance };
+export default AxiosInterceptor;
