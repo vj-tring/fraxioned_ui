@@ -68,19 +68,17 @@ const DocumentManagerCard = () => {
   };
 
   return (
-    <Card className="w-full max-w-5xl mx-auto">
+    <Card className="w-full max-w-5xxl mx-auto">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-2xl font-bold">Document Manager</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex space-x-4 mb-4">
           <div className="relative flex-grow">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search documents..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-8"
+              className="pl-8 "
             />
           </div>
           <div className="relative">
@@ -92,7 +90,7 @@ const DocumentManagerCard = () => {
               accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx"
             />
             <label htmlFor="file-upload">
-              <Button as="span">
+              <Button variant="outline" className='rounded-md '>
                 <Upload className="mr-2 h-4 w-4" />
                 Upload
               </Button>

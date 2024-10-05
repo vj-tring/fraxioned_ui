@@ -1,6 +1,6 @@
-import React from 'react';
-import styles from './propertydocuments.module.css';
-import { useState, useCallback } from "react"
+///property doc 
+
+import React, { useEffect } from 'react';
 import { Button } from "@/components/ui/button"
 import { FileIcon, UploadIcon, XIcon, ShareIcon } from "lucide-react"
 import { useDropzone } from "react-dropzone"
@@ -8,69 +8,76 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/ta
 import { Input } from '../../components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 import { ScrollArea } from '../../components/ui/scroll-area';
-
-interface Document {
-  id: string
-  name: string
-  content: string
-  category: string
-  versions: { id: string; content: string; timestamp: Date }[]
-}
+import { 
+  fetchPropertyDocuments, 
+  createPropertyDocumentThunk, 
+  updatePropertyDocumentThunk, 
+  deletePropertyDocumentThunk,
+  setCurrentDocument
+} from '../../store/slice/propertyDocumentSlice';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { PropertyDocument } from '../../types/propertydoc'; 
+import styles from './propertydocuments.module.css';
 
 const categories = ["General", "Contracts", "Invoices", "Reports"]
 
-const EnhancedDocumentManager = () => {
-  const [documents, setDocuments] = useState<Document[]>([])
-  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("All")
+const EnhancedDocumentManager: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { documents, isLoading, error } = useAppSelector((state) => state.propertyDocuments);
+  
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [selectedCategory, setSelectedCategory] = React.useState("All");
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
+  useEffect(() => {
+    dispatch(fetchPropertyDocuments());
+  }, [dispatch]);
+
+  const onDrop = React.useCallback((acceptedFiles: File[]) => {
     acceptedFiles.forEach((file) => {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        const content = e.target?.result as string
-        const newDocument: Document = {
-          id: Date.now().toString(),
-          name: file.name,
-          content,
-          category: "General",
-          versions: [{ id: Date.now().toString(), content, timestamp: new Date() }]
-        }
-        setDocuments((prevDocuments) => [...prevDocuments, newDocument])
-      }
-      reader.readAsText(file)
-    })
-  }, [])
+      const formData = new FormData();
+      formData.append('documentFile', file);
+      formData.append('name', file.name);
+      formData.append('documentType', 'General'); // You might want to adjust this
+      dispatch(createPropertyDocumentThunk(formData));
+    });
+  }, [dispatch]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
-  const handleDocumentSelect = (document: Document) => {
-    setSelectedDocument(document)
-  }
+  const handleDocumentSelect = (document: PropertyDocument) => {
+    dispatch(setCurrentDocument(document));
+  };
 
-  const handleDocumentDelete = (documentToDelete: Document) => {
-    setDocuments(documents.filter((doc) => doc !== documentToDelete))
-    if (selectedDocument === documentToDelete) {
-      setSelectedDocument(null)
+  const handleDocumentDelete = (documentId: number) => {
+    dispatch(deletePropertyDocumentThunk(documentId));
+  };
+
+  const handleCategoryChange = (documentId: number, newCategory: string) => {
+    const document = documents.find(doc => doc.id === documentId);
+    if (document) {
+      const formData = new FormData();
+      formData.append('documentType', newCategory);
+      dispatch(updatePropertyDocumentThunk({ id: documentId, documentData: formData }));
     }
-  }
+  };
 
-  const handleCategoryChange = (documentId: string, newCategory: string) => {
-    setDocuments(documents.map(doc => 
-      doc.id === documentId ? { ...doc, category: newCategory } : doc
-    ))
-  }
-
-  const handleShareDocument = (document: Document) => {
+  const handleShareDocument = (document: PropertyDocument) => {
     // Implement sharing functionality here
-    console.log(`Sharing document: ${document.name}`)
-  }
+    console.log(`Sharing document: ${document.name}`);
+  };
 
   const filteredDocuments = documents.filter(doc => 
-    (selectedCategory === "All" || doc.category === selectedCategory) &&
+    (selectedCategory === "All" || doc.documentType === selectedCategory) &&
     doc.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  );
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="flex-1 p-4">
@@ -117,7 +124,7 @@ const EnhancedDocumentManager = () => {
                     <span className="truncate">{doc.name}</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Select value={doc.category} onValueChange={(value) => handleCategoryChange(doc.id, value)}>
+                    <Select value={doc.documentType} onValueChange={(value) => handleCategoryChange(doc.id, value)}>
                       <SelectTrigger className="w-[100px]">
                         <SelectValue placeholder="Category" />
                       </SelectTrigger>
@@ -131,8 +138,8 @@ const EnhancedDocumentManager = () => {
                       variant="ghost"
                       size="icon"
                       onClick={(e) => {
-                        e.stopPropagation()
-                        handleShareDocument(doc)
+                        e.stopPropagation();
+                        handleShareDocument(doc);
                       }}
                     >
                       <ShareIcon size={20} />
@@ -141,8 +148,8 @@ const EnhancedDocumentManager = () => {
                       variant="ghost"
                       size="icon"
                       onClick={(e) => {
-                        e.stopPropagation()
-                        handleDocumentDelete(doc)
+                        e.stopPropagation();
+                        handleDocumentDelete(doc.id);
                       }}
                     >
                       <XIcon size={20} />
@@ -170,8 +177,9 @@ const EnhancedDocumentManager = () => {
         </TabsContent>
       </Tabs>
     </div>
-  )
-}
+  );
+};
+
 
 export const PropertyDocuments: React.FC = () => {
   return (
@@ -182,5 +190,3 @@ export const PropertyDocuments: React.FC = () => {
     </div>
   );
 }
-
-export default PropertyDocuments;
