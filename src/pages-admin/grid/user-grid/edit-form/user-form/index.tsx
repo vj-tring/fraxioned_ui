@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { getUserById } from "@/api";
 import {
   Edit,
   Mail,
@@ -12,7 +11,7 @@ import {
 } from "lucide-react";
 import defaultProfile from "../../../../../assets/images/profile.jpeg";
 import defaultStyles from "./userform.module.css";
-import { User } from "@/types"; // Ensure you have the User interface defined in your types
+import { User } from "@/store/model/user"; // Ensure you have the User interface defined in your types
 
 interface UserFormProps {
   user: User;
@@ -46,8 +45,6 @@ const UserForm: React.FC<UserFormProps> = ({
   customStyles = {},
   showActiveStatus = true,
 }) => {
-  const [error, setError] = useState<string | null>(null);
-  console.log(user);
   const styles = {
     userForm: customStyles.userForm || defaultStyles.userForm,
     header: customStyles.header || defaultStyles.header,
@@ -65,9 +62,6 @@ const UserForm: React.FC<UserFormProps> = ({
     error: customStyles.error || defaultStyles.error,
   };
 
-  if (error) {
-    return <div className={styles.error}>{error}</div>;
-  }
 
   if (!user) {
     return <div className={styles.error}>User not found</div>;
@@ -94,7 +88,7 @@ const UserForm: React.FC<UserFormProps> = ({
           <h3>
             {user.firstName} {user.lastName}
           </h3>
-          <p className={styles.role}>{user.role.roleName}</p>
+          <p className={styles.role}>{ user.role.roleName }</p>
           {showActiveStatus && (
             <p
               className={`${styles.status} ${
@@ -109,7 +103,7 @@ const UserForm: React.FC<UserFormProps> = ({
           <DetailItem
             icon={<Mail size={20} />}
             title="Primary Email"
-            content={user.contactDetails.primaryEmail}
+            content={user.contactDetails.primaryEmail || "N/A"}
           />
           <DetailItem
             icon={<Mail size={20} />}
@@ -119,7 +113,7 @@ const UserForm: React.FC<UserFormProps> = ({
           <DetailItem
             icon={<Phone size={20} />}
             title="Primary Phone"
-            content={user.contactDetails.primaryPhone}
+            content={user.contactDetails.primaryPhone || "N/A"}
           />
           <DetailItem
             icon={<Phone size={20} />}
@@ -158,7 +152,7 @@ const UserForm: React.FC<UserFormProps> = ({
           <DetailItem
             icon={<Clock size={20} />}
             title="Last Login"
-            content={new Date(user.lastLoginTime).toLocaleString()}
+            content={new Date(user.lastLoginTime).toLocaleString() || "N/A"}
           />
         </div>
       </div>

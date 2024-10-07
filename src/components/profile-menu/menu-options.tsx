@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
+import { MenuItem, ListItemIcon, ListItemText } from "@mui/material";
 import {
   PersonAddAlt1Outlined,
   LogoutOutlined,
@@ -30,7 +26,7 @@ const MenuOptions = ({
   onResetPasswordClick: () => void;
   onLogoutClick: () => void;
 }) => (
-  <>
+  <div>
     <MenuItem onClick={() => handleMenuItemClick(onProfileClick)}>
       <ListItemIcon>
         <AccountCircleOutlined />
@@ -39,12 +35,12 @@ const MenuOptions = ({
     </MenuItem>
 
     {!isAdmin && (
-      <>
+      <div>
         <CustomMenuItem icon={ConfirmationNumberOutlined} label="Tickets" />
         <CustomMenuItem icon={MenuBookOutlined} label="GuideBooks" />
         <CustomMenuItem icon={LiveHelpOutlined} label="FAQ" />
         <CustomMenuItem icon={ContactPageOutlined} label="Contact Us" />
-      </>
+      </div>
     )}
 
     {isAdmin && (
@@ -71,7 +67,7 @@ const MenuOptions = ({
       </ListItemIcon>
       <ListItemText>Logout</ListItemText>
     </MenuItem>
-  </>
+  </div>
 );
 
 const CustomMenuItem = ({

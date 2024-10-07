@@ -55,7 +55,7 @@ const AdminDashboard: React.FC = () => {
           <Routes>
             <Route
               path="/"
-              element={<Navigate to="admin/bookings" replace />}
+              element={<Navigate to="/admin/bookings" replace />}
             />
             <Route
               path="/bookings"

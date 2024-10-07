@@ -8,7 +8,7 @@ interface PropertyType {
     color: string;
 }
 
-interface PropertiesState {
+export interface PropertiesState {
     properties: PropertyType[];
     loading: boolean;
     error: string | null;

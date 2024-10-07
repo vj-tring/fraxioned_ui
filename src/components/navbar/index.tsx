@@ -10,10 +10,10 @@ import ConfirmationModal from "../confirmation-modal";
 import ResetPasswordModal from "../reset-password-modal";
 import FormDialog from "../register-form-modal";
 import styles from "./navbar.module.css";
-import { getUserById } from "@/api";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/reducers";
-import { User } from "@/types";
+import { useDispatch } from "@/store";
+import { fetchUserById } from "@/store/slice/user-slice";
 
 interface CustomNavbarProps {
   logo?: string;
@@ -34,6 +34,16 @@ const CustomNavbar = ({
   userImage,
   userName,
 }: CustomNavbarProps) => {
+  const dispatch = useDispatch();
+
+  const userId = useSelector((state: any) => state.auth.user?.id);
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchUserById(userId));
+    }
+  }, [dispatch, userId]);
+  const user = useSelector((state: RootState) => state.user.user);
+  const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
   const {
     showInviteModal,
     showLogoutModal,
@@ -44,11 +54,7 @@ const CustomNavbar = ({
     handleCloseResetPasswordModal,
     handleOpenResetPasswordModal,
   } = useNavbarHandler();
-  const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
-
   const [showUserForm, setShowUserForm] = useState(false);
-  const [userData, setUserData] = useState<User | null>(null);
-  const [userFormData, setUserFormData] = useState<User>();
   const [openNewAccountDialog, setOpenNewAccountDialog] = useState(false);
 
   const handleOpenNewAccountModal = () => {
@@ -58,30 +64,11 @@ const CustomNavbar = ({
   const handleCloseNewAccountModal = () => {
     setOpenNewAccountDialog(false);
   };
-  useEffect(() => {
-    const userDataString = localStorage.getItem("user");
-    const userData = userDataString ? JSON.parse(userDataString) : null;
-    setUserData(userData);
-  }, []);
-
-  const fetchUserData = async (userId: number) => {
-    try {
-      const response = await getUserById(userId);
-      setUserFormData(response.data.user);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
 
   const handleProfileClick = () => {
     setShowUserForm(true);
   };
-  const handleProfileMenuClick = () => {
-    const userId = userData?.id || 0;
-    if (userId) {
-      fetchUserData(userId);
-    }
-  };
+
 
   const handleCloseUserForm = () => {
     setShowUserForm(false);
@@ -103,7 +90,6 @@ const CustomNavbar = ({
           <ProfileMenu
             userImage={userImage}
             userName={userName}
-            onProfileMenuClick={handleProfileMenuClick}
             onProfileClick={handleProfileClick}
             onResetPasswordClick={handleOpenResetPasswordModal}
             onLogoutClick={handleShowLogoutModal}
@@ -112,11 +98,12 @@ const CustomNavbar = ({
         </Navbar.Collapse>
       </Navbar>
 
-      {userFormData && (
+      {user && (
         <UserProfileModal
-          userData={userFormData}
+          userData={user}
           showUserForm={showUserForm}
           handleClose={handleCloseUserForm}
+          isAdmin={isAdmin}
         />
       )}
       <InviteModal show={showInviteModal} onHide={handleCloseLogoutModal} />

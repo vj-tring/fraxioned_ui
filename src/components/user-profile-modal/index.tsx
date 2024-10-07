@@ -4,12 +4,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import UserForm from "@/pages-admin/grid/user-grid/edit-form/user-form";
 import EditForm from "@/pages-admin/grid/user-grid/edit-form/user-edit";
 import styles from "./user-profile.module.css";
-import { User } from "@/types";
+import { User } from "@/store/model/user";
 
 interface UserProfileModalProps {
   userData: User;
   showUserForm: boolean;
   handleClose: () => void;
+  isAdmin: boolean;
 }
 
 const userFormStyles = {
@@ -21,9 +22,9 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
   userData,
   showUserForm,
   handleClose,
+  isAdmin,
 }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
-
   // Handlers wrapped with useCallback to prevent re-creation on every render
   const handleEditClick = useCallback(() => setIsEditing(true), []);
   const handleCloseEditForm = useCallback(() => setIsEditing(false), []);
@@ -76,6 +77,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
               onClose={handleCloseEditForm}
               onUserUpdated={handleClose}
               formTitle=""
+              isAdmin={isAdmin}
             />
           </>
         )}

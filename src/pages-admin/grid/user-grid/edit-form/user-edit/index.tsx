@@ -17,7 +17,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import { updateuserapi, getRoles } from "@/api";
 import styles from "./useredit.module.css";
-import { User, Role, ContactDetails } from "@/types";
+import { User, Role, ContactDetails } from "@/store/model/user";
+import { updateUserById } from "@/store/slice/user-slice";
+import { useDispatch } from "@/store";
 
 interface EditFormProps {
   user: User;
@@ -25,6 +27,7 @@ interface EditFormProps {
   onUserUpdated: () => void;
   showCloseIcon?: boolean;
   formTitle?: string;
+  isAdmin: boolean;
 }
 
 const EditForm: React.FC<EditFormProps> = ({
@@ -33,12 +36,14 @@ const EditForm: React.FC<EditFormProps> = ({
   onUserUpdated,
   showCloseIcon = true,
   formTitle = "Edit User",
+  isAdmin,
 }) => {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState<User>(user);
   const [error, setError] = useState<string | null>(null);
   const [roles, setRoles] = useState<Role[]>([]);
-  const [showSecondaryContact, setShowSecondaryContact] = useState(false);
-
+  const [showSecondaryContact, setShowSecondaryContact] =
+    useState<Boolean>(false);
   useEffect(() => {
     const fetchRoles = async () => {
       try {
@@ -58,7 +63,11 @@ const EditForm: React.FC<EditFormProps> = ({
     setShowSecondaryContact(!!(secondaryEmail || secondaryPhone));
   }, [formData.contactDetails]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const target = e.target;
     const { name, value, type } = target;
     const checked = (target as HTMLInputElement).checked;
@@ -83,14 +92,17 @@ const EditForm: React.FC<EditFormProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const { id, role, ...rest } = formData;
-      const dataToSend = {
-        role: { id: role.id },
+      const { id, role, isActive, ...rest } = formData;
+      const dataToSend: User = {
+        role: { id: role.id, roleName: role.roleName },
         ...rest,
         updatedBy: id,
+        isActive: true,
       };
-
-      await updateuserapi(id, dataToSend);
+      if (id) {
+        console.log("updateuser", dataToSend);
+        await dispatch(updateUserById({ userId: id, userData: dataToSend }));
+      }
       onUserUpdated();
       onClose();
     } catch (err) {
@@ -101,12 +113,21 @@ const EditForm: React.FC<EditFormProps> = ({
 
   return (
     <div className={styles.editFormContainer}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={2}
+      >
         <Typography variant="h6" className={styles.formTitle}>
           {formTitle}
         </Typography>
         {showCloseIcon && (
-          <IconButton onClick={onClose} aria-label="close" className={styles.closeButton}>
+          <IconButton
+            onClick={onClose}
+            aria-label="close"
+            className={styles.closeButton}
+          >
             <CloseIcon />
           </IconButton>
         )}
@@ -114,7 +135,16 @@ const EditForm: React.FC<EditFormProps> = ({
 
       <form onSubmit={handleSubmit} className={styles.form}>
         <Grid container spacing={2}>
-          {["firstName", "lastName", "addressLine1", "addressLine2", "city", "state", "country", "zipcode"].map((field) => (
+          {[
+            "firstName",
+            "lastName",
+            "addressLine1",
+            "addressLine2",
+            "city",
+            "state",
+            "country",
+            "zipcode",
+          ].map((field) => (
             <Grid item xs={12} sm={6} key={field}>
               <TextField
                 label={field.replace(/([A-Z])/g, " $1").trim()} // Convert camelCase to readable label
@@ -127,44 +157,51 @@ const EditForm: React.FC<EditFormProps> = ({
               />
             </Grid>
           ))}
-
-          <Grid item xs={12} sm={6}>
-            <FormControl fullWidth className={styles.inputField}>
-              <InputLabel>Role</InputLabel>
-              <Select
-                value={formData.role.id}
-                onChange={(e) => {
-                  const selectedRole = roles.find((role) => role.id === Number(e.target.value));
-                  if (selectedRole) {
-                    setFormData((prev) => ({ ...prev, role: selectedRole }));
+          {isAdmin && (
+            <div>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth className={styles.inputField}>
+                  <InputLabel>Role</InputLabel>
+                  <Select
+                    value={formData.role.id}
+                    onChange={(e) => {
+                      const selectedRole = roles.find(
+                        (role) => role.id === Number(e.target.value)
+                      );
+                      if (selectedRole) {
+                        setFormData((prev) => ({
+                          ...prev,
+                          role: selectedRole,
+                        }));
+                      }
+                    }}
+                    label="Role"
+                    name="role.id"
+                  >
+                    {roles.map((role) => (
+                      <MenuItem key={role.id} value={role.id}>
+                        {role.roleName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formData.isActive}
+                      onChange={handleInputChange}
+                      name="isActive"
+                      color="primary"
+                    />
                   }
-                }}
-                label="Role"
-                name="role.id"
-              >
-                {roles.map((role) => (
-                  <MenuItem key={role.id} value={role.id}>
-                    {role.roleName}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={formData.isActive}
-                  onChange={handleInputChange}
-                  name="isActive"
-                  color="primary"
+                  label="Is Active"
+                  className={styles.checkbox}
                 />
-              }
-              label="Is Active"
-              className={styles.checkbox}
-            />
-          </Grid>
+              </Grid>
+            </div>
+          )}
 
           <Grid item xs={12}>
             <Typography variant="subtitle1" className={styles.sectionTitle}>
@@ -177,8 +214,15 @@ const EditForm: React.FC<EditFormProps> = ({
               <TextField
                 label={field.replace(/([A-Z])/g, " $1").trim()} // Convert camelCase to readable label
                 name={field}
-                value={formData.contactDetails[field as keyof ContactDetails] || ""}
-                onChange={(e) => handleContactChange(field as keyof ContactDetails, e.target.value)}
+                value={
+                  formData.contactDetails[field as keyof ContactDetails] || ""
+                }
+                onChange={(e) =>
+                  handleContactChange(
+                    field as keyof ContactDetails,
+                    e.target.value
+                  )
+                }
                 fullWidth
                 className={styles.inputField}
               />
@@ -192,8 +236,16 @@ const EditForm: React.FC<EditFormProps> = ({
                   <TextField
                     label={field.replace(/([A-Z])/g, " $1").trim()} // Convert camelCase to readable label
                     name={field}
-                    value={formData.contactDetails[field as keyof ContactDetails] || ""}
-                    onChange={(e) => handleContactChange(field as keyof ContactDetails, e.target.value)}
+                    value={
+                      formData.contactDetails[field as keyof ContactDetails] ||
+                      ""
+                    }
+                    onChange={(e) =>
+                      handleContactChange(
+                        field as keyof ContactDetails,
+                        e.target.value
+                      )
+                    }
                     fullWidth
                     className={styles.inputField}
                   />

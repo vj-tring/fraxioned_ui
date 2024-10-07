@@ -12,7 +12,8 @@ import datePickerReducer from '../slice/datePickerSlice';
 import propertyDocumentsReducer from '../slice/propertyDocumentSlice';
 import amenitiesReducer from '../slice/amenitiesSlice';
 import ThingsToKnowReducer from '../slice/auth/ThingstoknowSlice'; 
-import amenitiesReducer from '../slice/amenitiesSlice';
+// import amenitiesReducer from '../slice/amenitiesSlice';
+import userReducer from '../slice/user-slice';
 import propertiesReducer from '../slice/auth/propertiesSlice'
 
 const appReducer = combineReducers({
@@ -30,6 +31,7 @@ const appReducer = combineReducers({
   property: propertiesReducer,
   thingsToKnow: ThingsToKnowReducer,
   amenities: amenitiesReducer,
+  user: userReducer,
 });
 
 const rootReducer = (

@@ -56,7 +56,7 @@ interface ConfirmBookingResponse {
   data: any; // Replace with actual data type if possible
 }
 
-interface BookingState {
+export interface BookingState {
   bookings: BookingData[]; // Added bookings array to state
   currentBooking: BookingData | null;
   userBookings: BookingData[];

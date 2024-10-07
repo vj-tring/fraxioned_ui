@@ -17,7 +17,7 @@ interface ProfileMenuProps {
   onLogoutClick: () => void;
   onResetPasswordClick: () => void;
   onProfileClick: () => void;
-  onProfileMenuClick: () => void;
+  // onProfileMenuClick: () => void;
   onNewAccountClick: () => void;
 }
 
@@ -28,7 +28,6 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
   onLogoutClick,
   onResetPasswordClick,
   onProfileClick,
-  onProfileMenuClick,
   onNewAccountClick,
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -45,7 +44,6 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
 
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    onProfileMenuClick();
     setAnchorEl(event.currentTarget);
   };
 
@@ -106,7 +104,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
           paper: {
             elevation: 0,
             sx: {
-              overflow: "visible",
+              overflow: "auto",
               width: "230px",
               filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
               mt: 2.4,

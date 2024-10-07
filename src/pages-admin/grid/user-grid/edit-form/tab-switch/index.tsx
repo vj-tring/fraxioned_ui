@@ -33,6 +33,7 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        
         const response = await getUserById(userId);
         setUserData(response.data.user);
       } catch (error) {
