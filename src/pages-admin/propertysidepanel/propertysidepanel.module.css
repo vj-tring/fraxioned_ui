@@ -152,7 +152,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     border-bottom: 1px solid #f0f0f0;
-    font-size: 12px;
+    font-size: 10px ; 
 
 }
 
@@ -174,7 +174,9 @@
     cursor: not-allowed;
     pointer-events: none;
 }
-
+.label{
+    font-size: 12px;
+}
 @media (max-width: 768px) {
     .propertyPanel {
         width: 220px;

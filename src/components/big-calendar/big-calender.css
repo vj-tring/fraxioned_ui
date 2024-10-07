@@ -131,6 +131,7 @@
   padding: 6px 12px;
   font-family: "Roboto", sans-serif;
   font-weight: 500;
+  font-size: small;
   transition: all 0.3s ease;
 }
 
