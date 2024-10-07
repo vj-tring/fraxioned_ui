@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './Report.module.css';
-import { TextField, Button, MenuItem, Checkbox, FormControlLabel, Radio, RadioGroup, FormControl, FormLabel } from '@mui/material';
+import { TextField, Button, MenuItem, Checkbox, FormControlLabel, Radio, RadioGroup, FormControl, FormLabel, Paper } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Grid from '@mui/material/Grid';
 
@@ -14,22 +14,17 @@ const ReportsGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
   const [toDate, setToDate] = useState<Date | null>(null);
   const [format, setFormat] = useState<'EXCEL' | 'PDF' | 'XML'>('EXCEL');
   const [content, setContent] = useState<'AllDetails' | 'OnlyBookingDetails'>('AllDetails');
-
-
   const [propertiesMap, setPropertiesMap] = useState<Map<string, string>>(new Map());
   const [usersMap, setUsersMap] = useState<Map<string, string>>(new Map());
-
   const [includeCanceled, setIncludeCanceled] = useState<boolean>(false);
   const [includeModifiedBooking, setIncludeModifiedBooking] = useState<boolean>(false);
   const [isLastminBooking, setIsLastminBooking] = useState<boolean>(false);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const [withPets, setWithPets] = useState<boolean>(false);
   const [withoutPets, setWithoutPets] = useState<boolean>(false);
-
   const [excludeCanceledBookings, setExcludeCanceledBookings] = useState(false);
-
-  const [filterByOwner, setFilterByOwner] = useState<boolean>(false); // New state for filtering by owner
-  const [filterByProperty, setFilterByProperty] = useState<boolean>(false); // New state for filtering by owner
+  const [filterByOwner, setFilterByOwner] = useState<boolean>(false);
+  const [filterByProperty, setFilterByProperty] = useState<boolean>(false);
 
 
   const [usersPropertyMap, setUserPropertyMap] = useState<Map<number, number[]>>(new Map());
@@ -90,9 +85,6 @@ const ReportsGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
           }
         });
 
-
-
-
         setPropertiesMap(propertyMap);
         setUsersMap(userMap);
         setUserPropertyMap(usersPropertyMap);
@@ -113,8 +105,8 @@ const ReportsGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
 
     const filtered = Array.from(usersMap.entries()).filter(([userId]) => {
       const userProperties = usersPropertyMap.get(Number(userId)) || [];
-      const userPropertiesAsNumbers = userProperties.map(Number); 
-      const hasProperty = userPropertiesAsNumbers.includes(Number(selectedPropertyId)); 
+      const userPropertiesAsNumbers = userProperties.map(Number);
+      const hasProperty = userPropertiesAsNumbers.includes(Number(selectedPropertyId));
       return hasProperty;
     });
 
@@ -126,27 +118,18 @@ const ReportsGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
   const filteredPropertiesByOwner = () => {
     if (!selectedUserId) return Array.from(propertiesMap.entries());
 
-    const userProperties = usersPropertyMap.get(Number(selectedUserId)) || []; 
+    const userProperties = usersPropertyMap.get(Number(selectedUserId)) || [];
 
     console.log('Selected User ID:', selectedUserId);
     console.log('User Properties:', userProperties);
 
-    
+
     return Array.from(propertiesMap.entries()).filter(([propertyId]) => {
-      const isIncluded = userProperties.includes(Number(propertyId)); 
+      const isIncluded = userProperties.includes(Number(propertyId));
       console.log(`Checking Property ID: ${propertyId}, Included: ${isIncluded}`);
       return isIncluded;
     });
   };
-
-
-
-
-
-
-
-
-
 
   useEffect(() => {
     if (isLastminBooking) {
@@ -237,218 +220,130 @@ const ReportsGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
 
   return (
     <div className={`${styles.reportsContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed}`}>
-      <h2 className={styles.reportsHeader}>Bookings Report</h2>
-
-      <div className={styles.formSection}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={4}>
-            <TextField
-              select
-              label="Sort By"
-              value={reportType}
-              onChange={(e) => {
-                setReportType(e.target.value as 'PROPERTY' | 'OWNER' | 'DATE');
-                setSelectedPropertyId(null);
-                setSelectedUserId(null);
-                setFilterByOwner(false);
-              }}
-              fullWidth
-            >
-              <MenuItem value="PROPERTY">Property</MenuItem>
-              <MenuItem value="OWNER">Owner</MenuItem>
-              <MenuItem value="DATE">Date</MenuItem>
-            </TextField>
-          </Grid>
-
-          <Grid item xs={10} sm={3}>
-            <DatePicker
-              label="From Date"
-              value={fromDate}
-              onChange={(date) => setFromDate(date)}
-              sx={{ width: '300px' }}
-
-            />
-          </Grid>
-
-          <Grid item xs={10} sm={4}>
-            <DatePicker
-              label="To Date"
-              value={toDate}
-              onChange={(date) => setToDate(date)}
-              sx={{ width: '300px' }}
-
-            />
-          </Grid>
-
-
-
-          
-          {reportType === 'PROPERTY' && (
-            <Grid item xs={12} sm={8.3}>
+      <Paper elevation={3} className={styles.reportsPaper}>
+        <h2 className={styles.reportsHeader}>Bookings Report</h2>
+        <div className={styles.scrollableContent}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={4}>
               <TextField
                 select
-                label="Select Property"
-                value={selectedPropertyId || ''}
+                label="Sort By"
+                value={reportType}
                 onChange={(e) => {
-                  setSelectedPropertyId(e.target.value);
-                  setSelectedUserId(''); 
+                  setReportType(e.target.value as 'PROPERTY' | 'OWNER' | 'DATE');
+                  setSelectedPropertyId(null);
+                  setSelectedUserId(null);
+                  setFilterByOwner(false);
                 }}
                 fullWidth
+                className={styles.sortByField}
               >
-                {Array.from(propertiesMap.entries()).map(([id, name]) => (
-                  <MenuItem key={id} value={id.toString()}>{name}</MenuItem>
-                ))}
+                <MenuItem value="PROPERTY">Property</MenuItem>
+                <MenuItem value="OWNER">Owner</MenuItem>
+                <MenuItem value="DATE">Date</MenuItem>
               </TextField>
-
-
-
-
             </Grid>
-          )}
-
-        
-          {reportType === 'OWNER' && (
-            <Grid item xs={12} sm={8.3}>
-              <TextField
-                select
-                label="Select Owner"
-                value={selectedUserId || ''}
-                onChange={(e) => {
-                  setSelectedUserId(e.target.value);
-                  setSelectedPropertyId(null); 
-                }}
-                fullWidth
-              >
-                {Array.from(usersMap.entries()).map(([id, name]) => (
-                  <MenuItem key={id} value={id.toString()}>{name}</MenuItem>
-                ))}
-              </TextField>
-
-
-
-            </Grid>
-          )}
-          <Grid item xs={10} sm={4}>
-            <FormControlLabel
-              control={<Checkbox checked={includeCanceled} onChange={(e) => setIncludeCanceled(e.target.checked)} />}
-              label="Only Cancelled Bookings"
-
-            />
-          </Grid>
-
-          <Grid item xs={10} sm={6}>
-            <FormControlLabel
-              control={<Checkbox checked={excludeCanceledBookings} onChange={(e) => setExcludeCanceledBookings(e.target.checked)} />}
-              label="Exclude Cancelled Bookings"
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={4}>
-            <FormControlLabel
-              control={<Checkbox checked={isLastminBooking} onChange={(e) => setIsLastminBooking(e.target.checked)} />}
-              label="Only Last-Minute Bookings"
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <FormControlLabel
-              control={<Checkbox checked={includeModifiedBooking} onChange={(e) => setIncludeModifiedBooking(e.target.checked)} />}
-              label="Only Modified Bookings"
-            />
-          </Grid>
-
-          <Grid item xs={10} sm={4}>
-            <FormControlLabel
-              control={<Checkbox checked={isCompleted} onChange={(e) => setIsCompleted(e.target.checked)} />}
-              label="Only Completed Bookings"
-            />
-          </Grid>
-
-          <Grid item xs={10} sm={5}>
-            <FormControlLabel
-              control={<Checkbox checked={withPets} onChange={(e) => setWithPets(e.target.checked)} />}
-              label="Only Bookings with Pets"
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={4}>
-            <FormControlLabel
-              control={<Checkbox checked={withoutPets} onChange={(e) => setWithoutPets(e.target.checked)} />}
-              label="Only Bookings without Pets"
-            />
-
-
-          </Grid>
-
-          <Grid item xs={12} sm={4}>
-            
-            {reportType === 'PROPERTY' && (
-              <FormControlLabel
-                control={<Checkbox checked={filterByOwner} onChange={(e) => setFilterByOwner(e.target.checked)} />}
-                label="Filter by Owner"
+            <Grid item xs={12} md={4}>
+              <DatePicker
+                label="From Date"
+                value={fromDate}
+                onChange={(date) => setFromDate(date)}
+                className={styles.datePickerField}
+                sx={{ width: '100%' }}
               />
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <DatePicker
+                label="To Date"
+                value={toDate}
+                onChange={(date) => setToDate(date)}
+                className={styles.datePickerField}
+                sx={{ width: '100%' }}
+              />
+            </Grid>
+
+            {reportType === 'PROPERTY' && (
+              <Grid item xs={12}>
+                <TextField
+                  select
+                  label="Select Property"
+                  value={selectedPropertyId || ''}
+                  onChange={(e) => {
+                    setSelectedPropertyId(e.target.value);
+                    setSelectedUserId('');
+                  }}
+                  fullWidth
+                  className={styles.propertyField}
+                >
+                  {Array.from(propertiesMap.entries()).map(([id, name]) => (
+                    <MenuItem key={id} value={id.toString()}>{name}</MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
             )}
 
             {reportType === 'OWNER' && (
-              <FormControlLabel
-                control={<Checkbox checked={filterByProperty} onChange={(e) => setFilterByProperty(e.target.checked)} />}
-                label="Filter by Property"
-              />
-            )}
-
-
-
-          </Grid>
-
-
-          <Grid item xs={12} sm={8}>
-
-
-          <Grid item xs={12} sm={10} className={styles.reportFilter}>
-          
-             {filterByOwner && selectedPropertyId && (
-              <TextField
-                select
-                label="Select Owner"
-                value={selectedUserId || ''}
-                onChange={(e) => setSelectedUserId(e.target.value)}
-                fullWidth
-              >
-                {filteredOwners().length === 0 ? (
-                  <MenuItem disabled>No owners available</MenuItem>
-                ) : (
-                  filteredOwners().map(([id, name]) => (
+              <Grid item xs={12}>
+                <TextField
+                  select
+                  label="Select Owner"
+                  value={selectedUserId || ''}
+                  onChange={(e) => {
+                    setSelectedUserId(e.target.value);
+                    setSelectedPropertyId(null);
+                  }}
+                  fullWidth
+                  className={styles.ownerField}
+                >
+                  {Array.from(usersMap.entries()).map(([id, name]) => (
                     <MenuItem key={id} value={id.toString()}>{name}</MenuItem>
-                  ))
-                )}
-              </TextField>
+                  ))}
+                </TextField>
+              </Grid>
             )}
 
-            {/* Properties corresponding to selected owner */}
-            {filterByProperty && selectedUserId && (
-              <TextField
-                select
-                label="Select Property"
-                value={selectedPropertyId || ''}
-                onChange={(e) => setSelectedPropertyId(e.target.value)}
-                fullWidth
-              >
-                {filteredPropertiesByOwner().length === 0 ? (
-                  <MenuItem disabled>No property available</MenuItem>
-                ) : (
-                  filteredPropertiesByOwner().map(([id, name]) => (
-                    <MenuItem key={id} value={id.toString()}>{name}</MenuItem>
-                  ))
-                )}
-              </TextField>
-            )}
-
-
-          </Grid>
-
-           
             <Grid item xs={12}>
-              <FormControl component="fieldset">
+              <div className={styles.checkboxGroup}>
+                <FormControlLabel
+                  control={<Checkbox checked={includeCanceled} onChange={(e) => setIncludeCanceled(e.target.checked)} />}
+                  label="Only Cancelled"
+                  className={styles.checkboxField}
+                />
+                <FormControlLabel
+                  control={<Checkbox checked={excludeCanceledBookings} onChange={(e) => setExcludeCanceledBookings(e.target.checked)} />}
+                  label="Exclude Cancelled"
+                  className={styles.checkboxField}
+                />
+                <FormControlLabel
+                  control={<Checkbox checked={isLastminBooking} onChange={(e) => setIsLastminBooking(e.target.checked)} />}
+                  label="Last-Minute"
+                  className={styles.checkboxField}
+                />
+                <FormControlLabel
+                  control={<Checkbox checked={includeModifiedBooking} onChange={(e) => setIncludeModifiedBooking(e.target.checked)} />}
+                  label="Modified"
+                  className={styles.checkboxField}
+                />
+                <FormControlLabel
+                  control={<Checkbox checked={isCompleted} onChange={(e) => setIsCompleted(e.target.checked)} />}
+                  label="Completed"
+                  className={styles.checkboxField}
+                />
+                <FormControlLabel
+                  control={<Checkbox checked={withPets} onChange={(e) => setWithPets(e.target.checked)} />}
+                  label="With Pets"
+                  className={styles.checkboxField}
+                />
+                <FormControlLabel
+                  control={<Checkbox checked={withoutPets} onChange={(e) => setWithoutPets(e.target.checked)} />}
+                  label="Without Pets"
+                  className={styles.checkboxField}
+                />
+              </div>
+            </Grid>
+
+            <Grid item xs={12}>
+              <FormControl component="fieldset" className={styles.contentField}>
                 <FormLabel component="legend">Select Content</FormLabel>
                 <RadioGroup row value={content} onChange={(e) => setContent(e.target.value as 'AllDetails' | 'OnlyBookingDetails')}>
                   <FormControlLabel value="AllDetails" control={<Radio />} label="All Details" />
@@ -456,45 +351,35 @@ const ReportsGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
                 </RadioGroup>
               </FormControl>
             </Grid>
+
+            <Grid item xs={12}>
+              <FormControl component="fieldset" className={styles.formatField}>
+                <FormLabel component="legend">Select Format</FormLabel>
+                <RadioGroup row value={format} onChange={(e) => setFormat(e.target.value as 'EXCEL' | 'PDF' | 'XML')}>
+                  <FormControlLabel value="EXCEL" control={<Radio />} label="Excel" />
+                  <FormControlLabel value="PDF" control={<Radio />} label="PDF" />
+                  <FormControlLabel value="XML" control={<Radio />} label="XML" />
+                </RadioGroup>
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Button
+                className={styles.generateReportButton}
+                variant="contained"
+                color="primary"
+                onClick={handleFilter}
+                disabled={!isFormValid()}
+                fullWidth
+              >
+                Generate Report
+              </Button>
+            </Grid>
           </Grid>
-
-          <Grid item xs={12}>
-            <FormControl component="fieldset">
-              <FormLabel component="legend">Select Format</FormLabel>
-              <RadioGroup row value={format} onChange={(e) => setFormat(e.target.value as 'EXCEL' | 'PDF' | 'XML')}>
-                <FormControlLabel value="EXCEL" control={<Radio />} label="Excel" />
-                <FormControlLabel value="PDF" control={<Radio />} label="PDF" />
-                <FormControlLabel value="XML" control={<Radio />} label="XML" />
-              </RadioGroup>
-            </FormControl>
-
-          </Grid>
-
-
-
-
-
-
-          <Grid item xs={12}>
-            <Button
-              className={styles.generateReport}
-              variant="contained"
-              color="primary"
-              onClick={handleFilter}
-              disabled={!isFormValid()}
-
-            >
-              Generate Report
-            </Button>
-          </Grid>
-        </Grid>
-      </div>
+        </div>
+      </Paper>
     </div>
   );
-
-
-
-
 };
 
 export default ReportsGrid;

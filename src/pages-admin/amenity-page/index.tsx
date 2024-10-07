@@ -36,6 +36,7 @@ const AmenityManagement: React.FC = () => {
     const [editingAmenity, setEditingAmenity] = useState<Amenity | null>(null);
     const [isAddingNew, setIsAddingNew] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showUpdateModal, setShowUpdateModal] = useState(false);
     const [amenityToDelete, setAmenityToDelete] = useState<Amenity | null>(null);
     const [snackbar, setSnackbar] = useState<SnackbarState>({
         open: false,
@@ -90,11 +91,18 @@ const AmenityManagement: React.FC = () => {
         }, {} as { [key: string]: Amenity[] });
     };
 
+
     const handleEdit = (amenity: Amenity) => {
         setEditingAmenity(amenity);
     };
 
     const handleSave = async () => {
+        if (editingAmenity) {
+            setShowUpdateModal(true);
+        }
+    };
+
+    const handleUpdateConfirm = async () => {
         if (editingAmenity) {
             try {
                 const updateData = {
@@ -116,6 +124,11 @@ const AmenityManagement: React.FC = () => {
                 showSnackbar(err.response?.data?.message || 'Failed to update amenity', 'error');
             }
         }
+        setShowUpdateModal(false);
+    };
+
+    const handleUpdateCancel = () => {
+        setShowUpdateModal(false);
     };
 
     const handleCancel = () => {
@@ -311,7 +324,16 @@ const AmenityManagement: React.FC = () => {
                 title="Delete Amenity"
                 message={`Are you sure you want to delete the amenity "${amenityToDelete?.amenityName}"?`}
                 confirmLabel="Delete"
-                cancelLabel="Cancel" children={undefined}            />
+                cancelLabel="Cancel" children={undefined} />
+
+            <ConfirmationModal
+                show={showUpdateModal}
+                onHide={handleUpdateCancel}
+                onConfirm={handleUpdateConfirm}
+                title="Update Amenity"
+                message={`Are you sure you want to update the amenity "${editingAmenity?.amenityName}"?`}
+                confirmLabel="Update"
+                cancelLabel="Cancel" children={undefined} />
             <CustomizedSnackbars
                 open={snackbar.open}
                 handleClose={handleSnackbarClose}

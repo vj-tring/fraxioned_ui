@@ -8,11 +8,6 @@
     min-height: 100vh;
 }
 
-.notFoundMessage {
-    font-family: 'Roboto', 'Arial', sans-serif;
-    color: #333;
-}
-
 .header {
     display: flex;
     justify-content: space-between;
