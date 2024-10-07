@@ -145,7 +145,7 @@ const BookingSearchBar: React.FC = () => {
       checkoutDate: checkoutDate.toISOString(),
       noOfGuests: counts.Adults + counts.Children,
       noOfPets: counts.Pets,
-      isLastMinuteBooking: isLastMinuteBooking(checkinDate),
+      isLastMinuteBooking: Boolean(bookingdetails.isLastMinuteBooking),
       noOfAdults: counts.Adults,
       noOfChildren: counts.Children,
       notes: "",

@@ -11,11 +11,11 @@ interface LastMinuteBookingDialogProps {
 const LastMinuteBookingDialog: React.FC<LastMinuteBookingDialogProps> = ({ isOpen, onClose, onChoice }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] rounded">
         <DialogHeader>
-          <DialogTitle className="text-lg font-semibold">Last-Minute Booking</DialogTitle>
-          <DialogDescription className="text-sm text-gray-500">
-            This is a last-minute booking. Would you like to proceed with a last-minute booking or a regular booking?
+          <DialogTitle className="text-lg font-semibold mb-2">Last-Minute Booking</DialogTitle>
+          <DialogDescription className="text-sm text-gray-500 text-left">
+          This is a last-minute booking. Would you prefer to proceed with this last-minute reservation, or would you like to opt for a regular booking instead?
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="sm:justify-start">

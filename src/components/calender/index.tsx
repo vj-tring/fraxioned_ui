@@ -419,7 +419,11 @@ const handleDateChange = (range: DateRange | undefined) => {
             dispatch(setErrorMessage(`You don't have sufficient last-minute remaining nights to select this checkout date`));
           } else {
             dispatch(setErrorMessage(null));
-            const newDateRange = { from: newStartDate, to: newEndDate };
+            const newDateRange = { 
+              from: newStartDate, 
+              to: newEndDate,
+              isLastMinuteBooking: true
+            };
             dispatch(setDateRange(newDateRange));
             if (onSelect) onSelect(newDateRange);
           }
@@ -430,7 +434,11 @@ const handleDateChange = (range: DateRange | undefined) => {
             dispatch(setErrorMessage('Your booking request has exceeded the maximum stay length'));
           } else {
             dispatch(setErrorMessage(null));
-            const newDateRange = { from: newStartDate, to: newEndDate };
+            const newDateRange = { 
+              from: newStartDate, 
+              to: newEndDate,
+              isLastMinuteBooking: false
+            };
             dispatch(setDateRange(newDateRange));
             if (onSelect) onSelect(newDateRange);
           }
@@ -446,7 +454,11 @@ const handleDateChange = (range: DateRange | undefined) => {
       } else {
         dispatch(setErrorMessage(null));
       }
-      const newDateRange = { from: newStartDate, to: newEndDate };
+      const newDateRange = { 
+        from: newStartDate, 
+        to: newEndDate,
+        isLastMinuteBooking: lastMinuteBooking && !isRegularBookingSelected
+      };
       dispatch(setDateRange(newDateRange));
       if (onSelect) onSelect(newDateRange);
     }
@@ -484,16 +496,13 @@ const handleDateChange = (range: DateRange | undefined) => {
     setIsLastMinutePopupOpen(false);
     setIsRegularBookingSelected(choice === 'regular');
     if (tempDateRange?.from) {
-      if (choice === 'lastMinute') {
-        // For last-minute bookings, set the maximum end date to 3 nights from start
-        const maxLastMinuteEndDate = addDays(tempDateRange.from, calendarData.bookingRules.lastMinuteBooking.maxNights);
-        dispatch(setDateRange({ from: tempDateRange.from, to: undefined }));
-        dispatch(setIsCalendarOpen(true));
-      } else {
-        // For regular bookings, allow selection up to the maximum stay length
-        dispatch(setDateRange({ from: tempDateRange.from, to: undefined }));
-        dispatch(setIsCalendarOpen(true));
-      }
+      const isLastMinute = choice === 'lastMinute';
+      dispatch(setDateRange({ 
+        from: tempDateRange.from, 
+        to: undefined,
+        isLastMinuteBooking: isLastMinute
+      }));
+      dispatch(setIsCalendarOpen(true));
     }
   };
   
