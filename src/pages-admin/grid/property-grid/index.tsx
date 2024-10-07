@@ -93,7 +93,7 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     {
       field: "name",
       headerName: "Property Name",
-      minWidth: 180,
+      minWidth: 250,
       align: "center",
       headerAlign: "center",
     },
@@ -128,14 +128,14 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     {
       field: "Property_share",
       headerName: "Property Share",
-      width: 150,
+      width: 160,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "actions",
       headerName: "Actions",
-      width: 120,
+      width: 190,
       align: "center",
       headerAlign: "center",
       renderCell: (params) => (
@@ -184,6 +184,8 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
       <div className={styles.dataGridWrapper}>
         <DataGrid
           rows={properties}
+          rowHeight={40}
+          columnHeaderHeight={40}
           columns={columns}
           initialState={{
             pagination: {
@@ -193,6 +195,17 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
           pageSizeOptions={[5, 10, 25]}
           disableRowSelectionOnClick
           className={`${styles.dataGrid} ${styles.dataGridPadding}`}
+          sx={{
+            "& .MuiDataGrid-columnHeader": {
+              backgroundColor: "#0e6c79",
+              color: "white",
+              textTransform: "uppercase",
+              fontFamily: " 'Montserrat', sans-serif !important",
+            },
+            "& .MuiDataGrid-cell": {
+              fontFamily: " 'Montserrat', sans-serif !important",
+            },
+          }}
         />
       </div>
       {isNewFormOpen && (

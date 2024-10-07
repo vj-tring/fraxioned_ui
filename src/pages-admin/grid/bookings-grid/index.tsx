@@ -297,7 +297,7 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
     {
       field: "bookingId",
       headerName: "Booking ID",
-      width: 120,
+      width: 140,
       align: "center",
       headerAlign: "center",
     },
@@ -356,7 +356,7 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
     {
       field: "actions",
       headerName: "Actions",
-      width: 180,
+      width: 200,
       renderCell: (params) => (
         <>
           <IconButton
@@ -423,6 +423,42 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
           >
             Go to Calendar
           </Link>
+          <div className={styles.gridActionContainer}>
+            <Button
+              variant="contained"
+              startIcon={<FileDownloadIcon />}
+              onClick={handleExportCSV}
+              className={styles.actionButton}
+            >
+              Export
+            </Button>
+
+            <Box sx={{ position: "relative" }}>
+              <Button
+                variant="contained"
+                startIcon={<FilterListIcon />}
+                onClick={handleFilterClick}
+                className={styles.actionButton}
+              >
+                Filter
+              </Button>
+              {showFilter && (
+                <InlineFilter
+                  columns={columns}
+                  onFilter={handleApplyFilter}
+                  onClose={() => setShowFilter(false)}
+                />
+              )}
+            </Box>
+
+            <IconButton
+              onClick={() => window.location.reload()}
+              className={styles.refreshIcon}
+              aria-label="refresh"
+            >
+              <RefreshIcon />
+            </IconButton>
+          </div>
         </div>
       </div>
 
@@ -433,45 +469,22 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
       />
 
       <div className={styles.dataGridWrapper}>
-        <div className={styles.gridActionContainer}>
-          <Button
-            variant="contained"
-            startIcon={<FileDownloadIcon />}
-            onClick={handleExportCSV}
-            className={styles.actionButton}
-          >
-            Export
-          </Button>
-
-          <Box sx={{ position: "relative" }}>
-            <Button
-              variant="contained"
-              startIcon={<FilterListIcon />}
-              onClick={handleFilterClick}
-              className={styles.actionButton}
-            >
-              Filter
-            </Button>
-            {showFilter && (
-              <InlineFilter
-                columns={columns}
-                onFilter={handleApplyFilter}
-                onClose={() => setShowFilter(false)}
-              />
-            )}
-          </Box>
-
-          <IconButton
-            onClick={() => window.location.reload()}
-            className={styles.refreshIcon}
-            aria-label="refresh"
-          >
-            <RefreshIcon />
-          </IconButton>
-        </div>
         <DataGrid
           rows={filteredBookings}
           columns={columns}
+          rowHeight={40}
+          columnHeaderHeight={40}
+          sx={{
+            "& .MuiDataGrid-columnHeader": {
+              backgroundColor: "#0e6c79",
+              color: "white",
+              textTransform: "uppercase",
+              fontFamily: " 'Montserrat', sans-serif !important",
+            },
+            "& .MuiDataGrid-cell": {
+              fontFamily: " 'Montserrat', sans-serif !important",
+            },
+          }}
           initialState={{
             pagination: {
               paginationModel: { page: 0, pageSize: 10 },

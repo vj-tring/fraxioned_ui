@@ -14,18 +14,18 @@
   color: #4fbbc7 !important;
 }
 
-.dataGridPadding {
+/* .dataGridPadding {
   padding: 0 16px !important;
-}
+} */
 
 .dataGridPadding :global(.MuiDataGrid-columnHeaders) {
   /* padding-left: 16px; */
-  padding-right: 12px;
+  /* padding-right: 12px; */
 }
 
 .dataGridPadding :global(.MuiDataGrid-virtualScroller) {
-  padding-left: 10px;
-  padding-right: 16px;
+  /* padding-left: 10px; */
+  /* padding-right: 16px;/ */
 }
 
 .dataGridPadding :global(.MuiDataGrid-footerContainer) {
@@ -58,7 +58,7 @@
     flex-grow: 1;
     background-color: white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    border-radius: 2px !important;
     overflow: hidden;
     display: flex;
     flex-direction: column;

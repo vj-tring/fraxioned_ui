@@ -74,13 +74,13 @@
 }
 
 .headerIcon {
-    font-size: 64px;
+    font-size: 20px !important;
     color: #e28f25;
-    margin-right: 24px;
+    margin-right: 12px;
 }
 
 .formTitle {
-    font-size: 32px !important;
+    font-size: medium !important;
     font-weight: 600 !important;
     color: #333;
     font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
@@ -98,17 +98,17 @@
 
 .inputField input,
 .inputField textarea {
-    font-size: 16px;
+    font-size: 12px;
     padding: 12px;
     border-radius: 8px;
 }
 
 .datePicker {
     width: 100%;
-}
-
+    
+}\
 .checkboxGroupLabel {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: 500;
     color: #333;
     margin-bottom: 8px;
@@ -128,6 +128,10 @@
 
 .formControlLabel {
     margin-bottom: 0;
+    font-size: 12px !important;
+}
+.PropertyNameLabel{
+    font-size: small !important; 
 }
 
 .buttonContainer {
