@@ -21,11 +21,11 @@
 }
 
 .evenRow{
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255) !important;
 
 }
 .oddRow{
-    background-color: #ebecec;
+    background-color: #ebecec !important;
 }
 
 @media (max-width: 768px) {

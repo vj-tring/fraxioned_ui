@@ -19,7 +19,7 @@
 .propertyPanel {
     top: 60px;
     right: 0;
-    height: calc(100vh - 60px);
+    height: calc(130vh - 90px);
     background-color: #fcfcfc;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
     color: #333333;

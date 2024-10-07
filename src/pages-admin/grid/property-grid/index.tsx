@@ -216,9 +216,15 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
               color: "white",
               textTransform: "uppercase",
               fontFamily: " 'Montserrat', sans-serif !important",
+              position:"sticky",
+              right:'0',
+              zIndex:'9999'
             },
             "& .MuiDataGrid-cell": {
               fontFamily: " 'Montserrat', sans-serif !important",
+              position:"sticky",
+              right:'0',
+              zIndex:'9999',
             },
           }}
         />

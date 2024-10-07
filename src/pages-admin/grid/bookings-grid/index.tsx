@@ -356,7 +356,7 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
     {
       field: "actions",
       headerName: "Actions",
-      width: 200,
+      width: 150,
       renderCell: (params) => (
         <>
           <IconButton
@@ -364,11 +364,10 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
             color="primary"
             onClick={() => handleViewClick(params.row.id)}
           >
-            <VisibilityIcon 
-            
-            sx={{
-              color: "#8DC2F7",
-            }}
+            <VisibilityIcon
+              sx={{
+                color: "#8DC2F7",
+              }}
             />
           </IconButton>
           <IconButton
@@ -376,10 +375,10 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
             color="primary"
             onClick={() => handleEditClick(params.row.id)}
           >
-            <EditIcon 
-             sx={{
-              color: "#709C7E",
-            }} 
+            <EditIcon
+              sx={{
+                color: "#709C7E",
+              }}
             />
           </IconButton>
           <IconButton
@@ -389,10 +388,10 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
             disabled={params.row.isCancelled}
           >
             <DeleteIcon
-            
-            sx={{
-              color: "#F08486",
-            }}/>
+              sx={{
+                color: "#F08486",
+              }}
+            />
           </IconButton>
         </>
       ),
@@ -493,11 +492,16 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
               color: "white",
               textTransform: "uppercase",
               fontFamily: " 'Montserrat', sans-serif !important",
+              position: "sticky",
+              right: "0",
+              zIndex: "9999",
             },
             "& .MuiDataGrid-cell": {
               fontFamily: " 'Montserrat', sans-serif !important",
+              position: "sticky",
+              right: "0",
+              zIndex: "9999",
             },
-            
           }}
           initialState={{
             pagination: {
@@ -505,10 +509,9 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
             },
           }}
           getRowClassName={(params) => {
-            if (params.indexRelativeToCurrentPage % 2 === 0){
+            if (params.indexRelativeToCurrentPage % 2 === 0) {
               return styles.evenRow;
-            }
-            else {
+            } else {
               return styles.oddRow;
             }
           }}
