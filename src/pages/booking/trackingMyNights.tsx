@@ -247,9 +247,9 @@ const TrackingMyNigts: React.FC = () => {
                 disableRipple
                 key={year}
                 value={year}
-                className="monsterrat Year"
+                className="monsterrat "
               >
-                {year}
+                <div className="Year">{year}</div>
               </MenuItem>
             ))}
           </Select>

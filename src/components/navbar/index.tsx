@@ -310,7 +310,9 @@ const CustomNavbar: React.FC<CustomNavbarProps> = ({
                       }}
                     />
                   </ListItemIcon>
-                  <ListItemText>Profile</ListItemText>
+                  <ListItemText className={styles.Monsterrat}>
+                    Profile
+                  </ListItemText>
                 </MenuItem>
                 <MenuItem
                   // onClick={handleResetPasswordClick}

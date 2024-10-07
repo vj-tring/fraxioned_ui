@@ -206,7 +206,11 @@ const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                 <div className="dialog-header">
                     <h2 className="dialog-title">Booking Details</h2>
                     <button onClick={handleEdit} className="edit-button">
-                        <Edit />
+                        <Edit sx={
+                            {
+                                fontSize:"medium"
+                            }
+                        } />
                     </button>
                 </div>
                 <DialogContent className="dialog-content">
