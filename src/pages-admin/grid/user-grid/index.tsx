@@ -242,7 +242,11 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             sx={{ color: "#00636d" }}
             onClick={() => handleEditClick(params.row.id)}
           >
-            <EditIcon />
+            <EditIcon 
+              sx={{
+                color: "#709C7E",
+              }} 
+               />
           </IconButton>
         </>
       ),
@@ -269,7 +273,7 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
           rowHeight={40}
           sx={{
             "& .MuiDataGrid-columnHeader": {
-              backgroundColor: "#0e6c79",
+              backgroundColor: "grey",
               color: "white",
               textTransform: "uppercase",
               fontFamily: " 'Montserrat', sans-serif !important",
@@ -277,6 +281,13 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             "& .MuiDataGrid-cell": {
               fontFamily: " 'Montserrat', sans-serif !important",
             },
+          }}
+          getRowClassName={(params) => {
+            if (params.indexRelativeToCurrentPage % 2 === 0) {
+              return styles.evenRow;
+            } else {
+              return styles.oddRow;
+            }
           }}
           columnHeaderHeight={40}
           initialState={{

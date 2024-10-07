@@ -40,10 +40,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 150px;
-  font-family:  'Montserrat', sans-serif !important
-
+  font-family: "Montserrat", sans-serif !important;
 }
 
+.evenRow {
+  background-color: rgb(255, 255, 255);
+}
+.oddRow {
+  background-color: #ebecec;
+}
 .dropdownArrow {
   font-size: 18px;
   color: #f0f0f0;
@@ -127,7 +132,6 @@
 
 .dataGrid :global(.MuiDataGrid-row:hover) {
   background-color: #f8f8f8;
-  
 }
 
 .dataGrid :global(.MuiCheckbox-root) {
@@ -187,8 +191,7 @@
 }
 
 @media only screen and (max-width: 400px) {
-
-    .dataGridPadding{
-        font-size: small !important;
-    }
+  .dataGridPadding {
+    font-size: small !important;
+  }
 }

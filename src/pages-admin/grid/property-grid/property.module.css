@@ -58,6 +58,13 @@
   flex-direction: column;
 }
 
+.evenRow{
+  background-color: rgb(255, 255, 255);
+
+}
+.oddRow{
+  background-color: #ebecec;
+}
 .dataGrid {
   flex-grow: 1;
   border: none !important;

@@ -232,14 +232,23 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             color="primary"
             onClick={() => handleEditClick(params.row.id)}
           >
-            <EditIcon />
+            <EditIcon
+            sx={{
+              color: "#709C7E",
+            }} 
+            />
+            
           </IconButton>
           <IconButton
             aria-label="delete"
             color="secondary"
             onClick={() => handleDeleteClick(params.row)}
           >
-            <DeleteIcon />
+            <DeleteIcon
+              sx={{
+                color: "#F08486",
+              }}
+            />
           </IconButton>
         </>
       ),
@@ -293,7 +302,7 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
           }}
           sx={{
             "& .MuiDataGrid-columnHeader": {
-              backgroundColor: "#0e6c79",
+              backgroundColor: "grey",
               color: "white",
               textTransform: "uppercase",
               fontFamily: " 'Montserrat', sans-serif !important",
@@ -301,6 +310,13 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             "& .MuiDataGrid-cell": {
               fontFamily: " 'Montserrat', sans-serif !important",
             },
+          }}
+          getRowClassName={(params) => {
+            if (params.indexRelativeToCurrentPage % 2 === 0) {
+              return styles.evenRow;
+            } else {
+              return styles.oddRow;
+            }
           }}
           pageSizeOptions={[5, 10, 25]}
           disableRowSelectionOnClick

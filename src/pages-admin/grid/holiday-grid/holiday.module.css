@@ -9,6 +9,13 @@
   margin-left: 100px;
 }
 
+.evenRow{
+  background-color: rgb(255, 255, 255);
+
+}
+.oddRow{
+  background-color: #ebecec;
+}
 .refreshIcon {
   margin-left: 1170px !important;
   color: #4fbbc7 !important;

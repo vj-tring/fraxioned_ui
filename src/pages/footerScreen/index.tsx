@@ -36,6 +36,7 @@ function FooterScreen() {
           <div className="flex gap-4 text-blue-gray-900 sm:justify-center">
             <Typography
               as="a"
+              target="_blank"
               href="https://www.facebook.com/fraxioned/?_rdr"
               className="opacity-80 transition-opacity hover:opacity-100"
             >

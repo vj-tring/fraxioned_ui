@@ -364,14 +364,23 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
             color="primary"
             onClick={() => handleViewClick(params.row.id)}
           >
-            <VisibilityIcon />
+            <VisibilityIcon 
+            
+            sx={{
+              color: "#8DC2F7",
+            }}
+            />
           </IconButton>
           <IconButton
             aria-label="edit"
             color="primary"
             onClick={() => handleEditClick(params.row.id)}
           >
-            <EditIcon />
+            <EditIcon 
+             sx={{
+              color: "#709C7E",
+            }} 
+            />
           </IconButton>
           <IconButton
             aria-label="delete"
@@ -379,7 +388,11 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
             onClick={() => handleDeleteClick(params.row)}
             disabled={params.row.isCancelled}
           >
-            <DeleteIcon />
+            <DeleteIcon
+            
+            sx={{
+              color: "#F08486",
+            }}/>
           </IconButton>
         </>
       ),
@@ -476,7 +489,7 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
           columnHeaderHeight={40}
           sx={{
             "& .MuiDataGrid-columnHeader": {
-              backgroundColor: "#0e6c79",
+              backgroundColor: "grey",
               color: "white",
               textTransform: "uppercase",
               fontFamily: " 'Montserrat', sans-serif !important",
@@ -484,11 +497,20 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
             "& .MuiDataGrid-cell": {
               fontFamily: " 'Montserrat', sans-serif !important",
             },
+            
           }}
           initialState={{
             pagination: {
               paginationModel: { page: 0, pageSize: 10 },
             },
+          }}
+          getRowClassName={(params) => {
+            if (params.indexRelativeToCurrentPage % 2 === 0){
+              return styles.evenRow;
+            }
+            else {
+              return styles.oddRow;
+            }
           }}
           pageSizeOptions={[5, 10, 25]}
           disableRowSelectionOnClick

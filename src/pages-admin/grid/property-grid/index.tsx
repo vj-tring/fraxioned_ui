@@ -145,14 +145,22 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             color="primary"
             onClick={() => handleEditClick(params.row.id)}
           >
-            <EditIcon />
+            <EditIcon
+              sx={{
+                color: "#709C7E",
+              }} 
+               />
           </IconButton>
           <IconButton
             aria-label="delete"
             color="secondary"
             onClick={() => handleDeleteClick(params.row)}
           >
-            <DeleteIcon />
+            <DeleteIcon 
+              sx={{
+                color: "#F08486",
+              }}
+              />
           </IconButton>
         </>
       ),
@@ -195,9 +203,16 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
           pageSizeOptions={[5, 10, 25]}
           disableRowSelectionOnClick
           className={`${styles.dataGrid} ${styles.dataGridPadding}`}
+          getRowClassName={(params) => {
+            if (params.indexRelativeToCurrentPage % 2 === 0) {
+              return styles.evenRow;
+            } else {
+              return styles.oddRow;
+            }
+          }}
           sx={{
             "& .MuiDataGrid-columnHeader": {
-              backgroundColor: "#0e6c79",
+              backgroundColor: "grey",
               color: "white",
               textTransform: "uppercase",
               fontFamily: " 'Montserrat', sans-serif !important",
