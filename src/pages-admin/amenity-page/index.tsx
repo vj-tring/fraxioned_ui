@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { amenitiesapi, updateamenities, deleteAmenity, getamenitygroup } from '@/api';
+import { useDispatch, useSelector } from 'react-redux';
+import { amenitiesapi } from '@/api';
+import { updateAmenity, resetAmenitiesState, deleteAmenityAsync } from '@/store/slice/auth/amenitiespageSlice';
+import { RootState } from '@/store/reducers';
 import styles from './amenitypage.module.css';
 import NewAmenityForm from '../property-amenities/new-amenity';
 import { Edit2, Trash2, Plus, ChevronRight, ChevronDown, RefreshCw, Search } from 'lucide-react';
 import ConfirmationModal from '@/components/confirmation-modal';
 import CustomizedSnackbars from '@/components/customized-snackbar';
 import { IconButton, Tooltip } from '@mui/material';
+import { AppDispatch } from '@/store';
 
 interface Amenity {
     id: number;
@@ -29,6 +33,16 @@ interface SnackbarState {
 }
 
 const AmenityManagement: React.FC = () => {
+    const dispatch = useDispatch<AppDispatch>();
+    const {
+        loading: updateLoading,
+        error: updateError,
+        success: updateSuccess,
+        deleteLoading,
+        deleteError,
+        deleteSuccess
+    } = useSelector((state: RootState) => state.amenitiesPage);
+
     const [amenities, setAmenities] = useState<{ [key: string]: Amenity[] }>({});
     const [groupSearchTerms, setGroupSearchTerms] = useState<{ [key: string]: string }>({});
     const [amenityGroups, setAmenityGroups] = useState<AmenityGroup[]>([]);
@@ -43,26 +57,50 @@ const AmenityManagement: React.FC = () => {
         message: '',
         severity: 'info',
     });
-    const [searchTerm, setSearchTerm] = useState('');
     const [expandedGroups, setExpandedGroups] = useState<string[]>([]);
 
     useEffect(() => {
         fetchAmenities();
-        fetchAmenityGroups();
+        // fetchAmenityGroups();
     }, []);
 
-    const fetchAmenityGroups = async () => {
-        try {
-            const response = await getamenitygroup();
-            if (response.data.success) {
-                setAmenityGroups(response.data.data);
-            } else {
-                showSnackbar('Failed to fetch amenity groups', 'error');
-            }
-        } catch (err) {
-            showSnackbar('Failed to fetch amenity groups', 'error');
+    useEffect(() => {
+        if (updateSuccess) {
+            showSnackbar('Amenity updated successfully', 'success');
+            setEditingAmenity(null);
+            fetchAmenities();
+            dispatch(resetAmenitiesState());
         }
-    };
+        if (updateError) {
+            showSnackbar(updateError, 'error');
+            dispatch(resetAmenitiesState());
+        }
+    }, [updateSuccess, updateError, dispatch]);
+
+    useEffect(() => {
+        if (deleteSuccess) {
+            showSnackbar('Amenity deleted successfully', 'success');
+            fetchAmenities();
+            dispatch(resetAmenitiesState());
+        }
+        if (deleteError) {
+            showSnackbar(deleteError, 'error');
+            dispatch(resetAmenitiesState());
+        }
+    }, [deleteSuccess, deleteError, dispatch]);
+
+    // const fetchAmenityGroups = async () => {
+    //     try {
+    //         const response = await getamenitygroup();
+    //         if (response.data.success) {
+    //             setAmenityGroups(response.data.data);
+    //         } else {
+    //             showSnackbar('Failed to fetch amenity groups', 'error');
+    //         }
+    //     } catch (err) {
+    //         showSnackbar('Failed to fetch amenity groups', 'error');
+    //     }
+    // };
 
     const fetchAmenities = async () => {
         try {
@@ -91,7 +129,6 @@ const AmenityManagement: React.FC = () => {
         }, {} as { [key: string]: Amenity[] });
     };
 
-
     const handleEdit = (amenity: Amenity) => {
         setEditingAmenity(amenity);
     };
@@ -104,25 +141,17 @@ const AmenityManagement: React.FC = () => {
 
     const handleUpdateConfirm = async () => {
         if (editingAmenity) {
-            try {
-                const updateData = {
-                    updatedBy: { id: 1 },
-                    amenityName: editingAmenity.amenityName,
-                    amenityDescription: editingAmenity.amenityDescription || '',
-                    amenityGroup: { id: editingAmenity.amenityGroup.id }
-                };
+            const updateData = {
+                updatedBy: { id: 1 },
+                amenityName: editingAmenity.amenityName,
+                amenityDescription: editingAmenity.amenityDescription || '',
+                amenityGroup: { id: editingAmenity.amenityGroup.id }
+            };
 
-                const response = await updateamenities(editingAmenity.id, updateData);
-                if (response.data.success) {
-                    setEditingAmenity(null);
-                    await fetchAmenities();
-                    showSnackbar('Amenity updated successfully', 'success');
-                } else {
-                    showSnackbar(response.data.message || 'Failed to update amenity', 'error');
-                }
-            } catch (err: any) {
-                showSnackbar(err.response?.data?.message || 'Failed to update amenity', 'error');
-            }
+            dispatch(updateAmenity({
+                id: editingAmenity.id,
+                updateData
+            }));
         }
         setShowUpdateModal(false);
     };
@@ -156,21 +185,11 @@ const AmenityManagement: React.FC = () => {
     const handleDeleteConfirm = async () => {
         if (amenityToDelete) {
             try {
-                const response = await deleteAmenity(amenityToDelete.id);
-                if (response.data.success) {
-                    showSnackbar('Amenity deleted successfully', 'success');
-                    setShowDeleteModal(false);
-                    setAmenityToDelete(null);
-                    await fetchAmenities();
-                } else {
-                    showSnackbar(response.data.message || 'Failed to delete amenity', 'error');
-                    setShowDeleteModal(false);
-                    setAmenityToDelete(null);
-                }
-            } catch (err: any) {
-                showSnackbar(err.response?.data?.message || 'Failed to delete amenity', 'error');
+                dispatch(deleteAmenityAsync(amenityToDelete.id));
                 setShowDeleteModal(false);
                 setAmenityToDelete(null);
+            } catch (err: any) {
+                showSnackbar('Failed to delete amenity', 'error');
             }
         }
     };
@@ -283,10 +302,22 @@ const AmenityManagement: React.FC = () => {
                                                     {editingAmenity?.id === amenity.id ? (
                                                         <>
                                                             <Tooltip title="Save" arrow>
-                                                                <button onClick={handleSave} className={styles.saveButton}>Save</button>
+                                                                <button
+                                                                    onClick={handleSave}
+                                                                    className={styles.saveButton}
+                                                                    disabled={updateLoading}
+                                                                >
+                                                                    Save
+                                                                </button>
                                                             </Tooltip>
                                                             <Tooltip title="Cancel" arrow>
-                                                                <button onClick={handleCancel} className={styles.cancelButton}>Cancel</button>
+                                                                <button
+                                                                    onClick={handleCancel}
+                                                                    className={styles.cancelButton}
+                                                                    disabled={updateLoading}
+                                                                >
+                                                                    Cancel
+                                                                </button>
                                                             </Tooltip>
                                                         </>
                                                     ) : (
@@ -297,10 +328,15 @@ const AmenityManagement: React.FC = () => {
                                                                 </button>
                                                             </Tooltip>
                                                             <Tooltip title="Delete" arrow>
-                                                                <button onClick={() => handleDeleteClick(amenity)} className={styles.deleteButton}>
+                                                                <button
+                                                                    onClick={() => handleDeleteClick(amenity)}
+                                                                    className={styles.deleteButton}
+                                                                    disabled={deleteLoading}
+                                                                >
                                                                     <Trash2 size={16} />
                                                                 </button>
                                                             </Tooltip>
+
                                                         </>
                                                     )}
                                                 </div>
@@ -324,7 +360,9 @@ const AmenityManagement: React.FC = () => {
                 title="Delete Amenity"
                 message={`Are you sure you want to delete the amenity "${amenityToDelete?.amenityName}"?`}
                 confirmLabel="Delete"
-                cancelLabel="Cancel" children={undefined} />
+                cancelLabel="Cancel"
+                children={undefined}
+            />
 
             <ConfirmationModal
                 show={showUpdateModal}
@@ -333,7 +371,9 @@ const AmenityManagement: React.FC = () => {
                 title="Update Amenity"
                 message={`Are you sure you want to update the amenity "${editingAmenity?.amenityName}"?`}
                 confirmLabel="Update"
-                cancelLabel="Cancel" children={undefined} />
+                cancelLabel="Cancel"
+                children={undefined}
+            />
             <CustomizedSnackbars
                 open={snackbar.open}
                 handleClose={handleSnackbarClose}

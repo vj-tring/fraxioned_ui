@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { amenitiesapi } from '@/api';
 
 interface Amenity {
@@ -9,7 +9,7 @@ interface Amenity {
   updatedAt: string;
   createdBy: {
     id: number;
-  };
+  } | null;
   updatedBy: {
     id: number;
   } | null;
@@ -36,24 +36,33 @@ export const fetchAmenities = createAsyncThunk('amenities/fetchAmenities', async
   return response.data;
 });
 
+
 const amenitiesSlice = createSlice({
   name: 'amenities',
   initialState,
-  reducers: {},
+  reducers: {
+    resetAmenitiesState: (state) => {
+      state.status = 'idle';
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAmenities.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(fetchAmenities.fulfilled, (state, action) => {
+      .addCase(fetchAmenities.fulfilled, (state, action: PayloadAction<{ data: Amenity[] }>) => {
         state.status = 'succeeded';
         state.amenities = action.payload.data;
       })
       .addCase(fetchAmenities.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message || 'Failed to fetch amenities';
-      });
+      })
+  
+
   },
 });
 
+export const { resetAmenitiesState } = amenitiesSlice.actions;
 export default amenitiesSlice.reducer;

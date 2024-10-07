@@ -1,20 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from './propertyamenities.module.css';
-import { amenitiesapi, updateamenityforproperty } from '@/api';
+import { amenitiesapi } from '@/api';
 import { Pencil, Check, X, ChevronRight } from 'lucide-react';
 import CustomizedSnackbars from '@/components/customized-snackbar';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import ConfirmationModal from '@/components/confirmation-modal';
-import { fetchAmenities } from '@/store/slice/amenitiesSlice';
+import { 
+  getAmenitiesById, 
+  updatePropertyAmenities, 
+  resetPropertyAmenities 
+} from '@/store/slice/auth/propertyamenities';
 import { RootState } from '@/store/reducers';
 import { AppDispatch } from '@/store';
 
 interface Amenity {
   id: number;
   amenityName: string;
-  amenityDescription?: string;  
+  amenityDescription?: string;
   amenityGroup: {
     id: number;
     name: string;
@@ -30,7 +34,7 @@ interface SnackbarState {
 const PropertyAmenities: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
-  const { propertyAmenities, loading, error } = useSelector((state: RootState) => state.amenities);
+  const { loading, error, success, amenities: propertyAmenities } = useSelector((state: RootState) => state.propertyAmenities);
 
   const [amenities, setAmenities] = useState<{ [key: string]: Amenity[] }>({});
   const [selectedAmenities, setSelectedAmenities] = useState<number[]>([]);
@@ -47,14 +51,21 @@ const PropertyAmenities: React.FC = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   useEffect(() => {
-    fetchAmenitiesData();
+    fetchAmenities();
   }, []);
 
   useEffect(() => {
     if (id) {
-      dispatch(fetchAmenities(Number(id)));
+      dispatch(getAmenitiesById(Number(id)));
     }
   }, [id, dispatch]);
+
+  useEffect(() => {
+    if (propertyAmenities.length > 0) {
+      const selected = propertyAmenities.map((item) => item.amenity.id);
+      setSelectedAmenities(selected);
+    }
+  }, [propertyAmenities]);
 
   useEffect(() => {
     if (editingAmenity && inputRef.current) {
@@ -63,11 +74,17 @@ const PropertyAmenities: React.FC = () => {
   }, [editingAmenity]);
 
   useEffect(() => {
-    if (propertyAmenities.length > 0) {
-      const selected = propertyAmenities.map((item: { amenity: { id: any; }; }) => item.amenity.id);
-      setSelectedAmenities(selected);
+    if (success) {
+      showSnackbar('Amenities updated successfully!', 'success');
+      setDialogOpen(false);
+      setShowConfirmModal(false);
+      dispatch(resetPropertyAmenities());
     }
-  }, [propertyAmenities]);
+    if (error) {
+      showSnackbar(error, 'error');
+      dispatch(resetPropertyAmenities());
+    }
+  }, [success, error, dispatch]);
 
   const showSnackbar = (message: string, severity: 'success' | 'info' | 'warning' | 'error') => {
     setSnackbar({ open: true, message, severity });
@@ -89,7 +106,7 @@ const PropertyAmenities: React.FC = () => {
     setSnackbar({ ...snackbar, open: false });
   };
 
-  const fetchAmenitiesData = async () => {
+  const fetchAmenities = async () => {
     try {
       const response = await amenitiesapi();
       const groupedAmenities = groupAmenitiesByGroup(response.data.data);
@@ -123,25 +140,17 @@ const PropertyAmenities: React.FC = () => {
   };
 
   const handleUpdate = async () => {
-    try {
-      const updateData = {
-        property: {
-          id: Number(id)
-        },
-        amenities: selectedAmenities.map(amenityId => ({ id: amenityId })),
-        updatedBy: {
-          id: 1
-        }
-      };
+    const updateData = {
+      property: {
+        id: Number(id)
+      },
+      amenities: selectedAmenities.map(amenityId => ({ id: amenityId })),
+      updatedBy: {
+        id: 1 // Assuming a static user ID for now
+      }
+    };
 
-      await updateamenityforproperty(updateData);
-      showSnackbar('Amenities updated successfully!', 'success');
-      setDialogOpen(false);
-      setShowConfirmModal(false);
-      dispatch(fetchAmenities(Number(id))); // Refresh the amenities after update
-    } catch (err) {
-      showSnackbar('Failed to update amenities. Please try again.', 'error');
-    }
+    dispatch(updatePropertyAmenities(updateData));
   };
 
   const toggleEditMode = () => {
@@ -181,10 +190,6 @@ const PropertyAmenities: React.FC = () => {
 
   if (loading) {
     return <div className={styles.loading}>Loading...</div>;
-  }
-
-  if (error) {
-    return <div className={styles.error}>{error}</div>;
   }
 
   return (
@@ -295,8 +300,7 @@ const PropertyAmenities: React.FC = () => {
         title="Confirm Update"
         message="Are you sure you want to update the amenities for this property?"
         confirmLabel="Update"
-        cancelLabel="Cancel" children={undefined}      >
-      </ConfirmationModal>
+        cancelLabel="Cancel" children={undefined}      />
     </div>
   );
 };
