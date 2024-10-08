@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './propertydocuments.module.css';
 import { useState, useCallback } from "react"
 import { Button } from "@/components/ui/button"
-import { FileIcon, UploadIcon, XIcon, ShareIcon, HistoryIcon } from "lucide-react"
+import { FileIcon, UploadIcon, XIcon, ShareIcon } from "lucide-react"
 import { useDropzone } from "react-dropzone"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
 import { Input } from '../../components/ui/input';
@@ -65,13 +65,6 @@ const EnhancedDocumentManager = () => {
   const handleShareDocument = (document: Document) => {
     // Implement sharing functionality here
     console.log(`Sharing document: ${document.name}`)
-  }
-
-  const handleVersionChange = (document: Document, versionId: string) => {
-    const version = document.versions.find(v => v.id === versionId)
-    if (version) {
-      setSelectedDocument({ ...document, content: version.content })
-    }
   }
 
   const filteredDocuments = documents.filter(doc => 
@@ -176,35 +169,6 @@ const EnhancedDocumentManager = () => {
           </div>
         </TabsContent>
       </Tabs>
-      {selectedDocument && (
-        <div className="mt-4 bg-white p-4 rounded shadow-md h-[calc(100vh-340px)] overflow-auto">
-          <div className="flex justify-between items-center mb-2">
-            <h3 className="text-lg font-semibold">{selectedDocument.name}</h3>
-            <div className="flex items-center space-x-2">
-              <Select 
-                value={selectedDocument.versions[selectedDocument.versions.length - 1].id} 
-                onValueChange={(value) => handleVersionChange(selectedDocument, value)}
-              >
-                <SelectTrigger className="w-[150px]">
-                  <SelectValue placeholder="Select version" />
-                </SelectTrigger>
-                <SelectContent>
-                  {selectedDocument.versions.map((version, index) => (
-                    <SelectItem key={version.id} value={version.id}>
-                      Version {selectedDocument.versions.length - index}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button variant="outline" size="sm">
-                <HistoryIcon size={16} className="mr-2" />
-                Revert
-              </Button>
-            </div>
-          </div>
-          <pre className="whitespace-pre-wrap">{selectedDocument.content}</pre>
-        </div>
-      )}
     </div>
   )
 }
