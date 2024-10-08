@@ -4,7 +4,6 @@ import styles from "./userproperty.module.css";
 import { getuserbyproperty, userdetails } from "@/api";
 import { User, Building, Users, Calendar, Fingerprint } from "lucide-react";
 import profile from "../../assets/images/profile.jpeg";
-
 import { Avatar } from "@mui/material";
 // import { Fingerprint } from "@mui/icons-material";
 interface User {
@@ -87,7 +86,6 @@ const PropertyUsers: React.FC = () => {
                 <div className={styles.userInfo1}>
                   {/* <User size={10}  /> */}
                   <Avatar alt="Remy Sharp" src={profile} />
-
                   <span className={styles.userName}>
                     {user
                       ? `${user.firstName} ${user.lastName}`
