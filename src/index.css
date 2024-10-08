@@ -1,6 +1,6 @@
 * body {
   padding-right: 0px !important;
-} 
+}
 
 .MuiFormControl-root .MuiOutlinedInput-notchedOutline{
   border-color: rgb(208, 205, 205) !important;
@@ -73,4 +73,5 @@
   body {
     @apply bg-background text-foreground;
   }
-}
+
+

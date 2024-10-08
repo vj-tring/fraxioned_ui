@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axiosInstance from '@/api/axiosSetup';
+import {axiosInstance} from '@/api/axiosSetup';
 
 interface AmenityType {
     id: number;
@@ -29,7 +29,7 @@ interface PropertyAmenity {
     updatedAt: string;
 }
 
-interface PropertyAmenitiesState {
+export interface PropertyAmenitiesState {
     loading: boolean;
     error: string | null;
     success: boolean;
@@ -57,7 +57,7 @@ export const getAmenitiesById = createAsyncThunk(
     'propertyAmenities/getById',
     async (id: number, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.get(`/v1/property-amenities/property/${id}`);
+            const response = await axiosInstance.get(`/property-amenities/property/${id}`);
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message || 'An error occurred');
@@ -69,7 +69,7 @@ export const updatePropertyAmenities = createAsyncThunk(
     'propertyAmenities/update',
     async (updateData: UpdateAmenityPayload, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.patch('/v1/property-amenities', updateData);
+            const response = await axiosInstance.patch('/property-amenities', updateData);
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message || 'An error occurred');

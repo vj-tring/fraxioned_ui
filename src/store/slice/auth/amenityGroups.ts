@@ -14,7 +14,7 @@ interface AmenityGroup {
     };
 }
 
-interface AmenityGroupState {
+export interface AmenityGroupState {
     loading: boolean;
     error: string | null;
     success: boolean;

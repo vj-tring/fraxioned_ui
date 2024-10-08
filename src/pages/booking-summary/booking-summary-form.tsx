@@ -148,7 +148,7 @@ const BookingSummaryForm: React.FC = () => {
   const handleBookingCancel = () => {
     dispatch(resetLimits());
     dispatch(clearDates());
-    navigate("/home");
+    navigate("/");
   };
 
   const handleBookingConfirm = async () => {
@@ -163,7 +163,7 @@ const BookingSummaryForm: React.FC = () => {
       setBookingSuccess(true);
       setIsVisible(true);
       setTimeout(() => {
-        navigate("/home/booking");
+        navigate("/bookings");
       }, 1000);
     } catch (error) {
       setSnackbarMessage((error as string) || "Failed to confirm booking");
