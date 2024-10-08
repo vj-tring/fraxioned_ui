@@ -9,7 +9,6 @@ import {
   IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import FilterListIcon from "@mui/icons-material/FilterList";
 import BookingGrid from "@/components/grid/BookingGrid";
 import BookingCalendar from "@/components/booking-calendar";
 import TrackingMyNigts from "../../components/tracking-nights/trackingMyNights";
@@ -20,7 +19,6 @@ import {
   BookingData,
   fetchUserBookings,
 } from "@/store/slice/auth/bookingSlice";
-import { format } from "date-fns";
 import { cancelBooking } from "@/api";
 import "../booking/booking.css";
 import EditBookingModal from '../../components/modify-booking/bookingEdit';
@@ -38,7 +36,7 @@ const Booking = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("error");
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<BookingData | null>(null);
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [loading, setLoading] = useState(false);
   const user = useSelector((state: RootState) => state.auth.user);
   const userBookings = useSelector(
     (state: RootState) => state.bookings.userBookings || []
@@ -47,15 +45,6 @@ const Booking = () => {
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
-  };
-
-  const showSnackbar = (
-    message: string,
-    severity: "error" | "info" | "warning" = "error"
-  ) => {
-    setSnackbarMessage(message);
-    setSnackbarSeverity(severity);
-    setSnackbarOpen(true);
   };
 
   useEffect(() => {
@@ -106,12 +95,7 @@ const Booking = () => {
       setEditModalOpen(true);
     }
   };
-
   const handleEditSuccess = () => {
-    // if (user && user.id) {
-    //   dispatch(fetchUserBookings(user.id));
-    //   showSnackbar("Booking successfully updated.", "success");
-    // }
   };
 
   const handleEditModalClose = () => {
@@ -215,22 +199,6 @@ const Booking = () => {
             >
               View as Calendar
             </Button>
-            {/* <Button
-              variant="outlined"
-              disableRipple
-              color="primary"
-              startIcon={<FilterListIcon />}
-              style={{
-                marginLeft: "16px",
-                border: "1px solid #88CDD4",
-                color: "black",
-                borderRadius: "10px",
-                textTransform: "capitalize",
-              }}
-              className='FilterView'
-            >
-              Filter
-            </Button> */}
           </div>
         </div>
 
@@ -310,7 +278,7 @@ const Booking = () => {
         severity={snackbarSeverity}
       />
 
-      {loading && <Loader />} {/* Display loader */}
+      {loading && <Loader />} 
     </>
   );
 };
