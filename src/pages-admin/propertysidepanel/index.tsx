@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './propertysidepanel.module.css';
 import { FaInfoCircle, FaConciergeBell, FaMapMarkerAlt, FaImages, FaList, FaChevronDown, FaFile, FaUser } from 'react-icons/fa';
-import { fetchProperties, getPropertyById } from '@/store/slice/auth/propertiesSlice';
+import { fetchProperties, fetchPropertyById } from '@/store/slice/auth/propertiesSlice';
 import { RootState } from '@/store/reducers';
 import { AppDispatch } from '@/store';
 
@@ -34,12 +34,12 @@ const PropertySidePanel: React.FC<PropertySidePanelProps> = ({ isOpen }) => {
 
     useEffect(() => {
         if (id) {
-            dispatch(getPropertyById(Number(id)));
+            dispatch(fetchPropertyById(Number(id)));
         }
     }, [id, dispatch]);
 
     const handlePropertySelect = (property: Property) => {
-        dispatch(getPropertyById(property.id));
+        dispatch(fetchPropertyById(property.id));
         setIsDropdownOpen(false);
         navigate(`/admin/property/${property.id}`);
     };

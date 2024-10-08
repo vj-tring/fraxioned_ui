@@ -33,7 +33,6 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        
         const response = await getUserById(userId);
         setUserData(response.data.user);
       } catch (error) {
@@ -114,7 +113,7 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
       <div className={styles.content}>
         {selectedTab === 0 && !isEditing ? (
           <UserForm
-            userId={userId}
+            user={userData}
             onEditClick={handleEditClick}
             header={""}
             editButtonName={""}
@@ -128,6 +127,7 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
               onClose={() => setIsEditing(false)}
               onUserUpdated={handleUpdateSuccess}
               formTitle={""}
+              isAdmin={false}
             />
           )
         )}

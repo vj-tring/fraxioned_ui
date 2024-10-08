@@ -37,121 +37,183 @@ const AdminDashboard: React.FC = () => {
     throw new Error("Function not implemented.");
   }
 
-    return (
-        <div className="admin-dashboard-container">
-            <CustomNavbar
-                logo={fraxionedLogo}
-                userName={userImage}
-                userImage={userImage}
-                onUserImageClick={() => navigate('/admin/userdetails')}
+  return (
+    <div className="admin-dashboard-container">
+      <CustomNavbar
+        logo={fraxionedLogo}
+        userName={userImage}
+        userImage={userImage}
+        onUserImageClick={() => navigate("/admin/userdetails")}
+      />
+      <div className="dashboard-content">
+        <SidePanel isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+        <div
+          className={`content ${
+            isSidebarOpen ? "sidebar-open" : "sidebar-closed"
+          }`}
+        >
+          <Routes>
+            <Route
+              path="/"
+              element={<Navigate to="/admin/bookings" replace />}
             />
-            <div className="dashboard-content">
-                <SidePanel isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-                <div className={`content ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
-                    <Routes>
-                        <Route path="/" element={<Navigate to="admin/bookings" replace />} />
-                        <Route path="/bookings" element={<Calendar isSidebarOpen={isSidebarOpen} />} />
-                        <Route path="/bookings-grid" element={<BookingGrid isSidebarOpen={isSidebarOpen} />} />
-                        <Route path="/amenity" element={<AmenityManagement />} />
-                        <Route path="/user/:id/edit" element={<TabSwitch onUserUpdated={handleUserUpdated} />} />
-                        <Route path="/holidays" element={<Holidays isSidebarOpen={isSidebarOpen} />} />
-                        <Route path="/user" element={<UserGrid isSidebarOpen={isSidebarOpen} />} />
-                        <Route path="/reports" element={<ReportsGrid isSidebarOpen={isSidebarOpen} />} />
+            <Route
+              path="/bookings"
+              element={<Calendar isSidebarOpen={isSidebarOpen} />}
+            />
+            <Route
+              path="/bookings-grid"
+              element={<BookingGrid isSidebarOpen={isSidebarOpen} />}
+            />
+            <Route path="/amenity" element={<AmenityManagement />} />
+            <Route
+              path="/user/:id/edit"
+              element={<TabSwitch onUserUpdated={handleUserUpdated} />}
+            />
+            <Route
+              path="/holidays"
+              element={<Holidays isSidebarOpen={isSidebarOpen} />}
+            />
+            <Route
+              path="/user"
+              element={<UserGrid isSidebarOpen={isSidebarOpen} />}
+            />
+            <Route
+              path="/reports"
+              element={<ReportsGrid isSidebarOpen={isSidebarOpen} />}
+            />
 
-                        <Route path="/property" element={<Property isSidebarOpen={isSidebarOpen} />} />
-                        <Route path="/property/:id" element={
-                            <div className="property-details-container">
-                                <PropertySidePanel isOpen={true} />
-                                <div className="property-info-content">
-                                    <PropertyGeneralInfo />
-                                </div>
-                            </div>
-                        } />
-                        <Route path="/property/:id/edit" element={
-                            <div className="property-details-container">
-                                <PropertySidePanel isOpen={true} />
-                                <div className="property-info-content">
-                                    <EditPropertyForm />
-                                </div>
-                            </div>
-                        } />
-                        <Route path="/property/:id/rules" element={
-                            <div className="property-details-container">
-                                <PropertySidePanel isOpen={true} />
-                                <div className="property-info-content">
-                                    <PropertyRules />
-                                </div>
-                            </div>
-                        } />
-                        <Route path="/property/:id/rules/edit" element={
-                            <div className="property-details-container">
-                                <PropertySidePanel isOpen={true} />
-                                <div className="property-info-content">
-                                    <EditPropertyRulesForm />
-                                </div>
-                            </div>
-                        } />
-                        <Route path="/property/:id/location" element={
-                            <div className="property-details-container">
-                                <PropertySidePanel isOpen={true} />
-                                <div className="property-info-content">
-                                    {/* <PropertyLocation /> */}
-                                </div>
-                            </div>
-                        } />
-                        <Route path="/property/:id/amenities" element={
-                            <div className="property-details-container">
-                                <PropertySidePanel isOpen={true} />
-                                <div className="property-info-content">
-                                    <PropertyAmenities />
-                                </div>
-                            </div>
-                        } />
-                        <Route path="/property/:id/amenities/edit" element={
-                            <div className="property-details-container">
-                                <PropertySidePanel isOpen={true} />
-                                <div className="property-info-content">
-                                    <EditAmenityForm />
-                                </div>
-                            </div>
-                        } />
-                        <Route path="/property/:id/photos" element={
-                            <div className="property-details-container">
-                                <PropertySidePanel isOpen={true} />
-                                <div className="property-info-content">
-                                    <PropertyPhotos />
-                                </div>
-                            </div>
-                        } />
-                        <Route path="/property/:id/photos/upload" element={
-                            <div className="property-details-container">
-                                <PropertySidePanel isOpen={true} />
-                                <div className="property-info-content">
-                                    <PhotoUpload />
-                                </div>
-                            </div>
-                        } />
-                        <Route path="/property/:id/users" element={
-                            <div className="property-details-container">
-                                <PropertySidePanel isOpen={true} />
-                                <div className="property-info-content">
-                                    <UserProperty />
-                                </div>
-                            </div>
-                        } />
-                        <Route path="/property/:id/documents" element={
-                            <div className="property-details-container">
-                                <PropertySidePanel isOpen={true} />
-                                <div className="property-info-content">
-                                    <PropertyDocuments />
-                                </div>
-                            </div>
-                        } />
-                    </Routes>
+            <Route
+              path="/property"
+              element={<Property isSidebarOpen={isSidebarOpen} />}
+            />
+            <Route
+              path="/property/:id"
+              element={
+                <div className="property-details-container">
+                  <PropertySidePanel isOpen={true} />
+                  <div className="property-info-content">
+                    <PropertyGeneralInfo />
+                  </div>
                 </div>
-            </div>
+              }
+            />
+            <Route
+              path="/property/:id/edit"
+              element={
+                <div className="property-details-container">
+                  <PropertySidePanel isOpen={true} />
+                  <div className="property-info-content">
+                    <EditPropertyForm />
+                  </div>
+                </div>
+              }
+            />
+            <Route
+              path="/property/:id/rules"
+              element={
+                <div className="property-details-container">
+                  <PropertySidePanel isOpen={true} />
+                  <div className="property-info-content">
+                    <PropertyRules />
+                  </div>
+                </div>
+              }
+            />
+            <Route
+              path="/property/:id/rules/edit"
+              element={
+                <div className="property-details-container">
+                  <PropertySidePanel isOpen={true} />
+                  <div className="property-info-content">
+                    <EditPropertyRulesForm />
+                  </div>
+                </div>
+              }
+            />
+            <Route
+              path="/property/:id/location"
+              element={
+                <div className="property-details-container">
+                  <PropertySidePanel isOpen={true} />
+                  <div className="property-info-content">
+                    {/* <PropertyLocation /> */}
+                  </div>
+                </div>
+              }
+            />
+            <Route
+              path="/property/:id/amenities"
+              element={
+                <div className="property-details-container">
+                  <PropertySidePanel isOpen={true} />
+                  <div className="property-info-content">
+                    <PropertyAmenities />
+                  </div>
+                </div>
+              }
+            />
+            <Route
+              path="/property/:id/amenities/edit"
+              element={
+                <div className="property-details-container">
+                  <PropertySidePanel isOpen={true} />
+                  <div className="property-info-content">
+                    <EditAmenityForm />
+                  </div>
+                </div>
+              }
+            />
+            <Route
+              path="/property/:id/photos"
+              element={
+                <div className="property-details-container">
+                  <PropertySidePanel isOpen={true} />
+                  <div className="property-info-content">
+                    <PropertyPhotos />
+                  </div>
+                </div>
+              }
+            />
+            <Route
+              path="/property/:id/photos/upload"
+              element={
+                <div className="property-details-container">
+                  <PropertySidePanel isOpen={true} />
+                  <div className="property-info-content">
+                    <PhotoUpload />
+                  </div>
+                </div>
+              }
+            />
+            <Route
+              path="/property/:id/users"
+              element={
+                <div className="property-details-container">
+                  <PropertySidePanel isOpen={true} />
+                  <div className="property-info-content">
+                    <UserProperty />
+                  </div>
+                </div>
+              }
+            />
+            <Route
+              path="/property/:id/documents"
+              element={
+                <div className="property-details-container">
+                  <PropertySidePanel isOpen={true} />
+                  <div className="property-info-content">
+                    <PropertyDocuments />
+                  </div>
+                </div>
+              }
+            />
+            <Route path="*" element={<Navigate to="/admin/bookings" />} />
+          </Routes>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default AdminDashboard;
