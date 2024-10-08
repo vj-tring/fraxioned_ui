@@ -382,7 +382,6 @@ const handleDateChange = (range: DateRange | undefined) => {
 
     if (newEndDate) {
       for (let d = new Date(newStartDate); d < newEndDate; d.setDate(d.getDate() + 1)) {
-
         if (d >= peakSeasonStart && d <= peakSeasonEnd) {
           peakNights++;
         } else {
@@ -636,7 +635,6 @@ const handleDateChange = (range: DateRange | undefined) => {
           color: blue !important;
         }
       `}</style>
-
         {showEndCalendar && (
         <div className="flex items-center justify-between end-calendar">
           <div className='stay-length'>
