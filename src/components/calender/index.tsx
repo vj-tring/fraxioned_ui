@@ -119,6 +119,9 @@ export function DatePickerWithRange({
 
   const clearDatesHandler = () => {
     dispatch(clearDates());
+    setIsRegularBookingSelected(false);
+  setTempDateRange(null); // Reset tempDateRange
+  setIsLastMinutePopupOpen(false);
     if (onSelect) onSelect(undefined);
   };
 
