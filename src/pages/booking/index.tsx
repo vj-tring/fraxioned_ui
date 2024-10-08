@@ -22,11 +22,12 @@ import {
 } from "@/store/slice/auth/bookingSlice";
 import { format } from "date-fns";
 import { cancelBooking } from "@/api";
-import CustomizedSnackbar from "@/components/customized-snackbar";
 import "../booking/booking.css";
 import EditBookingModal from '../../components/modify-booking/bookingEdit';
 import { fetchProperties } from "@/store/slice/auth/property-slice";
 import { RootState } from "@/store/reducers";
+import Loader from '../../components/loader';
+import CustomizedSnackbars from "@/components/customized-snackbar";
 
 const Booking = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -37,6 +38,7 @@ const Booking = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("error");
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<BookingData | null>(null);
+  const [loading, setLoading] = useState(false); // Add loading state
   const user = useSelector((state: RootState) => state.auth.user);
   const userBookings = useSelector(
     (state: RootState) => state.bookings.userBookings || []
@@ -67,7 +69,11 @@ const Booking = () => {
 
   const formattedDate = (dateString: string) => {
     const date = new Date(dateString);
-    return format(date, "MMM do, yyyy");
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
   };
 
   const details = (Array.isArray(userBookings) ? userBookings : [])
@@ -115,6 +121,7 @@ const Booking = () => {
 
   const handleCancel = async (id: number) => {
     if (user && user.id) {
+      setLoading(true); // Show loader
       try {
         const response = await cancelBooking(id, user.id);
         if (response.data && response.data.status === 400) {
@@ -149,6 +156,8 @@ const Booking = () => {
         setSnackbarMessage(errorMessage);
         setSnackbarSeverity("error");
         setSnackbarOpen(true);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -261,8 +270,8 @@ const Booking = () => {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: properties.length === 1 ? '50%' : '97%',
-          height: '60%',
+          width: properties.length === 1 ? '47%' : '93%',
+          height:properties.length === 1 ? '62%' : '67%',
           bgcolor: 'background.paper',
           p: 4,
           borderRadius: '10px',
@@ -294,12 +303,14 @@ const Booking = () => {
         />
       )}
 
-      <CustomizedSnackbar
+      <CustomizedSnackbars
         open={snackbarOpen}
         handleClose={handleSnackbarClose}
         message={snackbarMessage}
         severity={snackbarSeverity}
       />
+
+      {loading && <Loader />} {/* Display loader */}
     </>
   );
 };

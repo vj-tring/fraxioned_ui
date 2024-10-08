@@ -19,30 +19,19 @@ import {
 import "./propertycarousel.css";
 import { propertyImageapi } from "@/api";
 import AddHomeOutlinedIcon from "@mui/icons-material/AddHomeOutlined";
-interface Card {
-  id: number;
-  name: string;
-  address: string;
-  image: string;
-  propertyId: number;
-  details: {
-    [year: number]: {
-      offSeason: string;
-      peakSeason: string;
-      peakHoliday: string;
-      offSeasonHoliday: string;
-    };
-  };
-}
+import { Card } from "../../store/slice/auth/property-slice";
+
 
 export default function BasicSelect() {
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedCardIndex, setSelectedCardIndex] = useState<number | null>(
     null
   );
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
-  const [years] = useState<number[]>([2024, 2025, 2026]);
-  const [selectedYear, setSelectedYear] = useState<number>(2024);
+  const [years, setYears] = useState<number[]>([]);
+  const [selectedYear, setSelectedYear] = useState<number>(currentYear);
   const carouselRef = useRef<HTMLDivElement>(null);
   const [imageDetails, setImageDetails] = useState<Image[]>([]);
   const open = Boolean(anchorEl);
@@ -81,6 +70,8 @@ export default function BasicSelect() {
     if (selectedCardIndex != null) {
       if (cards.length > 0) {
         setSelectedCard(cards[selectedCardIndex]);
+        setYears(Object.keys(cards[selectedCardIndex].details).map(Number))
+
         setSelectedCardIndex(selectedCardIndex);
         const card = cards[selectedCardIndex];
         dispatch(selectProperty(card.id));
@@ -118,13 +109,11 @@ export default function BasicSelect() {
   };
 
   const handlePrevious = () => {
-    setSelectedCardIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+    setSelectedCardIndex((prevIndex) => prevIndex !== null ? Math.max(prevIndex - 1, 0) : 0);
   };
-
+  
   const handleNext = () => {
-    setSelectedCardIndex((prevIndex) =>
-      Math.min(prevIndex + 1, cards.length - 1)
-    );
+    setSelectedCardIndex((prevIndex) => prevIndex !== null ? Math.min(prevIndex + 1, cards.length - 1) : 0);
   };
 
   const handleClose = () => {
@@ -166,8 +155,8 @@ export default function BasicSelect() {
 
   const BoxList =
     cards.length === 1 ? "7px" : cards.length === 2 ? "7px" : "10px";
-  const BoxMargin =
-    cards.length === 1 ? "0px" : cards.length === 2 ? "0px" : "8px";
+  // const BoxMargin =
+  //   cards.length === 1 ? "0px" : cards.length === 2 ? "0px" : "8px";
   const cardItemHeight =
     cards.length === 1 ? "272px" : cards.length === 2 ? "232px" : "280px";
   const cardNameWeight =
@@ -201,7 +190,7 @@ export default function BasicSelect() {
       >
         <AddHomeOutlinedIcon
           sx={{
-            color: "grey",
+            color: "grey",  
           }}
         />
         <div className="d-flex align-items-start flex-column card-item">
@@ -218,13 +207,16 @@ export default function BasicSelect() {
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
-        PaperProps={{
-          style: {
-            position: "fixed",
-            maxHeight: "60vh",
-            overflowY: "auto",
-            //maxWidth: "70vh",
-          },
+        slotProps={{
+          paper: {
+            style: {
+              position: "fixed",
+              maxHeight: "60vh",
+              overflowY: "auto",
+              //maxWidth: "70vh",
+            },
+          }
+          
         }}
         sx={{ borderRadius: 32 }}
       >
@@ -344,7 +336,7 @@ export default function BasicSelect() {
                       </h4>
                       <p className="BlueFont">{selectedCard.address}</p>
                       <p className="BlueFont">{selectedCard.city}</p>
-                      <p className="BlueFont">{selectedCard.state}</p>
+                      <p className="BlueFont">{selectedCard.state},</p>
                       <p className="BlueFont">{selectedCard.zipcode}</p>
                     </span>
                     <span className={`CardImage ${imageClass}`}>

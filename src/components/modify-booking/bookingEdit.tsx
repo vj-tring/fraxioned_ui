@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Modal, Box, Typography, Button, Grid } from '@mui/material';
 import { DatePickerWithRange } from '@/components/calender';
@@ -11,6 +11,8 @@ import { format } from 'date-fns';
 import { fetchUserBookings, updateBooking } from '@/store/slice/auth/bookingSlice';
 import { selectProperty } from '@/store/slice/auth/property-slice';
 import { AppDispatch } from '@/store';
+import Loader from '../../components/loader';
+import { X } from 'lucide-react';
 
 const MODAL_STYLE = {
   position: 'absolute' as 'absolute',
@@ -20,7 +22,7 @@ const MODAL_STYLE = {
   width: 731,
   bgcolor: 'background.paper',
   boxShadow: 24,
-  p: 4,
+  p: 3,
   borderRadius: 2,
 };
 
@@ -57,34 +59,50 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
   const guestCounts = useSelector((state: RootState) => state.limits.counts);
   const updateStatus = useSelector((state: RootState) => state.bookings.successMessage);
   const updateError = useSelector((state: RootState) => state.bookings.error);
+  const bookingRef = useRef(booking);
+
+  const currentBookingDates = {
+    from: new Date(booking.checkinDate),
+    to: new Date(booking.checkoutDate)
+  };
 
   useEffect(() => {
     if (booking?.propertyId) {
       dispatch(selectProperty(booking?.propertyId));
     }
 
-    if (booking) {
-      setDateRange({
-        from: new Date(booking.checkinDate),
-        to: new Date(booking.checkoutDate),
-      });
-      setDisplayDates({
-        checkinDate: booking.checkinDate,
-        checkoutDate: booking.checkoutDate,
-      });
-      setGuestCount(booking.noOfGuests);
-      dispatch(initializeCounts({
-        Adults: booking.noOfAdults,
-        Children: booking.noOfChildren,
-        Pets: booking.noOfPets
-      }));
-    }
+useEffect(() => {
+  if (open && bookingRef.current) {
+    const initialDateRange = {
+      from: new Date(bookingRef.current.checkinDate),
+      to: new Date(bookingRef.current.checkoutDate),
+    };
+    console.log('Setting initial date range:', initialDateRange);
+    setDateRange(initialDateRange);
+    setDisplayDates({
+      checkinDate: formattedDate(bookingRef.current.checkinDate),
+      checkoutDate: formattedDate(bookingRef.current.checkoutDate),
+    });
+    setGuestCount(bookingRef.current.noOfGuests);
+    dispatch(initializeCounts({
+      Adults: bookingRef.current.noOfAdults,
+      Children: bookingRef.current.noOfChildren,
+      Pets: bookingRef.current.noOfPets
+    }));
+  }
+}, [open, dispatch]);
+
+  useEffect(() => {
+    bookingRef.current = booking;
+  }, [booking]);
 
     if (updateStatus === "Booking updated successfully") {
+      console.log('Update successful, closing modal');
       onUpdateSuccess(booking);
       handleClose();
     }
     if (updateError) {
+      console.error('Update error:', updateError);
       setDateError(updateError);
     }
   }, [booking, dispatch, updateStatus, updateError, onUpdateSuccess, handleClose, booking?.propertyId, userId]);
@@ -95,6 +113,7 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
   };
 
   const handleDateSelect = (range: DateRange | undefined) => {
+    console.log('Date range selected:', range);
     setDateRange(range);
     setDateError(null);
     
@@ -112,38 +131,42 @@ const updateDisplayDates = (range: DateRange) => {
 };
 
   const handleGuestChange = (newCount: number) => {
+    console.log('Guest count changed:', newCount);
     setGuestCount(newCount);
   };
 
   const handleSubmit = async () => {
-    if (!dateRange?.from || !dateRange?.to) {
-      setDateError("Please select both check-in and check-out dates");
-      return;
-    }
-
+    console.log('Submitting booking update');
     setIsSubmitting(true);
     try {
       const updatedBookingData = {
-        user: { id: booking.user.id },
-        property: { id: booking?.propertyId },
-        updatedBy: { id: booking.user.id },
-        checkinDate: dateRange.from.toISOString(),
-        checkoutDate: dateRange.to.toISOString(),
+        user: { id: bookingRef.current.user.id },
+        property: { id: bookingRef.current?.propertyId },
+        updatedBy: { id: bookingRef.current.user.id },
         noOfGuests: guestCount,
-        isLastMinuteBooking: Boolean(booking.isLastMinuteBooking),
+        isLastMinuteBooking: Boolean(bookingRef.current.isLastMinuteBooking),
         noOfAdults: guestCounts.Adults,
         noOfChildren: guestCounts.Children,
         noOfPets: guestCounts.Pets,
-        notes: booking.notes,
-        confirmationCode: booking.confirmationCode,
-        cleaningFee: booking.cleaningFee,
-        petFee: booking.petFee
+        notes: bookingRef.current.notes,
+        confirmationCode: bookingRef.current.confirmationCode,
+        cleaningFee: bookingRef.current.cleaningFee,
+        petFee: bookingRef.current.petFee
       };
 
-      dispatch(updateBooking({ bookingId: booking.id, updatedData: updatedBookingData }));
-      dispatch(fetchUserBookings(userId));
+      if (dateRange && dateRange.from && dateRange.to) {
+        updatedBookingData.checkinDate = dateRange.from.toISOString();
+        updatedBookingData.checkoutDate = dateRange.to.toISOString();
+      } else {
+        updatedBookingData.checkinDate = bookingRef.current.checkinDate;
+        updatedBookingData.checkoutDate = bookingRef.current.checkoutDate;
+      }
 
-
+      console.log('Updated booking data:', updatedBookingData);
+      await dispatch(updateBooking({ bookingId: bookingRef.current.id, updatedData: updatedBookingData }));
+      await dispatch(fetchUserBookings(userId));
+      onUpdateSuccess(bookingRef.current);
+      handleClose();
     } catch (error) {
       console.error('Error updating booking:', error);
       if (error instanceof Error) {
@@ -154,7 +177,6 @@ const updateDisplayDates = (range: DateRange) => {
     } finally {
       setIsSubmitting(false);
     }
-
   };
 
   return (
@@ -165,29 +187,32 @@ const updateDisplayDates = (range: DateRange) => {
       aria-describedby="modal-to-edit-booking"
     >
       <Box sx={MODAL_STYLE}>
+        {isSubmitting && <Loader />}
         <Typography id="edit-booking-modal" variant="h4" component="h2" mb={2}>
           Modify Your Booking
         </Typography>
+        <X className="absolute top-8 right-7 h-7 w-7 cursor-pointer" onClick={handleClose} />
+
         <hr />
         <Grid container spacing={2} mt={1}>
           <Grid item xs={3} ml={3}>
-           <Typography>
-           # {booking?.bookingId}
+            <Typography>
+              # {bookingRef.current?.bookingId}
             </Typography>
             <Typography>
-            {booking?.property}
+              {bookingRef.current?.property}
             </Typography>
           </Grid>
           <Grid item xs={5}>
                <Box sx={DATE_BOX_STYLE}>
               <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
                 <Box>
-                  <Typography variant="caption" sx={{ fontWeight: 'bold', fontSize: '14px' }}>Check-in</Typography>
+                  <Typography variant="caption" sx={{ fontWeight: '500', fontSize: '14px' }}>Check-in</Typography>
                   <Typography variant="body2" sx={{color: 'gray'}}>{displayDates.checkinDate}</Typography>
                 </Box>
                 <div className="vl"></div>
                 <Box>
-                  <Typography variant="caption" sx={{ fontWeight: 'bold', fontSize: '14px' }}>Check-out</Typography>
+                  <Typography variant="caption" sx={{ fontWeight: '500', fontSize: '14px' }}>Check-out</Typography>
                   <Typography variant="body2" sx={{color: 'gray'}} >{displayDates.checkoutDate}</Typography>
                 </Box>
               </Box>
@@ -208,7 +233,14 @@ const updateDisplayDates = (range: DateRange) => {
             <DatePickerWithRange
               onSelect={handleDateSelect}
               initialRange={dateRange}
-              propertyColor={''}            />
+              propertyColor={''}    
+              isEditMode={true}
+              currentBookingDates={{
+                from: new Date(booking.checkinDate),
+                to: new Date(booking.checkoutDate)
+              }}
+              currentBookingId={booking.id}
+            />
           </Grid>
         </Grid>
         {dateError && (
@@ -217,9 +249,9 @@ const updateDisplayDates = (range: DateRange) => {
           </Typography>
         )}
         <Box mt={2} display="flex" justifyContent="flex-end">
-          <Button variant="outlined" color="secondary" onClick={handleClose} sx={{ mr: 1 }}>
+          {/* <Button variant="outlined" color="secondary" onClick={handleClose} sx={{ mr: 1 }}>
             Cancel
-          </Button>
+          </Button> */}
           <Button variant="contained" color="primary" onClick={handleSubmit} disabled={isSubmitting}>
             {isSubmitting ? 'Updating...' : 'Update Booking'}
           </Button>

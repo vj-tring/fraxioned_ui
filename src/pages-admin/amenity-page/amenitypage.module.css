@@ -1,173 +1,207 @@
 .container {
-    display: flex;
-    height: 100vh;
-    background-color: #f0f2f5;
-    font-family: 'Arial', sans-serif;
-}
-
-.sidebar {
-    width: 260px;
-    height: 100vh;
-    background-color: #ffffff;
-    padding: 2rem;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
-}
-
-.sidebarTitle {
-    font-size: 20px;
-    font-weight: bolder;
-    margin-left: 24px;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    font-family: 'Roboto', 'Arial', sans-serif;
     color: #333;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-}
-
-.typeList {
-    list-style-type: none;
-    padding: 0;
-}
-
-.typeItem {
-    padding: 0.75rem 1rem;
-    margin-bottom: 0.5rem;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.typeItem:hover {
-    background-color: #e0e0e0;
-}
-
-.typeItem.active {
-    background-color: #d4eced;
-    color: rgb(0, 0, 0);
-}
-
-.mainContent {
-    flex-grow: 1;
-    padding: 2rem;
-    overflow-y: auto;
+    background-color: #f8f9fa;
+    min-height: 100vh;
 }
 
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
+    padding: 1.0rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.05);
 }
 
 .title {
-    font-size: 2rem;
-    cursor: pointer;
-    font-weight: bold;
-    color: #333;
+    font-size: 28px;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
 }
 
 .actions {
     display: flex;
+    gap: 1rem;
     align-items: center;
 }
 
 .searchBar {
     display: flex;
     align-items: center;
-    background-color: white;
-    border-radius: 20px;
+    background-color: #f1f3f5;
+    border-radius: 25px;
     padding: 0.5rem 1rem;
-    margin-right: 1rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.searchBar:focus-within {
+    box-shadow: 0 0 0 2px #3498db;
 }
 
 .searchBar input {
     border: none;
-    outline: none;
+    background: transparent;
     margin-left: 0.5rem;
     font-size: 1rem;
+    outline: none;
+    width: 200px;
 }
 
 .addButton {
     display: flex;
     align-items: center;
-    background-color: #e28f25;
+    gap: 0.5rem;
+    background-color: #51beca;
     color: white;
     border: none;
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    border-radius: 20px;
+    padding: 0.7rem 0.9rem;
+    border-radius: 10px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s, transform 0.1s;
+    font-weight: 400;
 }
 
 .addButton:hover {
-    background-color: #e99e3d;
-    border-color: #e28f25;
+    background-color: #51beca;
 }
 
-.addButton svg {
-    margin-right: 0.5rem;
+.addButton:active {
+    transform: translateY(0);
+}
+
+.buttonText {
+    display: inline-block;
+}
+
+.refreshIcon {
+    color: #3498db !important;
+    transition: transform 0.3s ease;
+}
+
+.refreshIcon:hover {
+    transform: rotate(180deg);
 }
 
 .content {
     background-color: white;
     border-radius: 10px;
-    padding: 2rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
 }
 
-.amenitiesGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2rem;
+.amenitiesList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .amenityGroup {
-    background-color: #fbfeff;
+    border: 1px solid #e0e0e0;
     border-radius: 8px;
-    padding: 1.5rem;
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.05);
-    height: 210px;
-    display: flex;
-    flex-direction: column;
     overflow: hidden;
+    transition: box-shadow 0.3s ease;
 }
 
-.amenitiesGrid.singleTypeView {
-    grid-template-columns: 1fr;
+.amenityGroup:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.amenityGroup.fullHeight {
-    height: auto;
-    width: 80%;
+.groupHeader {
+    display: flex;
+    align-items: center;
+    height: 42px;
+    background-color: #f8f9fa;
+    padding: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.groupHeader:hover {
+    background-color: #e9ecef;
+}
+
+.groupHeader h2 {
+    margin: 0;
+    margin-left: 0.5rem;
+    font-weight: 500;
+    font-size: 16px;
+    color: #2c3e50;
+}
+
+.amenityCount {
     margin-left: auto;
-    margin-right: auto;
+    background-color: #77d0da;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
 }
 
-.amenityType {
-    font-size: 17px;
-    font-weight: 700;
-    color: #333;
+.groupSearchContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid #e0e0e0;
+    padding: 0.6rem 1.0rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
 }
 
-.amenityList {
-    flex-grow: 1;
+.groupSearchHeading {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.groupSearchBar {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 8px;
+    padding: 0.4rem 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.groupSearchBar input {
+    border: none;
+    outline: none;
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+    width: 200px;
+}
+
+.amenityItems {
+    padding: 1rem;
 }
 
 .amenityItem {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem 0;
+    padding: 0.2rem;
     border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.3s;
 }
 
 .amenityItem:last-child {
     border-bottom: none;
+}
+
+.amenityItem:hover {
+    background-color: #f8f9fa;
+}
+
+.amenityName {
+    font-size: 16px;
+    color: #34495e;
 }
 
 .actionButtons {
@@ -176,19 +210,23 @@
 }
 
 .editButton,
+.deleteButton,
 .saveButton,
-.cancelButton,
-.deleteButton {
+.cancelButton {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0.25rem;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.3s, transform 0.1s;
 }
 
 .editButton {
-    color: #4abac6;
+    color: #3498db;
+}
+
+.deleteButton {
+    color: #e74c3c;
 }
 
 .saveButton {
@@ -196,139 +234,87 @@
 }
 
 .cancelButton {
-    color: #e74c3c;
+    color: #95a5a6;
 }
 
-.deleteButton {
-    color: #ef958c;
-}
 
-.editButton:hover,
-.saveButton:hover,
-.cancelButton:hover,
-.deleteButton:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+.editButton:active,
+.deleteButton:active,
+.saveButton:active,
+.cancelButton:active {
+    transform: scale(1);
 }
 
 .editInput {
-    padding: 0.5rem;
-    font-size: 1rem;
-    border: 1px solid #4a90e2;
+    flex-grow: 1;
+    padding: 0.4rem;
+    height: 35px;
+    font-size: 16px;
+    border: 2px solid #c7eaee;
     border-radius: 4px;
     outline: none;
+    transition: border-color 0.3s;
 }
 
 .editInput:focus {
-    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+    border-color: #c7eaee;
 }
 
 .loading {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 50vh;
     font-size: 1.5rem;
-    color: #333;
-}
-
-.moreLink {
-    color: #383838;
-    cursor: pointer;
-    padding: 0.5rem 0;
-    text-align: right;
-    font-weight: bold;
-    transition: color 0.3s ease;
-    font-size: 14px;
-}
-
-.moreLink:hover {
-    color: #88cdd4;
-    font-weight: bold;
-}
-
-.newAmenityForm {
-    background-color: white;
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.newAmenityForm input,
-.newAmenityForm select {
-    width: 100%;
-    padding: 0.5rem;
-    font-size: 1rem;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    margin-bottom: 1rem;
-}
-
-.newAmenityForm button {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.newAmenityForm button[type="submit"] {
-    background-color: #4a90e2;
-    color: white;
-}
-
-.newAmenityForm button[type="button"] {
-    background-color: #e0e0e0;
-    color: #333;
-    margin-left: 1rem;
-}
-
-.newAmenityForm button:hover {
-    opacity: 0.9;
+    color: #2c3e50;
 }
 
 @media (max-width: 768px) {
     .container {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-        height: auto;
-        padding: 1rem;
-    }
-
-    .mainContent {
         padding: 1rem;
     }
 
     .header {
         flex-direction: column;
         align-items: flex-start;
+        gap: 1rem;
     }
 
     .actions {
         width: 100%;
-        margin-top: 1rem;
+        flex-direction: column;
     }
 
-    .searchBar {
-        width: 100%;
-        margin-right: 0;
-        margin-bottom: 1rem;
-    }
-
+    .searchBar,
     .addButton {
         width: 100%;
     }
 
-    .amenitiesGrid {
-        grid-template-columns: 1fr;
+    .buttonText {
+        display: none;
     }
 
-    .amenityGroup,
-    .amenityGroup.fullHeight {
+    .amenityItem {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .actionButtons {
+        align-self: flex-end;
+    }
+
+    .groupSearchContainer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .groupSearchBar {
+        width: 100%;
+    }
+
+    .groupSearchBar input {
         width: 100%;
     }
 }

@@ -27,9 +27,10 @@ const menuItems: MenuItem[] = [
     { icon: <FaUser />, label: 'User', path: '/admin/user', disabled: false },
     { icon: <FaConciergeBell />, label: 'Amenity', path: '/admin/amenity', disabled: false },
     { icon: <FaFile />, label: 'Documents', path: '/documents', disabled: true },
-    { icon: <FaUserTag />, label: 'Role', path: '/role', disabled: true },
-    { icon: <FaChartBar />, label: 'Reports', path: '/reports', disabled: true },
-    { icon: <FaGavel />, label: 'Rules', path: '/rules', disabled: true }
+
+    //{ icon: <FaUserTag />, label: 'Role', path: '/role', disabled: true },
+    { icon: <FaChartBar />, label: 'Reports', path: '/admin/reports', disabled: false },
+    //{ icon: <FaGavel />, label: 'Rules', path: '/rules', disabled: true }
 ];
 
 const SidePanel: React.FC<SidePanelProps> = ({ isOpen, toggleSidebar }) => {
@@ -50,6 +51,9 @@ const SidePanel: React.FC<SidePanelProps> = ({ isOpen, toggleSidebar }) => {
         }
         if (path === '/admin/user') {
             return location.pathname.startsWith('/admin/user');
+        }
+        if (path === '/admin/reports') {
+            return location.pathname.startsWith('/admin/reports');
         }
 
 

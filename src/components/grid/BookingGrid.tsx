@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
-import { Button, Grid, Typography } from "@mui/material";
+import { Backdrop, Button, Grid } from "@mui/material";
 import CancelPolicy from "../cancel-policy";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -235,40 +235,49 @@ const BookingGrid: React.FC<BookingGridProps> = ({
           },
         }}
       />
-      {showCancelPopup && (
-        <Grid
-          container
-          spacing={2}
-          direction="column"
-          justify="center"
-          alignItems="flex-start"
-          style={{
-            position: "absolute",
-            top: "57%",
-            left: "50%",
-            width: "70%",
-            height: "70%",
-            transform: "translate(-50%, -50%)",
-            backgroundColor: "white",
-            padding: "20px",
-            borderRadius: "8px",
-            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.4)",
-          }}
-        >
-          <Typography
-            variant="h5"
-            mb={3}
-            gutterBottom
-            sx={{ fontWeight: "bold" }}
-          >
-            Confirm Cancellation
-          </Typography>
-          <CancelPolicy
-            onConfirm={handleConfirmCancel}
-            onCancel={handleCloseCancelModal}
-          />
-        </Grid>
-      )}
+{showCancelPopup && (
+  <>
+    <div 
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        zIndex: 1000
+      }}
+    />
+      <Backdrop
+            open={showCancelPopup}
+            style={{
+              zIndex: 1000,
+              color: '#fff',
+            }}
+       />
+    <Grid 
+      container 
+      spacing={2} 
+      direction="column" 
+      justify="center" 
+      alignItems="flex-start" 
+      style={{
+        position: "fixed",
+        top: "52%",
+        left: "50%",
+        width: "70%",
+        height: "80%",
+        transform: "translate(-50%, -50%)",
+        backgroundColor: "white",
+        padding: "10px",
+        borderRadius: "8px",
+        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.4)",
+        zIndex: 1001,
+        // maxHeight: "80vh",
+      }}
+    >
+      <CancelPolicy onConfirm={handleConfirmCancel} onCancel={handleCloseCancelModal} />
+    </Grid>
+  </>
+)}
       {editingBooking && (
         <EditBookingModal
           open={editBookingId !== null}

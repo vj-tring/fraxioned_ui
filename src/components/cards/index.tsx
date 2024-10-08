@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Typography, Skeleton } from "@mui/material";
 import "./card.css";
-import firePng from "../../assests/fire.png"
+import firePng from "../../assests/fire.png";
 interface CardProps {
   imageUrl: string;
   text: string;
@@ -27,7 +27,7 @@ const Card: React.FC<CardProps> = ({
 
   const handleClick = () => {
     if (id !== undefined) {
-      navigate(`/home/property/${id}`);
+      navigate(`/property/${id}`);
     }
   };
 
@@ -42,11 +42,10 @@ const Card: React.FC<CardProps> = ({
     >
       <Box sx={{ position: "relative", width: "100%", height: 200 }}>
         {tag && (
-          
           <div className="tag">
-            <img src={firePng} className="firePng"></img>  
+            <img src={firePng} className="firePng"></img>
             <div className="TagName">{tag}</div>
-            </div> 
+          </div>
         )}
         {loading && (
           <Skeleton variant="rectangular" width="100%" height="100%" />

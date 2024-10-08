@@ -10,6 +10,7 @@ import { clearDates } from "@/store/slice/datePickerSlice";
 import { User } from "@/store/model";
 import { propertyImageapi, getProperties } from "@/api"; // Ensure getProperties is imported
 import { fetchProperties } from "@/store/slice/auth/property-slice";
+import NewsLetter from "./NewsLetter";
 interface Property {
   id: number;
   name?: string;
@@ -193,7 +194,12 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
 
         {/* Render additional properties based on user properties count */}
       </div>
-      <a href="https://www.fraxioned.com/" target="_blank">
+
+      <div className="NewsLetter">
+        <NewsLetter />
+      </div>
+
+      {/* <a href="https://www.fraxioned.com/" target="_blank">
         <div className="AddProps ">
           {properties.length <= 4 &&
             additionalProperties
@@ -219,7 +225,7 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
                 );
               })}
         </div>
-      </a>
+      </a> */}
     </div>
   );
 };

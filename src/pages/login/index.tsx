@@ -105,7 +105,7 @@ const Login: React.FC = () => {
             if (resultAction.user.roleId === 1) {
               navigate("/admin/bookings");
             } else {
-              navigate("/home");
+              navigate("/");
             }
 
             setIsLoading(false);
@@ -174,7 +174,7 @@ const Login: React.FC = () => {
                 type="text"
                 placeholder="Email"
                 value={email}
-                autoFocus
+                // autoFocus
                 onChange={handleEmailChange}
                 onBlur={handleEmailBlur}
                 className={emailError ? styles.errorInput : ""}

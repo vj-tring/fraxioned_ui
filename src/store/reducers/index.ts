@@ -9,6 +9,19 @@ import addpropertyReducer from '../slice/auth/addproperty';
 import propertySeasonHolidayReducer from '../slice/auth/propertySeasonHolidaySlice';
 import bookingReducer from '../slice/auth/bookingSlice';
 import datePickerReducer from '../slice/datePickerSlice';
+import propertyDocumentsReducer from '../slice/propertyDocumentSlice';
+import ThingsToKnowReducer from '../slice/auth/ThingstoknowSlice';
+import propertiesReducer from '../slice/auth/propertiesSlice';
+import holidayReducer from '../slice/auth/holidaySlice';
+import addAmenityReducer from '../slice/auth/addamenitySlice';
+import amenityGroupsReducer from '../slice/auth/amenityGroups';
+import propertyAmenitiesReducer from '../slice/auth/propertyamenities';
+import amenitiesReducer from '../slice/auth/amenitySlice';
+import amenitiesPageReducer from '../slice/auth/amenitiespageSlice';
+import userDetailsReducer from '../slice/auth/userdetails';
+import userpropertiesReducer from '../slice/auth/userproperties';
+import userReducer from '../slice/user-slice';
+
 
 const appReducer = combineReducers({
   auth: authReducer,
@@ -18,9 +31,21 @@ const appReducer = combineReducers({
   properties: propertyReducer,
   editProperty: editpropertyReducer,
   limits: limitsReducer,
-  propertySeasonHoliday: propertySeasonHolidayReducer, 
+  propertySeasonHoliday: propertySeasonHolidayReducer,
   bookings: bookingReducer,
   datePicker: datePickerReducer,
+  propertyDocuments: propertyDocumentsReducer,
+  property: propertiesReducer,
+  thingsToKnow: ThingsToKnowReducer,
+  holiday: holidayReducer,
+  addAmenity: addAmenityReducer,
+  amenityGroups: amenityGroupsReducer,
+  propertyAmenities: propertyAmenitiesReducer,
+  amenitiesPage: amenitiesPageReducer,
+  amenities: amenitiesReducer,
+  userDetails: userDetailsReducer,
+  userProperties: userpropertiesReducer,
+  user: userReducer,
 });
 
 const rootReducer = (
@@ -34,5 +59,4 @@ const rootReducer = (
 };
 
 export type RootState = ReturnType<typeof appReducer>;
-
 export default rootReducer;

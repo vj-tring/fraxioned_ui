@@ -1,16 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { amenitiesapi, updateamenities, deleteAmenity } from '@/api';
+import { useDispatch, useSelector } from 'react-redux';
+import { amenitiesapi } from '@/api';
+import { updateAmenity, resetAmenitiesState, deleteAmenityAsync } from '@/store/slice/auth/amenitiespageSlice';
+import { RootState } from '@/store/reducers';
 import styles from './amenitypage.module.css';
 import NewAmenityForm from '../property-amenities/new-amenity';
-import { Edit2, Check, X, Trash2, Plus, Search } from 'lucide-react';
+import { Edit2, Trash2, Plus, ChevronRight, ChevronDown, RefreshCw, Search } from 'lucide-react';
 import ConfirmationModal from '@/components/confirmation-modal';
 import CustomizedSnackbars from '@/components/customized-snackbar';
+import { IconButton, Tooltip } from '@mui/material';
+import { AppDispatch } from '@/store';
 
 interface Amenity {
     id: number;
     amenityName: string;
-    amenityType: string;
     amenityDescription?: string;
+    amenityGroup: {
+        id: number;
+        name: string;
+    };
+}
+
+interface AmenityGroup {
+    id: number;
+    name: string;
 }
 
 interface SnackbarState {
@@ -20,43 +33,61 @@ interface SnackbarState {
 }
 
 const AmenityManagement: React.FC = () => {
+    const dispatch = useDispatch<AppDispatch>();
+    const {
+        loading: updateLoading,
+        error: updateError,
+        success: updateSuccess,
+        deleteLoading,
+        deleteError,
+        deleteSuccess
+    } = useSelector((state: RootState) => state.amenitiesPage);
+
     const [amenities, setAmenities] = useState<{ [key: string]: Amenity[] }>({});
+    const [groupSearchTerms, setGroupSearchTerms] = useState<{ [key: string]: string }>({});
+    const [amenityGroups, setAmenityGroups] = useState<AmenityGroup[]>([]);
     const [loading, setLoading] = useState(true);
     const [editingAmenity, setEditingAmenity] = useState<Amenity | null>(null);
     const [isAddingNew, setIsAddingNew] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showUpdateModal, setShowUpdateModal] = useState(false);
     const [amenityToDelete, setAmenityToDelete] = useState<Amenity | null>(null);
     const [snackbar, setSnackbar] = useState<SnackbarState>({
         open: false,
         message: '',
         severity: 'info',
     });
-    const [searchTerm, setSearchTerm] = useState('');
-    const [activeType, setActiveType] = useState<string | null>(null);
+    const [expandedGroups, setExpandedGroups] = useState<string[]>([]);
 
     useEffect(() => {
         fetchAmenities();
+        // fetchAmenityGroups();
     }, []);
 
     useEffect(() => {
-        if (snackbar.open) {
-            const timer = setTimeout(() => {
-                setSnackbar((prev) => ({ ...prev, open: false }));
-            }, 3000);
-            return () => clearTimeout(timer);
+        if (updateSuccess) {
+            showSnackbar('Amenity updated successfully', 'success');
+            setEditingAmenity(null);
+            fetchAmenities();
+            dispatch(resetAmenitiesState());
         }
-    }, [snackbar.open]);
-
-    const showSnackbar = (message: string, severity: 'success' | 'info' | 'warning' | 'error') => {
-        setSnackbar({ open: true, message, severity });
-    };
-
-    const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-        if (reason === 'clickaway') {
-            return;
+        if (updateError) {
+            showSnackbar(updateError, 'error');
+            dispatch(resetAmenitiesState());
         }
-        setSnackbar({ ...snackbar, open: false });
-    };
+    }, [updateSuccess, updateError, dispatch]);
+
+    useEffect(() => {
+        if (deleteSuccess) {
+            showSnackbar('Amenity deleted successfully', 'success');
+            fetchAmenities();
+            dispatch(resetAmenitiesState());
+        }
+        if (deleteError) {
+            showSnackbar(deleteError, 'error');
+            dispatch(resetAmenitiesState());
+        }
+    }, [deleteSuccess, deleteError, dispatch]);
 
     const fetchAmenities = async () => {
         try {
@@ -65,17 +96,22 @@ const AmenityManagement: React.FC = () => {
             setAmenities(groupedAmenities);
             setLoading(false);
         } catch (err) {
-            showSnackbar('Failed to fetch amenities. Please try again later.', 'error');
+            showSnackbar('Failed to fetch amenities', 'error');
             setLoading(false);
         }
     };
 
+    const handleGroupSearch = (group: string, term: string) => {
+        setGroupSearchTerms(prev => ({ ...prev, [group]: term }));
+    };
+
     const groupAmenitiesByType = (data: Amenity[]) => {
         return data.reduce((acc, amenity) => {
-            if (!acc[amenity.amenityType]) {
-                acc[amenity.amenityType] = [];
+            const groupName = amenity.amenityGroup.name;
+            if (!acc[groupName]) {
+                acc[groupName] = [];
             }
-            acc[amenity.amenityType].push(amenity);
+            acc[groupName].push(amenity);
             return acc;
         }, {} as { [key: string]: Amenity[] });
     };
@@ -86,24 +122,29 @@ const AmenityManagement: React.FC = () => {
 
     const handleSave = async () => {
         if (editingAmenity) {
-            try {
-                const response = await updateamenities(editingAmenity.id, {
-                    updatedBy: { id: 1 },
-                    amenityName: editingAmenity.amenityName,
-                    amenityDescription: editingAmenity.amenityDescription || '',
-                    amenityType: editingAmenity.amenityType
-                });
-                if (response.data.success) {
-                    setEditingAmenity(null);
-                    await fetchAmenities();
-                    showSnackbar('Amenity updated successfully', 'success');
-                } else {
-                    showSnackbar(response.data.message || 'Failed to update amenity. Please try again.', 'error');
-                }
-            } catch (err: any) {
-                showSnackbar(err.response?.data?.message || 'Failed to update amenity. Please try again.', 'error');
-            }
+            setShowUpdateModal(true);
         }
+    };
+
+    const handleUpdateConfirm = async () => {
+        if (editingAmenity) {
+            const updateData = {
+                updatedBy: { id: 1 },
+                amenityName: editingAmenity.amenityName,
+                amenityDescription: editingAmenity.amenityDescription || '',
+                amenityGroup: { id: editingAmenity.amenityGroup.id }
+            };
+
+            dispatch(updateAmenity({
+                id: editingAmenity.id,
+                updateData
+            }));
+        }
+        setShowUpdateModal(false);
+    };
+
+    const handleUpdateCancel = () => {
+        setShowUpdateModal(false);
     };
 
     const handleCancel = () => {
@@ -131,27 +172,11 @@ const AmenityManagement: React.FC = () => {
     const handleDeleteConfirm = async () => {
         if (amenityToDelete) {
             try {
-                const response = await deleteAmenity(amenityToDelete.id);
-                if (response.data.success) {
-                    showSnackbar('Amenity deleted successfully', 'success');
-                    setTimeout(() => {
-                        setShowDeleteModal(false);
-                        setAmenityToDelete(null);
-                    }, 500);
-                    await fetchAmenities();
-                } else {
-                    showSnackbar(response.data.message || 'Failed to delete amenity. Please try again.', 'error');
-                    setTimeout(() => {
-                        setShowDeleteModal(false);
-                        setAmenityToDelete(null);
-                    }, 500);
-                }
+                dispatch(deleteAmenityAsync(amenityToDelete.id));
+                setShowDeleteModal(false);
+                setAmenityToDelete(null);
             } catch (err: any) {
-                showSnackbar(err.response?.data?.message || 'Failed to delete amenity. Please try again.', 'error');
-                setTimeout(() => {
-                    setShowDeleteModal(false);
-                    setAmenityToDelete(null);
-                }, 500);
+                showSnackbar('Failed to delete amenity', 'error');
             }
         }
     };
@@ -161,22 +186,29 @@ const AmenityManagement: React.FC = () => {
         setAmenityToDelete(null);
     };
 
-    const handleResetView = () => {
-        setActiveType(null);
-        setSearchTerm('');
+    const showSnackbar = (message: string, severity: 'success' | 'info' | 'warning' | 'error') => {
+        setSnackbar({ open: true, message, severity });
     };
 
-    const handleMoreClick = (type: string) => {
-        setActiveType(type);
-    };
-
-    const filteredAmenities = Object.entries(amenities).reduce((acc, [type, amenitiesList]) => {
-        const filtered = amenitiesList.filter(amenity =>
-            amenity.amenityName.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        if (filtered.length > 0) {
-            acc[type] = filtered;
+    const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
         }
+        setSnackbar({ ...snackbar, open: false });
+    };
+
+    const toggleGroupExpansion = (group: string) => {
+        setExpandedGroups(prev =>
+            prev.includes(group) ? prev.filter(g => g !== group) : [...prev, group]
+        );
+    };
+
+    const filteredAmenities = Object.entries(amenities).reduce((acc, [group, amenitiesList]) => {
+        const groupSearchTerm = groupSearchTerms[group] || '';
+        const filtered = amenitiesList.filter(amenity =>
+            amenity.amenityName.toLowerCase().includes(groupSearchTerm.toLowerCase())
+        );
+        acc[group] = filtered;
         return acc;
     }, {} as { [key: string]: Amenity[] });
 
@@ -184,102 +216,138 @@ const AmenityManagement: React.FC = () => {
 
     return (
         <div className={styles.container}>
-            <div className={styles.sidebar}>
-                <h2 className={styles.sidebarTitle}>Amenity Types</h2>
-                <ul className={styles.typeList}>
-                    {Object.keys(amenities).map(type => (
-                        <li
-                            key={type}
-                            className={`${styles.typeItem} ${activeType === type ? styles.active : ''}`}
-                            onClick={() => setActiveType(type === activeType ? null : type)}
-                        >
-                            {type}
-                        </li>
-                    ))}
-                </ul>
-            </div>
-            <div className={styles.mainContent}>
-                <div className={styles.header}>
-                    <h1 className={styles.title} onClick={handleResetView}>Amenity Management</h1>
-                    <div className={styles.actions}>
-                        <div className={styles.searchBar}>
-                            <Search size={20} />
-                            <input
-                                type="text"
-                                placeholder="Search amenities..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                        </div>
+            <div className={styles.header}>
+                <h1 className={styles.title}>Amenity Management</h1>
+                <div className={styles.actions}>
+                    <Tooltip title="Add New Amenity" arrow>
                         <button className={styles.addButton} onClick={handleAddNew}>
-                            New Amenity
+                            <Plus size={20} />
+                            <span className={styles.buttonText}>New Amenity</span>
                         </button>
-                    </div>
+                    </Tooltip>
+                    <Tooltip title="Refresh" arrow>
+                        <IconButton
+                            onClick={() => window.location.reload()}
+                            className={styles.refreshIcon}
+                            aria-label="refresh"
+                        >
+                            <RefreshCw size={20} />
+                        </IconButton>
+                    </Tooltip>
                 </div>
-                <div className={styles.content}>
-                    {isAddingNew && (
-                        <NewAmenityForm
-                            onClose={handleCloseNewAmenityForm}
-                            onAmenityAdded={handleAmenityAdded}
-                        />
-                    )}
-                    <div className={`${styles.amenitiesGrid} ${activeType ? styles.singleTypeView : ''}`}>
-                        {Object.entries(filteredAmenities)
-                            .filter(([type]) => !activeType || type === activeType)
-                            .map(([type, amenitiesList]) => (
-                                <div key={type} className={`${styles.amenityGroup} ${activeType ? styles.fullHeight : ''}`}>
-                                    <h2 className={styles.amenityType}>{type}</h2>
-                                    <div className={styles.amenityList}>
-                                        {(activeType ? amenitiesList : amenitiesList.slice(0, 2)).map((amenity) => (
-                                            <div key={amenity.id} className={styles.amenityItem}>
-
-                                                {editingAmenity?.id === amenity.id ? (
-                                                    <>
-                                                        <input
-                                                            type="text"
-                                                            value={editingAmenity.amenityName}
-                                                            onChange={(e) => setEditingAmenity({ ...editingAmenity, amenityName: e.target.value })}
-                                                            className={styles.editInput}
-                                                        />
-                                                        <div className={styles.actionButtons}>
-                                                            <button onClick={handleSave} className={styles.saveButton}><Check size={16} /></button>
-                                                            <button onClick={handleCancel} className={styles.cancelButton}><X size={16} /></button>
-                                                        </div>
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <span>{amenity.amenityName}</span>
-                                                        <div className={styles.actionButtons}>
-                                                            <button onClick={() => handleEdit(amenity)} className={styles.editButton}>
-                                                                <Edit2 size={16} />
-                                                            </button>
-                                                            <button onClick={() => handleDeleteClick(amenity)} className={styles.deleteButton}>
-                                                                <Trash2 size={16} />
-                                                            </button>
-                                                        </div>
-                                                    </>
-                                                )}
-                                            </div>
-                                        ))}
-                                        {!activeType && amenitiesList.length > 2 && (
-                                            <div className={styles.moreLink} onClick={() => handleMoreClick(type)}>
-                                                More...
-                                            </div>
-                                        )}
+            </div>
+            <div className={styles.content}>
+                {isAddingNew && (
+                    <NewAmenityForm
+                        onClose={handleCloseNewAmenityForm}
+                        onAmenityAdded={handleAmenityAdded}
+                    />
+                )}
+                <div className={styles.amenitiesList}>
+                    {Object.entries(filteredAmenities).map(([group, amenitiesList]) => (
+                        <div key={group} className={styles.amenityGroup}>
+                            <div
+                                className={styles.groupHeader}
+                                onClick={() => toggleGroupExpansion(group)}
+                            >
+                                {expandedGroups.includes(group) ? (
+                                    <ChevronDown size={20} />
+                                ) : (
+                                    <ChevronRight size={20} />
+                                )}
+                                <h2>{group}</h2>
+                                <span className={styles.amenityCount}>{amenitiesList.length}</span>
+                            </div>
+                            {expandedGroups.includes(group) && (
+                                <div className={styles.amenityItems}>
+                                    <div className={styles.groupSearchContainer}>
+                                        <h3 className={styles.groupSearchHeading}>{group} amenity list</h3>
+                                        <div className={styles.groupSearchBar}>
+                                            <Search size={20} />
+                                            <input
+                                                type="text"
+                                                placeholder={`Search in ${group}...`}
+                                                value={groupSearchTerms[group] || ''}
+                                                onChange={(e) => handleGroupSearch(group, e.target.value)}
+                                            />
+                                        </div>
                                     </div>
+                                    {amenitiesList.length > 0 ? (
+                                        amenitiesList.map((amenity) => (
+                                            <div key={amenity.id} className={styles.amenityItem}>
+                                                {editingAmenity?.id === amenity.id ? (
+                                                    <input
+                                                        type="text"
+                                                        value={editingAmenity.amenityName}
+                                                        onChange={(e) => setEditingAmenity({ ...editingAmenity, amenityName: e.target.value })}
+                                                        className={styles.editInput}
+                                                    />
+                                                ) : (
+                                                    <span className={styles.amenityName}>{amenity.amenityName}</span>
+                                                )}
+                                                <div className={styles.actionButtons}>
+                                                    {editingAmenity?.id === amenity.id ? (
+                                                        <>
+                                                            <Tooltip title="Save" arrow>
+                                                                <button
+                                                                    onClick={handleSave}
+                                                                    className={styles.saveButton}
+                                                                    disabled={updateLoading}
+                                                                >
+                                                                    Save
+                                                                </button>
+                                                            </Tooltip>
+                                                            <Tooltip title="Cancel" arrow>
+                                                                <button
+                                                                    onClick={handleCancel}
+                                                                    className={styles.cancelButton}
+                                                                    disabled={updateLoading}
+                                                                >
+                                                                    Cancel
+                                                                </button>
+                                                            </Tooltip>
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <Tooltip title="Edit" arrow>
+                                                                <button onClick={() => handleEdit(amenity)} className={styles.editButton}>
+                                                                    <Edit2 size={16} />
+                                                                </button>
+                                                            </Tooltip>
+                                                            <Tooltip title="Delete" arrow>
+                                                                <button
+                                                                    onClick={() => handleDeleteClick(amenity)}
+                                                                    className={styles.deleteButton}
+                                                                    disabled={deleteLoading}
+                                                                >
+                                                                    <Trash2 size={16} />
+                                                                </button>
+                                                            </Tooltip>
+
+                                                        </>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className={styles.notFoundMessage}>
+                                            No amenities found in {group} for this search.
+                                        </div>
+                                    )}
                                 </div>
-                            ))}
-                    </div>
+                            )}
+                        </div>
+                    ))}
                 </div>
             </div>
             <ConfirmationModal
-          show={showDeleteModal}
-          onHide={handleDeleteCancel}
-          onConfirm={handleDeleteConfirm}
-          title="Delete Amenity"
-          message={`Are you sure you want to delete the amenity "${amenityToDelete?.amenityName}"?`}
-          confirmLabel="Delete"
-          cancelLabel="Cancel" children={undefined}            />
+                show={showDeleteModal}
+                onHide={handleDeleteCancel}
+                onConfirm={handleDeleteConfirm}
+                title="Delete Amenity"
+                message={`Are you sure you want to delete the amenity "${amenityToDelete?.amenityName}"?`}
+                confirmLabel="Delete"
+                cancelLabel="Cancel" />
             <CustomizedSnackbars
                 open={snackbar.open}
                 handleClose={handleSnackbarClose}

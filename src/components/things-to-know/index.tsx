@@ -1,20 +1,53 @@
-import { useState } from "react";
-import { Grid, Typography, Button } from "@mui/material"; // Updated import for Material-UI components
+import { useState, useEffect, FC } from "react";
+import { Grid, Typography, Button } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
+import { AppDispatch } from "@/store"; 
 import "./things-to-know.css";
-const HouseRules = () => {
+import {
+  selectPropertyDetails,
+  selectLoading,
+  selectError,
+  fetchPropertyDetailsById,
+} from "@/store/slice/auth/ThingstoknowSlice";
+
+interface HouseRulesProps {
+  prop: number;
+}
+const convertTo12HourFormat = (hour: number): string => {
+  const period = hour >= 12 ? "PM" : "AM";
+  const adjustedHour = hour % 12 || 12;
+  return `${adjustedHour}:00 ${period}`;
+};
+const HouseRules: FC<HouseRulesProps> = ({ prop }) => {
   const [showMore, setShowMore] = useState(false);
 
+  const propertyDetails = useSelector(selectPropertyDetails);
+  const loading = useSelector(selectLoading);
+  const error = useSelector(selectError);
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    if (prop) {
+      dispatch(fetchPropertyDetailsById(prop)); 
+    }
+  }, [dispatch, prop]);
+
   const houseRules = [
-    "Check-in after 4:00 PM",
-    "Check-out before 11:00 PM",
-    "9 Guest Maximum",
-    "Please dispose of trash properly.",
-    "Respect your neighbors.",
-    "Keep the noise to a minimum.",
-    "No parties allowed.",
+    propertyDetails ? `Check-in after ${convertTo12HourFormat(propertyDetails.checkInTime)}` : " ",
+    propertyDetails ? `Check-out before ${convertTo12HourFormat(propertyDetails.checkOutTime)}` : " ",
+    propertyDetails ? `Maximum ${propertyDetails.noOfGuestsAllowed} Guests Allowed` : " ",
+    propertyDetails ? `${propertyDetails.petPolicy}` : " ",
   ];
 
-  const visibleRules = showMore ? houseRules : houseRules.slice(0, 4);
+  const visibleRules = showMore ? houseRules : houseRules.slice(0, 3);
+
+  if (loading) {
+    return <Typography>Loading...</Typography>;
+  }
+
+  if (error) {
+    return <Typography color="error">{error}</Typography>;
+  }
 
   return (
     <div className="mt-4">
@@ -27,8 +60,7 @@ const HouseRules = () => {
             <li
               key={index}
               style={{ marginBottom: "8px" }}
-              className="monsterrat1 RuleList
-"
+              className="monsterrat1 RuleList"
             >
               {rule}
             </li>
@@ -151,7 +183,11 @@ const CancellationPolicy = () => {
   );
 };
 
-const ThingsToKnow = () => {
+interface Thinkprop {
+  propId : number;
+}
+
+const ThingsToKnow: FC<Thinkprop>= (prop) => {
   return (
     <div className="mt-3">
       <Typography variant="h4" className="ThingstoHead1 monsterrat">
@@ -159,7 +195,7 @@ const ThingsToKnow = () => {
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={4}>
-          <HouseRules />
+          <HouseRules prop={prop.propId} />
         </Grid>
         <Grid item xs={12} sm={4}>
           <SafetyAndProperty />
