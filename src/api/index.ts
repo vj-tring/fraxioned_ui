@@ -40,8 +40,14 @@ export const fetchHolidaysApi = () =>
     axiosInstance.get('/holidays');
 
 //adding holiday api
-export const addHolidayApi = (holidayData: { name: string; year: number; startDate: string | undefined; endDate: string | undefined; createdBy: { id: number; }; }) =>
-    axiosInstance.post('/holidays/holiday', holidayData);
+export const addHolidayApi = (holidayData: {
+    name: string;
+    year: number;
+    startDate: string | undefined;
+    endDate: string | undefined;
+    createdBy: { id: number };
+    properties: { id: number }[];
+}) => axiosInstance.post('/v1/holidays/holiday', holidayData);
 
 //updating holiday api
 export const updateHolidaysApi = (id: number, updatedHolidayData: { name: string; year: number; startDate: string | undefined; endDate: string | undefined; properties: { id: number; }[]; updatedBy: { id: number; }; }) =>
@@ -147,8 +153,8 @@ export const propertydetailsapi = () =>
 export const amenitiesapi = () =>
     axiosInstance.get(`/amenities`);
 
-export const propertyAmenitiesapi = (id: number ) =>
-    axiosInstance.get(`/property-amenities/property/${id}`);
+export const propertyAmenitiesapi = (id: number) =>
+    axiosInstance.get(`/v1/property-amenities/property/${id}`);
 
 export const getpropertyamenityByid = () =>
     axiosInstance.get(`/property-amenities`);
@@ -164,8 +170,7 @@ export const addamenity = (data: {
     createdBy: { id: number };
     amenityName: string;
     amenityDescription: string;
-    amenityType: string;
-}) => axiosInstance.post('/amenities/amenity', data);
+}) => axiosInstance.post('/v1/amenities/amenity', data);
 
 export const updateamenityforproperty = (updateData: { property: { id: number; }; amenities: { id: number; }[]; updatedBy: { id: number; }; }) =>
     axiosInstance.patch(`/property-amenities`, updateData);
