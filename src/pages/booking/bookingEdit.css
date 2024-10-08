@@ -10,12 +10,21 @@
     text-decoration: underline;
 }
 
+.MuiBox-root css-1stp90e{
+    padding: 25px;
+}
+
 .property-calendar .calendar {
     box-shadow: none !important;
+    margin-left: 18px !important;
   }
 
 .property-calendar .end-calendar{
     width: 100% !important
+}
+
+.property-calendar{
+    
 }
 
 .multiple-select-container {

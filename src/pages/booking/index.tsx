@@ -69,7 +69,11 @@ const Booking = () => {
 
   const formattedDate = (dateString: string) => {
     const date = new Date(dateString);
-    return format(date, "MMM do, yyyy");
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
   };
 
   const details = (Array.isArray(userBookings) ? userBookings : [])
