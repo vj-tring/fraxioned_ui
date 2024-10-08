@@ -1,19 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import styles from './propertyamenities.module.css';
-import { amenitiesapi } from '@/api';
-import { Pencil, Check, X, ChevronRight } from 'lucide-react';
+import { amenitiesapi, getAmenitiesById, updateamenityforproperty } from '@/api';
+import { Pencil, Check, X, ChevronRight, Save } from 'lucide-react';
 import CustomizedSnackbars from '@/components/customized-snackbar';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
-import ConfirmationModal from '@/components/confirmation-modal';
-import { 
-  getAmenitiesById, 
-  updatePropertyAmenities, 
-  resetPropertyAmenities 
-} from '@/store/slice/auth/propertyamenities';
-import { RootState } from '@/store/reducers';
-import { AppDispatch } from '@/store';
 
 interface Amenity {
   id: number;
@@ -33,10 +24,8 @@ interface SnackbarState {
 
 const PropertyAmenities: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const dispatch = useDispatch<AppDispatch>();
-  const { loading, error, success, amenities: propertyAmenities } = useSelector((state: RootState) => state.propertyAmenities);
-
   const [amenities, setAmenities] = useState<{ [key: string]: Amenity[] }>({});
+  const [loading, setLoading] = useState(true);
   const [selectedAmenities, setSelectedAmenities] = useState<number[]>([]);
   const [editMode, setEditMode] = useState(false);
   const [editingAmenity, setEditingAmenity] = useState<Amenity | null>(null);
@@ -48,7 +37,6 @@ const PropertyAmenities: React.FC = () => {
   });
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState('');
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   useEffect(() => {
     fetchAmenities();
@@ -56,35 +44,15 @@ const PropertyAmenities: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      dispatch(getAmenitiesById(Number(id)));
+      fetchSelectedAmenities(Number(id));
     }
-  }, [id, dispatch]);
-
-  useEffect(() => {
-    if (propertyAmenities.length > 0) {
-      const selected = propertyAmenities.map((item) => item.amenity.id);
-      setSelectedAmenities(selected);
-    }
-  }, [propertyAmenities]);
+  }, [id]);
 
   useEffect(() => {
     if (editingAmenity && inputRef.current) {
       inputRef.current.focus();
     }
   }, [editingAmenity]);
-
-  useEffect(() => {
-    if (success) {
-      showSnackbar('Amenities updated successfully!', 'success');
-      setDialogOpen(false);
-      setShowConfirmModal(false);
-      dispatch(resetPropertyAmenities());
-    }
-    if (error) {
-      showSnackbar(error, 'error');
-      dispatch(resetPropertyAmenities());
-    }
-  }, [success, error, dispatch]);
 
   const showSnackbar = (message: string, severity: 'success' | 'info' | 'warning' | 'error') => {
     setSnackbar({ open: true, message, severity });
@@ -111,8 +79,20 @@ const PropertyAmenities: React.FC = () => {
       const response = await amenitiesapi();
       const groupedAmenities = groupAmenitiesByGroup(response.data.data);
       setAmenities(groupedAmenities);
+      setLoading(false);
     } catch (err) {
       showSnackbar('Failed to fetch amenities. Please try again later.', 'error');
+      setLoading(false);
+    }
+  };
+
+  const fetchSelectedAmenities = async (propertyId: number) => {
+    try {
+      const response = await getAmenitiesById(propertyId);
+      const selected = response.data.data.map((item: any) => item.amenity.id);
+      setSelectedAmenities(selected);
+    } catch (err) {
+      showSnackbar('Failed to fetch selected amenities for this property.', 'error');
     }
   };
 
@@ -135,22 +115,24 @@ const PropertyAmenities: React.FC = () => {
     );
   };
 
-  const handleUpdateClick = () => {
-    setShowConfirmModal(true);
-  };
-
   const handleUpdate = async () => {
-    const updateData = {
-      property: {
-        id: Number(id)
-      },
-      amenities: selectedAmenities.map(amenityId => ({ id: amenityId })),
-      updatedBy: {
-        id: 1 // Assuming a static user ID for now
-      }
-    };
+    try {
+      const updateData = {
+        property: {
+          id: Number(id)
+        },
+        amenities: selectedAmenities.map(amenityId => ({ id: amenityId })),
+        updatedBy: {
+          id: 1
+        }
+      };
 
-    dispatch(updatePropertyAmenities(updateData));
+      await updateamenityforproperty(updateData);
+      showSnackbar('Amenities updated successfully!', 'success');
+      setDialogOpen(false);
+    } catch (err) {
+      showSnackbar('Failed to update amenities. Please try again.', 'error');
+    }
   };
 
   const toggleEditMode = () => {
@@ -198,7 +180,7 @@ const PropertyAmenities: React.FC = () => {
         <div className={styles.header}>
           <h1 className={styles.title}>Property Amenities</h1>
           <div className={styles.buttonGroup}>
-            <button className={styles.updateButton} onClick={handleUpdateClick}>Update</button>
+            <button className={styles.updateButton} onClick={handleUpdate}>Update</button>
           </div>
         </div>
         <div className={styles.amenitiesScrollContainer}>
@@ -270,7 +252,7 @@ const PropertyAmenities: React.FC = () => {
       >
         <DialogTitle className={styles.dialogTitle}>
           {selectedGroup} Amenities
-          <button onClick={handleUpdateClick} className={styles.dialogUpdateButton}>
+          <button onClick={handleUpdate} className={styles.dialogUpdateButton}>
             Update
           </button>
         </DialogTitle>
@@ -293,14 +275,6 @@ const PropertyAmenities: React.FC = () => {
           </div>
         </DialogContent>
       </Dialog>
-      <ConfirmationModal
-        show={showConfirmModal}
-        onHide={() => setShowConfirmModal(false)}
-        onConfirm={handleUpdate}
-        title="Confirm Update"
-        message="Are you sure you want to update the amenities for this property?"
-        confirmLabel="Update"
-        cancelLabel="Cancel" children={undefined}      />
     </div>
   );
 };

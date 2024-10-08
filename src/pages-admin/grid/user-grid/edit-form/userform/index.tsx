@@ -46,6 +46,7 @@ interface UserFormProps {
   customStyles?: {
     userForm?: string;
     header?: string;
+    userName?:string;
     editButton?: string;
     content?: string;
     profileSection?: string;
@@ -87,6 +88,7 @@ const UserForm: React.FC<UserFormProps> = ({ userId, onEditClick, header = "User
     content: customStyles.content || defaultStyles.content,
     profileSection: customStyles.profileSection || defaultStyles.profileSection,
     imageContainer: customStyles.imageContainer || defaultStyles.imageContainer,
+    userName:customStyles.userName||defaultStyles.userName,
     profileImage: customStyles.profileImage || defaultStyles.profileImage,
     role: customStyles.role || defaultStyles.role,
     status: customStyles.status || defaultStyles.status,
@@ -119,7 +121,7 @@ const UserForm: React.FC<UserFormProps> = ({ userId, onEditClick, header = "User
               className={styles.profileImage}
             />
           </div>
-          <h3>
+          <h3 className={styles.userName}>
             {user.firstName} {user.lastName}
           </h3>
           <p className={styles.role}>{user.role.roleName}</p>

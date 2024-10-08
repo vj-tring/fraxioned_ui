@@ -8,6 +8,7 @@
   border-radius: 8px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
   transition: margin-left 0.3s ease, width 0.3s ease;
+  
 }
 
 .calendar-container.sidebar-open {
@@ -25,6 +26,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  
 }
 
 .calendar-view {
@@ -32,7 +34,7 @@
 }
 
 .rbc-calendar {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   color: #333333;
 }
 
@@ -41,16 +43,21 @@
   font-weight: 500;
   background-color: #f5f7fa;
   border-bottom: 1px solid #e0e0e0;
+  font-family:  'Montserrat', sans-serif !important
+
 }
 
 .rbc-month-view {
   border: none;
   border-radius: 8px;
   overflow: hidden;
+  font-family:  'Montserrat', sans-serif !important
+
 }
 
 .rbc-day-bg {
   transition: background-color 0.3s ease;
+  
 }
 
 .rbc-day-bg:hover {
@@ -69,7 +76,7 @@
   background-color: rgba(0, 120, 212, 0.8);
   border-radius: 0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   padding: 2px 5px;
   height: 20px !important;
   font-size: 12px;
@@ -80,6 +87,8 @@
   position: relative;
   left: 6%;
   width: 80% !important;
+  letter-spacing: 1px;
+  
 }
 
 .rbc-event.rbc-start-row {
@@ -120,8 +129,9 @@
   border: 1px solid #d9d9d9;
   border-radius: 4px;
   padding: 6px 12px;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-weight: 500;
+  font-size: small;
   transition: all 0.3s ease;
 }
 
@@ -174,7 +184,7 @@
 
 .dialog-title {
   color: #2c3e50;
-  font-size: 24px;
+  font-size: medium;
   font-weight: 700;
   margin: 0;
 }
@@ -184,8 +194,8 @@
   color: white;
   border: none;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -234,13 +244,13 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 16px;
+  font-size: 12px;
   color: #288b96;
 }
 
 .detail-icon {
   color: #288b96;
-  font-size: 24px;
+  font-size: medium !important;
 }
 
 .detail-label {
@@ -273,12 +283,14 @@
   background-color: #288b96 !important;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
   color: white !important;
-  padding: 10px 20px !important;
-  height: 34px;
+  padding: 6px 10px !important;
+  height: 25px;
   border-radius: 4px !important;
   text-transform: uppercase !important;
-  font-weight: 600 !important;
+  font-weight: 500 !important;
   transition: background-color 0.3s ease !important;
+  font-size: x-small !important;
+  font-size: x-small !important;
 }
 
 .close-button:hover {

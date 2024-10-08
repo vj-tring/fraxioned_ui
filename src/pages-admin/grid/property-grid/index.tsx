@@ -1,55 +1,87 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from 'react-redux';
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Button, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { getProperties, deletePropertyApi, getPropertyById } from "@/api";
 import styles from "./property.module.css";
 import NewPropertyForm from "./NewPropertyForm";
 import ConfirmationModal from "@/components/confirmation-modal";
 import { useNavigate } from "react-router-dom";
-import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
-import type { Property } from "@/store/slice/auth/propertiesSlice";
-import { RootState } from "@/store/reducers";
-import { AppDispatch } from "@/store";
 
-interface PropertyComponentProps {
-  isSidebarOpen: boolean;
+interface PropertyData {
+  id: number;
+  name: string;
+  address: string;
+  city: string;
+  state: string;
+  Property_share: string;
+  country: string;
+  created_by: string;
 }
 
-const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
-  const properties = useSelector((state: RootState) => state.property.properties);
-  const status = useSelector((state: RootState) => state.property.status);
-  const error = useSelector((state: RootState) => state.property.error);
-
+const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
+  const [properties, setProperties] = useState<PropertyData[]>([]);
   const [isNewFormOpen, setIsNewFormOpen] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [propertyToDelete, setPropertyToDelete] = useState<Property | null>(null);
+  const [propertyToDelete, setPropertyToDelete] = useState<PropertyData | null>(
+    null
+  );
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchProperties());
-    }
-  }, [status, dispatch]);
+    fetchProperties();
+  }, []);
 
-  const handleEditClick = (id: number) => {
-    navigate(`/admin/property/${id}`);
+  const fetchProperties = async () => {
+    try {
+      const response = await getProperties();
+      const fetchedProperties = response.data.map((property: any) => ({
+        id: property?.id,
+        name: property.propertyName,
+        address: property.address,
+        city: property.city,
+        state: property.state,
+        Property_share: property.propertyShare,
+        country: property.country,
+        created_by: property.createdBy.id,
+      }));
+      setProperties(fetchedProperties);
+    } catch (err) {
+      console.error("Error fetching properties:", err);
+      setError("Failed to fetch properties. Please try again.");
+    }
   };
 
-  const handleDeleteClick = (property: Property) => {
+  const handleEditClick = async (id: number) => {
+    try {
+      const response = await getPropertyById(id);
+      const propertyData = response.data;
+      navigate(`/admin/property/${id}`, { state: { propertyData } });
+    } catch (err) {
+      console.error("Error fetching property details:", err);
+      setError("Failed to fetch property details. Please try again.");
+    }
+  };
+
+  const handleDeleteClick = (property: PropertyData) => {
     setPropertyToDelete(property);
     setShowDeleteConfirmation(true);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (propertyToDelete === null) return;
 
-    // Implement delete functionality here
-    console.log('Delete property:', propertyToDelete.id);
-    setShowDeleteConfirmation(false);
-    setPropertyToDelete(null);
+    try {
+      await deletePropertyApi(propertyToDelete.id);
+      await fetchProperties();
+      setShowDeleteConfirmation(false);
+      setPropertyToDelete(null);
+    } catch (err) {
+      console.error("Failed to delete property. Please try again.", err);
+      setError("Failed to delete property. Please try again.");
+    }
   };
 
   const handleCancelDelete = () => {
@@ -59,9 +91,9 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
 
   const columns: GridColDef[] = [
     {
-      field: "propertyName",
+      field: "name",
       headerName: "Property Name",
-      minWidth: 180,
+      minWidth: 250,
       align: "center",
       headerAlign: "center",
     },
@@ -94,16 +126,16 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
       headerAlign: "center",
     },
     {
-      field: "propertyShare",
+      field: "Property_share",
       headerName: "Property Share",
-      width: 150,
+      width: 160,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "actions",
       headerName: "Actions",
-      width: 120,
+      width: 190,
       align: "center",
       headerAlign: "center",
       renderCell: (params) => (
@@ -113,14 +145,22 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
             color="primary"
             onClick={() => handleEditClick(params.row.id)}
           >
-            <EditIcon />
+            <EditIcon
+              sx={{
+                color: "#709C7E",
+              }}
+            />
           </IconButton>
           <IconButton
             aria-label="delete"
             color="secondary"
             onClick={() => handleDeleteClick(params.row)}
           >
-            <DeleteIcon />
+            <DeleteIcon
+              sx={{
+                color: "#F08486",
+              }}
+            />
           </IconButton>
         </>
       ),
@@ -141,8 +181,8 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
           color="primary"
           onClick={() => setIsNewFormOpen(true)}
           sx={{
-            backgroundColor: "#00b8cc",
-            "&:hover": { backgroundColor: "#00b8cc" },
+            backgroundColor: "darkgrey",
+            "&:hover": { backgroundColor: "darkgrey" },
           }}
         >
           Add Property
@@ -152,6 +192,8 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
       <div className={styles.dataGridWrapper}>
         <DataGrid
           rows={properties}
+          rowHeight={40}
+          columnHeaderHeight={40}
           columns={columns}
           initialState={{
             pagination: {
@@ -161,6 +203,26 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
           pageSizeOptions={[5, 10, 25]}
           disableRowSelectionOnClick
           className={`${styles.dataGrid} ${styles.dataGridPadding}`}
+          getRowClassName={(params) => {
+            if (params.indexRelativeToCurrentPage % 2 === 0) {
+              return styles.evenRow;
+            } else {
+              return styles.oddRow;
+            }
+          }}
+          sx={{
+            "& .MuiDataGrid-columnHeader": {
+              backgroundColor: "grey",
+              color: "white",
+              textTransform: "uppercase",
+              fontFamily: " 'Montserrat', sans-serif !important",
+           
+            },
+            "& .MuiDataGrid-cell": {
+              fontFamily: " 'Montserrat', sans-serif !important",
+           
+            },
+          }}
         />
       </div>
       {isNewFormOpen && (
@@ -174,7 +236,7 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
           >
             <NewPropertyForm
               onClose={() => setIsNewFormOpen(false)}
-              onPropertyAdded={() => dispatch(fetchProperties())}
+              onPropertyAdded={fetchProperties}
             />
           </div>
         </div>
@@ -186,7 +248,8 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
         title="Confirm Delete"
         message="Are you sure you want to delete this property?"
         confirmLabel="Delete"
-        cancelLabel="Cancel" children={undefined}      />
+        cancelLabel="Cancel"
+      />
     </div>
   );
 };

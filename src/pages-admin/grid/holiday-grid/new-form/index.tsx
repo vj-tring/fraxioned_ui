@@ -17,12 +17,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import CloseIcon from '@mui/icons-material/Close';
 import styles from './new-form.module.css';
-import { getProperties } from '@/api';
-import { useSelector, useDispatch } from 'react-redux';
+import { getProperties, addHolidayApi } from '@/api';
+import { useSelector } from 'react-redux';
 import Loader from '@/components/loader';
 import { RootState } from '@/store/reducers';
 import EventIcon from '@mui/icons-material/Event';
-import { addHoliday } from '@/store/slice/auth/holidaySlice';
 
 interface Property {
     id: number;
@@ -50,7 +49,6 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
     const [endDateError, setEndDateError] = useState<string | null>(null);
     const [propertiesError, setPropertiesError] = useState<string | null>(null);
 
-    const dispatch = useDispatch();
     const userId = useSelector((state: RootState) => state.auth.user?.id);
 
     useEffect(() => {
@@ -105,37 +103,41 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
             setEndDateError(null);
         }
 
-        if (selectedProperties.length === 0) {
-            setPropertiesError('Select at least one property');
+
+
+        if (!userId) {
+            setError('User ID not found. Please log in again.');
             valid = false;
-        } else {
-            setPropertiesError(null);
         }
 
         if (!valid) {
             return;
         }
+
         try {
-            const holidayData: Omit<Holiday, 'id'> = {
-              name,
-              year: Number(year),
-              startDate: startDate?.toISOString().split('T')[0] ?? '',
-              endDate: endDate?.toISOString().split('T')[0] ?? '',
-              properties: allPropertiesSelected
-                ? properties.map(property => ({ id: property.id }))
-                : selectedProperties.map(id => ({ id })),
-              createdBy: {
-                id: userId,
-              },
+            const holidayData = {
+                name,
+                year: Number(year),
+                startDate: startDate?.toISOString().split('T')[0],
+                endDate: endDate?.toISOString().split('T')[0],
+                properties: allPropertiesSelected
+                    ? properties.map(property => ({ id: property.id }))
+                    : selectedProperties.map(id => ({ id })),
+                createdBy: {
+                    id: userId,
+                },
             };
-            dispatch(addHoliday(holidayData));
+            await addHolidayApi(holidayData);
             onHolidayAdded();
             onClose();
-          } catch (err) {
+        } catch (err) {
             console.error('Error adding holiday:', err);
             setError('Failed to add holiday. Please try again.');
-          }
-        };
+        }
+    };
+
+
+
 
     const handlePropertyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, checked } = event.target;
@@ -151,6 +153,8 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
             updateAllPropertiesSelected();
         }
     };
+
+
 
     const handleAllPropertiesChange = (checked: boolean) => {
         setAllPropertiesSelected(checked);

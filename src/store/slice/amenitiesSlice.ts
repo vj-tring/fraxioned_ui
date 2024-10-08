@@ -26,8 +26,6 @@ export interface PropertyAmenity {
 }
 
 export interface AmenitiesState {
-  status: any;
-  amenities: any;
   propertyAmenities: PropertyAmenity[];
   loading: boolean;
   error: string | null;
@@ -37,8 +35,6 @@ const initialState: AmenitiesState = {
   propertyAmenities: [],
   loading: false,
   error: null,
-  status: undefined,
-  amenities: undefined
 };
 
 export const fetchAmenities = createAsyncThunk(
