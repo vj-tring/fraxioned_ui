@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { addDays, format, addYears } from "date-fns";
 import { DateRange } from "react-day-picker";
@@ -12,16 +11,7 @@ import { fetchPropertySeasonHoliday, selectPropertySeasonHolidays } from '@/stor
 import {  clearBookingMessages, fetchBookings } from '../../store/slice/auth/bookingSlice';
 import { useEffect, useState } from "react";
 import { RootState } from "@/store/reducers";
-import {
-  setDateRange,
-  setErrorMessage,
-  setIsCalendarOpen,
-  clearDates,
-  setStartDate,
-  setStartDateSelected,
-  setSelectedYear,
-  clearPartial,
-} from "@/store/slice/datePickerSlice";
+import {setDateRange, setErrorMessage, setIsCalendarOpen, clearDates, setStartDate, setStartDateSelected, setSelectedYear, clearPartial,} from "@/store/slice/datePickerSlice";
 import { AppDispatch } from "@/store";
 import LastMinuteBookingDialog from "../last-minute-dialog";
 
@@ -65,21 +55,11 @@ export function DatePickerWithRange({
   const bookings = useSelector((state: RootState) => state.bookings.bookings);
   const selectedPropertyDetails = useSelector(selectSelectedPropertyDetails);
   const seasonHolidays = useSelector(selectPropertySeasonHolidays);
-  const selectedYear = useSelector(
-    (state: RootState) => state.datePicker.selectedYear
-  );
-  const startDate = useSelector(
-    (state: RootState) => state.datePicker.startDate
-  );
-  const startDateSelected = useSelector(
-    (state: RootState) => state.datePicker.startDateSelected
-  );
-  const errorMessage = useSelector(
-    (state: RootState) => state.datePicker.errorMessage
-  );
-  const dateRange = useSelector(
-    (state: RootState) => state.datePicker.dateRange
-  );
+  const selectedYear = useSelector((state: RootState) => state.datePicker.selectedYear);
+  const startDate = useSelector((state: RootState) => state.datePicker.startDate);
+  const startDateSelected = useSelector((state: RootState) => state.datePicker.startDateSelected);
+  const errorMessage = useSelector((state: RootState) => state.datePicker.errorMessage);
+  const dateRange = useSelector((state: RootState) => state.datePicker.dateRange);
   const currentUser = useSelector((state: RootState) => state.auth.user);
   const validationMessage = useSelector((state: RootState) => state.datePicker.validationMessage);
   const [isLastMinutePopupOpen, setIsLastMinutePopupOpen] = useState(false);
@@ -113,8 +93,8 @@ export function DatePickerWithRange({
   const clearDatesHandler = () => {
     dispatch(clearDates());
     setIsRegularBookingSelected(false);
-  setTempDateRange(null); // Reset tempDateRange
-  setIsLastMinutePopupOpen(false);
+    setTempDateRange(null); 
+    setIsLastMinutePopupOpen(false);
     if (onSelect) onSelect(undefined);
   };
 
@@ -148,11 +128,6 @@ export function DatePickerWithRange({
         date.getMonth() === bookedDate.getMonth() &&
         date.getDate() === bookedDate.getDate()
     );
-  };
-
-  const isCurrentBookingDate = (date: Date) => {
-    if (!isEditMode || !currentBookingDates) return false;
-    return date >= currentBookingDates.from && date <= currentBookingDates.to;
   };
 
   const isUnavailableDate = (date: Date) => {
@@ -228,11 +203,9 @@ export function DatePickerWithRange({
     if (startDate.toDateString() === today.toDateString()) {
       return true;
     }
-
     if (!Array.isArray(bookings) || bookings.length === 0) {
       return true;
     }
-  
     const userBookings = bookings.filter(
       (booking) =>
         booking.property.id === selectedPropertyDetails.id &&
@@ -258,9 +231,8 @@ export function DatePickerWithRange({
       );
 
       if (
-        (daysSinceCheckoutStart >= 0 && daysSinceCheckoutStart < 4) ||
-        (daysSinceCheckoutEnd >= 0 && daysSinceCheckoutEnd < 4)
-      ) {
+        (daysSinceCheckoutStart >= 0 && daysSinceCheckoutStart < 4) ||(daysSinceCheckoutEnd >= 0 && daysSinceCheckoutEnd < 4))
+      {
         return false;
       }
       const daysBeforeCheckinStart = Math.floor(
@@ -271,17 +243,11 @@ export function DatePickerWithRange({
         (checkInDate.getTime() - endDate.getTime()) / (1000 * 60 * 60 * 24)
       );
       if (
-        (daysBeforeCheckinStart >= 0 && daysBeforeCheckinStart <= 5) ||
-        (daysBeforeCheckinEnd >= 0 && daysBeforeCheckinEnd <= 5)
-      ) {
-        return false;
-      }
+        (daysBeforeCheckinStart >= 0 && daysBeforeCheckinStart <= 5) ||(daysBeforeCheckinEnd >= 0 && daysBeforeCheckinEnd <= 5))
+        return false; 
       if (
-        (startDate >= checkInDate && startDate <= checkOutDate) ||
-        (endDate >= checkInDate && endDate <= checkOutDate)
-      ) {
+        (startDate >= checkInDate && startDate <= checkOutDate) ||(endDate >= checkInDate && endDate <= checkOutDate)) 
         return false;
-      }
     }
     return true;
   };
@@ -289,10 +255,8 @@ export function DatePickerWithRange({
   const isBookingTooCloseToCheckin = (checkinDate: Date) => {
     const checkinTime = new Date(checkinDate);
     checkinTime.setHours(selectedPropertyDetails.checkInTime, 0, 0, 0);
-
     const timeDifference = checkinTime.getTime() - today.getTime();
     const hoursDifference = timeDifference / (1000 * 60 * 60);
-
     return hoursDifference < 24;
   };
 
@@ -537,33 +501,24 @@ const handleDateChange = (range: DateRange | undefined) => {
           color: gray;
           text-decoration: line-through;
         }
-
-
-
-.selectable-date {
-  text-decoration: none !important;
-}
-
+        .selectable-date {
+          text-decoration: none !important;
+        }
         .booked-date-no-strike {
           color: white;
-          // background-color: ${propertyColor} !important;
-        }
-  
+        } 
         .unavailable-date {
           color: gray;
           text-decoration: line-through;
         }
-  
         .after-booked-date {
           color: gray;
           text-decoration: line-through;
-        }
-  
+        }  
         .checkout-only-date {
           color: gray;
           text-decoration: line-through;
-        }
-  
+        }  
         .holiday-date {
           color: blue !important;
         }
@@ -574,7 +529,6 @@ const handleDateChange = (range: DateRange | undefined) => {
             <div><b className="bold">Nights: [Peak - </b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.peakRemainingNights || '0'} , <b className="bold">Off - </b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.offRemainingNights || '0'}]</div>
             <div><b className="bold">Peak Season :</b> [{formatDate(selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.peakSeasonStartDate)} - {formatDate(selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.peakSeasonEndDate)}] </div>  
             <div><b className="bold">Max Stay :</b> {selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.maximumStayLength || '0'} Nights</div>
-
           </div>
           <div onClick={clearDatesHandler} className="btn-clear">
             Clear dates
