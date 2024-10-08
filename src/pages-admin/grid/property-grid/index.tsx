@@ -148,19 +148,19 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             <EditIcon
               sx={{
                 color: "#709C7E",
-              }} 
-               />
+              }}
+            />
           </IconButton>
           <IconButton
             aria-label="delete"
             color="secondary"
             onClick={() => handleDeleteClick(params.row)}
           >
-            <DeleteIcon 
+            <DeleteIcon
               sx={{
                 color: "#F08486",
               }}
-              />
+            />
           </IconButton>
         </>
       ),
@@ -181,8 +181,8 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
           color="primary"
           onClick={() => setIsNewFormOpen(true)}
           sx={{
-            backgroundColor: "#00b8cc",
-            "&:hover": { backgroundColor: "#00b8cc" },
+            backgroundColor: "darkgrey",
+            "&:hover": { backgroundColor: "darkgrey" },
           }}
         >
           Add Property
@@ -216,15 +216,11 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
               color: "white",
               textTransform: "uppercase",
               fontFamily: " 'Montserrat', sans-serif !important",
-              position:"sticky",
-              right:'0',
-              zIndex:'9999'
+           
             },
             "& .MuiDataGrid-cell": {
               fontFamily: " 'Montserrat', sans-serif !important",
-              position:"sticky",
-              right:'0',
-              zIndex:'9999',
+           
             },
           }}
         />

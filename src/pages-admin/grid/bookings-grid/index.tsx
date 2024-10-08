@@ -357,8 +357,9 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
       field: "actions",
       headerName: "Actions",
       width: 150,
+
       renderCell: (params) => (
-        <>
+        <div>
           <IconButton
             aria-label="view"
             color="primary"
@@ -393,7 +394,7 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
               }}
             />
           </IconButton>
-        </>
+        </div>
       ),
     },
   ];
@@ -492,15 +493,11 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
               color: "white",
               textTransform: "uppercase",
               fontFamily: " 'Montserrat', sans-serif !important",
-              position: "sticky",
-              right: "0",
-              zIndex: "9999",
+            
             },
             "& .MuiDataGrid-cell": {
               fontFamily: " 'Montserrat', sans-serif !important",
-              position: "sticky",
-              right: "0",
-              zIndex: "9999",
+           
             },
           }}
           initialState={{
