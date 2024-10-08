@@ -20,8 +20,6 @@ import {
   setStartDate,
   setStartDateSelected,
   setSelectedYear,
-  setValidationMessage,
-  clearValidationMessage,
   clearPartial,
 } from "@/store/slice/datePickerSlice";
 import { AppDispatch } from "@/store";
@@ -79,11 +77,9 @@ export function DatePickerWithRange({
   const errorMessage = useSelector(
     (state: RootState) => state.datePicker.errorMessage
   );
-  // const isCalendarOpen = useSelector((state: RootState) => state.datePicker.isCalendarOpen);
   const dateRange = useSelector(
     (state: RootState) => state.datePicker.dateRange
   );
-  // const currentBooking = useSelector((state: RootState) => state.bookings?.currentBooking);
   const currentUser = useSelector((state: RootState) => state.auth.user);
   const validationMessage = useSelector((state: RootState) => state.datePicker.validationMessage);
   const [isLastMinutePopupOpen, setIsLastMinutePopupOpen] = useState(false);
@@ -95,10 +91,6 @@ export function DatePickerWithRange({
   useEffect(() => {
     dispatch(fetchBookings());
   }, [dispatch]);
-
-  useEffect(() => {
-    // console.log('Bookings in component:', bookings);
-  }, [bookings]);
 
   useEffect(() => {
     dispatch(fetchProperties);
@@ -163,11 +155,6 @@ export function DatePickerWithRange({
     return date >= currentBookingDates.from && date <= currentBookingDates.to;
   };
 
-  // const isCurrentBookingDate = (date: Date) => {
-  //   if (!isEditMode ||!currentBookingId || !currentBookingDates) return false;
-  //   return date >= currentBookingDates.from && date <= currentBookingDates.to;
-  // };
-
   const isUnavailableDate = (date: Date) => {
     return unavailableDates.some(
       (unavailableDate) =>
@@ -187,6 +174,7 @@ export function DatePickerWithRange({
     );
   };
 
+  // Function to check if the given date is the day before the booked dates to throw an error check-out only.
   const isDayBeforeBookedDate = (date: Date) => {
     return bookedDates.some(
       (bookedDate) =>
@@ -275,7 +263,6 @@ export function DatePickerWithRange({
       ) {
         return false;
       }
-
       const daysBeforeCheckinStart = Math.floor(
         (checkInDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
       );
@@ -283,7 +270,6 @@ export function DatePickerWithRange({
       const daysBeforeCheckinEnd = Math.floor(
         (checkInDate.getTime() - endDate.getTime()) / (1000 * 60 * 60 * 24)
       );
-
       if (
         (daysBeforeCheckinStart >= 0 && daysBeforeCheckinStart <= 5) ||
         (daysBeforeCheckinEnd >= 0 && daysBeforeCheckinEnd <= 5)
@@ -297,7 +283,6 @@ export function DatePickerWithRange({
         return false;
       }
     }
-
     return true;
   };
 
@@ -372,55 +357,26 @@ const handleDateChange = (range: DateRange | undefined) => {
           }
         }
       }
-
-      if (
-        peakNights >
-        selectedPropertyDetails.details[selectedYear]?.peakRemainingNights
-      ) {
-        dispatch(
-          setErrorMessage(
-            `You don't have sufficient peak-season remaining nights to select this checkout date`
-          )
-        );
+      if (selectedYear !== null && selectedPropertyDetails?.details[selectedYear]?.peakRemainingNights < peakNights) {
+        dispatch(setErrorMessage(`You don't have sufficient peak-season remaining nights to select this checkout date`));
         return;
       }
 
-      if (
-        offNights >
-        selectedPropertyDetails.details[selectedYear]?.offRemainingNights
-      ) {
-        dispatch(
-          setErrorMessage(
-            `You don't have sufficient off-season remaining nights to select this checkout date`
-          )
-        );
+      if (selectedYear !== null && selectedPropertyDetails?.details[selectedYear]?.offRemainingNights < offNights) {
+        dispatch(setErrorMessage(`You don't have sufficient off-season remaining nights to select this checkout date`));
         return;
       }
 
-      if (
-        peakHolidayNights >
-        selectedPropertyDetails.details[selectedYear]
-          ?.peakRemainingHolidayNights
-      ) {
-        dispatch(
-          setErrorMessage(
-            `You don't have sufficient peak-season holiday remaining nights to select this checkout date`
-          )
-        );
+      if (selectedYear !== null && selectedPropertyDetails?.details[selectedYear]?.peakRemainingHolidayNights < peakHolidayNights) {
+        dispatch(setErrorMessage(`You don't have sufficient peak-season holiday remaining nights to select this checkout date`));
         return;
       }
 
-      if (
-        offHolidayNights >
-        selectedPropertyDetails.details[selectedYear]?.offRemainingHolidayNights
-      ) {
-        dispatch(
-          setErrorMessage(
-            `You don't have sufficient off-season holiday remaining nights to select this checkout date`
-          )
-        );
+      if (selectedYear !== null && selectedPropertyDetails?.details[selectedYear]?.offRemainingHolidayNights < offHolidayNights) {
+        dispatch(setErrorMessage(`You don't have sufficient off-season holiday remaining nights to select this checkout date`));
         return;
       }
+
       const nextBookedDate = bookedDates.find((bookedDate) => bookedDate > newStartDate);
       const nextUnavailableDate = unavailableDates.find((unavailableDate) => unavailableDate > newStartDate);
       if (
@@ -441,7 +397,7 @@ const handleDateChange = (range: DateRange | undefined) => {
             dispatch(setErrorMessage(`Minimum ${calendarData.bookingRules.lastMinuteBooking.minNights} nights required for last-minute bookings`));
           } else if (nightsSelected > calendarData.bookingRules.lastMinuteBooking.maxNights) {
             dispatch(setErrorMessage(`Maximum ${calendarData.bookingRules.lastMinuteBooking.maxNights} nights allowed for last-minute bookings`));
-          } else if (selectedPropertyDetails.details[selectedYear]?.lastMinuteRemainingNights < nightsSelected) {
+          } else if (selectedYear !== null && selectedPropertyDetails?.details[selectedYear]?.lastMinuteRemainingNights == 0) {
             dispatch(setErrorMessage(`You don't have sufficient last-minute remaining nights to select this checkout date`));
           } else {
             dispatch(setErrorMessage(null));

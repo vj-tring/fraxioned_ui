@@ -53,7 +53,8 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
   const [displayDates, setDisplayDates] = useState({ checkinDate: '', checkoutDate: '' });
   const [dateError, setDateError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isCalendarOpen, setIsCalendarVisible] = useState(false);
+  const [disabledDates, setDisabledDates] = useState<Date[]>([]);
+  const [isCalendarVisible, setIsCalendarVisible] = useState(false);
   const [guestCount, setGuestCount] = useState<number>(0);
   const userId = useSelector((state: any) => state.auth.user?.id);
   const guestCounts = useSelector((state: RootState) => state.limits.counts);
@@ -61,40 +62,32 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
   const updateError = useSelector((state: RootState) => state.bookings.error);
   const bookingRef = useRef(booking);
 
-  const currentBookingDates = {
-    from: new Date(booking.checkinDate),
-    to: new Date(booking.checkoutDate)
-  };
-
   useEffect(() => {
     if (booking?.propertyId) {
       dispatch(selectProperty(booking?.propertyId));
     }
-
-useEffect(() => {
-  if (open && bookingRef.current) {
-    const initialDateRange = {
-      from: new Date(bookingRef.current.checkinDate),
-      to: new Date(bookingRef.current.checkoutDate),
-    };
-    console.log('Setting initial date range:', initialDateRange);
-    setDateRange(initialDateRange);
-    setDisplayDates({
-      checkinDate: formattedDate(bookingRef.current.checkinDate),
-      checkoutDate: formattedDate(bookingRef.current.checkoutDate),
-    });
-    setGuestCount(bookingRef.current.noOfGuests);
-    dispatch(initializeCounts({
-      Adults: bookingRef.current.noOfAdults,
-      Children: bookingRef.current.noOfChildren,
-      Pets: bookingRef.current.noOfPets
-    }));
-  }
-}, [open, dispatch]);
+  }, [dispatch, booking?.propertyId, userId]);
 
   useEffect(() => {
+    if (open && bookingRef.current) {
+      const initialDateRange = {
+        from: new Date(bookingRef.current.checkinDate),
+        to: new Date(bookingRef.current.checkoutDate),
+      };
+      console.log('Setting initial date range:', initialDateRange);
+      setDateRange(initialDateRange);
+      setDisplayDates({
+        checkinDate: formattedDate(bookingRef.current.checkinDate),
+        checkoutDate: formattedDate(bookingRef.current.checkoutDate),
+      });
+      setGuestCount(bookingRef.current.noOfGuests);
+      dispatch(initializeCounts({
+        Adults: bookingRef.current.noOfAdults,
+        Children: bookingRef.current.noOfChildren,
+        Pets: bookingRef.current.noOfPets
+      }));
+    }
     bookingRef.current = booking;
-  }, [booking]);
 
     if (updateStatus === "Booking updated successfully") {
       console.log('Update successful, closing modal');
@@ -105,7 +98,7 @@ useEffect(() => {
       console.error('Update error:', updateError);
       setDateError(updateError);
     }
-  }, [booking, dispatch, updateStatus, updateError, onUpdateSuccess, handleClose, booking?.propertyId, userId]);
+  }, [open, dispatch, booking, updateStatus, updateError, onUpdateSuccess, handleClose]);
 
   const formattedDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -118,17 +111,32 @@ useEffect(() => {
     setDateError(null);
     
     if (range?.from && range?.to) {
+      updateDisabledDates(range);
       updateDisplayDates(range);
       setIsCalendarVisible(false);
     }
   }
 
-const updateDisplayDates = (range: DateRange) => {
-  setDisplayDates({
-    checkinDate: formattedDate(range.from!.toISOString()), 
-    checkoutDate: formattedDate(range.to!.toISOString()), 
-  });
-};
+  const updateDisabledDates = (newRange: DateRange) => {
+    const updatedDisabledDates = disabledDates.filter(date => {
+      return date < newRange.from! || date > newRange.to!;
+    });
+    
+    let currentDate = new Date(newRange.from!);
+    while (currentDate <= newRange.to!) {
+      updatedDisabledDates.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    
+    setDisabledDates(updatedDisabledDates);
+  };
+
+  const updateDisplayDates = (range: DateRange) => {
+    setDisplayDates({
+      checkinDate: formattedDate(range.from!), 
+      checkoutDate: formattedDate(range.to!), 
+    });
+  };
 
   const handleGuestChange = (newCount: number) => {
     console.log('Guest count changed:', newCount);
@@ -204,7 +212,7 @@ const updateDisplayDates = (range: DateRange) => {
             </Typography>
           </Grid>
           <Grid item xs={5}>
-               <Box sx={DATE_BOX_STYLE}>
+            <Box sx={DATE_BOX_STYLE}>
               <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
                 <Box>
                   <Typography variant="caption" sx={{ fontWeight: '500', fontSize: '14px' }}>Check-in</Typography>
@@ -249,9 +257,6 @@ const updateDisplayDates = (range: DateRange) => {
           </Typography>
         )}
         <Box mt={2} display="flex" justifyContent="flex-end">
-          {/* <Button variant="outlined" color="secondary" onClick={handleClose} sx={{ mr: 1 }}>
-            Cancel
-          </Button> */}
           <Button variant="contained" color="primary" onClick={handleSubmit} disabled={isSubmitting}>
             {isSubmitting ? 'Updating...' : 'Update Booking'}
           </Button>
