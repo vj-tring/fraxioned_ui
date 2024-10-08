@@ -8,6 +8,7 @@ import {
 } from "../../../api/index";
 
 export interface BookingData {
+  userId(userId: any): string;
   property: {
     propertyName: any;
     id: string;
