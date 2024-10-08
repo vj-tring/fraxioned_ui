@@ -1,5 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { DateRange } from 'react-day-picker';
+
+interface DateRange {
+  from: Date | undefined;
+  to: Date | undefined;
+  isLastMinuteBooking: boolean;
+}
 
 export interface DatePickerState {
   dateRange: DateRange | undefined;
@@ -12,8 +17,11 @@ export interface DatePickerState {
 }
 
 const initialState: DatePickerState = {
-  dateRange: undefined,
-  errorMessage: null,
+  dateRange: {
+    from: undefined,
+    to: undefined,
+    isLastMinuteBooking: false,
+  },  errorMessage: null,
   isCalendarOpen: false,
   validationMessage: null,
   selectedYear: null,
