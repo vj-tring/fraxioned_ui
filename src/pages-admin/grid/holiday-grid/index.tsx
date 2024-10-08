@@ -233,11 +233,10 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             onClick={() => handleEditClick(params.row.id)}
           >
             <EditIcon
-            sx={{
-              color: "#709C7E",
-            }} 
+              sx={{
+                color: "#709C7E",
+              }}
             />
-            
           </IconButton>
           <IconButton
             aria-label="delete"
@@ -263,6 +262,7 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     >
       <div className={styles.titleContainer}>
         <h1 className={styles.title}>Holidays</h1>
+
         <Button
           className={styles.addHolidayBtn}
           variant="contained"
@@ -276,18 +276,23 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
           Add Holiday
         </Button>
       </div>
-      <PropertyImage
-        onPropertySelect={handlePropertySelect}
-        selectedPropertyId={selectedPropertyId}
-      />
-      <IconButton
-        onClick={() => window.location.reload()}
-        className={styles.refreshIcon}
-        aria-label="refresh"
-        disableRipple
-      >
-        <RefreshIcon />
-      </IconButton>
+      <div className={styles.refreshprop}>
+        
+        
+        <PropertyImage
+          onPropertySelect={handlePropertySelect}
+          selectedPropertyId={selectedPropertyId}
+        />
+        <IconButton
+          onClick={() => window.location.reload()}
+          className={styles.refreshIcon}
+          aria-label="refresh"
+          disableRipple
+        >
+          <RefreshIcon />
+        </IconButton>
+      </div>
+
       {error && <div className={styles.error}>{error}</div>}
       <div className={styles.dataGridWrapper}>
         <DataGrid
@@ -306,12 +311,9 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
               color: "white",
               textTransform: "uppercase",
               fontFamily: " 'Montserrat', sans-serif !important",
-            
-             
             },
             "& .MuiDataGrid-cell": {
               fontFamily: " 'Montserrat', sans-serif !important",
-              
             },
           }}
           getRowClassName={(params) => {

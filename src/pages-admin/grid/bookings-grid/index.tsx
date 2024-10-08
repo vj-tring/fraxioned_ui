@@ -486,6 +486,7 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
           rows={filteredBookings}
           columns={columns}
           rowHeight={40}
+
           columnHeaderHeight={40}
           sx={{
             "& .MuiDataGrid-columnHeader": {
