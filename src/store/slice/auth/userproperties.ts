@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axiosInstance from '@/api/axiosSetup';
+import { getuserbyproperty } from '@/api'
 
 interface Owner {
     userId: number;
@@ -54,7 +54,7 @@ interface UserPropertyDetails {
     owners: Owner[];
 }
 
-interface UserPropertiesState {
+export interface UserPropertiesState {
     propertyDetails: UserPropertyDetails | null;
     loading: boolean;
     error: string | null;
@@ -69,7 +69,7 @@ const initialState: UserPropertiesState = {
 export const fetchUserPropertyDetails = createAsyncThunk(
     'userProperties/fetchUserPropertyDetails',
     async (id: number) => {
-        const response = await axiosInstance.get(`/v1/properties/property/${id}/details`);
+        const response = await getuserbyproperty(id);
         return response.data;
     }
 );

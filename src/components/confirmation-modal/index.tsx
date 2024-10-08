@@ -10,7 +10,6 @@ interface ConfirmationModalProps {
   message: string;
   confirmLabel: string;
   cancelLabel: string;
-  children: React.ReactNode;
 }
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
@@ -21,7 +20,6 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   message,
   confirmLabel,
   cancelLabel,
-  children,
 }) => {
   return (
     <Modal show={show} onHide={onHide} centered className="confirmation-modal">

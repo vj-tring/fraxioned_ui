@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axiosInstance from '@/api/axiosSetup';
-import { addPropertyApi } from '@/api';
+import { getProperties, getPropertyById } from '@/api';
 
 export interface Property {
     id: number;
@@ -21,7 +20,7 @@ export interface Property {
     displayOrder: number;
 }
 
-interface PropertiesState {
+export interface PropertiesState {
     properties: Property[];
     selectedProperty: Property | null;
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -36,38 +35,14 @@ const initialState: PropertiesState = {
 };
 
 export const fetchProperties = createAsyncThunk('properties/fetchProperties', async () => {
-    const response = await axiosInstance.get('/v1/properties');
+    const response = await getProperties();
     return response.data;
 });
 
-export const getPropertyById = createAsyncThunk(
-    'properties/getPropertyById',
+export const fetchPropertyById = createAsyncThunk(
+    'properties/fetchPropertyById',
     async (id: number) => {
-        const response = await axiosInstance.get(`/v1/properties/property/${id}`);
-        return response.data;
-    }
-);
-
-export const addProperty = createAsyncThunk(
-    'properties/addProperty',
-    async (propertyData: {
-        createdBy: { id: number };
-        propertyName: string;
-        ownerRezPropId: number;
-        address: string;
-        city: string;
-        state: string;
-        country: string;
-        zipcode: number;
-        houseDescription: string;
-        isExclusive: boolean;
-        propertyShare: number;
-        latitude: number;
-        longitude: number;
-        isActive: boolean;
-        displayOrder: number;
-    }) => {
-        const response = await addPropertyApi(propertyData);
+        const response = await getPropertyById(id);
         return response.data;
     }
 );
@@ -89,14 +64,14 @@ const propertiesSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message || 'Failed to fetch properties';
             })
-            .addCase(getPropertyById.pending, (state) => {
+            .addCase(fetchPropertyById.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(getPropertyById.fulfilled, (state, action) => {
+            .addCase(fetchPropertyById.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.selectedProperty = action.payload;
             })
-            .addCase(getPropertyById.rejected, (state, action) => {
+            .addCase(fetchPropertyById.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message || 'Failed to fetch property';
             })

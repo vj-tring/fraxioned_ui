@@ -34,10 +34,7 @@
   justify-content: space-between;
   align-items: center;
 }
-.username {
-  padding-left: 30px;
-  font-size: small;
-}
+
 
 .navbar-logo img {
   height: 40px;
