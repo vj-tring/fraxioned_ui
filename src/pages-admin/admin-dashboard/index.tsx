@@ -37,51 +37,28 @@ const AdminDashboard: React.FC = () => {
     throw new Error("Function not implemented.");
   }
 
-  return (
-    <div className="admin-dashboard-container">
-      <CustomNavbar
-        logo={fraxionedLogo}
-        userName={userImage}
-        userImage={userImage}
-        onUserImageClick={() => navigate("/admin/userdetails")}
-      />
-      <div className="dashboard-content">
-        <SidePanel isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-        <div
-          className={`content ${
-            isSidebarOpen ? "sidebar-open" : "sidebar-closed"
-          }`}
-        >
-          <Routes>
-            <Route
-              path="/"
-              element={<Navigate to="admin/bookings" replace />}
+
+    return (
+        <div className="admin-dashboard-container">
+            <CustomNavbar
+                logo={fraxionedLogo}
+                userName={userImage}
+                userImage={userImage}
+                onUserImageClick={() => navigate('/admin/userdetails')}
             />
-            <Route
-              path="/bookings"
-              element={<Calendar isSidebarOpen={isSidebarOpen} />}
-            />
-            <Route
-              path="/bookings-grid"
-              element={<BookingGrid isSidebarOpen={isSidebarOpen} />}
-            />
-            <Route path="/amenity" element={<AmenityManagement />} />
-            <Route
-              path="/user/:id/edit"
-              element={<TabSwitch onUserUpdated={handleUserUpdated} />}
-            />
-            <Route
-              path="/holidays"
-              element={<Holidays isSidebarOpen={isSidebarOpen} />}
-            />
-            <Route
-              path="/user"
-              element={<UserGrid isSidebarOpen={isSidebarOpen} />}
-            />
-            <Route
-              path="/reports"
-              element={<ReportsGrid isSidebarOpen={isSidebarOpen} />}
-            />
+            <div className="dashboard-content">
+                <SidePanel isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+                <div className={`content ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
+                    <Routes>
+                        <Route path="/" element={<Navigate to="admin/bookings" replace />} />
+                        <Route path="/bookings" element={<Calendar isSidebarOpen={isSidebarOpen} />} />
+                        <Route path="/bookings-grid" element={<BookingGrid isSidebarOpen={isSidebarOpen} />} />
+                        <Route path="/amenity" element={<AmenityManagement />} />
+                        <Route path="/user/:id/edit" element={<TabSwitch onUserUpdated={handleUserUpdated} />} />
+                        <Route path="/holidays" element={<Holidays isSidebarOpen={isSidebarOpen} />} />
+                        <Route path="/user" element={<UserGrid isSidebarOpen={isSidebarOpen} />} />
+                        <Route path="/reports" element={<ReportsGrid isSidebarOpen={isSidebarOpen} />} />
+
 
             <Route
               path="/property"
