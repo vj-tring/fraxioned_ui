@@ -283,14 +283,14 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
           onPropertySelect={handlePropertySelect}
           selectedPropertyId={selectedPropertyId}
         />
-        <IconButton
+        {/* <IconButton
           onClick={() => window.location.reload()}
           className={styles.refreshIcon}
           aria-label="refresh"
           disableRipple
         >
           <RefreshIcon />
-        </IconButton>
+        </IconButton> */}
       </div>
 
       {error && <div className={styles.error}>{error}</div>}

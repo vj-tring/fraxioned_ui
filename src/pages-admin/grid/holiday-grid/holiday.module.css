@@ -20,11 +20,15 @@
   color: #4fbbc7 !important;
 }
 .refreshprop{
-  display: flex !important;
-  justify-content: flex-end;
+  /* display: flex !important; */
+  /* justify-content: flex-end; */
   margin-top: 10px;
   margin-bottom: 5px;
- gap: 20px;
+  width: 100%;
+  /* position: absolute; */
+  /* right: 0; */
+  
+
 }
 .dataGridPadding :global(.MuiDataGrid-footerContainer) {
   padding-left: 16px;

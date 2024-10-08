@@ -43,7 +43,7 @@
 
 .dropdownContainer {
     display: flex; 
-    width: 50%;
+    width: 30%;
     margin-top: 10px;          
     justify-content: flex-end;
     /* border: 1px solid grey !important;  */
