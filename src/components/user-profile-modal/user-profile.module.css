@@ -1,0 +1,22 @@
+.header {
+  margin: 0;
+  color: #2d3748;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.userForm {
+  background-color: #ffffff;
+  font-family: "Inter", sans-serif;
+  height: calc(100% - 20px);
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.userFormHeader {
+  padding-right: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

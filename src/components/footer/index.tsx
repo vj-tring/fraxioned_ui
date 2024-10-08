@@ -11,12 +11,12 @@ const Footer: React.FC = () => {
         <div>
           <ul>
             <li>
-              <Link to="/home" className="no-underline disabled">
+              <Link to="/" className="no-underline disabled">
                 Home
               </Link>
             </li>
             <li>
-              <Link to="/booking" className="no-underline disabled">
+              <Link to="/bookings" className="no-underline disabled">
                 Bookings
               </Link>
             </li>

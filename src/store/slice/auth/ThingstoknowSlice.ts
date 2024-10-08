@@ -4,7 +4,7 @@ import { RootState } from '@/store/reducers';
 
 
 
-interface ThingsToKnowState {
+export interface ThingsToKnowState {
   propertyDetails: any | null;
   loading: boolean;
   error: string | null;

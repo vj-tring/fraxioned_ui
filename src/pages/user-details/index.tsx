@@ -1,55 +1,52 @@
-import React, { useEffect, useState } from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import './user-details.css'
-import userImage from '../../assets/images/profile.jpeg'
-import EditIcon from '../../assets/images/edit-icon.png'
-import { ApiUrl } from '../../api/config'
-import ownersPortal from '../../assets/pdf/ownerPortal.pdf'
-import ownersPortal1 from '../../assets/pdf/ownerPortal1.pdf'
-import ownersPortal2 from '../../assets/pdf/ownerPortal2.pdf'
+import React, { useEffect, useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./user-details.css";
+import userImage from "../../assets/images/profile.jpeg";
+import EditIcon from "../../assets/images/edit-icon.png";
+import { BACKEND_URL } from "@/constants";
 
 interface Document {
-  title: string
-  dateUploaded: string
-  content: string
+  title: string;
+  dateUploaded: string;
+  content: string;
 }
 
 const UserDetails: React.FC = () => {
   const [userDetails, setUserDetails] = useState({
     id: 0,
-    name: '',
-    email: '',
-    phone: '',
-    address1: '',
-    secondaryEmail: '',
-    secondaryPhone: '',
-  })
+    name: "",
+    email: "",
+    phone: "",
+    address1: "",
+    secondaryEmail: "",
+    secondaryPhone: "",
+  });
 
   const [documents] = useState<Document[]>([
     {
-      title: 'Signing Doc',
-      dateUploaded: '1/23/2024',
-      content: '../../assets/pdf/ownerPortal.pdf',
+      title: "Signing Doc",
+      dateUploaded: "1/23/2024",
+      content: "../../assets/pdf/ownerPortal.pdf",
     },
     {
-      title: 'Property Summary',
-      dateUploaded: '1/23/2024',
-      content: '../../assets/pdf/ownerPortal1.pdf',
+      title: "Property Summary",
+      dateUploaded: "1/23/2024",
+      content: "../../assets/pdf/ownerPortal1.pdf",
     },
     {
-      title: 'Welcome Packet',
-      dateUploaded: '1/23/2024',
-      content: '../../assets/pdf/ownerPortal2.pdf',
+      title: "Welcome Packet",
+      dateUploaded: "1/23/2024",
+      content: "../../assets/pdf/ownerPortal2.pdf",
     },
-  ])
+  ]);
 
   useEffect(() => {
-    const userData = localStorage.getItem('userData')
+    const userData = localStorage.getItem("userData");
     if (userData) {
-      const userDataObject = JSON.parse(userData)
-      const localStorageId = userDataObject.id
+      const userDataObject = JSON.parse(userData);
+      const localStorageId = userDataObject.id;
 
-      fetch(`${ApiUrl}/users/user/${localStorageId}`)
+      fetch(`${BACKEND_URL}/users/user/${localStorageId}`)
         .then((response) => response.json())
         .then((data) => {
           if (data) {
@@ -61,23 +58,23 @@ const UserDetails: React.FC = () => {
               address1: data.address1,
               secondaryEmail: data.secondaryEmail,
               secondaryPhone: data.secondaryPhone,
-            })
-            console.log('User details:', data)
+            });
+            console.log("User details:", data);
           } else {
-            console.error('No matching user found')
+            console.error("No matching user found");
           }
         })
         .catch((error) => {
-          console.error('Error fetching user details:', error)
-        })
+          console.error("Error fetching user details:", error);
+        });
     } else {
-      console.error('No user data found in local storage')
+      console.error("No user data found in local storage");
     }
-  }, [])
+  }, []);
 
   const handleViewDocument = (content: string) => {
-    window.open(content, '_blank')
-  }
+    window.open(content, "_blank");
+  };
 
   return (
     <div className="user-details-container">
@@ -143,7 +140,7 @@ const UserDetails: React.FC = () => {
                 <td>{doc.title}</td>
                 <td>{doc.dateUploaded}</td>
                 <td>
-                  {doc.content.endsWith('.pdf') ? (
+                  {doc.content.endsWith(".pdf") ? (
                     <div className="document">
                       <button
                         className="btn btn-primary View-btn mr-2"
@@ -169,7 +166,7 @@ const UserDetails: React.FC = () => {
         </table>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default UserDetails
+export default UserDetails;

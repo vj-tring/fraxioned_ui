@@ -13,7 +13,7 @@ interface Holiday {
     properties: { id: number }[];
 }
 
-interface HolidayState {
+export interface HolidayState {
     holidays: Holiday[];
     loading: boolean;
     error: string | null;

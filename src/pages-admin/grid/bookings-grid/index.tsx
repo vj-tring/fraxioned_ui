@@ -424,7 +424,7 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =>
                 title="Confirm Cancellation"
                 message="Are you sure you want to cancel this booking?"
                 confirmLabel="Cancel Booking"
-                cancelLabel="Keep Booking" children={undefined} />
+                cancelLabel="Keep Booking"/>
 
             <Snackbar
                 open={showErrorSnackbar}
