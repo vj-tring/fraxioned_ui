@@ -19,7 +19,7 @@
 .propertyPanel {
     top: 60px;
     right: 0;
-    height: calc(100vh - 60px);
+    height: calc(130vh - 90px);
     background-color: #fcfcfc;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
     color: #333333;
@@ -152,7 +152,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     border-bottom: 1px solid #f0f0f0;
-    font-size: 12px;
+    font-size: 10px ; 
 
 }
 
@@ -174,7 +174,9 @@
     cursor: not-allowed;
     pointer-events: none;
 }
-
+.label{
+    font-size: 12px;
+}
 @media (max-width: 768px) {
     .propertyPanel {
         width: 220px;

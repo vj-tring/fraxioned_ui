@@ -9,25 +9,23 @@
   margin-left: 100px;
 }
 
+.evenRow {
+  background-color: rgb(255, 255, 255);
+}
+.oddRow {
+  background-color: #ebecec;
+}
 .refreshIcon {
-  margin-left: 1170px !important;
+  /* margin-left: 1170px !important; */
   color: #4fbbc7 !important;
 }
-
-.dataGridPadding {
-  padding: 0 16px !important;
+.refreshprop{
+  display: flex !important;
+  justify-content: flex-end;
+  margin-top: 10px;
+  margin-bottom: 5px;
+ gap: 20px;
 }
-
-.dataGridPadding :global(.MuiDataGrid-columnHeaders) {
-  /* padding-left: 16px; */
-  padding-right: 12px;
-}
-
-.dataGridPadding :global(.MuiDataGrid-virtualScroller) {
-  padding-left: 10px;
-  padding-right: 16px;
-}
-
 .dataGridPadding :global(.MuiDataGrid-footerContainer) {
   padding-left: 16px;
   padding-right: 16px;
@@ -45,7 +43,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
 }
 
 .title {
@@ -55,14 +53,14 @@
 }
 
 .dataGridWrapper {
-    flex-grow: 1;
-    background-color: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
+  flex-grow: 1;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 2px !important;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
 }
 
 .dataGrid {

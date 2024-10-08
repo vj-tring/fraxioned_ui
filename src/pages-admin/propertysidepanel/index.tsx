@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import styles from './propertysidepanel.module.css';
+import styles from './propertysidepanel.module.css'
 import { FaInfoCircle, FaConciergeBell, FaMapMarkerAlt, FaImages, FaList, FaChevronDown, FaFile, FaUser } from 'react-icons/fa';
-import { fetchProperties, getPropertyById } from '@/store/slice/auth/propertiesSlice';
-import { RootState } from '@/store/reducers';
-import { AppDispatch } from '@/store';
+import { getPropertyById, getProperties } from '@/api';
 
 interface PropertySidePanelProps {
     isOpen: boolean;
@@ -20,26 +17,40 @@ const PropertySidePanel: React.FC<PropertySidePanelProps> = ({ isOpen }) => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const location = useLocation();
-    const dispatch = useDispatch<AppDispatch>();
-    const properties = useSelector((state: RootState) => state.property.properties);
-    const selectedProperty = useSelector((state: RootState) => state.property.selectedProperty);
-    const status = useSelector((state: RootState) => state.property.status);
+    const [properties, setProperties] = useState<Property[]>([]);
+    const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     useEffect(() => {
-        if (status === 'idle') {
-            dispatch(fetchProperties());
-        }
-    }, [status, dispatch]);
+        const fetchProperties = async () => {
+            try {
+                const response = await getProperties();
+                setProperties(response.data);
+            } catch (err) {
+                console.error('Error fetching properties:', err);
+            }
+        };
+
+        fetchProperties();
+    }, []);
 
     useEffect(() => {
         if (id) {
-            dispatch(getPropertyById(Number(id)));
+            const fetchPropertyDetails = async () => {
+                try {
+                    const response = await getPropertyById(Number(id));
+                    setSelectedProperty(response.data);
+                } catch (err) {
+                    console.error('Error fetching property details:', err);
+                }
+            };
+
+            fetchPropertyDetails();
         }
-    }, [id, dispatch]);
+    }, [id]);
 
     const handlePropertySelect = (property: Property) => {
-        dispatch(getPropertyById(property.id));
+        setSelectedProperty(property);
         setIsDropdownOpen(false);
         navigate(`/admin/property/${property.id}`);
     };
@@ -52,6 +63,7 @@ const PropertySidePanel: React.FC<PropertySidePanelProps> = ({ isOpen }) => {
         { icon: <FaUser />, label: 'Users', path: `/admin/property/${id}/users`, enabled: true },
         { icon: <FaMapMarkerAlt />, label: 'Location', path: `/admin/property/${id}/location`, enabled: false },
         { icon: <FaFile />, label: 'Documents', path: `/admin/property/${id}/documents`, enabled: true },
+
     ];
 
     return (

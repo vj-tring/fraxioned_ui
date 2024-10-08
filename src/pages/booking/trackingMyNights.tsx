@@ -177,10 +177,10 @@ const TrackingMyNigts: React.FC = () => {
             displayEmpty
             className="PropertyButton"
             sx={{
-              width: "270px",
+              width: "200px",
               color: "#808080",
               border: "none",
-              borderRadius: "50px",
+              borderRadius: "10px",
               "& .MuiSelect-select": {
                 padding: "10px 14px",
               },
@@ -219,15 +219,15 @@ const TrackingMyNigts: React.FC = () => {
             displayEmpty
             className="Year-btn"
             sx={{
-              width: "150px",
+              width: "100px",
               color: "#808080",
               border: "none",
               borderRadius: "50px",
-              paddingLeft: "30px",
+              paddingLeft: "10px",
               fontFamily: "Montserrat, sans-serif",
 
               "& .MuiSelect-select": {
-                padding: "10px 14px",
+                // padding: "10px 14px",
                 // fontSize: "16px",
               },
               "& .MuiOutlinedInput-notchedOutline": {
@@ -247,9 +247,9 @@ const TrackingMyNigts: React.FC = () => {
                 disableRipple
                 key={year}
                 value={year}
-                className="monsterrat Year"
+                className="monsterrat "
               >
-                {year}
+                <div className="Year">{year}</div>
               </MenuItem>
             ))}
           </Select>
