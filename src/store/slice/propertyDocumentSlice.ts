@@ -1,7 +1,7 @@
 import { getPropertyDocuments, getPropertyDocument, createPropertyDocument, updatePropertyDocument, deletePropertyDocument } from "@/api";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
-interface PropertyDocument {
+export interface PropertyDocument {
   id: number;
   property: { id: number };
   createdBy: { id: number };
@@ -11,7 +11,7 @@ interface PropertyDocument {
   documentFile: File | null;
 }
 
-interface PropertyDocumentState {
+export interface PropertyDocumentState {
   documents: PropertyDocument[];
   currentDocument: PropertyDocument | null;
   isLoading: boolean;

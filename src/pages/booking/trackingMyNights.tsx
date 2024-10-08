@@ -4,34 +4,15 @@ import "../booking/trackingMyNights.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
-import { MenuItem, Select } from "@mui/material";
+import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { Image } from "../property-listing-page";
 import { propertyImageapi } from "@/api";
+import { Card } from "../../store/slice/auth/property-slice";
 
-interface Property {
-  id: number;
-  propertyName?: string;
-  address?: string;
-  propertyShare?: string;
-  propertyId?: number;
-  details: {
-    [year: number]: {
-      offSeason: string;
-      peakSeason: string;
-      peakHoliday: string;
-      offSeasonHoliday: string;
-      peakRemainingNights: number;
-      offRemainingNights: number;
-      lastMinuteRemainingNights: number;
-      offRemainingHolidayNights: number;
-      peakRemainingHolidayNights: number;
-      maximumStayLength: number;
-    };
-  };
-}
+
 interface RootState {
   properties: {
-    cards: Property[];
+    cards: Card[];
     loading: boolean;
     error: string | null;
   };
@@ -53,21 +34,19 @@ const TrackingMyNigts: React.FC = () => {
     }
   }, [properties]);
 
-  const handlePropertyChange = (
-    event: React.ChangeEvent<{ value: unknown }>
-  ) => {
+  const handlePropertyChange = (event: SelectChangeEvent<number>) => {
     setSelectedPropertyId(event.target.value as number);
   };
 
-  const handleYearChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleYearChange = (event: SelectChangeEvent<number>) => {
     setSelectedYear(event.target.value as number);
   };
 
   const selectedProperty = properties.find(
     (property) => property.id === selectedPropertyId
   );
-  const propertyDetails = selectedProperty?.details[selectedYear] || {};
-
+  const propertyDetails = selectedProperty?.details[selectedYear];
+  console.log(selectedProperty)
   const availableYears = Object.keys(selectedProperty?.details || {}).map(
     (year) => parseInt(year)
   );
@@ -92,7 +71,8 @@ const TrackingMyNigts: React.FC = () => {
     return filteredImage[0]?.imageUrl;
   };
 
-  const formatDate = (dateStr) => {
+  const formatDate = (dateStr: string | number | Date | undefined) => {
+    if (!dateStr) return "";
     const date = new Date(dateStr);
     return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   };
@@ -152,8 +132,8 @@ const TrackingMyNigts: React.FC = () => {
 
   const { offSeasonBefore, offSeasonAfter } = selectedProperty
     ? getOffSeasonDates(
-        selectedProperty.details[selectedYear]?.peakSeasonStartDate || "",
-        selectedProperty.details[selectedYear]?.peakSeasonEndDate || ""
+        selectedProperty?.peakSeasonStartDate || "",
+        selectedProperty?.peakSeasonEndDate || ""
       )
     : {
         offSeasonBefore: { startDate: "", endDate: "" },
@@ -213,7 +193,7 @@ const TrackingMyNigts: React.FC = () => {
           </Select>
           <hr className="vl mt-2"></hr>
           <Select
-            disableRipple
+            // disableRipple
             value={selectedYear}
             onChange={handleYearChange}
             displayEmpty
@@ -299,25 +279,25 @@ const TrackingMyNigts: React.FC = () => {
                 <tr>
                   <th>Total Nights</th>
                   <th className="TableValues">
-                    {propertyDetails.offAllottedNights}
+                    {propertyDetails?.offAllottedNights}
                   </th>
                 </tr>
                 <tr>
                   <td>Nights Used</td>
                   <td className="TableValues">
-                    {propertyDetails.offUsedNights}
+                    {propertyDetails?.offUsedNights}
                   </td>
                 </tr>
                 <tr>
                   <td>Nights Booked</td>
                   <td className="TableValues">
-                    {propertyDetails.offBookedNights}
+                    {propertyDetails?.offBookedNights}
                   </td>
                 </tr>
                 <tr>
                   <td>Nights Remaining</td>
                   <td className="TableValues">
-                    {propertyDetails.offRemainingNights}
+                    {propertyDetails?.offRemainingNights}
                   </td>
                 </tr>
               </table>
@@ -327,25 +307,25 @@ const TrackingMyNigts: React.FC = () => {
                 <tr>
                   <th>Total Holidays</th>
                   <th className="TableValues">
-                    {propertyDetails.offAllottedHolidayNights}
+                    {propertyDetails?.offAllottedHolidayNights}
                   </th>
                 </tr>
                 <tr>
                   <td>Nights Used</td>
                   <th className="TableValues">
-                    {propertyDetails.offUsedHolidayNights}
+                    {propertyDetails?.offUsedHolidayNights}
                   </th>
                 </tr>
                 <tr>
                   <td>Nights Booked</td>
                   <th className="TableValues">
-                    {propertyDetails.offBookedHolidayNights}
+                    {propertyDetails?.offBookedHolidayNights}
                   </th>
                 </tr>
                 <tr>
                   <td>Nights Remaining</td>
                   <th className="TableValues">
-                    {propertyDetails.offRemainingHolidayNights}
+                    {propertyDetails?.offRemainingHolidayNights}
                   </th>
                 </tr>
               </table>
@@ -355,8 +335,8 @@ const TrackingMyNigts: React.FC = () => {
             <div className="Off-season">
               <li className="OffHead">Peak-Season</li>
               <li>
-                {formatDate(propertyDetails.peakSeasonStartDate)} -{" "}
-                {formatDate(propertyDetails.peakSeasonEndDate)}
+                {formatDate(selectedProperty?.peakSeasonStartDate)} -{" "}
+                {formatDate(selectedProperty?.peakSeasonEndDate)}
               </li>
             </div>
             <div className="Total-Nights pt-4">
@@ -364,25 +344,25 @@ const TrackingMyNigts: React.FC = () => {
                 <tr>
                   <th>Total Nights</th>
                   <th className="TableValues">
-                    {propertyDetails.peakAllottedNights}
+                    {propertyDetails?.peakAllottedNights}
                   </th>
                 </tr>
                 <tr>
                   <td>Nights Used</td>
                   <td className="TableValues">
-                    {propertyDetails.peakUsedNights}
+                    {propertyDetails?.peakUsedNights}
                   </td>
                 </tr>
                 <tr>
                   <td>Nights Booked</td>
                   <td className="TableValues">
-                    {propertyDetails.peakBookedNights}
+                    {propertyDetails?.peakBookedNights}
                   </td>
                 </tr>
                 <tr>
                   <td>Nights Remaining</td>
                   <td className="TableValues">
-                    {propertyDetails.peakRemainingNights}
+                    {propertyDetails?.peakRemainingNights}
                   </td>
                 </tr>
               </table>
@@ -392,25 +372,25 @@ const TrackingMyNigts: React.FC = () => {
                 <tr>
                   <th>Total Holidays</th>
                   <td className="TableValues">
-                    {propertyDetails.peakAllottedHolidayNights}
+                    {propertyDetails?.peakAllottedHolidayNights}
                   </td>
                 </tr>
                 <tr>
                   <td>Nights Used</td>
                   <td className="TableValues">
-                    {propertyDetails.peakUsedHolidayNights}
+                    {propertyDetails?.peakUsedHolidayNights}
                   </td>
                 </tr>
                 <tr>
                   <td>Nights Booked</td>
                   <td className="TableValues">
-                    {propertyDetails.peakBookedHolidayNights}
+                    {propertyDetails?.peakBookedHolidayNights}
                   </td>
                 </tr>
                 <tr>
                   <td>Nights Remaining</td>
                   <td className="TableValues">
-                    {propertyDetails.peakRemainingHolidayNights}
+                    {propertyDetails?.peakRemainingHolidayNights}
                   </td>
                 </tr>
               </table>

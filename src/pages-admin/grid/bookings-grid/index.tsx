@@ -519,16 +519,14 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
         />
       </div>
 
-      <ConfirmationModal
-        show={showDeleteConfirmation}
-        onHide={() => setShowDeleteConfirmation(false)}
-        onConfirm={handleConfirmDelete}
-        title="Confirm Cancellation"
-        message="Are you sure you want to cancel this booking?"
-        confirmLabel="Cancel Booking"
-        cancelLabel="Keep Booking"
-        children={undefined}
-      />
+            <ConfirmationModal
+                show={showDeleteConfirmation}
+                onHide={() => setShowDeleteConfirmation(false)}
+                onConfirm={handleConfirmDelete}
+                title="Confirm Cancellation"
+                message="Are you sure you want to cancel this booking?"
+                confirmLabel="Cancel Booking"
+                cancelLabel="Keep Booking"/>
 
       <Snackbar
         open={showErrorSnackbar}

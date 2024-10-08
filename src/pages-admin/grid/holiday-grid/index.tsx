@@ -367,9 +367,7 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             : "Are you sure you want to remove this holiday from the property?"
         }
         confirmLabel="Delete"
-        cancelLabel="Cancel"
-        children={undefined}
-      />
+        cancelLabel="Cancel"  />
 
       <Snackbar
         open={showErrorSnackbar}

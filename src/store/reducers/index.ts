@@ -20,6 +20,7 @@ import amenitiesReducer from '../slice/auth/amenitySlice';
 import amenitiesPageReducer from '../slice/auth/amenitiespageSlice';
 import userDetailsReducer from '../slice/auth/userdetails';
 import userpropertiesReducer from '../slice/auth/userproperties';
+import userReducer from '../slice/user-slice';
 
 
 const appReducer = combineReducers({
@@ -44,7 +45,7 @@ const appReducer = combineReducers({
   amenities: amenitiesReducer,
   userDetails: userDetailsReducer,
   userProperties: userpropertiesReducer,
-
+  user: userReducer,
 });
 
 const rootReducer = (

@@ -1,52 +1,41 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import "./available-night.css";
-import image1 from "../../assests/blue-bear-lake.jpg";
-import image2 from "../../assests/bear-lake-bluffs.jpg";
-import image3 from "../../assests/crown-jewel.jpg";
-import image4 from "../../assests/lake-escape.jpg";
 import userImage from "../../assets/images/profile.jpeg";
 import { RootState } from '../../store/reducers';
-import { AppDispatch } from '../../store/index';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useParams } from "react-router-dom";
+import { Card } from "@/store/slice/auth/property-slice";
 
-interface Card {
-  id: number;
-  name: string;
-  address: string;
-  image: string; // Added image property
-  details: {
-    [year: number]: {
-      offSeason: string;
-      peakSeason: string;
-      peakHoliday: string;
-      offSeasonHoliday: string;
-    };
-  };
-}
+
 
 export default function AvailableNights() {
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
-  const [years, setYears] = useState<number[]>([2024, 2025, 2026]);
-  const [selectedYear, setSelectedYear] = useState<number>(2024);
+  const [years, setYears] = useState<number[]>([]);
+  const [selectedYear, setSelectedYear] = useState<number>(currentYear);
   const { id } = useParams<{ id: string }>();
 
-  const dispatch = useDispatch<AppDispatch>();
-  const { cards, loading, error } = useSelector((state: RootState) => state.properties);
-  const user = useSelector((state: RootState) => state.auth.user);
+  // const dispatch = useDispatch<AppDispatch>();
+  const { cards} = useSelector((state: RootState) => state.properties);
+  // const years = Object.keys(selectedCard?.details as { [year: number]: propertyAvailableDaysDetails }).map(Number);
+  // const user = useSelector((state: RootState) => state.auth.user);
   const [selectedCardIndex, setSelectedCardIndex] = useState<number>(0);
 
   useEffect(() => {
     if (id && cards.length > 0 && selectedCardIndex >= 0) {
       const propertyId = parseInt(id, 10);
       setSelectedCardIndex(propertyId);
-      const cardwithid: any = cards.find((card) => {
+      const cardwithid: any = cards.find((card: { id: number; }) => {
         return card.id === propertyId
       })
+
       setSelectedCard(cardwithid);
+      setYears(Object.keys(cardwithid.details).map(Number))
+      // setYears(Object.keys(card)
     } else {
       setSelectedCardIndex(0);
       setSelectedCard(null);
@@ -56,120 +45,6 @@ export default function AvailableNights() {
   }, [id, selectedCardIndex, cards]);
 
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const cardData: Card[] = [
-        {
-          id: 1,
-          name: "Blue Bear Lake",
-          address: "537 Blue Lake St, Garden City, Utah, United States, 84028",
-          image: image1,
-          details: {
-            2024: {
-              offSeason: "12/30",
-              peakSeason: "1/14",
-              peakHoliday: "0/1",
-              offSeasonHoliday: "0/1",
-            },
-            2025: {
-              offSeason: "8/30",
-              peakSeason: "14/14",
-              peakHoliday: "1/1",
-              offSeasonHoliday: "0/1",
-            },
-            2026: {
-              offSeason: "8/30",
-              peakSeason: "3/14",
-              peakHoliday: "1/1",
-              offSeasonHoliday: "1/1",
-            },
-          },
-        },
-        {
-          id: 2,
-          name: "The Crown Jewel",
-          address: "5409 South Aquamarine Lane, St. George, Utah, United States, 84790",
-          image: image2,
-          details: {
-            2024: {
-              offSeason: "10/30",
-              peakSeason: "11/14",
-              peakHoliday: "0/1",
-              offSeasonHoliday: "0/1",
-            },
-            2025: {
-              offSeason: "7/30",
-              peakSeason: "8/14",
-              peakHoliday: "1/1",
-              offSeasonHoliday: "0/1",
-            },
-            2026: {
-              offSeason: "23/30",
-              peakSeason: "2/14",
-              peakHoliday: "0/1",
-              offSeasonHoliday: "1/1",
-            },
-          },
-        },
-        {
-          id: 3,
-          name: "Bear Lake Bluffs",
-          address: "732 Spruce Drive, Garden City, Utah, United States, 84028",
-          image: image3,
-          details: {
-            2024: {
-              offSeason: "25/30",
-              peakSeason: "1/14",
-              peakHoliday: "1/1",
-              offSeasonHoliday: "0/1",
-            },
-            2025: {
-              offSeason: "22/30",
-              peakSeason: "13/14",
-              peakHoliday: "0/1",
-              offSeasonHoliday: "0/1",
-            },
-            2026: {
-              offSeason: "25/30",
-              peakSeason: "12/14",
-              peakHoliday: "1/1",
-              offSeasonHoliday: "0/1",
-            },
-          },
-        },
-        {
-          id: 4,
-          name: "Lake Escape",
-          address: "432 Crown Blue St, Garden City, UT 84078",
-          image: image4,
-          details: {
-            2024: {
-              offSeason: "11/30",
-              peakSeason: "13/14",
-              peakHoliday: "1/1",
-              offSeasonHoliday: "0/1",
-            },
-            2025: {
-              offSeason: "21/30",
-              peakSeason: "3/14",
-              peakHoliday: "0/1",
-              offSeasonHoliday: "1/1",
-            },
-            2026: {
-              offSeason: "23/30",
-              peakSeason: "3/14",
-              peakHoliday: "1/1",
-              offSeasonHoliday: "0/1",
-            },
-          },
-        },
-      ];
-      // You might want to dispatch these to Redux or set them to local state
-      // setCards(cardData); 
-    };
-
-    fetchData();
-  }, []);
 
   const handleYearClick = (year: number) => {
     setSelectedYear(year);
@@ -213,6 +88,7 @@ export default function AvailableNights() {
                 <div className="d-flex flex-column night-count">
                   <li className="liststyle">
                     {selectedCard.details[selectedYear]?.peakSeason || "N/A"}
+                    
                   </li>
                   <li className="Box-list1">Peak-Season Nights</li>
                 </div>
