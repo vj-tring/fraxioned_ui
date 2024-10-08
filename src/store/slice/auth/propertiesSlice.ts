@@ -22,12 +22,14 @@ export interface Property {
 
 interface PropertiesState {
     properties: Property[];
+    selectedProperty: Property | null;
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
     error: string | null;
 }
 
 const initialState: PropertiesState = {
     properties: [],
+    selectedProperty: null,
     status: 'idle',
     error: null,
 };
@@ -36,6 +38,14 @@ export const fetchProperties = createAsyncThunk('properties/fetchProperties', as
     const response = await axiosInstance.get('/v1/properties');
     return response.data;
 });
+
+export const getPropertyById = createAsyncThunk(
+    'properties/getPropertyById',
+    async (id: number) => {
+        const response = await axiosInstance.get(`/v1/properties/property/${id}`);
+        return response.data;
+    }
+);
 
 const propertiesSlice = createSlice({
     name: 'property',
@@ -53,6 +63,17 @@ const propertiesSlice = createSlice({
             .addCase(fetchProperties.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message || 'Failed to fetch properties';
+            })
+            .addCase(getPropertyById.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(getPropertyById.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.selectedProperty = action.payload;
+            })
+            .addCase(getPropertyById.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || 'Failed to fetch property';
             });
     },
 });

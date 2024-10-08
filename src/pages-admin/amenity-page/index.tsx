@@ -89,19 +89,6 @@ const AmenityManagement: React.FC = () => {
         }
     }, [deleteSuccess, deleteError, dispatch]);
 
-    // const fetchAmenityGroups = async () => {
-    //     try {
-    //         const response = await getamenitygroup();
-    //         if (response.data.success) {
-    //             setAmenityGroups(response.data.data);
-    //         } else {
-    //             showSnackbar('Failed to fetch amenity groups', 'error');
-    //         }
-    //     } catch (err) {
-    //         showSnackbar('Failed to fetch amenity groups', 'error');
-    //     }
-    // };
-
     const fetchAmenities = async () => {
         try {
             const response = await amenitiesapi();
