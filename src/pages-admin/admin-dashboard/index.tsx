@@ -56,7 +56,7 @@ const AdminDashboard: React.FC = () => {
                         <Route path="/user/:id/edit" element={<TabSwitch onUserUpdated={handleUserUpdated} />} />
                         <Route path="/holidays" element={<Holidays isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/user" element={<UserGrid isSidebarOpen={isSidebarOpen} />} />
-                        <Route path="/reports" element={<ReportsGrid isSidebarOpen={isSidebarOpen}   />} />
+                        <Route path="/reports" element={<ReportsGrid isSidebarOpen={isSidebarOpen} />} />
 
                         <Route path="/property" element={<Property isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/property/:id" element={
