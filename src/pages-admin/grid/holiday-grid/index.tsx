@@ -9,7 +9,6 @@ import {
 import styles from "./holiday.module.css";
 import NewForm from "@/pages-admin/grid/holiday-grid/new-form";
 import EditForm from "@/pages-admin/grid/holiday-grid/edit-form";
-import RefreshIcon from '@mui/icons-material/Refresh';
 import PropertyImage from "@/pages-admin/property-image";
 import {
   Dialog,
@@ -277,7 +276,6 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
           className={styles.refreshIcon}
           aria-label="refresh"
         >
-          <RefreshIcon />
         </IconButton>
         <DataGrid
           rows={filteredHolidays}

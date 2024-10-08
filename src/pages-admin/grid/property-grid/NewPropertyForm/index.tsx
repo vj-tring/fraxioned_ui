@@ -13,9 +13,12 @@ import {
 import HomeIcon from '@mui/icons-material/Home';
 import styles from './NewPropertyForm.module.css';
 import CloseIcon from '@mui/icons-material/Close';
-import { addPropertyApi } from '@/api';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store/reducers';
+import {
+    addProperty
+} from '@/store/slice/auth/propertiesSlice';
+import { AppDispatch } from '@/store';
 
 interface NewPropertyFormProps {
     onClose: () => void;
@@ -35,7 +38,9 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
     const [longitude, setLongitude] = useState('');
     const [isActive, setIsActive] = useState(true);
 
+    const dispatch = useDispatch<AppDispatch>();
     const userId = useSelector((state: RootState) => state.auth.user?.id);
+    const status = useSelector((state: RootState) => state.property.status);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -61,9 +66,11 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
                 isActive,
                 displayOrder: 0
             };
-            await addPropertyApi(propertyData);
-            onPropertyAdded();
-            onClose();
+            await dispatch(addProperty(propertyData));
+            if (status === 'succeeded') {
+                onPropertyAdded();
+                onClose();
+            }
         } catch (err) {
             console.error('Error in adding the property:', err);
         }
@@ -78,14 +85,13 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
                         <Typography variant="h4" className={styles.formTitle}>
                             Add New Property
                         </Typography>
-                        <IconButton 
+                        <IconButton
                             onClick={onClose}
                             className={styles.closeButton}
                             aria-label="close"
                         >
                             <CloseIcon />
                         </IconButton>
-
                     </Box>
                     <form onSubmit={handleSubmit} className={styles.form}>
                         <Grid container spacing={3}>
@@ -232,8 +238,9 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
                                 type="submit"
                                 variant="contained"
                                 className={styles.addButton}
+                                disabled={status === 'loading'}
                             >
-                                Add Property
+                                {status === 'loading' ? 'Adding...' : 'Add Property'}
                             </Button>
                         </Box>
                     </form>

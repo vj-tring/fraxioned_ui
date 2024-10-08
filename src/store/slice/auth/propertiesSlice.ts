@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '@/api/axiosSetup';
+import { addPropertyApi } from '@/api';
 
 export interface Property {
     id: number;
@@ -47,6 +48,30 @@ export const getPropertyById = createAsyncThunk(
     }
 );
 
+export const addProperty = createAsyncThunk(
+    'properties/addProperty',
+    async (propertyData: {
+        createdBy: { id: number };
+        propertyName: string;
+        ownerRezPropId: number;
+        address: string;
+        city: string;
+        state: string;
+        country: string;
+        zipcode: number;
+        houseDescription: string;
+        isExclusive: boolean;
+        propertyShare: number;
+        latitude: number;
+        longitude: number;
+        isActive: boolean;
+        displayOrder: number;
+    }) => {
+        const response = await addPropertyApi(propertyData);
+        return response.data;
+    }
+);
+
 const propertiesSlice = createSlice({
     name: 'property',
     initialState,
@@ -74,6 +99,17 @@ const propertiesSlice = createSlice({
             .addCase(getPropertyById.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message || 'Failed to fetch property';
+            })
+            .addCase(addProperty.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(addProperty.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.properties.push(action.payload);
+            })
+            .addCase(addProperty.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || 'Failed to add property';
             });
     },
 });

@@ -261,9 +261,9 @@ const AmenityManagement: React.FC = () => {
                             {expandedGroups.includes(group) && (
                                 <div className={styles.amenityItems}>
                                     <div className={styles.groupSearchContainer}>
-                                        <h3 className={styles.groupSearchHeading}>{group} amenity list</h3>
+                                        <h3 className={styles.groupSearchHeading}>Search..</h3>
                                         <div className={styles.groupSearchBar}>
-                                            <Search size={20} />
+                                            <Search size={15} />
                                             <input
                                                 type="text"
                                                 placeholder={`Search in ${group}...`}
@@ -275,16 +275,42 @@ const AmenityManagement: React.FC = () => {
                                     {amenitiesList.length > 0 ? (
                                         amenitiesList.map((amenity) => (
                                             <div key={amenity.id} className={styles.amenityItem}>
-                                                {editingAmenity?.id === amenity.id ? (
-                                                    <input
-                                                        type="text"
-                                                        value={editingAmenity.amenityName}
-                                                        onChange={(e) => setEditingAmenity({ ...editingAmenity, amenityName: e.target.value })}
-                                                        className={styles.editInput}
-                                                    />
-                                                ) : (
-                                                    <span className={styles.amenityName}>{amenity.amenityName}</span>
-                                                )}
+                                                <div className={styles.amenityContent}>
+                                                    {editingAmenity?.id === amenity.id ? (
+                                                        <div className={styles.editingContainer}>
+                                                            <input
+                                                                type="text"
+                                                                value={editingAmenity.amenityName}
+                                                                onChange={(e) => setEditingAmenity({
+                                                                    ...editingAmenity,
+                                                                    amenityName: e.target.value
+                                                                })}
+                                                                className={styles.editInput}
+                                                                placeholder="Amenity name"
+                                                            />
+                                                            <textarea
+                                                                value={editingAmenity.amenityDescription || ''}
+                                                                onChange={(e) => setEditingAmenity({
+                                                                    ...editingAmenity,
+                                                                    amenityDescription: e.target.value
+                                                                })}
+                                                                className={styles.editDescription}
+                                                                placeholder="Description (optional)"
+                                                            />
+                                                        </div>
+                                                    ) : (
+                                                        <div className={styles.displayContainer}>
+                                                            <span className={styles.amenityName}>
+                                                                {amenity.amenityName}
+                                                            </span>
+                                                            {amenity.amenityDescription && (
+                                                                <p className={styles.amenityDescription}>
+                                                                    {amenity.amenityDescription}
+                                                                </p>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
                                                 <div className={styles.actionButtons}>
                                                     {editingAmenity?.id === amenity.id ? (
                                                         <>
@@ -310,7 +336,10 @@ const AmenityManagement: React.FC = () => {
                                                     ) : (
                                                         <>
                                                             <Tooltip title="Edit" arrow>
-                                                                <button onClick={() => handleEdit(amenity)} className={styles.editButton}>
+                                                                <button
+                                                                    onClick={() => handleEdit(amenity)}
+                                                                    className={styles.editButton}
+                                                                >
                                                                     <Edit2 size={16} />
                                                                 </button>
                                                             </Tooltip>
@@ -323,7 +352,6 @@ const AmenityManagement: React.FC = () => {
                                                                     <Trash2 size={16} />
                                                                 </button>
                                                             </Tooltip>
-
                                                         </>
                                                     )}
                                                 </div>
@@ -340,6 +368,7 @@ const AmenityManagement: React.FC = () => {
                     ))}
                 </div>
             </div>
+
             <ConfirmationModal
                 show={showDeleteModal}
                 onHide={handleDeleteCancel}

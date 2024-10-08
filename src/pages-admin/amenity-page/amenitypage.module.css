@@ -115,9 +115,9 @@
 .groupHeader {
     display: flex;
     align-items: center;
-    height: 42px;
+    height: 40px;
     background-color: #f8f9fa;
-    padding: 1rem;
+    padding: 0.8rem;
     cursor: pointer;
     transition: background-color 0.3s;
 }
@@ -130,7 +130,7 @@
     margin: 0;
     margin-left: 0.5rem;
     font-weight: 500;
-    font-size: 16px;
+    font-size: 17px;
     color: #2c3e50;
 }
 
@@ -146,23 +146,23 @@
 
 .groupSearchContainer {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
-    padding: 0.6rem 1.0rem;
+    padding: 0.4rem 1.0rem;
     background-color: #f8f9fa;
-    border-radius: 8px;
+    border-radius: 10px;
 }
 
 .groupSearchHeading {
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: 17px;
+    font-weight: 500;
     color: #2c3e50;
     margin: 0;
 }
 
 .groupSearchBar {
     display: flex;
+    margin-left: 16px;
     align-items: center;
     background-color: white;
     border-radius: 8px;
@@ -185,10 +185,29 @@
 .amenityItem {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 0.2rem;
+    align-items: flex-start;
+    padding: 0.4rem;
     border-bottom: 1px solid #e0e0e0;
     transition: background-color 0.3s;
+}
+
+
+.amenityContent {
+    flex-grow: 1;
+    margin-right: 1rem;
+}
+
+.displayContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.editingContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
 }
 
 .amenityItem:last-child {
@@ -202,11 +221,20 @@
 .amenityName {
     font-size: 16px;
     color: #34495e;
+    font-weight: 500;
+}
+
+.amenityDescription {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+    line-height: 1.4;
 }
 
 .actionButtons {
     display: flex;
     gap: 0.5rem;
+    align-self: flex-start;
 }
 
 .editButton,
@@ -246,7 +274,6 @@
 }
 
 .editInput {
-    flex-grow: 1;
     padding: 0.4rem;
     height: 35px;
     font-size: 16px;
@@ -254,10 +281,25 @@
     border-radius: 4px;
     outline: none;
     transition: border-color 0.3s;
+    width: 100%;
 }
 
-.editInput:focus {
-    border-color: #c7eaee;
+.editDescription {
+    padding: 0.4rem;
+    min-height: 60px;
+    font-size: 14px;
+    border: 1px solid #c7eaee;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s;
+    width: 100%;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.editInput:focus,
+.editDescription:focus {
+    border: 1px solid #c7eaee;
 }
 
 .loading {
