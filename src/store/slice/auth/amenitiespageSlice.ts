@@ -8,10 +8,11 @@ interface UpdateAmenityPayload {
         amenityName: string;
         amenityDescription: string;
         amenityGroup: { id: number };
+        amenityType: string; // Add this property
     };
 }
 
-interface AmenitiesState {
+export interface AmenitiesState {
     loading: boolean;
     error: string | null;
     success: boolean;

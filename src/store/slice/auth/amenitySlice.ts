@@ -19,7 +19,7 @@ interface Amenity {
   };
 }
 
-interface AmenitiesState {
+export interface AmenitiesState {
   amenities: Amenity[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
