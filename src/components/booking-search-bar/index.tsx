@@ -167,7 +167,7 @@ const BookingSearchBar: React.FC = () => {
         };
 
         await dispatch(saveBooking(updatedBookingData));
-        navigate("/home/booking-summary");
+        navigate("/booking-summary");
       } else {
         throw new Error(
           result.message || "An error occurred while processing your booking."
