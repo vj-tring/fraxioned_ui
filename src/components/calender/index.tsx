@@ -513,7 +513,7 @@ const handleDateChange = (range: DateRange | undefined) => {
         <Calendar
           mode="range"
           defaultMonth={dateRange?.from}
-          selected={dateRange}
+          selected={dateRange || currentBookingDates}
           onSelect={isViewOnly ? undefined :handleDateChange}
           isViewOnly={true}
           numberOfMonths={2}
@@ -533,17 +533,6 @@ const handleDateChange = (range: DateRange | undefined) => {
               { from: currentBookingDates.from, to: currentBookingDates.to }
             ] : [],
           }}
-          modifiersStyles={{
-            booked: {
-              backgroundColor: propertyColor,
-              color: 'white',
-            },
-            currentBooking: {
-              backgroundColor: 'lightblue',
-              color: 'black',
-              textDecoration: 'none',
-            },
-          }}
           modifiersClassNames={{
             booked:  disableStrikethrough ? 'booked-date-no-strike' : 'booked-date',
             unavailable: 'unavailable-date',
@@ -551,7 +540,6 @@ const handleDateChange = (range: DateRange | undefined) => {
             holiday: 'holiday-date',
             currentBooking: 'current-booking-date',
             selectable: 'selectable-date',
-
           }}
         />
       <div className="error-msg-container ml-5 flex justify-start">
@@ -567,11 +555,7 @@ const handleDateChange = (range: DateRange | undefined) => {
           text-decoration: line-through;
         }
 
-       .current-booking-date {
-  background-color: lightblue !important;
-  color: black !important;
-  text-decoration: none !important;
-}
+
 
 .selectable-date {
   text-decoration: none !important;
@@ -601,16 +585,10 @@ const handleDateChange = (range: DateRange | undefined) => {
           color: blue !important;
         }
       `}</style>
-      {/* <div className="flex items-center justify-between end-calendar">
-        <div className='peak-length'>
-            <div><b className="bold">Peak Nights : </b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.peakRemainingNights || 'N/A'} Nights</div>
-            <div><b className="bold">Off Nights : </b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.offRemainingNights || 'N/A'} Nights</div>
-          </div>
-        </div> */}
-                {showEndCalendar && (
+        {showEndCalendar && (
         <div className="flex items-center justify-between end-calendar">
           <div className='stay-length'>
-            <div><b className="bold">Nights: [Peak -</b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.peakRemainingNights || '0'} , <b className="bold">Off -</b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.offRemainingNights || '0'}]</div>
+            <div><b className="bold">Nights: [Peak - </b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.peakRemainingNights || '0'} , <b className="bold">Off - </b>{selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.offRemainingNights || '0'}]</div>
             <div><b className="bold">Peak Season :</b> [{formatDate(selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.peakSeasonStartDate)} - {formatDate(selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.peakSeasonEndDate)}] </div>  
             <div><b className="bold">Max Stay :</b> {selectedPropertyDetails?.details[selectedYear || new Date().getFullYear()]?.maximumStayLength || '0'} Nights</div>
           </div>

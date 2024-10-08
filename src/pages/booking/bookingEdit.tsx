@@ -73,25 +73,26 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
     }
   }, [dispatch, booking?.propertyId, userId]);
 
-  useEffect(() => {
-    if (open && bookingRef.current) {
-      const initialDateRange = {
-        from: new Date(bookingRef.current.checkinDate),
-        to: new Date(bookingRef.current.checkoutDate),
-      };
-      setDateRange(initialDateRange);
-      setDisplayDates({
-        checkinDate: bookingRef.current.checkinDate,
-        checkoutDate: bookingRef.current.checkoutDate,
-      });
-      setGuestCount(bookingRef.current.noOfGuests);
-      dispatch(initializeCounts({
-        Adults: bookingRef.current.noOfAdults,
-        Children: bookingRef.current.noOfChildren,
-        Pets: bookingRef.current.noOfPets
-      }));
-    }
-  }, [open, dispatch]);
+useEffect(() => {
+  if (open && bookingRef.current) {
+    const initialDateRange = {
+      from: new Date(bookingRef.current.checkinDate),
+      to: new Date(bookingRef.current.checkoutDate),
+    };
+    console.log('Setting initial date range:', initialDateRange);
+    setDateRange(initialDateRange);
+    setDisplayDates({
+      checkinDate: formattedDate(bookingRef.current.checkinDate),
+      checkoutDate: formattedDate(bookingRef.current.checkoutDate),
+    });
+    setGuestCount(bookingRef.current.noOfGuests);
+    dispatch(initializeCounts({
+      Adults: bookingRef.current.noOfAdults,
+      Children: bookingRef.current.noOfChildren,
+      Pets: bookingRef.current.noOfPets
+    }));
+  }
+}, [open, dispatch]);
 
   useEffect(() => {
     bookingRef.current = booking;
