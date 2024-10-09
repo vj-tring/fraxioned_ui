@@ -9,7 +9,6 @@ import { Image } from "../property-listing-page";
 import { propertyImageapi } from "@/api";
 import { Card } from "../../store/slice/auth/property-slice";
 
-
 interface RootState {
   properties: {
     cards: Card[];
@@ -46,7 +45,7 @@ const TrackingMyNigts: React.FC = () => {
     (property) => property.id === selectedPropertyId
   );
   const propertyDetails = selectedProperty?.details[selectedYear];
-  console.log(selectedProperty)
+  console.log(selectedProperty);
   const availableYears = Object.keys(selectedProperty?.details || {}).map(
     (year) => parseInt(year)
   );
@@ -274,60 +273,64 @@ const TrackingMyNigts: React.FC = () => {
                 offSeasonAfter.endDate
               )}`}</li>
             </div>
-            <div className="Total-Nights pt-3 ">
+            <div className="Total-Nights pt-3">
               <table style={{ width: "90%" }}>
-                <tr>
-                  <th>Total Nights</th>
-                  <th className="TableValues">
-                    {propertyDetails?.offAllottedNights}
-                  </th>
-                </tr>
-                <tr>
-                  <td>Nights Used</td>
-                  <td className="TableValues">
-                    {propertyDetails?.offUsedNights}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Nights Booked</td>
-                  <td className="TableValues">
-                    {propertyDetails?.offBookedNights}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Nights Remaining</td>
-                  <td className="TableValues">
-                    {propertyDetails?.offRemainingNights}
-                  </td>
-                </tr>
+                <tbody>
+                  <tr>
+                    <th>Total Nights</th>
+                    <th className="TableValues">
+                      {propertyDetails?.offAllottedNights}
+                    </th>
+                  </tr>
+                  <tr>
+                    <td>Nights Used</td>
+                    <td className="TableValues">
+                      {propertyDetails?.offUsedNights}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Nights Booked</td>
+                    <td className="TableValues">
+                      {propertyDetails?.offBookedNights}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Nights Remaining</td>
+                    <td className="TableValues">
+                      {propertyDetails?.offRemainingNights}
+                    </td>
+                  </tr>
+                </tbody>
               </table>
             </div>
             <div className="Total-Holiday pt-3">
               <table style={{ width: "90%" }}>
-                <tr>
-                  <th>Total Holidays</th>
-                  <th className="TableValues">
-                    {propertyDetails?.offAllottedHolidayNights}
-                  </th>
-                </tr>
-                <tr>
-                  <td>Nights Used</td>
-                  <th className="TableValues">
-                    {propertyDetails?.offUsedHolidayNights}
-                  </th>
-                </tr>
-                <tr>
-                  <td>Nights Booked</td>
-                  <th className="TableValues">
-                    {propertyDetails?.offBookedHolidayNights}
-                  </th>
-                </tr>
-                <tr>
-                  <td>Nights Remaining</td>
-                  <th className="TableValues">
-                    {propertyDetails?.offRemainingHolidayNights}
-                  </th>
-                </tr>
+                <tbody>
+                  <tr>
+                    <th>Total Holidays</th>
+                    <th className="TableValues">
+                      {propertyDetails?.offAllottedHolidayNights}
+                    </th>
+                  </tr>
+                  <tr>
+                    <td>Nights Used</td>
+                    <th className="TableValues">
+                      {propertyDetails?.offUsedHolidayNights}
+                    </th>
+                  </tr>
+                  <tr>
+                    <td>Nights Booked</td>
+                    <th className="TableValues">
+                      {propertyDetails?.offBookedHolidayNights}
+                    </th>
+                  </tr>
+                  <tr>
+                    <td>Nights Remaining</td>
+                    <th className="TableValues">
+                      {propertyDetails?.offRemainingHolidayNights}
+                    </th>
+                  </tr>
+                </tbody>
               </table>
             </div>
           </div>
@@ -341,58 +344,62 @@ const TrackingMyNigts: React.FC = () => {
             </div>
             <div className="Total-Nights pt-4">
               <table style={{ width: "90%" }}>
-                <tr>
-                  <th>Total Nights</th>
-                  <th className="TableValues">
-                    {propertyDetails?.peakAllottedNights}
-                  </th>
-                </tr>
-                <tr>
-                  <td>Nights Used</td>
-                  <td className="TableValues">
-                    {propertyDetails?.peakUsedNights}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Nights Booked</td>
-                  <td className="TableValues">
-                    {propertyDetails?.peakBookedNights}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Nights Remaining</td>
-                  <td className="TableValues">
-                    {propertyDetails?.peakRemainingNights}
-                  </td>
-                </tr>
+                <tbody>
+                  <tr>
+                    <th>Total Nights</th>
+                    <th className="TableValues">
+                      {propertyDetails?.peakAllottedNights}
+                    </th>
+                  </tr>
+                  <tr>
+                    <td>Nights Used</td>
+                    <td className="TableValues">
+                      {propertyDetails?.peakUsedNights}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Nights Booked</td>
+                    <td className="TableValues">
+                      {propertyDetails?.peakBookedNights}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Nights Remaining</td>
+                    <td className="TableValues">
+                      {propertyDetails?.peakRemainingNights}
+                    </td>
+                  </tr>
+                </tbody>
               </table>
             </div>
             <div className="Total-Holiday pt-4">
               <table style={{ width: "90%" }}>
-                <tr>
-                  <th>Total Holidays</th>
-                  <td className="TableValues">
-                    {propertyDetails?.peakAllottedHolidayNights}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Nights Used</td>
-                  <td className="TableValues">
-                    {propertyDetails?.peakUsedHolidayNights}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Nights Booked</td>
-                  <td className="TableValues">
-                    {propertyDetails?.peakBookedHolidayNights}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Nights Remaining</td>
-                  <td className="TableValues">
-                    {propertyDetails?.peakRemainingHolidayNights}
-                  </td>
-                </tr>
+                <tbody>
+                  <tr>
+                    <th>Total Holidays</th>
+                    <td className="TableValues">
+                      {propertyDetails?.peakAllottedHolidayNights}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Nights Used</td>
+                    <td className="TableValues">
+                      {propertyDetails?.peakUsedHolidayNights}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Nights Booked</td>
+                    <td className="TableValues">
+                      {propertyDetails?.peakBookedHolidayNights}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Nights Remaining</td>
+                    <td className="TableValues">
+                      {propertyDetails?.peakRemainingHolidayNights}
+                    </td>
+                  </tr>
+                </tbody>
               </table>
             </div>
           </div>

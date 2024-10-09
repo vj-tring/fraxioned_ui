@@ -121,16 +121,16 @@
 }
 
 .Total-Nights > table,
-.Total-Nights > table > tr > th,
-.Total-Nights > table > tr > td {
+.Total-Nights > table > tbody > tr > th,
+.Total-Nights > table > tbody > tr > td {
   border: 1.5px solid grey;
   border-collapse: collapse;
   padding: 5px;
 }
 
 .Total-Holiday > table,
-.Total-Holiday > table > tr > th,
-.Total-Holiday > table > tr > td {
+.Total-Holiday > table > tbody > tr > th,
+.Total-Holiday > table > tbody > tr > td {
   border: 1.5px solid grey;
   border-collapse: collapse;
   padding: 5px;
@@ -144,7 +144,8 @@ tr > td {
   width: 230px;
 }
 
-tr > th {
+tr > th,
+tr > td {
   color: grey;
 }
 
