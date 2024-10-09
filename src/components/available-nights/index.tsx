@@ -79,8 +79,8 @@ export default function AvailableNights() {
                 </div>
               </div>
 
-              <div className="box1 d-flex justify-content-around propertyDetailsYear">
-                <ul>
+              <div className="box1 d-flex  justify-content-around propertyDetailsYear">
+                <ul className="d-flex">
                   <div className="d-flex flex-column night-count">
                     <li className="liststyle">
                       {selectedCard.details[selectedYear]?.offSeason || "N/A"}
