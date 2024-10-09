@@ -8,6 +8,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  
 }
 
 .header {
@@ -24,6 +25,7 @@
   color: #2d3748;
   font-size: medium;
   font-weight: 600;
+  
 }
 
 .editButton {
@@ -86,15 +88,18 @@
   margin: 0 0 4px 0;
   color: #2d3748;
   font-size: medium;
-  font-weight: 600;
+  font-weight: 300;
   margin-top: 10px;
+  font-family:  'Roboto', sans-serif !important;
+
 }
 
 .role {
   color: #023e97;
   font-size: 16px;
   font-weight: 500;
-  text-transform: uppercase;
+  font-family:  'Roboto', sans-serif !important;
+
   margin-bottom: 12px;
 }
 
@@ -129,6 +134,7 @@
   display: flex;
   align-items: flex-start;
   gap: 16px;
+  
 }
 
 .detailItem svg {
@@ -143,19 +149,26 @@
 }
 
 .detailItem strong {
+  width:40%;
   display: block;
   color: #4a5568;
-  font-size: small;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500 !important; 
   margin-bottom: 4px;
+  font-family:  'Roboto', sans-serif !important;
+
 }
 
 .detailItem p {
   color: #2d3748;
-  font-size: small;
+  font-size: 14px;
+  width: 60%;
+
   margin: 0;
   line-height: 1.5;
   margin-right: 300px;
+  font-family:  'Roboto', sans-serif !important;
+
 }
 
 .error {

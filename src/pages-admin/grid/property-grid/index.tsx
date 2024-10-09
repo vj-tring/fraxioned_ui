@@ -176,15 +176,15 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
             "& .MuiDataGrid-columnHeader": {
               backgroundColor: "grey",
               color: "white",
-              fontSize:'small',
+              fontSize: "small",
 
               textTransform: "uppercase",
-              fontFamily: " 'Montserrat', sans-serif !important",
+              fontFamily: " 'Roboto', sans-serif !important",
             },
             "& .MuiDataGrid-cell": {
-              fontSize:'small',
+              fontSize: "small",
 
-              fontFamily: " 'Montserrat', sans-serif !important",
+              fontFamily: " 'Roboto', sans-serif !important",
             },
           }}
           getRowClassName={(params) => {

@@ -100,27 +100,27 @@ const UserForm: React.FC<UserFormProps> = ({
         </div>
         <div className={styles.detailsSection}>
           <DetailItem
-            icon={<Mail size={20} />}
+            icon={<Mail size={22} />}
             title="Primary Email "
             content={user.contactDetails.primaryEmail || "N/A"}
           />
           <DetailItem
-            icon={<Mail size={20} />}
+            icon={<Mail size={22} />}
             title="Alternate Email"
             content={user.contactDetails.secondaryEmail || "N/A"}
           />
           <DetailItem
-            icon={<Phone size={20} />}
+            icon={<Phone size={22} />}
             title="Primary Phone"
             content={user.contactDetails.primaryPhone || "N/A"}
           />
           <DetailItem
-            icon={<Phone size={20} />}
+            icon={<Phone size={22} />}
             title="Alternate Phone"
             content={user.contactDetails.secondaryPhone || "N/A"}
           />
           <DetailItem
-            icon={<MapPin size={20} />}
+            icon={<MapPin size={22} />}
             title="Address"
             content={
               `${user.addressLine1 || "N/A"}${
@@ -129,27 +129,27 @@ const UserForm: React.FC<UserFormProps> = ({
             }
           />
           <DetailItem
-            icon={<Building size={20} />}
+            icon={<Building size={22} />}
             title="City"
             content={user.city || "N/A"}
           />
           <DetailItem
-            icon={<MapPin size={20} />}
+            icon={<MapPin size={22} />}
             title="State"
             content={user.state || "N/A"}
           />
           <DetailItem
-            icon={<Flag size={20} />}
+            icon={<Flag size={22} />}
             title="Country"
             content={user.country || "N/A"}
           />
           <DetailItem
-            icon={<Hash size={20} />}
+            icon={<Hash size={22} />}
             title="Zipcode"
             content={user.zipcode || "N/A"}
           />
           <DetailItem
-            icon={<Clock size={20} />}
+            icon={<Clock size={22} />}
             title="Last Login"
             content={new Date(user.lastLoginTime).toLocaleString() || "N/A"}
           />
@@ -169,7 +169,7 @@ const DetailItem: React.FC<DetailItemProps> = ({ icon, title, content }) => (
   <div className={defaultStyles.detailItem}>
     {icon}
     <div>
-      <strong>{title}</strong>
+      <strong>{title} :</strong>
       <p>{content || "N/A"}</p>
     </div>
   </div>

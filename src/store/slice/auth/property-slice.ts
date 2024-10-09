@@ -501,9 +501,9 @@ export const selectSelectedPropertyDetails = (state: RootState) => {
     const relevantYears = [currentYear, currentYear + 1, currentYear + 2];
 
     const dynamicDetails = relevantYears.reduce((acc, year) => {
-      if (selectedProperty.details[year]) {
+      if (selectedProperty?.details?.[year]) {
         acc[year] = {
-          ...selectedProperty.details[year],
+          ...selectedProperty?.details[year],
           peakSeasonStartDate: selectedProperty.peakSeasonStartDate,
           peakSeasonEndDate: selectedProperty.peakSeasonEndDate,
         };
