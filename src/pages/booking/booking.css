@@ -1,30 +1,55 @@
-.my-Book{
-    font-size:large !important;
-    font-weight: 600 !important ;
-    
+.my-Book {
+  font-size: large !important;
+  font-weight: 600 !important ;
 }
 
-.Up,.Com,.Can,.All{
-    font-weight: 600 !important;
-    color: grey !important;
-    text-transform: capitalize !important;
+.Up,
+.Com,
+.Can,
+.All {
+  font-weight: 600 !important;
+  color: grey !important;
+  text-transform: capitalize !important;
 }
-
 
 @media only screen and (max-width: 480px) {
+  .BookHeader {
+    display: flex;
+    flex-direction: column-reverse;
+  }
 
-    .BookHeader{
-        display: flex;
-        flex-direction: column-reverse;
-    }
-
-    .Up,.Com,.Can,.All{
-        font-size: x-small !important;
-
-    }
-    .CalendarFilter{
-        display: flex;
-        justify-content: space-between;
-    }
+  .Up,
+  .Com,
+  .Can,
+  .All {
+    font-size: x-small !important;
+  }
+  .CalendarFilter {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
+.bookImg {
+  background-color: aquamarine;
+  height: 100px;
+  background-image: url("../../assets/images/buildingnew.jpg");
+  background-size: cover;
+  border-bottom-left-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  border-bottom-right-radius: 10px;
+}
+.bookImg > span {
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 5%;
+  padding-top: 30px;
+  font-size: xx-large;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: rgb(255, 255, 255);
+  letter-spacing: 5px;
+}

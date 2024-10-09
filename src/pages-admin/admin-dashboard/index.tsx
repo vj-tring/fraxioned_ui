@@ -136,9 +136,7 @@ const AdminDashboard: React.FC = () => {
               element={
                 <div className="property-details-container">
                   <PropertySidePanel isOpen={true} />
-                  <div className="property-info-content">
-                    {/* <PropertyLocation /> */}
-                  </div>
+                  <div className="property-info-content"></div>
                 </div>
               }
             />

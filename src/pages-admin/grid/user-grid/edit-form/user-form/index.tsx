@@ -62,7 +62,6 @@ const UserForm: React.FC<UserFormProps> = ({
     error: customStyles.error || defaultStyles.error,
   };
 
-
   if (!user) {
     return <div className={styles.error}>User not found</div>;
   }
@@ -88,7 +87,7 @@ const UserForm: React.FC<UserFormProps> = ({
           <h3>
             {user.firstName} {user.lastName}
           </h3>
-          <p className={styles.role}>{ user.role.roleName }</p>
+          <p className={styles.role}>{user.role.roleName}</p>
           {showActiveStatus && (
             <p
               className={`${styles.status} ${
@@ -102,7 +101,7 @@ const UserForm: React.FC<UserFormProps> = ({
         <div className={styles.detailsSection}>
           <DetailItem
             icon={<Mail size={20} />}
-            title="Primary Email"
+            title="Primary Email "
             content={user.contactDetails.primaryEmail || "N/A"}
           />
           <DetailItem
