@@ -83,9 +83,9 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
           propertyId === "all"
             ? mappedData
             : mappedData.filter(
-              (h: { propertyId: string | number | null }) =>
-                h.propertyId === propertyId
-            )
+                (h: { propertyId: string | number | null }) =>
+                  h.propertyId === propertyId
+              )
         );
       } catch (err) {
         console.error("Error fetching holidays:", err);
@@ -223,7 +223,7 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     {
       field: "actions",
       headerName: "Actions",
-      width: 120,
+      width: 150,
       renderCell: (params) => (
         <>
           <IconButton
@@ -231,14 +231,22 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             color="primary"
             onClick={() => handleEditClick(params.row.id)}
           >
-            <EditIcon />
+            <EditIcon
+              sx={{
+                color: "#709C7E",
+              }}
+            />
           </IconButton>
           <IconButton
             aria-label="delete"
             color="secondary"
             onClick={() => handleDeleteClick(params.row)}
           >
-            <DeleteIcon />
+            <DeleteIcon
+              sx={{
+                color: "#F08486",
+              }}
+            />
           </IconButton>
         </>
       ),
@@ -247,11 +255,19 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
 
   return (
     <div
-      className={`${styles.holidaysContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
-        }`}
+      className={`${styles.holidaysContainer} ${
+        isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
+      }`}
     >
       <div className={styles.titleContainer}>
-        <h1 className={styles.title}>Holidays</h1>
+        <h1 className={styles.title}>Holidays Details</h1>
+
+        <div className={styles.refreshprop}>
+          <PropertyImage
+            onPropertySelect={handlePropertySelect}
+            selectedPropertyId={selectedPropertyId}
+          />
+        </div>
         <Button
           className={styles.addHolidayBtn}
           variant="contained"
@@ -265,25 +281,38 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
           Add Holiday
         </Button>
       </div>
-      <PropertyImage
-        onPropertySelect={handlePropertySelect}
-        selectedPropertyId={selectedPropertyId}
-      />
+
       {error && <div className={styles.error}>{error}</div>}
       <div className={styles.dataGridWrapper}>
-        <IconButton
-          onClick={() => window.location.reload()}
-          className={styles.refreshIcon}
-          aria-label="refresh"
-        >
-        </IconButton>
         <DataGrid
           rows={filteredHolidays}
           columns={columns}
+          rowHeight={40}
+          columnHeaderHeight={40}
           initialState={{
             pagination: {
               paginationModel: { page: 0, pageSize: 10 },
             },
+          }}
+          sx={{
+            "& .MuiDataGrid-columnHeader": {
+              backgroundColor: "grey",
+              color: "white",
+              fontSize:'small',
+              textTransform: "uppercase",
+              fontFamily: " 'Montserrat', sans-serif !important",
+            },
+            "& .MuiDataGrid-cell": {
+              fontFamily: " 'Montserrat', sans-serif !important",
+              fontSize:"small"
+            },
+          }}
+          getRowClassName={(params) => {
+            if (params.indexRelativeToCurrentPage % 2 === 0) {
+              return styles.evenRow;
+            } else {
+              return styles.oddRow;
+            }
           }}
           pageSizeOptions={[5, 10, 25]}
           disableRowSelectionOnClick
@@ -323,11 +352,14 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
         onHide={handleCancelDelete}
         onConfirm={handleConfirmDelete}
         title="Confirm Delete"
-        message={selectedPropertyId === "all"
-          ? "Are you sure you want to delete this holiday?"
-          : "Are you sure you want to remove this holiday from the property?"}
+        message={
+          selectedPropertyId === "all"
+            ? "Are you sure you want to delete this holiday?"
+            : "Are you sure you want to remove this holiday from the property?"
+        }
         confirmLabel="Delete"
-        cancelLabel="Cancel"  />
+        cancelLabel="Cancel"
+      />
 
       <Snackbar
         open={showErrorSnackbar}

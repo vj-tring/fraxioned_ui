@@ -40,8 +40,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 150px;
+  font-family: "Montserrat", sans-serif !important;
 }
 
+.evenRow {
+  background-color: rgb(255, 255, 255);
+}
+.oddRow {
+  background-color: #ebecec;
+}
 .dropdownArrow {
   font-size: 18px;
   color: #f0f0f0;
@@ -55,21 +62,21 @@
 }
 
 .dataGridPadding {
-  padding: 0 16px !important;
+  /* padding: 0 16px !important; */
 }
 
 .dataGridPadding :global(.MuiDataGrid-columnHeaders) {
-  padding-right: 12px;
+  /* padding-right: 12px; */
 }
 
 .dataGridPadding :global(.MuiDataGrid-virtualScroller) {
-  padding-left: 10px;
-  padding-right: 16px;
+  /* padding-left: 10px; */
+  /* padding-right: 16px; */
 }
 
 .dataGridPadding :global(.MuiDataGrid-footerContainer) {
-  padding-left: 16px;
-  padding-right: 16px;
+  /* padding-left: 16px; */
+  /* padding-right: 16px; */
 }
 
 .sidebarOpen {
@@ -89,7 +96,7 @@
 }
 
 .title {
-  font-size: 28px;
+  font-size: large;
   font-weight: bold;
   color: #333;
 }
@@ -103,7 +110,7 @@
   flex-grow: 1;
   background-color: rgb(255, 255, 255);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  border-radius: 2px !important;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -184,8 +191,7 @@
 }
 
 @media only screen and (max-width: 400px) {
-
-    .dataGridPadding{
-        font-size: small !important;
-    }
+  .dataGridPadding {
+    font-size: small !important;
+  }
 }

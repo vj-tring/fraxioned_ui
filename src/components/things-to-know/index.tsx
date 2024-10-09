@@ -1,5 +1,5 @@
 import { useState, useEffect, FC } from "react";
-import { Grid, Typography, Button } from "@mui/material";
+import { Grid, Button } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "@/store"; 
 import "./things-to-know.css";
@@ -42,19 +42,19 @@ const HouseRules: FC<HouseRulesProps> = ({ prop }) => {
   const visibleRules = showMore ? houseRules : houseRules.slice(0, 3);
 
   if (loading) {
-    return <Typography>Loading...</Typography>;
+    return <div>Loading...</div>;
   }
 
   if (error) {
-    return <Typography color="error">{error}</Typography>;
+    return <div color="error">{error}</div>;
   }
 
   return (
     <div className="mt-4">
-      <Typography variant="h6" className="ThingstoHead monsterrat" gutterBottom>
+      <div  className="ThingstoHead monsterrat" >
         House Rules
-      </Typography>
-      <Typography variant="body1" paragraph>
+      </div>
+      <div  >
         <ul>
           {visibleRules.map((rule, index) => (
             <li
@@ -83,7 +83,7 @@ const HouseRules: FC<HouseRulesProps> = ({ prop }) => {
         >
           {showMore ? "< Show Less " : "Show more >"}
         </Button>
-      </Typography>
+      </div>
     </div>
   );
 };
@@ -97,10 +97,10 @@ const SafetyAndProperty = () => {
 
   return (
     <div style={{ padding: "16px" }} className="ThingsHead">
-      <Typography variant="h6" className="ThingstoHead monsterrat" gutterBottom>
+      <div  className="ThingstoHead monsterrat" >
         Safety & Property
-      </Typography>
-      <Typography variant="body1" paragraph>
+      </div>
+      <div  >
         <ul>
           {visibleSafetyRules.map((rule, index) => (
             <li
@@ -129,7 +129,7 @@ const SafetyAndProperty = () => {
         >
           {showMore ? "< Show Less " : "Show more >"}
         </Button>
-      </Typography>
+      </div>
     </div>
   );
 };
@@ -145,10 +145,10 @@ const CancellationPolicy = () => {
 
   return (
     <div style={{ padding: "16px" }} className="ThingsHead">
-      <Typography variant="h6" className="ThingstoHead monsterrat" gutterBottom>
+      <div   className="ThingstoHead monsterrat" >
         Cancellation Policy
-      </Typography>
-      <Typography variant="body1" paragraph>
+      </div>
+      <div  >
         <ul>
           {visiblePolicyText.map((text, index) => (
             <li
@@ -178,7 +178,7 @@ const CancellationPolicy = () => {
           {"Add Dates >"}
           {/* {showMore ? '< Add dates ' : 'Add Dates >'} */}
         </Button>
-      </Typography>
+      </div>
     </div>
   );
 };
@@ -190,9 +190,9 @@ interface Thinkprop {
 const ThingsToKnow: FC<Thinkprop>= (prop) => {
   return (
     <div className="mt-3">
-      <Typography variant="h4" className="ThingstoHead1 monsterrat">
+      <div className="ThingstoHead1 monsterrat">
         Things to Know
-      </Typography>
+      </div>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={4}>
           <HouseRules prop={prop.propId} />

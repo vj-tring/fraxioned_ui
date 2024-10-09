@@ -1,103 +1,101 @@
 .booking-calendar {
-    font-family: Arial, sans-serif;
-    width: 100%;
-    margin: 0 auto;
-    background-color: white;
-    border-radius: 8px;
-    padding-top: 30px;
-  }
+  font-family: Arial, sans-serif;
+  width: 100%;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 8px;
+  padding-top: 30px;
+}
 
-  .header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 3px;
-    right: 0;
-    background-color: white;
-    padding: 10px 0px 10px 20px;
-    z-index: 100;
-    width: 93%
-  }
-  
-  
-  .calendar-heading {
-    font-size: 24px;
-    font-weight: bold;
-  }
-  
-  .properties-legend {
-    display: flex;
-    gap: 20px;
-  }
-  
-  .property-name {
-    margin-right: 10px;
-    font-weight: bold;
-  } 
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 3px;
+  right: 0;
+  background-color: white;
+  padding: 10px 0px 10px 20px;
+  z-index: 100;
+  width: 93%;
+}
 
-  .scrollable {
-    overflow-y: auto;
-  }
-  
-  .calendars-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
+.calendar-heading {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.properties-legend {
+  display: flex;
+  gap: 20px;
+}
+
+.property-name {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.scrollable {
+  overflow-y: auto;
+}
+
+.calendars-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.calendars-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.property-calendar-color {
+  flex: 2;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+}
+
+.booking-markers-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.booking-marker {
+  position: absolute;
+  height: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.7;
+  border-radius: 2px;
+}
+
+.property-calendar .calendar {
+  box-shadow: none !important;
+}
+
+.last-odd-row {
+  justify-content: flex-start;
+}
+
+.last-odd-row .property-calendar-color.last-odd {
+  flex: 0 0 calc(50% - 10px);
+}
+
+@media (max-width: 768px) {
   .calendars-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    margin-top: 10px;
-  }
-  
-  .property-calendar-color {
-    flex: 2;
-    position: relative;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 10px;
+    flex-direction: column;
   }
 
-  .booking-markers-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
+  .property-calendar {
+    flex-basis: 100%;
   }
-  
-  .booking-marker {
-    position: absolute;
-    height: 4px;
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 0.7;
-    border-radius: 2px;
-  }
-  
-  .property-calendar .calendar {
-    box-shadow: none !important;
-  }
-
-  .last-odd-row {
-    justify-content: flex-start;
-  }
-  
-  .last-odd-row .property-calendar-color.last-odd {
-    flex: 0 0 calc(50% - 10px); 
-  }
-  
-  @media (max-width: 768px) {
-    .calendars-row {
-      flex-direction: column;
-    }
-  
-    .property-calendar {
-      flex-basis: 100%;
-    }
-  }
-  
+}

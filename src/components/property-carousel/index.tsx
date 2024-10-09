@@ -21,7 +21,6 @@ import { propertyImageapi } from "@/api";
 import AddHomeOutlinedIcon from "@mui/icons-material/AddHomeOutlined";
 import { Card } from "../../store/slice/auth/property-slice";
 
-
 export default function BasicSelect() {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
@@ -70,7 +69,7 @@ export default function BasicSelect() {
     if (selectedCardIndex != null) {
       if (cards.length > 0) {
         setSelectedCard(cards[selectedCardIndex]);
-        setYears(Object.keys(cards[selectedCardIndex].details).map(Number))
+        setYears(Object.keys(cards[selectedCardIndex].details).map(Number));
 
         setSelectedCardIndex(selectedCardIndex);
         const card = cards[selectedCardIndex];
@@ -109,11 +108,15 @@ export default function BasicSelect() {
   };
 
   const handlePrevious = () => {
-    setSelectedCardIndex((prevIndex) => prevIndex !== null ? Math.max(prevIndex - 1, 0) : 0);
+    setSelectedCardIndex((prevIndex) =>
+      prevIndex !== null ? Math.max(prevIndex - 1, 0) : 0
+    );
   };
-  
+
   const handleNext = () => {
-    setSelectedCardIndex((prevIndex) => prevIndex !== null ? Math.min(prevIndex + 1, cards.length - 1) : 0);
+    setSelectedCardIndex((prevIndex) =>
+      prevIndex !== null ? Math.min(prevIndex + 1, cards.length - 1) : 0
+    );
   };
 
   const handleClose = () => {
@@ -190,7 +193,7 @@ export default function BasicSelect() {
       >
         <AddHomeOutlinedIcon
           sx={{
-            color: "grey",  
+            color: "grey",
           }}
         />
         <div className="d-flex align-items-start flex-column card-item">
@@ -215,8 +218,7 @@ export default function BasicSelect() {
               overflowY: "auto",
               //maxWidth: "70vh",
             },
-          }
-          
+          },
         }}
         sx={{ borderRadius: 32 }}
       >
