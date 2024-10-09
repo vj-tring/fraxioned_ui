@@ -75,7 +75,8 @@
 }
 
 .propertyDropdownList li:hover {
-  background-color: #f5f5f5;
+  background-color: #b2d8f9;
+  color: white;
 }
 
 /* Scrollbar styles */

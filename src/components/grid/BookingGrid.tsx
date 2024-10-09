@@ -196,6 +196,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
             csvOptions: { disableToolbarButton: true },
           },
         }}
+        
         getRowClassName={(params) =>
           params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd"
         }

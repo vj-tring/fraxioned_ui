@@ -48,7 +48,10 @@ const PropertyDropdown: React.FC<PropertyDropdownProps> = ({ onPropertySelect })
             </div>
             {isOpen && (
                 <ul className={styles.propertyDropdownList}>
-                    <li key="all" onClick={() => handleSelect(null)}>All Properties</li>
+                    <li style={{
+                        backgroundColor:"#428BCA",
+                        color:'white'
+                    }} key="all" onClick={() => handleSelect(null)}>All Properties</li>
                     {properties.map((property) => (
                         <li key={property.id} onClick={() => handleSelect(property.id)}>
                             {property.propertyName}
