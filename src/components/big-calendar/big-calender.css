@@ -128,6 +128,10 @@
 .rbc-event:not(.rbc-event) {
   border-radius: 0 !important;
 }
+.rbc-label {
+  font-size: x-small;
+  font-weight: 500;
+}
 
 .rbc-toolbar {
   margin-bottom: 20px;
