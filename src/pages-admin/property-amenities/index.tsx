@@ -34,7 +34,6 @@ const PropertyAmenities: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const { loading, error, success, amenities: propertyAmenities } = useSelector((state: RootState) => state.propertyAmenities);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [amenities, setAmenities] = useState<{ [key: string]: Amenity[] }>({});
   const [selectedAmenities, setSelectedAmenities] = useState<number[]>([]);
   const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
@@ -46,13 +45,10 @@ const PropertyAmenities: React.FC = () => {
   });
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const groupRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [originalScrollPosition, setOriginalScrollPosition] = useState<number>(0);
-  const [isScrollingBack, setIsScrollingBack] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchAmenities();
-    setOriginalScrollPosition(window.pageYOffset);
   }, []);
 
   useEffect(() => {
@@ -73,30 +69,29 @@ const PropertyAmenities: React.FC = () => {
       showSnackbar('Amenities updated successfully!', 'success');
       setShowConfirmModal(false);
       dispatch(resetPropertyAmenities());
-      window.location.reload(); // Refresh the page after update
+      fetchAmenities();
+      if (id) {
+        dispatch(getAmenitiesById(Number(id)));
+      }
     }
     if (error) {
       showSnackbar(error, 'error');
       dispatch(resetPropertyAmenities());
     }
-  }, [success, error, dispatch]);
+  }, [success, error, dispatch, id]);
 
   useEffect(() => {
-    if (expandedGroup && !isScrollingBack) {
-      if (groupRefs.current[expandedGroup]) {
-        groupRefs.current[expandedGroup]?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
+    if (expandedGroup && groupRefs.current[expandedGroup]) {
+      const groupElement = groupRefs.current[expandedGroup];
+      const scrollContainer = scrollContainerRef.current;
+      if (groupElement && scrollContainer) {
+        const groupRect = groupElement.getBoundingClientRect();
+        const containerRect = scrollContainer.getBoundingClientRect();
+        const scrollTop = groupRect.top - containerRect.top + scrollContainer.scrollTop - 20;
+        scrollContainer.scrollTo({ top: scrollTop, behavior: 'smooth' });
       }
-    } else if (!expandedGroup || isScrollingBack) {
-      window.scrollTo({
-        top: originalScrollPosition,
-        behavior: 'smooth'
-      });
-      setIsScrollingBack(false);
     }
-  }, [expandedGroup, isScrollingBack, originalScrollPosition]);
+  }, [expandedGroup]);
 
   const showSnackbar = (message: string, severity: 'success' | 'info' | 'warning' | 'error') => {
     setSnackbar({ open: true, message, severity });
@@ -139,7 +134,6 @@ const PropertyAmenities: React.FC = () => {
         ? prev.filter(id => id !== amenityId)
         : [...prev, amenityId]
     );
-    setIsScrollingBack(true);
   };
 
   const handleUpdateClick = () => {
@@ -153,7 +147,7 @@ const PropertyAmenities: React.FC = () => {
       },
       amenities: selectedAmenities.map(amenityId => ({ id: amenityId })),
       updatedBy: {
-        id: 1 // Assuming a static user ID for now
+        id: 1
       }
     };
 
@@ -161,30 +155,12 @@ const PropertyAmenities: React.FC = () => {
   };
 
   const toggleGroup = (group: string) => {
-    setExpandedGroup(prev => {
-      if (prev === group) {
-        setIsScrollingBack(true);
-        return null;
-      }
-      setIsScrollingBack(false);
-      return group;
-    });
+    setExpandedGroup(prev => prev === group ? null : group);
   };
 
   const handleSearch = (group: string, term: string) => {
     setSearchTerms(prev => ({ ...prev, [group]: term }));
   };
-
-  const sortAmenities = useCallback((amenitiesList: Amenity[]) => {
-    return [...amenitiesList].sort((a, b) => {
-      const aSelected = selectedAmenities.includes(a.id);
-      const bSelected = selectedAmenities.includes(b.id);
-      if (aSelected === bSelected) {
-        return a.amenityName.localeCompare(b.amenityName);
-      }
-      return aSelected ? -1 : 1;
-    });
-  }, [selectedAmenities]);
 
   const filterAmenities = useCallback((amenitiesList: Amenity[], searchTerm: string) => {
     return amenitiesList.filter(amenity =>
@@ -197,13 +173,13 @@ const PropertyAmenities: React.FC = () => {
   }
 
   return (
-    <div className={styles.fullContainer} ref={containerRef}>
+    <div className={styles.fullContainer}>
       <div className={styles.contentWrapper}>
         <div className={styles.header}>
           <h1 className={styles.title}>Property Amenities</h1>
           <button className={styles.updateButton} onClick={handleUpdateClick}>Update</button>
         </div>
-        <div className={styles.amenitiesScrollContainer}>
+        <div className={styles.amenitiesScrollContainer} ref={scrollContainerRef}>
           {Object.entries(amenities).map(([group, amenitiesList]) => (
             <div
               key={group}
@@ -217,7 +193,7 @@ const PropertyAmenities: React.FC = () => {
               {expandedGroup === group && (
                 <>
                   <div className={styles.searchContainer}>
-                    <Search size={16} className={styles.searchIcon} />
+                    <Search size={19} className={styles.searchIcon} />
                     <input
                       type="text"
                       placeholder={`Search in ${group}...`}
@@ -227,7 +203,7 @@ const PropertyAmenities: React.FC = () => {
                     />
                   </div>
                   <div className={styles.amenityList}>
-                    {sortAmenities(filterAmenities(amenitiesList, searchTerms[group] || '')).map((amenity) => (
+                    {filterAmenities(amenitiesList, searchTerms[group] || '').map((amenity) => (
                       <label key={amenity.id} className={styles.amenityItem}>
                         <input
                           type="checkbox"

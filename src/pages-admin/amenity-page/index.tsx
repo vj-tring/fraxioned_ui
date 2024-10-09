@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { amenitiesapi } from '@/api';
 import { updateAmenity, resetAmenitiesState, deleteAmenityAsync } from '@/store/slice/auth/amenitiespageSlice';
@@ -45,7 +45,6 @@ const AmenityManagement: React.FC = () => {
 
     const [amenities, setAmenities] = useState<{ [key: string]: Amenity[] }>({});
     const [groupSearchTerms, setGroupSearchTerms] = useState<{ [key: string]: string }>({});
-    const [amenityGroups, setAmenityGroups] = useState<AmenityGroup[]>([]);
     const [loading, setLoading] = useState(true);
     const [editingAmenity, setEditingAmenity] = useState<Amenity | null>(null);
     const [isAddingNew, setIsAddingNew] = useState(false);
@@ -58,10 +57,10 @@ const AmenityManagement: React.FC = () => {
         severity: 'info',
     });
     const [expandedGroups, setExpandedGroups] = useState<string[]>([]);
+    const groupRefs = useRef<{ [key: string]: React.RefObject<HTMLDivElement> }>({});
 
     useEffect(() => {
         fetchAmenities();
-        // fetchAmenityGroups();
     }, []);
 
     useEffect(() => {
@@ -70,7 +69,6 @@ const AmenityManagement: React.FC = () => {
             setEditingAmenity(null);
             fetchAmenities();
             dispatch(resetAmenitiesState());
-
         }
         if (updateError) {
             showSnackbar(updateError, 'error');
@@ -96,6 +94,13 @@ const AmenityManagement: React.FC = () => {
             const groupedAmenities = groupAmenitiesByType(response.data.data);
             setAmenities(groupedAmenities);
             setLoading(false);
+
+            // Initialize refs for each group
+            Object.keys(groupedAmenities).forEach(group => {
+                if (!groupRefs.current[group]) {
+                    groupRefs.current[group] = React.createRef();
+                }
+            });
         } catch (err) {
             showSnackbar('Failed to fetch amenities', 'error');
             setLoading(false);
@@ -123,7 +128,18 @@ const AmenityManagement: React.FC = () => {
 
     const handleSave = async () => {
         if (editingAmenity) {
-            setShowUpdateModal(true);
+            const updateData = {
+                updatedBy: { id: 1 },
+                amenityName: editingAmenity.amenityName,
+                amenityDescription: editingAmenity.amenityDescription || '',
+                amenityGroup: { id: editingAmenity.amenityGroup.id }
+            };
+
+            await dispatch(updateAmenity({
+                id: editingAmenity.id,
+                updateData
+            }));
+            setEditingAmenity(null);
         }
     };
 
@@ -206,6 +222,16 @@ const AmenityManagement: React.FC = () => {
         setExpandedGroups(prev =>
             prev.includes(group) ? prev.filter(g => g !== group) : [...prev, group]
         );
+
+        setTimeout(() => {
+            const groupRef = groupRefs.current[group];
+            if (groupRef && groupRef.current) {
+                groupRef.current.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start',
+                });
+            }
+        }, 100);
     };
 
     const filteredAmenities = Object.entries(amenities).reduce((acc, [group, amenitiesList]) => {
@@ -250,7 +276,7 @@ const AmenityManagement: React.FC = () => {
                 )}
                 <div className={styles.amenitiesList}>
                     {Object.entries(filteredAmenities).map(([group, amenitiesList]) => (
-                        <div key={group} className={styles.amenityGroup}>
+                        <div key={group} className={styles.amenityGroup} ref={groupRefs.current[group]}>
                             <div
                                 className={styles.groupHeader}
                                 onClick={() => toggleGroupExpansion(group)}
@@ -264,7 +290,6 @@ const AmenityManagement: React.FC = () => {
                             </div>
                             {expandedGroups.includes(group) && (
                                 <div className={styles.amenityItems}>
-
                                     <div className={styles.groupSearchContainer}>
                                         <div className={styles.groupSearchBar}>
                                             <Search size={15} />
@@ -384,15 +409,6 @@ const AmenityManagement: React.FC = () => {
                 message={`Are you sure you want to delete the amenity "${amenityToDelete?.amenityName}"?`}
                 confirmLabel="Delete"
                 cancelLabel="Cancel" />
-            <ConfirmationModal
-                show={showUpdateModal}
-                onHide={handleUpdateCancel}
-                onConfirm={handleUpdateConfirm}
-                title="Update Amenity"
-                message={`Are you sure you want to update the amenity "${editingAmenity?.amenityName}"?`}
-                confirmLabel="Update"
-                cancelLabel="Cancel"
-            />
 
             <CustomizedSnackbars
                 open={snackbar.open}
