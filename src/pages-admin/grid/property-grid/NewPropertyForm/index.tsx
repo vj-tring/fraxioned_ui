@@ -88,7 +88,7 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
 
                     </Box>
                     <form onSubmit={handleSubmit} className={styles.form}>
-                        <Grid container spacing={3}>
+                        <Grid container spacing={1}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     label="Property Name"

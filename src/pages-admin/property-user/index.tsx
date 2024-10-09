@@ -8,6 +8,26 @@ import { fetchUserPropertyDetails } from "@/store/slice/auth/userproperties";
 import styles from "./userproperty.module.css";
 import { Building, Users, Calendar, Fingerprint } from "lucide-react";
 import profile from "../../assets/images/profile.jpeg";
+import { Avatar } from "@mui/material";
+// import { Fingerprint } from "@mui/icons-material";
+interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
+}
+
+interface PropertyUser {
+  userId: number;
+  noOfShare: number;
+  acquisitionDate: string;
+}
+
+interface PropertyDetails {
+  propertyId: number;
+  propertyName: string;
+  propertyShare: number;
+  owners: PropertyUser[];
+}
 
 const PropertyUsers: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -56,7 +76,9 @@ const PropertyUsers: React.FC = () => {
             return (
               <div key={owner.userId} className={styles.userCard}>
                 <div className={styles.userInfo1}>
-                  <img src={profile} className={styles.usericon} alt="User profile" />
+                  {/* <User size={10}  /> */}
+                  <Avatar alt="Remy Sharp" src={profile} />
+
                   <span className={styles.userName}>
                     {user
                       ? `${user.firstName} ${user.lastName}`

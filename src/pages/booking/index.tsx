@@ -9,7 +9,7 @@ import {
   IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import FilterListIcon from "@mui/icons-material/FilterList";
+// import FilterListIcon from "@mui/icons-material/FilterList";
 import BookingGrid from "@/components/grid/BookingGrid";
 import BookingCalendar from "@/components/booking-calendar";
 import TrackingMyNigts from "./trackingMyNights";
@@ -23,10 +23,10 @@ import {
 import { format } from "date-fns";
 import { cancelBooking } from "@/api";
 import "../booking/booking.css";
-import EditBookingModal from './bookingEdit';
+import EditBookingModal from "./bookingEdit";
 import { fetchProperties } from "@/store/slice/auth/property-slice";
 import { RootState } from "@/store/reducers";
-import Loader from '../../components/loader';
+import Loader from "../../components/loader";
 import CustomizedSnackbars from "@/components/customized-snackbar";
 
 const Booking = () => {
@@ -35,15 +35,21 @@ const Booking = () => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("error");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "error"
+  );
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [selectedBooking, setSelectedBooking] = useState<BookingData | null>(null);
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [selectedBooking, setSelectedBooking] = useState<BookingData | null>(
+    null
+  );
+  const [loading, setLoading] = useState(false);
   const user = useSelector((state: RootState) => state.auth.user);
   const userBookings = useSelector(
     (state: RootState) => state.bookings.userBookings || []
   );
-  const properties = useSelector((state: RootState) => state.properties.cards || []);
+  const properties = useSelector(
+    (state: RootState) => state.properties.cards || []
+  );
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
@@ -100,7 +106,9 @@ const Booking = () => {
     });
 
   const handleEdit = (id: number) => {
-    const bookingToEdit = userBookings.find((booking: BookingData) => booking.id === id);
+    const bookingToEdit = userBookings.find(
+      (booking: BookingData) => booking.id === id
+    );
     if (bookingToEdit) {
       setSelectedBooking(bookingToEdit);
       setEditModalOpen(true);
@@ -125,7 +133,9 @@ const Booking = () => {
       try {
         const response = await cancelBooking(id, user.id);
         if (response.data && response.data.status === 400) {
-          setSnackbarMessage(response.data.message || "Failed to cancel booking");
+          setSnackbarMessage(
+            response.data.message || "Failed to cancel booking"
+          );
 
           setSnackbarSeverity("error");
         } else {
@@ -177,6 +187,9 @@ const Booking = () => {
   return (
     <>
       <Box sx={{ width: "90%", margin: "auto" }}>
+        {/* <div className="bookImg">
+          <span>My Bookings</span>{" "}
+        </div> */}
         <Typography
           variant="h4"
           className="my-Book mt-5 monsterrat mb-3"
@@ -208,7 +221,7 @@ const Booking = () => {
               style={{
                 marginLeft: "16px",
                 borderRadius: "10px",
-                backgroundColor: "#88CDD4",
+                backgroundColor: "#083a5d",
                 textTransform: "capitalize",
               }}
               className="calendarView"
@@ -258,27 +271,27 @@ const Booking = () => {
           <PropertyList paddingLeft />
         </div>
       </Box>
-
       <Modal
         open={isCalendarOpen}
         onClose={handleCloseCalendar}
         aria-labelledby="calendar-modal-title"
         aria-describedby="calendar-modal-description"
       >
-        <Box sx={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: properties.length === 1 ? '47%' : '93%',
-          height:properties.length === 1 ? '62%' : '67%',
-          bgcolor: 'background.paper',
-          p: 4,
-          borderRadius: '10px',
-          overflow: 'auto',
-          padding: '20px',
-        }}>
-
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: properties.length === 1 ? "47%" : "93%",
+            height: properties.length === 1 ? "62%" : "67%",
+            bgcolor: "background.paper",
+            p: 4,
+            borderRadius: "10px",
+            overflow: "auto",
+            padding: "20px",
+          }}
+        >
           <IconButton
             aria-label="close"
             onClick={handleCloseCalendar}
@@ -293,7 +306,6 @@ const Booking = () => {
           <BookingCalendar properties={properties} />
         </Box>
       </Modal>
-
       {selectedBooking && (
         <EditBookingModal
           open={editModalOpen}
@@ -302,14 +314,12 @@ const Booking = () => {
           onEditSuccess={handleEditSuccess}
         />
       )}
-
       <CustomizedSnackbars
         open={snackbarOpen}
         handleClose={handleSnackbarClose}
         message={snackbarMessage}
         severity={snackbarSeverity}
       />
-
       {loading && <Loader />} {/* Display loader */}
     </>
   );

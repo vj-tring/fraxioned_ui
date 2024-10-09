@@ -4,11 +4,10 @@ import { Backdrop, Button, Grid } from "@mui/material";
 import EditBookingModal from "@/pages/booking/bookingEdit";
 import CancelPolicy from "../cancel-policy";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchUserBookings,
-} from "@/store/slice/auth/bookingSlice";
+import { fetchUserBookings } from "@/store/slice/auth/bookingSlice";
 import { AppDispatch } from "@/store";
 import { RootState } from "@/store/reducers";
+import { Pencil, Trash2 } from "lucide-react";
 
 interface BookingGridProps {
   bookings: Array<{
@@ -90,7 +89,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
     {
       field: "bookingId",
       headerName: "BookingID",
-      flex: 1,
+      width:150,
       headerAlign: "center",
       align: "center",
     },
@@ -98,7 +97,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
     {
       field: "property",
       headerName: "Property",
-      flex: 1,
+      width:160,
       headerAlign: "center",
       align: "center",
     },
@@ -107,31 +106,33 @@ const BookingGrid: React.FC<BookingGridProps> = ({
       headerName: "Check-in",
       headerAlign: "center",
       align: "center",
+      width:180,
     },
     {
       field: "checkoutDate",
       headerName: "Checkout",
       headerAlign: "center",
       align: "center",
+      width:180,
     },
     {
       field: "guest",
       headerName: "Guests",
-      flex: 1,
+      width:230,
       headerAlign: "center",
       align: "center",
     },
     {
       field: "createdAt",
       headerName: "Booked",
-      flex: 1,
+      width:200,
       headerAlign: "center",
       align: "center",
     },
     {
       field: "totalNights",
       headerName: "TotalNights",
-      flex: 1,
+      width:130,
       headerAlign: "center",
       align: "center",
     },
@@ -143,40 +144,19 @@ const BookingGrid: React.FC<BookingGridProps> = ({
       headerName: "Actions",
       headerAlign: "center",
       align: "center",
-      flex: 1,
+      width:150,
       renderCell: (params) => (
         <>
-          <Button
-            variant="outlined"
-            disableRipple
-            onClick={() => handleEditClick(params.row.id)}
-            sx={{
-              marginRight: 1,
-              height: "25px",
-              fontSize: "12px",
-              borderRadius: "15px",
-              border: "1px solid black",
-              color: "#808080",
-              fontFamily: "Montserrat, sans-serif",
-            }}
-          >
-            Edit
+          <Button disableRipple onClick={() => handleEditClick(params.row.id)}>
+            <Pencil color="darkblue"
+            size={16} />
           </Button>
+
           <Button
-            variant="outlined"
-            color="primary"
             disableRipple
             onClick={() => handleCancelClick(params.row.id)}
-            sx={{
-              borderRadius: "15px",
-              height: "25px",
-              fontSize: "12px",
-              border: "1px solid black",
-              color: "#808080",
-              fontFamily: "Montserrat, sans-serif",
-            }}
           >
-            Cancel
+            <Trash2 color="red" size={16}/>
           </Button>
         </>
       ),
@@ -194,6 +174,8 @@ const BookingGrid: React.FC<BookingGridProps> = ({
         width: "100%",
         border: "none",
         marginTop: "2rem",
+        // boxShadow: "rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px"
+        
       }}
     >
       <DataGrid
@@ -214,13 +196,18 @@ const BookingGrid: React.FC<BookingGridProps> = ({
             csvOptions: { disableToolbarButton: true },
           },
         }}
+        
+        getRowClassName={(params) =>
+          params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd"
+        }
         sx={{
           "& .MuiDataGrid-columnHeader": {
-            backgroundColor: "#46696E",
+            backgroundColor: "#083a5d",
             fontWeight: "bold",
             color: "white",
-            textTransform: "capitalize",
-            paddingRight: "50px",
+            fontSize:'small',
+            textTransform: "uppercase",
+            // paddingRight: "50px",
             fontFamily: "Montserrat, sans-serif",
           },
           "& .MuiDataGrid-footerContainer": {
@@ -232,52 +219,57 @@ const BookingGrid: React.FC<BookingGridProps> = ({
           "& .MuiDataGrid-cell": {
             fontFamily: "Montserrat, sans-serif",
             color: "#808080",
+            fontSize:'small',
+
           },
         }}
       />
-{showCancelPopup && (
-  <>
-    <div 
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-        zIndex: 1000
-      }}
-    />
-      <Backdrop
+      {showCancelPopup && (
+        <>
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              zIndex: 1000,
+            }}
+          />
+          <Backdrop
             open={showCancelPopup}
             style={{
               zIndex: 1000,
-              color: '#fff',
+              color: "#fff",
             }}
-       />
-    <Grid 
-      container 
-      spacing={2} 
-      direction="column" 
-      justify="center" 
-      alignItems="flex-start" 
-      style={{
-        position: "fixed",
-        top: "52%",
-        left: "50%",
-        width: "70%",
-        height: "80%",
-        transform: "translate(-50%, -50%)",
-        backgroundColor: "white",
-        padding: "10px",
-        borderRadius: "8px",
-        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.4)",
-        zIndex: 1001,
-        // maxHeight: "80vh",
-      }}
-    >
-      <CancelPolicy onConfirm={handleConfirmCancel} onCancel={handleCloseCancelModal} />
-    </Grid>
-  </>
-)}
+          />
+          <Grid
+            container
+            spacing={2}
+            direction="column"
+            justify="center"
+            alignItems="flex-start"
+            style={{
+              position: "fixed",
+              top: "52%",
+              left: "50%",
+              width: "70%",
+              height: "80%",
+              transform: "translate(-50%, -50%)",
+              backgroundColor: "white",
+              padding: "10px",
+              borderRadius: "8px",
+              boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.4)",
+              zIndex: 1001,
+              // maxHeight: "80vh",
+            }}
+          >
+            <CancelPolicy
+              onConfirm={handleConfirmCancel}
+              onCancel={handleCloseCancelModal}
+            />
+          </Grid>
+        </>
+      )}
       {editingBooking && (
         <EditBookingModal
           open={editBookingId !== null}
