@@ -199,7 +199,7 @@ const Booking = () => {
         </Typography>
         <div className="d-flex justify-between BookHeader">
           <Tabs
-            disableRipple
+            // disableRipple
             value={activeTab}
             onChange={handleTabChange}
             className="monsterrat "

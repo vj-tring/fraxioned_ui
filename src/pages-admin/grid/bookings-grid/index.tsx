@@ -437,10 +437,12 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
               )}
             </Box>
             <Paper className={styles.searchContainer} elevation={1}>
-              <IconButton className={styles.searchIcon} size="small"
-              disableRipple>
-                <SearchIcon 
-                />
+              <IconButton
+                className={styles.searchIcon}
+                size="small"
+                disableRipple
+              >
+                <SearchIcon />
               </IconButton>
               <InputBase
                 className={styles.searchInput}
@@ -494,15 +496,16 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
             "& .MuiDataGrid-columnHeader": {
               backgroundColor: "grey",
               color: "white",
-              fontSize:'small',
+              fontSize: "small",
 
               textTransform: "uppercase",
-              fontFamily: " 'Montserrat', sans-serif !important",
+              // fontFamily: " 'Montserrat', sans-serif !important",
+              fontFamily: " 'Roboto', sans-serif !important",
             },
             "& .MuiDataGrid-cell": {
-              fontFamily: " 'Montserrat', sans-serif !important",
-              fontSize:'small',
-
+              // fontFamily: " 'Montserrat', sans-serif !important",
+              fontSize: "small",
+              fontFamily: " 'Roboto', sans-serif !important ",
             },
           }}
           initialState={{
