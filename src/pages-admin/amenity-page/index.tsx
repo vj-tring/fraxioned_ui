@@ -245,10 +245,6 @@ const AmenityManagement: React.FC = () => {
 
   if (loading) return <div className={styles.loading}>Loading...</div>;
 
-  function handleSnackbarClose(event?: Event | SyntheticEvent<Element, Event> | undefined, reason?: string | undefined): void {
-    throw new Error('Function not implemented.');
-  }
-
   return (
     <div className={styles.container}>
       <div className={styles.header}>
