@@ -80,7 +80,7 @@
   width: 380px;
   height: 35px;
   padding: 2px 8px;
-  border-radius: 10px !important;
+  border-radius: 4px !important;
   background-color: #ffffff;
   font-size: small !important;
   transition: box-shadow 0.3s ease;
@@ -107,18 +107,23 @@
 }
 
 .calendarLink {
-  color: #62a2a9 !important;
-  font-size: 15px !important;
-  text-decoration: underline !important;
-  transition: color 0.3s ease;
-  /* padding-right: 14px !important; */
-  align-self: flex-end;
-  margin-top: 7px !important;
+  color: white !important;
+  font-size: small !important;
+  display: flex;
+  padding: 4px 8px !important;
+  align-items: center;
+  border-radius: 5px !important;
+  gap: 5px;
+  margin-left: 10px !important;
+  text-decoration: none;
+  height: 30px;
+  margin-top: 5px !important;
+  background-color: #2d6aa0 !important;
 }
 
 .calendarLink:hover {
-  color: #82cfd6 !important;
-  text-decoration: underline !important;
+  color: white !important;
+  text-decoration: none !important;
 }
 
 .searchContainer:hover {

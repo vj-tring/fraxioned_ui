@@ -70,7 +70,9 @@ const PropertyImage: React.FC<PropertyImageProps> = ({
               },
             },
           }}
-          sx={{ height: "50px" }}
+          sx={{ height: "40px" ,
+            fontSize:'small'
+          }}
         >
           {properties.map((property: PropertyType) => (
             <MenuItem key={property.id} value={property.id}>

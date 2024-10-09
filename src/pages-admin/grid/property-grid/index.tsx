@@ -146,7 +146,7 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
       }`}
     >
       <div className={styles.titleContainer}>
-        <h1 className={styles.title}>Properties</h1>
+        <h1 className={styles.title}>Properties Details</h1>
         <Button
           className={styles.AddPropertyBtn}
           variant="contained"

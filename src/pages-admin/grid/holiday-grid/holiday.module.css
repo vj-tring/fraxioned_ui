@@ -16,19 +16,12 @@
   background-color: #ebecec;
 }
 .refreshIcon {
-  /* margin-left: 1170px !important; */
   color: #4fbbc7 !important;
 }
-.refreshprop{
-  /* display: flex !important; */
-  /* justify-content: flex-end; */
+.refreshprop {
   margin-top: 10px;
   margin-bottom: 5px;
-  width: 100%;
-  /* position: absolute; */
-  /* right: 0; */
-  
-
+  width: 70%;
 }
 .dataGridPadding :global(.MuiDataGrid-footerContainer) {
   padding-left: 16px;
@@ -47,11 +40,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* margin-bottom: 30px; */
 }
 
 .title {
-  font-size: 28px;
+  font-size: large;
   font-weight: bold;
   color: #333;
 }

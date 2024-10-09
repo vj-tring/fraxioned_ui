@@ -17,6 +17,7 @@ import {
   Link,
   Box,
 } from "@mui/material";
+import AssistantDirectionOutlinedIcon from "@mui/icons-material/AssistantDirectionOutlined";
 import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -408,34 +409,6 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
       <div className={styles.titleContainer}>
         <h1 className={styles.title}>Booking Details</h1>
         <div className={styles.actionsContainer}>
-          <Paper className={styles.searchContainer} elevation={1}>
-            <IconButton className={styles.searchIcon} size="small">
-              <SearchIcon />
-            </IconButton>
-            <InputBase
-              className={styles.searchInput}
-              placeholder="Search..."
-              value={filterValue}
-              onChange={handleSearchChange}
-            />
-            {filterValue && (
-              <IconButton
-                className={styles.clearIcon}
-                size="small"
-                onClick={handleSearchClear}
-              >
-                <ClearIcon />
-              </IconButton>
-            )}
-          </Paper>
-          <Link
-            component="button"
-            variant="body2"
-            onClick={handleCalendarClick}
-            className={styles.calendarLink}
-          >
-            Go to Calendar
-          </Link>
           <div className={styles.gridActionContainer}>
             <Button
               variant="contained"
@@ -446,7 +419,7 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
               Export
             </Button>
 
-            <Box sx={{ position: "relative" }}>
+            <Box sx={{ position: "relative", marginRight: "10px" }}>
               <Button
                 variant="contained"
                 startIcon={<FilterListIcon />}
@@ -463,14 +436,44 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
                 />
               )}
             </Box>
+            <Paper className={styles.searchContainer} elevation={1}>
+              <IconButton className={styles.searchIcon} size="small"
+              disableRipple>
+                <SearchIcon 
+                />
+              </IconButton>
+              <InputBase
+                className={styles.searchInput}
+                placeholder="Search..."
+                value={filterValue}
+                onChange={handleSearchChange}
+              />
+              {filterValue && (
+                <IconButton
+                  className={styles.clearIcon}
+                  size="small"
+                  onClick={handleSearchClear}
+                >
+                  <ClearIcon />
+                </IconButton>
+              )}
+            </Paper>
 
-            <IconButton
-              onClick={() => window.location.reload()}
-              className={styles.refreshIcon}
-              aria-label="refresh"
+            <Link
+              component="button"
+              // variant="body2"
+              onClick={handleCalendarClick}
+              className={styles.calendarLink}
             >
-              <RefreshIcon />
-            </IconButton>
+              <AssistantDirectionOutlinedIcon
+                fontSize="small"
+                sx={{
+                  // color: "#8ab3b7",
+                  marginLeft: "5px",
+                }}
+              />
+              <> Go to Calendar</>
+            </Link>
           </div>
         </div>
       </div>
@@ -519,14 +522,15 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
         />
       </div>
 
-            <ConfirmationModal
-                show={showDeleteConfirmation}
-                onHide={() => setShowDeleteConfirmation(false)}
-                onConfirm={handleConfirmDelete}
-                title="Confirm Cancellation"
-                message="Are you sure you want to cancel this booking?"
-                confirmLabel="Cancel Booking"
-                cancelLabel="Keep Booking"/>
+      <ConfirmationModal
+        show={showDeleteConfirmation}
+        onHide={() => setShowDeleteConfirmation(false)}
+        onConfirm={handleConfirmDelete}
+        title="Confirm Cancellation"
+        message="Are you sure you want to cancel this booking?"
+        confirmLabel="Cancel Booking"
+        cancelLabel="Keep Booking"
+      />
 
       <Snackbar
         open={showErrorSnackbar}

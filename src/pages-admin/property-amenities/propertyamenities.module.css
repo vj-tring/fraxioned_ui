@@ -29,7 +29,7 @@
 }
 
 .title {
-  font-size: 28px;
+  font-size: medium;
   font-weight: bold;
   color: #2c3e50;
   margin: 0;
@@ -45,8 +45,8 @@
   background-color: #e28f25;
   color: white;
   border: none;
-  padding: 10px 20px;
-  font-size: 16px;
+  padding: 6px 20px;
+  font-size: small;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -64,25 +64,24 @@
 
 .amenitiesGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
 }
 
 .amenityGroup {
   border-radius: 8px;
-  width: 300px;
+  width: 180px;
   padding: 12px;
   background-color: #fdfdfd;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease;
 }
 
-
 .amenityType {
   font-weight: bold;
   color: #25393b;
   margin-bottom: 12px;
-  font-size: 15px;
+  font-size: small;
   text-transform: capitalize;
   border-bottom: 1px solid #c6c5c4;
   padding-bottom: 8px;
@@ -91,11 +90,11 @@
 .amenityList {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 2px;
 }
 
 .amenityItem {
-  font-size: 16px;
+  font-size: x-small;
   color: #2c3e50;
   padding: 4px;
   border-radius: 4px;
@@ -110,9 +109,9 @@
   display: flex;
   align-items: center;
   position: relative;
-  padding-left: 35px;
+  padding-left: 25px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: small;
   user-select: none;
 }
 
@@ -128,15 +127,15 @@
   position: absolute;
   top: 0;
   left: 0;
-  height: 25px;
-  width: 25px;
+  height: 15px;
+  width: 15px;
   border: 1px solid #a3a3a348;
   background-color: #f8f8f8;
   border-radius: 4px;
   transition: all 0.3s ease;
 }
 
-.checkboxLabel:hover input~.checkmark {
+.checkboxLabel:hover input ~ .checkmark {
   background-color: #ccc;
 }
 
@@ -146,14 +145,14 @@
   display: none;
 }
 
-.checkboxLabel input:checked~.checkmark:after {
+.checkboxLabel input:checked ~ .checkmark:after {
   display: block;
 }
 
 .checkboxLabel .checkmark:after {
-  left: 9px;
-  top: 5px;
-  width: 5px;
+  left: 4px;
+  top: 1px;
+  width: 4px;
   height: 10px;
   border: solid #e28f25;
   border-width: 0 3px 3px 0;
@@ -161,7 +160,7 @@
 }
 
 .amenityName {
-  font-size: 14px;
+  font-size: x-small;
   display: flex;
   align-items: center;
   width: 100%;
@@ -208,7 +207,7 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  font-size: 14px;
+  font-size: x-small;
   margin-top: 12px;
   transition: color 0.3s ease;
 }
@@ -227,7 +226,7 @@
 .dialogTitle {
   color: rgb(73, 73, 73);
   padding: 16px;
-  font-size: 20px !important;
+  font-size: medium !important;
   font-weight: 600 !important;
   position: relative;
   display: flex;
@@ -236,14 +235,15 @@
 }
 
 .dialogContent {
-  padding: 24px;
+  padding: 10px;
   margin-top: 10px !important;
 }
 
 .dialogAmenityList {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 2px;
   max-height: 400px;
   overflow-y: auto;
 }
@@ -253,18 +253,17 @@
   align-items: center;
   font-size: 16px;
   color: #2c3e50;
-  padding: 8px;
+  padding: 5px;
   border-radius: 4px;
   transition: background-color 0.3s ease;
 }
-
 
 .dialogUpdateButton {
   background-color: #e28f25;
   color: white;
   border: none;
-  padding: 8px 16px;
-  font-size: 14px;
+  padding: 4px 16px;
+  font-size: small;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;

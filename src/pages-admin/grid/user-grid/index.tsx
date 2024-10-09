@@ -242,11 +242,11 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             sx={{ color: "#00636d" }}
             onClick={() => handleEditClick(params.row.id)}
           >
-            <EditIcon 
+            <EditIcon
               sx={{
                 color: "#709C7E",
-              }} 
-               />
+              }}
+            />
           </IconButton>
         </>
       ),
@@ -260,7 +260,7 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
       }`}
     >
       <div className={styles.headerContainer}>
-        <h1 className={styles.title}>Users</h1>
+        <h1 className={styles.title}>Users Details</h1>
         <div className={styles.searchWrapper}>
           <Search onSearch={handleSearch} placeholder="Search" />
         </div>
@@ -277,12 +277,9 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
               color: "white",
               textTransform: "uppercase",
               fontFamily: " 'Montserrat', sans-serif !important",
-              
-              
             },
             "& .MuiDataGrid-cell": {
               fontFamily: " 'Montserrat', sans-serif !important",
-             
             },
           }}
           getRowClassName={(params) => {

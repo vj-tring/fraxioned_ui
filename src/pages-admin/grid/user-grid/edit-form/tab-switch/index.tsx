@@ -86,19 +86,19 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
           aria-label="user edit tabs"
           className={styles.tabs}
         >
-          <Tab label="General Details" />
-          <Tab label="Property" disabled={!isOwner} />
-          <Tab label="Booking" />
-          <Tab label="Document" />
+          <Tab disableRipple label="General Details" />
+          <Tab disableRipple label="Property" disabled={!isOwner} />
+          <Tab disableRipple label="Booking" />
+          <Tab disableRipple label="Document" />
         </Tabs>
         <div className={styles.actionButtons}>
-          <IconButton
+          {/* <IconButton
             onClick={() => window.location.reload()}
             className={styles.refreshIcon}
             aria-label="refresh"
           >
             <RefreshIcon />
-          </IconButton>
+          </IconButton> */}
           <Button
             variant="contained"
             color="primary"

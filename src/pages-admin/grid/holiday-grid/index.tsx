@@ -9,7 +9,6 @@ import {
 import styles from "./holiday.module.css";
 import NewForm from "@/pages-admin/grid/holiday-grid/new-form";
 import EditForm from "@/pages-admin/grid/holiday-grid/edit-form";
-import RefreshIcon from "@mui/icons-material/Refresh";
 import PropertyImage from "@/pages-admin/property-image";
 import {
   Dialog,
@@ -261,36 +260,26 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
       }`}
     >
       <div className={styles.titleContainer}>
-        <h1 className={styles.title}>Holidays</h1>
+        <h1 className={styles.title}>Holidays Details</h1>
 
+        <div className={styles.refreshprop}>
+          <PropertyImage
+            onPropertySelect={handlePropertySelect}
+            selectedPropertyId={selectedPropertyId}
+          />
+        </div>
         <Button
           className={styles.addHolidayBtn}
           variant="contained"
           color="primary"
           onClick={() => setOpenNewForm(true)}
           sx={{
-            backgroundColor: "darkgrey",
-            "&:hover": { backgroundColor: "darkgrey" },
+            backgroundColor: "#00b8cc",
+            "&:hover": { backgroundColor: "#00b8cc" },
           }}
         >
           Add Holiday
         </Button>
-      </div>
-      <div className={styles.refreshprop}>
-        
-        
-        <PropertyImage
-          onPropertySelect={handlePropertySelect}
-          selectedPropertyId={selectedPropertyId}
-        />
-        {/* <IconButton
-          onClick={() => window.location.reload()}
-          className={styles.refreshIcon}
-          aria-label="refresh"
-          disableRipple
-        >
-          <RefreshIcon />
-        </IconButton> */}
       </div>
 
       {error && <div className={styles.error}>{error}</div>}
@@ -367,7 +356,8 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             : "Are you sure you want to remove this holiday from the property?"
         }
         confirmLabel="Delete"
-        cancelLabel="Cancel"  />
+        cancelLabel="Cancel"
+      />
 
       <Snackbar
         open={showErrorSnackbar}

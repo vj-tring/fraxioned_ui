@@ -141,7 +141,6 @@ const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     }
   };
 
-
   const handleClose = () => {
     setOpenEvent(false);
   };
