@@ -176,11 +176,12 @@ export const addamenity = (data: {
 export const updateamenityforproperty = (updateData: { property: { id: number; }; amenities: { id: number; }[]; updatedBy: { id: number; }; }) =>
     axiosInstance.patch(`/property-amenities`, updateData);
 
+
 export const updateamenities = (id: number, updateData: {
     updatedBy: { id: number };
     amenityName: string;
     amenityDescription: string;
-    amenityType: string;
+    amenityGroup: { id: number };
 }) => axiosInstance.patch(`/amenities/amenity/${id}`, updateData);
 
 export const propertyImageapi = () =>
@@ -253,6 +254,10 @@ export const addamenitygroup = (data: {
 //get all amenity groups
 export const getamenitygroup = () =>
     axiosInstance.get(`/amenity-groups`);
+
+
+export const getamenitygroupbyId = (id: number) =>
+    axiosInstance.get(`/amenity-groups/amenity-group/${id}`);
 
 
 

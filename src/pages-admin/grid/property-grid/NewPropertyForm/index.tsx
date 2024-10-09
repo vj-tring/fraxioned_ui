@@ -13,12 +13,9 @@ import {
 import HomeIcon from '@mui/icons-material/Home';
 import styles from './NewPropertyForm.module.css';
 import CloseIcon from '@mui/icons-material/Close';
-import { useSelector, useDispatch } from 'react-redux';
+import { addPropertyApi } from '@/api';
+import { useSelector } from 'react-redux';
 import { RootState } from '@/store/reducers';
-import {
-    addProperty
-} from '@/store/slice/auth/propertiesSlice';
-import { AppDispatch } from '@/store';
 
 interface NewPropertyFormProps {
     onClose: () => void;
@@ -38,9 +35,7 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
     const [longitude, setLongitude] = useState('');
     const [isActive, setIsActive] = useState(true);
 
-    const dispatch = useDispatch<AppDispatch>();
     const userId = useSelector((state: RootState) => state.auth.user?.id);
-    const status = useSelector((state: RootState) => state.property.status);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -66,11 +61,9 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
                 isActive,
                 displayOrder: 0
             };
-            await dispatch(addProperty(propertyData));
-            if (status === 'succeeded') {
-                onPropertyAdded();
-                onClose();
-            }
+            await addPropertyApi(propertyData);
+            onPropertyAdded();
+            onClose();
         } catch (err) {
             console.error('Error in adding the property:', err);
         }
@@ -92,6 +85,7 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
                         >
                             <CloseIcon />
                         </IconButton>
+
                     </Box>
                     <form onSubmit={handleSubmit} className={styles.form}>
                         <Grid container spacing={3}>
@@ -238,9 +232,8 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
                                 type="submit"
                                 variant="contained"
                                 className={styles.addButton}
-                                disabled={status === 'loading'}
                             >
-                                {status === 'loading' ? 'Adding...' : 'Add Property'}
+                                Add Property
                             </Button>
                         </Box>
                     </form>

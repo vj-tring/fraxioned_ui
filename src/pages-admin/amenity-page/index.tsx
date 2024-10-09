@@ -70,6 +70,7 @@ const AmenityManagement: React.FC = () => {
             setEditingAmenity(null);
             fetchAmenities();
             dispatch(resetAmenitiesState());
+
         }
         if (updateError) {
             showSnackbar(updateError, 'error');
@@ -135,12 +136,13 @@ const AmenityManagement: React.FC = () => {
                 amenityGroup: { id: editingAmenity.amenityGroup.id }
             };
 
-            dispatch(updateAmenity({
+            await dispatch(updateAmenity({
                 id: editingAmenity.id,
                 updateData
             }));
+            setShowUpdateModal(false);
+            setEditingAmenity(null);
         }
-        setShowUpdateModal(false);
     };
 
     const handleUpdateCancel = () => {
@@ -188,6 +190,9 @@ const AmenityManagement: React.FC = () => {
 
     const showSnackbar = (message: string, severity: 'success' | 'info' | 'warning' | 'error') => {
         setSnackbar({ open: true, message, severity });
+        setTimeout(() => {
+            setSnackbar(prev => ({ ...prev, open: false }));
+        }, 3000);
     };
 
     const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
@@ -256,12 +261,11 @@ const AmenityManagement: React.FC = () => {
                                     <ChevronRight size={20} />
                                 )}
                                 <h2>{group}</h2>
-                                <span className={styles.amenityCount}>{amenitiesList.length}</span>
                             </div>
                             {expandedGroups.includes(group) && (
                                 <div className={styles.amenityItems}>
+
                                     <div className={styles.groupSearchContainer}>
-                                        <h3 className={styles.groupSearchHeading}>Search..</h3>
                                         <div className={styles.groupSearchBar}>
                                             <Search size={15} />
                                             <input
@@ -271,6 +275,9 @@ const AmenityManagement: React.FC = () => {
                                                 onChange={(e) => handleGroupSearch(group, e.target.value)}
                                             />
                                         </div>
+                                        <span className={styles.groupTotalCount}>
+                                            Total {group} amenities: {amenitiesList.length}
+                                        </span>
                                     </div>
                                     {amenitiesList.length > 0 ? (
                                         amenitiesList.map((amenity) => (
@@ -377,6 +384,16 @@ const AmenityManagement: React.FC = () => {
                 message={`Are you sure you want to delete the amenity "${amenityToDelete?.amenityName}"?`}
                 confirmLabel="Delete"
                 cancelLabel="Cancel" />
+            <ConfirmationModal
+                show={showUpdateModal}
+                onHide={handleUpdateCancel}
+                onConfirm={handleUpdateConfirm}
+                title="Update Amenity"
+                message={`Are you sure you want to update the amenity "${editingAmenity?.amenityName}"?`}
+                confirmLabel="Update"
+                cancelLabel="Cancel"
+            />
+
             <CustomizedSnackbars
                 open={snackbar.open}
                 handleClose={handleSnackbarClose}

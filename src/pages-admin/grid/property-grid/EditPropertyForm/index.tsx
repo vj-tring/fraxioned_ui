@@ -13,7 +13,7 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import { useSelector, useDispatch } from "react-redux";
 import { updatePropertyapi } from "@/api";
-import { getPropertyById } from "@/store/slice/auth/propertiesSlice";
+import { fetchPropertyById } from "@/store/slice/auth/propertiesSlice";
 import Loader from "@/components/loader";
 import styles from "./EditPropertyForm.module.css";
 import { RootState } from "@/store/reducers";
@@ -33,7 +33,7 @@ const EditPropertyForm: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      dispatch(getPropertyById(Number(id)));
+      dispatch(fetchPropertyById(Number(id)));
     }
   }, [dispatch, id]);
 

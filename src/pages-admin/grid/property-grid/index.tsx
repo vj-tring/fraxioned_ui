@@ -186,7 +186,7 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
         title="Confirm Delete"
         message="Are you sure you want to delete this property?"
         confirmLabel="Delete"
-        cancelLabel="Cancel" children={undefined}      />
+        cancelLabel="Cancel"    />
     </div>
   );
 };

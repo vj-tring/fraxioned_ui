@@ -75,17 +75,6 @@ const propertiesSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message || 'Failed to fetch property';
             })
-            .addCase(addProperty.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(addProperty.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                state.properties.push(action.payload);
-            })
-            .addCase(addProperty.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.error.message || 'Failed to add property';
-            });
     },
 });
 
