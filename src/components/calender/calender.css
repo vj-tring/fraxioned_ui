@@ -123,3 +123,14 @@
 .bold {
   font-weight: 500;
 }
+
+/* .calendar{
+    margin-right: 50%;
+} */
+
+@media only screen and (max-width: 400px) {
+  .calendarDiv {
+    /* display: flex; */
+    /* flex-direction: column-reverse; */
+  }
+} 

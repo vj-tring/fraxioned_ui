@@ -11,9 +11,9 @@ const CancelPolicy: React.FC<CancelPolicyProps> = ({ onConfirm, onCancel }) => {
   return (
     <div className="min-h-screen w-100">
       <Card className="max-w-5xl mx-auto">
-        <CardHeader className="relative">
+        <CardHeader className="relative p-4">
           <CardTitle className="text-2xl font-bold text-left mr-2">Cancellation Policy</CardTitle>
-          <X className="absolute top-0 right-0 h-6 w-6 cursor-pointer" onClick={onCancel} />
+          <X className="absolute top-0 right-3 h-6 w-6 cursor-pointer" onClick={onCancel} />
         </CardHeader>
         <CardContent className="space-y-6">
           <section>

@@ -10,13 +10,13 @@
   padding-right: 0px !important;
 }
 
+.MuiFormControl-root .MuiOutlinedInput-notchedOutline{
+  border-color: rgb(208, 205, 205) !important;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-.MuiFormControl-root .MuiOutlinedInput-notchedOutline {
-  border-color: rgb(208, 205, 205) !important;
-}
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -81,4 +81,5 @@
   body {
     @apply bg-background text-foreground;
   }
+
 }
