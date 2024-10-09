@@ -1,11 +1,13 @@
 /** @type {import('tailwindcss').Config} */
+import plugin from "tailwindcss/plugin";
+
 module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   prefix: "",
   theme: {
@@ -18,6 +20,7 @@ module.exports = {
     },
     extend: {
       colors: {
+        connection: "var(--connection)",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -73,5 +76,90 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    plugin(function ({ addUtilities }) {
+      addUtilities({
+        ".scrollbar-hide": {
+          /* IE and Edge */
+          "-ms-overflow-style": "none",
+          /* Firefox */
+          "scrollbar-width": "none",
+          /* Safari and Chrome */
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+        },
+        ".truncate-multiline": {
+          display: "-webkit-box",
+          "-webkit-line-clamp":
+            "3" /* Change this number to the number of lines you want to show */,
+          "-webkit-box-orient": "vertical",
+          overflow: "hidden",
+          "text-overflow": "ellipsis",
+        },
+        ".truncate-doubleline": {
+          display: "-webkit-box",
+          "-webkit-line-clamp":
+            "2" /* Change this number to the number of lines you want to show */,
+          "-webkit-box-orient": "vertical",
+          overflow: "hidden",
+          "text-overflow": "ellipsis",
+        },
+        ".word-break-break-word": {
+          wordBreak: "break-word",
+        },
+        ".arrow-hide": {
+          "&::-webkit-inner-spin-button": {
+            "-webkit-appearance": "none",
+            margin: "0",
+          },
+          "&::-webkit-outer-spin-button": {
+            "-webkit-appearance": "none",
+            margin: "0",
+          },
+        },
+        ".password": {
+          "-webkit-text-security": "disc",
+          "font-family": "text-security-disc",
+        },
+        ".stop": {
+          "-webkit-animation-play-state": "paused",
+          "-moz-animation-play-state": "paused",
+          "animation-play-state": "paused",
+        },
+        ".custom-scroll": {
+          "&::-webkit-scrollbar": {
+            width: "8px",
+            height: "8px",
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "#f1f1f1",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#ccc",
+            borderRadius: "999px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            backgroundColor: "#bbb",
+          },
+          cursor: "auto",
+        },
+        ".dark .theme-attribution .react-flow__attribution": {
+          backgroundColor: "rgba(255, 255, 255, 0.2)",
+          padding: "0px 5px",
+        },
+        ".dark .theme-attribution .react-flow__attribution a": {
+          color: "black",
+        },
+        ".text-align-last-left": {
+          "text-align-last": "left",
+        },
+        ".text-align-last-right": {
+          "text-align-last": "right",
+        },
+      });
+    }),
+    require("tailwindcss-dotted-background"),
+  ],
 }
