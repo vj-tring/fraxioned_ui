@@ -494,11 +494,15 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
             "& .MuiDataGrid-columnHeader": {
               backgroundColor: "grey",
               color: "white",
+              fontSize:'small',
+
               textTransform: "uppercase",
               fontFamily: " 'Montserrat', sans-serif !important",
             },
             "& .MuiDataGrid-cell": {
               fontFamily: " 'Montserrat', sans-serif !important",
+              fontSize:'small',
+
             },
           }}
           initialState={{

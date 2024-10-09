@@ -205,6 +205,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
             backgroundColor: "#083a5d",
             fontWeight: "bold",
             color: "white",
+            fontSize:'small',
             textTransform: "uppercase",
             // paddingRight: "50px",
             fontFamily: "Montserrat, sans-serif",
@@ -218,6 +219,8 @@ const BookingGrid: React.FC<BookingGridProps> = ({
           "& .MuiDataGrid-cell": {
             fontFamily: "Montserrat, sans-serif",
             color: "#808080",
+            fontSize:'small',
+
           },
         }}
       />
