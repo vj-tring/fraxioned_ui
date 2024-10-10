@@ -84,6 +84,7 @@ const UserForm: React.FC<UserFormProps> = ({
               className={styles.profileImage}
             />
           </div>
+          <div className="d-flex flex-col gap-0 ml-4">
           <h3>
             {user.firstName} {user.lastName}
           </h3>
@@ -97,13 +98,17 @@ const UserForm: React.FC<UserFormProps> = ({
               {user.isActive ? "Active" : "Inactive"}
             </p>
           )}
+          
+          </div>
+         
+         
         </div>
         <div className={styles.detailsSection}>
           <DetailItem
             icon={<Mail size={22} />}
             title="Primary Email "
             content={user.contactDetails.primaryEmail || "N/A"}
-          />
+          />                                                
           <DetailItem
             icon={<Mail size={22} />}
             title="Alternate Email"
