@@ -82,12 +82,6 @@ const PropertyAmenities: React.FC = () => {
     }
   }, [success, error, dispatch, id]);
 
-  useEffect(() => {
-    if (amenities && Object.keys(amenities).length > 0 && selectedAmenities.length > 0) {
-      sortAmenities();
-    }
-  }, [amenities, selectedAmenities]);
-
   const showSnackbar = (message: string, severity: 'success' | 'info' | 'warning' | 'error') => {
     setSnackbar({ open: true, message, severity });
     setTimeout(() => {
@@ -160,21 +154,19 @@ const PropertyAmenities: React.FC = () => {
     );
   }, []);
 
-  const sortAmenities = () => {
-    const sortedAmenities = Object.entries(amenities).reduce((acc, [group, amenitiesList]) => {
-      const sortedList = [...amenitiesList].sort((a, b) => {
-        const aChecked = selectedAmenities.includes(a.id);
-        const bChecked = selectedAmenities.includes(b.id);
-        if (aChecked && !bChecked) return -1;
-        if (!aChecked && bChecked) return 1;
-        return a.amenityName.localeCompare(b.amenityName);
-      });
-      acc[group] = sortedList;
-      return acc;
-    }, {} as { [key: string]: Amenity[] });
+  const sortAmenities = useCallback((amenitiesList: Amenity[]) => {
+    return [...amenitiesList].sort((a, b) => {
+      const aChecked = selectedAmenities.includes(a.id);
+      const bChecked = selectedAmenities.includes(b.id);
+      if (aChecked && !bChecked) return -1;
+      if (!aChecked && bChecked) return 1;
+      return a.amenityName.localeCompare(b.amenityName);
+    });
+  }, [selectedAmenities]);
 
-    setAmenities(sortedAmenities);
-  };
+  const getSortedAmenities = useCallback((group: string) => {
+    return sortAmenities(amenities[group] || []);
+  }, [amenities, sortAmenities]);
 
   const handleUpdate = async () => {
     const updateData = {
@@ -226,7 +218,7 @@ const PropertyAmenities: React.FC = () => {
                     />
                   </div>
                   <div className={styles.amenityList}>
-                    {filterAmenities(amenitiesList, searchTerms[group] || '').map((amenity) => (
+                    {filterAmenities(getSortedAmenities(group), searchTerms[group] || '').map((amenity) => (
                       <label key={amenity.id} className={styles.amenityItem}>
                         <input
                           type="checkbox"
@@ -238,7 +230,7 @@ const PropertyAmenities: React.FC = () => {
                         <span className={styles.amenityName}>{amenity.amenityName}</span>
                       </label>
                     ))}
-                    {filterAmenities(amenitiesList, searchTerms[group] || '').length === 0 && (
+                    {filterAmenities(getSortedAmenities(group), searchTerms[group] || '').length === 0 && (
                       <p className={styles.noResults}>
                         No "{searchTerms[group]}" found in {group} category
                       </p>
