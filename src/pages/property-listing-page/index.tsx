@@ -69,11 +69,12 @@ export interface Image {
   createdAt: string;
   updatedAt: string;
   id: number;
-  imageUrl: string;
+  url: string;
   imageName: string;
   displayOrder: number;
   spaceType: SpaceType;
   property: Property;
+  propertySpace: object;
   createdBy: User;
   updatedBy: User;
 }
@@ -118,6 +119,7 @@ const PropertyListingPage = () => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [imageDetails, setImageDetails] = useState<Image[]>([]);
+
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
@@ -160,15 +162,20 @@ const PropertyListingPage = () => {
           console.error("Invalid propertyId:", id);
           return;
         }
-        const response = await propertyImageapi();
-        const filterById = response.data.data.filter(
-          (image: Image) =>
-            image.property?.id === propertyId && image.displayOrder
-        );
-        const sortedImages = filterById.sort(
-          (a: Image, b: Image) => a.displayOrder - b.displayOrder
-        );
-        setImageDetails(sortedImages);
+        const response = await propertyImageapi(id);
+  
+        // const filterByPropertySpaceId = response.data.data.filter(
+        //   (image: Image) => image.propertySpace.id === propertyId
+        // );
+        // console.log("filterByPropertySpaceId", filterByPropertySpaceId);
+
+  
+        // const sortedImages = filterByPropertySpaceId.sort(
+        //   (a, b) => a.displayOrder - b.displayOrder
+        // );
+  
+        setImageDetails(response.data.data);
+
         setLoadingImages(false);
       } catch (error) {
         console.error("Error fetching property images:", error);
@@ -326,7 +333,7 @@ const PropertyListingPage = () => {
                 .map((image, index) => (
                   <img
                     key={index}
-                    src={image.imageUrl}
+                    src={image.url}
                     alt={image.imageName}
                     loading="lazy"
                     className={`img-fluid img1 cornertop ${
@@ -352,7 +359,7 @@ const PropertyListingPage = () => {
                 : imageDetails.slice(1, 5).map((image, index) => (
                     <Grid item xs={6} key={index}>
                       <img
-                        src={image.imageUrl}
+                        src={image.url}
                         alt={image.imageName}
                         loading="lazy"
                         className={`img-fluid image ${
@@ -525,7 +532,7 @@ const PropertyListingPage = () => {
                     <Grid item xs={12} sm={6} md={4} key={index}>
                       <Card>
                         <img
-                          src={image.imageUrl}
+                          src={image.url}
                           alt={image.imageName}
                           style={{ width: "100%", height: "auto" }}
                           loading="lazy"

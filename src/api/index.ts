@@ -177,7 +177,7 @@ export const amenitiesapi = () =>
     axiosInstance.get(`/amenities`);
 
 export const propertyAmenitiesapi = (id: number) =>
-    axiosInstance.get(`/property-amenities/property/${id}`);
+    axiosInstance.get(`/property-space-amenities/property/${id}`);
 
 export const getpropertyamenityByid = () =>
     axiosInstance.get(`/property-amenities`);
@@ -218,8 +218,8 @@ export const updateamenities = (id: number, updateData: {
     amenityGroup: { id: number };
 }) => axiosInstance.patch(`/amenities/amenity/${id}`, updateData);
 
-export const propertyImageapi = () =>
-    axiosInstance.get(`/property-images`);
+export const propertyImageapi = (propertyId: number) =>
+    axiosInstance.get(`/property-space-images/property/${propertyId}/images`);
 
 export const deleteAmenity = (id: number) =>
     axiosInstance.delete(`/amenities/amenity/${id}`);
