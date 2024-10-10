@@ -357,7 +357,7 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
     {
       field: "actions",
       headerName: "Actions",
-      width: 150,
+      width: 180,
 
       renderCell: (params) => (
         <div>
@@ -497,7 +497,6 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
               backgroundColor: "grey",
               color: "white",
               fontSize: "small",
-
               textTransform: "uppercase",
               // fontFamily: " 'Montserrat', sans-serif !important",
               fontFamily: " 'Roboto', sans-serif !important",

@@ -7,6 +7,7 @@
   flex-direction: column;
   transition: margin-left 0.3s ease;
   margin-left: 100px;
+
 }
 
 .propertyCell {
@@ -41,6 +42,7 @@
   text-overflow: ellipsis;
   max-width: 150px;
   font-family: "Montserrat", sans-serif !important;
+  
 }
 
 .evenRow {
@@ -99,6 +101,7 @@
   font-size: large;
   font-weight: bold;
   color: #333;
+  
 }
 
 .searchWrapper {

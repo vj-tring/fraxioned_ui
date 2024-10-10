@@ -6,8 +6,9 @@
   height: calc(100% - 20px);
   /* margin: 10px; */
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   overflow: hidden;
+  
 }
 
 .header {
@@ -24,6 +25,7 @@
   color: #2d3748;
   font-size: medium;
   font-weight: 600;
+  
 }
 
 .editButton {
@@ -48,6 +50,7 @@
 .content {
   display: flex;
   flex: 1;
+  flex-direction: column;
   overflow: hidden;
 }
 
@@ -57,19 +60,19 @@
 }
 
 .profileSection {
-  flex: 0 0 350px;
+  /* flex: 0 0 350px; */
   text-align: center;
   /* padding: 24px; */
   border-right: 1px solid #e9ecef;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
 }
 
 .imageContainer {
-  width: 200px;
-  height: 200px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   overflow: hidden;
   margin-bottom: 16px;
@@ -83,18 +86,21 @@
 }
 
 .profileSection h3 {
-  margin: 0 0 4px 0;
+  /* margin: 0 0 4px 0; */
   color: #2d3748;
   font-size: medium;
-  font-weight: 600;
+  font-weight: 300;
   margin-top: 10px;
+  font-family:  'Roboto', sans-serif !important;
+
 }
 
 .role {
   color: #023e97;
   font-size: 16px;
   font-weight: 500;
-  text-transform: uppercase;
+  font-family:  'Roboto', sans-serif !important;
+
   margin-bottom: 12px;
 }
 
@@ -117,18 +123,20 @@
 }
 
 .detailsSection {
-  flex: 1;
+  /*  flex: 1; */
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  /* gap: 24px; */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 17px;
   padding-left: 24px;
   overflow-y: auto;
+  margin-top: 30px;
 }
 
 .detailItem {
   display: flex;
-  align-items: flex-start;
+  /* align-items: flex-start; */
   gap: 16px;
+  
 }
 
 .detailItem svg {
@@ -138,24 +146,32 @@
 
 .detailItem div {
   flex: 1;
-  display: flex;
-  justify-content: space-between;
+  /* display: flex; */
+  justify-content: space-evenly !important;
+  /* width: 100% !important; */
 }
 
 .detailItem strong {
+  width:40%;
   display: block;
   color: #4a5568;
-  font-size: small;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500 !important; 
   margin-bottom: 4px;
+  font-family:  'Roboto', sans-serif !important;
+
 }
 
 .detailItem p {
   color: #2d3748;
-  font-size: small;
+  font-size: 14px;
+  width: 60%;
+
   margin: 0;
   line-height: 1.5;
   margin-right: 300px;
+  font-family:  'Roboto', sans-serif !important;
+
 }
 
 .error {
