@@ -3,6 +3,9 @@ import { Link, useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styles from './propertysidepanel.module.css';
 import { FaInfoCircle, FaConciergeBell, FaMapMarkerAlt, FaImages, FaList, FaChevronDown, FaFile, FaUser } from 'react-icons/fa';
+import { MdAddPhotoAlternate } from "react-icons/md";
+
+import { getPropertyById, getProperties } from '@/api';
 import { fetchProperties, fetchPropertyById } from '@/store/slice/auth/propertiesSlice';
 import { RootState } from '@/store/reducers';
 import { AppDispatch } from '@/store';
@@ -52,6 +55,8 @@ const PropertySidePanel: React.FC<PropertySidePanelProps> = ({ isOpen }) => {
         { icon: <FaConciergeBell />, label: 'Amenities', path: `/admin/property/${id}/amenities`, enabled: true },
         { icon: <FaMapMarkerAlt />, label: 'Location', path: `/admin/property/${id}/location`, enabled: false },
         { icon: <FaFile />, label: 'Documents', path: `/admin/property/${id}/documents`, enabled: true },
+        { icon: <MdAddPhotoAlternate />, label: 'Rooms', path: `/admin/property/${id}/rooms`, enabled: true },
+
     ];
 
     return (

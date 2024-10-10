@@ -1,5 +1,24 @@
 import { axiosInstance } from "./axiosSetup";
 
+export interface SpaceProperty {
+    space: {
+        id: number;
+    };
+    property: {
+        id: number;
+    };
+    createdBy: {
+        id: number;
+    };
+}
+
+export interface Space {
+    id?: number; // Optional for create and update
+    name: string;
+    isBedTypeAllowed: boolean;
+    isBathroomTypeAllowed: boolean;
+}
+
 // login api
 export const loginUser = (email: string, password: string) =>
     axiosInstance.post('/authentication/login', { email, password });
@@ -119,6 +138,9 @@ export const addPropertyApi = (propertyData: {
     displayOrder: number;
 }) => axiosInstance.post('/properties/property', propertyData);
 
+export const updatePropertyImage = (id: number, formData: FormData) =>
+    axiosInstance.patch(`/properties/property/${id}`, formData);
+
 export const deletePropertyApi = (id: number) =>
     axiosInstance.delete(`/properties/property/${id}`);
 
@@ -161,7 +183,7 @@ export const getpropertyamenityByid = () =>
     axiosInstance.get(`/property-amenities`);
 
 export const getAmenitiesById = (id: number) =>
-    axiosInstance.get(`/property-amenities/property/${id}`);
+    axiosInstance.get(`/property-space-amenities/property-space-amenity/${id}`);
 
 export const getuserbyproperty = (id: number) =>
     axiosInstance.get(`/properties/property/${id}/details`);
@@ -272,5 +294,47 @@ export const getamenitygroupbyId = (id: number) =>
     axiosInstance.get(`/amenity-groups/amenity-group/${id}`);
 
 
+// Space CRUD API's
 
+// Create Space API
+export const createSpace = (spaceData: FormData) =>
+    axiosInstance.post(`/spaces/space`, spaceData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
 
+// Get all spaces
+export const getAllSpaces = () =>
+    axiosInstance.get(`/spaces`);
+
+// Update a space by ID
+export const updateSpace = (id: number, spaceData: FormData) =>
+    axiosInstance.put(`/spaces/space/${id}`, spaceData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+
+// Delete a space by ID
+export const deleteSpace = (id: number) =>
+    axiosInstance.delete(`/spaces/space/${id}`);
+
+// Space-Property CRUD API's
+
+// Create Space Property API
+export const createSpaceProperty = (spacePropertyData: SpaceProperty) =>
+    axiosInstance.post(`/property-spaces/property-space`, spacePropertyData);
+
+// Get All Space Properties API
+export const getAllSpaceProperties = () =>
+    axiosInstance.get(`/property-spaces`);
+
+// Get Property Space by PropertyID
+
+export const getAllSpacePropertiesById = (propertyId: number) =>
+    axiosInstance.get(`/property-spaces/property/${propertyId}`);
+
+// Delete Space Property API
+export const deleteSpaceProperty = (id: number) =>
+    axiosInstance.delete(`/property-spaces/property-space/${id}`);

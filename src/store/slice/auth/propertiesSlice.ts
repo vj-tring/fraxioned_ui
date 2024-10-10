@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getProperties, getPropertyById } from '@/api';
+import { getProperties, getPropertyById, getProperrtDetailsbyId } from '@/api';
 
-export interface Property {
+
+interface Property {
     id: number;
     ownerRezPropId: number;
     propertyName: string;
@@ -18,11 +19,48 @@ export interface Property {
     longitude: number;
     isActive: boolean;
     displayOrder: number;
+    createdAt: string;
+    updatedAt: string;
+    mailBannerUrl: string;
+    coverImageUrl: string;
+  }
+
+export interface PropertyDetails {
+    id: number;
+    noOfGuestsAllowed: number;
+    noOfBedrooms: number;
+    noOfBathrooms: number;
+    noOfBathroomsFull: number;
+    noOfBathroomsHalf: number;
+    noOfPetsAllowed: number;
+    squareFootage: string;
+    checkInTime: number;
+    checkOutTime: number;
+    petPolicy: string;
+    feePerPet: number;
+    cleaningFee: number;
+    peakSeasonStartDate: string;
+    peakSeasonEndDate: string;
+    peakSeasonAllottedNights: number;
+    offSeasonAllottedNights: number;
+    peakSeasonAllottedHolidayNights: number;
+    offSeasonAllottedHolidayNights: number;
+    lastMinuteBookingAllottedNights: number;
+    wifiNetwork: string;
+    createdAt: string;
+    updatedAt: string;
+    createdBy: {
+        id: number;
+    };
+    updatedBy: {
+        id: number;
+    };
 }
 
 export interface PropertiesState {
     properties: Property[];
     selectedProperty: Property | null;
+    selectedPropertyDetails: PropertyDetails | null;
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
     error: string | null;
 }
@@ -30,6 +68,7 @@ export interface PropertiesState {
 const initialState: PropertiesState = {
     properties: [],
     selectedProperty: null,
+    selectedPropertyDetails: null,
     status: 'idle',
     error: null,
 };
@@ -43,6 +82,14 @@ export const fetchPropertyById = createAsyncThunk(
     'properties/fetchPropertyById',
     async (id: number) => {
         const response = await getPropertyById(id);
+        return response.data;
+    }
+);
+
+export const fetchPropertyDetailsById = createAsyncThunk(
+    'properties/fetchPropertyDetailsById',
+    async (id: number) => {
+        const response = await getProperrtDetailsbyId(id);
         return response.data;
     }
 );
@@ -75,6 +122,17 @@ const propertiesSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message || 'Failed to fetch property';
             })
+            .addCase(fetchPropertyDetailsById.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchPropertyDetailsById.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.selectedPropertyDetails = action.payload;
+            })
+            .addCase(fetchPropertyDetailsById.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message || 'Failed to fetch property details';
+            });
     },
 });
 
