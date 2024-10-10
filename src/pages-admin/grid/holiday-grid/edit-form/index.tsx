@@ -16,14 +16,16 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import styles from "./edit-form.module.css";
-import { updateHolidaysApi, fetchpropertyHolidaysApi } from "@/api";
+import {
+  getProperties,
+  updateHolidaysApi,
+  fetchpropertyHolidaysApi,
+} from "@/api";
 import CloseIcon from "@mui/icons-material/Close";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import Loader from "@/components/loader";
 import { RootState } from "@/store/reducers";
 import EventIcon from "@mui/icons-material/Event";
-import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
-import { AppDispatch } from "@/store";
 
 interface Property {
   id: number;
@@ -55,21 +57,21 @@ const EditForm: React.FC<EditFormProps> = ({
   const [endDate, setEndDate] = useState<Date | null>(
     new Date(holidayData.endDate)
   );
+  const [properties, setProperties] = useState<Property[]>([]);
   const [selectedProperties, setSelectedProperties] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const dispatch = useDispatch<AppDispatch>();
   const userId = useSelector((state: RootState) => state.auth.user?.id);
-  const properties = useSelector((state: RootState) => state.property.properties);
-  const propertyStatus = useSelector((state: RootState) => state.property.status);
-  const propertyError = useSelector((state: RootState) => state.property.error);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        dispatch(fetchProperties());
-        const holidayResponse = await fetchpropertyHolidaysApi(holidayData.id);
+        const [propertiesResponse, holidayResponse] = await Promise.all([
+          getProperties(),
+          fetchpropertyHolidaysApi(holidayData.id),
+        ]);
+        setProperties(propertiesResponse.data);
 
         const holidayProperties =
           holidayResponse.data.data.propertySeasonHolidays.map(
@@ -86,13 +88,7 @@ const EditForm: React.FC<EditFormProps> = ({
     };
 
     fetchData();
-  }, [dispatch, holidayData.id]);
-
-  useEffect(() => {
-    if (propertyStatus === 'failed') {
-      setError(propertyError || "Failed to fetch properties. Please try again.");
-    }
-  }, [propertyStatus, propertyError]);
+  }, [holidayData.id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -131,7 +127,7 @@ const EditForm: React.FC<EditFormProps> = ({
     }
   };
 
-  if (loading || propertyStatus === 'loading') {
+  if (loading) {
     return <Loader />;
   }
 
