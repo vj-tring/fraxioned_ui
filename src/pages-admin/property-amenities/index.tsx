@@ -33,7 +33,11 @@ interface SnackbarState {
 const PropertyAmenities: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, error, success, amenities: propertyAmenities } = useSelector((state: RootState) => state.propertyAmenities);
+  
+  const { loading, error, success, amenities: propertyAmenities } = useSelector(
+    (state: RootState) => state.propertyAmenities
+  );
+
   const [amenities, setAmenities] = useState<{ [key: string]: Amenity[] }>({});
   const [selectedAmenities, setSelectedAmenities] = useState<number[]>([]);
   const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
@@ -128,9 +132,7 @@ const PropertyAmenities: React.FC = () => {
     if (element && scrollContainerRef.current) {
       const container = scrollContainerRef.current;
       const elementPosition = element.offsetTop;
-      const containerScrollPosition = container.scrollTop;
       const targetScrollPosition = elementPosition - container.offsetTop;
-      
       container.scrollTo({
         top: targetScrollPosition,
         behavior: 'smooth'
@@ -177,8 +179,9 @@ const PropertyAmenities: React.FC = () => {
   const handleUpdate = async () => {
     const updateData = {
       property: { id: Number(id) },
+      propertySpace: { id: null },
       amenities: selectedAmenities.map(amenityId => ({ id: amenityId })),
-      updatedBy: { id: 1 }
+      updatedBy: { id: 1 } 
     };
     dispatch(updatePropertyAmenities(updateData));
   };
@@ -192,7 +195,10 @@ const PropertyAmenities: React.FC = () => {
       <div className={styles.contentWrapper}>
         <div className={styles.header}>
           <h1 className={styles.title}>Property Amenities</h1>
-          <button className={styles.updateButton} onClick={() => setShowConfirmModal(true)}>
+          <button 
+            className={styles.updateButton} 
+            onClick={() => setShowConfirmModal(true)}
+          >
             Update
           </button>
         </div>
@@ -233,7 +239,9 @@ const PropertyAmenities: React.FC = () => {
                       </label>
                     ))}
                     {filterAmenities(amenitiesList, searchTerms[group] || '').length === 0 && (
-                      <p className={styles.noResults}>No "{searchTerms[group]}" found in {group} category</p>
+                      <p className={styles.noResults}>
+                        No "{searchTerms[group]}" found in {group} category
+                      </p>
                     )}
                   </div>
                 </div>
