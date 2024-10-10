@@ -10,6 +10,8 @@ import { RootState } from "@/store/reducers";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { IconButton } from "@mui/material";
+import styles from "./BookingGrid.module.css";
+
 interface BookingGridProps {
   bookings: Array<{
     id: number;
@@ -133,7 +135,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
     {
       field: "totalNights",
       headerName: "TotalNights",
-      width: 130,
+      width: 150,
       headerAlign: "center",
       align: "center",
     },
@@ -143,9 +145,9 @@ const BookingGrid: React.FC<BookingGridProps> = ({
     columns.push({
       field: "actions",
       headerName: "Actions",
-      headerAlign: "center",
-      align: "center",
-      width: 150,
+      // headerAlign: "center",
+      // align: "center",
+      width: 130,
       renderCell: (params) => (
         <div>
           <IconButton
@@ -208,22 +210,35 @@ const BookingGrid: React.FC<BookingGridProps> = ({
             csvOptions: { disableToolbarButton: true },
           },
         }}
-        getRowClassName={(params) =>
-          params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd"
-        }
+        getRowClassName={(params) => {
+          if (params.indexRelativeToCurrentPage % 2 === 0) {
+            return styles.evenRow;
+          } else {
+            return styles.oddRow;
+          }
+        }}
         sx={{
           "& .MuiDataGrid-columnHeader": {
             backgroundColor: "grey",
             color: "white",
             fontSize: "small",
             textTransform: "uppercase",
-            // fontFamily: " 'Montserrat', sans-serif !important",
+
             fontFamily: " 'Roboto', sans-serif !important",
           },
           "& .MuiDataGrid-cell": {
-            // fontFamily: " 'Montserrat', sans-serif !important",
             fontSize: "small",
             fontFamily: " 'Roboto', sans-serif !important ",
+          },
+          "&  .MuiDataGrid-cell--textLeft ": {
+            position: "sticky",
+            right: 0,
+            backgroundColor: "#ebecec",
+          },
+          "& .MuiDataGrid-columnHeader--last": {
+            // backgroundColor: "lightgrey",
+            position: "sticky",
+            right: 0,
           },
         }}
       />

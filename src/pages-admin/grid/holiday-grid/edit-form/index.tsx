@@ -228,16 +228,15 @@ const EditForm: React.FC<EditFormProps> = ({
                           <Grid item xs={3} key={property.id}>
                             <div className="d-flex ">
                               <FormControlLabel
-                              sx={{
-                                marginRight:"5px",
-                                marginLeft:"6px",
-                              }}
+                                sx={{
+                                  marginRight: "5px",
+                                  marginLeft: "6px",
+                                }}
                                 control={
                                   <Checkbox
-                                  sx={{
-                                    padding:"0px",
-
-                                  }}
+                                    sx={{
+                                      padding: "0px",
+                                    }}
                                     checked={selectedProperties.includes(
                                       property.id
                                     )}

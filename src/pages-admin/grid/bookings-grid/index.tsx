@@ -29,7 +29,6 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import ViewBookings from "@/components/userbooking-form";
 import InlineFilter from "@/components/filterbox";
-import RefreshIcon from "@mui/icons-material/Refresh";
 
 interface User {
   id: number;
@@ -357,7 +356,7 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
     {
       field: "actions",
       headerName: "Actions",
-      width: 180,
+      width: 150,
 
       renderCell: (params) => (
         <div>
@@ -498,14 +497,23 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
               color: "white",
               fontSize: "small",
               textTransform: "uppercase",
-              // fontFamily: " 'Montserrat', sans-serif !important",
+              
               fontFamily: " 'Roboto', sans-serif !important",
             },
             "& .MuiDataGrid-cell": {
-              // fontFamily: " 'Montserrat', sans-serif !important",
               fontSize: "small",
               fontFamily: " 'Roboto', sans-serif !important ",
             },
+            "&  .MuiDataGrid-cell--textLeft ": {
+              position: "sticky",
+              right: 0,
+              backgroundColor: "#ebecec",
+            },
+            "& .MuiDataGrid-columnHeader--last":{
+              // backgroundColor: "lightgrey",
+              position: "sticky",
+              right: 0,
+            }
           }}
           initialState={{
             pagination: {
