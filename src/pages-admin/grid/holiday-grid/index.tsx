@@ -223,7 +223,7 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     {
       field: "actions",
       headerName: "Actions",
-      width: 120,
+      width: 150,
       renderCell: (params) => (
         <>
           <IconButton
@@ -311,11 +311,13 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
               position: "sticky",
               right: 0,
               backgroundColor: "#ebecec",
+              paddingLeft:"50px"
             },
             "& .MuiDataGrid-columnHeader--last": {
               // backgroundColor: "lightgrey",
               position: "sticky",
               right: 0,
+              paddingLeft:"50px"
             },
           }}
           getRowClassName={(params) => {

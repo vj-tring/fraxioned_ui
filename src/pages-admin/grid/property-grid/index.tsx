@@ -107,7 +107,7 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
     {
       field: "actions",
       headerName: "Actions",
-      width: 100,
+      width: 150,
       // align: "center",
       // headerAlign: "center",
       renderCell: (params) => (
@@ -189,11 +189,14 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
               position: "sticky",
               right: 0,
               backgroundColor: "#ebecec",
+              paddingLeft:"50px"
             },
             "& .MuiDataGrid-columnHeader--last": {
               // backgroundColor: "lightgrey",
               position: "sticky",
               right: 0,
+              paddingLeft:"50px"
+
             },
           }}
           getRowClassName={(params) => {

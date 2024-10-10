@@ -173,7 +173,7 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     {
       field: "lastLoginTime",
       headerName: "Last Login",
-      minWidth: 180,
+      minWidth: 240,
       align: "center",
       headerAlign: "center",
     },
@@ -232,7 +232,7 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     {
       field: "actions",
       headerName: "Actions",
-      width: 80,
+      width: 180,
       // align: "center",
       // headerAlign: "center",
       renderCell: (params) => (
@@ -287,11 +287,14 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             "&  .MuiDataGrid-cell--textLeft ": {
               position: "sticky",
               right: 0,
+              paddingLeft: "60px",
               backgroundColor: "#ebecec",
             },
             "& .MuiDataGrid-columnHeader--last": {
               // backgroundColor: "lightgrey",
               position: "sticky",
+              paddingLeft: "40px",
+
               right: 0,
             },
           }}

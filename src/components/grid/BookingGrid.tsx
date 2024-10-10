@@ -234,11 +234,13 @@ const BookingGrid: React.FC<BookingGridProps> = ({
             position: "sticky",
             right: 0,
             backgroundColor: "#ebecec",
+            paddingLeft:'30px'
           },
           "& .MuiDataGrid-columnHeader--last": {
             // backgroundColor: "lightgrey",
             position: "sticky",
             right: 0,
+            paddingLeft:'30px'
           },
         }}
       />

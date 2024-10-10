@@ -356,7 +356,7 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
     {
       field: "actions",
       headerName: "Actions",
-      width: 150,
+      width: 180,
 
       renderCell: (params) => (
         <div>
@@ -508,11 +508,14 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
               position: "sticky",
               right: 0,
               backgroundColor: "#ebecec",
+              paddingLeft:"30px"
+
             },
             "& .MuiDataGrid-columnHeader--last":{
               // backgroundColor: "lightgrey",
               position: "sticky",
               right: 0,
+              paddingLeft:"30px"
             }
           }}
           initialState={{
