@@ -69,8 +69,7 @@ export default function BasicSelect() {
     if (selectedCardIndex != null) {
       if (cards.length > 0) {
         setSelectedCard(cards[selectedCardIndex]);
-        setYears(Object.keys(cards[selectedCardIndex].details).map(Number));
-
+        setYears(Object?.keys(cards[selectedCardIndex]?.details ?? {}).map(Number));
         setSelectedCardIndex(selectedCardIndex);
         const card = cards[selectedCardIndex];
         dispatch(selectProperty(card.id));
@@ -165,8 +164,12 @@ export default function BasicSelect() {
   const cardNameWeight =
     cards.length === 1 ? "600" : cards.length === 2 ? "600" : "600";
 
-  const formatCardName = (name: string) => {
-    return name.replace(/\s+\(.*\)/, "");
+  const formatCardName = (name: string | undefined) => {
+    if (name) {
+      return name.replace(/\s+\(.*\)/, "");
+    } else {
+      return "";
+    }
   };
 
   return (
@@ -388,7 +391,7 @@ export default function BasicSelect() {
                     <div className="d-flex flex-column night-count">
                       <ul>
                         <li className="Off-Values">
-                          {selectedCard.details[selectedYear]?.offSeason ||
+                          {selectedCard?.details?.[selectedYear]?.offSeason ||
                             "N/A"}
                         </li>
                         <li style={{ fontSize: BoxList, fontWeight: "650" }}>
@@ -399,7 +402,7 @@ export default function BasicSelect() {
                     <div className="d-flex flex-column night-count">
                       <ul>
                         <li className="Off-Values">
-                          {selectedCard.details[selectedYear]?.peakSeason ||
+                          {selectedCard?.details?.[selectedYear]?.peakSeason ||
                             "N/A"}
                         </li>
                         <li style={{ fontSize: BoxList, fontWeight: "650" }}>
@@ -410,7 +413,7 @@ export default function BasicSelect() {
                     <div className="d-flex flex-column night-count">
                       <ul>
                         <li className="Off-Values">
-                          {selectedCard.details[selectedYear]?.peakHoliday ||
+                          {selectedCard?.details?.[selectedYear]?.peakHoliday ||
                             "N/A"}
                         </li>
                         <li style={{ fontSize: BoxList, fontWeight: "650" }}>
@@ -421,7 +424,7 @@ export default function BasicSelect() {
                     <div className="d-flex flex-column night-count">
                       <ul>
                         <li className="Off-Values">
-                          {selectedCard.details[selectedYear]
+                          {selectedCard?.details?.[selectedYear]
                             ?.offSeasonHoliday || "N/A"}
                         </li>
                         <li style={{ fontSize: BoxList, fontWeight: "650" }}>
@@ -432,7 +435,7 @@ export default function BasicSelect() {
                     <div className="d-flex flex-column night-count">
                       <ul>
                         <li className="Off-Values">
-                          {selectedCard.details[selectedYear]?.lastMinute ||
+                          {selectedCard?.details?.[selectedYear]?.lastMinute ||
                             "N/A"}{" "}
                         </li>
                         <li style={{ fontSize: BoxList, fontWeight: "650" }}>
