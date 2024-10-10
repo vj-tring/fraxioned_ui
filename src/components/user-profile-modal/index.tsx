@@ -79,6 +79,7 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({
               onUserUpdated={handleClose}
               formTitle=""
               isAdmin={false}
+              showCloseIcon = {false}
             />
           </>
         )}
