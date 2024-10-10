@@ -85,9 +85,9 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
           onChange={handleTabChange}
           aria-label="user edit tabs"
           className={styles.tabs}
-        >
+        > 
           <Tab disableRipple label="General Details" />
-          <Tab disableRipple label="Property" disabled={!isOwner} />
+          <Tab disableRipple label="Property"  />
           <Tab disableRipple label="Booking" />
           <Tab disableRipple label="Document" />
         </Tabs>

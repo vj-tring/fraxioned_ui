@@ -8,6 +8,7 @@
   border-radius: 8px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
   transition: margin-left 0.3s ease, width 0.3s ease;
+  
 }
 
 .calendar-container.sidebar-open {
@@ -32,7 +33,7 @@
 }
 
 .rbc-calendar {
-  /* font-family: "Roboto", sans-serif; */
+  font-family: "Roboto", sans-serif !important;
   color: #333333;
 }
 
@@ -111,6 +112,8 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-family: "Roboto", sans-serif !important;
+
   position: relative;
   z-index: 1;
 }

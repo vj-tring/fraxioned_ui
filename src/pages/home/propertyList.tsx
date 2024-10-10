@@ -110,9 +110,13 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
   // const Shadow =
   //   properties.length >= 4 ? "rgba(0, 0, 0, 0.1) 1px 1px 2px 1px" : "none";
 
-  const formatCardName = (name: string) => {
-    return name.replace(/\s+\(.*\)/, "");
-  };
+  const formatCardName = (name: string | undefined) => {
+    if (name) {
+        return name.replace(/\s+\(.*\)/, "");
+    } else {
+        return "";
+    }
+};
 
   return (
     <div className={` Container1 ${properties.length > 5 ? "" : "flex"}`}>

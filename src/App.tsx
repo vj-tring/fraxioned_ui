@@ -28,7 +28,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
 }) => {
   const token = localStorage.getItem("session");
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-  console.log(token)
+  console.log(token);
   if (!token) {
     return <Navigate to="/login" />;
   }

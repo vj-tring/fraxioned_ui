@@ -7,7 +7,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUserBookings } from "@/store/slice/auth/bookingSlice";
 import { AppDispatch } from "@/store";
 import { RootState } from "@/store/reducers";
-import { Pencil, Trash2 } from "lucide-react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import { IconButton } from "@mui/material";
+import styles from "./BookingGrid.module.css";
 
 interface BookingGridProps {
   bookings: Array<{
@@ -89,7 +92,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
     {
       field: "bookingId",
       headerName: "BookingID",
-      width:150,
+      width: 150,
       headerAlign: "center",
       align: "center",
     },
@@ -97,7 +100,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
     {
       field: "property",
       headerName: "Property",
-      width:160,
+      width: 160,
       headerAlign: "center",
       align: "center",
     },
@@ -106,33 +109,33 @@ const BookingGrid: React.FC<BookingGridProps> = ({
       headerName: "Check-in",
       headerAlign: "center",
       align: "center",
-      width:180,
+      width: 180,
     },
     {
       field: "checkoutDate",
       headerName: "Checkout",
       headerAlign: "center",
       align: "center",
-      width:180,
+      width: 180,
     },
     {
       field: "guest",
       headerName: "Guests",
-      width:230,
+      width: 230,
       headerAlign: "center",
       align: "center",
     },
     {
       field: "createdAt",
       headerName: "Booked",
-      width:200,
+      width: 200,
       headerAlign: "center",
       align: "center",
     },
     {
       field: "totalNights",
       headerName: "TotalNights",
-      width:130,
+      width: 150,
       headerAlign: "center",
       align: "center",
     },
@@ -142,23 +145,35 @@ const BookingGrid: React.FC<BookingGridProps> = ({
     columns.push({
       field: "actions",
       headerName: "Actions",
-      headerAlign: "center",
-      align: "center",
-      width:150,
+      // headerAlign: "center",
+      // align: "center",
+      width: 130,
       renderCell: (params) => (
-        <>
-          <Button disableRipple onClick={() => handleEditClick(params.row.id)}>
-            <Pencil color="darkblue"
-            size={16} />
-          </Button>
-
-          <Button
-            disableRipple
-            onClick={() => handleCancelClick(params.row.id)}
+        <div>
+          <IconButton
+            aria-label="edit"
+            color="primary"
+            onClick={() => handleEditClick(params.row.id)}
           >
-            <Trash2 color="red" size={16}/>
-          </Button>
-        </>
+            <EditIcon
+              sx={{
+                color: "#709C7E",
+              }}
+            />
+          </IconButton>
+          <IconButton
+            aria-label="delete"
+            color="secondary"
+            onClick={() => handleCancelClick(params.row)}
+            disabled={params.row.isCancelled}
+          >
+            <DeleteIcon
+              sx={{
+                color: "#F08486",
+              }}
+            />
+          </IconButton>
+        </div>
       ),
     });
   }
@@ -175,7 +190,6 @@ const BookingGrid: React.FC<BookingGridProps> = ({
         border: "none",
         marginTop: "2rem",
         // boxShadow: "rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px"
-        
       }}
     >
       <DataGrid
@@ -196,31 +210,37 @@ const BookingGrid: React.FC<BookingGridProps> = ({
             csvOptions: { disableToolbarButton: true },
           },
         }}
-        
-        getRowClassName={(params) =>
-          params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd"
-        }
+        getRowClassName={(params) => {
+          if (params.indexRelativeToCurrentPage % 2 === 0) {
+            return styles.evenRow;
+          } else {
+            return styles.oddRow;
+          }
+        }}
         sx={{
           "& .MuiDataGrid-columnHeader": {
-            backgroundColor: "#083a5d",
-            fontWeight: "bold",
+            backgroundColor: "grey",
             color: "white",
-            fontSize:'small',
+            fontSize: "small",
             textTransform: "uppercase",
-            // paddingRight: "50px",
-            fontFamily: "Montserrat, sans-serif",
-          },
-          "& .MuiDataGrid-footerContainer": {
-            display: "none",
-          },
-          "& .MuiDataGrid": {
-            border: "none",
+
+            fontFamily: " 'Roboto', sans-serif !important",
           },
           "& .MuiDataGrid-cell": {
-            fontFamily: "Montserrat, sans-serif",
-            color: "#808080",
-            fontSize:'small',
-
+            fontSize: "small",
+            fontFamily: " 'Roboto', sans-serif !important ",
+          },
+          "&  .MuiDataGrid-cell--textLeft ": {
+            position: "sticky",
+            right: 0,
+            backgroundColor: "#ebecec",
+            paddingLeft:'30px'
+          },
+          "& .MuiDataGrid-columnHeader--last": {
+            // backgroundColor: "lightgrey",
+            position: "sticky",
+            right: 0,
+            paddingLeft:'30px'
           },
         }}
       />

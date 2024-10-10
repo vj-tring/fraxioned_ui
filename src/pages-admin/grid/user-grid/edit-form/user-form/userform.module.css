@@ -2,27 +2,27 @@
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  /* font-family: "Inter", sans-serif; */
+  font-family: 'Inter', sans-serif;
   height: calc(100% - 20px);
-  /* margin: 10px; */
+  margin: 10px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
 .header {
-  /* background-color: #f8f9fa; */
-  padding: 10px 16px;
+  background-color: #f8f9fa;
+  padding: 16px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* border-bottom: 1px solid #e9ecef; */
+  border-bottom: 1px solid #e9ecef;
 }
 
 .header h2 {
   margin: 0;
   color: #2d3748;
-  font-size: medium;
+  font-size: 20px;
   font-weight: 600;
 }
 
@@ -37,7 +37,7 @@
   align-items: center;
   gap: 8px;
   transition: background-color 0.3s ease;
-  font-size: small;
+  font-size: 14px;
   font-weight: 500;
 }
 
@@ -51,15 +51,10 @@
   overflow: hidden;
 }
 
-.userName {
-  /* text-transform: uppercase !important; */
-  font-size: medium !important;
-}
-
 .profileSection {
   flex: 0 0 350px;
   text-align: center;
-  /* padding: 24px; */
+  padding: 24px;
   border-right: 1px solid #e9ecef;
   display: flex;
   flex-direction: column;
@@ -85,16 +80,13 @@
 .profileSection h3 {
   margin: 0 0 4px 0;
   color: #2d3748;
-  font-size: medium;
+  font-size: 20px;
   font-weight: 600;
-  margin-top: 10px;
 }
 
 .role {
-  color: #023e97;
+  color: #718096;
   font-size: 16px;
-  font-weight: 500;
-  text-transform: uppercase;
   margin-bottom: 12px;
 }
 
@@ -119,9 +111,9 @@
 .detailsSection {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  /* gap: 24px; */
-  padding-left: 24px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  padding: 24px;
   overflow-y: auto;
 }
 
@@ -138,24 +130,21 @@
 
 .detailItem div {
   flex: 1;
-  display: flex;
-  justify-content: space-between;
 }
 
 .detailItem strong {
   display: block;
   color: #4a5568;
-  font-size: small;
+  font-size: 16px;
   font-weight: 600;
   margin-bottom: 4px;
 }
 
 .detailItem p {
   color: #2d3748;
-  font-size: small;
+  font-size: 15px;
   margin: 0;
   line-height: 1.5;
-  margin-right: 300px;
 }
 
 .error {
@@ -167,22 +156,22 @@
 
 @media (max-width: 1024px) {
   .detailsSection {
-    grid-template-columns: 1fr;
+      grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 768px) {
   .content {
-    flex-direction: column;
+      flex-direction: column;
   }
 
   .profileSection {
-    border-right: none;
-    border-bottom: 1px solid #e9ecef;
-    padding-bottom: 24px;
+      border-right: none;
+      border-bottom: 1px solid #e9ecef;
+      padding-bottom: 24px;
   }
 
   .detailsSection {
-    padding: 16px;
+      padding: 16px;
   }
 }
