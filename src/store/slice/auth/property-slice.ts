@@ -12,6 +12,7 @@ const mockData: Card[] = [
     name: "The Lake Escape",
     address: "123 Mock Lane",
     image: "imageParadiseShores",
+    coverImageUrl:null,
     details: {
       2024: {
         offSeason: "2/10",
@@ -102,6 +103,7 @@ const mockData: Card[] = [
         isActive: 1,
         addressLine1: "456 Main St",
         addressLine2: null,
+        coverImageUrl:null,
         state: "Mock State",
         country: "Mock Country",
         city: "Mock City",
@@ -126,6 +128,7 @@ export interface User {
   lastName: string;
   password: string;
   imageURL: string | null;
+  coverImageUrl: string | null
   isActive: number;
   addressLine1: string;
   addressLine2: string | null;
@@ -182,6 +185,7 @@ export interface Card {
   details: {
     [year: number]: propertyAvailableDaysDetails;
   };
+  coverImageUrl: string | null,
   propertyShare: number;
   maxGuestsAllowed: number;
   maxPetsAllowed: number;
@@ -343,6 +347,7 @@ export const fetchProperties = createAsyncThunk(
           image: getImageForProperty(property.propertyId),
           share: shareMap[2024] || 0,
           details,
+          coverImageUrl: property.coverImageUrl,
           maxGuestsAllowed: property.noOfGuestsAllowed || 0,
           maxPetsAllowed: property.noOfPetsAllowed || 0,
           propertyShare: property.propertyShare,
