@@ -9,7 +9,12 @@
 .DeleteFont {
   font-size: 20px !important;
 }
-
+.evenRow {
+  background-color: rgb(255, 255, 255) !important;
+}
+.oddRow {
+  background-color: #ebecec !important;
+}
 
 .EditFont {
   color: rgb(26, 26, 77);
@@ -35,6 +40,3 @@
     font-size: 14px !important;
   }
 }
-
-
-

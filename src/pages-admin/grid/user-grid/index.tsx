@@ -173,14 +173,14 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     {
       field: "lastLoginTime",
       headerName: "Last Login",
-      minWidth: 180,
+      minWidth: 240,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "contactDetails",
       headerName: "Contact Details",
-      width: 180,
+      width: 120,
       align: "center",
       headerAlign: "center",
       renderCell: (params) => {
@@ -232,9 +232,9 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     {
       field: "actions",
       headerName: "Actions",
-      width: 160,
-      align: "center",
-      headerAlign: "center",
+      width: 180,
+      // align: "center",
+      // headerAlign: "center",
       renderCell: (params) => (
         <>
           <IconButton
@@ -275,15 +275,27 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             "& .MuiDataGrid-columnHeader": {
               backgroundColor: "grey",
               color: "white",
-              fontSize:'small',
-
+              fontSize: "small",
               textTransform: "uppercase",
+
               fontFamily: " 'Roboto', sans-serif !important",
             },
             "& .MuiDataGrid-cell": {
-              fontFamily: " 'Roboto', sans-serif !important",
-              fontSize:'small',
+              fontSize: "small",
+              fontFamily: " 'Roboto', sans-serif !important ",
+            },
+            "&  .MuiDataGrid-cell--textLeft ": {
+              position: "sticky",
+              right: 0,
+              paddingLeft: "60px",
+              backgroundColor: "#ebecec",
+            },
+            "& .MuiDataGrid-columnHeader--last": {
+              // backgroundColor: "lightgrey",
+              position: "sticky",
+              paddingLeft: "40px",
 
+              right: 0,
             },
           }}
           getRowClassName={(params) => {

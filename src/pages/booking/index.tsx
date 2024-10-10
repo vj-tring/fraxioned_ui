@@ -220,8 +220,8 @@ const Booking = () => {
               onClick={handleOpenCalendar}
               style={{
                 marginLeft: "16px",
-                borderRadius: "10px",
-                backgroundColor: "#083a5d",
+                borderRadius: "5px",
+                backgroundColor: "#808080",
                 textTransform: "capitalize",
               }}
               className="calendarView"
