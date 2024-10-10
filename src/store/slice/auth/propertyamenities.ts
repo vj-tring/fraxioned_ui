@@ -63,7 +63,7 @@ export const getAmenitiesById = createAsyncThunk(
     'propertyAmenities/getById',
     async (id: number, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.get(`/property-amenities/property/${id}`);
+            const response = await axiosInstance.get(`/property-space-amenities/property/${id}`);
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message || 'An error occurred');
@@ -75,7 +75,7 @@ export const updatePropertyAmenities = createAsyncThunk(
     'propertyAmenities/update',
     async (updateData: UpdateAmenityPayload, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.patch('/property-amenities', updateData);
+            const response = await axiosInstance.patch('/property-space-amenities', updateData);
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message || 'An error occurred');

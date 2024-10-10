@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getPropertyById, getProperrtDetailsbyId } from "@/api";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPropertyById, fetchPropertyDetailsById } from "@/store/slice/auth/propertiesSlice";
+import { AppDispatch } from '@/store';
+import { RootState } from "@/store/reducers";
 import EditButton from "@/components/edit";
 import styles from "./property-generalinfo.module.css";
 import imageone from "../../assests/bear-lake-bluffs.jpg";
@@ -9,76 +12,31 @@ import imagethree from "../../assests/lake-escape.jpg";
 import Loader from "@/components/loader";
 import pinImage from "../../assets/images/pin.jpg";
 
-interface PropertyData {
-  id: number;
-  ownerRezPropId: number;
-  propertyName: string;
-  address: string;
-  city: string;
-  state: string;
-  country: string;
-  zipcode: number;
-  houseDescription: string;
-  isExclusive: boolean;
-  propertyShare: number;
-  propertyRemainingShare: number;
-  latitude: number;
-  longitude: number;
-  isActive: boolean;
-  displayOrder: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface PropertyDetails {
-  noOfBedrooms: number;
-  noOfBathrooms: number;
-  squareFootage: string;
-  cleaningFee: number;
-}
-
 const PropertyGeneralInfo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [propertyData, setPropertyData] = useState<PropertyData | null>(null);
-  const [propertyDetails, setPropertyDetails] =
-    useState<PropertyDetails | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  
+  const propertyData = useSelector((state: RootState) => state.property.selectedProperty);
+  const propertyDetails = useSelector((state: RootState) => state.property.selectedPropertyDetails);
+  const status = useSelector((state: RootState) => state.property.status);
+  const error = useSelector((state: RootState) => state.property.error);
 
   const images = [imageone, imagetwo, imagethree];
   const randomImage = images[Math.floor(Math.random() * images.length)];
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [propertyResponse, detailsResponse] = await Promise.all([
-          getPropertyById(Number(id)),
-          getProperrtDetailsbyId(Number(id)),
-        ]);
-        setPropertyData(propertyResponse.data);
-        setPropertyDetails({
-          noOfBedrooms: detailsResponse.data.noOfBedrooms,
-          noOfBathrooms: detailsResponse.data.noOfBathrooms,
-          squareFootage: detailsResponse.data.squareFootage,
-          cleaningFee: detailsResponse.data.cleaningFee,
-        });
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching property data:", err);
-        setError("Failed to fetch property data. Please try again.");
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [id]);
+    if (id) {
+      dispatch(fetchPropertyById(Number(id)));
+      dispatch(fetchPropertyDetailsById(Number(id)));
+    }
+  }, [id, dispatch]);
 
   const handleEdit = () => {
     navigate(`/admin/property/${id}/edit`);
   };
 
-  if (loading) return <Loader />;
+  if (status === 'loading') return <Loader />;
   if (error) return <div className={styles.error}>{error}</div>;
   if (!propertyData || !propertyDetails)
     return <div className={styles.noData}>No property data found.</div>;
@@ -106,7 +64,7 @@ const PropertyGeneralInfo: React.FC = () => {
           </div>
           <div className={styles.infoBlock}>
             <div className={styles.infoColumns}>
-            <h3 className={styles.propertyName}>{propertyData.propertyName}</h3>
+              <h3 className={styles.propertyName}>{propertyData.propertyName}</h3>
               <div className={styles.addressColumn}>
                 <div className={styles.infoRow}>
                   <span className={styles.infoLabel}>
@@ -170,8 +128,6 @@ const PropertyGeneralInfo: React.FC = () => {
             </div>
           </div>
           <div className={styles.infoContainer}>
-         
-
             <div className={styles.infoBlock1}>
               <h4 className={styles.descriptionTitle}>Description</h4>
               <p className={styles.description}>
