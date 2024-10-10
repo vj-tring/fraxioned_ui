@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Search, ChevronDown, ChevronUp } from 'lucide-react';
 import styles from './propertyamenities.module.css';
 import { amenitiesapi } from '@/api';
-import { Search, ChevronDown, ChevronUp } from 'lucide-react';
 import CustomizedSnackbars from '@/components/customized-snackbar';
 import ConfirmationModal from '@/components/confirmation-modal';
 import {
@@ -44,7 +44,6 @@ const PropertyAmenities: React.FC = () => {
     severity: 'info',
   });
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const groupRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -59,8 +58,7 @@ const PropertyAmenities: React.FC = () => {
 
   useEffect(() => {
     if (propertyAmenities.length > 0) {
-      const selected = propertyAmenities.map((item: { amenity: { id: any; }; }) => item.amenity.id);
-      setSelectedAmenities(selected);
+      setSelectedAmenities(propertyAmenities.map(item => item.amenity.id));
     }
   }, [propertyAmenities]);
 
@@ -94,9 +92,7 @@ const PropertyAmenities: React.FC = () => {
   };
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
+    if (reason === 'clickaway') return;
     setSnackbar({ ...snackbar, open: false });
   };
 
@@ -113,9 +109,7 @@ const PropertyAmenities: React.FC = () => {
   const groupAmenitiesByGroup = (data: Amenity[]) => {
     return data.reduce((acc, amenity) => {
       const group = amenity.amenityGroup.name;
-      if (!acc[group]) {
-        acc[group] = [];
-      }
+      if (!acc[group]) acc[group] = [];
       acc[group].push(amenity);
       return acc;
     }, {} as { [key: string]: Amenity[] });
@@ -129,37 +123,29 @@ const PropertyAmenities: React.FC = () => {
     );
   };
 
-  useEffect(() => {
-    if (expandedGroup) {
-      setTimeout(() => {
-        const groupElement = groupRefs.current[expandedGroup];
-        if (groupElement) {
-          groupElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 100);
+  const scrollToGroup = (group: string) => {
+    const element = document.getElementById(`group-${group}`);
+    if (element && scrollContainerRef.current) {
+      const container = scrollContainerRef.current;
+      const elementPosition = element.offsetTop;
+      const containerScrollPosition = container.scrollTop;
+      const targetScrollPosition = elementPosition - container.offsetTop;
+      
+      container.scrollTo({
+        top: targetScrollPosition,
+        behavior: 'smooth'
+      });
     }
-  }, [expandedGroup]);
-
-  const handleUpdateClick = () => {
-    setShowConfirmModal(true);
-  };
-
-  const handleUpdate = async () => {
-    const updateData = {
-      property: {
-        id: Number(id)
-      },
-      amenities: selectedAmenities.map(amenityId => ({ id: amenityId })),
-      updatedBy: {
-        id: 1
-      }
-    };
-
-    dispatch(updatePropertyAmenities(updateData));
   };
 
   const toggleGroup = (group: string) => {
-    setExpandedGroup(prev => prev === group ? null : group);
+    setExpandedGroup(prev => {
+      const newState = prev === group ? null : group;
+      if (newState) {
+        setTimeout(() => scrollToGroup(group), 100);
+      }
+      return newState;
+    });
   };
 
   const handleSearch = (group: string, term: string) => {
@@ -188,6 +174,15 @@ const PropertyAmenities: React.FC = () => {
     setAmenities(sortedAmenities);
   };
 
+  const handleUpdate = async () => {
+    const updateData = {
+      property: { id: Number(id) },
+      amenities: selectedAmenities.map(amenityId => ({ id: amenityId })),
+      updatedBy: { id: 1 }
+    };
+    dispatch(updatePropertyAmenities(updateData));
+  };
+
   if (loading) {
     return <div className={styles.loading}>Loading...</div>;
   }
@@ -197,21 +192,23 @@ const PropertyAmenities: React.FC = () => {
       <div className={styles.contentWrapper}>
         <div className={styles.header}>
           <h1 className={styles.title}>Property Amenities</h1>
-          <button className={styles.updateButton} onClick={handleUpdateClick}>Update</button>
+          <button className={styles.updateButton} onClick={() => setShowConfirmModal(true)}>
+            Update
+          </button>
         </div>
         <div className={styles.amenitiesScrollContainer} ref={scrollContainerRef}>
           {Object.entries(amenities).map(([group, amenitiesList]) => (
             <div
               key={group}
+              id={`group-${group}`}
               className={`${styles.amenityGroup} ${expandedGroup === group ? styles.expanded : ''}`}
-              ref={el => groupRefs.current[group] = el}
             >
               <div className={styles.groupHeader} onClick={() => toggleGroup(group)}>
                 <h2 className={styles.groupTitle}>{group}</h2>
                 {expandedGroup === group ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
               </div>
               {expandedGroup === group && (
-                <>
+                <div className={styles.groupContent}>
                   <div className={styles.searchContainer}>
                     <Search size={19} className={styles.searchIcon} />
                     <input
@@ -239,7 +236,7 @@ const PropertyAmenities: React.FC = () => {
                       <p className={styles.noResults}>No "{searchTerms[group]}" found in {group} category</p>
                     )}
                   </div>
-                </>
+                </div>
               )}
             </div>
           ))}
