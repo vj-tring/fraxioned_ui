@@ -1,113 +1,90 @@
-import React, { useState } from 'react'
-import { Modal, Image } from 'react-bootstrap'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit } from '@fortawesome/free-solid-svg-icons'
+import React, { useState, useCallback } from "react";
+import { Modal, Box, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import UserForm from "@/pages-admin/grid/user-grid/edit-form/user-form";
+import EditForm from "@/pages-admin/grid/user-grid/edit-form/user-edit";
+import styles from "./user-profile.module.css";
+import { User } from "@/store/model/user";
 
-interface UserDetailsModalProps {
-  show: boolean
-  onHide: () => void
-  userImage?: string
-  userDetails: {
-    name: string
-    email: string
-    phone: string
-    mailingAddress: string
-    secondaryEmail: string
-    secondaryPhone: string
-  }
+interface UserProfileModalProps {
+  userData: User;
+  showUserForm: boolean;
+  handleClose: () => void;
+  isAdmin: boolean;
 }
 
-const UserDetailsModal: React.FC<UserDetailsModalProps> = ({
-  show,
-  onHide,
-  userImage,
-  userDetails,
+const userFormStyles = {
+  userForm: styles.userForm,
+  header: styles.userFormHeader,
+};
+
+const UserProfileModal: React.FC<UserProfileModalProps> = ({
+  userData,
+  showUserForm,
+  handleClose,
+  isAdmin,
 }) => {
-  const [newImage, setNewImage] = useState<string | undefined>(userImage)
-  const [showEditIcon, setShowEditIcon] = useState(false)
-  const [showFileInput, setShowFileInput] = useState(false)
-
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const reader = new FileReader()
-      reader.onload = () => {
-        if (reader.result) {
-          setNewImage(reader.result as string)
-        }
-      }
-      reader.readAsDataURL(event.target.files[0])
-    }
-  }
-
-  const handleEditIconClick = () => {
-    setShowFileInput(true)
-  }
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  // Handlers wrapped with useCallback to prevent re-creation on every render
+  const handleEditClick = useCallback(() => setIsEditing(true), []);
+  const handleCloseEditForm = useCallback(() => setIsEditing(false), []);
 
   return (
-    <Modal show={show} onHide={onHide} centered>
-      <Modal.Header closeButton style={{}}>
-        <Modal.Title>User Details</Modal.Title>
-      </Modal.Header>
-      <Modal.Body style={{}}>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            flexDirection: 'column',
-          }}
+    <Modal
+      open={showUserForm}
+      onClose={handleClose}
+      aria-labelledby="user-form-modal"
+      aria-describedby="user-form-modal-description"
+    >
+      <Box
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: 1000,
+          height:600,
+          bgcolor: "background.paper",
+          p: 4,
+          boxShadow: 24,
+          borderRadius: 2,
+        }}
+      >
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={{ position: "absolute", right: 8, top: 8 }}
         >
-          {newImage && (
-            <div
-              style={{
-                position: 'relative',
-              }}
-            >
-              <Image
-                src={newImage}
-                roundedCircle
-                height="60"
-                width="60"
-                className="mb-3"
-                alt="User"
-                onMouseOver={() => setShowEditIcon(true)}
-                onMouseLeave={() => setShowEditIcon(false)}
-              />
-              {showEditIcon && (
-                <span
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    cursor: 'pointer',
-                  }}
-                  onClick={handleEditIconClick}
-                >
-                  <FontAwesomeIcon icon={faEdit} color="white" size="lg" />
-                </span>
-              )}
-            </div>
-          )}
-          <h5>{userDetails.name}</h5>
-          {showFileInput && <input type="file" onChange={handleImageChange} />}
-        </div>
-        <p className="">
-          <strong>Email:</strong> {userDetails.name}
-        </p>
-        <p>
-          <strong>Phone:</strong> {userDetails.phone}
-        </p>
-        <p>
-          <strong>Mailing Address:</strong> {userDetails.mailingAddress}
-        </p>
-        <p>
-          <strong>Secondary Email:</strong> {userDetails.secondaryEmail}
-        </p>
-        <p>
-          <strong>Secondary Phone:</strong> {userDetails.secondaryPhone}
-        </p>
-      </Modal.Body>
-    </Modal>
-  )
-}
+          <CloseIcon />
+        </IconButton>
 
-export default UserDetailsModal
+        {!isEditing ? (
+          <>
+            <h2 className={styles.header}>My Profile</h2>
+            <UserForm
+              user={userData}
+              onEditClick={handleEditClick}
+              header=""
+              editButtonName="Edit"
+              customStyles={userFormStyles}
+              showActiveStatus={false}
+            />
+          </>
+        ) : (
+          <>
+            <h2 className={styles.header}>Edit Profile</h2>
+            <EditForm
+              user={userData}
+              onClose={handleCloseEditForm}
+              onUserUpdated={handleClose}
+              formTitle=""
+              isAdmin={false}
+            />
+          </>
+        )}
+      </Box>
+    </Modal>
+  );
+};
+
+export default UserProfileModal;

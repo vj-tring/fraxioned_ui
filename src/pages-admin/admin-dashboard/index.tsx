@@ -27,9 +27,10 @@ import ReportsGrid from '../grid/reports-grid';
 import SpaceProperty from '../space-property';
 import SpacePropertyDetails from '../space-property/space-property-details';
 import Spaces from '../spaces';
+import "./admin-dashboard.css";
 
 const AdminDashboard: React.FC = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
     const toggleSidebar = () => {
@@ -37,7 +38,7 @@ const AdminDashboard: React.FC = () => {
     };
 
     function handleUserUpdated(): void {
-        throw new Error('Function not implemented.');
+        throw new Error("Function not implemented.");
     }
 
     return (
@@ -46,7 +47,7 @@ const AdminDashboard: React.FC = () => {
                 logo={fraxionedLogo}
                 userName={userImage}
                 userImage={userImage}
-                onUserImageClick={() => navigate('/admin/userdetails')}
+                onUserImageClick={() => navigate("/admin/userdetails")}
             />
             <div className="dashboard-content">
                 <SidePanel isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
@@ -168,13 +169,12 @@ const AdminDashboard: React.FC = () => {
                                 </div>
                             </div>
                         } />
-
-
+                        <Route path="*" element={<Navigate to="/admin/bookings" />} />
                     </Routes>
-
                 </div>
             </div>
-        </div>
+        </div >
+
     );
 };
 

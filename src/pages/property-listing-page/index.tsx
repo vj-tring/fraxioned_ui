@@ -310,7 +310,7 @@ const PropertyListingPage = () => {
   };
 
   const handleNavigateToSummary = () => {
-    navigate("/home/booking-summary");
+    navigate("/booking-summary");
   };
 
   return (
@@ -419,24 +419,24 @@ const PropertyListingPage = () => {
         )}
         <div className="Blue-row pb-3 pt-5">
           <div>
-            <a href="#myShare" smooth={true} duration={200}>
+            <a href="#myShare" smooth={"true"} duration={200}>
               <h1 className="Blue-rowshare" style={{ fontWeight: "bolder" }}>
                 My Share
               </h1>
             </a>
           </div>
           <div>
-            <a href="#rooms" smooth={true} duration={200}>
+            <a href="#rooms" smooth={"true"} duration={200}>
               <h1 className="Blue-rowshare">Amenities</h1>
             </a>
           </div>
           <div>
-            <a href="#location" smooth={true} duration={200}>
+            <a href="#location" smooth={"true"} duration={200}>
               <h1 className="Blue-rowshare">Location</h1>
             </a>
           </div>
           <div>
-            <a href="#info" smooth={true} duration={200}>
+            <a href="#info" smooth={"true"} duration={200}>
               <h1 className="Blue-rowshare">Info</h1>
             </a>
           </div>

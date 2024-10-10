@@ -145,7 +145,7 @@ const BookingSearchBar: React.FC = () => {
       checkoutDate: checkoutDate.toISOString(),
       noOfGuests: counts.Adults + counts.Children,
       noOfPets: counts.Pets,
-      isLastMinuteBooking: isLastMinuteBooking(checkinDate),
+      isLastMinuteBooking: Boolean(bookingdetails.isLastMinuteBooking),
       noOfAdults: counts.Adults,
       noOfChildren: counts.Children,
       notes: "",
@@ -167,7 +167,7 @@ const BookingSearchBar: React.FC = () => {
         };
 
         await dispatch(saveBooking(updatedBookingData));
-        navigate("/home/booking-summary");
+        navigate("/booking-summary");
       } else {
         throw new Error(
           result.message || "An error occurred while processing your booking."

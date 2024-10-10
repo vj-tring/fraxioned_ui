@@ -8,6 +8,7 @@ import {
 } from "../../../api/index";
 
 export interface BookingData {
+  userId(userId: any): string;
   property: {
     propertyName: any;
     id: string;
@@ -56,7 +57,7 @@ interface ConfirmBookingResponse {
   data: any; // Replace with actual data type if possible
 }
 
-interface BookingState {
+export interface BookingState {
   bookings: BookingData[]; // Added bookings array to state
   currentBooking: BookingData | null;
   userBookings: BookingData[];

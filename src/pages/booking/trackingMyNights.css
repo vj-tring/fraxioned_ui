@@ -2,6 +2,13 @@
   width: 100%;
   height: 500px;
 }
+.ProperName,
+.Year {
+  font-size: small !important;
+}
+.Year {
+  padding: 1px !important;
+}
 .container3 {
   display: flex;
   flex-direction: row;
@@ -12,7 +19,7 @@
 }
 .bar-btn {
   border-radius: 50px;
-  width: 40%;
+  width: 30%;
   display: flex;
   float: right;
   height: 50px;
@@ -22,7 +29,6 @@
 }
 .Track-btn {
   background-color: #88cdd4;
-  /* border-radius: 50px; */
   width: 3.5rem;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
@@ -69,6 +75,7 @@
   height: 350px;
   border-radius: 10px;
 }
+
 .Prop {
   font-weight: 600;
   font-size: small;
@@ -114,16 +121,16 @@
 }
 
 .Total-Nights > table,
-.Total-Nights > table > tr > th,
-.Total-Nights > table > tr > td {
+.Total-Nights > table > tbody > tr > th,
+.Total-Nights > table > tbody > tr > td {
   border: 1.5px solid grey;
   border-collapse: collapse;
   padding: 5px;
 }
 
 .Total-Holiday > table,
-.Total-Holiday > table > tr > th,
-.Total-Holiday > table > tr > td {
+.Total-Holiday > table > tbody > tr > th,
+.Total-Holiday > table > tbody > tr > td {
   border: 1.5px solid grey;
   border-collapse: collapse;
   padding: 5px;
@@ -137,7 +144,8 @@ tr > td {
   width: 230px;
 }
 
-tr > th {
+tr > th,
+tr > td {
   color: grey;
 }
 

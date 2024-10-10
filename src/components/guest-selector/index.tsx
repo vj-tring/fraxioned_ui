@@ -24,8 +24,6 @@ const names = [
   { label: "Pets", description: "Bringing a service?", icon: <PetsIcon /> },
 ];
 
-
-
 interface MultipleSelectProps {
   showIcons?: boolean;
   initialCount: number;
@@ -34,9 +32,13 @@ interface MultipleSelectProps {
   onClose: () => void;
 }
 
-
-const MultipleSelect: React.FC<MultipleSelectProps> = ({ showIcons = true, initialCount, onChange, onClose, initialCounts, }) => {
-
+const MultipleSelect: React.FC<MultipleSelectProps> = ({
+  showIcons = true,
+  initialCount,
+  onChange,
+  onClose,
+  initialCounts,
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
@@ -124,13 +126,17 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({ showIcons = true, initi
     if (action === "increase") {
       if (name === "Pets") {
         if (currentCount >= noOfPetsAllowed) {
-          setValidationMessage(`You can't have more than ${noOfPetsAllowed} pets.`);
+          setValidationMessage(
+            `You can't have more than ${noOfPetsAllowed} pets.`
+          );
           return;
         }
       } else {
         const totalGuests = counts.Adults + counts.Children;
         if (totalGuests >= noOfGuestsAllowed) {
-          setValidationMessage(`You can't have more than ${noOfGuestsAllowed} guests.`);
+          setValidationMessage(
+            `You can't have more than ${noOfGuestsAllowed} guests.`
+          );
           return;
         }
       }
@@ -150,9 +156,13 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({ showIcons = true, initi
 
     dispatch(updateCount({ name, count: newCount }));
 
-    const newTotalGuests = name === "Pets" 
-      ? counts.Adults + counts.Children 
-      : (counts.Adults + counts.Children - currentCount + newCount);
+    const newTotalGuests =
+      name === "Pets"
+        ? counts.Adults + counts.Children
+        : counts.Adults + counts.Children - currentCount + newCount;
+    const onChange = (newTotalGuests: number) => {
+      console.log("Total guests changed to: ", newTotalGuests);
+    };
 
     onChange(newTotalGuests);
     validateCounts();
@@ -180,7 +190,6 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({ showIcons = true, initi
   }, [open]);
 
   return (
-
     <Box sx={{ width: showIcons ? "20%" : "100%" }}>
       <Button
         disableRipple
@@ -198,9 +207,14 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({ showIcons = true, initi
           justifyContent: showIcons ? "flex-start" : "space-between",
         }}
       >
-        {showIcons && <PersonAddAlt1OutlinedIcon sx={{ color: "grey",
-          // marginBottom:"10px"
-         }} />}
+        {showIcons && (
+          <PersonAddAlt1OutlinedIcon
+            sx={{
+              color: "grey",
+              // marginBottom:"10px"
+            }}
+          />
+        )}
 
         <div
           className="d-flex align-items-start flex-column"
@@ -226,20 +240,22 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({ showIcons = true, initi
         }}
       >
         {names.map((item) => (
-          <>
-            <MenuItem
-              key={item.label}
-              sx={{
-                width: "100%",
-                padding: showIcons ? "0 2rem" : "0.5rem 2.5rem",
-                margin: ".5rem 0",
-                height: showIcons ? "4rem" : "auto",
-              }}
-              disableRipple
+          <MenuItem
+            key={item.label}
+            sx={{
+              width: "100%",
+              padding: showIcons ? "0 2rem" : "0.5rem 2.5rem",
+              margin: ".5rem 0",
+              height: showIcons ? "4rem" : "auto",
+            }}
+            disableRipple
+          >
+            <div
+              className={`d-flex justify-content-between align-items-center ${
+                showIcons ? "gap-2.5" : "gap-2.5"
+              } w-100 monsterrat`}
             >
-
-            <div className={`d-flex justify-content-between align-items-center ${showIcons ? 'gap-2.5' : 'gap-2.5'} w-100 monsterrat`}>
-            {showIcons && (
+              {showIcons && (
                 <Avatar
                   sx={{
                     backgroundColor: "#DF9526",
@@ -249,60 +265,59 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({ showIcons = true, initi
                   {item.icon}
                 </Avatar>
               )}
-                 <div className={showIcons ? "w-40" : ""}>
-                  <b>{item.label}</b>
-                  <p className="DescFont monsterrat">{item.description}</p>
-                </div>
-                <div
-                  className={`d-flex justify-content-around ${
-                    showIcons ? "w-50" : "w-40"
-                  } text-center`}
-                >
-                  <button
-                    className=" monsterrat"
-                    disabled={counts[item.label] === 0}
-                    onClick={() => handleCountChange(item.label, "decrease")}
-                  >
-                    <CircleMinus
-                      size={showIcons ? 29 : 29}
-                      strokeWidth={0.75}
-                      color="grey"
-                    />
-                  </button>
-                  <p className="Ad-count monsterrat">{counts[item.label]}</p>
-                  <button
-                    onClick={() => handleCountChange(item.label, "increase")}
-                  >
-                    <CirclePlus
-                      size={showIcons ? 29 : 29}
-                      strokeWidth={0.75}
-                      className={`${
-                        item.label === "Pets"
-                          ? counts.Pets === noOfPets
-                            ? "circleplusdisable"
-                            : "circleplus"
-                          : ""
-                      } ${
-                        item.label === "Adults" || item.label === "Children"
-                          ? counts.Adults + counts.Children === noOfguest
-                            ? "circleplusdisable"
-                            : "circleplus"
-                          : ""
-                      } `}
-                    />
-                  </button>
-                </div>
+              <div className={showIcons ? "w-40" : ""}>
+                <b>{item.label}</b>
+                <p className="DescFont monsterrat">{item.description}</p>
               </div>
-            </MenuItem>
-            {!(names.indexOf(item) === names.length - 1) && (
-              <hr
-                style={{
-                  opacity: 0.08,
-                  margin: "0 2.1rem",
-                }}
-              />
-            )}
-          </>
+              <div
+                className={`d-flex justify-content-around ${
+                  showIcons ? "w-50" : "w-40"
+                } text-center`}
+              >
+                <button
+                  className=" monsterrat"
+                  disabled={counts[item.label] === 0}
+                  onClick={() => handleCountChange(item.label, "decrease")}
+                >
+                  <CircleMinus
+                    size={showIcons ? 29 : 29}
+                    strokeWidth={0.75}
+                    color="grey"
+                  />
+                </button>
+                <p className="Ad-count monsterrat">{counts[item.label]}</p>
+                <button
+                  onClick={() => handleCountChange(item.label, "increase")}
+                >
+                  <CirclePlus
+                    size={showIcons ? 29 : 29}
+                    strokeWidth={0.75}
+                    className={`${
+                      item.label === "Pets"
+                        ? counts.Pets === noOfPets
+                          ? "circleplusdisable"
+                          : "circleplus"
+                        : ""
+                    } ${
+                      item.label === "Adults" || item.label === "Children"
+                        ? counts.Adults + counts.Children === noOfguest
+                          ? "circleplusdisable"
+                          : "circleplus"
+                        : ""
+                    } `}
+                  />
+                </button>
+              </div>
+            </div>
+          </MenuItem>
+          // {!(names.indexOf(item) === names.length - 1) && (
+          //   <hr
+          //     style={{
+          //       opacity: 0.08,
+          //       margin: "0 2.1rem",
+          //     }}
+          //   />
+          // )}
         ))}
         {validationMessage && (
           <div className="validationMsg monsterrat">

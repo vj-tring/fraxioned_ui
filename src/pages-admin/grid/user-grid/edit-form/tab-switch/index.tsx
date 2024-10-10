@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Tabs, Tab, Button, IconButton } from "@mui/material";
-import UserForm from "../userform";
-import EditForm from "../useredit";
+import UserForm from "../user-form";
+import EditForm from "../user-edit";
 import PropertyTab from "../propertyUser";
 import UserBookings from "../user-bookings";
 import styles from "./tab.module.css";
-import RefreshIcon from '@mui/icons-material/Refresh';
+import RefreshIcon from "@mui/icons-material/Refresh";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { getUserById } from "@/api";
-import DocumentManagerCard from '../document';
+import DocumentManagerCard from "../document";
 
 interface TabSwitchProps {
   onUserUpdated: () => void;
@@ -85,20 +85,20 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
           onChange={handleTabChange}
           aria-label="user edit tabs"
           className={styles.tabs}
-        >
-          <Tab label="General Details" />
-          <Tab label="Property" disabled={!isOwner} />
-          <Tab label="Booking" />
-          <Tab label="Document"  />
+        > 
+          <Tab disableRipple label="General Details" />
+          <Tab disableRipple label="Property" disabled={!isOwner} />
+          <Tab disableRipple label="Booking" />
+          <Tab disableRipple label="Document" />
         </Tabs>
         <div className={styles.actionButtons}>
-          <IconButton
+          {/* <IconButton
             onClick={() => window.location.reload()}
             className={styles.refreshIcon}
             aria-label="refresh"
           >
             <RefreshIcon />
-          </IconButton>
+          </IconButton> */}
           <Button
             variant="contained"
             color="primary"
@@ -112,14 +112,23 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
 
       <div className={styles.content}>
         {selectedTab === 0 && !isEditing ? (
-          <UserForm userId={userId} onEditClick={handleEditClick} header={""} editButtonName={""} showActiveStatus={false} />
+          <UserForm
+            user={userData}
+            onEditClick={handleEditClick}
+            header={""}
+            editButtonName={""}
+            showActiveStatus={false}
+          />
         ) : (
           selectedTab === 0 &&
           isEditing && (
             <EditForm
               user={userData}
               onClose={() => setIsEditing(false)}
-              onUserUpdated={handleUpdateSuccess} formTitle={""} />
+              onUserUpdated={handleUpdateSuccess}
+              formTitle={""}
+              isAdmin={false}
+            />
           )
         )}
 
@@ -127,10 +136,7 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
 
         {isOwner && selectedTab === 2 && <UserBookings userId={userId} />}
 
-        {selectedTab === 3 && (
-                    <DocumentManagerCard/>
-                )}
-
+        {selectedTab === 3 && <DocumentManagerCard />}
       </div>
     </div>
   );
