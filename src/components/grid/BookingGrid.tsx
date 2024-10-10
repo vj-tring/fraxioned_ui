@@ -142,9 +142,9 @@ const BookingGrid: React.FC<BookingGridProps> = ({
     columns.push({
       field: "actions",
       headerName: "Actions",
-      headerAlign: "center",
-      align: "center",
-      width:150,
+      // headerAlign: "center",
+      // align: "center",
+      width: 150,
       renderCell: (params) => (
         <>
           <Button disableRipple onClick={() => handleEditClick(params.row.id)}>
@@ -170,7 +170,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
   return (
     <div
       style={{
-        height: 300,
+        height: 350,
         width: "100%",
         border: "none",
         marginTop: "2rem",
@@ -188,6 +188,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
         disableColumnSelector
         disableColumnMenu
         disableColumnFilter
+        // hideFooterPagination
         slots={{ toolbar: GridToolbar }}
         slotProps={{
           toolbar: {
@@ -201,6 +202,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
           params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd"
         }
         sx={{
+          border: "none",
           "& .MuiDataGrid-columnHeader": {
             backgroundColor: "#083a5d",
             fontWeight: "bold",
@@ -217,10 +219,23 @@ const BookingGrid: React.FC<BookingGridProps> = ({
             border: "none",
           },
           "& .MuiDataGrid-cell": {
-            fontFamily: "Montserrat, sans-serif",
-            color: "#808080",
-            fontSize:'small',
-
+            fontSize: "small",
+            fontFamily: " 'Roboto', sans-serif !important ",
+          },
+          "&  .MuiDataGrid-cell--textLeft ": {
+            position: "sticky",
+            right: 0,
+            backgroundColor: "#ebecec",
+            paddingLeft: "30px",
+          },
+          "& .MuiDataGrid-columnHeader--last": {
+            // backgroundColor: "lightgrey",
+            position: "sticky",
+            right: 0,
+            paddingLeft: "30px",
+          },
+          "& .MuiDataGrid-footerContainer ": {
+            borderBottom: "1px solid #e5e7eb",
           },
         }}
       />

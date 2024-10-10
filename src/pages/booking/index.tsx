@@ -220,8 +220,8 @@ const Booking = () => {
               onClick={handleOpenCalendar}
               style={{
                 marginLeft: "16px",
-                borderRadius: "10px",
-                backgroundColor: "#083a5d",
+                borderRadius: "5px",
+                backgroundColor: "#38a8b5",
                 textTransform: "capitalize",
               }}
               className="calendarView"
@@ -253,7 +253,7 @@ const Booking = () => {
           activeTab={activeTab}
         />
 
-        <div className="TrackingMyNight mt-5">
+        <div className="TrackingMyNight mt-5 ">
           <TrackingMyNigts />
         </div>
 
