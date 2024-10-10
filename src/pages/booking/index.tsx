@@ -221,7 +221,7 @@ const Booking = () => {
               style={{
                 marginLeft: "16px",
                 borderRadius: "5px",
-                backgroundColor: "#38a8b5",
+                backgroundColor: "#808080",
                 textTransform: "capitalize",
               }}
               className="calendarView"

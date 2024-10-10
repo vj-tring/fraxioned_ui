@@ -24,6 +24,7 @@ import { AppDispatch } from "@/store";
 import { RootState } from "@/store/reducers";
 import Bedroom1Image from "../../assets/images/bedroom1.jpg";
 import KingBedImage from "../../assets/images/bedroom1.jpg";
+import { fetchSpacePropertiesById } from "@/store/slice/spacePropertySlice";
 
 interface SingleDeviceProps {
   propertyId: number;
@@ -61,12 +62,15 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const { propertyAmenities, loading, error } = useSelector(
     (state: RootState) => state.amenities
   );
+  const propertySpace = useSelector((state: RootState) => state.spaceProperties.spaceProperties || [])
+
   const [page, setPage] = useState(1);
   const [showAllAmenities, setShowAllAmenities] = useState(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchAmenities(propertyId));
+    dispatch(fetchSpacePropertiesById(propertyId));
   }, [dispatch, propertyId]);
 
   const handlePageChange = (value: number) => {
@@ -87,6 +91,12 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   );
   const totalPages = Math.ceil(allRooms.length / ITEMS_PER_PAGE);
 
+  const paginatedSpaces = propertySpace.slice(
+    (page - 1) * ITEMS_PER_PAGE,
+    page * ITEMS_PER_PAGE
+  );
+  const totalspacePages = Math.ceil(propertySpace.length / ITEMS_PER_PAGE);
+
   const groupedAmenities = groupAmenitiesByGroup(propertyAmenities || []);
   const allAmenities = propertyAmenities ? propertyAmenities.map((pa) => pa.amenity) : [];
   const displayedAmenities = showAllAmenities
@@ -101,7 +111,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
       sx={{ display: "flex", flexDirection: "row", gap: 10 }}
       className="singleDevice"
     >
-      <Box
+      {/* <Box
         sx={{ display: "flex", flexDirection: "column", gap: 3, width: "50%" }}
         className="RoomsRes"
       >
@@ -173,7 +183,87 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
             ))}
           </Box>
         )}
+      </Box> */}
+
+      <Box
+        sx={{ display: "flex", flexDirection: "column", gap: 3, width: "50%" }}
+        className="RoomsRes"
+      >
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography variant="h6" component="div" className="monsterrat checkIn">
+            Spaces for Property
+          </Typography>
+          <Box>
+            <CustomPagination
+              page={page}
+              totalPages={totalspacePages}
+              onPageChange={handlePageChange}
+            />
+          </Box>
+        </Box>
+
+        {propertySpace.length === 0 ? (
+          <Typography variant="body1">No spaces available for this property.</Typography>
+        ) : (
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
+            {paginatedSpaces.map((space, index) => (
+              <Box
+                key={index}
+                sx={{
+                  flex: "1 1 calc(50% - 1rem)",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <Card
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "70%",
+                    width: "100%",
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    height="100%"
+                    image={"https://via.placeholder.com/150"} // Placeholder for space image
+                    alt={space.space.name}
+                    sx={{ objectFit: "cover" }}
+                  />
+                </Card>
+                <CardContent sx={{ padding: 1, paddingTop: 2 }}>
+                  <Typography
+                    variant="h6"
+                    sx={{ fontSize: 15, fontWeight: 600 }}
+                    className="monsterrat"
+                  >
+                    {space.space.name} {space.instanceNumber}
+                  </Typography>
+                  {space.space.isBedTypeAllowed && (
+                    <Typography
+                      variant="body1"
+                      sx={{ fontSize: 12 }}
+                      className="monsterrat"
+                    >
+                      Bed Type Available
+                    </Typography>
+                  )}
+                  {space.space.isBathroomTypeAllowed && (
+                    <Typography
+                      variant="body1"
+                      sx={{ fontSize: 12 }}
+                      className="monsterrat"
+                    >
+                      Bathroom Available
+                    </Typography>
+                  )}
+                </CardContent>
+              </Box>
+            ))}
+          </Box>
+        )}
       </Box>
+
 
       <Box
         sx={{ width: "50%", display: "flex", flexDirection: "column", gap: 3 }}
