@@ -284,19 +284,19 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
               fontSize: "small",
               fontFamily: " 'Roboto', sans-serif !important ",
             },
-            "&  .MuiDataGrid-cell--textLeft ": {
-              position: "sticky",
-              right: 0,
-              paddingLeft: "60px",
-              backgroundColor: "#ebecec",
-            },
-            "& .MuiDataGrid-columnHeader--last": {
-              // backgroundColor: "lightgrey",
-              position: "sticky",
-              paddingLeft: "40px",
+            // "&  .MuiDataGrid-cell--textLeft ": {
+            //   position: "sticky",
+            //   right: 0,
+            //   paddingLeft: "60px",
+            //   backgroundColor: "#ebecec",
+            // },
+            // "& .MuiDataGrid-columnHeader--last": {
+            //   // backgroundColor: "lightgrey",
+            //   position: "sticky",
+            //   paddingLeft: "40px",
 
-              right: 0,
-            },
+            //   right: 0,
+            // },
           }}
           getRowClassName={(params) => {
             if (params.indexRelativeToCurrentPage % 2 === 0) {

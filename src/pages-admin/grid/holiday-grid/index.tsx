@@ -308,16 +308,16 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
               fontFamily: " 'Roboto', sans-serif !important ",
             },
             "&  .MuiDataGrid-cell--textLeft ": {
-              position: "sticky",
-              right: 0,
-              backgroundColor: "#ebecec",
-              paddingLeft:"50px"
+              // position: "sticky",
+              // right: 0,
+              // backgroundColor: "#ebecec",
+              // paddingLeft:"50px"
             },
             "& .MuiDataGrid-columnHeader--last": {
               // backgroundColor: "lightgrey",
-              position: "sticky",
-              right: 0,
-              paddingLeft:"50px"
+              // position: "sticky",
+              // right: 0,
+              // paddingLeft:"50px"
             },
           }}
           getRowClassName={(params) => {
