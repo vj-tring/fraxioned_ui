@@ -59,7 +59,7 @@ const PropertyAmenities: React.FC = () => {
 
   useEffect(() => {
     if (propertyAmenities.length > 0) {
-      const selected = propertyAmenities.map((item) => item.amenity.id);
+      const selected = propertyAmenities.map((item: { amenity: { id: any; }; }) => item.amenity.id);
       setSelectedAmenities(selected);
     }
   }, [propertyAmenities]);
@@ -69,10 +69,10 @@ const PropertyAmenities: React.FC = () => {
       showSnackbar('Amenities updated successfully!', 'success');
       setShowConfirmModal(false);
       dispatch(resetPropertyAmenities());
-      fetchAmenities();
       if (id) {
         dispatch(getAmenitiesById(Number(id)));
       }
+      fetchAmenities();
     }
     if (error) {
       showSnackbar(error, 'error');
@@ -81,17 +81,10 @@ const PropertyAmenities: React.FC = () => {
   }, [success, error, dispatch, id]);
 
   useEffect(() => {
-    if (expandedGroup && groupRefs.current[expandedGroup]) {
-      const groupElement = groupRefs.current[expandedGroup];
-      const scrollContainer = scrollContainerRef.current;
-      if (groupElement && scrollContainer) {
-        const groupRect = groupElement.getBoundingClientRect();
-        const containerRect = scrollContainer.getBoundingClientRect();
-        const scrollTop = groupRect.top - containerRect.top + scrollContainer.scrollTop - 20;
-        scrollContainer.scrollTo({ top: scrollTop, behavior: 'smooth' });
-      }
+    if (amenities && Object.keys(amenities).length > 0 && selectedAmenities.length > 0) {
+      sortAmenities();
     }
-  }, [expandedGroup]);
+  }, [amenities, selectedAmenities]);
 
   const showSnackbar = (message: string, severity: 'success' | 'info' | 'warning' | 'error') => {
     setSnackbar({ open: true, message, severity });
@@ -136,6 +129,17 @@ const PropertyAmenities: React.FC = () => {
     );
   };
 
+  useEffect(() => {
+    if (expandedGroup) {
+      setTimeout(() => {
+        const groupElement = groupRefs.current[expandedGroup];
+        if (groupElement) {
+          groupElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
+  }, [expandedGroup]);
+
   const handleUpdateClick = () => {
     setShowConfirmModal(true);
   };
@@ -167,6 +171,22 @@ const PropertyAmenities: React.FC = () => {
       amenity.amenityName.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, []);
+
+  const sortAmenities = () => {
+    const sortedAmenities = Object.entries(amenities).reduce((acc, [group, amenitiesList]) => {
+      const sortedList = [...amenitiesList].sort((a, b) => {
+        const aChecked = selectedAmenities.includes(a.id);
+        const bChecked = selectedAmenities.includes(b.id);
+        if (aChecked && !bChecked) return -1;
+        if (!aChecked && bChecked) return 1;
+        return a.amenityName.localeCompare(b.amenityName);
+      });
+      acc[group] = sortedList;
+      return acc;
+    }, {} as { [key: string]: Amenity[] });
+
+    setAmenities(sortedAmenities);
+  };
 
   if (loading) {
     return <div className={styles.loading}>Loading...</div>;

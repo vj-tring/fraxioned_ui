@@ -12,216 +12,224 @@ import { IconButton, Tooltip } from '@mui/material';
 import { AppDispatch } from '@/store';
 
 interface Amenity {
+  id: number;
+  amenityName: string;
+  amenityDescription?: string;
+  amenityGroup: {
     id: number;
-    amenityName: string;
-    amenityDescription?: string;
-    amenityGroup: {
-        id: number;
-        name: string;
-    };
+    name: string;
+  };
 }
 
 interface AmenityGroup {
-    id: number;
-    name: string;
+  id: number;
+  name: string;
 }
 
 interface SnackbarState {
-    open: boolean;
-    message: string;
-    severity: 'success' | 'info' | 'warning' | 'error';
+  open: boolean;
+  message: string;
+  severity: 'success' | 'info' | 'warning' | 'error';
 }
 
+
+interface ErrorResponse {
+  success: boolean;
+  message: string;
+  statusCode: number;
+}
+
+
 const AmenityManagement: React.FC = () => {
-    const dispatch = useDispatch<AppDispatch>();
-    const {
-        loading: updateLoading,
-        error: updateError,
-        success: updateSuccess,
-        deleteLoading,
-        deleteError,
-        deleteSuccess
-    } = useSelector((state: RootState) => state.amenitiesPage);
+  const dispatch = useDispatch<AppDispatch>();
+  const {
+    loading: updateLoading,
+    error: updateError,
+    success: updateSuccess,
+    deleteLoading,
+    deleteError,
+    deleteSuccess
+  } = useSelector((state: RootState) => state.amenitiesPage);
 
-    const [amenities, setAmenities] = useState<{ [key: string]: Amenity[] }>({});
-    const [groupSearchTerms, setGroupSearchTerms] = useState<{ [key: string]: string }>({});
-    const [loading, setLoading] = useState(true);
-    const [editingAmenity, setEditingAmenity] = useState<Amenity | null>(null);
-    const [isAddingNew, setIsAddingNew] = useState(false);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [showUpdateModal, setShowUpdateModal] = useState(false);
-    const [amenityToDelete, setAmenityToDelete] = useState<Amenity | null>(null);
-    const [snackbar, setSnackbar] = useState<SnackbarState>({
-        open: false,
-        message: '',
-        severity: 'info',
-    });
-    const [expandedGroups, setExpandedGroups] = useState<string[]>([]);
-    const groupRefs = useRef<{ [key: string]: React.RefObject<HTMLDivElement> }>({});
+  const [amenities, setAmenities] = useState<{ [key: string]: Amenity[] }>({});
+  const [groupSearchTerms, setGroupSearchTerms] = useState<{ [key: string]: string }>({});
+  const [loading, setLoading] = useState(true);
+  const [editingAmenity, setEditingAmenity] = useState<Amenity | null>(null);
+  const [isAddingNew, setIsAddingNew] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [amenityToDelete, setAmenityToDelete] = useState<Amenity | null>(null);
+  const [snackbar, setSnackbar] = useState<SnackbarState>({
+    open: false,
+    message: '',
+    severity: 'info',
+  });
+  const [expandedGroups, setExpandedGroups] = useState<string[]>([]);
+  const groupRefs = useRef<{ [key: string]: React.RefObject<HTMLDivElement> }>({});
 
-    useEffect(() => {
-        fetchAmenities();
-    }, []);
+  useEffect(() => {
+    fetchAmenities();
+  }, []);
 
-    useEffect(() => {
-        if (updateSuccess) {
-            showSnackbar('Amenity updated successfully', 'success');
-            setEditingAmenity(null);
-            fetchAmenities();
-            dispatch(resetAmenitiesState());
+  useEffect(() => {
+    if (updateSuccess) {
+      showSnackbar('Amenity updated successfully', 'success');
+      setEditingAmenity(null);
+      fetchAmenities();
+      dispatch(resetAmenitiesState());
+    }
+    if (updateError) {
+      showSnackbar(updateError, 'error');
+      dispatch(resetAmenitiesState());
+    }
+  }, [updateSuccess, updateError, dispatch]);
+
+  useEffect(() => {
+    if (deleteSuccess) {
+      showSnackbar('Amenity deleted successfully', 'success');
+      fetchAmenities();
+      dispatch(resetAmenitiesState());
+    }
+    if (deleteError) {
+      showSnackbar(deleteError, 'error');
+      dispatch(resetAmenitiesState());
+    }
+  }, [deleteSuccess, deleteError, dispatch]);
+
+  const fetchAmenities = async () => {
+    try {
+      const response = await amenitiesapi();
+      const groupedAmenities = groupAmenitiesByType(response.data.data);
+      setAmenities(groupedAmenities);
+      setLoading(false);
+
+      // Initialize refs for each group
+      Object.keys(groupedAmenities).forEach(group => {
+        if (!groupRefs.current[group]) {
+          groupRefs.current[group] = React.createRef();
         }
-        if (updateError) {
-            showSnackbar(updateError, 'error');
-            dispatch(resetAmenitiesState());
-        }
-    }, [updateSuccess, updateError, dispatch]);
+      });
+    } catch (err) {
+      showSnackbar('Failed to fetch amenities', 'error');
+      setLoading(false);
+    }
+  };
 
-    useEffect(() => {
-        if (deleteSuccess) {
+  const handleGroupSearch = (group: string, term: string) => {
+    setGroupSearchTerms(prev => ({ ...prev, [group]: term }));
+  };
+
+  const groupAmenitiesByType = (data: Amenity[]) => {
+    return data.reduce((acc, amenity) => {
+      const groupName = amenity.amenityGroup.name;
+      if (!acc[groupName]) {
+        acc[groupName] = [];
+      }
+      acc[groupName].push(amenity);
+      return acc;
+    }, {} as { [key: string]: Amenity[] });
+  };
+
+  const handleEdit = (amenity: Amenity) => {
+    setEditingAmenity(amenity);
+  };
+
+  const handleSave = async () => {
+    if (editingAmenity) {
+      const updateData = {
+        updatedBy: { id: 1 },
+        amenityName: editingAmenity.amenityName,
+        amenityDescription: editingAmenity.amenityDescription || '',
+        amenityGroup: { id: editingAmenity.amenityGroup.id }
+      };
+
+      await dispatch(updateAmenity({
+        id: editingAmenity.id,
+        updateData
+      }));
+      setEditingAmenity(null);
+    }
+  };
+
+  const handleUpdateCancel = () => {
+    setShowUpdateModal(false);
+  };
+
+  const handleCancel = () => {
+    setEditingAmenity(null);
+  };
+
+  const handleAddNew = () => {
+    setIsAddingNew(true);
+  };
+
+  const handleCloseNewAmenityForm = () => {
+    setIsAddingNew(false);
+  };
+
+  const handleAmenityAdded = () => {
+    fetchAmenities();
+    showSnackbar('New amenity added successfully', 'success');
+  };
+
+  const handleDeleteClick = (amenity: Amenity) => {
+    setAmenityToDelete(amenity);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (amenityToDelete) {
+      try {
+        const result = await dispatch(deleteAmenityAsync(amenityToDelete.id));
+
+        if (result.payload && typeof result.payload === 'object' && 'success' in result.payload) {
+          const response = result.payload as ErrorResponse;
+
+          if (!response.success) {
+            showSnackbar(response.message, 'error');
+          } else {
             showSnackbar('Amenity deleted successfully', 'success');
             fetchAmenities();
-            dispatch(resetAmenitiesState());
+          }
+        } else if (deleteAmenityAsync.fulfilled.match(result)) {
+          showSnackbar('Amenity deleted successfully', 'success');
+          fetchAmenities();
+        } else {
+          showSnackbar('Failed to delete amenity', 'error');
         }
-        if (deleteError) {
-            showSnackbar(deleteError, 'error');
-            dispatch(resetAmenitiesState());
-        }
-    }, [deleteSuccess, deleteError, dispatch]);
-
-    const fetchAmenities = async () => {
-        try {
-            const response = await amenitiesapi();
-            const groupedAmenities = groupAmenitiesByType(response.data.data);
-            setAmenities(groupedAmenities);
-            setLoading(false);
-
-            // Initialize refs for each group
-            Object.keys(groupedAmenities).forEach(group => {
-                if (!groupRefs.current[group]) {
-                    groupRefs.current[group] = React.createRef();
-                }
-            });
-        } catch (err) {
-            showSnackbar('Failed to fetch amenities', 'error');
-            setLoading(false);
-        }
-    };
-
-    const handleGroupSearch = (group: string, term: string) => {
-        setGroupSearchTerms(prev => ({ ...prev, [group]: term }));
-    };
-
-    const groupAmenitiesByType = (data: Amenity[]) => {
-        return data.reduce((acc, amenity) => {
-            const groupName = amenity.amenityGroup.name;
-            if (!acc[groupName]) {
-                acc[groupName] = [];
-            }
-            acc[groupName].push(amenity);
-            return acc;
-        }, {} as { [key: string]: Amenity[] });
-    };
-
-    const handleEdit = (amenity: Amenity) => {
-        setEditingAmenity(amenity);
-    };
-
-    const handleSave = async () => {
-        if (editingAmenity) {
-            const updateData = {
-                updatedBy: { id: 1 },
-                amenityName: editingAmenity.amenityName,
-                amenityDescription: editingAmenity.amenityDescription || '',
-                amenityGroup: { id: editingAmenity.amenityGroup.id }
-            };
-
-            await dispatch(updateAmenity({
-                id: editingAmenity.id,
-                updateData
-            }));
-            setEditingAmenity(null);
-        }
-    };
-
-    const handleUpdateConfirm = async () => {
-        if (editingAmenity) {
-            const updateData = {
-                updatedBy: { id: 1 },
-                amenityName: editingAmenity.amenityName,
-                amenityDescription: editingAmenity.amenityDescription || '',
-                amenityGroup: { id: editingAmenity.amenityGroup.id }
-            };
-
-            await dispatch(updateAmenity({
-                id: editingAmenity.id,
-                updateData
-            }));
-            setShowUpdateModal(false);
-            setEditingAmenity(null);
-        }
-    };
-
-    const handleUpdateCancel = () => {
-        setShowUpdateModal(false);
-    };
-
-    const handleCancel = () => {
-        setEditingAmenity(null);
-    };
-
-    const handleAddNew = () => {
-        setIsAddingNew(true);
-    };
-
-    const handleCloseNewAmenityForm = () => {
-        setIsAddingNew(false);
-    };
-
-    const handleAmenityAdded = () => {
-        fetchAmenities();
-        showSnackbar('New amenity added successfully', 'success');
-    };
-
-    const handleDeleteClick = (amenity: Amenity) => {
-        setAmenityToDelete(amenity);
-        setShowDeleteModal(true);
-    };
-
-    const handleDeleteConfirm = async () => {
-        if (amenityToDelete) {
-            try {
-                dispatch(deleteAmenityAsync(amenityToDelete.id));
-                setShowDeleteModal(false);
-                setAmenityToDelete(null);
-            } catch (err: any) {
-                showSnackbar('Failed to delete amenity', 'error');
-            }
-        }
-    };
-
-    const handleDeleteCancel = () => {
+      } catch (err: any) {
+        showSnackbar('An unexpected error occurred', 'error');
+      } finally {
         setShowDeleteModal(false);
         setAmenityToDelete(null);
-    };
+      }
+    }
+  };
 
-    const showSnackbar = (message: string, severity: 'success' | 'info' | 'warning' | 'error') => {
-        setSnackbar({ open: true, message, severity });
-        setTimeout(() => {
-            setSnackbar(prev => ({ ...prev, open: false }));
-        }, 3000);
-    };
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);
+    setAmenityToDelete(null);
+  };
 
-    const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setSnackbar({ ...snackbar, open: false });
-    };
 
-    const toggleGroupExpansion = (group: string) => {
-        setExpandedGroups(prev =>
-            prev.includes(group) ? prev.filter(g => g !== group) : [...prev, group]
-        );
+  const showSnackbar = (message: string, severity: 'success' | 'info' | 'warning' | 'error') => {
+    setSnackbar({ open: true, message, severity });
+    setTimeout(() => {
+      setSnackbar(prev => ({ ...prev, open: false }));
+    }, 3000);
+  };
+
+  const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbar({ ...snackbar, open: false });
+  };
+
+  const toggleGroupExpansion = (group: string) => {
+    setExpandedGroups(prev =>
+      prev.includes(group) ? prev.filter(g => g !== group) : [...prev, group]
+    );
 
     setTimeout(() => {
       const groupRef = groupRefs.current[group];
@@ -403,22 +411,24 @@ const AmenityManagement: React.FC = () => {
 
       <ConfirmationModal
         show={showDeleteModal}
-        onHide={handleCancel}
+        onHide={handleDeleteCancel}
         onConfirm={handleDeleteConfirm}
         title="Delete Amenity"
         message={`Are you sure you want to delete the amenity "${amenityToDelete?.amenityName}"?`}
         confirmLabel="Delete"
-        cancelLabel="Cancel" />
+        cancelLabel="Cancel"
+      />
 
-            <CustomizedSnackbars
-                open={snackbar.open}
-                handleClose={handleSnackbarClose}
-                message={snackbar.message}
-                severity={snackbar.severity}
-            />
-        </div>
-    );
+      <CustomizedSnackbars
+        open={snackbar.open}
+        handleClose={handleSnackbarClose}
+        message={snackbar.message}
+        severity={snackbar.severity}
+      />
+    </div>
+  );
 };
+
 
 // const filteredAmenities = Object.entries(amenities).reduce(
 //   (acc, [group, amenitiesList]) => {
