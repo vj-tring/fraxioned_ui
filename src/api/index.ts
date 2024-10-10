@@ -338,3 +338,13 @@ export const getAllSpacePropertiesById = (propertyId: number) =>
 // Delete Space Property API
 export const deleteSpaceProperty = (id: number) =>
     axiosInstance.delete(`/property-spaces/property-space/${id}`);
+
+// Property Space CRUD
+
+// Create Property Space Image
+
+export const propertySpaceImageuploadapi = (formData: FormData) => {
+    return axiosInstance.post(`/property-space-images`, formData, {
+    });
+};
+

@@ -11,7 +11,7 @@ import { BACKEND_URL } from "@/constants";
 // Create an Axios instance
 const axiosInstance = axios.create({
   baseURL: BACKEND_URL,
-  timeout: 30000,
+  // timeout: 50000,
 });
 
 interface AxiosInterceptorProps {
@@ -47,7 +47,7 @@ const AxiosInterceptor: React.FC<AxiosInterceptorProps> = ({ children }) => {
           }
 
           const isImageUpload =
-            (config.url?.includes('/propertyImages') || config.url?.includes('/spaces/space') || config.url?.includes('/properties/property')) &&
+            (config.url?.includes('/propertyImages') || config.url?.includes('/spaces/space') || config.url?.includes('/properties/property')) || config.url?.includes('/property-space-images') &&
             (config.method === 'post' || config.method === 'patch');
 
           if (isImageUpload) {
