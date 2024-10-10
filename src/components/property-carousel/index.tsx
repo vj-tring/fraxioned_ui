@@ -21,7 +21,6 @@ import { propertyImageapi } from "@/api";
 import AddHomeOutlinedIcon from "@mui/icons-material/AddHomeOutlined";
 import { Card } from "../../store/slice/auth/property-slice";
 
-
 export default function BasicSelect() {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
@@ -70,8 +69,7 @@ export default function BasicSelect() {
     if (selectedCardIndex != null) {
       if (cards.length > 0) {
         setSelectedCard(cards[selectedCardIndex]);
-        setYears(Object.keys(cards[selectedCardIndex].details).map(Number))
-
+        setYears(Object?.keys(cards[selectedCardIndex]?.details ?? {}).map(Number));
         setSelectedCardIndex(selectedCardIndex);
         const card = cards[selectedCardIndex];
         dispatch(selectProperty(card.id));
@@ -109,11 +107,15 @@ export default function BasicSelect() {
   };
 
   const handlePrevious = () => {
-    setSelectedCardIndex((prevIndex) => prevIndex !== null ? Math.max(prevIndex - 1, 0) : 0);
+    setSelectedCardIndex((prevIndex) =>
+      prevIndex !== null ? Math.max(prevIndex - 1, 0) : 0
+    );
   };
-  
+
   const handleNext = () => {
-    setSelectedCardIndex((prevIndex) => prevIndex !== null ? Math.min(prevIndex + 1, cards.length - 1) : 0);
+    setSelectedCardIndex((prevIndex) =>
+      prevIndex !== null ? Math.min(prevIndex + 1, cards.length - 1) : 0
+    );
   };
 
   const handleClose = () => {
@@ -162,14 +164,14 @@ export default function BasicSelect() {
   const cardNameWeight =
     cards.length === 1 ? "600" : cards.length === 2 ? "600" : "600";
 
-    const formatCardName = (name: string | undefined) => {
-      if (name) {
-          return name.replace(/\s+\(.*\)/, "");
-      } else {
-          return "";
-      }
+  const formatCardName = (name: string | undefined) => {
+    if (name) {
+      return name.replace(/\s+\(.*\)/, "");
+    } else {
+      return "";
+    }
   };
-  
+
   return (
     <Box sx={{ borderRadius: 32, border: "none" }}>
       <Button
@@ -194,7 +196,7 @@ export default function BasicSelect() {
       >
         <AddHomeOutlinedIcon
           sx={{
-            color: "grey",  
+            color: "grey",
           }}
         />
         <div className="d-flex align-items-start flex-column card-item">
@@ -219,8 +221,7 @@ export default function BasicSelect() {
               overflowY: "auto",
               //maxWidth: "70vh",
             },
-          }
-          
+          },
         }}
         sx={{ borderRadius: 32 }}
       >
@@ -390,7 +391,7 @@ export default function BasicSelect() {
                     <div className="d-flex flex-column night-count">
                       <ul>
                         <li className="Off-Values">
-                          {selectedCard.details[selectedYear]?.offSeason ||
+                          {selectedCard?.details?.[selectedYear]?.offSeason ||
                             "N/A"}
                         </li>
                         <li style={{ fontSize: BoxList, fontWeight: "650" }}>
@@ -401,7 +402,7 @@ export default function BasicSelect() {
                     <div className="d-flex flex-column night-count">
                       <ul>
                         <li className="Off-Values">
-                          {selectedCard.details[selectedYear]?.peakSeason ||
+                          {selectedCard?.details?.[selectedYear]?.peakSeason ||
                             "N/A"}
                         </li>
                         <li style={{ fontSize: BoxList, fontWeight: "650" }}>
@@ -412,7 +413,7 @@ export default function BasicSelect() {
                     <div className="d-flex flex-column night-count">
                       <ul>
                         <li className="Off-Values">
-                          {selectedCard.details[selectedYear]?.peakHoliday ||
+                          {selectedCard?.details?.[selectedYear]?.peakHoliday ||
                             "N/A"}
                         </li>
                         <li style={{ fontSize: BoxList, fontWeight: "650" }}>
@@ -423,7 +424,7 @@ export default function BasicSelect() {
                     <div className="d-flex flex-column night-count">
                       <ul>
                         <li className="Off-Values">
-                          {selectedCard.details[selectedYear]
+                          {selectedCard?.details?.[selectedYear]
                             ?.offSeasonHoliday || "N/A"}
                         </li>
                         <li style={{ fontSize: BoxList, fontWeight: "650" }}>
@@ -434,7 +435,7 @@ export default function BasicSelect() {
                     <div className="d-flex flex-column night-count">
                       <ul>
                         <li className="Off-Values">
-                          {selectedCard.details[selectedYear]?.lastMinute ||
+                          {selectedCard?.details?.[selectedYear]?.lastMinute ||
                             "N/A"}{" "}
                         </li>
                         <li style={{ fontSize: BoxList, fontWeight: "650" }}>
