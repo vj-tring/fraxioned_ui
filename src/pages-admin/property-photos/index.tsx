@@ -150,10 +150,12 @@ const PropertyPhotos: React.FC = () => {
                     alt={image.imageName}
                     className={styles.propertyImage}
                     onLoad={handleImageLoad}
-                    style={{
-                      // display: loading ? "none" : "block",
-                      // objectFit: "cover",
-                    }}
+                    style={
+                      {
+                        // display: loading ? "none" : "block",
+                        // objectFit: "cover",
+                      }
+                    }
                   />
                   <div className={styles.editOverlay}>
                     <button

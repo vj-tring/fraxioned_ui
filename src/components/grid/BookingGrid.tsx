@@ -185,7 +185,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
   return (
     <div
       style={{
-        height: 300,
+        height: 350,
         width: "100%",
         border: "none",
         marginTop: "2rem",
@@ -202,6 +202,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
         disableColumnSelector
         disableColumnMenu
         disableColumnFilter
+        // hideFooterPagination
         slots={{ toolbar: GridToolbar }}
         slotProps={{
           toolbar: {
@@ -218,6 +219,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
           }
         }}
         sx={{
+          border: "none",
           "& .MuiDataGrid-columnHeader": {
             backgroundColor: "grey",
             color: "white",

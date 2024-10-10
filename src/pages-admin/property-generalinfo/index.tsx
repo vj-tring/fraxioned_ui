@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getPropertyById, getProperrtDetailsbyId, updatePropertyImage } from "@/api"; // Added updatePropertyImage
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchPropertyById, fetchPropertyDetailsById } from "@/store/slice/auth/propertiesSlice";
-import { AppDispatch } from '@/store';
+import {
+  getPropertyById,
+  getProperrtDetailsbyId,
+  updatePropertyImage,
+} from "@/api"; // Added updatePropertyImage
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchPropertyById,
+  fetchPropertyDetailsById,
+} from "@/store/slice/auth/propertiesSlice";
+import { AppDispatch } from "@/store";
 import { RootState } from "@/store/reducers";
 import EditButton from "@/components/edit";
 import styles from "./property-generalinfo.module.css";
@@ -24,7 +31,6 @@ import {
 import { AsyncThunkAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { UnknownAction } from "redux";
 
-
 const PropertyGeneralInfo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
@@ -33,8 +39,12 @@ const PropertyGeneralInfo: React.FC = () => {
   const [dialogOpen, setDialogOpen] = useState(false); // State to manage the dialog visibility
   const navigate = useNavigate();
 
-  const propertyData = useSelector((state: RootState) => state.property.selectedProperty);
-  const propertyDetails = useSelector((state: RootState) => state.property.selectedPropertyDetails);
+  const propertyData = useSelector(
+    (state: RootState) => state.property.selectedProperty
+  );
+  const propertyDetails = useSelector(
+    (state: RootState) => state.property.selectedPropertyDetails
+  );
   const status = useSelector((state: RootState) => state.property.status);
   const error = useSelector((state: RootState) => state.property.error);
 
@@ -81,8 +91,7 @@ const PropertyGeneralInfo: React.FC = () => {
     }
   };
 
-
-  if (status === 'loading') return <Loader />;
+  if (status === "loading") return <Loader />;
   if (error) return <div className={styles.error}>{error}</div>;
   if (!propertyData || !propertyDetails)
     return <div className={styles.noData}>No property data found.</div>;
@@ -115,7 +124,9 @@ const PropertyGeneralInfo: React.FC = () => {
           </div>
           <div className={styles.infoBlock}>
             <div className={styles.infoColumns}>
-              <h3 className={styles.propertyName}>{propertyData.propertyName}</h3>
+              <h3 className={styles.propertyName}>
+                {propertyData.propertyName}
+              </h3>
               <div className={styles.addressColumn}>
                 <div className={styles.infoRow}>
                   <span className={styles.infoLabel}>
@@ -190,9 +201,16 @@ const PropertyGeneralInfo: React.FC = () => {
       </div>
 
       {/* Image Upload Dialog */}
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} fullWidth maxWidth='sm'>
+      <Dialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        fullWidth
+        maxWidth="sm"
+      >
         <DialogTitle>Upload Image</DialogTitle>
-        <DialogContent sx={{ gap: 4, display: 'flex', flexDirection: 'column' }}>
+        <DialogContent
+          sx={{ gap: 4, display: "flex", flexDirection: "column" }}
+        >
           <input type="file" accept="image/*" onChange={handleFileChange} />
 
           <div className={styles.imagePreviewContainer}>
@@ -228,7 +246,6 @@ const PropertyGeneralInfo: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
-
     </div>
   );
 };

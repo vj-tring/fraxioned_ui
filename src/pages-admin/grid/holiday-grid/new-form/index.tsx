@@ -16,19 +16,15 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import CloseIcon from "@mui/icons-material/Close";
+import EventIcon from "@mui/icons-material/Event";
 import styles from "./new-form.module.css";
-import { getProperties } from "@/api";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "@/components/loader";
 import { RootState } from "@/store/reducers";
-import EventIcon from "@mui/icons-material/Event";
-import { addHoliday } from "@/store/slice/auth/holidaySlice";
 import { AppDispatch } from "@/store";
+import { addHoliday } from "@/store/slice/auth/holidaySlice";
+import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
 
-interface Property {
-  id: number;
-  propertyName: string;
-}
 
 interface NewFormProps {
   onClose: () => void;
@@ -40,41 +36,29 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
   const [year, setYear] = useState<number | "">("");
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-  const [properties, setProperties] = useState<Property[]>([]);
   const [selectedProperties, setSelectedProperties] = useState<number[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [allPropertiesSelected, setAllPropertiesSelected] = useState(false);
   const [nameError, setNameError] = useState<string | null>(null);
   const [yearError, setYearError] = useState<string | null>(null);
   const [startDateError, setStartDateError] = useState<string | null>(null);
   const [endDateError, setEndDateError] = useState<string | null>(null);
-  const [propertiesError, setPropertiesError] = useState<string | null>(null);
+  const [propertiesErrors, setPropertiesError] = useState<string | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
   const userId = useSelector((state: RootState) => state.auth.user?.id);
+  const { properties, status: propertiesStatus, error: propertiesError } = useSelector((state: RootState) => state.property);
   const { loading: holidayLoading, error: holidayError } = useSelector((state: RootState) => state.holiday);
 
   useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        const response = await getProperties();
-        setProperties(response.data);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching properties:", err);
-        setLoading(false);
-        setError("Failed to fetch properties. Please try again.");
-      }
-    };
-
-    fetchProperties();
-  }, []);
+    if (propertiesStatus === 'idle') {
+      dispatch(fetchProperties());
+    }
+  }, [propertiesStatus, dispatch]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userId) {
-      setError("User ID not found. Please log in again.");
+      setPropertiesError("User ID not found. Please log in again.");
       return;
     }
 
@@ -139,11 +123,11 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
         onHolidayAdded();
         onClose();
       } else if (addHoliday.rejected.match(resultAction)) {
-        setError(resultAction.payload as string || "Failed to add holiday. Please try again.");
+        setPropertiesError(resultAction.payload as string || "Failed to add holiday. Please try again.");
       }
     } catch (err) {
       console.error("Error adding holiday:", err);
-      setError("Failed to add holiday. Please try again.");
+      setPropertiesError("Failed to add holiday. Please try again.");
     }
   };
 
@@ -175,12 +159,12 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
     setAllPropertiesSelected(selectedProperties.length === properties.length);
   };
 
-  if (loading) {
+  if (propertiesStatus === 'loading') {
     return <Loader />;
   }
 
-  if (error) {
-    return <Typography color="error">{error}</Typography>;
+  if (propertiesStatus === 'failed') {
+    return <Typography color="error">{propertiesError}</Typography>;
   }
 
   return (
