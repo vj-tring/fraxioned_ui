@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { getPropertyById, getProperrtDetailsbyId, updatePropertyImage } from "@/api"; // Added updatePropertyImage
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPropertyById, fetchPropertyDetailsById } from "@/store/slice/auth/propertiesSlice";
 import { AppDispatch } from '@/store';
@@ -11,12 +12,27 @@ import imagetwo from "../../assests/crown-jewel.jpg";
 import imagethree from "../../assests/lake-escape.jpg";
 import Loader from "@/components/loader";
 import pinImage from "../../assets/images/pin.jpg";
+import { Edit, Trash2 } from "lucide-react";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField,
+} from "@mui/material";
+import { AsyncThunkAction, ThunkDispatch } from "@reduxjs/toolkit";
+import { UnknownAction } from "redux";
+
 
 const PropertyGeneralInfo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
+  const userId = useSelector((state: any) => state.auth.user?.id);
+  const [imageFile, setImageFile] = useState<File | null>(null); // State to hold the uploaded image
+  const [dialogOpen, setDialogOpen] = useState(false); // State to manage the dialog visibility
   const navigate = useNavigate();
-  
+
   const propertyData = useSelector((state: RootState) => state.property.selectedProperty);
   const propertyDetails = useSelector((state: RootState) => state.property.selectedPropertyDetails);
   const status = useSelector((state: RootState) => state.property.status);
@@ -36,6 +52,36 @@ const PropertyGeneralInfo: React.FC = () => {
     navigate(`/admin/property/${id}/edit`);
   };
 
+  const handleEditImage = () => {
+    setDialogOpen(true); // Open the upload dialog
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      setImageFile(event.target.files[0]); // Set the uploaded file
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!imageFile) return;
+
+    const formData = new FormData();
+    const updatedBy = { id: userId };
+    formData.append("updatedBy", JSON.stringify(updatedBy));
+    formData.append("coverImageFile", imageFile);
+
+    try {
+      await updatePropertyImage(Number(id), formData); // Call the PATCH API
+      setDialogOpen(false); // Close the dialog after upload
+      // Optionally, refetch property data to reflect the updated image
+      // await fetchData();
+    } catch (err) {
+      console.error("Error uploading image:", err);
+      // setError("Failed to upload image. Please try again.");
+    }
+  };
+
+
   if (status === 'loading') return <Loader />;
   if (error) return <div className={styles.error}>{error}</div>;
   if (!propertyData || !propertyDetails)
@@ -51,7 +97,7 @@ const PropertyGeneralInfo: React.FC = () => {
         <div className={styles.propertyCard}>
           <div className={styles.imageContainer}>
             <img
-              src={randomImage}
+              src={propertyData.coverImageUrl || randomImage}
               alt={propertyData.propertyName}
               className={styles.propertyImage}
             />
@@ -60,6 +106,11 @@ const PropertyGeneralInfo: React.FC = () => {
               <span>
                 {propertyData.isExclusive ? "Exclusive" : "Collective"}
               </span>
+            </div>
+            <div className={styles.editOverlay}>
+              <button className={styles.iconButton} onClick={handleEditImage}>
+                <Edit size={20} />
+              </button>
             </div>
           </div>
           <div className={styles.infoBlock}>
@@ -137,6 +188,47 @@ const PropertyGeneralInfo: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Image Upload Dialog */}
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} fullWidth maxWidth='sm'>
+        <DialogTitle>Upload Image</DialogTitle>
+        <DialogContent sx={{ gap: 4, display: 'flex', flexDirection: 'column' }}>
+          <input type="file" accept="image/*" onChange={handleFileChange} />
+
+          <div className={styles.imagePreviewContainer}>
+            {imageFile ? (
+              <>
+                <div className={styles.imagePreview}>
+                  <img
+                    src={URL.createObjectURL(imageFile)} // Create a URL for the selected file
+                    alt="Preview"
+                    className={styles.previewImage}
+                  />
+                  <button
+                    className={styles.cancelPreviewButton}
+                    onClick={() => setImageFile(null)} // Clear the image file
+                  >
+                    Cancel Preview
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className={styles.defaultPreview}>
+                <p>Preview your image here</p>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDialogOpen(false)} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleUpload} color="primary">
+            Upload
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </div>
   );
 };

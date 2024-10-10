@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getProperties, getPropertyById, getProperrtDetailsbyId } from '@/api';
 
-export interface Property {
+
+interface Property {
     id: number;
     ownerRezPropId: number;
     propertyName: string;
@@ -18,7 +19,11 @@ export interface Property {
     longitude: number;
     isActive: boolean;
     displayOrder: number;
-}
+    createdAt: string;
+    updatedAt: string;
+    mailBannerUrl: string;
+    coverImageUrl: string;
+  }
 
 export interface PropertyDetails {
     id: number;

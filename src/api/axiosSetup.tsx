@@ -11,7 +11,7 @@ import { BACKEND_URL } from "@/constants";
 // Create an Axios instance
 const axiosInstance = axios.create({
   baseURL: BACKEND_URL,
-  timeout: 10000,
+  timeout: 30000,
 });
 
 interface AxiosInterceptorProps {
@@ -23,7 +23,7 @@ const AxiosInterceptor: React.FC<AxiosInterceptorProps> = ({ children }) => {
   useLayoutEffect(() => {
     let requestInterceptor: number;
     let responseInterceptor: number;
-    
+
     const addInterceptors = () => {
       requestInterceptor = axiosInstance.interceptors.request.use(
         (config) => {
@@ -37,7 +37,7 @@ const AxiosInterceptor: React.FC<AxiosInterceptorProps> = ({ children }) => {
 
           // If the access token exists, set it in the Authorization header
           if (userId && token) {
-            
+
             config.headers["user-id"] = userId;
             config.headers["access-token"] = token;
           }
@@ -47,8 +47,8 @@ const AxiosInterceptor: React.FC<AxiosInterceptorProps> = ({ children }) => {
           }
 
           const isImageUpload =
-            config.url?.includes("/property-images") &&
-            (config.method === "post" || config.method === "patch");
+            (config.url?.includes('/propertyImages') || config.url?.includes('/spaces/space') || config.url?.includes('/properties/property')) &&
+            (config.method === 'post' || config.method === 'patch');
 
           if (isImageUpload) {
             config.headers["Content-Type"] = "multipart/form-data";
