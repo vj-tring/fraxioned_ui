@@ -505,17 +505,17 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
               fontFamily: " 'Roboto', sans-serif !important ",
             },
             "&  .MuiDataGrid-cell--textLeft ": {
-              position: "sticky",
-              right: 0,
-              backgroundColor: "#ebecec",
-              paddingLeft:"30px"
+              // position: "sticky",
+              // right: 0,
+              // backgroundColor: "#ebecec",
+              // paddingLeft:"30px"
 
             },
             "& .MuiDataGrid-columnHeader--last":{
               // backgroundColor: "lightgrey",
-              position: "sticky",
-              right: 0,
-              paddingLeft:"30px"
+              // position: "sticky",
+              // right: 0,
+              // paddingLeft:"30px"
             }
           }}
           initialState={{

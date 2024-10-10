@@ -232,18 +232,18 @@ const BookingGrid: React.FC<BookingGridProps> = ({
             fontSize: "small",
             fontFamily: " 'Roboto', sans-serif !important ",
           },
-          "&  .MuiDataGrid-cell--textLeft ": {
-            position: "sticky",
-            right: 0,
-            backgroundColor: "#ebecec",
-            paddingLeft:'30px'
-          },
-          "& .MuiDataGrid-columnHeader--last": {
-            // backgroundColor: "lightgrey",
-            position: "sticky",
-            right: 0,
-            paddingLeft:'30px'
-          },
+          // "&  .MuiDataGrid-cell--textLeft ": {
+          //   position: "sticky",
+          //   right: 0,
+          //   backgroundColor: "#ebecec",
+          //   paddingLeft:'30px'
+          // },
+          // "& .MuiDataGrid-columnHeader--last": {
+          //   // backgroundColor: "lightgrey",
+          //   position: "sticky",
+          //   right: 0,
+          //   paddingLeft:'30px'
+          // },
         }}
       />
       {showCancelPopup && (
