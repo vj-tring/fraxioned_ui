@@ -53,7 +53,7 @@ function App() {
               <Route path="/bookingSummary" element={<BookingSummary />} />
               <Route
                 path="/resetPassword"
-                element={<ResetPassword onClose={() => {}} />}
+                element={<ResetPassword onClose={() => { }} />}
               />
               <Route
                 path="/*"

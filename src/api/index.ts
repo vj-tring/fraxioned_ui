@@ -139,7 +139,7 @@ export const addPropertyApi = (propertyData: {
 }) => axiosInstance.post('/properties/property', propertyData);
 
 export const updatePropertyImage = (id: number, formData: FormData) =>
-    axiosInstance.patch(`/v1/properties/property/${id}`, formData);
+    axiosInstance.patch(`/properties/property/${id}`, formData);
 
 export const deletePropertyApi = (id: number) =>
     axiosInstance.delete(`/properties/property/${id}`);
@@ -183,7 +183,7 @@ export const getpropertyamenityByid = () =>
     axiosInstance.get(`/property-amenities`);
 
 export const getAmenitiesById = (id: number) =>
-    axiosInstance.get(`/property-amenities/property/${id}`);
+    axiosInstance.get(`/property-space-amenities/property-space-amenity/${id}`);
 
 export const getuserbyproperty = (id: number) =>
     axiosInstance.get(`/properties/property/${id}/details`);

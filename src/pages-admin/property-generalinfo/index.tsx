@@ -1,6 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getPropertyById, getProperrtDetailsbyId, updatePropertyImage } from "@/api"; // Added updatePropertyImage
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPropertyById, fetchPropertyDetailsById } from "@/store/slice/auth/propertiesSlice";
+import { AppDispatch } from '@/store';
+import { RootState } from "@/store/reducers";
 import EditButton from "@/components/edit";
 import styles from "./property-generalinfo.module.css";
 import imageone from "../../assests/bear-lake-bluffs.jpg";
@@ -9,7 +13,6 @@ import imagethree from "../../assests/lake-escape.jpg";
 import Loader from "@/components/loader";
 import pinImage from "../../assets/images/pin.jpg";
 import { Edit, Trash2 } from "lucide-react";
-import { useSelector } from "react-redux";
 import {
   Dialog,
   DialogTitle,
@@ -18,75 +21,32 @@ import {
   Button,
   TextField,
 } from "@mui/material";
+import { AsyncThunkAction, ThunkDispatch } from "@reduxjs/toolkit";
+import { UnknownAction } from "redux";
 
-interface PropertyData {
-  id: number;
-  ownerRezPropId: number;
-  propertyName: string;
-  address: string;
-  city: string;
-  state: string;
-  country: string;
-  zipcode: number;
-  houseDescription: string;
-  isExclusive: boolean;
-  propertyShare: number;
-  propertyRemainingShare: number;
-  latitude: number;
-  longitude: number;
-  isActive: boolean;
-  displayOrder: number;
-  createdAt: string;
-  updatedAt: string;
-  mailBannerUrl: string;
-  coverImageUrl: string;
-}
-
-interface PropertyDetails {
-  noOfBedrooms: number;
-  noOfBathrooms: number;
-  squareFootage: string;
-  cleaningFee: number;
-}
 
 const PropertyGeneralInfo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const dispatch = useDispatch<AppDispatch>();
   const userId = useSelector((state: any) => state.auth.user?.id);
-  const [propertyData, setPropertyData] = useState<PropertyData | null>(null);
-  const [propertyDetails, setPropertyDetails] = useState<PropertyDetails | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null); // State to hold the uploaded image
   const [dialogOpen, setDialogOpen] = useState(false); // State to manage the dialog visibility
   const navigate = useNavigate();
+
+  const propertyData = useSelector((state: RootState) => state.property.selectedProperty);
+  const propertyDetails = useSelector((state: RootState) => state.property.selectedPropertyDetails);
+  const status = useSelector((state: RootState) => state.property.status);
+  const error = useSelector((state: RootState) => state.property.error);
 
   const images = [imageone, imagetwo, imagethree];
   const randomImage = images[Math.floor(Math.random() * images.length)];
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [propertyResponse, detailsResponse] = await Promise.all([
-          getPropertyById(Number(id)),
-          getProperrtDetailsbyId(Number(id)),
-        ]);
-        setPropertyData(propertyResponse.data);
-        setPropertyDetails({
-          noOfBedrooms: detailsResponse.data.noOfBedrooms,
-          noOfBathrooms: detailsResponse.data.noOfBathrooms,
-          squareFootage: detailsResponse.data.squareFootage,
-          cleaningFee: detailsResponse.data.cleaningFee,
-        });
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching property data:", err);
-        setError("Failed to fetch property data. Please try again.");
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [id]);
+    if (id) {
+      dispatch(fetchPropertyById(Number(id)));
+      dispatch(fetchPropertyDetailsById(Number(id)));
+    }
+  }, [id, dispatch]);
 
   const handleEdit = () => {
     navigate(`/admin/property/${id}/edit`);
@@ -114,33 +74,15 @@ const PropertyGeneralInfo: React.FC = () => {
       await updatePropertyImage(Number(id), formData); // Call the PATCH API
       setDialogOpen(false); // Close the dialog after upload
       // Optionally, refetch property data to reflect the updated image
-      await fetchData();
+      // await fetchData();
     } catch (err) {
       console.error("Error uploading image:", err);
-      setError("Failed to upload image. Please try again.");
+      // setError("Failed to upload image. Please try again.");
     }
   };
 
-  const fetchData = async () => {
-    try {
-      const [propertyResponse, detailsResponse] = await Promise.all([
-        getPropertyById(Number(id)),
-        getProperrtDetailsbyId(Number(id)),
-      ]);
-      setPropertyData(propertyResponse.data);
-      setPropertyDetails({
-        noOfBedrooms: detailsResponse.data.noOfBedrooms,
-        noOfBathrooms: detailsResponse.data.noOfBathrooms,
-        squareFootage: detailsResponse.data.squareFootage,
-        cleaningFee: detailsResponse.data.cleaningFee,
-      });
-    } catch (err) {
-      console.error("Error fetching property data:", err);
-      setError("Failed to fetch property data. Please try again.");
-    }
-  };
 
-  if (loading) return <Loader />;
+  if (status === 'loading') return <Loader />;
   if (error) return <div className={styles.error}>{error}</div>;
   if (!propertyData || !propertyDetails)
     return <div className={styles.noData}>No property data found.</div>;
@@ -155,7 +97,7 @@ const PropertyGeneralInfo: React.FC = () => {
         <div className={styles.propertyCard}>
           <div className={styles.imageContainer}>
             <img
-              src={propertyData.coverImageUrl ||randomImage }
+              src={propertyData.coverImageUrl || randomImage}
               alt={propertyData.propertyName}
               className={styles.propertyImage}
             />
@@ -250,7 +192,7 @@ const PropertyGeneralInfo: React.FC = () => {
       {/* Image Upload Dialog */}
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} fullWidth maxWidth='sm'>
         <DialogTitle>Upload Image</DialogTitle>
-        <DialogContent sx={{gap:4,display:'flex',flexDirection:'column'}}>
+        <DialogContent sx={{ gap: 4, display: 'flex', flexDirection: 'column' }}>
           <input type="file" accept="image/*" onChange={handleFileChange} />
 
           <div className={styles.imagePreviewContainer}>

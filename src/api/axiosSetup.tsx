@@ -11,7 +11,7 @@ import { BACKEND_URL } from "@/constants";
 // Create an Axios instance
 const axiosInstance = axios.create({
   baseURL: BACKEND_URL,
-  timeout: 10000,
+  timeout: 30000,
 });
 
 interface AxiosInterceptorProps {
