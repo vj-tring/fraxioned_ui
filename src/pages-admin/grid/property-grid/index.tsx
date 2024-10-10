@@ -108,8 +108,8 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
       field: "actions",
       headerName: "Actions",
       width: 150,
-      align: "center",
-      headerAlign: "center",
+      // align: "center",
+      // headerAlign: "center",
       renderCell: (params) => (
         <>
           <IconButton
@@ -141,8 +141,9 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
 
   return (
     <div
-      className={`${styles.propertiesContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
-        }`}
+      className={`${styles.propertiesContainer} ${
+        isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
+      }`}
     >
       <div className={styles.titleContainer}>
         <h1 className={styles.title}>Properties Details</h1>
@@ -175,13 +176,27 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
             "& .MuiDataGrid-columnHeader": {
               backgroundColor: "grey",
               color: "white",
-              fontSize: 'small',
+              fontSize: "small",
               textTransform: "uppercase",
+
               fontFamily: " 'Roboto', sans-serif !important",
             },
             "& .MuiDataGrid-cell": {
               fontSize: "small",
-              fontFamily: " 'Roboto', sans-serif !important",
+              fontFamily: " 'Roboto', sans-serif !important ",
+            },
+            "&  .MuiDataGrid-cell--textLeft ": {
+              position: "sticky",
+              right: 0,
+              backgroundColor: "#ebecec",
+              paddingLeft:"50px"
+            },
+            "& .MuiDataGrid-columnHeader--last": {
+              // backgroundColor: "lightgrey",
+              position: "sticky",
+              right: 0,
+              paddingLeft:"50px"
+
             },
           }}
           getRowClassName={(params) => {
@@ -219,7 +234,8 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
         title="Confirm Delete"
         message="Are you sure you want to delete this property?"
         confirmLabel="Delete"
-        cancelLabel="Cancel" />
+        cancelLabel="Cancel"
+      />
     </div>
   );
 };

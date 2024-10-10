@@ -236,6 +236,7 @@ const EditForm: React.FC<EditFormProps> = ({
                                   marginRight: "5px",
                                   marginLeft: "6px",
                                 }}
+
                                 control={<Checkbox
                                   sx={{
                                     padding: "0px",
@@ -245,6 +246,7 @@ const EditForm: React.FC<EditFormProps> = ({
                                   )}
                                   onChange={handlePropertyChange}
                                   name={property.id.toString()} />} label={undefined}                                //   className={styles.formControlLabel}
+
                               />
 
                               <div className={styles.formControlLabel}>
