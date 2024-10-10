@@ -78,7 +78,7 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
                         <Typography variant="h4" className={styles.formTitle}>
                             Add New Property
                         </Typography>
-                        <IconButton 
+                        <IconButton
                             onClick={onClose}
                             className={styles.closeButton}
                             aria-label="close"

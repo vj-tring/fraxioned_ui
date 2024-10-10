@@ -74,7 +74,7 @@ const propertiesSlice = createSlice({
             .addCase(fetchPropertyById.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message || 'Failed to fetch property';
-            });
+            })
     },
 });
 

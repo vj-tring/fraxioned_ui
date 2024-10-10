@@ -141,9 +141,8 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
 
   return (
     <div
-      className={`${styles.propertiesContainer} ${
-        isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
-      }`}
+      className={`${styles.propertiesContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
+        }`}
     >
       <div className={styles.titleContainer}>
         <h1 className={styles.title}>Properties Details</h1>
@@ -176,14 +175,12 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
             "& .MuiDataGrid-columnHeader": {
               backgroundColor: "grey",
               color: "white",
-              fontSize: "small",
-
+              fontSize: 'small',
               textTransform: "uppercase",
               fontFamily: " 'Roboto', sans-serif !important",
             },
             "& .MuiDataGrid-cell": {
               fontSize: "small",
-
               fontFamily: " 'Roboto', sans-serif !important",
             },
           }}
@@ -222,9 +219,7 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
         title="Confirm Delete"
         message="Are you sure you want to delete this property?"
         confirmLabel="Delete"
-        cancelLabel="Cancel"
-        children={undefined}
-      />
+        cancelLabel="Cancel" />
     </div>
   );
 };

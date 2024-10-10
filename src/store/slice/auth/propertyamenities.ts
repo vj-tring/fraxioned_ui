@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import {axiosInstance} from '@/api/axiosSetup';
+import { axiosInstance } from '@/api/axiosSetup';
 
 interface AmenityType {
     id: number;
@@ -9,6 +9,9 @@ interface PropertyAmenity {
     id: number;
     property: {
         id: number;
+    };
+    propertySpace: {
+        id: null;
     };
     amenity: {
         id: number;
@@ -39,6 +42,9 @@ export interface PropertyAmenitiesState {
 interface UpdateAmenityPayload {
     property: {
         id: number;
+    };
+    propertySpace: {
+        id: null;
     };
     amenities: AmenityType[];
     updatedBy: {
