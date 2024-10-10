@@ -161,7 +161,7 @@ export const getpropertyamenityByid = () =>
     axiosInstance.get(`/property-amenities`);
 
 export const getAmenitiesById = (id: number) =>
-    axiosInstance.get(`/property-amenities/property/${id}`);
+    axiosInstance.get(`/property-space-amenities/property-space-amenity/${id}`);
 
 export const getuserbyproperty = (id: number) =>
     axiosInstance.get(`/properties/property/${id}/details`);

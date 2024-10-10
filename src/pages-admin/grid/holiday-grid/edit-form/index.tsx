@@ -16,16 +16,14 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import styles from "./edit-form.module.css";
-import {
-  getProperties,
-  updateHolidaysApi,
-  fetchpropertyHolidaysApi,
-} from "@/api";
+import { updateHolidaysApi, fetchpropertyHolidaysApi } from "@/api";
 import CloseIcon from "@mui/icons-material/Close";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Loader from "@/components/loader";
 import { RootState } from "@/store/reducers";
 import EventIcon from "@mui/icons-material/Event";
+import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
+import { AppDispatch } from "@/store";
 
 interface Property {
   id: number;
@@ -57,21 +55,21 @@ const EditForm: React.FC<EditFormProps> = ({
   const [endDate, setEndDate] = useState<Date | null>(
     new Date(holidayData.endDate)
   );
-  const [properties, setProperties] = useState<Property[]>([]);
   const [selectedProperties, setSelectedProperties] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const dispatch = useDispatch<AppDispatch>();
   const userId = useSelector((state: RootState) => state.auth.user?.id);
+  const properties = useSelector((state: RootState) => state.property.properties);
+  const propertyStatus = useSelector((state: RootState) => state.property.status);
+  const propertyError = useSelector((state: RootState) => state.property.error);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [propertiesResponse, holidayResponse] = await Promise.all([
-          getProperties(),
-          fetchpropertyHolidaysApi(holidayData.id),
-        ]);
-        setProperties(propertiesResponse.data);
+        dispatch(fetchProperties());
+        const holidayResponse = await fetchpropertyHolidaysApi(holidayData.id);
 
         const holidayProperties =
           holidayResponse.data.data.propertySeasonHolidays.map(
@@ -88,7 +86,13 @@ const EditForm: React.FC<EditFormProps> = ({
     };
 
     fetchData();
-  }, [holidayData.id]);
+  }, [dispatch, holidayData.id]);
+
+  useEffect(() => {
+    if (propertyStatus === 'failed') {
+      setError(propertyError || "Failed to fetch properties. Please try again.");
+    }
+  }, [propertyStatus, propertyError]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -127,7 +131,7 @@ const EditForm: React.FC<EditFormProps> = ({
     }
   };
 
-  if (loading) {
+  if (loading || propertyStatus === 'loading') {
     return <Loader />;
   }
 
@@ -228,24 +232,19 @@ const EditForm: React.FC<EditFormProps> = ({
                           <Grid item xs={3} key={property.id}>
                             <div className="d-flex ">
                               <FormControlLabel
-                              sx={{
-                                marginRight:"5px",
-                                marginLeft:"6px",
-                              }}
-                                control={
-                                  <Checkbox
+                                sx={{
+                                  marginRight: "5px",
+                                  marginLeft: "6px",
+                                }}
+                                control={<Checkbox
                                   sx={{
-                                    padding:"0px",
-
+                                    padding: "0px",
                                   }}
-                                    checked={selectedProperties.includes(
-                                      property.id
-                                    )}
-                                    onChange={handlePropertyChange}
-                                    name={property.id.toString()}
-                                  />
-                                }
-                                //   className={styles.formControlLabel}
+                                  checked={selectedProperties.includes(
+                                    property.id
+                                  )}
+                                  onChange={handlePropertyChange}
+                                  name={property.id.toString()} />} label={undefined}                                //   className={styles.formControlLabel}
                               />
 
                               <div className={styles.formControlLabel}>
