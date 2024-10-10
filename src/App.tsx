@@ -28,7 +28,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
 }) => {
   const token = localStorage.getItem("session");
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-  console.log(token)
+  console.log(token);
   if (!token) {
     return <Navigate to="/login" />;
   }
@@ -36,7 +36,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   if (user?.roleId && allowedRoles.includes(user.roleId)) {
     return <Element />;
   }
-  return <Navigate to="/" />;
+  return <Navigate to="/login" />;
 };
 
 function App() {

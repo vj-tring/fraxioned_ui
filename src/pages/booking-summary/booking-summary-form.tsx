@@ -206,7 +206,7 @@ const BookingSummaryForm: React.FC = () => {
           <CircularProgress
             size="50px"
             sx={{
-              color: "#DC9751"
+              color: "#DC9751",
             }}
           />
         </Box>
@@ -229,9 +229,6 @@ const BookingSummaryForm: React.FC = () => {
             transform: isVisible ? "translateY(0)" : "translateY(20px)",
             transition: "opacity 0.5s ease, transform 2s ease",
           }}
-          // className={`transition-transform duration-1000 ease-out ${
-          //   isVisible ? "translate-y-0" : "translate-y-full"
-          // }`}
         >
           <Box className="relative BookedCheck">
             <CheckCircle size={100} className="text-green-500" />
@@ -284,7 +281,7 @@ const BookingSummaryForm: React.FC = () => {
                     className="PropImgHeadHeight"
                   />
                 ) : (
-                  <div className="placeholder-image">No Image</div>
+                  <Skeleton variant="rectangular" width="100%" height={400} />
                 )}
               </Col>
             </Row>
@@ -302,23 +299,21 @@ const BookingSummaryForm: React.FC = () => {
                   </Col>
                 </>
               ) : ( */}
-              {
-                imageDetails.slice(1, 4).map((image, index) => (
-                  <Col sm={4} key={index}>
-                    <img
-                      src={image.imageUrl}
-                      alt={`Image ${image.displayOrder}`}
-                      loading="lazy"
-                      style={{
-                        width: "100%",
-                        height: "150px",
-                        objectFit: "cover",
-                      }}
-                      className="PropImgHeight"
-                    />
-                  </Col>
-                ))
-              }
+              {imageDetails.slice(1, 4).map((image, index) => (
+                <Col sm={4} key={index}>
+                  <img
+                    src={image.imageUrl}
+                    alt={`Image ${image.displayOrder}`}
+                    loading="lazy"
+                    style={{
+                      width: "100%",
+                      height: "150px",
+                      objectFit: "cover",
+                    }}
+                    className="PropImgHeight"
+                  />
+                </Col>
+              ))}
               {/* )} */}
             </Row>
           </div>
@@ -337,54 +332,54 @@ const BookingSummaryForm: React.FC = () => {
                   <Skeleton width="50%" height={16} sx={{ mt: 1 }} />
                 </>
               ) : ( */}
-                <>
-                  <div>
-                    <div className="property">Property</div>
-                    <div className="colon">:</div>
-                    <div className="value">
-                      {selectedPropertyDetails?.propertyName || "N/A"}
-                    </div>
+              <>
+                <div>
+                  <div className="property">Property</div>
+                  <div className="colon">:</div>
+                  <div className="value">
+                    {selectedPropertyDetails?.propertyName || "N/A"}
                   </div>
-                  <div>
-                    <div className="property">Check-in</div>
-                    <div className="colon">:</div>
-                    <div className="value">
-                      {formatDate(new Date(checkinDate))}
-                    </div>
+                </div>
+                <div>
+                  <div className="property">Check-in</div>
+                  <div className="colon">:</div>
+                  <div className="value">
+                    {formatDate(new Date(checkinDate))}
                   </div>
-                  <div>
-                    <div className="property">Check-out</div>
-                    <div className="colon">:</div>
-                    <div className="value">
-                      {formatDate(new Date(checkoutDate))}
-                    </div>
+                </div>
+                <div>
+                  <div className="property">Check-out</div>
+                  <div className="colon">:</div>
+                  <div className="value">
+                    {formatDate(new Date(checkoutDate))}
                   </div>
-                  <div>
-                    <div className="property">Total Nights</div>
-                    <div className="colon">:</div>
-                    <div className="value">{totalNights}</div>
-                  </div>
-                  <div>
-                    <div className="property">Adults</div>
-                    <div className="colon">:</div>
-                    <div className="value">{booking.noOfAdults}</div>
-                  </div>
-                  <div>
-                    <div className="property">Children</div>
-                    <div className="colon">:</div>
-                    <div className="value">{booking.noOfChildren}</div>
-                  </div>
-                  <div>
-                    <div className="property">Pets</div>
-                    <div className="colon">:</div>
-                    <div className="value">{booking.noOfPets}</div>
-                  </div>
-                  <div>
-                    <div className="property">Season</div>
-                    <div className="colon">:</div>
-                    <div className="value">{booking.season || "N/A"}</div>
-                  </div>
-                </>
+                </div>
+                <div>
+                  <div className="property">Total Nights</div>
+                  <div className="colon">:</div>
+                  <div className="value">{totalNights}</div>
+                </div>
+                <div>
+                  <div className="property">Adults</div>
+                  <div className="colon">:</div>
+                  <div className="value">{booking.noOfAdults}</div>
+                </div>
+                <div>
+                  <div className="property">Children</div>
+                  <div className="colon">:</div>
+                  <div className="value">{booking.noOfChildren}</div>
+                </div>
+                <div>
+                  <div className="property">Pets</div>
+                  <div className="colon">:</div>
+                  <div className="value">{booking.noOfPets}</div>
+                </div>
+                <div>
+                  <div className="property">Season</div>
+                  <div className="colon">:</div>
+                  <div className="value">{booking.season || "N/A"}</div>
+                </div>
+              </>
               {/* )} */}
             </div>
           </div>
@@ -400,28 +395,28 @@ const BookingSummaryForm: React.FC = () => {
                   <Skeleton width="50%" height={16} sx={{ mt: 1 }} />
                 </>
               ) : ( */}
-                <>
-                  <div>
-                    <div className="property">Cleaning Fee</div>
-                    <div className="colon">:</div>
-                    <div className="value">${booking.cleaningFee}</div>
-                  </div>
-                  <div>
-                    <div className="property">Pet Fee</div>
-                    <div className="colon">:</div>
-                    <div className="value">${booking.petFee}</div>
-                  </div>
-                  <div>
-                    <div className="property">Total Amount Due</div>
-                    <div className="colon">:</div>
-                    <div className="value">${booking.totalAmountDue}</div>
-                  </div>
-                  <div>
-                    <div className="property">Date of Charge</div>
-                    <div className="colon">:</div>
-                    <div className="value">{formatDate(new Date())}</div>
-                  </div>
-                </>
+              <>
+                <div>
+                  <div className="property">Cleaning Fee</div>
+                  <div className="colon">:</div>
+                  <div className="value">${booking.cleaningFee}</div>
+                </div>
+                <div>
+                  <div className="property">Pet Fee</div>
+                  <div className="colon">:</div>
+                  <div className="value">${booking.petFee}</div>
+                </div>
+                <div>
+                  <div className="property">Total Amount Due</div>
+                  <div className="colon">:</div>
+                  <div className="value">${booking.totalAmountDue}</div>
+                </div>
+                <div>
+                  <div className="property">Date of Charge</div>
+                  <div className="colon">:</div>
+                  <div className="value">{formatDate(new Date())}</div>
+                </div>
+              </>
               {/* )} */}
             </div>
 
