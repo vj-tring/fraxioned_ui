@@ -6,6 +6,8 @@ import {
     FaCalendar, FaPlane, FaUser, FaFile,
     FaUserTag, FaChartBar, FaGavel, FaBars, FaHome, FaConciergeBell
 } from 'react-icons/fa';
+import { IoIosImages } from "react-icons/io";
+
 import styles from './sidepanel.module.css'
 
 interface MenuItem {
@@ -30,6 +32,7 @@ const menuItems: MenuItem[] = [
 
     //{ icon: <FaUserTag />, label: 'Role', path: '/role', disabled: true },
     { icon: <FaChartBar />, label: 'Reports', path: '/admin/reports', disabled: false },
+    { icon: <IoIosImages /> , label: 'Spaces', path: '/admin/spaces', disabled: false },
     //{ icon: <FaGavel />, label: 'Rules', path: '/rules', disabled: true }
 ];
 

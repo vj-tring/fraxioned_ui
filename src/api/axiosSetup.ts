@@ -5,7 +5,7 @@ import { useAuthHelpers } from './useAuthHelper';
 // Create an Axios instance
 const axiosInstance = axios.create({
     baseURL: 'http://192.168.1.47:3008/api',
-    timeout: 10000,
+    timeout: 20000,
 });
 
 // Add a r  equest interceptor
@@ -30,8 +30,10 @@ axiosInstance.interceptors.request.use(
             config.headers['resetToken'] = resetToken;
         }
 
-        const isImageUpload = config.url?.includes('/propertyImages') &&
+        const isImageUpload =
+            (config.url?.includes('/propertyImages') || config.url?.includes('/spaces/space') || config.url?.includes('/properties/property')) &&
             (config.method === 'post' || config.method === 'patch');
+
 
         if (isImageUpload) {
             config.headers['Content-Type'] = 'multipart/form-data';
@@ -67,4 +69,3 @@ axiosInstance.interceptors.response.use(
 );
 
 export default axiosInstance;
-

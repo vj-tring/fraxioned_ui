@@ -11,9 +11,10 @@ import bookingReducer from '../slice/auth/bookingSlice';
 import datePickerReducer from '../slice/datePickerSlice';
 import propertyDocumentsReducer from '../slice/propertyDocumentSlice';
 import amenitiesReducer from '../slice/amenitiesSlice';
-import ThingsToKnowReducer from '../slice/auth/ThingstoknowSlice'; 
-import amenitiesReducer from '../slice/amenitiesSlice';
-import propertiesReducer from '../slice/auth/propertiesSlice'
+import ThingsToKnowReducer from '../slice/auth/ThingstoknowSlice';
+import propertiesReducer from '../slice/auth/propertiesSlice';
+import spaceReducer from '../slice/spaceSlice';
+import spacePropertyReducer from '../slice/spacePropertySlice';
 
 const appReducer = combineReducers({
   auth: authReducer,
@@ -23,13 +24,15 @@ const appReducer = combineReducers({
   properties: propertyReducer,
   editProperty: editpropertyReducer,
   limits: limitsReducer,
-  propertySeasonHoliday: propertySeasonHolidayReducer, 
+  propertySeasonHoliday: propertySeasonHolidayReducer,
   bookings: bookingReducer,
   datePicker: datePickerReducer,
   propertyDocuments: propertyDocumentsReducer,
   property: propertiesReducer,
   thingsToKnow: ThingsToKnowReducer,
   amenities: amenitiesReducer,
+  spaces: spaceReducer, // Add space reducer
+  spaceProperties: spacePropertyReducer, // Add space property reducer
 });
 
 const rootReducer = (

@@ -24,6 +24,9 @@ import userImage from '../../assets/images/profile.jpeg'
 import './admin-dashboard.css'
 import { PropertyDocuments } from '../property-documents';
 import ReportsGrid from '../grid/reports-grid';
+import SpaceProperty from '../space-property';
+import SpacePropertyDetails from '../space-property/space-property-details';
+import Spaces from '../spaces';
 
 const AdminDashboard: React.FC = () => {
     const navigate = useNavigate()
@@ -56,7 +59,8 @@ const AdminDashboard: React.FC = () => {
                         <Route path="/user/:id/edit" element={<TabSwitch onUserUpdated={handleUserUpdated} />} />
                         <Route path="/holidays" element={<Holidays isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/user" element={<UserGrid isSidebarOpen={isSidebarOpen} />} />
-                        <Route path="/reports" element={<ReportsGrid isSidebarOpen={isSidebarOpen}   />} />
+                        <Route path="/reports" element={<ReportsGrid isSidebarOpen={isSidebarOpen} />} />
+                        <Route path="/spaces" element={<Spaces isSidebarOpen={isSidebarOpen} />} />
 
                         <Route path="/property" element={<Property isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/property/:id" element={
@@ -147,7 +151,27 @@ const AdminDashboard: React.FC = () => {
                                 </div>
                             </div>
                         } />
+                        <Route path="/property/:id/rooms" element={
+                            <div className="property-details-container">
+                                <PropertySidePanel isOpen={true} />
+                                <div className="property-info-content">
+                                    <SpaceProperty />
+                                </div>
+                            </div>
+                        } />
+
+                        <Route path="/property/:id/rooms/:spaceId" element={
+                            <div className="property-details-container">
+                                <PropertySidePanel isOpen={true} />
+                                <div className="property-info-content">
+                                    <SpacePropertyDetails />
+                                </div>
+                            </div>
+                        } />
+
+
                     </Routes>
+
                 </div>
             </div>
         </div>
