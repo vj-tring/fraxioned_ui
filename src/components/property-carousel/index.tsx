@@ -346,7 +346,7 @@ export default function BasicSelect() {
                     </span>
                     <span className={`CardImage ${imageClass}`}>
                       <img
-                        src={showselectedimage(selectedCard.propertyId ?? 1)}
+                        src={selectedCard.coverImageUrl!}
                         alt={selectedCard.name}
                         className="property-image"
                         loading="lazy"
