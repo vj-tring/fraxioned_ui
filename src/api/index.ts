@@ -348,3 +348,12 @@ export const propertySpaceImageuploadapi = (formData: FormData) => {
     });
 };
 
+export const getAllSpacePropertyImages = () => {
+    return axiosInstance.get(`/property-space-images`)
+};
+
+export const getAllSpacePropertyImageById = (propertyId: number) => {
+    return axiosInstance.get(`/property-space-images/property/${propertyId}/images`)
+};
+
+
