@@ -33,7 +33,7 @@ interface SnackbarState {
 const PropertyAmenities: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
-  
+
   const { loading, error, success, amenities: propertyAmenities } = useSelector(
     (state: RootState) => state.propertyAmenities
   );
@@ -66,6 +66,17 @@ const PropertyAmenities: React.FC = () => {
     }
   }, [propertyAmenities]);
 
+
+  const getTotalAmenitiesCount = useCallback(() => {
+    return selectedAmenities.length;
+  }, [selectedAmenities]);
+
+  const TotalAmenitiesCount: React.FC = () => (
+    <div className={styles.totalAmenitiesCount}>
+      Total Amenities mapped to this property: {getTotalAmenitiesCount()}
+    </div>
+  );
+
   useEffect(() => {
     if (success) {
       showSnackbar('Amenities updated successfully!', 'success');
@@ -88,6 +99,20 @@ const PropertyAmenities: React.FC = () => {
       setSnackbar(prev => ({ ...prev, open: false }));
     }, 3000);
   };
+
+  const getSelectedCountForGroup = useCallback((group: string) => {
+    return amenities[group]?.filter(amenity => selectedAmenities.includes(amenity.id)).length || 0;
+  }, [amenities, selectedAmenities]);
+
+  const sortGroups = useCallback(() => {
+    return Object.keys(amenities).sort((a, b) => {
+      const aCount = getSelectedCountForGroup(a);
+      const bCount = getSelectedCountForGroup(b);
+      if (aCount > 0 && bCount === 0) return -1;
+      if (aCount === 0 && bCount > 0) return 1;
+      return a.localeCompare(b);
+    });
+  }, [amenities, getSelectedCountForGroup]);
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') return;
@@ -173,7 +198,7 @@ const PropertyAmenities: React.FC = () => {
       property: { id: Number(id) },
       propertySpace: { id: null },
       amenities: selectedAmenities.map(amenityId => ({ id: amenityId })),
-      updatedBy: { id: 1 } 
+      updatedBy: { id: 1 }
     };
     dispatch(updatePropertyAmenities(updateData));
   };
@@ -187,26 +212,30 @@ const PropertyAmenities: React.FC = () => {
       <div className={styles.contentWrapper}>
         <div className={styles.header}>
           <h1 className={styles.title}>Property Amenities</h1>
-          <button 
-            className={styles.updateButton} 
+          <button
+            className={styles.updateButton}
             onClick={() => setShowConfirmModal(true)}
           >
             Update
           </button>
         </div>
+        <TotalAmenitiesCount />
         <div className={styles.amenitiesScrollContainer} ref={scrollContainerRef}>
-          {Object.entries(amenities).map(([group, amenitiesList]) => (
+          {sortGroups().map((group) => (
             <div
               key={group}
               id={`group-${group}`}
-              className={`${styles.amenityGroup} ${expandedGroup === group ? styles.expanded : ''}`}
+              className={`${styles.amenityGroup} ${expandedGroup === group ? styles.expanded : ''} ${getSelectedCountForGroup(group) > 0 ? styles.markedGroup : ''}`}
             >
               <div className={styles.groupHeader} onClick={() => toggleGroup(group)}>
                 <h2 className={styles.groupTitle}>{group}</h2>
-                {expandedGroup === group ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                <div className={styles.groupHeaderRight}>
+                  {expandedGroup === group ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                </div>
               </div>
               {expandedGroup === group && (
                 <div className={styles.groupContent}>
+                  {/* <GroupAmenitiesCount group={group} /> */}
                   <div className={styles.searchContainer}>
                     <Search size={19} className={styles.searchIcon} />
                     <input
@@ -219,7 +248,7 @@ const PropertyAmenities: React.FC = () => {
                   </div>
                   <div className={styles.amenityList}>
                     {filterAmenities(getSortedAmenities(group), searchTerms[group] || '').map((amenity) => (
-                      <label key={amenity.id} className={styles.amenityItem}>
+                      <label key={amenity.id} className={`${styles.amenityItem} ${selectedAmenities.includes(amenity.id) ? styles.markedAmenity : ''}`}>
                         <input
                           type="checkbox"
                           checked={selectedAmenities.includes(amenity.id)}
