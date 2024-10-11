@@ -1,31 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getProperrtDetailsbyId, getpropertycodes } from "@/api";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPropertyDetailsById } from "@/store/slice/auth/propertiesSlice";
+import { getpropertycodes } from "@/api";
 import EditButton from "@/components/edit";
 import styles from "./propertyrules.module.css";
 import Loader from "@/components/loader";
 import {
   Users,
   Clock,
-  Wifi,
   Calendar,
-  Home,
   DollarSign,
   PawPrint,
 } from "lucide-react";
-
-interface PropertyRulesData {
-  noOfGuestsAllowed: number;
-  noOfPetsAllowed: number;
-  checkInTime: number;
-  checkOutTime: number;
-  feePerPet: number;
-  squareFootage: number;
-  wifiNetwork: string;
-  peakSeasonStartDate: string;
-  peakSeasonEndDate: string;
-  petPolicy: string;
-}
+import { AppDispatch } from '@/store';
+import { RootState } from "@/store/reducers";
 
 interface PropertyCode {
   propertyCodeType: string;
@@ -34,30 +23,34 @@ interface PropertyCode {
 
 const PropertyRules: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [rulesData, setRulesData] = useState<PropertyRulesData | null>(null);
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+
   const [propertyCodes, setPropertyCodes] = useState<PropertyCode[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
+
+  const rulesData = useSelector((state: RootState) => state.property.selectedPropertyDetails);
+  const status = useSelector((state: RootState) => state.property.status);
+  const reduxError = useSelector((state: RootState) => state.property.error);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [rulesResponse, codesResponse] = await Promise.all([
-          getProperrtDetailsbyId(Number(id)),
-          getpropertycodes(),
-        ]);
-        setRulesData(rulesResponse.data);
+        if (id) {
+          dispatch(fetchPropertyDetailsById(Number(id)));
+        }
+        const codesResponse = await getpropertycodes();
         setPropertyCodes(codesResponse.data);
-        setLoading(false);
       } catch (err) {
-        console.error("Error fetching data:", err);
-        setError("Failed to fetch property data. Please try again.");
+        console.error("Error fetching property codes:", err);
+        setError("Failed to fetch property codes. Please try again.");
+      } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, [id]);
+  }, [id, dispatch]);
 
   const handleEdit = () => {
     navigate(`/admin/property/${id}/rules/edit`);
@@ -69,15 +62,8 @@ const PropertyRules: React.FC = () => {
     return `${formattedHour}:00 ${ampm}`;
   };
 
-  const getWifiPassword = (): string => {
-    const wifiPassword = propertyCodes.find(
-      (code) => code.propertyCodeType === "Wifi Password"
-    );
-    return wifiPassword ? wifiPassword.propertyCode : "Not available";
-  };
-
-  if (loading) return <Loader />;
-  if (error) return <div className={styles.error}>{error}</div>;
+  if (status === 'loading' || loading) return <Loader />;
+  if (reduxError || error) return <div className={styles.error}>{reduxError || error}</div>;
   if (!rulesData)
     return <div className={styles.noData}>No rules data found.</div>;
 
@@ -90,11 +76,8 @@ const PropertyRules: React.FC = () => {
         </div>
         <div className={styles.rulesContainer}>
           <div className={`${styles.ruleCard} ${styles.seasonCard}`}>
-            {/* <div className={styles.cardIcon}>
-            </div> */}
             <div className={styles.cardContent}>
               <h3 className={styles.cardTitle}>
-                {" "}
                 <Calendar size={14} color="white" />
                 Season Dates
               </h3>
@@ -110,10 +93,8 @@ const PropertyRules: React.FC = () => {
           </div>
 
           <div className={styles.ruleCard}>
-            {/* <div className={styles.cardIcon}></div> */}
             <div className={styles.cardContent}>
               <h3 className={styles.cardTitle1}>
-                {" "}
                 <Users size={14} />
                 Guests & Pets
               </h3>
@@ -129,10 +110,8 @@ const PropertyRules: React.FC = () => {
             </div>
           </div>
           <div className={styles.ruleCard}>
-            {/* <div className={styles.cardIcon}></div> */}
             <div className={styles.cardContent}>
               <h3 className={styles.cardTitle1}>
-                {" "}
                 <Clock size={14} />
                 Check-in/out
               </h3>

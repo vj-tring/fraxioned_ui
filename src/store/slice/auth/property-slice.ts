@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { getUserProperties } from "../../../api/index";
+import { getUserProperties } from "../../../api";
 import imageParadiseShores from "../../../assests/bear-lake-bluffs.jpg";
 import imageBlueBearLake from "../../../assests/crown-jewel.jpg";
 import imageCrownJewel from "../../../assests/blue-bear-lake.jpg";
@@ -12,6 +12,7 @@ const mockData: Card[] = [
     name: "The Lake Escape",
     address: "123 Mock Lane",
     image: "imageParadiseShores",
+    coverImageUrl:null,
     details: {
       2024: {
         offSeason: "2/10",
@@ -24,7 +25,30 @@ const mockData: Card[] = [
         offRemainingHolidayNights: 1,
         peakRemainingHolidayNights: 1,
         maximumStayLength: 14,
-      },
+        lastMinute: "", 
+        peakUsedNights: 0, 
+        offUsedNights: 0, 
+        peakBookedNights: 0, 
+        offBookedNights: 0, 
+        peakBookedHolidayNights: 0, 
+        offBookedHolidayNights: 0, 
+        lastMinuteLostNights: 0, 
+        peakCancelledHolidayNights: 0, 
+        offCancelledHolidayNights: 0, 
+        peakLostHolidayNights: 0, 
+        offLostHolidayNights: 0, 
+        offUsedHolidayNights: 0, 
+        peakUsedHolidayNights: 0, 
+        lastMinuteBookedNights: 0, 
+        lastMinuteAllottedNights: 0,
+        lastMinuteCancelledNights: 0,
+        offAllottedHolidayNights: 0,
+        peakAllottedHolidayNights: 0,
+        peakAllottedNights: 0,
+        offAllottedNights: 0
+        
+        // ... add the other 17 missing properties
+      }
     },
     propertyShare: 3,
     maxGuestsAllowed: 4,
@@ -79,6 +103,7 @@ const mockData: Card[] = [
         isActive: 1,
         addressLine1: "456 Main St",
         addressLine2: null,
+        coverImageUrl:null,
         state: "Mock State",
         country: "Mock Country",
         city: "Mock City",
@@ -103,6 +128,7 @@ export interface User {
   lastName: string;
   password: string;
   imageURL: string | null;
+  coverImageUrl: string | null
   isActive: number;
   addressLine1: string;
   addressLine2: string | null;
@@ -118,42 +144,48 @@ export interface User {
   createdAt: string;
   updatedAt: string;
 }
-
+export interface propertyAvailableDaysDetails {
+  offSeason: string;
+  peakSeason: string;
+  peakHoliday: string;
+  lastMinute: string;
+  offSeasonHoliday: string;
+  peakRemainingNights: number;
+  offRemainingNights: number;
+  lastMinuteRemainingNights: number;
+  offRemainingHolidayNights: number;
+  peakRemainingHolidayNights: number;
+  maximumStayLength: number;
+  peakUsedNights: number;
+  offUsedNights: number;
+  peakBookedNights: number;
+  offBookedNights: number;
+  lastMinuteAllottedNights: number;
+  lastMinuteLostNights: number;
+  peakBookedHolidayNights: number;
+  offBookedHolidayNights: number;
+  peakCancelledHolidayNights: number;
+  offCancelledHolidayNights: number;
+  peakLostHolidayNights: number;
+  offLostHolidayNights: number;
+  offUsedHolidayNights: number;
+  peakUsedHolidayNights: number;
+  lastMinuteBookedNights: number;
+  lastMinuteCancelledNights: number;
+  offAllottedHolidayNights: number;
+  peakAllottedNights: number;
+  offAllottedNights: number;
+  peakAllottedHolidayNights: number;
+}
 export interface Card {
   id: number;
   name: string;
   address: string;
   image: string;
   details: {
-    [year: number]: {
-      offSeason: string;
-      peakSeason: string;
-      peakHoliday: string;
-      offSeasonHoliday: string;
-      peakRemainingNights: number;
-      offRemainingNights: number;
-      lastMinuteRemainingNights: number;
-      offRemainingHolidayNights: number;
-      peakRemainingHolidayNights: number;
-      maximumStayLength: number;
-      peakUsedNights: number;
-      offUsedNights: number;
-      peakBookedNights: number;
-      offBookedNights: number;
-      lastMinuteAllottedNights: number;
-      lastMinuteLostNights: number;
-      peakBookedHolidayNights: number;
-      offBookedHolidayNights: number;
-      peakCancelledHolidayNights: number;
-      offCancelledHolidayNights: number;
-      peakLostHolidayNights: number;
-      offLostHolidayNights: number;
-      offUsedHolidayNights: number;
-      peakUsedHolidayNights: number;
-      lastMinuteBookedNights: number;
-      lastMinuteCancelledNights: number;
-    };
+    [year: number]: propertyAvailableDaysDetails;
   };
+  coverImageUrl: string | null,
   propertyShare: number;
   maxGuestsAllowed: number;
   maxPetsAllowed: number;
@@ -195,16 +227,13 @@ export interface Card {
   peakSeasonAllottedHolidayNights: number;
   offSeasonAllottedHolidayNights: number;
   lastMinuteBookingAllottedNights: number;
-  offAllottedHolidayNights:number;
-  peakAllottedNights:number;
-  offAllottedNights:number;
-  peakAllottedHolidayNights:number;
+  
   wifiNetwork: string;
   users: User[];
 }
 
 export interface PropertyState {
-  find(arg0: (p: any) => boolean): unknown;
+  // find(arg0: (p: any) => boolean): unknown;
   cards: Card[];
   loading: boolean;
   error: string | null;
@@ -231,7 +260,7 @@ const initialState: PropertyState = {
 
 export const fetchProperties = createAsyncThunk(
   "properties/fetchProperties",
-  async (userId: number, { rejectWithValue }) => {
+  async (userId: number, {}) => {
     try {
       const response = await getUserProperties(userId);
 
@@ -243,7 +272,7 @@ export const fetchProperties = createAsyncThunk(
       const combinedData: Card[] = response.data.map((property: any) => {
         const userProperties = property.userProperties || [];
         const shareMap: { [year: number]: number } = {};
-        const details: { [year: number]: any } = {};
+        const details: { [year: number]: propertyAvailableDaysDetails } = {};
 
         userProperties.forEach((userProp: any) => {
           if (userProp.isActive) {
@@ -261,8 +290,8 @@ export const fetchProperties = createAsyncThunk(
               offRemainingHolidayNights: userProp.offRemainingHolidayNights,
               peakRemainingHolidayNights: userProp.peakRemainingHolidayNights,
               maximumStayLength: userProp.maximumStayLength,
-              peakSeasonStartDate: property.peakSeasonStartDate,
-              peakSeasonEndDate: property.peakSeasonEndDate,
+              // peakSeasonStartDate: property.peakSeasonStartDate,
+              // peakSeasonEndDate: property.peakSeasonEndDate,
               peakUsedNights: userProp.peakUsedNights,
               offUsedNights: userProp.offUsedNights,
               peakBookedNights: userProp.peakBookedNights,
@@ -278,39 +307,38 @@ export const fetchProperties = createAsyncThunk(
               peakUsedHolidayNights: userProp.peakUsedHolidayNights,
               lastMinuteBookedNights: userProp.lastMinuteBookedNights,
               lastMinuteCancelledNights: userProp.lastMinuteCancelledNights,
-              offAllottedHolidayNights:userProp.offAllottedHolidayNights,
-              peakAllottedHolidayNights:userProp.peakAllottedHolidayNights,
-              peakAllottedNights:userProp.peakAllottedNights,
-              offAllottedNights:userProp.offAllottedNights,
-
-
+              lastMinuteAllottedNights: userProp.lastMinuteAllottedNights,
+              offAllottedHolidayNights: userProp.offAllottedHolidayNights,
+              peakAllottedHolidayNights: userProp.peakAllottedHolidayNights,
+              peakAllottedNights: userProp.peakAllottedNights,
+              offAllottedNights: userProp.offAllottedNights,
             };
           }
         });
 
-        [2024, 2025, 2026].forEach((year) => {
-          if (!details[year]) {
-            details[year] = {
-              offSeason: "undefined",
-              peakSeason: "undefined",
-              peakHoliday: "undefined",
-              offSeasonHoliday: "undefined",
-              lastMinute: "undefined",
-              peakRemainingNights: 0,
-              offRemainingNights: 0,
-              lastMinuteRemainingNights: 0,
-              offRemainingHolidayNights: 0,
-              peakRemainingHolidayNights: 0,
-              maximumStayLength: 0,
-              peakSeasonStartDate: property.peakSeasonStartDate,
-              peakSeasonEndDate: property.peakSeasonEndDate,
-              peakUsedNights: property.peakUsedNights,
-              offUsedNights: property.offUsedNights,
-              peakBookedNights: property.peakBookedNights,
-              offBookedNights: property.offBookedNights,
-            };
-          }
-        });
+        // [2024, 2025, 2026].forEach((year) => {
+        //   if (!details[year]) {
+        //     details[year] = {
+        //       offSeason: "undefined",
+        //       peakSeason: "undefined",
+        //       peakHoliday: "undefined",
+        //       offSeasonHoliday: "undefined",
+        //       lastMinute: "undefined",
+        //       peakRemainingNights: 0,
+        //       offRemainingNights: 0,
+        //       lastMinuteRemainingNights: 0,
+        //       offRemainingHolidayNights: 0,
+        //       peakRemainingHolidayNights: 0,
+        //       maximumStayLength: 0,
+        //       peakSeasonStartDate: property.peakSeasonStartDate,
+        //       peakSeasonEndDate: property.peakSeasonEndDate,
+        //       peakUsedNights: property.peakUsedNights,
+        //       offUsedNights: property.offUsedNights,
+        //       peakBookedNights: property.peakBookedNights,
+        //       offBookedNights: property.offBookedNights,
+        //     };
+        //   }
+        // });
 
         return {
           id: property.propertyId,
@@ -319,6 +347,7 @@ export const fetchProperties = createAsyncThunk(
           image: getImageForProperty(property.propertyId),
           share: shareMap[2024] || 0,
           details,
+          coverImageUrl: property.coverImageUrl,
           maxGuestsAllowed: property.noOfGuestsAllowed || 0,
           maxPetsAllowed: property.noOfPetsAllowed || 0,
           propertyShare: property.propertyShare,
@@ -477,9 +506,9 @@ export const selectSelectedPropertyDetails = (state: RootState) => {
     const relevantYears = [currentYear, currentYear + 1, currentYear + 2];
 
     const dynamicDetails = relevantYears.reduce((acc, year) => {
-      if (selectedProperty.details[year]) {
+      if (selectedProperty?.details?.[year]) {
         acc[year] = {
-          ...selectedProperty.details[year],
+          ...selectedProperty?.details[year],
           peakSeasonStartDate: selectedProperty.peakSeasonStartDate,
           peakSeasonEndDate: selectedProperty.peakSeasonEndDate,
         };

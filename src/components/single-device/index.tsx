@@ -24,6 +24,8 @@ import { AppDispatch } from "@/store";
 import { RootState } from "@/store/reducers";
 import Bedroom1Image from "../../assets/images/bedroom1.jpg";
 import KingBedImage from "../../assets/images/bedroom1.jpg";
+import { fetchSpacePropertiesById } from "@/store/slice/spacePropertySlice";
+import { getAllSpacePropertyImageById, getAllSpacePropertyImages } from "@/api";
 
 interface SingleDeviceProps {
   propertyId: number;
@@ -61,17 +63,48 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const { propertyAmenities, loading, error } = useSelector(
     (state: RootState) => state.amenities
   );
+  const propertySpace = useSelector((state: RootState) => state.spaceProperties.spaceProperties || [])
+  const [imagesData, setImagesData] = useState<any[]>([]);
+
   const [page, setPage] = useState(1);
   const [showAllAmenities, setShowAllAmenities] = useState(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchAmenities(propertyId));
+    dispatch(fetchSpacePropertiesById(propertyId));
   }, [dispatch, propertyId]);
 
   const handlePageChange = (value: number) => {
     setPage(value);
   };
+
+  useEffect(() => {
+    const imageFetching = async () => {
+      try {
+        const response = await getAllSpacePropertyImageById(Number(propertyId));
+        const sortedImages = response.data.data.sort((a: any, b: any) => a.displayOrder - b.displayOrder);
+        setImagesData(sortedImages); // Sort images by displayOrder
+        console.log('Images fetched and sorted successfully');
+      } catch (error) {
+        console.error('Error fetching images:', error);
+      }
+    };
+
+    imageFetching();
+  }, [propertyId]); // 
+
+  const getImageUrlByPropertyAndSpace = (spaceId: number): string | null => {
+    const image = imagesData.find(
+      (img) =>
+        img.propertySpace?.id === spaceId &&
+        img.displayOrder === 1
+    );
+
+    return image ? image.url : null;
+  };
+
+
 
   const handleShowMoreClick = () => {
     setOpen(true);
@@ -87,6 +120,12 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   );
   const totalPages = Math.ceil(allRooms.length / ITEMS_PER_PAGE);
 
+  const paginatedSpaces = propertySpace.slice(
+    (page - 1) * ITEMS_PER_PAGE,
+    page * ITEMS_PER_PAGE
+  );
+  const totalspacePages = Math.ceil(propertySpace.length / ITEMS_PER_PAGE);
+
   const groupedAmenities = groupAmenitiesByGroup(propertyAmenities || []);
   const allAmenities = propertyAmenities ? propertyAmenities.map((pa) => pa.amenity) : [];
   const displayedAmenities = showAllAmenities
@@ -101,32 +140,29 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
       sx={{ display: "flex", flexDirection: "row", gap: 10 }}
       className="singleDevice"
     >
+
       <Box
         sx={{ display: "flex", flexDirection: "column", gap: 3, width: "50%" }}
         className="RoomsRes"
       >
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography
-            variant="h6"
-            component="div"
-            className="monsterrat checkIn"
-          >
-            Rooms
+          <Typography variant="h6" component="div" className="monsterrat checkIn">
+            Spaces for Property
           </Typography>
           <Box>
             <CustomPagination
               page={page}
-              totalPages={totalPages}
+              totalPages={totalspacePages}
               onPageChange={handlePageChange}
             />
           </Box>
         </Box>
 
-        {allRooms.length === 0 ? (
-          <Typography variant="body1">No rooms available.</Typography>
+        {propertySpace.length === 0 ? (
+          <Typography variant="body1">No spaces available for this property.</Typography>
         ) : (
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
-            {paginatedRooms.map((room: Room, index: number) => (
+            {paginatedSpaces.map((space, index) => (
               <Box
                 key={index}
                 sx={{
@@ -146,8 +182,8 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                   <CardMedia
                     component="img"
                     height="100%"
-                    image={room.image}
-                    alt={room.name}
+                    image={getImageUrlByPropertyAndSpace(space.space.id) || 'https://via.placeholder.com/100'} // Placeholder for space image
+                    alt={space.space.name}
                     sx={{ objectFit: "cover" }}
                   />
                 </Card>
@@ -157,15 +193,24 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                     sx={{ fontSize: 15, fontWeight: 600 }}
                     className="monsterrat"
                   >
-                    {room.name}
+                    {space.space.name} {space.instanceNumber}
                   </Typography>
-                  {room.Bed && (
+                  {space.space.isBedTypeAllowed && (
                     <Typography
                       variant="body1"
                       sx={{ fontSize: 12 }}
                       className="monsterrat"
                     >
-                      {room.Bed}
+                      Bed Type Available
+                    </Typography>
+                  )}
+                  {space.space.isBathroomTypeAllowed && (
+                    <Typography
+                      variant="body1"
+                      sx={{ fontSize: 12 }}
+                      className="monsterrat"
+                    >
+                      Bathroom Available
                     </Typography>
                   )}
                 </CardContent>
@@ -174,6 +219,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
           </Box>
         )}
       </Box>
+
 
       <Box
         sx={{ width: "50%", display: "flex", flexDirection: "column", gap: 3 }}

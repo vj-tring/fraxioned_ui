@@ -11,36 +11,43 @@ import {
   Grid,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import { useSelector } from "react-redux";
-import { updatePropertyapi, getPropertyById } from "@/api";
+import { useSelector, useDispatch } from "react-redux";
+import { updatePropertyapi } from "@/api";
+import { fetchPropertyById } from "@/store/slice/auth/propertiesSlice";
 import Loader from "@/components/loader";
 import styles from "./EditPropertyForm.module.css";
 import { RootState } from "@/store/reducers";
+import { AppDispatch } from "@/store";
 
 const EditPropertyForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
   const [formData, setFormData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
 
   const userId = useSelector((state: RootState) => state.auth.user?.id);
+  const selectedProperty = useSelector((state: RootState) => state.property.selectedProperty);
+  const status = useSelector((state: RootState) => state.property.status);
+  const reduxError = useSelector((state: RootState) => state.property.error);
 
   useEffect(() => {
-    const fetchPropertyData = async () => {
-      try {
-        const response = await getPropertyById(Number(id));
-        setFormData(response.data);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching property details:", err);
-        setError("Failed to fetch property details. Please try again.");
-        setLoading(false);
-      }
-    };
+    if (id) {
+      dispatch(fetchPropertyById(Number(id)));
+    }
+  }, [dispatch, id]);
 
-    fetchPropertyData();
-  }, [id]);
+  useEffect(() => {
+    if (selectedProperty) {
+      setFormData(selectedProperty);
+    }
+  }, [selectedProperty]);
+
+  useEffect(() => {
+    if (reduxError) {
+      setError(reduxError);
+    }
+  }, [reduxError]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -85,10 +92,9 @@ const EditPropertyForm: React.FC = () => {
     }
   };
 
-  if (loading) return <Loader />;
+  if (status === 'loading') return <Loader />;
   if (error) return <div>{error}</div>;
   if (!formData) return <div>No property data found.</div>;
-
   return (
     <div className={styles.formContainer}>
       <Paper elevation={3} className={styles.formPaper}>
@@ -274,7 +280,7 @@ const EditPropertyForm: React.FC = () => {
                       name="isActive"
                       color="primary"
                       sx={{
-                        fontSize:'small'
+                        fontSize: 'small'
                       }}
                     />
                   }

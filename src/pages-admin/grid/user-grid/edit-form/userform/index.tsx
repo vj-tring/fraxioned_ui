@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { getUserById } from "@/api";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/reducers";
+import { fetchUserById } from "@/store/slice/user-slice";
 import {
   Edit,
   Mail,
@@ -12,30 +14,7 @@ import {
 } from "lucide-react";
 import defaultProfile from "../../../../../assets/images/profile.jpeg";
 import defaultStyles from "./userform.module.css";
-
-interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  imageURL: string | null;
-  isActive: number;
-  addressLine1: string | null;
-  addressLine2: string | null;
-  state: string | null;
-  country: string | null;
-  city: string | null;
-  zipcode: string | null;
-  lastLoginTime: string;
-  contactDetails: {
-    primaryEmail: string;
-    primaryPhone: string;
-    secondaryEmail: string;
-    secondaryPhone: string;
-  };
-  role: {
-    roleName: string;
-  };
-}
+import { AppDispatch } from "@/store";
 
 interface UserFormProps {
   userId: number;
@@ -46,6 +25,7 @@ interface UserFormProps {
   customStyles?: {
     userForm?: string;
     header?: string;
+    userName?: string;
     editButton?: string;
     content?: string;
     profileSection?: string;
@@ -59,27 +39,23 @@ interface UserFormProps {
     detailItem?: string;
     error?: string;
   };
-  
 }
 
-const UserForm: React.FC<UserFormProps> = ({ userId, onEditClick, header = "User Details", editButtonName = "Edit Profile", customStyles = {}, showActiveStatus = true
+const UserForm: React.FC<UserFormProps> = ({
+  userId,
+  onEditClick,
+  header = "User Details",
+  editButtonName = "Edit Profile",
+  customStyles = {},
+  showActiveStatus = true
 }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const dispatch = useDispatch<AppDispatch>();
+  const { user, loading, error } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await getUserById(userId);
-        setUser(response.data.user);
-      } catch (err) {
-        console.error("Error fetching user:", err);
-        setError("Failed to fetch user data. Please try again.");
-      }
-    };
+    dispatch(fetchUserById(userId));
+  }, [dispatch, userId]);
 
-    fetchUser();
-  }, [userId]);
   const styles = {
     userForm: customStyles.userForm || defaultStyles.userForm,
     header: customStyles.header || defaultStyles.header,
@@ -87,6 +63,7 @@ const UserForm: React.FC<UserFormProps> = ({ userId, onEditClick, header = "User
     content: customStyles.content || defaultStyles.content,
     profileSection: customStyles.profileSection || defaultStyles.profileSection,
     imageContainer: customStyles.imageContainer || defaultStyles.imageContainer,
+    userName: customStyles.userName || defaultStyles.userName,
     profileImage: customStyles.profileImage || defaultStyles.profileImage,
     role: customStyles.role || defaultStyles.role,
     status: customStyles.status || defaultStyles.status,
@@ -97,7 +74,7 @@ const UserForm: React.FC<UserFormProps> = ({ userId, onEditClick, header = "User
     error: customStyles.error || defaultStyles.error,
   };
 
-
+  if (loading) return <div>Loading...</div>;
   if (error) return <div className={styles.error}>{error}</div>;
   if (!user) return <div className={styles.error}>User not found</div>;
 
@@ -119,17 +96,18 @@ const UserForm: React.FC<UserFormProps> = ({ userId, onEditClick, header = "User
               className={styles.profileImage}
             />
           </div>
-          <h3>
+          <h3 className={styles.userName}>
             {user.firstName} {user.lastName}
           </h3>
           <p className={styles.role}>{user.role.roleName}</p>
-          {showActiveStatus && (<p
-            className={`${styles.status} ${
-              user.isActive ? styles.activeStatus : styles.inactiveStatus
-            }`}
-          >
-            {user.isActive ? "Active" : "Inactive"}
-          </p>)}
+          {showActiveStatus && (
+            <p
+              className={`${styles.status} ${user.isActive ? styles.activeStatus : styles.inactiveStatus
+                }`}
+            >
+              {user.isActive ? "Active" : "Inactive"}
+            </p>
+          )}
         </div>
         <div className={styles.detailsSection}>
           <div className={styles.detailItem}>

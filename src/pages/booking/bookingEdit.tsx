@@ -12,6 +12,7 @@ import { fetchUserBookings, updateBooking } from '@/store/slice/auth/bookingSlic
 import { selectProperty } from '@/store/slice/auth/property-slice';
 import { AppDispatch } from '@/store';
 import Loader from '../../components/loader';
+import { X } from 'lucide-react';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -21,7 +22,7 @@ const style = {
   width: 731,
   bgcolor: 'background.paper',
   boxShadow: 24,
-  p: 4,
+  p: 3,
   borderRadius: 2,
 };
 
@@ -72,25 +73,26 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
     }
   }, [dispatch, booking?.propertyId, userId]);
 
-  useEffect(() => {
-    if (open && bookingRef.current) {
-      const initialDateRange = {
-        from: new Date(bookingRef.current.checkinDate),
-        to: new Date(bookingRef.current.checkoutDate),
-      };
-      setDateRange(initialDateRange);
-      setDisplayDates({
-        checkinDate: bookingRef.current.checkinDate,
-        checkoutDate: bookingRef.current.checkoutDate,
-      });
-      setGuestCount(bookingRef.current.noOfGuests);
-      dispatch(initializeCounts({
-        Adults: bookingRef.current.noOfAdults,
-        Children: bookingRef.current.noOfChildren,
-        Pets: bookingRef.current.noOfPets
-      }));
-    }
-  }, [open, dispatch]);
+useEffect(() => {
+  if (open && bookingRef.current) {
+    const initialDateRange = {
+      from: new Date(bookingRef.current.checkinDate),
+      to: new Date(bookingRef.current.checkoutDate),
+    };
+    console.log('Setting initial date range:', initialDateRange);
+    setDateRange(initialDateRange);
+    setDisplayDates({
+      checkinDate: formattedDate(bookingRef.current.checkinDate),
+      checkoutDate: formattedDate(bookingRef.current.checkoutDate),
+    });
+    setGuestCount(bookingRef.current.noOfGuests);
+    dispatch(initializeCounts({
+      Adults: bookingRef.current.noOfAdults,
+      Children: bookingRef.current.noOfChildren,
+      Pets: bookingRef.current.noOfPets
+    }));
+  }
+}, [open, dispatch]);
 
   useEffect(() => {
     bookingRef.current = booking;
@@ -207,6 +209,8 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
         <Typography id="edit-booking-modal" variant="h4" component="h2" mb={2}>
           Modify Your Booking
         </Typography>
+        <X className="absolute top-8 right-7 h-7 w-7 cursor-pointer" onClick={handleClose} />
+
         <hr />
         <Grid container spacing={2} mt={1}>
           <Grid item xs={3} ml={3}>
@@ -221,12 +225,12 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
             <Box sx={dateBoxStyle}>
               <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
                 <Box>
-                  <Typography variant="caption" sx={{ fontWeight: 'bold', fontSize: '14px' }}>Check-in</Typography>
+                  <Typography variant="caption" sx={{ fontWeight: '500', fontSize: '14px' }}>Check-in</Typography>
                   <Typography variant="body2" sx={{color: 'gray'}}>{displayDates.checkinDate}</Typography>
                 </Box>
                 <div className="vl"></div>
                 <Box>
-                  <Typography variant="caption" sx={{ fontWeight: 'bold', fontSize: '14px' }}>Check-out</Typography>
+                  <Typography variant="caption" sx={{ fontWeight: '500', fontSize: '14px' }}>Check-out</Typography>
                   <Typography variant="body2" sx={{color: 'gray'}} >{displayDates.checkoutDate}</Typography>
                 </Box>
               </Box>
@@ -263,9 +267,9 @@ const EditBookingModal: React.FC<EditBookingModalProps> = ({ open, booking, hand
           </Typography>
         )}
         <Box mt={2} display="flex" justifyContent="flex-end">
-          <Button variant="outlined" color="secondary" onClick={handleClose} sx={{ mr: 1 }}>
+          {/* <Button variant="outlined" color="secondary" onClick={handleClose} sx={{ mr: 1 }}>
             Cancel
-          </Button>
+          </Button> */}
           <Button variant="contained" color="primary" onClick={handleSubmit} disabled={isSubmitting}>
             {isSubmitting ? 'Updating...' : 'Update Booking'}
           </Button>

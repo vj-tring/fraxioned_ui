@@ -1,87 +1,59 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Button, IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { getProperties, deletePropertyApi, getPropertyById } from "@/api";
 import styles from "./property.module.css";
 import NewPropertyForm from "./NewPropertyForm";
 import ConfirmationModal from "@/components/confirmation-modal";
 import { useNavigate } from "react-router-dom";
+import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
+import type { Property } from "@/store/slice/auth/propertiesSlice";
+import { RootState } from "@/store/reducers";
+import { AppDispatch } from "@/store";
 
-interface PropertyData {
-  id: number;
-  name: string;
-  address: string;
-  city: string;
-  state: string;
-  Property_share: string;
-  country: string;
-  created_by: string;
+interface PropertyComponentProps {
+  isSidebarOpen: boolean;
 }
 
-const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
-  const [properties, setProperties] = useState<PropertyData[]>([]);
+const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const properties = useSelector(
+    (state: RootState) => state.property.properties
+  );
+  const status = useSelector((state: RootState) => state.property.status);
+  const error = useSelector((state: RootState) => state.property.error);
+
   const [isNewFormOpen, setIsNewFormOpen] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [propertyToDelete, setPropertyToDelete] = useState<PropertyData | null>(
+  const [propertyToDelete, setPropertyToDelete] = useState<Property | null>(
     null
   );
-  const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchProperties();
-  }, []);
-
-  const fetchProperties = async () => {
-    try {
-      const response = await getProperties();
-      const fetchedProperties = response.data.map((property: any) => ({
-        id: property?.id,
-        name: property.propertyName,
-        address: property.address,
-        city: property.city,
-        state: property.state,
-        Property_share: property.propertyShare,
-        country: property.country,
-        created_by: property.createdBy.id,
-      }));
-      setProperties(fetchedProperties);
-    } catch (err) {
-      console.error("Error fetching properties:", err);
-      setError("Failed to fetch properties. Please try again.");
+    if (status === "idle") {
+      dispatch(fetchProperties());
     }
+  }, [status, dispatch]);
+
+  const handleEditClick = (id: number) => {
+    navigate(`/admin/property/${id}`);
   };
 
-  const handleEditClick = async (id: number) => {
-    try {
-      const response = await getPropertyById(id);
-      const propertyData = response.data;
-      navigate(`/admin/property/${id}`, { state: { propertyData } });
-    } catch (err) {
-      console.error("Error fetching property details:", err);
-      setError("Failed to fetch property details. Please try again.");
-    }
-  };
-
-  const handleDeleteClick = (property: PropertyData) => {
+  const handleDeleteClick = (property: Property) => {
     setPropertyToDelete(property);
     setShowDeleteConfirmation(true);
   };
 
-  const handleConfirmDelete = async () => {
+  const handleConfirmDelete = () => {
     if (propertyToDelete === null) return;
 
-    try {
-      await deletePropertyApi(propertyToDelete.id);
-      await fetchProperties();
-      setShowDeleteConfirmation(false);
-      setPropertyToDelete(null);
-    } catch (err) {
-      console.error("Failed to delete property. Please try again.", err);
-      setError("Failed to delete property. Please try again.");
-    }
+    // Implement delete functionality here
+    console.log("Delete property:", propertyToDelete.id);
+    setShowDeleteConfirmation(false);
+    setPropertyToDelete(null);
   };
 
   const handleCancelDelete = () => {
@@ -91,30 +63,30 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
 
   const columns: GridColDef[] = [
     {
-      field: "name",
+      field: "propertyName",
       headerName: "Property Name",
-      minWidth: 180,
+      minWidth: 200,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "address",
       headerName: "Address",
-      minWidth: 240,
+      minWidth: 250,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "city",
       headerName: "City",
-      width: 150,
+      width: 180,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "state",
       headerName: "State",
-      width: 150,
+      width: 170,
       align: "center",
       headerAlign: "center",
     },
@@ -126,18 +98,18 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
       headerAlign: "center",
     },
     {
-      field: "Property_share",
+      field: "propertyShare",
       headerName: "Property Share",
-      width: 150,
+      width: 170,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "actions",
       headerName: "Actions",
-      width: 120,
-      align: "center",
-      headerAlign: "center",
+      width: 150,
+      // align: "center",
+      // headerAlign: "center",
       renderCell: (params) => (
         <>
           <IconButton
@@ -145,14 +117,22 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             color="primary"
             onClick={() => handleEditClick(params.row.id)}
           >
-            <EditIcon />
+            <EditIcon
+              sx={{
+                color: "#709C7E",
+              }}
+            />
           </IconButton>
           <IconButton
             aria-label="delete"
             color="secondary"
             onClick={() => handleDeleteClick(params.row)}
           >
-            <DeleteIcon />
+            <DeleteIcon
+              sx={{
+                color: "#F08486",
+              }}
+            />
           </IconButton>
         </>
       ),
@@ -166,7 +146,7 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
       }`}
     >
       <div className={styles.titleContainer}>
-        <h1 className={styles.title}>Properties</h1>
+        <h1 className={styles.title}>Properties Details</h1>
         <Button
           className={styles.AddPropertyBtn}
           variant="contained"
@@ -185,10 +165,46 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
         <DataGrid
           rows={properties}
           columns={columns}
+          rowHeight={40}
+          columnHeaderHeight={40}
           initialState={{
             pagination: {
               paginationModel: { page: 0, pageSize: 10 },
             },
+          }}
+          sx={{
+            "& .MuiDataGrid-columnHeader": {
+              backgroundColor: "grey",
+              color: "white",
+              fontSize: "small",
+              textTransform: "uppercase",
+
+              fontFamily: " 'Roboto', sans-serif !important",
+            },
+            "& .MuiDataGrid-cell": {
+              fontSize: "small",
+              fontFamily: " 'Roboto', sans-serif !important ",
+            },
+            "&  .MuiDataGrid-cell--textLeft ": {
+              // position: "sticky",
+              // right: 0,
+              // backgroundColor: "#ebecec",
+              // paddingLeft:"50px"
+            },
+            "& .MuiDataGrid-columnHeader--last": {
+              // backgroundColor: "lightgrey",
+              // position: "sticky",
+              // right: 0,
+              // paddingLeft:"50px"
+
+            },
+          }}
+          getRowClassName={(params) => {
+            if (params.indexRelativeToCurrentPage % 2 === 0) {
+              return styles.evenRow;
+            } else {
+              return styles.oddRow;
+            }
           }}
           pageSizeOptions={[5, 10, 25]}
           disableRowSelectionOnClick
@@ -206,7 +222,7 @@ const Property: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
           >
             <NewPropertyForm
               onClose={() => setIsNewFormOpen(false)}
-              onPropertyAdded={fetchProperties}
+              onPropertyAdded={() => dispatch(fetchProperties())}
             />
           </div>
         </div>

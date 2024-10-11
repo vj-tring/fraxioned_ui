@@ -8,6 +8,7 @@
   border-radius: 8px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
   transition: margin-left 0.3s ease, width 0.3s ease;
+  
 }
 
 .calendar-container.sidebar-open {
@@ -32,21 +33,27 @@
 }
 
 .rbc-calendar {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif !important;
   color: #333333;
 }
 
 .rbc-header {
-  padding: 12px 0;
+  padding: 4px 0;
   font-weight: 500;
-  background-color: #f5f7fa;
-  border-bottom: 1px solid #e0e0e0;
+  background-color: #878787;
+  color: white;
+  font-size: small;
+  border-bottom: 1px solid #737373;
+  text-transform: uppercase;
+  font-family: "Montserrat", sans-serif !important;
 }
 
 .rbc-month-view {
-  border: none;
-  border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
+    rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+  border-radius: 3px;
   overflow: hidden;
+  font-family: "Montserrat", sans-serif !important;
 }
 
 .rbc-day-bg {
@@ -69,10 +76,10 @@
   background-color: rgba(0, 120, 212, 0.8);
   border-radius: 0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
-  padding: 2px 5px;
-  height: 20px !important;
-  font-size: 12px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  padding: 5px 10px;
+  height: 23px !important;
+  font-size: small !important;
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -80,6 +87,8 @@
   position: relative;
   left: 6%;
   width: 80% !important;
+  /* letter-spacing: 0px; */
+  border-radius: 3px !important;
 }
 
 .rbc-event.rbc-start-row {
@@ -98,16 +107,33 @@
 
 .rbc-event-content {
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 500;
+  text-transform: uppercase;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-family: "Roboto", sans-serif !important;
+
   position: relative;
   z-index: 1;
 }
-
+.rbc-button-link {
+  font-size: small;
+}
+.rbc-show-more {
+  font-size: x-small !important;
+}
+.rbc-toolbar-label {
+  font-size: medium !important;
+  font-weight: 600;
+  color: #2d6aa0;
+}
 .rbc-event:not(.rbc-event) {
   border-radius: 0 !important;
+}
+.rbc-label {
+  font-size: x-small;
+  font-weight: 500;
 }
 
 .rbc-toolbar {
@@ -120,8 +146,9 @@
   border: 1px solid #d9d9d9;
   border-radius: 4px;
   padding: 6px 12px;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-weight: 500;
+  font-size: small;
   transition: all 0.3s ease;
 }
 
@@ -174,7 +201,7 @@
 
 .dialog-title {
   color: #2c3e50;
-  font-size: 24px;
+  font-size: medium;
   font-weight: 700;
   margin: 0;
 }
@@ -184,8 +211,8 @@
   color: white;
   border: none;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -234,13 +261,13 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 16px;
+  font-size: 12px;
   color: #288b96;
 }
 
 .detail-icon {
   color: #288b96;
-  font-size: 24px;
+  font-size: medium !important;
 }
 
 .detail-label {
@@ -273,12 +300,14 @@
   background-color: #288b96 !important;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
   color: white !important;
-  padding: 10px 20px !important;
-  height: 34px;
+  padding: 6px 10px !important;
+  height: 25px;
   border-radius: 4px !important;
   text-transform: uppercase !important;
-  font-weight: 600 !important;
+  font-weight: 500 !important;
   transition: background-color 0.3s ease !important;
+  font-size: x-small !important;
+  font-size: x-small !important;
 }
 
 .close-button:hover {

@@ -61,6 +61,7 @@
   height: 100%;
   object-fit: cover;
   padding: 8px;
+  border-radius: 12px !important 
 }
 
 .propertyNoImage {
@@ -71,6 +72,7 @@
   justify-content: center;
   background: #e0e0e0;
   color: #adb5bd;
+ 
 }
 
 .propertyInfo {
@@ -78,38 +80,44 @@
 }
 
 .propertyInfoContainer {
-  padding: 12px;
+  padding: 8px;
 }
 
 .propertyName {
-  font-size: 1.1rem !important;
+  font-size: small !important;
   font-weight: 600;
   color: #2c3e50;
 }
 
 .propertyAddress {
-  font-size: 0.85rem;
+  font-size: small !important;
   color: #7f8c8d;
   margin-bottom: 8px !important;
 }
 
 .propertyDetails {
   display: flex;
+  flex-direction: column;
   gap: 6px;
+  font-size: small !important;
 }
 
 .propertyDetailItem {
   display: flex;
+  font-size: small !important;
 }
 
 .propertyDetailLabel {
-  font-size: 0.85rem;
+  font-size: x-small !important;
   font-weight: 500;
+  text-transform: uppercase;
+  
 }
 
 .propertyDetailValue {
-  font-size: 0.85rem;
+  font-size: x-small;
   margin-left: 10px;
+  letter-spacing: 1px;
 }
 
 .propertyYearSelector {

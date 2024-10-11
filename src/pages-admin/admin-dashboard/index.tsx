@@ -25,9 +25,13 @@ import './admin-dashboard.css'
 import ReportsGrid from '../grid/reports-grid';
 import PropertyDocuments from '../property-documents';
 import DocumentGrid from '../grid/document-grid';
+import SpaceProperty from '../space-property';
+import SpacePropertyDetails from '../space-property/space-property-details';
+import Spaces from '../spaces';
+import "./admin-dashboard.css";
 
 const AdminDashboard: React.FC = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
     const toggleSidebar = () => {
@@ -35,7 +39,7 @@ const AdminDashboard: React.FC = () => {
     };
 
     function handleUserUpdated(): void {
-        throw new Error('Function not implemented.');
+        throw new Error("Function not implemented.");
     }
 
     return (
@@ -44,7 +48,7 @@ const AdminDashboard: React.FC = () => {
                 logo={fraxionedLogo}
                 userName={userImage}
                 userImage={userImage}
-                onUserImageClick={() => navigate('/admin/userdetails')}
+                onUserImageClick={() => navigate("/admin/userdetails")}
             />
             <div className="dashboard-content">
                 <SidePanel isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
@@ -57,8 +61,9 @@ const AdminDashboard: React.FC = () => {
                         <Route path="/user/:id/edit" element={<TabSwitch onUserUpdated={handleUserUpdated} />} />
                         <Route path="/holidays" element={<Holidays isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/user" element={<UserGrid isSidebarOpen={isSidebarOpen} />} />
-                        <Route path="/reports" element={<ReportsGrid isSidebarOpen={isSidebarOpen}   />} />
                         <Route path="/documents" element={<DocumentGrid isSidebarOpen={isSidebarOpen} />} />
+                        <Route path="/reports" element={<ReportsGrid isSidebarOpen={isSidebarOpen} />} />
+                        <Route path="/spaces" element={<Spaces isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/property" element={<Property isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/property/:id" element={
                             <div className="property-details-container">
@@ -148,10 +153,29 @@ const AdminDashboard: React.FC = () => {
                                 </div>
                             </div>
                         } />
+                        <Route path="/property/:id/rooms" element={
+                            <div className="property-details-container">
+                                <PropertySidePanel isOpen={true} />
+                                <div className="property-info-content">
+                                    <SpaceProperty />
+                                </div>
+                            </div>
+                        } />
+
+                        <Route path="/property/:id/rooms/:spaceId" element={
+                            <div className="property-details-container">
+                                <PropertySidePanel isOpen={true} />
+                                <div className="property-info-content">
+                                    <SpacePropertyDetails />
+                                </div>
+                            </div>
+                        } />
+                        <Route path="*" element={<Navigate to="/admin/bookings" />} />
                     </Routes>
                 </div>
             </div>
-        </div>
+        </div >
+
     );
 };
 

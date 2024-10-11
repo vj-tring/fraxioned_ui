@@ -22,6 +22,7 @@ interface Property {
   country?: string;
   latitude?: string;
   longitude?: string;
+  coverImageUrl?: string;
 }
 
 // Image interface
@@ -56,16 +57,6 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
   const showCarousel = properties.length > 4;
   const showPlusIcon = true;
 
-  const fetchImages = async () => {
-    try {
-      const response = await propertyImageapi();
-      const data = response.data.data as Image[];
-      setImages(data.filter((img) => img.displayOrder === 1));
-    } catch (error) {
-      console.error("Error fetching images:", error);
-    }
-  };
-
   console.log("properties", properties);
   const fetchAdditionalProperties = async () => {
     try {
@@ -92,7 +83,7 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
     dispatch(resetLimits());
     dispatch(clearDates());
 
-    fetchImages();
+    // fetchImages();
     fetchAdditionalProperties();
   }, [dispatch]);
 
@@ -110,8 +101,12 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
   // const Shadow =
   //   properties.length >= 4 ? "rgba(0, 0, 0, 0.1) 1px 1px 2px 1px" : "none";
 
-  const formatCardName = (name: string) => {
-    return name.replace(/\s+\(.*\)/, "");
+  const formatCardName = (name: string | undefined) => {
+    if (name) {
+      return name.replace(/\s+\(.*\)/, "");
+    } else {
+      return "";
+    }
   };
 
   return (
@@ -139,13 +134,10 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
             ref={carouselRef}
           >
             {properties.map((property) => {
-              const propertyImage = images.find(
-                (img) => img.property.id === property.id
-              );
               return (
                 <Card
                   key={property.id}
-                  imageUrl={propertyImage?.imageUrl || image1}
+                  imageUrl={property.coverImageUrl || PorpImg}
                   title={formatCardName(property.name || "No Title")}
                   text={property.address || "Address not available"}
                   share={

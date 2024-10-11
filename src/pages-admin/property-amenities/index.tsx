@@ -1,10 +1,18 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Search, ChevronDown, ChevronUp } from 'lucide-react';
 import styles from './propertyamenities.module.css';
-import { amenitiesapi, getAmenitiesById, updateamenityforproperty } from '@/api';
-import { Pencil, Check, X, ChevronRight, Save } from 'lucide-react';
+import { amenitiesapi } from '@/api';
 import CustomizedSnackbars from '@/components/customized-snackbar';
-import { Dialog, DialogContent, DialogTitle } from '@mui/material';
+import ConfirmationModal from '@/components/confirmation-modal';
+import {
+  getAmenitiesById,
+  updatePropertyAmenities,
+  resetPropertyAmenities
+} from '@/store/slice/auth/propertyamenities';
+import { RootState } from '@/store/reducers';
+import { AppDispatch } from '@/store';
 
 interface Amenity {
   id: number;
@@ -24,19 +32,23 @@ interface SnackbarState {
 
 const PropertyAmenities: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const dispatch = useDispatch<AppDispatch>();
+  
+  const { loading, error, success, amenities: propertyAmenities } = useSelector(
+    (state: RootState) => state.propertyAmenities
+  );
+
   const [amenities, setAmenities] = useState<{ [key: string]: Amenity[] }>({});
-  const [loading, setLoading] = useState(true);
   const [selectedAmenities, setSelectedAmenities] = useState<number[]>([]);
-  const [editMode, setEditMode] = useState(false);
-  const [editingAmenity, setEditingAmenity] = useState<Amenity | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
+  const [searchTerms, setSearchTerms] = useState<{ [key: string]: string }>({});
   const [snackbar, setSnackbar] = useState<SnackbarState>({
     open: false,
     message: '',
     severity: 'info',
   });
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedGroup, setSelectedGroup] = useState('');
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchAmenities();
@@ -44,33 +56,41 @@ const PropertyAmenities: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      fetchSelectedAmenities(Number(id));
+      dispatch(getAmenitiesById(Number(id)));
     }
-  }, [id]);
+  }, [id, dispatch]);
 
   useEffect(() => {
-    if (editingAmenity && inputRef.current) {
-      inputRef.current.focus();
+    if (propertyAmenities.length > 0) {
+      setSelectedAmenities(propertyAmenities.map(item => item.amenity.id));
     }
-  }, [editingAmenity]);
+  }, [propertyAmenities]);
+
+  useEffect(() => {
+    if (success) {
+      showSnackbar('Amenities updated successfully!', 'success');
+      setShowConfirmModal(false);
+      dispatch(resetPropertyAmenities());
+      if (id) {
+        dispatch(getAmenitiesById(Number(id)));
+      }
+      fetchAmenities();
+    }
+    if (error) {
+      showSnackbar(error, 'error');
+      dispatch(resetPropertyAmenities());
+    }
+  }, [success, error, dispatch, id]);
 
   const showSnackbar = (message: string, severity: 'success' | 'info' | 'warning' | 'error') => {
     setSnackbar({ open: true, message, severity });
-  };
-
-  const handleMoreClick = (group: string) => {
-    setSelectedGroup(group);
-    setDialogOpen(true);
-  };
-
-  const handleCloseDialog = () => {
-    setDialogOpen(false);
+    setTimeout(() => {
+      setSnackbar(prev => ({ ...prev, open: false }));
+    }, 3000);
   };
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
+    if (reason === 'clickaway') return;
     setSnackbar({ ...snackbar, open: false });
   };
 
@@ -79,29 +99,15 @@ const PropertyAmenities: React.FC = () => {
       const response = await amenitiesapi();
       const groupedAmenities = groupAmenitiesByGroup(response.data.data);
       setAmenities(groupedAmenities);
-      setLoading(false);
     } catch (err) {
       showSnackbar('Failed to fetch amenities. Please try again later.', 'error');
-      setLoading(false);
-    }
-  };
-
-  const fetchSelectedAmenities = async (propertyId: number) => {
-    try {
-      const response = await getAmenitiesById(propertyId);
-      const selected = response.data.data.map((item: any) => item.amenity.id);
-      setSelectedAmenities(selected);
-    } catch (err) {
-      showSnackbar('Failed to fetch selected amenities for this property.', 'error');
     }
   };
 
   const groupAmenitiesByGroup = (data: Amenity[]) => {
     return data.reduce((acc, amenity) => {
       const group = amenity.amenityGroup.name;
-      if (!acc[group]) {
-        acc[group] = [];
-      }
+      if (!acc[group]) acc[group] = [];
       acc[group].push(amenity);
       return acc;
     }, {} as { [key: string]: Amenity[] });
@@ -115,59 +121,61 @@ const PropertyAmenities: React.FC = () => {
     );
   };
 
-  const handleUpdate = async () => {
-    try {
-      const updateData = {
-        property: {
-          id: Number(id)
-        },
-        amenities: selectedAmenities.map(amenityId => ({ id: amenityId })),
-        updatedBy: {
-          id: 1
-        }
-      };
-
-      await updateamenityforproperty(updateData);
-      showSnackbar('Amenities updated successfully!', 'success');
-      setDialogOpen(false);
-    } catch (err) {
-      showSnackbar('Failed to update amenities. Please try again.', 'error');
-    }
-  };
-
-  const toggleEditMode = () => {
-    setEditMode(!editMode);
-    setEditingAmenity(null);
-  };
-
-  const startEditing = (amenity: Amenity) => {
-    setEditingAmenity(amenity);
-  };
-
-  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (editingAmenity) {
-      setEditingAmenity({ ...editingAmenity, amenityName: e.target.value });
-    }
-  };
-
-  const saveEdit = () => {
-    if (editingAmenity) {
-      setAmenities(prev => {
-        const newAmenities = { ...prev };
-        const groupArray = newAmenities[editingAmenity.amenityGroup.name];
-        const index = groupArray.findIndex(a => a.id === editingAmenity.id);
-        if (index !== -1) {
-          groupArray[index] = editingAmenity;
-        }
-        return newAmenities;
+  const scrollToGroup = (group: string) => {
+    const element = document.getElementById(`group-${group}`);
+    if (element && scrollContainerRef.current) {
+      const container = scrollContainerRef.current;
+      const elementPosition = element.offsetTop;
+      const targetScrollPosition = elementPosition - container.offsetTop;
+      container.scrollTo({
+        top: targetScrollPosition,
+        behavior: 'smooth'
       });
-      setEditingAmenity(null);
-      showSnackbar('Amenity updated successfully!', 'success');
     }
   };
 
-  const cancelEdit = () => {
-    setEditingAmenity(null);
+  const toggleGroup = (group: string) => {
+    setExpandedGroup(prev => {
+      const newState = prev === group ? null : group;
+      if (newState) {
+        setTimeout(() => scrollToGroup(group), 100);
+      }
+      return newState;
+    });
+  };
+
+  const handleSearch = (group: string, term: string) => {
+    setSearchTerms(prev => ({ ...prev, [group]: term }));
+  };
+
+  const filterAmenities = useCallback((amenitiesList: Amenity[], searchTerm: string) => {
+    return amenitiesList.filter(amenity =>
+      amenity.amenityName.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, []);
+
+  const sortAmenities = useCallback((amenitiesList: Amenity[]) => {
+    return [...amenitiesList].sort((a, b) => {
+      const aChecked = selectedAmenities.includes(a.id);
+      const bChecked = selectedAmenities.includes(b.id);
+      if (aChecked && !bChecked) return -1;
+      if (!aChecked && bChecked) return 1;
+      return a.amenityName.localeCompare(b.amenityName);
+    });
+  }, [selectedAmenities]);
+
+  const getSortedAmenities = useCallback((group: string) => {
+    return sortAmenities(amenities[group] || []);
+  }, [amenities, sortAmenities]);
+
+  const handleUpdate = async () => {
+    const updateData = {
+      property: { id: Number(id) },
+      propertySpace: { id: null },
+      amenities: selectedAmenities.map(amenityId => ({ id: amenityId })),
+      updatedBy: { id: 1 } 
+    };
+    dispatch(updatePropertyAmenities(updateData));
   };
 
   if (loading) {
@@ -179,19 +187,39 @@ const PropertyAmenities: React.FC = () => {
       <div className={styles.contentWrapper}>
         <div className={styles.header}>
           <h1 className={styles.title}>Property Amenities</h1>
-          <div className={styles.buttonGroup}>
-            <button className={styles.updateButton} onClick={handleUpdate}>Update</button>
-          </div>
+          <button 
+            className={styles.updateButton} 
+            onClick={() => setShowConfirmModal(true)}
+          >
+            Update
+          </button>
         </div>
-        <div className={styles.amenitiesScrollContainer}>
-          <div className={styles.amenitiesGrid}>
-            {Object.entries(amenities).map(([group, amenitiesList]) => (
-              <div key={group} className={styles.amenityGroup}>
-                <h2 className={styles.amenityType}>{group}</h2>
-                <div className={styles.amenityList}>
-                  {amenitiesList.slice(0, 3).map((amenity) => (
-                    <div key={amenity.id} className={styles.amenityItem}>
-                      <label className={styles.checkboxLabel}>
+        <div className={styles.amenitiesScrollContainer} ref={scrollContainerRef}>
+          {Object.entries(amenities).map(([group, amenitiesList]) => (
+            <div
+              key={group}
+              id={`group-${group}`}
+              className={`${styles.amenityGroup} ${expandedGroup === group ? styles.expanded : ''}`}
+            >
+              <div className={styles.groupHeader} onClick={() => toggleGroup(group)}>
+                <h2 className={styles.groupTitle}>{group}</h2>
+                {expandedGroup === group ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+              </div>
+              {expandedGroup === group && (
+                <div className={styles.groupContent}>
+                  <div className={styles.searchContainer}>
+                    <Search size={19} className={styles.searchIcon} />
+                    <input
+                      type="text"
+                      placeholder={`Search in ${group}...`}
+                      className={styles.searchInput}
+                      value={searchTerms[group] || ''}
+                      onChange={(e) => handleSearch(group, e.target.value)}
+                    />
+                  </div>
+                  <div className={styles.amenityList}>
+                    {filterAmenities(getSortedAmenities(group), searchTerms[group] || '').map((amenity) => (
+                      <label key={amenity.id} className={styles.amenityItem}>
                         <input
                           type="checkbox"
                           checked={selectedAmenities.includes(amenity.id)}
@@ -199,44 +227,19 @@ const PropertyAmenities: React.FC = () => {
                           className={styles.checkbox}
                         />
                         <span className={styles.checkmark}></span>
-                        {editMode && editingAmenity?.id === amenity.id ? (
-                          <div className={styles.editingWrapper}>
-                            <input
-                              ref={inputRef}
-                              type="text"
-                              value={editingAmenity.amenityName}
-                              onChange={handleEditChange}
-                              className={styles.editInput}
-                            />
-                            <button onClick={saveEdit} className={styles.editButton}>
-                              <Check size={16} />
-                            </button>
-                            <button onClick={cancelEdit} className={styles.editButton}>
-                              <X size={16} />
-                            </button>
-                          </div>
-                        ) : (
-                          <span className={styles.amenityName}>
-                            {amenity.amenityName}
-                            {editMode && (
-                              <button onClick={() => startEditing(amenity)} className={styles.editButton}>
-                                <Pencil size={16} />
-                              </button>
-                            )}
-                          </span>
-                        )}
+                        <span className={styles.amenityName}>{amenity.amenityName}</span>
                       </label>
-                    </div>
-                  ))}
+                    ))}
+                    {filterAmenities(getSortedAmenities(group), searchTerms[group] || '').length === 0 && (
+                      <p className={styles.noResults}>
+                        No "{searchTerms[group]}" found in {group} category
+                      </p>
+                    )}
+                  </div>
                 </div>
-                {amenitiesList.length > 3 && (
-                  <button className={styles.moreButton} onClick={() => handleMoreClick(group)}>
-                    More <ChevronRight size={16} />
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
       <CustomizedSnackbars
@@ -245,36 +248,15 @@ const PropertyAmenities: React.FC = () => {
         message={snackbar.message}
         severity={snackbar.severity}
       />
-      <Dialog
-        open={dialogOpen}
-        onClose={handleCloseDialog}
-        classes={{ paper: styles.dialogPaper }}
-      >
-        <DialogTitle className={styles.dialogTitle}>
-          {selectedGroup} Amenities
-          <button onClick={handleUpdate} className={styles.dialogUpdateButton}>
-            Update
-          </button>
-        </DialogTitle>
-        <DialogContent className={styles.dialogContent}>
-          <div className={styles.dialogAmenityList}>
-            {amenities[selectedGroup]?.map((amenity) => (
-              <div key={amenity.id} className={styles.dialogAmenityItem}>
-                <label className={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    checked={selectedAmenities.includes(amenity.id)}
-                    onChange={() => handleCheckboxChange(amenity.id)}
-                    className={styles.checkbox}
-                  />
-                  <span className={styles.checkmark}></span>
-                  {amenity.amenityName}
-                </label>
-              </div>
-            ))}
-          </div>
-        </DialogContent>
-      </Dialog>
+      <ConfirmationModal
+        show={showConfirmModal}
+        onHide={() => setShowConfirmModal(false)}
+        onConfirm={handleUpdate}
+        title="Confirm Update"
+        message="Are you sure you want to update the amenities for this property?"
+        confirmLabel="Update"
+        cancelLabel="Cancel"
+      />
     </div>
   );
 };

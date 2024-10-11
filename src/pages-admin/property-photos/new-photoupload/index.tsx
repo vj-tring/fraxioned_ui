@@ -77,10 +77,10 @@ const PhotoUpload: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    if (!space || !spaceType) {
-      alert("Please select both Space and Space Type");
-      return;
-    }
+    // if (!space || !spaceType) {
+    //   alert("Please select both Space and Space Type");
+    //   return;
+    // }
 
     setIsLoading(true);
     const createdBy = 1;

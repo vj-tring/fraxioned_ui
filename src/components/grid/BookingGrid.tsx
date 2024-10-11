@@ -4,11 +4,13 @@ import { Backdrop, Button, Grid } from "@mui/material";
 import EditBookingModal from "@/pages/booking/bookingEdit";
 import CancelPolicy from "../cancel-policy";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchUserBookings,
-} from "@/store/slice/auth/bookingSlice";
+import { fetchUserBookings } from "@/store/slice/auth/bookingSlice";
 import { AppDispatch } from "@/store";
 import { RootState } from "@/store/reducers";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import { IconButton } from "@mui/material";
+import styles from "./BookingGrid.module.css";
 
 interface BookingGridProps {
   bookings: Array<{
@@ -90,7 +92,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
     {
       field: "bookingId",
       headerName: "BookingID",
-      flex: 1,
+      width: 150,
       headerAlign: "center",
       align: "center",
     },
@@ -98,7 +100,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
     {
       field: "property",
       headerName: "Property",
-      flex: 1,
+      width: 160,
       headerAlign: "center",
       align: "center",
     },
@@ -107,31 +109,33 @@ const BookingGrid: React.FC<BookingGridProps> = ({
       headerName: "Check-in",
       headerAlign: "center",
       align: "center",
+      width: 180,
     },
     {
       field: "checkoutDate",
       headerName: "Checkout",
       headerAlign: "center",
       align: "center",
+      width: 180,
     },
     {
       field: "guest",
       headerName: "Guests",
-      flex: 1,
+      width: 230,
       headerAlign: "center",
       align: "center",
     },
     {
       field: "createdAt",
       headerName: "Booked",
-      flex: 1,
+      width: 200,
       headerAlign: "center",
       align: "center",
     },
     {
       field: "totalNights",
       headerName: "TotalNights",
-      flex: 1,
+      width: 150,
       headerAlign: "center",
       align: "center",
     },
@@ -141,44 +145,35 @@ const BookingGrid: React.FC<BookingGridProps> = ({
     columns.push({
       field: "actions",
       headerName: "Actions",
-      headerAlign: "center",
-      align: "center",
-      flex: 1,
+      // headerAlign: "center",
+      // align: "center",
+      width: 130,
       renderCell: (params) => (
-        <>
-          <Button
-            variant="outlined"
-            disableRipple
-            onClick={() => handleEditClick(params.row.id)}
-            sx={{
-              marginRight: 1,
-              height: "25px",
-              fontSize: "12px",
-              borderRadius: "15px",
-              border: "1px solid black",
-              color: "#808080",
-              fontFamily: "Montserrat, sans-serif",
-            }}
-          >
-            Edit
-          </Button>
-          <Button
-            variant="outlined"
+        <div>
+          <IconButton
+            aria-label="edit"
             color="primary"
-            disableRipple
-            onClick={() => handleCancelClick(params.row.id)}
-            sx={{
-              borderRadius: "15px",
-              height: "25px",
-              fontSize: "12px",
-              border: "1px solid black",
-              color: "#808080",
-              fontFamily: "Montserrat, sans-serif",
-            }}
+            onClick={() => handleEditClick(params.row.id)}
           >
-            Cancel
-          </Button>
-        </>
+            <EditIcon
+              sx={{
+                color: "#709C7E",
+              }}
+            />
+          </IconButton>
+          <IconButton
+            aria-label="delete"
+            color="secondary"
+            onClick={() => handleCancelClick(params.row)}
+            disabled={params.row.isCancelled}
+          >
+            <DeleteIcon
+              sx={{
+                color: "#F08486",
+              }}
+            />
+          </IconButton>
+        </div>
       ),
     });
   }
@@ -190,10 +185,11 @@ const BookingGrid: React.FC<BookingGridProps> = ({
   return (
     <div
       style={{
-        height: 300,
+        height: 350,
         width: "100%",
         border: "none",
         marginTop: "2rem",
+        // boxShadow: "rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px"
       }}
     >
       <DataGrid
@@ -206,6 +202,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
         disableColumnSelector
         disableColumnMenu
         disableColumnFilter
+        // hideFooterPagination
         slots={{ toolbar: GridToolbar }}
         slotProps={{
           toolbar: {
@@ -214,70 +211,87 @@ const BookingGrid: React.FC<BookingGridProps> = ({
             csvOptions: { disableToolbarButton: true },
           },
         }}
+        getRowClassName={(params) => {
+          if (params.indexRelativeToCurrentPage % 2 === 0) {
+            return styles.evenRow;
+          } else {
+            return styles.oddRow;
+          }
+        }}
         sx={{
+          border: "none",
           "& .MuiDataGrid-columnHeader": {
-            backgroundColor: "#46696E",
-            fontWeight: "bold",
+            backgroundColor: "grey",
             color: "white",
-            textTransform: "capitalize",
-            paddingRight: "50px",
-            fontFamily: "Montserrat, sans-serif",
-          },
-          "& .MuiDataGrid-footerContainer": {
-            display: "none",
-          },
-          "& .MuiDataGrid": {
-            border: "none",
+            fontSize: "small",
+            textTransform: "uppercase",
+
+            fontFamily: " 'Roboto', sans-serif !important",
           },
           "& .MuiDataGrid-cell": {
-            fontFamily: "Montserrat, sans-serif",
-            color: "#808080",
+            fontSize: "small",
+            fontFamily: " 'Roboto', sans-serif !important ",
           },
+          // "&  .MuiDataGrid-cell--textLeft ": {
+          //   position: "sticky",
+          //   right: 0,
+          //   backgroundColor: "#ebecec",
+          //   paddingLeft:'30px'
+          // },
+          // "& .MuiDataGrid-columnHeader--last": {
+          //   // backgroundColor: "lightgrey",
+          //   position: "sticky",
+          //   right: 0,
+          //   paddingLeft:'30px'
+          // },
         }}
       />
-{showCancelPopup && (
-  <>
-    <div 
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-        zIndex: 1000
-      }}
-    />
-      <Backdrop
+      {showCancelPopup && (
+        <>
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              zIndex: 1000,
+            }}
+          />
+          <Backdrop
             open={showCancelPopup}
             style={{
               zIndex: 1000,
-              color: '#fff',
+              color: "#fff",
             }}
-       />
-    <Grid 
-      container 
-      spacing={2} 
-      direction="column" 
-      justify="center" 
-      alignItems="flex-start" 
-      style={{
-        position: "fixed",
-        top: "52%",
-        left: "50%",
-        width: "70%",
-        height: "80%",
-        transform: "translate(-50%, -50%)",
-        backgroundColor: "white",
-        padding: "10px",
-        borderRadius: "8px",
-        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.4)",
-        zIndex: 1001,
-        // maxHeight: "80vh",
-      }}
-    >
-      <CancelPolicy onConfirm={handleConfirmCancel} onCancel={handleCloseCancelModal} />
-    </Grid>
-  </>
-)}
+          />
+          <Grid
+            container
+            spacing={2}
+            direction="column"
+            justify="center"
+            alignItems="flex-start"
+            style={{
+              position: "fixed",
+              top: "52%",
+              left: "50%",
+              width: "70%",
+              height: "80%",
+              transform: "translate(-50%, -50%)",
+              backgroundColor: "white",
+              padding: "10px",
+              borderRadius: "8px",
+              boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.4)",
+              zIndex: 1001,
+              // maxHeight: "80vh",
+            }}
+          >
+            <CancelPolicy
+              onConfirm={handleConfirmCancel}
+              onCancel={handleCloseCancelModal}
+            />
+          </Grid>
+        </>
+      )}
       {editingBooking && (
         <EditBookingModal
           open={editBookingId !== null}

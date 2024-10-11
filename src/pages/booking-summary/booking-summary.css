@@ -4,6 +4,7 @@
 }
 .Booking-Summary {
   display: flex;
+  width: 100%;
   flex-direction: row;
   justify-content: space-between;
   padding: 10px;
@@ -297,8 +298,7 @@
   }
 }
 
-.BookedCheck
-{
+.BookedCheck {
   transition: all 0.5s ease-out;
   animation: txt 5s infinite;
 }

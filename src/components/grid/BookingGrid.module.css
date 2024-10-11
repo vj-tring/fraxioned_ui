@@ -3,19 +3,23 @@
   justify-content: space-around;
   gap: 10px;
   cursor: pointer;
-  /* margin-left: 30px !important; */
-  /* float: right !important; */
 }
 
 .EditFont,
 .DeleteFont {
   font-size: 20px !important;
 }
+.evenRow {
+  background-color: rgb(255, 255, 255) !important;
+}
+.oddRow {
+  background-color: #ebecec !important;
+}
 
-.EditFont{
+.EditFont {
   color: rgb(26, 26, 77);
 }
-.DeleteFont{
+.DeleteFont {
   color: rgb(132, 40, 40);
 }
 @media only screen and (max-width: 480px) {
@@ -30,14 +34,9 @@
     display: flex;
     gap: 2px !important;
     float: none !important;
-    /* flex-direction: column; */
   }
   .EditFont,
   .DeleteFont {
     font-size: 14px !important;
   }
-
-  /* .css-3eek4p-MuiDataGrid-main{
-    overflow-y: scroll !important;
-  } */
 }

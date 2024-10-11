@@ -1,88 +1,88 @@
-import React, { useState, useEffect } from 'react';
-import styles from './property-image.module.css';
-import { getProperties } from '@/api';
-import { MenuItem, Select, FormControl, InputLabel, SelectChangeEvent } from '@mui/material';
-
-interface PropertyType {
-    id: number | string;
-    propertyName: string;
-    color: string;
-}
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import styles from "./property-image.module.css";
+import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
+import {
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+  SelectChangeEvent,
+} from "@mui/material";
+import { RootState } from "@/store/reducers";
+import { AppDispatch } from "@/store";
 
 interface PropertyImageProps {
-    onPropertySelect: (propertyId: number | string) => void;
-    selectedPropertyId: number | string;
+  onPropertySelect: (propertyId: number | string) => void;
+  selectedPropertyId: number | string;
 }
 
-const PropertyImage: React.FC<PropertyImageProps> = ({ onPropertySelect, selectedPropertyId }) => {
-    const [propertyTypes, setPropertyTypes] = useState<PropertyType[]>([]);
-    const [dropdownValue, setDropdownValue] = useState<number | string>('');
+interface PropertyType {
+  id: number | string;
+  propertyName: string;
+  color: string;
+}
 
-    useEffect(() => {
-        const colors = [
-            '#FF9999', '#9999FF', '#99FF99', '#FFB266', '#FF6666', '#FF99FF', '#999999', '#66FFB2', '#FFA07A', '#20B2AA', '#99FF99', '#FFB266'
-        ];
+const PropertyImage: React.FC<PropertyImageProps> = ({
+  onPropertySelect,
+  selectedPropertyId,
+}) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { properties, loading, error } = useSelector(
+    (state: RootState) => state.property
+  );
 
-        const fetchProperties = async () => {
-            try {
-                const response = await getProperties();
-                const fetchedProperties = response.data.map((property: any, index: number) => ({
-                    id: property.id,
-                    propertyName: property.propertyName,
-                    color: colors[index % colors.length]
-                }));
+  useEffect(() => {
+    dispatch(fetchProperties());
+    const intervalId = setInterval(() => {
+      dispatch(fetchProperties());
+    }, 60000);
+    return () => clearInterval(intervalId);
+  }, [dispatch]);
 
-                const allHolidaysProperty: PropertyType = {
-                    id: 'all',
-                    propertyName: 'All Holidays',
-                    color: '#4CAF50'
-                };
+  const handleChange = (event: SelectChangeEvent<number | string>) => {
+    const selectedValue = event.target.value as number | string;
+    onPropertySelect(selectedValue);
+  };
 
-                setPropertyTypes([allHolidaysProperty, ...fetchedProperties]);
-            } catch (err) {
-                console.error('Error fetching properties:', err);
-            }
-        };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-        fetchProperties();
-        const intervalId = setInterval(fetchProperties, 60000);
-        return () => clearInterval(intervalId);
-    }, []);
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
-    const handleChange = (event: SelectChangeEvent<number | string>) => {
-        const selectedValue = event.target.value as number | string;
-        setDropdownValue(selectedValue);
-        onPropertySelect(selectedValue);
-    };
-
-    return (
-        <div className={styles.container}>
-            <FormControl variant="outlined" className={styles.dropdownContainer}>
-                <InputLabel id="property-select-label">Select Property</InputLabel>
-                <Select
-                    labelId="property-select-label"
-                    value={dropdownValue}
-                    onChange={handleChange}
-                    label="Select Property"
-                    MenuProps={{
-                        PaperProps: {
-                            style: {
-                                maxHeight: 200,
-                                borderColor:'grey'
-                            },
-                        },
-                    }}
-                    sx={{ height: '50px' }}
-                >
-                    {propertyTypes.map((property) => (
-                        <MenuItem key={property.id} value={property.id}>
-                            {property.propertyName}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-        </div>
-    );
+  return (
+    <div className={styles.container}>
+      <FormControl variant="outlined" className={styles.dropdownContainer}>
+        <InputLabel id="property-select-label">Select Property</InputLabel>
+        <Select
+          labelId="property-select-label"
+          value={selectedPropertyId}
+          onChange={handleChange}
+          label="Select Property"
+          MenuProps={{
+            PaperProps: {
+              style: {
+                maxHeight: 200,
+                borderColor: "grey",
+              },
+            },
+          }}
+          sx={{ height: "40px" ,
+            fontSize:'small'
+          }}
+        >
+          {properties.map((property: PropertyType) => (
+            <MenuItem key={property.id} value={property.id}>
+              {property.propertyName}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </div>
+  );
 };
 
 export default PropertyImage;
