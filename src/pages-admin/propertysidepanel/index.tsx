@@ -4,8 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import styles from './propertysidepanel.module.css';
 import { FaInfoCircle, FaConciergeBell, FaMapMarkerAlt, FaImages, FaList, FaChevronDown, FaFile, FaUser } from 'react-icons/fa';
 import { MdAddPhotoAlternate } from "react-icons/md";
-
-import { getPropertyById, getProperties } from '@/api';
 import { fetchProperties, fetchPropertyById } from '@/store/slice/auth/propertiesSlice';
 import { RootState } from '@/store/reducers';
 import { AppDispatch } from '@/store';

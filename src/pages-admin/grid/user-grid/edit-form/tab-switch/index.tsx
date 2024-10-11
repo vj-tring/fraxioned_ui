@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Tabs, Tab, Button, IconButton } from "@mui/material";
+import { Tabs, Tab, Button } from "@mui/material";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserById } from "@/store/slice/user-slice";
+import { RootState } from "@/store/reducers";
 import UserForm from "../user-form";
 import EditForm from "../user-edit";
 import PropertyTab from "../propertyUser";
 import UserBookings from "../user-bookings";
-import styles from "./tab.module.css";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { getUserById } from "@/api";
 import DocumentManagerCard from "../document";
+import styles from "./tab.module.css";
+import { AppDispatch } from "@/store";
 
 interface TabSwitchProps {
   onUserUpdated: () => void;
@@ -16,12 +18,14 @@ interface TabSwitchProps {
 
 const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [userData, setUserData] = useState<any>(null);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch<AppDispatch>();
 
   const userId = parseInt(id || "0", 10);
+
+  const { user, loading, error } = useSelector((state: RootState) => state.user);
 
   const getCurrentTab = () => {
     const searchParams = new URLSearchParams(location.search);
@@ -31,19 +35,10 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
   const [selectedTab, setSelectedTab] = useState(getCurrentTab());
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await getUserById(userId);
-        setUserData(response.data.user);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
     if (userId) {
-      fetchUserData();
+      dispatch(fetchUserById(userId));
     }
-  }, [userId]);
+  }, [dispatch, userId]);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -71,11 +66,19 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
     navigate("/admin/user");
   };
 
-  if (!userData) {
+  if (loading) {
     return <div className={styles.loading}>Loading...</div>;
   }
 
-  const isOwner = userData.role.roleName === "Owner";
+  if (error) {
+    return <div className={styles.error}>Error: {error}</div>;
+  }
+
+  if (!user) {
+    return <div className={styles.error}>User not found</div>;
+  }
+
+  const isOwner = user.role.roleName === "Owner";
 
   return (
     <div className={styles.tabContainer}>
@@ -85,20 +88,13 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
           onChange={handleTabChange}
           aria-label="user edit tabs"
           className={styles.tabs}
-        > 
+        >
           <Tab disableRipple label="General Details" />
-          <Tab disableRipple label="Property"  />
+          <Tab disableRipple label="Property" />
           <Tab disableRipple label="Booking" />
           <Tab disableRipple label="Document" />
         </Tabs>
         <div className={styles.actionButtons}>
-          {/* <IconButton
-            onClick={() => window.location.reload()}
-            className={styles.refreshIcon}
-            aria-label="refresh"
-          >
-            <RefreshIcon />
-          </IconButton> */}
           <Button
             variant="contained"
             color="primary"
@@ -113,7 +109,7 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
       <div className={styles.content}>
         {selectedTab === 0 && !isEditing ? (
           <UserForm
-            user={userData}
+            user={user}
             onEditClick={handleEditClick}
             header={""}
             editButtonName={""}
@@ -123,7 +119,7 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
           selectedTab === 0 &&
           isEditing && (
             <EditForm
-              user={userData}
+              user={user}
               onClose={() => setIsEditing(false)}
               onUserUpdated={handleUpdateSuccess}
               formTitle={""}
