@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { updatePropertyImage } from "@/api"; 
+import { updatePropertyImage } from "@/api";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPropertyById, fetchPropertyDetailsById } from "@/store/slice/auth/propertiesSlice";
 import { AppDispatch } from '@/store';
@@ -21,8 +21,6 @@ import {
   Button,
   TextField,
 } from "@mui/material";
-import { AsyncThunkAction, ThunkDispatch } from "@reduxjs/toolkit";
-import { UnknownAction } from "redux";
 
 
 const PropertyGeneralInfo: React.FC = () => {
