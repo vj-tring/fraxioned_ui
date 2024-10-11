@@ -19,7 +19,7 @@ import { updateuserapi, getRoles } from "@/api";
 import styles from "./useredit.module.css";
 import { User, Role, ContactDetails } from "@/store/model/user";
 import { updateUserById } from "@/store/slice/user-slice";
-import { useDispatch } from "@/store";
+import { useDispatch } from "react-redux";
 
 interface EditFormProps {
   user: User;
