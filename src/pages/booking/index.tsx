@@ -253,7 +253,7 @@ const Booking = () => {
           activeTab={activeTab}
         />
 
-        <div className="TrackingMyNight mt-5">
+        <div className="TrackingMyNight mt-5 ">
           <TrackingMyNigts />
         </div>
 

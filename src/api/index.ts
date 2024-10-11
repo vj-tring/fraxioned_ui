@@ -177,7 +177,7 @@ export const amenitiesapi = () =>
     axiosInstance.get(`/amenities`);
 
 export const propertyAmenitiesapi = (id: number) =>
-    axiosInstance.get(`/property-amenities/property/${id}`);
+    axiosInstance.get(`/property-space-amenities/property/${id}`);
 
 export const getpropertyamenityByid = () =>
     axiosInstance.get(`/property-amenities`);
@@ -218,8 +218,8 @@ export const updateamenities = (id: number, updateData: {
     amenityGroup: { id: number };
 }) => axiosInstance.patch(`/amenities/amenity/${id}`, updateData);
 
-export const propertyImageapi = () =>
-    axiosInstance.get(`/property-images`);
+export const propertyImageapi = (propertyId: number) =>
+    axiosInstance.get(`/property-space-images/property/${propertyId}/images`);
 
 export const deleteAmenity = (id: number) =>
     axiosInstance.delete(`/amenities/amenity/${id}`);
@@ -338,3 +338,22 @@ export const getAllSpacePropertiesById = (propertyId: number) =>
 // Delete Space Property API
 export const deleteSpaceProperty = (id: number) =>
     axiosInstance.delete(`/property-spaces/property-space/${id}`);
+
+// Property Space CRUD
+
+// Create Property Space Image
+
+export const propertySpaceImageuploadapi = (formData: FormData) => {
+    return axiosInstance.post(`/property-space-images`, formData, {
+    });
+};
+
+export const getAllSpacePropertyImages = () => {
+    return axiosInstance.get(`/property-space-images`)
+};
+
+export const getAllSpacePropertyImageById = (propertyId: number) => {
+    return axiosInstance.get(`/property-space-images/property/${propertyId}/images`)
+};
+
+
