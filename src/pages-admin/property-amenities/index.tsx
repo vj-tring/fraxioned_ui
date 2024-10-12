@@ -66,7 +66,6 @@ const PropertyAmenities: React.FC = () => {
     }
   }, [propertyAmenities]);
 
-
   const getTotalAmenitiesCount = useCallback(() => {
     return selectedAmenities.length;
   }, [selectedAmenities]);
@@ -235,16 +234,20 @@ const PropertyAmenities: React.FC = () => {
               </div>
               {expandedGroup === group && (
                 <div className={styles.groupContent}>
-                  {/* <GroupAmenitiesCount group={group} /> */}
                   <div className={styles.searchContainer}>
-                    <Search size={19} className={styles.searchIcon} />
-                    <input
-                      type="text"
-                      placeholder={`Search in ${group}...`}
-                      className={styles.searchInput}
-                      value={searchTerms[group] || ''}
-                      onChange={(e) => handleSearch(group, e.target.value)}
-                    />
+                    <div className={styles.searchWrapper}>
+                      <Search size={19} className={styles.searchIcon} />
+                      <input
+                        type="text"
+                        placeholder={`Search in ${group}...`}
+                        className={styles.searchInput}
+                        value={searchTerms[group] || ''}
+                        onChange={(e) => handleSearch(group, e.target.value)}
+                      />
+                    </div>
+                    <span className={styles.groupCount}>
+                      Total amenities mapped: {getSelectedCountForGroup(group)}
+                    </span>
                   </div>
                   <div className={styles.amenityList}>
                     {filterAmenities(getSortedAmenities(group), searchTerms[group] || '').map((amenity) => (
@@ -291,3 +294,5 @@ const PropertyAmenities: React.FC = () => {
 };
 
 export default PropertyAmenities;
+
+
