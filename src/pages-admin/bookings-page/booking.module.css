@@ -34,23 +34,7 @@
   }
 }
 
-.dataGridPadding {
-  /* padding: 0 16px !important; */
-}
 
-.dataGridPadding :global(.MuiDataGrid-columnHeaders) {
-  /* padding-right: 12px; */
-}
-
-.dataGridPadding :global(.MuiDataGrid-virtualScroller) {
-  /* padding-left: 10px; */
-  /* padding-right: 16px; */
-}
-
-.dataGridPadding :global(.MuiDataGrid-footerContainer) {
-  /* padding-left: 16px; */
-  /* padding-right: 16px; */
-}
 
 .sidebarOpen {
   margin-left: 0 !important;
@@ -84,7 +68,7 @@
   background-color: #ffffff;
   font-size: small !important;
   transition: box-shadow 0.3s ease;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
 }
 
 .actionLink {
@@ -92,7 +76,8 @@
   font-size: 15px !important;
   text-decoration: underline !important;
   transition: color 0.3s ease;
-  margin-left: 16px !important;
+  margin-left: 20px !important;
+
 }
 
 .actionLink:hover {
@@ -114,11 +99,11 @@
   align-items: center;
   border-radius: 5px !important;
   gap: 5px;
-  margin-left: 10px !important;
+  margin-left: 20px !important;
   text-decoration: none;
   height: 30px;
-  margin-top: 5px !important;
   background-color: #2d6aa0 !important;
+  
 }
 
 .calendarLink:hover {
@@ -167,7 +152,7 @@
   margin-left: 10px;
   color: #333;
   margin-right: 16px;
-  margin-bottom: 30px;
+  margin-top: 12px;
 }
 
 .gridActionContainer {
@@ -177,6 +162,8 @@
   background-color: transparent;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
+  align-items: center;
+
 }
 
 .actionButton {
@@ -190,6 +177,7 @@
   border-radius: 4px !important;
   transition: background-color 0.3s ease !important;
   margin-left: 12px !important;
+  
 }
 
 .actionButton:hover {

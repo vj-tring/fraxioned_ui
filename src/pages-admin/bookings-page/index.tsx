@@ -6,7 +6,7 @@ import {
   getProperties,
   userbookingCancelapi,
 } from "@/api";
-import styles from "./bookingsgrid.module.css";
+import styles from "./booking.module.css";
 import {
   Alert,
   Snackbar,
@@ -29,38 +29,13 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import ViewBookings from "@/components/userbooking-form";
 import InlineFilter from "@/components/filterbox";
+import { User, Property, Booking } from './booking.module';
+import { exportBookingsToCSV } from './bookings-export';
 
-interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-}
 
-interface Property {
-  id: number;
-  propertyName: string;
-}
 
-interface Booking {
-  id: number;
-  bookingId: string;
-  checkinDate: string;
-  checkoutDate: string;
-  totalNights: number;
-  noOfGuests: number;
-  isLastMinuteBooking: number;
-  noOfPets: number;
-  isCancelled: boolean;
-  isCompleted: boolean;
-  cleaningFee: number;
-  petFee: number;
-  userId: number;
-  propertyId: number;
-  userName: string;
-  propertyName: string;
-}
 
-const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
+const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
   isSidebarOpen,
 }) => {
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -237,61 +212,12 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
     navigate("/admin/bookings");
   };
 
-  const handleCancelDelete = () => {
-    setShowDeleteConfirmation(false);
-    setBookingToDelete(null);
-  };
+
 
   const handleExportCSV = () => {
-    const headers = [
-      "Booking ID",
-      "User Name",
-      "Property Name",
-      "Check-in Date",
-      "Check-out Date",
-      "LastMinuteBooking",
-      "Total Nights",
-      "Number of Guests",
-      "Number of Pets",
-      "Cancelled",
-      "Completed",
-      "Cleaning Fee",
-      "Pet Fee",
-    ];
-
-    const csvContent = [
-      headers.join(","),
-      ...filteredBookings.map((booking) =>
-        [
-          booking.bookingId,
-          booking.userName,
-          booking.propertyName,
-          booking.isLastMinuteBooking,
-          booking.checkinDate,
-          booking.checkoutDate,
-          booking.totalNights,
-          booking.noOfGuests,
-          booking.noOfPets,
-          booking.isCancelled ? "Yes" : "No",
-          booking.isCompleted ? "Yes" : "No",
-          booking.cleaningFee,
-          booking.petFee,
-        ].join(",")
-      ),
-    ].join("\n");
-
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob);
-      link.setAttribute("href", url);
-      link.setAttribute("download", "bookings.csv");
-      link.style.visibility = "hidden";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
+    exportBookingsToCSV(filteredBookings);
   };
+
 
   const columns: GridColDef[] = [
     {
@@ -401,40 +327,16 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
 
   return (
     <div
-      className={`${styles.bookingsContainer} ${
-        isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
-      }`}
+      className={`${styles.bookingsContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
+        }`}
     >
       <div className={styles.titleContainer}>
         <h1 className={styles.title}>Booking Details</h1>
         <div className={styles.actionsContainer}>
           <div className={styles.gridActionContainer}>
-            <Button
-              variant="contained"
-              startIcon={<FileDownloadIcon />}
-              onClick={handleExportCSV}
-              className={styles.actionButton}
-            >
-              Export
-            </Button>
 
-            <Box sx={{ position: "relative", marginRight: "10px" }}>
-              <Button
-                variant="contained"
-                startIcon={<FilterListIcon />}
-                onClick={handleFilterClick}
-                className={styles.actionButton}
-              >
-                Filter
-              </Button>
-              {showFilter && (
-                <InlineFilter
-                  columns={columns}
-                  onFilter={handleApplyFilter}
-                  onClose={() => setShowFilter(false)}
-                />
-              )}
-            </Box>
+
+
             <Paper className={styles.searchContainer} elevation={1}>
               <IconButton
                 className={styles.searchIcon}
@@ -459,6 +361,33 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
                 </IconButton>
               )}
             </Paper>
+
+            <Box sx={{ position: "relative", marginRight: "10px" }}>
+              <Button
+                variant="contained"
+                startIcon={<FilterListIcon />}
+                onClick={handleFilterClick}
+                className={styles.actionButton}
+              >
+                Filter
+              </Button>
+              {showFilter && (
+                <InlineFilter
+                  columns={columns}
+                  onFilter={handleApplyFilter}
+                  onClose={() => setShowFilter(false)}
+                />
+              )}
+            </Box>
+
+            <Button
+              variant="contained"
+              startIcon={<FileDownloadIcon />}
+              onClick={handleExportCSV}
+              className={styles.actionButton}
+            >
+              Export
+            </Button>
 
             <Link
               component="button"
@@ -497,26 +426,14 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
               color: "white",
               fontSize: "small",
               textTransform: "uppercase",
-              
+
               fontFamily: " 'Roboto', sans-serif !important",
             },
             "& .MuiDataGrid-cell": {
               fontSize: "small",
               fontFamily: " 'Roboto', sans-serif !important ",
             },
-            "&  .MuiDataGrid-cell--textLeft ": {
-              // position: "sticky",
-              // right: 0,
-              // backgroundColor: "#ebecec",
-              // paddingLeft:"30px"
 
-            },
-            "& .MuiDataGrid-columnHeader--last":{
-              // backgroundColor: "lightgrey",
-              // position: "sticky",
-              // right: 0,
-              // paddingLeft:"30px"
-            }
           }}
           initialState={{
             pagination: {
@@ -582,4 +499,4 @@ const BookingGrid: React.FC<{ isSidebarOpen: boolean }> = ({
   );
 };
 
-export default BookingGrid;
+export default BookingsPage;
