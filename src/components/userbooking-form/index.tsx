@@ -4,7 +4,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import moment from "moment";
-import { getBookings, userdetails } from "@/api";
+import { getBookings, userdetails } from "@/store/service";
 import { Edit, CalendarToday, Person, Home, CheckCircle, CancelOutlined, Group, Pets, AttachMoney, Schedule, Block } from '@mui/icons-material';
 import imageone from '../../assests/blue-bear-lake.jpg';
 import imagetwo from '../../assests/crown-jewel.jpg';

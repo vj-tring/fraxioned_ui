@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { addamenitygroup, getamenitygroup } from '@/api';
+import { addamenitygroup, getamenitygroup } from '@/store/service';
 
 interface AmenityGroup {
     id: number;

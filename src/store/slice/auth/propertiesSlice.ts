@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getProperties, getPropertyById, getProperrtDetailsbyId } from '@/api';
+import { getProperties, getPropertyById, getProperrtDetailsbyId } from '@/store/service';
 
 export interface Property {
     id: number;

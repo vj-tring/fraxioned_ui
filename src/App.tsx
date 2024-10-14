@@ -15,7 +15,7 @@ import Dashboard from "./pages/dashboard";
 import BookingSummary from "./pages/booking-summary/pages";
 import AdminDashboard from "./pages-admin/admin-dashboard";
 import ScrollToTop from "./components/ScrollToTop";
-import AxiosInterceptor from "./api/axiosSetup";
+import AxiosInterceptor from "./store/service/axios-setup";
 
 interface PrivateRouteProps {
   element: React.ComponentType;

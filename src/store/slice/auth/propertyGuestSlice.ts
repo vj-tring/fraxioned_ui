@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { propertywithDetails } from '../../../api/index';
+import { propertywithDetails } from '@/store/service';
 import { RootState } from '@/store/reducers';
 
 export interface LimitsState {

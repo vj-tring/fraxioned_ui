@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, Action } from '@reduxjs/toolkit';
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '../../reducers';
-import { addPropertyApi } from '@/api';
+import { addPropertyApi } from '@/store/service';
 
 export interface AddPropertyState {
     loading: boolean;

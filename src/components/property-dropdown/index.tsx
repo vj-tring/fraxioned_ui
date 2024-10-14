@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getProperties } from "@/api";
+import { getProperties } from "@/store/service";
 import { AxiosResponse } from "axios";
 import styles from "./propertydropdown.module.css";
 

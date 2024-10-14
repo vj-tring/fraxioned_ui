@@ -5,7 +5,7 @@ import {
   userdetails,
   getProperties,
   userbookingCancelapi,
-} from "@/api";
+} from "@/store/service";
 import styles from "./bookingsgrid.module.css";
 import {
   Alert,

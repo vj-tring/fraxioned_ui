@@ -5,7 +5,7 @@ import {
   propertyseasonholiday,
   propertyseasonholidaydelete,
   deleteHolidaysApi,
-} from "@/api";
+} from "@/store/service";
 import styles from "./holiday.module.css";
 import NewForm from "@/pages-admin/grid/holiday-grid/new-form";
 import EditForm from "@/pages-admin/grid/holiday-grid/edit-form";

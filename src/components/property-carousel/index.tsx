@@ -17,7 +17,7 @@ import {
   selectcardindex,
 } from "../../store/slice/auth/property-slice";
 import "./propertycarousel.css";
-import { propertyImageapi } from "@/api";
+import { propertyImageapi } from "@/store/service";
 import AddHomeOutlinedIcon from "@mui/icons-material/AddHomeOutlined";
 import { Card } from "../../store/slice/auth/property-slice";
 

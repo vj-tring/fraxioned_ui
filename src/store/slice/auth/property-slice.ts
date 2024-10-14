@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { getUserProperties } from "../../../api";
+import { getUserProperties } from "@/store/service";
 import imageParadiseShores from "../../../assests/bear-lake-bluffs.jpg";
 import imageBlueBearLake from "../../../assests/crown-jewel.jpg";
 import imageCrownJewel from "../../../assests/blue-bear-lake.jpg";

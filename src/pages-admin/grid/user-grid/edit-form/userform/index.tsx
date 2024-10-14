@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getUserById } from "@/api";
+import { getUserById } from "@/store/service";
 import {
   Edit,
   Mail,

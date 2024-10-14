@@ -13,7 +13,7 @@ import {
 import HomeIcon from '@mui/icons-material/Home';
 import styles from './NewPropertyForm.module.css';
 import CloseIcon from '@mui/icons-material/Close';
-import { addPropertyApi } from '@/api';
+import { addPropertyApi } from '@/store/service';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/reducers';
 

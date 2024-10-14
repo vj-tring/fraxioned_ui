@@ -5,7 +5,7 @@ import {
   getBookings,
   getUserBookings,
   modifyBooking,
-} from "../../../api/index";
+} from "@/store/service";
 
 export interface BookingData {
   userId(userId: any): string;

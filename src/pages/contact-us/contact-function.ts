@@ -1,4 +1,4 @@
-import { sendContactMessage } from '../../api/functions/contact-us'
+import { sendContactMessage } from '@/store/service/contact-us'
 import { ContactMessage } from '../../types/contact'
 
 export const handleSubmit = async (

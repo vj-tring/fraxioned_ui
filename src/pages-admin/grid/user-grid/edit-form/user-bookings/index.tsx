@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getUserBookings } from "@/api";
+import { getUserBookings } from "@/store/service";
 import styles from "./userbookings.module.css";
 import {
   Calendar,

@@ -16,7 +16,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import styles from "./edit-form.module.css";
-import { updateHolidaysApi, fetchpropertyHolidaysApi } from "@/api";
+import { updateHolidaysApi, fetchpropertyHolidaysApi } from "@/store/service";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "@/components/loader";

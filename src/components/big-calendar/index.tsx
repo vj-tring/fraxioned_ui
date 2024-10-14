@@ -11,7 +11,7 @@ import Button from "@mui/material/Button";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import BookingButton from "../bookingbutton";
 import PropertyDropdown from "../property-dropdown";
-import { getBookings, userdetails } from "@/api";
+import { getBookings, userdetails } from "@/store/service";
 import "./big-calender.css";
 import {
   Edit,

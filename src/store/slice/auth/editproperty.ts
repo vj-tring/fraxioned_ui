@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, Action } from '@reduxjs/toolkit';
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '@/store/reducers';
-import { updatePropertyapi } from '@/api';
+import { updatePropertyapi } from '@/store/service';
 import { UpdateProperty } from '@/store/model';
 
 export interface EditPropertyState {

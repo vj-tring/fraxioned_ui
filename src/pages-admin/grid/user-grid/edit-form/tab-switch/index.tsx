@@ -7,7 +7,7 @@ import UserBookings from "../user-bookings";
 import styles from "./tab.module.css";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { getUserById } from "@/api";
+import { getUserById } from "@/store/service";
 import DocumentManagerCard from "../document";
 
 interface TabSwitchProps {

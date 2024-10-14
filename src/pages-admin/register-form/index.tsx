@@ -6,7 +6,7 @@ import { MdCancel } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { registerUser } from "../../store/slice/auth/register";
 import { AppDispatch } from "../../store";
-import { getProperties, getRoles } from "../../api";
+import { getProperties, getRoles } from "@/store/service";
 import Loader from "@/components/loader";
 import CustomizedSnackbars from "@/components/customized-snackbar";
 import { ChangeEvent } from "react";

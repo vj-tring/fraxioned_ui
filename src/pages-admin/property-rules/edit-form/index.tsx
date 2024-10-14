@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { useSelector } from 'react-redux';
-import { updaterulesapi, getProperrtDetailsbyId } from '@/api';
+import { updaterulesapi, getProperrtDetailsbyId } from '@/store/service';
 import Loader from '@/components/loader';
 import styles from './editrulesform.module.css'
 import { RootState } from '@/store/reducers';

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { updateamenities, deleteAmenity } from '@/api';
+import { updateamenities, deleteAmenity } from '@/store/service';
 
 interface UpdateAmenityPayload {
     id: number;

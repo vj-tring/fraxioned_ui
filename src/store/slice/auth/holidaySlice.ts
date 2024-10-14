@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { addHolidayApi } from '@/api';
+import { addHolidayApi } from '@/store/service';
 
 interface Holiday {
     id: number;

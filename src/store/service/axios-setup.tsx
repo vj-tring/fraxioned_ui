@@ -2,11 +2,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "@/components/snackbar-provider";
 import React, { ReactNode, useLayoutEffect } from "react";
-import { BACKEND_URL } from "@/constants";
-
-// const navigate = useNavigate();
-// const { showSnackbar } = useSnackbar();
-// const { handleUnauthorized } = createAuthHelpers(navigate, showSnackbar);
+import { BACKEND_URL } from "./config";
 
 // Create an Axios instance
 const axiosInstance = axios.create({

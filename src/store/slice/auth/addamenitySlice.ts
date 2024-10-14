@@ -1,5 +1,5 @@
+import { axiosInstance } from '@/store/service/axios-setup';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import {axiosInstance} from '@/api/axiosSetup';
 
 interface AddAmenityData {
   amenityGroup: { id: number };

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { getProperrtDetailsbyId } from '@/api';
+import { getProperrtDetailsbyId } from '@/store/service';
 import { RootState } from '@/store/reducers';
 
 

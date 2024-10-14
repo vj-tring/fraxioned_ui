@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { userdetails } from "@/api";
+import { userdetails } from "@/store/service";
 
 interface User {
   id: number;

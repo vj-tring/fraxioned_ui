@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { getuserbyproperty } from '@/api'
+import { getuserbyproperty } from '@/store/service'
 
 interface Owner {
     userId: number;

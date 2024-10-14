@@ -17,7 +17,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "./new-form.module.css";
-import { getProperties } from "@/api";
+import { getProperties } from "@/store/service";
 import { useSelector, useDispatch } from "react-redux";
 import Loader from "@/components/loader";
 import { RootState } from "@/store/reducers";

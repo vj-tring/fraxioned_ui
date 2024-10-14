@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./user-details.css";
 import userImage from "../../assets/images/profile.jpeg";
 import EditIcon from "../../assets/images/edit-icon.png";
-import { BACKEND_URL } from "@/constants";
+import { BACKEND_URL } from "@/store/service/config";
 
 interface Document {
   title: string;
