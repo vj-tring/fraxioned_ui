@@ -16,6 +16,9 @@ interface PropertyCodeCategory {
 
 interface CreatePropertyCodeCategoryPayload {
     name: string;
+    createdBy: {
+        id: number;  
+    };
 }
 
 interface CreatePropertyCodeCategoryResponse {

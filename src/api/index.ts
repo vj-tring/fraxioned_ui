@@ -362,15 +362,19 @@ export const getAllpropertycodes = () =>
 
 
 //add for a property
-export const postpropertycode = () =>
-    axiosInstance.post(`/property-codes/property-code`);
+export const postpropertycode = (payload: {
+    property: number;
+    propertyCodeCategory: number;
+    createdBy: number;
+    propertyCode: string;
+}) => axiosInstance.post(`/property-codes/property-code`, payload);
 
 
 export const getAllpropertycodecatogory = () =>
     axiosInstance.get(`/property-code-categories`);
 
-export const createpropertycodecatogory = () =>
-    axiosInstance.post(`/property-code-categories`);
+export const createpropertycodecatogory = (data: { name: string; createdBy: { id: number } }) =>
+    axiosInstance.post(`/property-code-categories`, data);
 
 
 

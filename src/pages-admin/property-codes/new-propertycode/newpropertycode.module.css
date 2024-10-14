@@ -1,51 +1,70 @@
-.modal {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.modalWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalContent {
   width: 700px;
   background-color: white;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 27px;
 }
 
 .modalTitle {
-  margin-bottom: 24px;
-  font-weight: 600;
-  font-size: 20px;
+  margin-bottom: 24px !important;
+  font-weight: 600 !important;
+  font-size: 18px !important;
   color: #333;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
-.dropdownContainer {
+.inputGroup {
   display: flex;
-  align-items: flex-start;
-  gap: 16px;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.formControl {
-  flex-grow: 1;
+.inputLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.selectWrapper {
+  display: flex;
+  gap: 12px;
 }
 
 .select {
-  width: 100%;
+  flex-grow: 1;
+  height: 38px !important;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #333;
 }
 
 .addNewBtn {
   white-space: nowrap;
   text-transform: none;
-  color: #f5a623;
+  color: #f5a623 !important;
   font-weight: 500;
-  border: 1px solid #f5a623;
-  padding: 6px 16px;
-  height: 56px;
-  margin-top: 0;
+  border: 1px solid #f5a623 !important;
+  padding: 8px 16px !important;
+  height: 40px !important;
+  transition: all 0.3s ease;
+}
+
+.addNewBtn:hover {
+  background-color: rgba(245, 166, 35, 0.1);
 }
 
 .newCategoryContainer {
@@ -54,14 +73,21 @@
   gap: 8px;
 }
 
-.input {
-  width: 100%;
-  margin-bottom: 8px;
+.newCategoryInput {
+  flex-grow: 1;
 }
 
 .iconButton {
-  min-width: unset;
-  padding: 6px;
+  padding: 8px !important;
+  color: #757575 !important;
+}
+
+.iconButton:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.propertyCodeInput {
+  width: 100%;
 }
 
 .buttonGroup {
@@ -72,37 +98,41 @@
 }
 
 .cancelBtn {
-  color: #9e9e9e;
+  color: #9e9e9e !important;
   text-transform: none;
+  font-weight: 500;
 }
 
 .submitBtn {
-  background-color: #f5a623;
-  color: white;
+  background-color: #f5a623 !important;
+  color: white !important;
   text-transform: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
 .submitBtn:hover {
-  background-color: #f39c12;
+  background-color: #f39c12 !important;
 }
 
-/* Adjust Material-UI components to match the design */
-:global(.MuiOutlinedInput-root) {
-  border-radius: 4px;
+/* Override Material-UI styles */
+.propertyCodeInput :global(.MuiOutlinedInput-root) {
+  height: 38px;
 }
 
-:global(.MuiOutlinedInput-notchedOutline) {
+.propertyCodeInput :global(.MuiOutlinedInput-input) {
+  padding: 10px;
+}
+
+.propertyCodeInput :global(.MuiOutlinedInput-notchedOutline) {
   border-color: #e0e0e0;
 }
 
-:global(.MuiInputLabel-root) {
-  color: #757575;
+.newCategoryInput :global(.MuiOutlinedInput-root) {
+  font-size: 14px !important;
+  height: 35px;
 }
 
-:global(.MuiMenuItem-root) {
-  color: #333;
-}
-
-:global(.MuiSelect-select) {
-  padding: 10px 14px;
+.newCategoryInput :global(.MuiOutlinedInput-input) {
+  padding: 10px;
 }

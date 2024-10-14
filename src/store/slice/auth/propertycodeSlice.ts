@@ -22,6 +22,14 @@ interface PropertyCode {
     };
 }
 
+
+interface CreatePropertyCodePayload {
+    property: { id: number };
+    propertyCodeCategory: { id: number };
+    createdBy: { id: number };
+    propertyCode: string;
+  }
+
 interface PropertyCodesState {
     propertyCodes: PropertyCode[];
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
@@ -42,18 +50,16 @@ export const fetchPropertyCodes = createAsyncThunk(
     }
 );
 
-export const postPropertyCode = createAsyncThunk(
-    'propertyCodes/postPropertyCode',
-    async (payload: {
-        property: { id: number };
-        propertyCodeCategory: { id: number; name: string };
-        createdBy: { id: number };
-        propertyCode: string;
-    }) => {
-        const response = await axiosInstance.post('/property-codes/property-code', payload);
-        return response.data;
+export const postPropertyCode = (payload: CreatePropertyCodePayload) => 
+    axiosInstance.post(`/property-codes/property-code`, payload);
+  
+  export const createPropertyCode = createAsyncThunk(
+    'propertyCode/createPropertyCode',
+    async (payload: CreatePropertyCodePayload) => {
+      const response = await postPropertyCode(payload);
+      return response.data;
     }
-);
+  );
 
 const propertyCodesSlice = createSlice({
     name: 'propertyCodes',
@@ -72,16 +78,16 @@ const propertyCodesSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message || 'Failed to fetch property codes';
             })
-            .addCase(postPropertyCode.pending, (state) => {
+            .addCase(createPropertyCode.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(postPropertyCode.fulfilled, (state, action: PayloadAction<PropertyCode>) => {
+            .addCase(createPropertyCode.fulfilled, (state, action: PayloadAction<PropertyCode>) => {
                 state.status = 'succeeded';
                 state.propertyCodes.push(action.payload);
             })
-            .addCase(postPropertyCode.rejected, (state, action) => {
+            .addCase(createPropertyCode.rejected, (state, action) => {
                 state.status = 'failed';
-                state.error = action.error.message || 'Failed to post property code';
+                state.error = action.error.message || 'Failed to create property code';
             });
     },
 });
