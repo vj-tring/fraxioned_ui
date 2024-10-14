@@ -63,7 +63,9 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const { propertyAmenities, loading, error } = useSelector(
     (state: RootState) => state.amenities
   );
-  const propertySpace = useSelector((state: RootState) => state.spaceProperties.spaceProperties || [])
+  const propertySpace = useSelector(
+    (state: RootState) => state.spaceProperties.spaceProperties || []
+  );
   const [imagesData, setImagesData] = useState<any[]>([]);
 
   const [page, setPage] = useState(1);
@@ -83,28 +85,26 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
     const imageFetching = async () => {
       try {
         const response = await getAllSpacePropertyImageById(Number(propertyId));
-        const sortedImages = response.data.data.sort((a: any, b: any) => a.displayOrder - b.displayOrder);
+        const sortedImages = response.data.data.sort(
+          (a: any, b: any) => a.displayOrder - b.displayOrder
+        );
         setImagesData(sortedImages); // Sort images by displayOrder
-        console.log('Images fetched and sorted successfully');
+        console.log("Images fetched and sorted successfully");
       } catch (error) {
-        console.error('Error fetching images:', error);
+        console.error("Error fetching images:", error);
       }
     };
 
     imageFetching();
-  }, [propertyId]); // 
+  }, [propertyId]); //
 
   const getImageUrlByPropertyAndSpace = (spaceId: number): string | null => {
     const image = imagesData.find(
-      (img) =>
-        img.propertySpace?.id === spaceId &&
-        img.displayOrder === 1
+      (img) => img.propertySpace?.id === spaceId && img.displayOrder === 1
     );
 
     return image ? image.url : null;
   };
-
-
 
   const handleShowMoreClick = () => {
     setOpen(true);
@@ -127,7 +127,9 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const totalspacePages = Math.ceil(propertySpace.length / ITEMS_PER_PAGE);
 
   const groupedAmenities = groupAmenitiesByGroup(propertyAmenities || []);
-  const allAmenities = propertyAmenities ? propertyAmenities.map((pa) => pa.amenity) : [];
+  const allAmenities = propertyAmenities
+    ? propertyAmenities.map((pa) => pa.amenity)
+    : [];
   const displayedAmenities = showAllAmenities
     ? allAmenities
     : allAmenities.slice(0, AMENITIES_PER_PAGE);
@@ -140,13 +142,16 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
       sx={{ display: "flex", flexDirection: "row", gap: 10 }}
       className="singleDevice"
     >
-
       <Box
         sx={{ display: "flex", flexDirection: "column", gap: 3, width: "50%" }}
         className="RoomsRes"
       >
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="h6" component="div" className="monsterrat checkIn">
+          <Typography
+            variant="h6"
+            component="div"
+            className="monsterrat checkIn"
+          >
             Spaces for Property
           </Typography>
           <Box>
@@ -159,7 +164,9 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
         </Box>
 
         {propertySpace.length === 0 ? (
-          <Typography variant="body1">No spaces available for this property.</Typography>
+          <Typography variant="body1">
+            No spaces available for this property.
+          </Typography>
         ) : (
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
             {paginatedSpaces.map((space, index) => (
@@ -181,10 +188,13 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                 >
                   <CardMedia
                     component="img"
-                    height="100%"
-                    image={getImageUrlByPropertyAndSpace(space.space.id) || 'https://via.placeholder.com/100'} // Placeholder for space image
+                    height="100%" 
+                    image={
+                      getImageUrlByPropertyAndSpace(space.space.id) ||
+                      "https://via.placeholder.com/100"
+                    } // Placeholder for space image
                     alt={space.space.name}
-                    sx={{ objectFit: "cover" }}
+                    sx={{ objectFit: "cover", height: "200px" }}
                   />
                 </Card>
                 <CardContent sx={{ padding: 1, paddingTop: 2 }}>
@@ -219,7 +229,6 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
           </Box>
         )}
       </Box>
-
 
       <Box
         sx={{ width: "50%", display: "flex", flexDirection: "column", gap: 3 }}
@@ -280,7 +289,9 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
         className="aminityPopup"
       >
         <DialogTitle>
-          <Typography variant="h3" className="aminityPopupTitle">Amenities</Typography>
+          <Typography variant="h3" className="aminityPopupTitle">
+            Amenities
+          </Typography>
           <IconButton
             edge="end"
             color="inherit"

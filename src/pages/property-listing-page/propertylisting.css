@@ -93,7 +93,24 @@ body {
   padding: 0;
   white-space: normal;
 }
-
+.GroupedImg {
+  text-transform: uppercase;
+  font-size: small !important;
+  font-weight: 700 !important;
+  padding: 4px 10px;
+  background-color: rgb(243, 158, 48);
+  color: white;
+  border-radius: 2px;
+  width: 200px;
+  text-align: center;
+}
+.GroupImgPic{
+  width: 95% !important;
+  margin-left: 3% !important;
+}
+.ListingImg {
+  padding: 15px;
+}
 .show-more-overlay {
   position: absolute;
   bottom: 18px;
@@ -177,7 +194,7 @@ body {
   .propertyDetails {
     width: 100%;
   }
-  .liststyle{
+  .liststyle {
     font-size: 0.6rem !important;
   }
   .GridWidth {
@@ -371,7 +388,7 @@ body {
   .ThingstoHead {
     font-size: small !important;
   }
-  .Proprespo{
+  .Proprespo {
     display: flex;
     flex-direction: column;
   }

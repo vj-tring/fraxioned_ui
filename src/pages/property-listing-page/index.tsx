@@ -118,7 +118,7 @@ const PropertyListingPage = () => {
   const [guests, setGuests] = useState<number>(1);
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [imageDetails, setImageDetails] = useState<Image[]>([]);
+  const [imageDetails, setImageDetails] = useState([]);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -165,19 +165,7 @@ const PropertyListingPage = () => {
           return;
         }
         const response = await propertyImageapi(id);
-  
-        // const filterByPropertySpaceId = response.data.data.filter(
-        //   (image: Image) => image.propertySpace.id === propertyId
-        // );
-        // console.log("filterByPropertySpaceId", filterByPropertySpaceId);
-
-  
-        // const sortedImages = filterByPropertySpaceId.sort(
-        //   (a, b) => a.displayOrder - b.displayOrder
-        // );
-  
         setImageDetails(response.data.data);
-
         setLoadingImages(false);
       } catch (error) {
         console.error("Error fetching property images:", error);
@@ -185,6 +173,19 @@ const PropertyListingPage = () => {
     };
     fetchPropertyImages();
   }, [id]);
+  const groupedImages = imageDetails.reduce((acc, image) => {
+    const spaceId = image.propertySpace.space.id;
+    const spaceName = image.propertySpace.space.name;
+
+    if (!acc[spaceId]) {
+      acc[spaceId] = {
+        name: spaceName,
+        images: [],
+      };
+    }
+    acc[spaceId].images.push(image);
+    return acc;
+  }, {});
 
   const handleClickOpen = () => {
     setDialogOpen(true);
@@ -505,7 +506,12 @@ const PropertyListingPage = () => {
         <div id="info">
           <ThingsToKnow propId={Number(id) || Number(0)} />
         </div>
-        <Dialog open={dialogOpen} onClose={handleClose} fullWidth maxWidth="md">
+        <Dialog
+          open={dialogOpen}
+          onClose={handleClose}
+          fullWidth
+          maxWidth="x-lg"
+        >
           <DialogTitle className="d-flex justify-content-between">
             <Typography variant="h6">More Photos</Typography>
             <IconButton
@@ -519,7 +525,7 @@ const PropertyListingPage = () => {
           </DialogTitle>
           <DialogContent>
             <Grid container spacing={2}>
-              {!loadingImages
+              {loadingImages
                 ? Array.from({ length: 6 }).map((_, index) => (
                     <Grid item xs={12} sm={6} md={4} key={index}>
                       <Skeleton
@@ -529,17 +535,34 @@ const PropertyListingPage = () => {
                       />
                     </Grid>
                   ))
-                : imageDetails.map((image, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={index}>
-                      <Card>
-                        <img
-                          src={image.url}
-                          alt={image.imageName}
-                          style={{ width: "100%", height: "auto" }}
-                          loading="lazy"
-                        />
-                      </Card>
-                    </Grid>
+                : Object.keys(groupedImages).map((spaceId) => (
+                    <div key={spaceId} className="ListingImg">
+                      <Typography
+                        variant="h6"
+                        gutterBottom
+                        className="mt-3 mb-3 GroupedImg"
+                      >
+                        {groupedImages[spaceId].name}
+                      </Typography>
+                      <Grid container spacing={2} className="GroupImgPic">
+                        {groupedImages[spaceId].images.map((image, index) => (
+                          <Grid item xs={12} sm={4} md={3} key={index}>
+                            <Card>
+                              <img
+                                src={image.url}
+                                alt={image.description}
+                                style={{
+                                  width: "100%",
+                                  height: "250px",
+                                  objectFit: "cover",
+                                }}
+                                loading="lazy"
+                              />
+                            </Card>
+                          </Grid>
+                        ))}
+                      </Grid>
+                    </div>
                   ))}
             </Grid>
           </DialogContent>
