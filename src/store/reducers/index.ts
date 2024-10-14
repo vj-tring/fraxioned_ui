@@ -23,7 +23,8 @@ import amenitiesPageReducer from '../slice/auth/amenitiespageSlice';
 import userDetailsReducer from '../slice/auth/userdetails';
 import userpropertiesReducer from '../slice/auth/userproperties';
 import userReducer from '../slice/user-slice';
-
+import userpropertyReducer from '../slice/auth/userpropertiesSlice';
+import rolesReducer from '../slice/auth/rolesSlice';
 
 const appReducer = combineReducers({
   auth: authReducer,
@@ -50,6 +51,9 @@ const appReducer = combineReducers({
   userDetails: userDetailsReducer,
   userProperties: userpropertiesReducer,
   user: userReducer,
+  userProperty: userpropertyReducer,
+  roles: rolesReducer,
+
 });
 
 const rootReducer = (

@@ -16,21 +16,14 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import styles from "./edit-form.module.css";
-import {
-  getProperties,
-  updateHolidaysApi,
-  fetchpropertyHolidaysApi,
-} from "@/api";
 import CloseIcon from "@mui/icons-material/Close";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Loader from "@/components/loader";
 import { RootState } from "@/store/reducers";
 import EventIcon from "@mui/icons-material/Event";
-
-interface Property {
-  id: number;
-  propertyName: string;
-}
+import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
+import { AppDispatch } from "@/store";
+import { fetchPropertyHoliday, updateHoliday } from "@/store/slice/auth/holidaySlice";
 
 interface EditFormProps {
   onClose: () => void;
@@ -49,6 +42,7 @@ const EditForm: React.FC<EditFormProps> = ({
   onHolidayUpdated,
   holidayData,
 }) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [name, setName] = useState(holidayData.name);
   const [year, setYear] = useState<number>(holidayData.year);
   const [startDate, setStartDate] = useState<Date | null>(
@@ -57,38 +51,35 @@ const EditForm: React.FC<EditFormProps> = ({
   const [endDate, setEndDate] = useState<Date | null>(
     new Date(holidayData.endDate)
   );
-  const [properties, setProperties] = useState<Property[]>([]);
   const [selectedProperties, setSelectedProperties] = useState<number[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const userId = useSelector((state: RootState) => state.auth.user?.id);
+  const properties = useSelector((state: RootState) => state.property.properties);
+  const propertyStatus = useSelector((state: RootState) => state.property.status);
+  const propertyError = useSelector((state: RootState) => state.property.error);
+  
+  // New selectors for holiday state
+  const selectedHoliday = useSelector((state: RootState) => state.holiday.selectedHoliday);
+  const holidayLoading = useSelector((state: RootState) => state.holiday.loading);
+  const holidayError = useSelector((state: RootState) => state.holiday.error);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [propertiesResponse, holidayResponse] = await Promise.all([
-          getProperties(),
-          fetchpropertyHolidaysApi(holidayData.id),
-        ]);
-        setProperties(propertiesResponse.data);
+    dispatch(fetchProperties());
+  }, [dispatch]);
 
-        const holidayProperties =
-          holidayResponse.data.data.propertySeasonHolidays.map(
-            (push: any) => push.property.id
-          );
-        setSelectedProperties(holidayProperties);
+  useEffect(() => {
+    dispatch(fetchPropertyHoliday(holidayData.id));
+  }, [dispatch, holidayData.id]);
 
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-        setError("Failed to fetch data. Please try again.");
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [holidayData.id]);
+  useEffect(() => {
+    if (selectedHoliday?.propertySeasonHolidays) {
+      const holidayProperties = selectedHoliday.propertySeasonHolidays.map(
+        (psh) => psh.property.id
+      );
+      setSelectedProperties(holidayProperties);
+    }
+  }, [selectedHoliday]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -96,19 +87,23 @@ const EditForm: React.FC<EditFormProps> = ({
       setError("User ID not found. Please log in again.");
       return;
     }
-    try {
-      const updatedHolidayData = {
-        startDate: startDate?.toISOString().split("T")[0],
-        endDate: endDate?.toISOString().split("T")[0],
-        updatedBy: {
-          id: userId,
-        },
-        properties: selectedProperties.map((id) => ({ id })),
-        name,
-        year,
-      };
 
-      await updateHolidaysApi(holidayData.id, updatedHolidayData);
+    const updatedHolidayData = {
+      name,
+      year,
+      startDate: startDate?.toISOString().split("T")[0],
+      endDate: endDate?.toISOString().split("T")[0],
+      updatedBy: {
+        id: userId,
+      },
+      properties: selectedProperties.map((id) => ({ id })),
+    };
+
+    try {
+      await dispatch(updateHoliday({ 
+        id: holidayData.id, 
+        updatedHolidayData 
+      })).unwrap();
       onHolidayUpdated();
       onClose();
     } catch (err) {
@@ -127,12 +122,16 @@ const EditForm: React.FC<EditFormProps> = ({
     }
   };
 
-  if (loading) {
+  if (propertyStatus === 'loading' || holidayLoading) {
     return <Loader />;
   }
 
-  if (error) {
-    return <Typography color="error">{error}</Typography>;
+  if (propertyStatus === 'failed') {
+    return <Typography color="error">{propertyError || "An error occurred loading properties"}</Typography>;
+  }
+
+  if (holidayError) {
+    return <Typography color="error">{holidayError}</Typography>;
   }
 
   return (
@@ -232,19 +231,20 @@ const EditForm: React.FC<EditFormProps> = ({
                                   marginRight: "5px",
                                   marginLeft: "6px",
                                 }}
-
-                                control={<Checkbox
-                                  sx={{
-                                    padding: "0px",
-                                  }}
-                                  checked={selectedProperties.includes(
-                                    property.id
-                                  )}
-                                  onChange={handlePropertyChange}
-                                  name={property.id.toString()} />} label={undefined}                                //   className={styles.formControlLabel}
-
+                                control={
+                                  <Checkbox
+                                    sx={{
+                                      padding: "0px",
+                                    }}
+                                    checked={selectedProperties.includes(
+                                      property.id
+                                    )}
+                                    onChange={handlePropertyChange}
+                                    name={property.id.toString()}
+                                  />
+                                }
+                                label={undefined}
                               />
-
                               <div className={styles.formControlLabel}>
                                 {property.propertyName}
                               </div>
@@ -269,8 +269,9 @@ const EditForm: React.FC<EditFormProps> = ({
                 type="submit"
                 variant="contained"
                 className={styles.addButton}
+                disabled={holidayLoading}
               >
-                Update Holiday
+                {holidayLoading ? "Updating..." : "Update Holiday"}
               </Button>
             </Box>
           </form>

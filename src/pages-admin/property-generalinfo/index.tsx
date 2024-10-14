@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  getPropertyById,
-  getProperrtDetailsbyId,
-  updatePropertyImage,
-} from "@/api"; // Added updatePropertyImage
-import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchPropertyById,
-  fetchPropertyDetailsById,
-} from "@/store/slice/auth/propertiesSlice";
-import { AppDispatch } from "@/store";
+import { updatePropertyImage } from "@/api";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPropertyById, fetchPropertyDetailsById } from "@/store/slice/auth/propertiesSlice";
+import { AppDispatch } from '@/store';
 import { RootState } from "@/store/reducers";
 import EditButton from "@/components/edit";
 import styles from "./property-generalinfo.module.css";
@@ -28,8 +21,6 @@ import {
   Button,
   TextField,
 } from "@mui/material";
-import { AsyncThunkAction, ThunkDispatch } from "@reduxjs/toolkit";
-import { UnknownAction } from "redux";
 
 const PropertyGeneralInfo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
