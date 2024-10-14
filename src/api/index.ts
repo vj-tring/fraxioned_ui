@@ -215,8 +215,16 @@ export const userbookingCancelapi = (id: number, user: number) => {
     return axiosInstance.post(`/v1/bookings/${id}/${user}/cancel`);
 };
 
+export const getCategories = () => {
+    return axiosInstance.get('/v1/faq-categories');
+};
 
+export const getQuestions = () => {
+    return axiosInstance.get('/v1/faq-questions');
+};
 
-
+export const getQuestionsByCategory = async (Id: number) => {
+    axiosInstance.get(`/api/v1/getQuestion?Id=${Id}`);
+};
 
 

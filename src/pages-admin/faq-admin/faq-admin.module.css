@@ -1,0 +1,24 @@
+/* FAQPage.css */
+.faq-page {
+    padding: 20px;
+  }
+  
+  .faq-page h4 {
+    margin-bottom: 20px;
+  }
+  
+  .faq-page .MuiSelect-root {
+    margin-bottom: 20px;
+  }
+  
+  .faq-page .MuiAccordion-root {
+    margin-bottom: 10px;
+  }
+ 
+ .title{
+  font-size: 2rem;
+  cursor: pointer;
+  font-weight: bold;
+  color: #333; 
+  margin-left: -20px;
+}

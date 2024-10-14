@@ -4,7 +4,7 @@ import fraxionedLogo from '../../assets/images/fraxioned.png';
 import logo from '../../assets/images/fraxionedpng.png'
 import {
     FaCalendar, FaPlane, FaUser, FaFile,
-    FaUserTag, FaChartBar, FaGavel, FaBars, FaHome, FaConciergeBell
+    FaUserTag, FaChartBar, FaGavel, FaBars, FaHome, FaConciergeBell, FaQuestion
 } from 'react-icons/fa';
 import styles from './sidepanel.module.css'
 
@@ -29,7 +29,8 @@ const menuItems: MenuItem[] = [
     { icon: <FaFile />, label: 'Documents', path: '/documents', disabled: true },
     { icon: <FaUserTag />, label: 'Role', path: '/role', disabled: true },
     { icon: <FaChartBar />, label: 'Reports', path: '/reports', disabled: true },
-    { icon: <FaGavel />, label: 'Rules', path: '/rules', disabled: true }
+    { icon: <FaGavel />, label: 'Rules', path: '/rules', disabled: true },
+    { icon: <FaQuestion />, label: 'FAQ', path: '/admin/faq', disabled: false }   
 ];
 
 const SidePanel: React.FC<SidePanelProps> = ({ isOpen, toggleSidebar }) => {
@@ -50,6 +51,9 @@ const SidePanel: React.FC<SidePanelProps> = ({ isOpen, toggleSidebar }) => {
         }
         if (path === '/admin/user') {
             return location.pathname.startsWith('/admin/user');
+        }
+        if (path === '/admin/faq') {
+            return location.pathname.startsWith('/admin/faq');
         }
 
 
