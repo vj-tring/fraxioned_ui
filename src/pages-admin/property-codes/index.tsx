@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -9,13 +8,15 @@ import { fetchPropertyCodes } from '@/store/slice/auth/propertycodeSlice';
 import styles from './propertycode.module.css';
 import { RootState } from '@/store/reducers';
 import { AppDispatch } from '@/store';
+import PropertyCodeCategoryModal from './new-propertycode';
 
 const PropertyCode: React.FC = () => {
-    const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>();
   const { id: propertyId } = useParams<{ id: string }>();
   const propertyCodes = useSelector((state: RootState) => state.propertycode.propertyCodes);
   const status = useSelector((state: RootState) => state.propertycode.status);
   const [filteredCodes, setFilteredCodes] = useState<any[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchPropertyCodes() as any);
@@ -29,7 +30,11 @@ const PropertyCode: React.FC = () => {
   }, [propertyCodes, propertyId]);
 
   const handleCreateCode = () => {
-    console.log('Create code clicked');
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   const handleEdit = (codeId: number) => {
@@ -97,6 +102,7 @@ const PropertyCode: React.FC = () => {
           ))}
         </Grid>
       </Paper>
+      <PropertyCodeCategoryModal isOpen={isModalOpen} onClose={handleCloseModal} />
     </div>
   );
 };

@@ -1,84 +1,108 @@
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+}
+
+.modalTitle {
+  margin-bottom: 24px;
+  font-weight: 600;
+  font-size: 20px;
+  color: #333;
+}
+
 .form {
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f7f7f7;
-    border-radius: 8px;
-  }
-  
-  .formGroup {
-    margin-bottom: 20px;
-  }
-  
-  .label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-  
-  .categoryContainer {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .select {
-    flex-grow: 1;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .addNewBtn {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 8px 12px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .newCategoryContainer {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-  }
-  
-  .iconBtn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 5px;
-  }
-  
-  .buttonGroup {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-    margin-top: 20px;
-  }
-  
-  .submitBtn, .cancelBtn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .submitBtn {
-    background-color: #4CAF50;
-    color: white;
-  }
-  
-  .cancelBtn {
-    background-color: #f44336;
-    color: white;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dropdownContainer {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.formControl {
+  flex-grow: 1;
+}
+
+.select {
+  width: 100%;
+}
+
+.addNewBtn {
+  white-space: nowrap;
+  text-transform: none;
+  color: #f5a623;
+  font-weight: 500;
+  border: 1px solid #f5a623;
+  padding: 6px 16px;
+  height: 56px;
+  margin-top: 0;
+}
+
+.newCategoryContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.iconButton {
+  min-width: unset;
+  padding: 6px;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.cancelBtn {
+  color: #9e9e9e;
+  text-transform: none;
+}
+
+.submitBtn {
+  background-color: #f5a623;
+  color: white;
+  text-transform: none;
+}
+
+.submitBtn:hover {
+  background-color: #f39c12;
+}
+
+/* Adjust Material-UI components to match the design */
+:global(.MuiOutlinedInput-root) {
+  border-radius: 4px;
+}
+
+:global(.MuiOutlinedInput-notchedOutline) {
+  border-color: #e0e0e0;
+}
+
+:global(.MuiInputLabel-root) {
+  color: #757575;
+}
+
+:global(.MuiMenuItem-root) {
+  color: #333;
+}
+
+:global(.MuiSelect-select) {
+  padding: 10px 14px;
+}

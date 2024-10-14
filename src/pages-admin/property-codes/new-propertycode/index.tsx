@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
-import { Plus, Save, Trash2 } from 'lucide-react';
+import { Modal, Box, Typography, TextField, Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Plus, Save, X } from 'lucide-react';
 import styles from './newpropertycode.module.css';
 
-const PropertyCodeCatogory: React.FC = () => {
+interface PropertyCodeCategoryModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const PropertyCodeCategoryModal: React.FC<PropertyCodeCategoryModalProps> = ({ isOpen, onClose }) => {
   const [category, setCategory] = useState('');
   const [showNewCategory, setShowNewCategory] = useState(false);
   const [newCategory, setNewCategory] = useState('');
@@ -18,7 +24,7 @@ const PropertyCodeCatogory: React.FC = () => {
     setNewCategory('');
   };
 
-  const handleDeleteNewCategory = () => {
+  const handleCancelNewCategory = () => {
     setShowNewCategory(false);
     setNewCategory('');
   };
@@ -26,65 +32,88 @@ const PropertyCodeCatogory: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Submitted:', { category, propertyCode });
+    onClose();
   };
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
-      <div className={styles.formGroup}>
-        <label htmlFor="category" className={styles.label}>Property Category</label>
-        <div className={styles.categoryContainer}>
-          <select
-            id="category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className={styles.select}
-          >
-            <option value="">Select a category</option>
-            <option value="residential">Residential</option>
-            <option value="commercial">Commercial</option>
-            <option value="industrial">Industrial</option>
-          </select>
-          <button type="button" onClick={handleAddNew} className={styles.addNewBtn}>
-            <Plus size={16} /> Add New
-          </button>
-        </div>
-      </div>
-      
-      {showNewCategory && (
-        <div className={styles.newCategoryContainer}>
-          <input
-            type="text"
-            value={newCategory}
-            onChange={(e) => setNewCategory(e.target.value)}
-            placeholder="New category name"
+    <Modal open={isOpen} onClose={onClose}>
+      <Box className={styles.modal}>
+        <Typography variant="h6" component="h2" className={styles.modalTitle}>
+          Add New Amenity
+        </Typography>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <Box className={styles.dropdownContainer}>
+            <FormControl className={styles.formControl}>
+              <InputLabel id="category-label">Amenity Group*</InputLabel>
+              <Select
+                labelId="category-label"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className={styles.select}
+              >
+                <MenuItem value="">Select Amenity Group</MenuItem>
+                <MenuItem value="bathroom">Bathroom</MenuItem>
+                <MenuItem value="bedroom">Bedroom</MenuItem>
+                <MenuItem value="kitchen">Kitchen</MenuItem>
+              </Select>
+            </FormControl>
+            <Button
+              startIcon={<Plus size={16} />}
+              onClick={handleAddNew}
+              className={styles.addNewBtn}
+            >
+              Add New
+            </Button>
+          </Box>
+          {showNewCategory && (
+            <Box className={styles.newCategoryContainer}>
+              <TextField
+                fullWidth
+                value={newCategory}
+                onChange={(e) => setNewCategory(e.target.value)}
+                placeholder="Enter new amenity group"
+                className={styles.input}
+              />
+              <Button
+                onClick={handleSaveNewCategory}
+                className={styles.iconButton}
+              >
+                <Save size={20} />
+              </Button>
+              <Button
+                onClick={handleCancelNewCategory}
+                className={styles.iconButton}
+              >
+                <X size={20} />
+              </Button>
+            </Box>
+          )}
+          <TextField
+            fullWidth
+            label="Amenity Name*"
+            value={propertyCode}
+            onChange={(e) => setPropertyCode(e.target.value)}
             className={styles.input}
           />
-          <button type="button" onClick={handleSaveNewCategory} className={styles.iconBtn}>
-            <Save size={16} />
-          </button>
-          <button type="button" onClick={handleDeleteNewCategory} className={styles.iconBtn}>
-            <Trash2 size={16} />
-          </button>
-        </div>
-      )}
-
-      <div className={styles.formGroup}>
-        <label htmlFor="propertyCode" className={styles.label}>Property Code</label>
-        <input
-          type="text"
-          id="propertyCode"
-          value={propertyCode}
-          onChange={(e) => setPropertyCode(e.target.value)}
-          className={styles.input}
-        />
-      </div>
-
-      <div className={styles.buttonGroup}>
-        <button type="submit" className={styles.submitBtn}>Add</button>
-        <button type="button" className={styles.cancelBtn}>Cancel</button>
-      </div>
-    </form>
+          <TextField
+            fullWidth
+            label="Description (Optional)"
+            multiline
+            rows={3}
+            className={styles.input}
+          />
+          <div className={styles.buttonGroup}>
+            <Button onClick={onClose} className={styles.cancelBtn}>
+              Cancel
+            </Button>
+            <Button type="submit" variant="contained" className={styles.submitBtn}>
+              Add Amenity
+            </Button>
+          </div>
+        </form>
+      </Box>
+    </Modal>
   );
 };
 
-export default PropertyCodeCatogory;
+export default PropertyCodeCategoryModal;
