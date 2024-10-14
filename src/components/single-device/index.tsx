@@ -25,6 +25,7 @@ import { RootState } from "@/store/reducers";
 import Bedroom1Image from "../../assets/images/bedroom1.jpg";
 import KingBedImage from "../../assets/images/bedroom1.jpg";
 import { fetchSpacePropertiesById } from "@/store/slice/spacePropertySlice";
+import { getAllSpacePropertyImageById, getAllSpacePropertyImages } from "@/api";
 
 interface SingleDeviceProps {
   propertyId: number;
@@ -63,6 +64,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
     (state: RootState) => state.amenities
   );
   const propertySpace = useSelector((state: RootState) => state.spaceProperties.spaceProperties || [])
+  const [imagesData, setImagesData] = useState<any[]>([]);
 
   const [page, setPage] = useState(1);
   const [showAllAmenities, setShowAllAmenities] = useState(false);
@@ -76,6 +78,33 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const handlePageChange = (value: number) => {
     setPage(value);
   };
+
+  useEffect(() => {
+    const imageFetching = async () => {
+      try {
+        const response = await getAllSpacePropertyImageById(Number(propertyId));
+        const sortedImages = response.data.data.sort((a: any, b: any) => a.displayOrder - b.displayOrder);
+        setImagesData(sortedImages); // Sort images by displayOrder
+        console.log('Images fetched and sorted successfully');
+      } catch (error) {
+        console.error('Error fetching images:', error);
+      }
+    };
+
+    imageFetching();
+  }, [propertyId]); // 
+
+  const getImageUrlByPropertyAndSpace = (spaceId: number): string | null => {
+    const image = imagesData.find(
+      (img) =>
+        img.propertySpace?.id === spaceId &&
+        img.displayOrder === 1
+    );
+
+    return image ? image.url : null;
+  };
+
+
 
   const handleShowMoreClick = () => {
     setOpen(true);
@@ -111,79 +140,6 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
       sx={{ display: "flex", flexDirection: "row", gap: 10 }}
       className="singleDevice"
     >
-      {/* <Box
-        sx={{ display: "flex", flexDirection: "column", gap: 3, width: "50%" }}
-        className="RoomsRes"
-      >
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography
-            variant="h6"
-            component="div"
-            className="monsterrat checkIn"
-          >
-            Rooms
-          </Typography>
-          <Box>
-            <CustomPagination
-              page={page}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
-          </Box>
-        </Box>
-
-        {allRooms.length === 0 ? (
-          <Typography variant="body1">No rooms available.</Typography>
-        ) : (
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
-            {paginatedRooms.map((room: Room, index: number) => (
-              <Box
-                key={index}
-                sx={{
-                  flex: "1 1 calc(50% - 1rem)",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <Card
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    height: "70%",
-                    width: "100%",
-                  }}
-                >
-                  <CardMedia
-                    component="img"
-                    height="100%"
-                    image={room.image}
-                    alt={room.name}
-                    sx={{ objectFit: "cover" }}
-                  />
-                </Card>
-                <CardContent sx={{ padding: 1, paddingTop: 2 }}>
-                  <Typography
-                    variant="h6"
-                    sx={{ fontSize: 15, fontWeight: 600 }}
-                    className="monsterrat"
-                  >
-                    {room.name}
-                  </Typography>
-                  {room.Bed && (
-                    <Typography
-                      variant="body1"
-                      sx={{ fontSize: 12 }}
-                      className="monsterrat"
-                    >
-                      {room.Bed}
-                    </Typography>
-                  )}
-                </CardContent>
-              </Box>
-            ))}
-          </Box>
-        )}
-      </Box> */}
 
       <Box
         sx={{ display: "flex", flexDirection: "column", gap: 3, width: "50%" }}
@@ -226,7 +182,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                   <CardMedia
                     component="img"
                     height="100%"
-                    image={"https://via.placeholder.com/150"} // Placeholder for space image
+                    image={getImageUrlByPropertyAndSpace(space.space.id) || 'https://via.placeholder.com/100'} // Placeholder for space image
                     alt={space.space.name}
                     sx={{ objectFit: "cover" }}
                   />
