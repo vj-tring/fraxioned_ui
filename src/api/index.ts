@@ -254,23 +254,23 @@ export const propertyspacetypesapi = () =>
     axiosInstance.get(`/space-types`);
 
 export const getPropertyDocuments = () =>
-    axiosInstance.get('/api/propertyDocuments');
+    axiosInstance.get('/propertyDocuments');
 
 export const getPropertyDocument = (id: number) =>
-    axiosInstance.get(`/api/propertyDocuments/propertyDocument/${id}`);
+    axiosInstance.get(`/propertyDocuments/propertyDocument/${id}`);
 
 export const createPropertyDocument = (formData: FormData) =>
-    axiosInstance.post('/api/propertyDocuments', formData, {
+    axiosInstance.post('/propertyDocuments', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
     });
 
 export const updatePropertyDocument = (id: number, formData: FormData) =>
-    axiosInstance.patch(`/api/propertyDocuments/propertyDocument/${id}`, formData, {
+    axiosInstance.patch(`/propertyDocuments/propertyDocument/${id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
     });
 
 export const deletePropertyDocument = (id: number) =>
-    axiosInstance.delete(`/api/propertyDocuments/propertyDocument/${id}`);
+    axiosInstance.delete(`/propertyDocuments/propertyDocument/${id}`);
 
 export const getpropertycodes = () =>
     axiosInstance.get(`/property-codes`);

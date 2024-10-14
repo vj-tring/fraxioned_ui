@@ -1,7 +1,7 @@
 // src/api/contactApi.ts
 import axios from 'axios'
 import { BACKEND_URL } from '@/constants'
-import { ContactMessage } from '../../types/contact'
+import { ContactMessage } from '../../store/model/contact-message'
 
 export const sendContactMessage = async (payload: ContactMessage) => {
   try {

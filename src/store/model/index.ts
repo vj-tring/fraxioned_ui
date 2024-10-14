@@ -1,47 +1,5 @@
-export interface Role {
-  id: number;
-  roleName: string;
-}
-export interface User {
-  roleId: number;
-  id: number;
-  email: string;
-  firstName: string;
-  lastName: string;
-  mobile: string;
-  address: string;
-  city: string;
-  state: string;
-  isAdmin: boolean;
-  country: string;
-  zipcode: string;
-  password: string;
-  imageURL: string | null;
-  isActive: number;
-  addressLine1: string | null;
-  addressLine2: string | null;
-  resetToken: string;
-  resetTokenExpires: string | null;
-  lastLoginTime: string;
-  createdBy: number;
-  updatedBy: number;
-  createdAt: string;
-  updatedAt: string;
-  role: Role;
-}
-
-export interface Session {
-    token: string;
-    expiresAt: string;
-}
-
-export interface AuthState {
-    user: User | null;
-    session: Session | null;
-    loading: boolean;
-    error: string | null;
-    isAdmin: boolean;
-  }
+export * from './auth'
+export * from './user'
 
 export interface ForgotPasswordState {
     loading: boolean

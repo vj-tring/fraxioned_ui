@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/index"; 
-import { login } from "../../store/slice/auth/authentication";
+import { login } from "../../store/slice/authentication/actions";
 import styles from "./login.module.css";
 import logo from "../../assets/images/fraxioned.png";
 import Loader from "../../components/loader/index";
 import CustomizedSnackbars from "../../components/customized-snackbar";
+import { ENCRYPTION_KEY } from "@/constants";
 
-const ENCRYPTION_KEY = "fraxioned-owner-creds-key";
 
 const encrypt = (text: string): string => {
   return btoa(
@@ -102,7 +102,7 @@ const Login: React.FC = () => {
               localStorage.removeItem("rememberedPassword");
             }
 
-            if (resultAction.user.roleId === 1) {
+            if (resultAction.user.role.id === 1) {
               navigate("/admin/bookings");
             } else {
               navigate("/");

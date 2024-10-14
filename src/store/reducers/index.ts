@@ -1,5 +1,5 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import authReducer from '../slice/auth/authentication';
+import authReducer from '../slice/authentication';
 import registerReducer from '../slice/auth/register';
 import forgotPasswordReducer from '../slice/auth/forget-password';
 import propertyReducer from '../slice/auth/property-slice';

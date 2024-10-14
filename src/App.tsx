@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -6,7 +6,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { Provider } from "react-redux";
-import store from "./store/index";
+import store, { useDispatch } from "./store";
 import Login from "./pages/login/index";
 import ForgetPassword from "./pages/forgot-password";
 import Change from "./pages/recover-password";
@@ -16,6 +16,7 @@ import BookingSummary from "./pages/booking-summary/pages";
 import AdminDashboard from "./pages-admin/admin-dashboard";
 import ScrollToTop from "./components/ScrollToTop";
 import AxiosInterceptor from "./api/axiosSetup";
+import { fetchAuthState } from "./store/slice/authentication/actions";
 
 interface PrivateRouteProps {
   element: React.ComponentType;
@@ -27,7 +28,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   allowedRoles,
 }) => {
   const token = localStorage.getItem("session");
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  // const user = JSON.parse(localStorage.getItem("user") || "{}");
   console.log(token);
   if (!token) {
     return <Navigate to="/login" />;
@@ -40,6 +41,12 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
 };
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchAuthState());
+  }, [dispatch]);
+
   return (
     <Provider store={store}>
       <Router>
@@ -53,7 +60,7 @@ function App() {
               <Route path="/bookingSummary" element={<BookingSummary />} />
               <Route
                 path="/resetPassword"
-                element={<ResetPassword onClose={() => { }} />}
+                element={<ResetPassword onClose={() => {}} />}
               />
               <Route
                 path="/*"
