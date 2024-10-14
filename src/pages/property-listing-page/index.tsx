@@ -37,7 +37,7 @@ import CustomizedSnackbar from "@/components/customized-snackbar";
 import calendarData from "@/components/calender/calendarData.json";
 import { DateRange } from "react-day-picker";
 import DatePickerCard from "../../components/date-picker-card";
-import { Skeleton } from "@mui/material"; 
+import { Skeleton } from "@mui/material";
 import { RootState } from "@/store/reducers";
 
 interface Property {
@@ -51,7 +51,7 @@ interface Property {
   country?: string;
   latitude?: string;
   longitude?: string;
-  zipcode?: string
+  zipcode?: string;
 }
 
 interface Space {
@@ -126,7 +126,9 @@ const PropertyListingPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const userId = useSelector((state: PropertyRootState) => state.auth.user.id);
-  const currentUser = useSelector((state: PropertyRootState) => state.auth.user);
+  const currentUser = useSelector(
+    (state: PropertyRootState) => state.auth.user
+  );
   const selectedPropertyDetails = useSelector(selectSelectedPropertyDetails);
   const calendarError = useSelector(
     (state: PropertyRootState) => state.datePicker.errorMessage
@@ -407,7 +409,6 @@ const PropertyListingPage = () => {
                 className="PropertyAddress monsterrat "
                 style={{ opacity: 0.9, fontWeight: "bolder" }}
               >
-                
                 <div>{selectedProperty.address || "Property Address"},</div>
                 <div>{selectedProperty.city || "Property Address"},</div>
                 <div>{selectedProperty.state || "Property Address"},</div>
@@ -441,7 +442,7 @@ const PropertyListingPage = () => {
             </a>
           </div>
         </div>
-        <div className="d-flex pt-2 h-100">
+        <div className="d-flex pt-2 h-100 Proprespo">
           <div className="col-6 col-md-7 GridWidth h-100">
             <div id="myShare" className="mt-4">
               <Showmore
@@ -483,7 +484,7 @@ const PropertyListingPage = () => {
           }}
         />
         <div id="rooms" className="mt-5">
-          <SingleDevice propertyId={id}/>
+          <SingleDevice propertyId={id} />
         </div>
         <div id="location">
           <MapEmbed

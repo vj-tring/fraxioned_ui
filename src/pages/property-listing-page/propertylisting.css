@@ -177,11 +177,14 @@ body {
   .propertyDetails {
     width: 100%;
   }
+  .liststyle{
+    font-size: 0.6rem !important;
+  }
   .GridWidth {
     width: 100% !important;
   }
   .PropertyAddress {
-    font-size: small !important;
+    font-size: xx-small !important;
   }
   .location > img {
     width: 20px !important;
@@ -324,7 +327,6 @@ body {
     font-size: 6px !important;
   }
   .stay-length {
-
     gap: 10px !important;
   }
   .img1 {
@@ -368,5 +370,9 @@ body {
   }
   .ThingstoHead {
     font-size: small !important;
+  }
+  .Proprespo{
+    display: flex;
+    flex-direction: column;
   }
 }

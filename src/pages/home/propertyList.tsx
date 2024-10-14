@@ -122,7 +122,7 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
     <div className={` Container1 ${properties.length > 5 ? "" : "flex"}`}>
       <div>
         <div
-          className="d-flex flex-row Container"
+          className="d-flex flex-row Container4"
           style={{
             marginLeft: paddingLeft ? "-45px" : "1%",
           }}
