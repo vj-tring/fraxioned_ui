@@ -207,20 +207,28 @@
   height: 50px;
 }
 .defaultPreview {
-    width: 100%;
-    border: 2px dashed #ccc;
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 17rem;
-    text-align: center;
-    color: #888;
-  }
-  .previewImage{
-    height: 17rem !important;
-
-  }
-  .cancelPreviewButton{
-    
-  }
+  width: 100%;
+  border: 2px dashed #ccc;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 17rem;
+  text-align: center;
+  color: #888;
+}
+.previewImage {
+  height: 17rem !important;
+  width: 460px;
+}
+.cancelPreviewButton {
+  font-size: x-small;
+  padding: 4px 10px;
+  background-color: #888;
+  color: white;
+  margin-right: 10px;
+  margin-top: 10px;
+  position: relative;
+  float: right;
+  border-radius: 3px;
+}

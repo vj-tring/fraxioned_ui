@@ -23,6 +23,7 @@ import {
   Space,
 } from "@/store/slice/spaceSlice";
 import { Delete, Edit } from "@mui/icons-material";
+import { fontSize } from "@mui/system";
 
 const Spaces: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -215,7 +216,9 @@ const Spaces: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
           open={isDialogOpen}
           onClose={handleDialogClose}
           sx={{
-            height: "650px",
+            "& .MuiDialog-paper": {
+              height: "1000px",
+            },
           }}
         >
           <DialogTitle
