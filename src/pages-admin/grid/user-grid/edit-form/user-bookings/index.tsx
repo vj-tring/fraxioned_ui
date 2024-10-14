@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { getUserBookings } from "@/api";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserBookings, BookingData } from "@/store/slice/auth/bookingSlice";
+import { RootState } from "@/store/reducers";
 import styles from "./userbookings.module.css";
 import {
   Calendar,
@@ -10,60 +12,44 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
+import { AppDispatch } from "@/store";
 
 interface BookingProps {
   userId: number;
 }
-
-interface Booking {
-  id: number;
+interface Booking extends BookingData {
+  id: string;
   bookingId: string;
-  checkinDate: string;
-  checkoutDate: string;
   totalNights: number;
   noOfGuests: number;
-  noOfPets: number;
-  noOfAdults: number | null;
-  noOfChildren: number | null;
-  cleaningFee: number | null;
-  petFee: number | null;
   property: {
-    id: number;
+    id: string;
     propertyName: string;
   };
 }
 
+interface GroupedBookings {
+  [key: string]: {
+    propertyName: string;
+    bookings: Booking[];
+  };
+}
+
 const UserBookings: React.FC<BookingProps> = ({ userId }) => {
-  const [bookings, setBookings] = useState<Booking[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [expandedProperties, setExpandedProperties] = useState<
-    Record<number, boolean>
-  >({});
+  const dispatch = useDispatch<AppDispatch>();
+  const { userBookings, isLoading, error } = useSelector((state: RootState) => state.bookings);
+  const [expandedProperties, setExpandedProperties] = React.useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    const fetchBookings = async () => {
-      try {
-        const response = await getUserBookings(userId);
-        if (Array.isArray(response.data)) {
-          setBookings(response.data);
-          // Set the first property to be expanded by default
-          if (response.data.length > 0) {
-            const firstPropertyId = response.data[0].property.id;
-            setExpandedProperties({ [firstPropertyId]: true });
-          }
-        } else {
-          setError("No bookings available");
-        }
-      } catch (error) {
-        console.error("Error fetching bookings:", error);
-        setError("Error fetching bookings. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchBookings();
-  }, [userId]);
+    dispatch(fetchUserBookings(userId));
+  }, [dispatch, userId]);
+
+  useEffect(() => {
+    if (Array.isArray(userBookings) && userBookings.length > 0 && userBookings[0].property) {
+      const firstPropertyId = userBookings[0].property.id;
+      setExpandedProperties({ [firstPropertyId]: true });
+    }
+  }, [userBookings]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -81,32 +67,39 @@ const UserBookings: React.FC<BookingProps> = ({ userId }) => {
     return (cleaning || 0) + (pet || 0);
   };
 
-  const groupBookingsByProperty = (bookings: Booking[]) => {
+  const groupBookingsByProperty = (bookings: Booking[]): GroupedBookings => {
+    if (!Array.isArray(bookings)) {
+      console.error("Expected bookings to be an array, but got:", bookings);
+      return {};
+    }
     return bookings.reduce((acc, booking) => {
-      const { property } = booking;
-      if (!acc[property.id]) {
-        acc[property.id] = {
-          propertyName: property.propertyName,
-          bookings: [],
-        };
+      if (booking && booking.property) {
+        const { property } = booking;
+        if (!acc[property.id]) {
+          acc[property.id] = {
+            propertyName: property.propertyName,
+            bookings: [],
+          };
+        }
+        acc[property.id].bookings.push(booking);
       }
-      acc[property.id].bookings.push(booking);
       return acc;
-    }, {} as Record<number, { propertyName: string; bookings: Booking[] }>);
+    }, {} as GroupedBookings);
   };
 
-  const togglePropertyExpansion = (propertyId: number) => {
+  const togglePropertyExpansion = (propertyId: string) => {
     setExpandedProperties((prev) => ({
       ...prev,
       [propertyId]: !prev[propertyId],
     }));
   };
 
-  if (loading) return <div className={styles.message}>Loading bookings...</div>;
-  if (error) return <div className={styles.message}>{error}</div>;
-  if (bookings.length === 0)
+  if (isLoading) return <div className={styles.message}>Loading bookings...</div>;
+  if (error) return <div className={styles.message}>Error: {error}</div>;
+  if (!userBookings || !Array.isArray(userBookings) || userBookings.length === 0)
     return <div className={styles.message}>No bookings available</div>;
 
+  const bookings = userBookings as Booking[];
   const groupedBookings = groupBookingsByProperty(bookings);
 
   return (
@@ -116,19 +109,19 @@ const UserBookings: React.FC<BookingProps> = ({ userId }) => {
           <div key={propertyId} className={styles.propertyContainer}>
             <div
               className={styles.propertyHeader}
-              onClick={() => togglePropertyExpansion(Number(propertyId))}
+              onClick={() => togglePropertyExpansion(propertyId)}
             >
               <h2 className={styles.propertyTitle}>
                 <Home className={styles.icon} size={20} />
                 {propertyName}
               </h2>
-              {expandedProperties[Number(propertyId)] ? (
+              {expandedProperties[propertyId] ? (
                 <ChevronUp className={styles.icon} size={20} />
               ) : (
                 <ChevronDown className={styles.icon} size={20} />
               )}
             </div>
-            {expandedProperties[Number(propertyId)] && (
+            {expandedProperties[propertyId] && (
               <div className={styles.bookingsContainer}>
                 {bookings.map((booking) => (
                   <div key={booking.id} className={styles.bookingTile}>
