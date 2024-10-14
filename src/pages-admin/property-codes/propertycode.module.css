@@ -1,0 +1,25 @@
+
+.container {
+    padding: 20px;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .gridContainer {
+    padding: 20px;
+  }
+  
+  .columnHeader {
+    font-weight: bold;
+  }
+  
+  .actionButton {
+    margin-right: 10px;
+  }
+  
+  

@@ -26,6 +26,7 @@ import { PropertyDocuments } from '../property-documents';
 import ReportsGrid from '../grid/reports-grid';
 import SpaceProperty from '../space-property';
 import SpacePropertyDetails from '../space-property/space-property-details';
+import PropertyCode from '../property-codes';
 import Spaces from '../spaces';
 import "./admin-dashboard.css";
 
@@ -157,6 +158,16 @@ const AdminDashboard: React.FC = () => {
                                 <PropertySidePanel isOpen={true} />
                                 <div className="property-info-content">
                                     <SpaceProperty />
+                                </div>
+                            </div>
+                        } />
+
+
+                        <Route path="/property/:id/codes" element={
+                            <div className="property-details-container">
+                                <PropertySidePanel isOpen={true} />
+                                <div className="property-info-content">
+                                    <PropertyCode />
                                 </div>
                             </div>
                         } />

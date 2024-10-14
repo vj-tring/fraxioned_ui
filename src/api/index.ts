@@ -356,4 +356,23 @@ export const getAllSpacePropertyImageById = (propertyId: number) => {
     return axiosInstance.get(`/property-space-images/property/${propertyId}/images`)
 };
 
+//for proeprty
+export const getAllpropertycodes = () =>
+    axiosInstance.get(`/property-codes`);
+
+
+//add for a property
+export const postpropertycode = () =>
+    axiosInstance.post(`/property-codes/property-code`);
+
+
+export const getAllpropertycodecatogory = () =>
+    axiosInstance.get(`/property-code-categories`);
+
+export const createpropertycodecatogory = () =>
+    axiosInstance.post(`/property-code-categories`);
+
+
+
+
 
