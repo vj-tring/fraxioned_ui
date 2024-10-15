@@ -9,12 +9,19 @@
   margin: 0 auto;
 }
 
+.title1
+{
+  margin-top: 5px !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
-  padding: 16px;
+  margin-bottom: 5px;
+  padding: 12px;
   background-color: #ffffff;
   border-radius: 4px 4px 0 0;
 }

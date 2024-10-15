@@ -13,15 +13,24 @@ import styles from './propertycode.module.css';
 import { RootState } from '@/store/reducers';
 import { AppDispatch } from '@/store';
 import PropertyCodeCategoryModal from './new-propertycode';
-
 interface PropertyCode {
   id: number;
   propertyCode: string;
   property: {
     id: number;
+    propertyName: string;
   };
   propertyCodeCategory: {
+    id: number;
     name: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+  createdBy: {
+    id: number;
+  };
+  updatedBy: null | {
+    id: number;
   };
 }
 
@@ -70,7 +79,8 @@ const PropertyCode: React.FC = () => {
     <div className={styles.container}>
       <Paper elevation={3} className={styles.content}>
         <div className={styles.header}>
-          <Typography variant="h6" component="h2">Property Codes</Typography>
+          <Typography variant="h6" component="h2" className={styles.title1}
+          >Property Codes</Typography>
           <Button
             className={styles.addbutton}
             variant="contained"
