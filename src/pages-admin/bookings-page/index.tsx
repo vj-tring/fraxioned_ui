@@ -29,7 +29,7 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import ViewBookings from "@/components/userbooking-form";
 import InlineFilter from "@/components/filterbox";
-import { User, Property, Booking } from './booking.module';
+import { User, Property, Booking } from './booking.types';
 import { exportBookingsToCSV } from './bookings-export';
 
 

@@ -1,5 +1,5 @@
 
-import { Booking } from './booking.module'; 
+import { Booking } from './booking.types'; 
 
 export const exportBookingsToCSV = (filteredBookings: Booking[]) => {
   const headers = [
