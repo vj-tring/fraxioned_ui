@@ -9,7 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { fetchPropertyCodes } from '@/store/slice/auth/propertycodeSlice';
-import styles from './PropertyCode.module.css';
+import styles from './propertycode.module.css';
 import { RootState } from '@/store/reducers';
 import { AppDispatch } from '@/store';
 import PropertyCodeCategoryModal from './new-propertycode';
