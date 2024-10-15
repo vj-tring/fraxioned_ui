@@ -9,10 +9,11 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { fetchPropertyCodes } from '@/store/slice/auth/propertycodeSlice';
-import styles from './propertycode.module.css';
+import styles from './PropertyCode.module.css';
 import { RootState } from '@/store/reducers';
 import { AppDispatch } from '@/store';
 import PropertyCodeCategoryModal from './new-propertycode';
+
 interface PropertyCode {
   id: number;
   propertyCode: string;
@@ -79,12 +80,12 @@ const PropertyCode: React.FC = () => {
     <div className={styles.container}>
       <Paper elevation={3} className={styles.content}>
         <div className={styles.header}>
-          <Typography variant="h6" component="h2" className={styles.title1}
-          >Property Codes</Typography>
+          <Typography variant="h6" component="h2" className={styles.title}>
+            Property Codes
+          </Typography>
           <Button
-            className={styles.addbutton}
+            className={styles.createButton}
             variant="contained"
-            color="primary"
             startIcon={<AddIcon />}
             onClick={handleCreateCode}
             size="small"
@@ -92,18 +93,18 @@ const PropertyCode: React.FC = () => {
             Create Code
           </Button>
         </div>
-        <TableContainer component={Paper} className={styles.tableContainer}>
+        <TableContainer className={styles.tableContainer}>
           <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell>Category</TableCell>
-                <TableCell>Code</TableCell>
-                <TableCell align="right">Actions</TableCell>
+                <TableCell className={styles.tableHeader}>Category</TableCell>
+                <TableCell className={styles.tableHeader}>Code</TableCell>
+                <TableCell align="right" className={styles.tableHeader}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {filteredCodes.map((code) => (
-                <TableRow key={code.id}>
+                <TableRow key={code.id} className={styles.tableRow}>
                   <TableCell>
                     <Chip
                       label={code.propertyCodeCategory.name}
