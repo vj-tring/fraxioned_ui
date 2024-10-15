@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "@/components/snackbar-provider";
 import React, { ReactNode, useLayoutEffect } from "react";
 import { BACKEND_URL } from "@/constants";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/reducers";
+
 
 // const navigate = useNavigate();
 // const { showSnackbar } = useSnackbar();
@@ -28,16 +31,15 @@ const AxiosInterceptor: React.FC<AxiosInterceptorProps> = ({ children }) => {
       requestInterceptor = axiosInstance.interceptors.request.use(
         (config) => {
           // Get the access token from local storage or state
-          const user = JSON.parse(localStorage.getItem("user") || "{}");
+          // const user = JSON.parse(localStorage.getItem("user") || "{}");
+          // const user = useSelector((state: RootState) => state.auth.user);
           const session = JSON.parse(localStorage.getItem("session") || "{}");
-          const userId = user.id;
+          const userId = session.userId;
           const token = session.token;
           const searchParams = new URLSearchParams(window.location.search);
           const resetToken = searchParams.get("resetToken");
-
           // If the access token exists, set it in the Authorization header
-          if (userId && token) {
-
+          if (userId && token ) {
             config.headers["user-id"] = userId;
             config.headers["access-token"] = token;
           }

@@ -42,7 +42,7 @@ const CustomNavbar = ({
       dispatch(fetchUserById(userId));
     }
   }, [dispatch, userId]);
-  const user = useSelector((state: RootState) => state.user.user);
+  const user = useSelector((state: RootState) => state.auth.user);
   const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
   const {
     showInviteModal,
