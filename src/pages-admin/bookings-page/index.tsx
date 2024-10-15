@@ -15,7 +15,7 @@ import {
   InputBase,
   Button,
   Link,
-  Box,
+
 } from "@mui/material";
 import AssistantDirectionOutlinedIcon from "@mui/icons-material/AssistantDirectionOutlined";
 import { useNavigate } from "react-router-dom";
@@ -26,9 +26,7 @@ import ConfirmationModal from "@/components/confirmation-modal";
 import { ClearIcon } from "@mui/x-date-pickers/icons";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import FilterListIcon from "@mui/icons-material/FilterList";
 import ViewBookings from "@/components/userbooking-form";
-import InlineFilter from "@/components/filterbox";
 import { User, Property, Booking } from './booking.types';
 import { exportBookingsToCSV } from './bookings-export';
 
@@ -50,8 +48,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
   );
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [showSuccessSnackbar, setShowSuccessSnackbar] = useState(false);
-  const [showFilter, setShowFilter] = useState(false);
-  const [filterModel, setFilterModel] = useState<GridFilterModel>({
+  const [filterModel] = useState<GridFilterModel>({
     items: [],
   });
   const navigate = useNavigate();
@@ -124,43 +121,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     setFilterValue(event.target.value);
   };
 
-  const handleApplyFilter = (
-    field: string,
-    operator: string,
-    value: string
-  ) => {
-    const newFilterModel: GridFilterModel = {
-      items: [
-        {
-          field,
-          operator: operator as any,
-          value,
-        },
-      ],
-    };
-    setFilterModel(newFilterModel);
 
-    const filteredData = bookings.filter((booking) => {
-      const bookingValue = booking[field as keyof Booking];
-      if (typeof bookingValue === "string") {
-        switch (operator) {
-          case "contains":
-            return bookingValue.toLowerCase().includes(value.toLowerCase());
-          case "equals":
-            return bookingValue.toLowerCase() === value.toLowerCase();
-          case "startsWith":
-            return bookingValue.toLowerCase().startsWith(value.toLowerCase());
-          case "endsWith":
-            return bookingValue.toLowerCase().endsWith(value.toLowerCase());
-          default:
-            return true;
-        }
-      }
-      return true;
-    });
-
-    setFilteredBookings(filteredData);
-  };
 
   const handleSearchClear = () => {
     setFilterValue("");
@@ -169,9 +130,6 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
   const handleDeleteClick = (booking: Booking) => {
     setBookingToDelete(booking);
     setShowDeleteConfirmation(true);
-  };
-  const handleFilterClick = () => {
-    setShowFilter(!showFilter);
   };
 
   const handleViewClick = (id: number) => {
@@ -362,23 +320,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
               )}
             </Paper>
 
-            <Box sx={{ position: "relative", marginRight: "10px" }}>
-              <Button
-                variant="contained"
-                startIcon={<FilterListIcon />}
-                onClick={handleFilterClick}
-                className={styles.actionButton}
-              >
-                Filter
-              </Button>
-              {showFilter && (
-                <InlineFilter
-                  columns={columns}
-                  onFilter={handleApplyFilter}
-                  onClose={() => setShowFilter(false)}
-                />
-              )}
-            </Box>
+
 
             <Button
               variant="contained"
@@ -388,21 +330,18 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
             >
               Export
             </Button>
-
             <Link
               component="button"
-              // variant="body2"
               onClick={handleCalendarClick}
               className={styles.calendarLink}
             >
+              <>Go to Calendar</>
               <AssistantDirectionOutlinedIcon
                 fontSize="small"
                 sx={{
-                  // color: "#8ab3b7",
-                  marginLeft: "5px",
+
                 }}
               />
-              <> Go to Calendar</>
             </Link>
           </div>
         </div>

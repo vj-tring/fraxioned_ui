@@ -1,20 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { getProperties } from "@/api";
 import { AxiosResponse } from "axios";
-import styles from "./propertydropdown.module.css";
-
-interface Property {
-  id: number;
-  propertyName: string;
-  ownerRezPropId: number;
-  address: string;
-  city: string;
-  state: string;
-}
-
-interface PropertyDropdownProps {
-  onPropertySelect: (propertyId: number | null) => void;
-}
+import styles from "./property-dropdown.module.css";
+import {Property,PropertyDropdownProps} from './property-dropdown.types.ts';
 
 const PropertyDropdown: React.FC<PropertyDropdownProps> = ({
   onPropertySelect,

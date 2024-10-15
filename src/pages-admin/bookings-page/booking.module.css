@@ -48,7 +48,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* margin-bottom: 20px; */
+  margin-bottom: 1px; 
   flex-wrap: wrap;
 }
 
@@ -68,7 +68,7 @@
   background-color: #ffffff;
   font-size: small !important;
   transition: box-shadow 0.3s ease;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .actionLink {
@@ -77,6 +77,7 @@
   text-decoration: underline !important;
   transition: color 0.3s ease;
   margin-left: 20px !important;
+  
 
 }
 
@@ -95,15 +96,15 @@
   color: white !important;
   font-size: small !important;
   display: flex;
-  padding: 4px 8px !important;
+  padding: 15px 12px !important;
   align-items: center;
   border-radius: 5px !important;
   gap: 5px;
-  margin-left: 20px !important;
+  margin-left: 10px !important;
   text-decoration: none;
   height: 30px;
   background-color: #2d6aa0 !important;
-  
+  margin-bottom:10px !important;
 }
 
 .calendarLink:hover {
@@ -152,7 +153,7 @@
   margin-left: 10px;
   color: #333;
   margin-right: 16px;
-  margin-top: 12px;
+  margin-bottom: 12px;
 }
 
 .gridActionContainer {
@@ -177,6 +178,7 @@
   border-radius: 4px !important;
   transition: background-color 0.3s ease !important;
   margin-left: 12px !important;
+  margin-bottom:10px !important;
   
 }
 
@@ -192,7 +194,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
+  margin-top: 1px;
 }
 
 .dataGrid {
