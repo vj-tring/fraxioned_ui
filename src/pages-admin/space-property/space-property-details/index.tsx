@@ -1,274 +1,303 @@
-import { Button, TextField, Dialog, DialogTitle, DialogContent, DialogActions, IconButton, Box, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { FaPlus, FaTrash } from "react-icons/fa";
-import { MdKeyboardArrowRight, MdDelete } from "react-icons/md";
-import { IoIosClose, IoIosImages } from "react-icons/io";
-import { GoPlus } from "react-icons/go";
-import styles from './spacepropertydetails.module.css';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/reducers";
+import { AppDispatch } from '@/store';
+import { getByPropertySpaceId } from '@/store/slice/auth/propertyamenities';
 import { propertySpaceImageuploadapi } from "@/api";
-import { VscTrash } from "react-icons/vsc";
+import { motion, AnimatePresence } from 'framer-motion'
+import { Trash2, Plus, X, Camera, Loader2, ChevronDown, ChevronUp } from 'lucide-react'
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Badge } from "@/src/components/ui/badge";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/src/components/ui/collapsible";
 
-
-
+interface AmenityGroup {
+  id: number;
+  name: string;
+  amenities: string[];
+}
 
 const SpacePropertyDetails: React.FC = () => {
-    const location = useLocation();
-    const { space } = location.state || {};
-    const userId = useSelector((state: RootState) => state.auth.user?.id);
+  const location = useLocation();
+  const { space } = location.state || {};
+  const dispatch = useDispatch<AppDispatch>();
+  const userId = useSelector((state: RootState) => state.auth.user?.id);
 
+  const { amenities: propertyAmenities } = useSelector(
+    (state: RootState) => state.propertyAmenities
+  );
 
-    // State for the uploaded photos (multiple)
-    const [photos, setPhotos] = useState<File[]>([]);
-    // State for photo previews
-    const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
-    // State for the amenities input and list
-    const [amenities, setAmenities] = useState<string>("");
-    const [amenitiesList, setAmenitiesList] = useState<string[]>([]);
-    // State for the description
-    const [description, setDescription] = useState<string>("");
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
+  const [amenityGroups, setAmenityGroups] = useState<AmenityGroup[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedAmenity, setSelectedAmenity] = useState<string>("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({});
 
-    // Dialog open/close state for image uploading
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+  useEffect(() => {
+    if (space?.id) {
+      dispatch(getByPropertySpaceId(space.id));
+    }
+  }, [space, dispatch]);
 
-    // Handles adding multiple photo uploads and generating previews
-    const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files) {
-            const selectedFiles = Array.from(event.target.files);
-
-            // Update photos state
-            setPhotos((prevPhotos) => [...prevPhotos, ...selectedFiles]);
-
-            // Generate previews
-            const filePreviews = selectedFiles.map((file) => URL.createObjectURL(file));
-            setPhotoPreviews((prevPreviews) => [...prevPreviews, ...filePreviews]);
+  useEffect(() => {
+    if (propertyAmenities.length > 0) {
+      const groupedAmenities = propertyAmenities.reduce((acc: AmenityGroup[], item) => {
+        const groupIndex = acc.findIndex(group => group.id === item.amenity.amenityGroup.id);
+        if (groupIndex === -1) {
+          acc.push({
+            id: item.amenity.amenityGroup.id,
+            name: item.amenity.amenityGroup.name,
+            amenities: [item.amenity.amenityName]
+          });
+        } else {
+          acc[groupIndex].amenities.push(item.amenity.amenityName);
         }
-    };
+        return acc;
+      }, []);
+      setAmenityGroups(groupedAmenities);
+      
+      const initialExpandedState = groupedAmenities.reduce((acc, group) => {
+        acc[group.name] = false;
+        return acc;
+      }, {} as Record<string, boolean>);
+      setOpenCategories(initialExpandedState);
+    }
+  }, [propertyAmenities]);
 
-    const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        const files = Array.from(event.dataTransfer.files);
+  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const selectedFiles = Array.from(event.target.files);
+      setPhotos((prevPhotos) => [...prevPhotos, ...selectedFiles]);
+      const filePreviews = selectedFiles.map((file) => URL.createObjectURL(file));
+      setPhotoPreviews((prevPreviews) => [...prevPreviews, ...filePreviews]);
+    }
+  };
 
-        // Reuse the handlePhotoUpload function
-        handlePhotoUpload({ target: { files } } as unknown as React.ChangeEvent<HTMLInputElement>);
-    };
+  const handleDeletePhoto = (index: number) => {
+    setPhotos((prevPhotos) => prevPhotos.filter((_, i) => i !== index));
+    setPhotoPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
+  };
 
-    // Handles deleting individual photos and their previews
-    const handleDeletePhoto = (index: number) => {
-        setPhotos((prevPhotos) => prevPhotos.filter((_, i) => i !== index));
-        setPhotoPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
-    };
+  const handleUploadImages = async () => {
+    setIsUploading(true);
+    const formData = new FormData();
+    const propertySpaceImages = photos.map((photo, index) => ({
+      description: photo.name,
+      displayOrder: index + 1,
+      propertySpace: { id: space.id },
+      createdBy: { id: userId }
+    }));
+    formData.append('propertySpaceImages', JSON.stringify(propertySpaceImages));
+    photos.forEach((photo) => {
+      formData.append('imageFiles', photo);
+    });
+    try {
+      await propertySpaceImageuploadapi(formData);
+      console.log('Images uploaded successfully');
+      setIsUploading(false);
+    } catch (error) {
+      console.error('Error uploading images:', error);
+      setIsUploading(false);
+    }
+  };
 
-    // Handles adding an amenity to the list
-    const handleAddAmenity = () => {
-        if (amenities.trim() !== "") {
-            setAmenitiesList((prevList) => [...prevList, amenities]);
-            setAmenities(""); // Clear input field
-        }
-    };
+  const addAmenity = () => {
+    if (selectedCategory && selectedAmenity) {
+      setAmenityGroups(prev => prev.map(group => 
+        group.name === selectedCategory 
+          ? { ...group, amenities: [...group.amenities, selectedAmenity] }
+          : group
+      ));
+      setSelectedAmenity("");
+    }
+  };
 
-    // Handles deleting an amenity from the list
-    const handleDeleteAmenity = (index: number) => {
-        setAmenitiesList(amenitiesList.filter((_, i) => i !== index));
-    };
+  const removeAmenity = (category: string, amenity: string) => {
+    setAmenityGroups(prev => prev.map(group => 
+      group.name === category 
+        ? { ...group, amenities: group.amenities.filter(a => a !== amenity) }
+        : group
+    ));
+  };
 
-    // Handle the image upload API call
-    const handleUploadImages = async () => {
-        const formData = new FormData();
+  const toggleCategory = (category: string) => {
+    setOpenCategories(prev => ({
+      ...prev,
+      [category]: !prev[category]
+    }));
+  };
 
-        // Prepare metadata for each image
-        const propertySpaceImages = photos.map((photo, index) => ({
-            description: photo.name,
-            displayOrder: index + 1,
-            propertySpace: { id: space.id },
-            createdBy: { id: userId }
-        }));
-
-        // Append metadata as text field
-        formData.append('propertySpaceImages', JSON.stringify(propertySpaceImages));
-
-        // Append each photo to formData
-        photos.forEach((photo) => {
-            formData.append('imageFiles', photo); // Make sure 'files' matches the backend expectations
-        });
-
-        try {
-            // Call the upload API
-            await propertySpaceImageuploadapi(formData);
-            console.log('Images uploaded successfully');
-            setIsDialogOpen(false); // Close dialog after successful upload
-        } catch (error) {
-            console.error('Error uploading images:', error);
-        }
-    };
-
-    return (
-        <div className={styles.fullContainer}>
-            <div className={styles.maincontainer}>
-                {/* First Section: Name and Add Button */}
-                <div className={styles.headersection}>
-                    <h2>{space?.space.name || "Space Name"} {space?.instanceNumber}</h2>
-                    <Button variant="outlined" size="small" startIcon={<FaPlus />} onClick={() => setIsDialogOpen(true)}>
-                        Add Photos
+  return (
+    <Card className="w-full max-w-2xl mx-auto">
+      <CardHeader>
+        <CardTitle className="text-3xl font-bold">{space?.space.name || "Space Name"} {space?.instanceNumber}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Tabs defaultValue="photos" className="space-y-4">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="photos">Photos</TabsTrigger>
+            <TabsTrigger value="amenities">Amenities</TabsTrigger>
+          </TabsList>
+          <TabsContent value="photos" className="space-y-4">
+            <div className="grid grid-cols-3 gap-4">
+              <AnimatePresence>
+                {photoPreviews.map((preview, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    transition={{ duration: 0.2 }}
+                    className="relative aspect-square"
+                  >
+                    <img src={preview} alt={`Room photo ${index + 1}`} className="w-full h-full object-cover rounded-lg" />
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-2 right-2 h-8 w-8 rounded-full"
+                      onClick={() => handleDeletePhoto(index)}
+                    >
+                      <X className="h-4 w-4" />
                     </Button>
-                </div>
-                {/* Second Section: Images */}
-                <div className={styles.imageContainer} onClick={() => setIsDialogOpen(true)}>
-                    <div className={styles.uploadContent}>
-                        <img src="https://fraxionedportal.s3.us-west-2.amazonaws.com/properties/1/coverImages/Paradise+Shores+%28eighths%29-coverImage.jpg" />
-                    </div>
-                    <div className={styles.uploadLabel} >
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+              {photoPreviews.length < 6 && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Button
+                    variant="outline"
+                    className="h-full w-full aspect-square flex flex-col items-center justify-center text-muted-foreground"
+                    onClick={() => document.getElementById('photo-upload')?.click()}
+                    disabled={isUploading}
+                  >
+                    {isUploading ? (
+                      <Loader2 className="h-6 w-6 animate-spin" />
+                    ) : (
+                      <>
+                        <Camera className="h-8 w-8 mb-2" />
                         <span>Add Photo</span>
-                    </div>
-                </div>
-
-
-                {/* Third Section: Amenities */}
-                <div className={styles.amenitiescontainer}>
-                    <div className={styles.amenitiesheader}>
-                        <h3>Amenities</h3>
-                        <span><MdKeyboardArrowRight style={{ fontSize: '1.6rem' }} /></span>
-                    </div>
-                    <div className={styles.amenitiesname}>
-                        Displaying the selected amenities
-                    </div>
-                </div>
-
-
-                {/* Display List of Added Amenities */}
-                {/* <div>
-                    {amenitiesList.length > 0 && (
-                        <ul>
-                            {amenitiesList.map((amenity, index) => (
-                                <li key={index} className={styles.amenityItem}>
-                                    {amenity}
-                                    <Button
-                                        variant="text"
-                                        startIcon={<FaTrash />}
-                                        onClick={() => handleDeleteAmenity(index)}
-                                    >
-                                        Delete
-                                    </Button>
-                                </li>
-                            ))}
-                        </ul>
+                      </>
                     )}
-                </div> */}
-                <hr />
-
-                {/* Fourth Section: Delete Room or Space */}
-                <div className={styles.deletecontainer}>
-                    <FaTrash style={{ fontSize: '.7rem' }} />
-                    <h3>Delete room or space</h3>
-                </div>
+                  </Button>
+                  <input
+                    id="photo-upload"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    hidden
+                    onChange={handlePhotoUpload}
+                  />
+                </motion.div>
+              )}
             </div>
-
-            <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)} maxWidth="xs" fullWidth>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-
-                    <DialogTitle sx={{
-                        height: '44px',
-                        letterSpacing: '.02rem',
-                        fontSize: 15,
-                        paddingX: 2,
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        position: 'sticky',
-                        top: 0,
-                        zIndex: 2,
-                        backgroundColor: '#fff'
-                    }}>
-                        <IconButton sx={{ padding: 0 }}>
-                            <IoIosClose size={24} onClick={() => setIsDialogOpen(false)} />
-                        </IconButton>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <Typography sx={{ fontSize: 12, fontWeight: 600 }}>
-                                Upload Photos
-                            </Typography>
-                            <Typography sx={{ fontSize: 9 }}>
-                                {photoPreviews.length === 0 ? 'No Photos Selected' : `${photoPreviews.length} photo selected`}
-                            </Typography>
-                        </div>
-                        <Button sx={{ padding: .4, minWidth: 0, borderRadius: '50%' }} size="small" component="label">
-                            <GoPlus size={20} color="#666" />
-                            <input
-                                type="file"
-                                accept="image/*"
-                                multiple
-                                hidden
-                                onChange={handlePhotoUpload}
-                            />
-                        </Button>
-                    </DialogTitle>
-
-                    <DialogContent sx={{ paddingBottom: 0 }}>
-                        {/* Conditionally Render Upload Container or Previews */}
-                        {photoPreviews.length === 0 ? (
-                            <div
-                                className={styles.uploadContainer}
-                                onDragOver={(e) => e.preventDefault()}
-                                onDrop={handleDrop}
-                            >
-                                <div className={styles.dragDropArea}>
-                                    <IoIosImages className={styles.icon} />
-                                    <p className={styles.dragDropText}>Drag and drop</p>
-                                    <p className={styles.orText}>or browse for photos</p>
-                                    <Button variant="contained" size="small" component="label" className={styles.browseButton}>
-                                        Browse
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            multiple
-                                            hidden
-                                            onChange={handlePhotoUpload}
-                                        />
-                                    </Button>
-                                </div>
-                            </div>
+            <Button onClick={handleUploadImages} disabled={photos.length === 0 || isUploading}>
+              {isUploading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2 h-4 w-4" />}
+              Upload Photos
+            </Button>
+          </TabsContent>
+          <TabsContent value="amenities" className="space-y-4">
+            <div className="flex space-x-2">
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {amenityGroups.map((group) => (
+                    <SelectItem key={group.id} value={group.name}>
+                      {group.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select
+                value={selectedAmenity}
+                onValueChange={setSelectedAmenity}
+                disabled={!selectedCategory}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Amenity" />
+                </SelectTrigger>
+                <SelectContent>
+                  {selectedCategory &&
+                    amenityGroups.find(group => group.name === selectedCategory)?.amenities.map((amenity) => (
+                      <SelectItem key={amenity} value={amenity}>
+                        {amenity}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+              <Button onClick={addAmenity} disabled={!selectedAmenity}>
+                <Plus className="h-4 w-4 mr-2" />
+                Add
+              </Button>
+            </div>
+            <ScrollArea className="h-[300px] w-full rounded-md border p-4">
+              <div className="space-y-2">
+                {amenityGroups.map((group) => (
+                  <Collapsible
+                    key={group.id}
+                    open={openCategories[group.name]}
+                    onOpenChange={() => toggleCategory(group.name)}
+                  >
+                    <CollapsibleTrigger asChild>
+                      <Button variant="ghost" className="w-full justify-between">
+                        {group.name}
+                        {openCategories[group.name] ? (
+                          <ChevronUp className="h-4 w-4" />
                         ) : (
-                            <div className={styles.photoPreviewContainer}>
-                                {/* Preview Uploaded Images */}
-                                <div className={styles.photoGrid}>
-                                    {photoPreviews.map((preview, index) => (
-                                        <div key={index} className={styles.photoItem}>
-                                            <img
-                                                src={preview}
-                                                alt={`Uploaded Preview ${index}`}
-                                                className={styles.previewImage}
-                                            />
-                                            <button
-                                                onClick={() => handleDeletePhoto(index)}
-                                                className={styles.deleteButton}
-                                            >
-                                                <VscTrash size={12} style={{ padding: .2 }} />
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
+                          <ChevronDown className="h-4 w-4" />
                         )}
-                    </DialogContent>
-
-                    <DialogActions sx={{
-                        paddingTop: 1, display: 'flex', justifyContent: 'space-between', borderTop: 1, borderTopColor: '#ddd', position: 'sticky',
-                        bottom: 0,
-                        zIndex: 2,
-                        backgroundColor: '#fff'
-                    }}>
-                        <Button onClick={() => setPhotoPreviews([])} size="small" sx={{ color: '#00636d' }} disabled={photoPreviews.length === 0}>Reset</Button>
-                        <Button onClick={handleUploadImages} size="small" variant="contained" sx={{ backgroundColor: '#066670', color: '#fff' }} disabled={!photoPreviews.length}>
-                            Upload
-                        </Button>
-                    </DialogActions>
-                </Box>
-            </Dialog>
-
-
-        </div>
-    );
+                      </Button>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <AnimatePresence>
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          {group.amenities.map((amenity) => (
+                            <motion.div
+                              key={amenity}
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.8 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              <Badge variant="secondary" className="text-sm py-1 px-2">
+                                {amenity}
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-4 w-4 p-0 ml-2"
+                                  onClick={() => removeAmenity(group.name, amenity)}
+                                >
+                                  <X className="h-3 w-3" />
+                                </Button>
+                              </Badge>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </AnimatePresence>
+                    </CollapsibleContent>
+                  </Collapsible>
+                ))}
+              </div>
+            </ScrollArea>
+          </TabsContent>
+        </Tabs>
+        <Button variant="destructive" className="w-full mt-6">
+          <Trash2 className="mr-2 h-4 w-4" /> Delete room or space
+        </Button>
+      </CardContent>
+    </Card>
+  );
 };
 
 export default SpacePropertyDetails;
