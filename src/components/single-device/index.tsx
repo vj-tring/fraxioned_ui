@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   PropertyAmenity,
   fetchAmenities,
-} from "../../store/slice/amenitiesSlice";
+} from "../../store/slice/auth/amenitySlice";
 import {
   Box,
   Button,
@@ -61,7 +61,7 @@ const groupAmenitiesByGroup = (data: PropertyAmenity[]) => {
 const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { propertyAmenities, loading, error } = useSelector(
-    (state: RootState) => state.amenities
+    (state: RootState) => state.amenities.amenities
   );
   const propertySpace = useSelector(
     (state: RootState) => state.spaceProperties.spaceProperties || []
@@ -188,13 +188,13 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                 >
                   <CardMedia
                     component="img"
-                    height="100%" 
+                    height="200px"
                     image={
                       getImageUrlByPropertyAndSpace(space.space.id) ||
                       "https://via.placeholder.com/100"
                     } // Placeholder for space image
                     alt={space.space.name}
-                    sx={{ objectFit: "cover", height: "200px" }}
+                    sx={{ objectFit: "cover" }}
                   />
                 </Card>
                 <CardContent sx={{ padding: 1, paddingTop: 2 }}>

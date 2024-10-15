@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { amenitiesapi } from '@/api';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { amenitiesapi, propertyAmenitiesapi } from "@/api";
 
 interface Amenity {
   id: number;
@@ -21,46 +21,49 @@ interface Amenity {
 
 export interface AmenitiesState {
   amenities: Amenity[];
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
 
 const initialState: AmenitiesState = {
   amenities: [],
-  status: 'idle',
+  status: "idle",
   error: null,
 };
 
-export const fetchAmenities = createAsyncThunk('amenities/fetchAmenities', async () => {
-  const response = await amenitiesapi();
-  return response.data;
-});
-
+export const fetchAmenities = createAsyncThunk(
+  "amenities/fetchAmenities",
+  async (id: number) => {
+    const response = await propertyAmenitiesapi(id);
+    return response.data;
+  }
+);
 
 const amenitiesSlice = createSlice({
-  name: 'amenities',
+  name: "amenities",
   initialState,
   reducers: {
     resetAmenitiesState: (state) => {
-      state.status = 'idle';
+      state.status = "idle";
       state.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAmenities.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
-      .addCase(fetchAmenities.fulfilled, (state, action: PayloadAction<{ data: Amenity[] }>) => {
-        state.status = 'succeeded';
-        state.amenities = action.payload.data;
-      })
+      .addCase(
+        fetchAmenities.fulfilled,
+        (state, action: PayloadAction<{ data: Amenity[] }>) => {
+          state.status = "succeeded";
+          state.amenities = action.payload.data;
+        }
+      )
       .addCase(fetchAmenities.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message || 'Failed to fetch amenities';
-      })
-  
-
+        state.status = "failed";
+        state.error = action.error.message || "Failed to fetch amenities";
+      });
   },
 });
 

@@ -39,6 +39,7 @@ import { DateRange } from "react-day-picker";
 import DatePickerCard from "../../components/date-picker-card";
 import { Skeleton } from "@mui/material";
 import { RootState } from "@/store/reducers";
+import { fetchAmenities } from "@/store/slice/amenitiesSlice";
 
 interface Property {
   id: number;
