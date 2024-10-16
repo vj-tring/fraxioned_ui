@@ -31,7 +31,8 @@ import BedTypesTab from "./property-space-tabs/bed-type-tab";
 import { Trash2 } from "lucide-react";
 import BathTypesTab from "./property-space-tabs/bath-type-tab";
 import { deleteExistingSpaceProperty } from "@/store/slice/spacePropertySlice";
-import { createOrDeletePropertySpaceBeds, fetchAllPropertySpaceBeds } from "@/store/slice/bedSlice";
+import { createOrDeletePropertySpaceBeds, fetchAllPropertySpaceBeds, fetchAllPropertySpaceBedsByPropertySpace } from "@/store/slice/bedSlice";
+import { createOrDeletePropertySpaceBathrooms, fetchAllPropertySpaceBathroomsByPropertySpace } from "@/store/slice/bathroom-slice";
 
 export default function Component({ initialSpace = {} }) {
   const location = useLocation();
@@ -60,6 +61,9 @@ export default function Component({ initialSpace = {} }) {
     (state: RootState) => state.spaceImage.error
   );
   const { propertySpaceBeds, loading: bedTypesLoading, error: bedTypesError } = useSelector((state: RootState) => state.bed);
+  const { propertySpaceBathrooms, loading: bathTypesLoading, error: bathTypesError } = useSelector(
+    (state: RootState) => state.bathroom
+  );
 
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedAmenity, setSelectedAmenity] = useState<string>("");
@@ -98,28 +102,12 @@ export default function Component({ initialSpace = {} }) {
   };
   const tabsList = generateTabsList();
 
-  const [bathTypes, setBathTypes] = useState([
-    { id: 1, name: "Full Bath" },
-    { id: 2, name: "Three-Quarter Bath" },
-    { id: 3, name: "Half Bath" },
-    { id: 4, name: "Quarter Bath" },
-  ]);
-
-  const [bedTypes, setBedTypes] = useState([
-    { id: 1, name: "Single Bed", count: 0 },
-    { id: 2, name: "Double Bed", count: 0 },
-    { id: 3, name: "Queen Bed", count: 0 },
-    { id: 4, name: "King Bed", count: 0 },
-    { id: 5, name: "Bunk Bed", count: 0 },
-  ]);
-
-  
-
   useEffect(() => {
     if (space?.id) {
       dispatch(getByPropertySpaceId(space.id));
       dispatch(fetchImagesByPropertySpaceId(space.id));
-      dispatch(fetchAllPropertySpaceBeds());
+      dispatch(fetchAllPropertySpaceBedsByPropertySpace(space.id));
+      dispatch(fetchAllPropertySpaceBathroomsByPropertySpace(space.id));
 
     }
     dispatch(fetchAmenities());
@@ -242,12 +230,10 @@ export default function Component({ initialSpace = {} }) {
     setUploadError(null);
 
     try {
-      // Delete marked images
       if (imagesToDelete.length > 0) {
         await dispatch(deleteImagesBatch({ ids: imagesToDelete })).unwrap();
       }
 
-      // Upload new images
       if (photos.length > 0) {
         const formData = new FormData();
         const propertySpaceImages = photos.map((photo, index) => ({
@@ -280,19 +266,6 @@ export default function Component({ initialSpace = {} }) {
   };
 
 
-  const handleBedCountChange = (id: number, increment: number) => {
-    setBedTypes((prevBedTypes) =>
-      prevBedTypes.map((bed) =>
-        bed.id === id
-          ? { ...bed, count: Math.max(0, bed.count + increment) }
-          : bed
-      )
-    );
-  };
-  const handleSaveBathType = (selectedBathTypeId: number) => {
-    console.log(`Saved bath type with ID: ${selectedBathTypeId}`);
-  };
-
   const handleDeletePropertySpace = async () => {
     if (space?.id) {
       try {
@@ -316,9 +289,23 @@ export default function Component({ initialSpace = {} }) {
           spaceBedType: { id: bed.id },
           count: bed.count,
         })),
-        updatedBy: { id: 1 }
+        updatedBy: { id: userId }
       };
       dispatch(createOrDeletePropertySpaceBeds(data));
+    }
+  };
+
+  const handleSaveBathTypes = (updatedBathTypes: Array<{ id: number; count: number }>) => {
+    if (space?.id) {
+      const data = {
+        propertySpace: { id: space.id },
+        spaceBathroomTypes: updatedBathTypes.map(bath => ({
+          spaceBathroomType: { id: bath.id },
+          count: bath.count,
+        })),
+        updatedBy: { id: userId }
+      };
+      dispatch(createOrDeletePropertySpaceBathrooms(data));
     }
   };
   return (
@@ -410,7 +397,12 @@ export default function Component({ initialSpace = {} }) {
            />
           )}
           {showBathTypesTab && (
-            <BathTypesTab bathTypes={bathTypes} onSave={handleSaveBathType} />
+           <BathTypesTab
+           bathTypes={propertySpaceBathrooms}
+           loading={bathTypesLoading}
+           error={bathTypesError}
+           onSave={handleSaveBathTypes}
+         />
           )}
         </Tabs>
       </CardContent>

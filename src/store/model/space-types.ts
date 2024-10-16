@@ -22,11 +22,11 @@ export interface CreatePropertySpaceBedDto {
   export interface CreateOrDeletePropertySpaceBedsDto {
     propertySpace: { id: number };
     spaceBedTypes: SpaceBedTypeCount[];
-    updatedBy: { id: number };
+    updatedBy: { id: number | undefined };
   }
 
   export interface SpaceBedTypeCount{
-    spaceBedType: { id: number };
+    spaceBedType: { id: number  };
     count: number;
   }
   
@@ -40,7 +40,7 @@ export interface CreatePropertySpaceBedDto {
   export interface CreateOrDeletePropertySpaceBathroomsDto {
     propertySpace: { id: number };
     spaceBathroomTypes: SpaceBathroomTypesCount[];
-    updatedBy: { id: number };
+    updatedBy: { id: number | undefined };
   }
 
   export interface SpaceBathroomTypesCount{
