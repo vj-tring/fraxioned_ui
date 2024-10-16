@@ -23,12 +23,14 @@ export const deletePropertySpaceBed = (id: number) =>
 export const createOrDeletePropertySpaceBeds = (data: CreateOrDeletePropertySpaceBedsDto) =>
     axiosInstance.patch('/property-space-beds', data);
 
-// Property Space Bathroom Endpoints
 export const createPropertySpaceBathroom = (data: CreatePropertySpaceBathroomDto) =>
     axiosInstance.post('/property-space-bathrooms/property-space-bathroom', data);
 
 export const getAllPropertySpaceBathroom = () =>
     axiosInstance.get('/property-space-bathrooms');
+
+export const getAllPropertySpaceBathroomsByPropertySpace = (propertySpaceId: number) =>
+    axiosInstance.get(`/property-space-bathrooms/property-space/${propertySpaceId}/bathrooms`);
 
 export const getPropertySpaceBathroomById = (id: number) =>
     axiosInstance.get(`/property-space-bathrooms/property-space-bathroom/${id}`);

@@ -11,14 +11,14 @@ import {
 interface BathroomState {
   propertySpaceBathrooms: any[];
   spaceBathroomTypes: any[];
-  loading: 'idle' | 'pending' | 'succeeded' | 'failed';
+  loading: boolean;
   error: string | null;
 }
 
 const initialState: BathroomState = {
   propertySpaceBathrooms: [],
   spaceBathroomTypes: [],
-  loading: 'idle',
+  loading: false,
   error: null,
 };
 
@@ -26,15 +26,24 @@ export const fetchAllPropertySpaceBathrooms = createAsyncThunk(
   'bathroom/fetchAllPropertySpaceBathrooms',
   async () => {
     const response = await api.getAllPropertySpaceBathroom();
-    return response.data;
+    return response.data.data;
   }
 );
+
+export const fetchAllPropertySpaceBathroomsByPropertySpace = createAsyncThunk(
+    'bathroom/fetchAllPropertySpaceBathroomsByPropertySpace',
+    async (propertySpaceId: number) => {
+      const response = await api.getAllPropertySpaceBathroomsByPropertySpace(propertySpaceId);
+      return response.data.data;
+    }
+  );
+  
 
 export const createPropertySpaceBathroom = createAsyncThunk(
   'bathroom/createPropertySpaceBathroom',
   async (data: CreatePropertySpaceBathroomDto) => {
     const response = await api.createPropertySpaceBathroom(data);
-    return response.data;
+    return response.data.data;
   }
 );
 
@@ -42,7 +51,7 @@ export const updatePropertySpaceBathroom = createAsyncThunk(
   'bathroom/updatePropertySpaceBathroom',
   async ({ id, data }: { id: number; data: UpdatePropertySpaceBathroomDto }) => {
     const response = await api.updatePropertySpaceBathroomById(id, data);
-    return response.data;
+    return response.data.data;
   }
 );
 
@@ -58,7 +67,7 @@ export const createOrDeletePropertySpaceBathrooms = createAsyncThunk(
   'bathroom/createOrDeletePropertySpaceBathrooms',
   async (data: CreateOrDeletePropertySpaceBathroomsDto) => {
     const response = await api.createOrDeletePropertySpaceBathrooms(data);
-    return response.data;
+    return response.data.data;
   }
 );
 
@@ -66,7 +75,7 @@ export const fetchAllSpaceBathroomTypes = createAsyncThunk(
   'bathroom/fetchAllSpaceBathroomTypes',
   async () => {
     const response = await api.getAllSpaceBathroomTypes();
-    return response.data;
+    return response.data.data;
   }
 );
 
@@ -74,7 +83,7 @@ export const createSpaceBathroomType = createAsyncThunk(
   'bathroom/createSpaceBathroomType',
   async ({ data, imageFile }: { data: CreateSpaceBathroomTypesDto; imageFile: File }) => {
     const response = await api.createSpaceBathroomType(data, imageFile);
-    return response.data;
+    return response.data.data;
   }
 );
 
@@ -82,7 +91,7 @@ export const updateSpaceBathroomType = createAsyncThunk(
   'bathroom/updateSpaceBathroomType',
   async ({ id, data, imageFile }: { id: number; data: UpdateSpaceBathroomTypesDto; imageFile?: File }) => {
     const response = await api.updateSpaceBathroomTypeById(id, data, imageFile);
-    return response.data;
+    return response.data.data;
   }
 );
 
@@ -102,14 +111,25 @@ const bathroomSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllPropertySpaceBathrooms.pending, (state) => {
-        state.loading = 'pending';
+        state.loading = true;
       })
       .addCase(fetchAllPropertySpaceBathrooms.fulfilled, (state, action) => {
-        state.loading = 'succeeded';
+        state.loading = false;
         state.propertySpaceBathrooms = action.payload;
       })
       .addCase(fetchAllPropertySpaceBathrooms.rejected, (state, action) => {
-        state.loading = 'failed';
+        state.loading = false;
+        state.error = action.error.message || null;
+      })
+      .addCase(fetchAllPropertySpaceBathroomsByPropertySpace.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchAllPropertySpaceBathroomsByPropertySpace.fulfilled, (state, action) => {
+        state.loading = false;
+        state.propertySpaceBathrooms = action.payload;
+      })
+      .addCase(fetchAllPropertySpaceBathroomsByPropertySpace.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.error.message || null;
       })
       .addCase(createPropertySpaceBathroom.fulfilled, (state, action) => {
@@ -125,7 +145,6 @@ const bathroomSlice = createSlice({
         state.propertySpaceBathrooms = state.propertySpaceBathrooms.filter(bathroom => bathroom.id !== action.payload);
       })
       .addCase(createOrDeletePropertySpaceBathrooms.fulfilled, (state, action) => {
-        // Assuming the API returns the updated list of property space bathrooms
         state.propertySpaceBathrooms = action.payload;
       })
       .addCase(fetchAllSpaceBathroomTypes.fulfilled, (state, action) => {
