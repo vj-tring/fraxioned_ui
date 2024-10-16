@@ -1,48 +1,90 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Save } from "lucide-react";
+import { MinusCircle, PlusCircle, Save } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TabsContent } from "@/components/ui/tabs";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/src/components/ui/radio-group";
 
 interface BathType {
   id: number;
   name: string;
+  count: number;
+}
+
+interface PropertySpaceBath {
+  id: number;
+  spaceBathroomType: {
+    id: number;
+    name: string;
+  };
+  count: number;
 }
 
 interface BathTypesTabProps {
-  bathTypes: BathType[];
-  onSave: (selectedBathTypeId: number) => void;
+  bathTypes: PropertySpaceBath[];
+  loading: boolean;
+  error: string | null;
+  onSave: (updatedBathTypes: Array<{ id: number; count: number }>) => void;
 }
 
-const BathTypesTab: React.FC<BathTypesTabProps> = ({ bathTypes, onSave }) => {
-  const [selectedBathTypeId, setSelectedBathTypeId] = useState<number | null>(null);
+const BathTypesTab: React.FC<BathTypesTabProps> = ({ bathTypes: initialBathTypes, onSave }) => {
+  const [bathTypes, setBathTypes] = useState<BathType[]>([]);
+
+  useEffect(() => {
+    if (initialBathTypes.length > 0) {
+      const initialTypes = initialBathTypes.map(bath => ({
+        id: bath.spaceBathroomType.id,
+        name: bath.spaceBathroomType.name,
+        count: bath.count
+      }));
+      setBathTypes(initialTypes);
+    }
+  }, [initialBathTypes]);
+
+  const handleBathCountChange = (id: number, increment: number) => {
+    setBathTypes(prevBathTypes =>
+      prevBathTypes.map(bath =>
+        bath.id === id ? { ...bath, count: Math.max(0, bath.count + increment) } : bath
+      )
+    );
+  };
 
   const handleSave = () => {
-    if (selectedBathTypeId !== null) {
-      onSave(selectedBathTypeId);
-    }
+    const updatedBathTypes = bathTypes.map(bath => ({ id: bath.id, count: bath.count }));
+    onSave(updatedBathTypes);
   };
 
   return (
     <TabsContent value="bathTypes" className="space-y-4">
       <ScrollArea className="h-[300px] w-full rounded-md border p-4">
-        <RadioGroup
-          value={selectedBathTypeId?.toString() || ""}
-          onValueChange={(value) => setSelectedBathTypeId(Number(value))}
-        >
-          {bathTypes.map((bathType) => (
-            <div key={bathType.id} className="flex items-center space-x-2 mb-2">
-              <RadioGroupItem value={bathType.id.toString()} id={`bath-type-${bathType.id}`} />
-              <Label htmlFor={`bath-type-${bathType.id}`}>{bathType.name}</Label>
+        <div className="space-y-4">
+          {bathTypes.map((bath) => (
+            <div key={bath.id} className="flex items-center justify-between">
+              <span className="text-lg">{bath.name}</span>
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => handleBathCountChange(bath.id, -1)}
+                  disabled={bath.count === 0}
+                >
+                  <MinusCircle className="h-4 w-4" />
+                </Button>
+                <span className="w-8 text-center">{bath.count}</span>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => handleBathCountChange(bath.id, 1)}
+                >
+                  <PlusCircle className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           ))}
-        </RadioGroup>
+        </div>
       </ScrollArea>
-      <Button className="w-full mt-4" onClick={handleSave} disabled={selectedBathTypeId === null}>
+      <Button className="w-full mt-4" onClick={handleSave}>
         <Save className="mr-2 h-4 w-4" />
-        Save Bath Type
+        Save Bath Types
       </Button>
     </TabsContent>
   );
