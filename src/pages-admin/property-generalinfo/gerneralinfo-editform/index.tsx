@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { useSelector, useDispatch } from "react-redux";
-import { updaterulesapi, getProperrtDetailsbyId } from "@/api";
+import { updaterulesapi, getProperrtDetailsbyId } from "@/api/api-endpoints";
 import { fetchPropertyById } from "@/store/slice/auth/propertiesSlice";
 import Loader from "@/components/loader";
 import styles from "./EditPropertyForm.module.css";

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { propertyImageapi, deletetpropertyImageById } from "@/api";
+import { propertyImageapi, deletetpropertyImageById } from "@/api/api-endpoints";
 import { Edit, Trash2, X, Plus } from "lucide-react";
 import Loader from "@/components/loader";
 import styles from "./propertyphoto.module.css";

@@ -30,7 +30,7 @@ import {
 } from "@/store/slice/auth/property-slice";
 import { AppDispatch } from "@/store";
 import { Session, User } from "@/store/model";
-import { propertyImageapi } from "@/api";
+import { propertyImageapi } from "@/api/api-endpoints";
 import { PiDotsNineBold } from "react-icons/pi";
 import { bookingSummary, saveBooking } from "@/store/slice/auth/bookingSlice";
 import CustomizedSnackbar from "@/components/customized-snackbar";

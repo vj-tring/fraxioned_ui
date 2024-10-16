@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Search, ChevronDown, ChevronUp } from 'lucide-react';
 import styles from './propertyamenities.module.css';
-import { amenitiesapi } from '@/api';
+import { amenitiesapi } from '@/api/api-endpoints';
 import CustomizedSnackbars from '@/components/customized-snackbar';
 import ConfirmationModal from '@/components/confirmation-modal';
 import {
