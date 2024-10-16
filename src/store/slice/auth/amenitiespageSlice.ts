@@ -27,7 +27,7 @@ const initialState: AmenitiesState = {
     deleteLoading: false,
     deleteError: null,
     deleteSuccess: false,
-};
+};  
 
 export const updateAmenity = createAsyncThunk(
     'amenities/updateAmenity',
