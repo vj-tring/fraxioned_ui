@@ -25,7 +25,7 @@ import { RootState } from "@/store/reducers";
 import Bedroom1Image from "../../assets/images/bedroom1.jpg";
 import KingBedImage from "../../assets/images/bedroom1.jpg";
 import { fetchSpacePropertiesById } from "@/store/slice/spacePropertySlice";
-import { fetchSpaceImageDetailsById, fetchAllPropertySpaceImages } from "@/api";
+import {fetchPropertyImagesByPropertyId } from "@/api";
 
 interface SingleDeviceProps {
   propertyId: number;
@@ -82,7 +82,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   useEffect(() => {
     const imageFetching = async () => {
       try {
-        const response = await fetchSpaceImageDetailsById(Number(propertyId));
+        const response = await fetchPropertyImagesByPropertyId(Number(propertyId));
         const sortedImages = response.data.data.sort((a: any, b: any) => a.displayOrder - b.displayOrder);
         setImagesData(sortedImages); // Sort images by displayOrder
         console.log('Images fetched and sorted successfully');
@@ -97,7 +97,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const getImageUrlByPropertyAndSpace = (spaceId: number): string | null => {
     const image = imagesData.find(
       (img) =>
-        img.propertySpace?.id === spaceId &&
+        img.propertySpace?.space.id === spaceId &&
         img.displayOrder === 1
     );
 
