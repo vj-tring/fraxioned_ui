@@ -1,5 +1,5 @@
-import { getAmenitiesByPropertyId } from '@/api';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { getAmenitiesByPropertyId } from '@/api';
 
 export interface AmenityGroup {
   id: number;
@@ -26,8 +26,6 @@ export interface PropertyAmenity {
 }
 
 export interface AmenitiesState {
-  status: any;
-  amenities: any;
   propertyAmenities: PropertyAmenity[];
   loading: boolean;
   error: string | null;
@@ -37,12 +35,10 @@ const initialState: AmenitiesState = {
   propertyAmenities: [],
   loading: false,
   error: null,
-  status: undefined,
-  amenities: undefined,
 };
 
 export const fetchAmenities = createAsyncThunk(
-  "amenities/fetchPropertyAmenities",
+  'amenities/fetchPropertyAmenities',
   async (propertyId: number) => {
     const response = await getAmenitiesByPropertyId(propertyId);
     return response.data.data;
@@ -50,7 +46,7 @@ export const fetchAmenities = createAsyncThunk(
 );
 
 const amenitiesSlice = createSlice({
-  name: "propertyAmenities",
+  name: 'propertyAmenities',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -61,11 +57,13 @@ const amenitiesSlice = createSlice({
       })
       .addCase(fetchAmenities.fulfilled, (state, action) => {
         state.loading = false;
+        
         state.propertyAmenities = action.payload;
+        console.log("Updated propertyAmenities:", state.propertyAmenities); 
       })
       .addCase(fetchAmenities.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || "Failed to fetch amenities";
+        state.error = action.error.message || 'Failed to fetch amenities';
       });
   },
 });

@@ -53,6 +53,7 @@ export const fetchAllSpaceProperties = createAsyncThunk<SpaceProperty[], void>(
     async (_, { rejectWithValue }) => {
         try {
             const response = await getAllSpaceProperties();
+
             return response.data.data;
         } catch (error) {
             return rejectWithValue("Failed to fetch space properties");
@@ -65,6 +66,8 @@ export const fetchSpacePropertiesById = createAsyncThunk<SpaceProperty[], number
     async (propertyId: number, { rejectWithValue }) => {
         try {
             const response = await getAllSpacePropertiesById(propertyId);
+            // console.log("space proerpyty",response.data.data);
+
             return response.data.data;
         } catch (error) {
             return rejectWithValue("Failed to fetch space properties");

@@ -1,63 +1,73 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { amenitiesapi, propertyAmenitiesapi } from "@/api";
+import { getAmenitiesByPropertyId } from "@/api";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-interface Amenity {
+export interface AmenityGroup {
+  id: number;
+  name: string;
+}
+
+export interface Amenity {
   id: number;
   amenityName: string;
   amenityDescription: string;
-  amenityGroup: {
-    id: number;
-    name: string;
-  };
+  amenityGroup: AmenityGroup;
+  createdAt: string;
+  updatedAt: string;
 }
+
+export interface PropertyAmenity {
+  id: number;
+  property: { id: number };
+  amenity: Amenity;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: { id: number };
+  updatedBy: { id: number };
+}
+
 export interface AmenitiesState {
-  amenities: Amenity[];
-  status: "idle" | "loading" | "succeeded" | "failed";
+  status: any;
+  amenities: any;
+  propertyAmenities: PropertyAmenity[];
+  loading: boolean;
   error: string | null;
 }
 
 const initialState: AmenitiesState = {
-  amenities: [],
-  status: "idle",
+  propertyAmenities: [],
+  loading: false,
   error: null,
+  status: undefined,
+  amenities: undefined,
 };
 
 export const fetchAmenities = createAsyncThunk(
-  "amenities/fetchAmenities",
-  async (id: number) => {
-    const response = await propertyAmenitiesapi(id);
-    console.log("API Response:", response.data); // Log the response to verify structure
-    return response.data; // Ensure this matches the structure you're using in your slice
+  "amenities/fetchPropertyAmenities",
+  async (propertyId: number) => {
+    const response = await getAmenitiesByPropertyId(propertyId);
+    return response.data.data;
   }
 );
 
 const amenitiesSlice = createSlice({
-  name: "amenities",
+  name: "propertyAmenities",
   initialState,
-  reducers: {
-    resetAmenitiesState: (state) => {
-      state.status = "idle";
-      state.error = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchAmenities.pending, (state) => {
-        state.status = "loading";
+        state.loading = true;
+        state.error = null;
       })
-      .addCase(
-        fetchAmenities.fulfilled,
-        (state, action: PayloadAction<{ data: Amenity[] }>) => {
-          state.status = "succeeded";
-          state.amenities = action.payload.data;
-        }
-      )
+      .addCase(fetchAmenities.fulfilled, (state, action) => {
+        state.loading = false;
+        state.propertyAmenities = action.payload;
+      })
       .addCase(fetchAmenities.rejected, (state, action) => {
-        state.status = "failed";
+        state.loading = false;
         state.error = action.error.message || "Failed to fetch amenities";
       });
   },
 });
 
-export const { resetAmenitiesState } = amenitiesSlice.actions;
 export default amenitiesSlice.reducer;
