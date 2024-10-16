@@ -63,7 +63,7 @@ const PropertyAmenities: React.FC = () => {
 
   useEffect(() => {
     if (propertyAmenities.length > 0) {
-      setSelectedAmenities(propertyAmenities.map(item => item.amenity.id));
+      setSelectedAmenities(propertyAmenities.map((item: { amenity: { id: any; }; }) => item.amenity.id));
     }
   }, [propertyAmenities]);
 

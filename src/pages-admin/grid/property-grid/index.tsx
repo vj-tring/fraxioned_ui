@@ -8,11 +8,34 @@ import styles from "./property.module.css";
 import NewPropertyForm from "./NewPropertyForm";
 import ConfirmationModal from "@/components/confirmation-modal";
 import { useNavigate } from "react-router-dom";
-import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
-import type { Property } from "@/store/slice/auth/propertiesSlice";
+import { fetchProperties, PropertiesState } from "@/store/slice/auth/propertiesSlice";
 import { RootState } from "@/store/reducers";
 import { AppDispatch } from "@/store";
 
+
+
+interface Property {
+  id: number;
+  ownerRezPropId: number;
+  propertyName: string;
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  zipcode: number;
+  houseDescription: string;
+  isExclusive: boolean;
+  propertyShare: number;
+  propertyRemainingShare: number;
+  latitude: number;
+  longitude: number;
+  isActive: boolean;
+  displayOrder: number;
+  createdAt: string;
+  updatedAt: string;
+  mailBannerUrl: string;
+  coverImageUrl: string;
+}
 interface PropertyComponentProps {
   isSidebarOpen: boolean;
 }
@@ -20,12 +43,9 @@ interface PropertyComponentProps {
 const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const properties = useSelector(
-    (state: RootState) => state.property.properties
+  const { properties, status, error } = useSelector<RootState, PropertiesState>(
+    (state) => state.property
   );
-  const status = useSelector((state: RootState) => state.property.status);
-  const error = useSelector((state: RootState) => state.property.error);
-
   const [isNewFormOpen, setIsNewFormOpen] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [propertyToDelete, setPropertyToDelete] = useState<Property | null>(
@@ -108,8 +128,6 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
       field: "actions",
       headerName: "Actions",
       width: 150,
-      // align: "center",
-      // headerAlign: "center",
       renderCell: (params) => (
         <>
           <IconButton

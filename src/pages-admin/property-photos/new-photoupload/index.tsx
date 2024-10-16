@@ -7,7 +7,12 @@ import {
   propertyspacetypesapi,
 } from "@/api";
 import Loader from "@/components/loader";
-import { Image, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
+
+interface PhotoUploadProps {
+  propertyId: string | undefined;
+  onClose: () => void;
+}
 
 interface Space {
   id: number;
@@ -23,7 +28,7 @@ interface SpaceType {
   };
 }
 
-const PhotoUpload: React.FC = () => {
+const PhotoUpload: React.FC<PhotoUploadProps> = ({ propertyId, onClose }) => {
   const [images, setImages] = useState<File[]>([]);
   const [name, setName] = useState("");
   const [spaceType, setSpaceType] = useState<number | null>(null);
@@ -77,13 +82,14 @@ const PhotoUpload: React.FC = () => {
   };
 
   const handleSubmit = async () => {
+    // Uncomment this section if you want to enforce space and space type selection
     // if (!space || !spaceType) {
     //   alert("Please select both Space and Space Type");
     //   return;
     // }
 
     setIsLoading(true);
-    const createdBy = 1;
+    const createdBy = 1; // This should ideally come from your user context
     const propertyImagesData = images.map((image, index) => ({
       property: { id: parseInt(id || "0", 10) },
       createdBy: { id: createdBy },
@@ -94,7 +100,7 @@ const PhotoUpload: React.FC = () => {
     }));
     const formData = new FormData();
 
-    images.forEach((image, index) => {
+    images.forEach((image) => {
       formData.append(`imageFiles`, image);
     });
     formData.append("propertyImages", JSON.stringify(propertyImagesData));
@@ -102,6 +108,7 @@ const PhotoUpload: React.FC = () => {
     try {
       await propertyImageuploadapi(formData);
       navigate(`/admin/property/${id}/photos`, { state: { fromUpload: true } });
+      onClose(); // Call onClose after successful upload
     } catch (error) {
       console.error("Error uploading images:", error);
       navigate(`/admin/property/${id}/photos`);
@@ -189,7 +196,6 @@ const PhotoUpload: React.FC = () => {
           </div>
         </div>
         <div className={styles.previewSection}>
-          {/* <Image /> */}
           <h3 className={styles.previewTitle}>Image Preview</h3>
           <div className={styles.previewScroll}>
             <div className={styles.previewGrid}>
@@ -205,7 +211,7 @@ const PhotoUpload: React.FC = () => {
                     className={styles.removeButton}
                     onClick={() => handleRemoveImage(index)}
                   >
-                    <Trash2  size={14} color="red"/>
+                    <Trash2 size={14} color="red" />
                   </button>
                 </div>
               ))}
@@ -217,12 +223,15 @@ const PhotoUpload: React.FC = () => {
         <button className={styles.submitButton} onClick={handleSubmit}>
           Submit
         </button>
-        <button
+        {/* <button
           className={styles.cancelButton}
-          onClick={() => navigate(`/admin/property/${id}/photos`)}
+          onClick={() => {
+            navigate(`/admin/property/${id}/photos`);
+            onClose();
+          }}
         >
           Cancel
-        </button>
+        </button> */}
       </div>
     </div>
   );
