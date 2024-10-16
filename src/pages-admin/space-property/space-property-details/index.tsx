@@ -8,7 +8,7 @@ import { GoPlus } from "react-icons/go";
 import styles from './spacepropertydetails.module.css';
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/reducers";
-import { propertySpaceImageuploadapi } from "@/api";
+import { uploadPropertySpaceImages } from "@/api";
 import { VscTrash } from "react-icons/vsc";
 
 
@@ -96,7 +96,7 @@ const SpacePropertyDetails: React.FC = () => {
 
         try {
             // Call the upload API
-            await propertySpaceImageuploadapi(formData);
+            await uploadPropertySpaceImages(formData);
             console.log('Images uploaded successfully');
             setIsDialogOpen(false); // Close dialog after successful upload
         } catch (error) {

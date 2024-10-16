@@ -329,7 +329,7 @@ export const getAllSpaces = () =>
 
 // Update a space by ID
 export const updateSpace = (id: number, spaceData: FormData) =>
-    axiosInstance.put(`/spaces/space/${id}`, spaceData, {
+    axiosInstance.patch(`/spaces/space/${id}`, spaceData, {
         headers: {
             'Content-Type': 'multipart/form-data',
         },
@@ -358,22 +358,23 @@ export const getAllSpacePropertiesById = (propertyId: number) =>
 export const deleteSpaceProperty = (id: number) =>
     axiosInstance.delete(`/property-spaces/property-space/${id}`);
 
-// Property Space CRUD
+// Property Space Images CRUD
 
-// Create Property Space Image
+// Upload Property Space Images (Create)
+export const uploadPropertySpaceImages = (formData: FormData) =>
+    axiosInstance.post('/property-space-images', formData);
 
-export const propertySpaceImageuploadapi = (formData: FormData) => {
-    return axiosInstance.post(`/property-space-images`, formData, {
-    });
-};
+// Get All Space Property Images
+export const fetchAllPropertySpaceImages = () =>
+    axiosInstance.get('/property-space-images');
 
-export const getAllSpacePropertyImages = () => {
-    return axiosInstance.get(`/property-space-images`)
-};
+// Get Property Space Images by Property ID
+export const fetchPropertyImagesByPropertyId = (propertyId: number) =>
+    axiosInstance.get(`/property-space-images/property/${propertyId}/images`);
 
-export const getAllSpacePropertyImageById = (propertyId: number) => {
-    return axiosInstance.get(`/property-space-images/property/${propertyId}/images`)
-};
+// Get Space Image Details by Image ID
+export const fetchSpaceImageDetailsById = (imageId: number) =>
+    axiosInstance.get(`/property-space-images/property-space-image/${imageId}`);
 
 //for proeprty
 export const getAllpropertycodes = () =>
@@ -398,4 +399,14 @@ export const createpropertycodecatogory = (data: { name: string; createdBy: { id
 
 
 
+// Update Space Image Details with Image (Patch)
+export const updateSpaceImageById = (imageId: number, formData: FormData) =>
+    axiosInstance.patch(`/property-space-images/property-space-image/${imageId}`, formData);
 
+// Delete Space Image by ID (Single)
+export const deleteSpaceImageById = (id: number) =>
+    axiosInstance.delete(`/property-space-images/property-space-images/${id}`);
+
+// Delete Multiple Space Images (Batch Delete)
+export const deleteMultipleSpaceImages = (spaceImages: { ids: number[] }) =>
+    axiosInstance.delete(`/property-space-images/property-space-images`, { data: spaceImages });
