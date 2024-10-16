@@ -11,7 +11,6 @@ import { propertySpaceImageuploadapi } from "@/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
 import {
   Dialog,
   DialogContent,
@@ -36,7 +35,8 @@ export default function Component({ initialSpace = {} }) {
   const location = useLocation();
   const { space = initialSpace } = location.state || {};
   const dispatch = useDispatch<AppDispatch>();
-
+  const showBedTypesTab = space?.space?.isBedTypeAllowed ?? false;
+  const showBathTypesTab = space?.space?.isBathroomTypeAllowed ?? false;
   const userId = useSelector((state: RootState) => state.auth.user?.id);
   const {
     amenities: allAmenities,
@@ -75,6 +75,23 @@ export default function Component({ initialSpace = {} }) {
     Array<{ id?: number; url: string; isNew?: boolean }>
   >([]);
 
+  const generateTabsList = () => {
+    const tabs = [
+      { value: "photos", label: "Photos" },
+      { value: "amenities", label: "Amenities" },
+    ];
+    
+    if (showBathTypesTab) {
+      tabs.splice(1, 0, { value: "bathTypes", label: "Bath Types" });
+    }
+    
+    if (showBedTypesTab) {
+      tabs.splice(1, 0, { value: "bedTypes", label: "Bed Types" });
+    }
+    
+    return tabs;
+  };
+  const tabsList = generateTabsList();
 
   const [bathTypes, setBathTypes] = useState([
     { id: 1, name: "Full Bath" },
@@ -313,12 +330,13 @@ export default function Component({ initialSpace = {} }) {
         </Dialog>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="photos" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="photos">Photos</TabsTrigger>
-            <TabsTrigger value="bedTypes">Bed Types</TabsTrigger>
-            <TabsTrigger value="bathTypes">Bath Types</TabsTrigger>
-            <TabsTrigger value="amenities">Amenities</TabsTrigger>
+<Tabs defaultValue="photos" className="space-y-4">
+          <TabsList className={`grid w-full grid-cols-${tabsList.length}`}>
+            {tabsList.map((tab) => (
+              <TabsTrigger key={tab.value} value={tab.value}>
+                {tab.label}
+              </TabsTrigger>
+            ))}
           </TabsList>
           <PhotosTab
             combinedImages={combinedImages}
@@ -349,11 +367,15 @@ export default function Component({ initialSpace = {} }) {
             openCategories={openCategories}
             toggleCategory={toggleCategory}
           />
-          <BedTypesTab
-            bedTypes={bedTypes}
-            handleBedCountChange={handleBedCountChange}
-          />
-          <BathTypesTab bathTypes={bathTypes} onSave={handleSaveBathType} />
+          {showBedTypesTab && (
+            <BedTypesTab
+              bedTypes={bedTypes}
+              handleBedCountChange={handleBedCountChange}
+            />
+          )}
+          {showBathTypesTab && (
+            <BathTypesTab bathTypes={bathTypes} onSave={handleSaveBathType} />
+          )}
         </Tabs>
       </CardContent>
     </Card>

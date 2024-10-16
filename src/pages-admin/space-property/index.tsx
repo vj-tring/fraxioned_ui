@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/store";
 import { fetchAllSpaces, Space } from "@/store/slice/spaceSlice";
 import { createNewSpaceProperty, fetchSpacePropertiesById } from "@/store/slice/spacePropertySlice";
-import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
+import { useParams, useNavigate } from "react-router-dom";
 import { fetchAllImages } from "@/store/slice/spaceImagesSlice";
 import Loader from "@/components/loader";
 
@@ -82,7 +82,6 @@ const SpaceProperty: React.FC = () => {
     };
 
     // Navigate to space details page when a space is clicked
->>>>>>> main
     const handleSpaceClick = (space: any) => {
         // Sending all rooms, regardless of isBedTypeAllowed or isBathroomTypeAllowed
         console.log("Sending all room data:", space);
