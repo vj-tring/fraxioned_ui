@@ -1,6 +1,6 @@
 import { getUserById, updateuserapi } from "@/api";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { UserState, User } from "../model/user";
+import { UserState, User } from "../model";
 
 const initialState: UserState = {
   user: {

@@ -224,7 +224,7 @@ const BookingSearchBar: React.FC = () => {
             </PopoverTrigger>
             <PopoverContent className="calendar-popover" align="start">
               <DatePickerWithRange
-                onSelect={handleDateSelect}
+                onDateSelect={handleDateSelect}
                 initialRange={dateRange}
                 selectingFrom={activeDate === "check-in"}
                 userId={userId}

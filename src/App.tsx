@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
   Routes,
-  Navigate,
   useLocation,
 } from "react-router-dom";
 import { useSelector } from "react-redux";

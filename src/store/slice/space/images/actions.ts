@@ -1,47 +1,12 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
     fetchAllPropertySpaceImages,
     fetchPropertyImagesByPropertyId,
-    fetchSpaceImageDetailsById,
     uploadPropertySpaceImages,
     updateSpaceImageById,
     deleteSpaceImageById,
     deleteMultipleSpaceImages
 } from '@/api';
-import { RootState } from '@/store/reducers';
-
-// Define Space Image Interface
-export interface SpaceImage {
-    id: number;
-    description: string;
-    url: string;
-    displayOrder: number;
-    createdAt: string;
-    updatedAt: string;
-    propertySpace: {
-        id: number;
-        space: { id: number; name: string };
-        property: { id: number; propertyName: string };
-    };
-    createdBy: { id: number };
-    updatedBy: { id: number } | null;
-}
-
-// State Interface
-interface SpaceImageState {
-    images: SpaceImage[];
-    loading: boolean;
-    error: string | null;
-}
-
-// Initial State
-const initialState: SpaceImageState = {
-    images: [],
-    loading: false,
-    error: null,
-};
-
-// Thunks for Async Actions
 
 // Fetch All Space Property Images
 export const fetchAllImages = createAsyncThunk(
@@ -120,43 +85,3 @@ export const deleteImagesBatch = createAsyncThunk(
         }
     }
 );
-
-// Slice Definition
-const spaceImageSlice = createSlice({
-    name: 'spaceImage',
-    initialState,
-    reducers: {},
-    extraReducers: (builder) => {
-        builder
-            .addCase(fetchAllImages.pending, (state) => {
-                state.loading = true;
-            })
-            .addCase(fetchAllImages.fulfilled, (state, action: PayloadAction<SpaceImage[]>) => {
-                state.images = action.payload;
-                state.loading = false;
-                state.error = null;
-            })
-            .addCase(fetchAllImages.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload as string;
-            })
-            .addCase(uploadImages.fulfilled, (state, action: PayloadAction<SpaceImage[]>) => {
-                state.images.push(...action.payload);
-            })
-            .addCase(updateImageById.fulfilled, (state, action: PayloadAction<SpaceImage>) => {
-                const index = state.images.findIndex((img) => img.id === action.payload.id);
-                if (index !== -1) state.images[index] = action.payload;
-            })
-            .addCase(deleteImageById.fulfilled, (state, action: PayloadAction<number>) => {
-                state.images = state.images.filter((img) => img.id !== action.payload);
-            })
-            .addCase(deleteImagesBatch.fulfilled, (state, action: PayloadAction<number[]>) => {
-                state.images = state.images.filter((img) => !action.payload.includes(img.id));
-            });
-    },
-});
-
-// Selector to Get Images from State
-export const selectSpaceImages = (state: RootState) => state.spaceImage.images;
-
-export default spaceImageSlice.reducer;

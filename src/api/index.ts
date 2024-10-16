@@ -1,16 +1,6 @@
 import { axiosInstance } from "./axiosSetup";
+import { SpaceProperty } from "@/store/model";
 
-export interface SpaceProperty {
-    space: {
-        id: number;
-    };
-    property: {
-        id: number;
-    };
-    createdBy: {
-        id: number;
-    };
-}
 
 export interface Space {
     id?: number; // Optional for create and update
@@ -188,7 +178,7 @@ export const getAmenitiesById = (id: number) =>
 export const getuserbyproperty = (id: number) =>
     axiosInstance.get(`/properties/property/${id}/details`);
 
-export const addamenity = (data: {
+export const addAmenity = (data: {
     amenityGroup: { id: number };
     createdBy: { id: number };
     amenityName: string;

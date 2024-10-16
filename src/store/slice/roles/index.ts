@@ -1,32 +1,12 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { axiosInstance } from '@/api/axiosSetup';
-
-interface Role {
-    id: number;
-    roleName: string;
-    roleDescription: string;
-    createdAt: string;
-    updatedAt: string;
-    createdBy: string | null;
-    updatedBy: string | null;
-}
-
-interface RolesState {
-    roles: Role[];
-    status: 'idle' | 'loading' | 'succeeded' | 'failed';
-    error: string | null;
-}
+import { createSlice } from '@reduxjs/toolkit';
+import { fetchRoles } from './actions'
+import { RolesState } from '@/store/model';
 
 const initialState: RolesState = {
     roles: [],
     status: 'idle',
     error: null
 };
-
-export const fetchRoles = createAsyncThunk('roles/fetchRoles', async () => {
-    const response = await axiosInstance.get('/roles');
-    return response.data.roles;
-});
 
 const rolesSlice = createSlice({
     name: 'roles',
@@ -47,5 +27,5 @@ const rolesSlice = createSlice({
             });
     },
 });
-
+export * from './actions';
 export default rolesSlice.reducer;

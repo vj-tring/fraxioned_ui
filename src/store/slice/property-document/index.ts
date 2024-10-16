@@ -1,83 +1,12 @@
-import { getPropertyDocuments, getPropertyDocument, createPropertyDocument, updatePropertyDocument, deletePropertyDocument } from "@/api";
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-
-export interface PropertyDocument {
-  id: number;
-  property: { id: number };
-  createdBy: { id: number };
-  updatedBy?: { id: number };
-  name: string;
-  documentType: string;
-  documentFile: File | null;
-}
-
-export interface PropertyDocumentState {
-  documents: PropertyDocument[];
-  currentDocument: PropertyDocument | null;
-  isLoading: boolean;
-  error: string | null;
-}
-
-// Create async thunks for CRUD operations
-export const fetchPropertyDocuments = createAsyncThunk(
-  "propertyDocuments/fetchAll",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await getPropertyDocuments();
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
-
-export const fetchPropertyDocument = createAsyncThunk(
-  "propertyDocuments/fetchOne",
-  async (id: number, { rejectWithValue }) => {
-    try {
-      const response = await getPropertyDocument(id);
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
-
-export const createPropertyDocumentThunk = createAsyncThunk(
-  "propertyDocuments/create",
-  async (documentData: FormData, { rejectWithValue }) => {
-    try {
-      const response = await createPropertyDocument(documentData);
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
-
-export const updatePropertyDocumentThunk = createAsyncThunk(
-  "propertyDocuments/update",
-  async ({ id, documentData }: { id: number; documentData: FormData }, { rejectWithValue }) => {
-    try {
-      const response = await updatePropertyDocument(id, documentData);
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
-
-export const deletePropertyDocumentThunk = createAsyncThunk(
-  "propertyDocuments/delete",
-  async (id: number, { rejectWithValue }) => {
-    try {
-      await deletePropertyDocument(id);
-      return id;
-    } catch (error: any) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { PropertyDocumentState, PropertyDocument } from "@/store/model";
+import {
+  fetchPropertyDocuments,
+  fetchPropertyDocument,
+  createPropertyDocumentThunk,
+  updatePropertyDocumentThunk,
+  deletePropertyDocumentThunk,
+} from "./actions";
 
 // Create the slice
 const propertyDocumentsSlice = createSlice({
@@ -92,7 +21,10 @@ const propertyDocumentsSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
-    setCurrentDocument: (state, action: PayloadAction<PropertyDocument | null>) => {
+    setCurrentDocument: (
+      state,
+      action: PayloadAction<PropertyDocument | null>
+    ) => {
       state.currentDocument = action.payload;
     },
   },
@@ -140,7 +72,9 @@ const propertyDocumentsSlice = createSlice({
       })
       .addCase(updatePropertyDocumentThunk.fulfilled, (state, action) => {
         state.isLoading = false;
-        const index = state.documents.findIndex((doc) => doc.id === action.payload.id);
+        const index = state.documents.findIndex(
+          (doc) => doc.id === action.payload.id
+        );
         if (index !== -1) {
           state.documents[index] = action.payload;
         }
@@ -156,8 +90,13 @@ const propertyDocumentsSlice = createSlice({
       })
       .addCase(deletePropertyDocumentThunk.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.documents = state.documents.filter((doc) => doc.id !== action.payload);
-        if (state.currentDocument && state.currentDocument.id === action.payload) {
+        state.documents = state.documents.filter(
+          (doc) => doc.id !== action.payload
+        );
+        if (
+          state.currentDocument &&
+          state.currentDocument.id === action.payload
+        ) {
           state.currentDocument = null;
         }
       })
@@ -168,5 +107,7 @@ const propertyDocumentsSlice = createSlice({
   },
 });
 
-export const { clearError, setCurrentDocument } = propertyDocumentsSlice.actions;
+export const { clearError, setCurrentDocument } =
+  propertyDocumentsSlice.actions;
+export * from "./actions";
 export default propertyDocumentsSlice.reducer;

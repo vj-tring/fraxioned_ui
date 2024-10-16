@@ -20,8 +20,8 @@ import {
   fetchAllSpaces,
   updateExistingSpace,
   deleteExistingSpace,
-  Space,
-} from "@/store/slice/spaceSlice";
+} from "@/store/slice/space";
+import { Space } from "@/store/model";
 import { Delete, Edit } from "@mui/icons-material";
 
 const Spaces: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {

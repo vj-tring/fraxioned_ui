@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 // import PorpImg from "../../assests/crown-jewel.jpg";
 import { resetLimits } from "@/store/slice/auth/propertyGuestSlice";
 import { useDispatch } from "react-redux";
-import { clearDates } from "@/store/slice/datePickerSlice";
+import { clearDates } from "@/store/slice/datepicker";
 import PropertyList from "./propertyList";
 import BackgroundBeamsDemo from "./backgroundHome";
 // import TrackingMyNigts from "../booking/trackingMyNights";

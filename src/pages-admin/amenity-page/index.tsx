@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { amenitiesapi } from '@/api';
-import { updateAmenity, resetAmenitiesState, deleteAmenityAsync } from '@/store/slice/auth/amenitiespageSlice';
+import {fetchAmenities, updateAmenity, resetAmenitiesState, deleteAmenityAsync } from '@/store/slice/amenity';
 import { RootState } from '@/store/reducers';
 import styles from './amenitypage.module.css';
 import NewAmenityForm from '../property-amenities/new-amenity';
@@ -10,16 +10,17 @@ import ConfirmationModal from '@/components/confirmation-modal';
 import CustomizedSnackbars from '@/components/customized-snackbar';
 import { IconButton, Tooltip } from '@mui/material';
 import { AppDispatch } from '@/store';
+import { Amenity } from "@/store/model"
 
-interface Amenity {
-  id: number;
-  amenityName: string;
-  amenityDescription?: string;
-  amenityGroup: {
-    id: number;
-    name: string;
-  };
-}
+// interface Amenity {
+//   id: number;
+//   amenityName: string;
+//   amenityDescription?: string;
+//   amenityGroup: {
+//     id: number;
+//     name: string;
+//   };
+// }
 
 interface AmenityGroup {
   id: number;
@@ -43,15 +44,16 @@ interface ErrorResponse {
 const AmenityManagement: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const {
+    amenities,
     loading: updateLoading,
     error: updateError,
     success: updateSuccess,
     deleteLoading,
     deleteError,
     deleteSuccess
-  } = useSelector((state: RootState) => state.amenitiesPage);
+  } = useSelector((state: RootState) => state.amenities);
 
-  const [amenities, setAmenities] = useState<{ [key: string]: Amenity[] }>({});
+  const [groupAmenities, setGroupAmenities] = useState<{ [key: string]: Amenity[] }>({});
   const [groupSearchTerms, setGroupSearchTerms] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(true);
   const [editingAmenity, setEditingAmenity] = useState<Amenity | null>(null);
@@ -68,14 +70,14 @@ const AmenityManagement: React.FC = () => {
   const groupRefs = useRef<{ [key: string]: React.RefObject<HTMLDivElement> }>({});
 
   useEffect(() => {
-    fetchAmenities();
+    getAmenities();
   }, []);
 
   useEffect(() => {
     if (updateSuccess) {
       showSnackbar('Amenity updated successfully', 'success');
       setEditingAmenity(null);
-      fetchAmenities();
+      getAmenities();
       dispatch(resetAmenitiesState());
     }
     if (updateError) {
@@ -87,7 +89,7 @@ const AmenityManagement: React.FC = () => {
   useEffect(() => {
     if (deleteSuccess) {
       showSnackbar('Amenity deleted successfully', 'success');
-      fetchAmenities();
+      getAmenities();
       dispatch(resetAmenitiesState());
     }
     if (deleteError) {
@@ -96,11 +98,11 @@ const AmenityManagement: React.FC = () => {
     }
   }, [deleteSuccess, deleteError, dispatch]);
 
-  const fetchAmenities = async () => {
+  const getAmenities = async () => {
     try {
-      const response = await amenitiesapi();
-      const groupedAmenities = groupAmenitiesByType(response.data.data);
-      setAmenities(groupedAmenities);
+      dispatch(fetchAmenities());
+      const groupedAmenities = groupAmenitiesByType(amenities);
+      setGroupAmenities(groupedAmenities);
       setLoading(false);
 
       // Initialize refs for each group
@@ -122,10 +124,12 @@ const AmenityManagement: React.FC = () => {
   const groupAmenitiesByType = (data: Amenity[]) => {
     return data.reduce((acc, amenity) => {
       const groupName = amenity.amenityGroup.name;
-      if (!acc[groupName]) {
-        acc[groupName] = [];
+      if (groupName !== undefined) {
+        if (!acc[groupName]) {
+          acc[groupName] = [];
+        }
+        acc[groupName].push(amenity);
       }
-      acc[groupName].push(amenity);
       return acc;
     }, {} as { [key: string]: Amenity[] });
   };
@@ -137,6 +141,7 @@ const AmenityManagement: React.FC = () => {
   const handleSave = async () => {
     if (editingAmenity) {
       const updateData = {
+        createdBy: {id: 1},
         updatedBy: { id: 1 },
         amenityName: editingAmenity.amenityName,
         amenityDescription: editingAmenity.amenityDescription || '',
@@ -144,7 +149,7 @@ const AmenityManagement: React.FC = () => {
       };
 
       await dispatch(updateAmenity({
-        id: editingAmenity.id,
+        id: editingAmenity.id ?? 0,
         updateData
       }));
       setEditingAmenity(null);
@@ -168,7 +173,7 @@ const AmenityManagement: React.FC = () => {
   };
 
   const handleAmenityAdded = () => {
-    fetchAmenities();
+    getAmenities();
     showSnackbar('New amenity added successfully', 'success');
   };
 
@@ -180,7 +185,7 @@ const AmenityManagement: React.FC = () => {
   const handleDeleteConfirm = async () => {
     if (amenityToDelete) {
       try {
-        const result = await dispatch(deleteAmenityAsync(amenityToDelete.id));
+        const result = await dispatch(deleteAmenityAsync(amenityToDelete.id ?? 0));
 
         if (result.payload && typeof result.payload === 'object' && 'success' in result.payload) {
           const response = result.payload as ErrorResponse;
@@ -189,11 +194,11 @@ const AmenityManagement: React.FC = () => {
             showSnackbar(response.message, 'error');
           } else {
             showSnackbar('Amenity deleted successfully', 'success');
-            fetchAmenities();
+            getAmenities();
           }
         } else if (deleteAmenityAsync.fulfilled.match(result)) {
           showSnackbar('Amenity deleted successfully', 'success');
-          fetchAmenities();
+          getAmenities();
         } else {
           showSnackbar('Failed to delete amenity', 'error');
         }
@@ -242,7 +247,7 @@ const AmenityManagement: React.FC = () => {
     }, 100);
   };
 
-  const filteredAmenities = Object.entries(amenities).reduce((acc, [group, amenitiesList]) => {
+  const filteredAmenities = Object.entries(groupAmenities).reduce((acc, [group, amenitiesList]) => {
     const groupSearchTerm = groupSearchTerms[group] || '';
     const filtered = amenitiesList.filter(amenity =>
       amenity.amenityName.toLowerCase().includes(groupSearchTerm.toLowerCase())
@@ -320,19 +325,19 @@ const AmenityManagement: React.FC = () => {
                             <div className={styles.editingContainer}>
                               <input
                                 type="text"
-                                value={editingAmenity.amenityName}
+                                value={editingAmenity?.amenityName}
                                 onChange={(e) => setEditingAmenity({
-                                  ...editingAmenity,
-                                  amenityName: e.target.value
+                                  ...(editingAmenity as Amenity),
+                                  amenityName: e.target.value 
                                 })}
                                 className={styles.editInput}
                                 placeholder="Amenity name"
                               />
                               <textarea
-                                value={editingAmenity.amenityDescription || ''}
+                                value={editingAmenity?.amenityDescription || ''}
                                 onChange={(e) => setEditingAmenity({
-                                  ...editingAmenity,
-                                  amenityDescription: e.target.value
+                                  ...(editingAmenity as Amenity),
+                                  amenityDescription: e.target.value 
                                 })}
                                 className={styles.editDescription}
                                 placeholder="Description (optional)"
