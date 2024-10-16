@@ -29,6 +29,7 @@ import {
 import AmenitiesTab from "./property-space-tabs/amenities-tab";
 import PhotosTab from "./property-space-tabs/photos-tab";
 import BedTypesTab from "./property-space-tabs/type-tab";
+import { Trash2 } from "lucide-react";
 
 export default function Component({ initialSpace = {} }) {
   const location = useLocation();
