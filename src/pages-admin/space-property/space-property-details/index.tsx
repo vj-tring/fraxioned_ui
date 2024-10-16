@@ -5,15 +5,17 @@ import { RootState } from "@/store/reducers";
 import { AppDispatch } from '@/store';
 import { getByPropertySpaceId } from '@/store/slice/auth/propertyamenities';
 import { propertySpaceImageuploadapi } from "@/api";
-import { motion, AnimatePresence } from 'framer-motion'
-import { Trash2, Plus, X, Camera, Loader2, ChevronDown, ChevronUp } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { motion, AnimatePresence } from 'framer-motion';
+import { Trash2, Plus, X, Camera, Loader2, ChevronDown, ChevronUp } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/src/components/ui/badge";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/src/components/ui/collapsible";
+import { uploadPropertySpaceImages } from "@/api";
+import { VscTrash } from "react-icons/vsc";
 
 interface AmenityGroup {
   id: number;
