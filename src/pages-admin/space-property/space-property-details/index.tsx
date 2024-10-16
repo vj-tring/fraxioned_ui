@@ -28,8 +28,9 @@ import {
 } from "@/store/slice/spaceImagesSlice";
 import AmenitiesTab from "./property-space-tabs/amenities-tab";
 import PhotosTab from "./property-space-tabs/photos-tab";
-import BedTypesTab from "./property-space-tabs/type-tab";
+import BedTypesTab from "./property-space-tabs/bed-type-tab";
 import { Trash2 } from "lucide-react";
+import BathTypesTab from "./property-space-tabs/bath-type-tab";
 
 export default function Component({ initialSpace = {} }) {
   const location = useLocation();
@@ -73,6 +74,24 @@ export default function Component({ initialSpace = {} }) {
   const [combinedImages, setCombinedImages] = useState<
     Array<{ id?: number; url: string; isNew?: boolean }>
   >([]);
+
+
+  const [bathTypes, setBathTypes] = useState([
+    { id: 1, name: "Full Bath" },
+    { id: 2, name: "Three-Quarter Bath" },
+    { id: 3, name: "Half Bath" },
+    { id: 4, name: "Quarter Bath" },
+  ]);
+
+  const [bedTypes, setBedTypes] = useState([
+    { id: 1, name: "Single Bed", count: 0 },
+    { id: 2, name: "Double Bed", count: 0 },
+    { id: 3, name: "Queen Bed", count: 0 },
+    { id: 4, name: "King Bed", count: 0 },
+    { id: 5, name: "Bunk Bed", count: 0 },
+  ]);
+
+  
 
   useEffect(() => {
     if (space?.id) {
@@ -236,13 +255,6 @@ export default function Component({ initialSpace = {} }) {
     }
   };
 
-  const [bedTypes, setBedTypes] = useState([
-    { id: 1, name: "Single Bed", count: 0 },
-    { id: 2, name: "Double Bed", count: 0 },
-    { id: 3, name: "Queen Bed", count: 0 },
-    { id: 4, name: "King Bed", count: 0 },
-    { id: 5, name: "Bunk Bed", count: 0 },
-  ]);
 
   const handleBedCountChange = (id: number, increment: number) => {
     setBedTypes((prevBedTypes) =>
@@ -253,7 +265,10 @@ export default function Component({ initialSpace = {} }) {
       )
     );
   };
-
+  const handleSaveBathType = (selectedBathTypeId: number) => {
+    console.log(`Saved bath type with ID: ${selectedBathTypeId}`);
+    // Implement your save logic here
+  };
   return (
     <Card className="w-full max-w-5xl mx-auto">
       <CardHeader>
@@ -299,9 +314,10 @@ export default function Component({ initialSpace = {} }) {
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="photos" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="photos">Photos</TabsTrigger>
             <TabsTrigger value="bedTypes">Bed Types</TabsTrigger>
+            <TabsTrigger value="bathTypes">Bath Types</TabsTrigger>
             <TabsTrigger value="amenities">Amenities</TabsTrigger>
           </TabsList>
           <PhotosTab
@@ -337,6 +353,7 @@ export default function Component({ initialSpace = {} }) {
             bedTypes={bedTypes}
             handleBedCountChange={handleBedCountChange}
           />
+          <BathTypesTab bathTypes={bathTypes} onSave={handleSaveBathType} />
         </Tabs>
       </CardContent>
     </Card>

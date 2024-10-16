@@ -57,9 +57,10 @@ const SpaceProperty: React.FC = () => {
         }
     };
 
-    // Navigate to space details page when a space is clicked
     const handleSpaceClick = (space: any) => {
-        navigate(`/admin/property/${id}/rooms/${space.space.id}`, { state: { space } }); // Pass space details in state
+        // Sending all rooms, regardless of isBedTypeAllowed or isBathroomTypeAllowed
+        console.log("Sending all room data:", space);
+        navigate(`/admin/property/${id}/rooms/${space.space.id}`, { state: { space } }); 
     };
 
     return (
@@ -73,7 +74,6 @@ const SpaceProperty: React.FC = () => {
                 </div>
             </div>
 
-            {/* Main Section for Added Spaces */}
             <div className={styles.mainsection}>
                 <div className={`${styles.spaceList} ${(!propertySpace || propertySpace.length === 0) ? styles.noRooms : ''}`}>
                     {Array.isArray(propertySpace) && propertySpace.length > 0 ? (
@@ -119,7 +119,7 @@ const SpaceProperty: React.FC = () => {
                                         }}
                                     >
                                         <img
-                                            src={space.s3_url || "https://via.placeholder.com/150"} // Placeholder image
+                                            src={space.s3_url || "https://via.placeholder.com/150"}
                                             alt={space.name}
                                             style={{ width: '100%', height: '100px', marginBottom: '10px' }}
                                         />
