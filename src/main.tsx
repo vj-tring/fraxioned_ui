@@ -17,7 +17,7 @@ const disableConsole = (): void => {
   }
 };
 
-disableConsole();
+// disableConsole();
 if (rootElement) {
   const root = createRoot(rootElement);
 

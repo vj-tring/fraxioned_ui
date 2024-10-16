@@ -136,7 +136,8 @@ export const addPropertyApi = (propertyData: {
     longitude: number;
     isActive: boolean;
     displayOrder: number;
-}) => axiosInstance.post('/properties/property', propertyData);
+}) => axiosInstance.post('/properties/property', propertyData
+);
 
 export const updatePropertyImage = (id: number, formData: FormData) =>
     axiosInstance.patch(`/properties/property/${id}`, formData);
@@ -148,8 +149,26 @@ export const deletePropertyApi = (id: number) =>
 export const getPropertyById = (id: number) =>
     axiosInstance.get(`/properties/property/${id}`);
 
-export const updatePropertyapi = (id: number, data: any) =>
-    axiosInstance.patch(`/properties/property/${id}`, data);
+export const updatePropertyapi = (id: number, data: any) => {
+    const formData = new FormData();
+
+    Object.keys(data).forEach(key => {
+        if (key === 'updatedBy') {
+            formData.append(key, JSON.stringify(data[key]));
+        } else if (key === 'mailBannerFile' || key === 'coverImageFile') {
+            // Append null for these fields
+            formData.append(key, 'null');
+        } else if (data[key] !== undefined && data[key] !== null) {
+            formData.append(key, data[key].toString());
+        }
+    });
+
+    return axiosInstance.patch(`/properties/property/${id}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+};
 
 export const userdetails = () =>
     axiosInstance.get('/users');

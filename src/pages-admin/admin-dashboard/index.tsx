@@ -8,7 +8,7 @@ import PropertySidePanel from '../propertysidepanel';
 import PropertyGeneralInfo from '../property-generalinfo'
 import PhotoUpload from '../property-photos/new-photoupload';
 import TabSwitch from '../grid/user-grid/edit-form/tab-switch';
-import EditPropertyForm from '../grid/property-grid/EditPropertyForm';
+import EditPropertyForm from '../property-generalinfo/gerneralinfo-editform';
 import AmenityManagement from '../amenity-page';
 import EditAmenityForm from '../property-amenities/edit-amenityform';
 import PropertyAmenities from '../property-amenities';
