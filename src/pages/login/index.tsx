@@ -1,159 +1,133 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../store/index"; 
+import { AppDispatch } from "../../store/index";
 import { login } from "../../store/slice/authentication/actions";
 import styles from "./login.module.css";
 import logo from "../../assets/images/fraxioned.png";
 import Loader from "../../components/loader/index";
 import CustomizedSnackbars from "../../components/customized-snackbar";
 import { ENCRYPTION_KEY } from "@/constants";
+import { encrypt, decrypt } from "@/utils/encryption";
 
-
-const encrypt = (text: string): string => {
-  return btoa(
-    text
-      .split("")
-      .map((char, index) =>
-        String.fromCharCode(
-          char.charCodeAt(0) ^
-            ENCRYPTION_KEY.charCodeAt(index % ENCRYPTION_KEY.length)
-        )
-      )
-      .join("")
-  );
-};
-
-const decrypt = (encryptedText: string): string => {
-  return atob(encryptedText)
-    .split("")
-    .map((char, index) =>
-      String.fromCharCode(
-        char.charCodeAt(0) ^
-          ENCRYPTION_KEY.charCodeAt(index % ENCRYPTION_KEY.length)
-      )
-    )
-    .join("");
+export const validateEmail = (email: string): boolean => {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return emailRegex.test(String(email).toLowerCase());
 };
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState(false);
-  const [showSnackbar, setShowSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
-    "success"
-  );
-  const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
+  const [formState, setFormState] = useState({
+    email: "",
+    password: "",
+    rememberMe: false,
+  });
+  const [formErrors, setFormErrors] = useState({
+    email: "",
+    password: "",
+  });
+  const [snackbar, setSnackbar] = useState({
+    show: false,
+    message: "",
+    severity: "success" as "success" | "error",
+  });
   const [isLoading, setIsLoading] = useState(false);
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+
+  // Preload email/password if 'remember me' was checked
   useEffect(() => {
-    const storedEncryptedEmail = localStorage.getItem("rememberedEmail");
-    const storedEncryptedPassword = localStorage.getItem("rememberedPassword");
-    if (storedEncryptedEmail && storedEncryptedPassword) {
-      setEmail(decrypt(storedEncryptedEmail));
-      setPassword(decrypt(storedEncryptedPassword));
-      setRememberMe(true);
+    const storedEmail = localStorage.getItem("rememberedEmail");
+    const storedPassword = localStorage.getItem("rememberedPassword");
+    if (storedEmail && storedPassword) {
+      setFormState({
+        email: decrypt(storedEmail, ENCRYPTION_KEY),
+        password: decrypt(storedPassword, ENCRYPTION_KEY),
+        rememberMe: true,
+      });
     }
   }, []);
 
-  const validateEmail = (email: string) => {
-    const re =
-      /^[a-zA-Z0-9]+([._@][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/;
-    return re.test(String(email).toLowerCase());
-  };
+  // Form change handler
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormState((prevState) => ({ ...prevState, [name]: value }));
+    setFormErrors((prevState) => ({ ...prevState, [name]: "" }));
+  }, []);
+
+  // Form validation
+  const validateForm = useCallback(() => {
+    const errors: { email: string; password: string } = {
+      email: "",
+      password: "",
+    };
+
+    if (!formState.email) {
+      errors.email = "Please fill in the Email ID";
+    } else if (!validateEmail(formState.email)) {
+      errors.email = "Please enter a valid email ID";
+    }
+
+    if (!formState.password) {
+      errors.password = "Please fill in the Password";
+    }
+
+    setFormErrors(errors);
+    return !errors.email && !errors.password;
+  }, [formState]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateForm()) return;
 
-    if (!email.trim()) {
-      setEmailError("Please fill in the Email ID");
-      setPasswordError(false);
-    } else if (!validateEmail(email)) {
-      setEmailError("Please enter a valid email ID");
-      setPasswordError(false);
-    } else if (!password.trim()) {
-      setPasswordError(true);
-      setEmailError("");
-    } else {
-      setEmailError("");
-      setPasswordError(false);
-      setIsLoading(true);
+    setIsLoading(true);
+    try {
+      const resultAction = await dispatch(
+        login({ email: formState.email, password: formState.password })
+      ).unwrap();
 
-      try {
-        const resultAction = await dispatch(
-          login({ email, password })
-        ).unwrap();
-        setTimeout(() => {
-          if (resultAction.user && resultAction.session) {
-            setSnackbarMessage("Login Successful");
-            setSnackbarSeverity("success");
-            setShowSnackbar(true);
+      setSnackbar({
+        show: true,
+        message: "Login Successful",
+        severity: "success",
+      });
 
-            if (rememberMe) {
-              localStorage.setItem("rememberedEmail", encrypt(email));
-              localStorage.setItem("rememberedPassword", encrypt(password));
-            } else {
-              localStorage.removeItem("rememberedEmail");
-              localStorage.removeItem("rememberedPassword");
-            }
-
-            if (resultAction.user.role.id === 1) {
-              navigate("/admin/bookings");
-            } else {
-              navigate("/");
-            }
-
-            setIsLoading(false);
-          }
-        }, 1000);
-      } catch (error) {
-        setSnackbarMessage(
-          (error as string) || "Login failed. Please try again."
+      if (formState.rememberMe) {
+        localStorage.setItem(
+          "rememberedEmail",
+          encrypt(formState.email, ENCRYPTION_KEY)
         );
-        setSnackbarSeverity("error");
-        setShowSnackbar(true);
-        setIsLoading(false);
+        localStorage.setItem(
+          "rememberedPassword",
+          encrypt(formState.password, ENCRYPTION_KEY)
+        );
+      } else {
+        localStorage.removeItem("rememberedEmail");
+        localStorage.removeItem("rememberedPassword");
       }
+
+      const redirectPath =
+        resultAction.user.role.id === 1 ? "/admin/bookings" : "/";
+      navigate(redirectPath);
+    } catch (error) {
+      setSnackbar({
+        show: true,
+        message: (error as string) || "Login failed. Please try again.",
+        severity: "error",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-    setEmailError("");
-  };
-
-  const handleEmailBlur = () => {
-    if (email && !validateEmail(email)) {
-      setEmailError("Please enter a valid email id");
-    }
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-    setPasswordError(false);
-  };
-
-  const handleRememberMeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRememberMe(e.target.checked);
-  };
-
-  const handleSnackbarClose = () => {
-    setShowSnackbar(false);
-  };
+  const handleSnackbarClose = useCallback(() => {
+    setSnackbar((prev) => ({ ...prev, show: false }));
+  }, []);
 
   return (
     <div className={styles.outerContainer}>
       <div className={styles.innerContainer}>
-        {isLoading && (
-          <div data-testid="loader">
-            <Loader />
-          </div>
-        )}
+        {isLoading && <Loader />}
         <img
           src={logo}
           alt="Fraxioned Logo"
@@ -165,41 +139,40 @@ const Login: React.FC = () => {
           <p className={styles.loginSubtext}>
             Please enter your details to sign in
           </p>
-          {emailError && (
-            <div className={styles.errorMessage}>{emailError}</div>
+          {formErrors.email && (
+            <div className={styles.errorMessage}>{formErrors.email}</div>
           )}
           <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.inputGroup}>
               <input
                 type="text"
+                name="email"
                 placeholder="Email"
-                value={email}
-                // autoFocus
-                onChange={handleEmailChange}
-                onBlur={handleEmailBlur}
-                className={emailError ? styles.errorInput : ""}
+                value={formState.email}
+                onChange={handleChange}
+                className={formErrors.email ? styles.errorInput : ""}
               />
             </div>
             <div className={styles.inputGroup}>
-              {passwordError && (
-                <div className={styles.errorMessage}>
-                  Please fill in the Password
-                </div>
+              {formErrors.password && (
+                <div className={styles.errorMessage}>{formErrors.password}</div>
               )}
               <input
                 type="password"
+                name="password"
                 placeholder="Password"
-                value={password}
-                onChange={handlePasswordChange}
-                className={passwordError ? styles.errorInput : ""}
+                value={formState.password}
+                onChange={handleChange}
+                className={formErrors.password ? styles.errorInput : ""}
               />
             </div>
             <div className={styles.formFooter}>
               <label className={styles.remember}>
                 <input
                   type="checkbox"
-                  checked={rememberMe}
-                  onChange={handleRememberMeChange}
+                  name="rememberMe"
+                  checked={formState.rememberMe}
+                  onChange={handleChange}
                 />{" "}
                 Remember me
               </label>
@@ -214,10 +187,10 @@ const Login: React.FC = () => {
         </div>
       </div>
       <CustomizedSnackbars
-        open={showSnackbar}
+        open={snackbar.show}
         handleClose={handleSnackbarClose}
-        message={snackbarMessage}
-        severity={snackbarSeverity}
+        message={snackbar.message}
+        severity={snackbar.severity}
       />
     </div>
   );
