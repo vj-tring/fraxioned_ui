@@ -47,7 +47,7 @@
   height: 36px !important;
   padding: 10px;
   border: 1px solid #e0e0e0;
-  border-radius: 4px; 
+  border-radius: 4px;
   font-size: 12px;
   color: #333;
 }
@@ -55,10 +55,12 @@
 .addNewBtn {
   white-space: nowrap;
   text-transform: none;
-  color: #f5a623 !important;
+  background-color: #ececec !important;
+  color: #2f2f2f !important;
   font-size: 10px !important;
   font-weight: 400;
-  border: 1px solid #f5a623 !important;
+  border-radius: 6px !important;
+  border: none !important;
   padding: 4px 5px !important;
   height: 35px !important;
   transition: all 0.3s ease;
