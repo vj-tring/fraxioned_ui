@@ -31,6 +31,7 @@ import propertydetailReducer from '../slice/auth/property-detail';
 import spaceImageReducer from '../slice/spaceImagesSlice';
 import bedReducer from '../slice/bedSlice';
 import bathroomReducer from '../slice/bathroom-slice';
+import amenityReducer from "../slice/amenitiesSlice";
 
 
 const appReducer = combineReducers({
@@ -66,6 +67,8 @@ const appReducer = combineReducers({
   propertydetail: propertydetailReducer,
   bed: bedReducer,
   bathroom: bathroomReducer,
+  amenitiesID: amenityReducer,
+
 });
 
 const rootReducer = (

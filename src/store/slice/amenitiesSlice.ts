@@ -1,5 +1,6 @@
 import { getAmenitiesByPropertyId } from '@/api/api-endpoints';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+// import { getAmenitiesByPropertyId } from '@/api';
 
 export interface AmenityGroup {
   id: number;
@@ -26,8 +27,6 @@ export interface PropertyAmenity {
 }
 
 export interface AmenitiesState {
-  status: any;
-  amenities: any;
   propertyAmenities: PropertyAmenity[];
   loading: boolean;
   error: string | null;
@@ -37,8 +36,6 @@ const initialState: AmenitiesState = {
   propertyAmenities: [],
   loading: false,
   error: null,
-  status: undefined,
-  amenities: undefined
 };
 
 export const fetchAmenities = createAsyncThunk(
@@ -49,7 +46,7 @@ export const fetchAmenities = createAsyncThunk(
   }
 );
 
-const amenitiesSlice = createSlice({
+const amenitySlice = createSlice({
   name: 'propertyAmenities',
   initialState,
   reducers: {},
@@ -61,7 +58,9 @@ const amenitiesSlice = createSlice({
       })
       .addCase(fetchAmenities.fulfilled, (state, action) => {
         state.loading = false;
+        
         state.propertyAmenities = action.payload;
+        console.log("Updated propertyAmenities:", state.propertyAmenities); 
       })
       .addCase(fetchAmenities.rejected, (state, action) => {
         state.loading = false;
@@ -70,4 +69,4 @@ const amenitiesSlice = createSlice({
   },
 });
 
-export default amenitiesSlice.reducer;
+export default amenitySlice.reducer;

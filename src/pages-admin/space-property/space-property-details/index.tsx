@@ -89,15 +89,15 @@ export default function Component({ initialSpace = {} }) {
       { value: "photos", label: "Photos" },
       { value: "amenities", label: "Amenities" },
     ];
-    
+
     if (showBathTypesTab) {
       tabs.splice(1, 0, { value: "bathTypes", label: "Bath Types" });
     }
-    
+
     if (showBedTypesTab) {
       tabs.splice(1, 0, { value: "bedTypes", label: "Bed Types" });
     }
-    
+
     return tabs;
   };
   const tabsList = generateTabsList();
@@ -279,13 +279,13 @@ export default function Component({ initialSpace = {} }) {
     }
   };
 
-
-
-  const handleSaveBedTypes = (updatedBedTypes: Array<{ id: number; count: number }>) => {
+  const handleSaveBedTypes = (
+    updatedBedTypes: Array<{ id: number; count: number }>
+  ) => {
     if (space?.id) {
       const data = {
         propertySpace: { id: space.id },
-        spaceBedTypes: updatedBedTypes.map(bed => ({
+        spaceBedTypes: updatedBedTypes.map((bed) => ({
           spaceBedType: { id: bed.id },
           count: bed.count,
         })),
@@ -351,7 +351,7 @@ export default function Component({ initialSpace = {} }) {
         </Dialog>
       </CardHeader>
       <CardContent>
-<Tabs defaultValue="photos" className="space-y-4">
+        <Tabs defaultValue="photos" className="space-y-4">
           <TabsList className={`grid w-full grid-cols-${tabsList.length}`}>
             {tabsList.map((tab) => (
               <TabsTrigger key={tab.value} value={tab.value}>
@@ -389,12 +389,12 @@ export default function Component({ initialSpace = {} }) {
             toggleCategory={toggleCategory}
           />
           {showBedTypesTab && (
-             <BedTypesTab
-             propertySpaceBeds={propertySpaceBeds}
-             loading={bedTypesLoading}
-             error={bedTypesError}
-             onSave={handleSaveBedTypes}
-           />
+            <BedTypesTab
+              propertySpaceBeds={propertySpaceBeds}
+              loading={bedTypesLoading}
+              error={bedTypesError}
+              onSave={handleSaveBedTypes}
+            />
           )}
           {showBathTypesTab && (
            <BathTypesTab

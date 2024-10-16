@@ -37,8 +37,9 @@ import CustomizedSnackbar from "@/components/customized-snackbar";
 import calendarData from "@/components/calender/calendarData.json";
 import { DateRange } from "react-day-picker";
 import DatePickerCard from "../../components/date-picker-card";
-import { Skeleton } from "@mui/material"; 
+import { Skeleton } from "@mui/material";
 import { RootState } from "@/store/reducers";
+import { fetchAmenities } from "@/store/slice/amenitiesSlice";
 
 interface Property {
   id: number;
@@ -51,7 +52,7 @@ interface Property {
   country?: string;
   latitude?: string;
   longitude?: string;
-  zipcode?: string
+  zipcode?: string;
 }
 
 interface Space {
@@ -118,7 +119,7 @@ const PropertyListingPage = () => {
   const [guests, setGuests] = useState<number>(1);
   const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [imageDetails, setImageDetails] = useState<Image[]>([]);
+  const [imageDetails, setImageDetails] = useState([]);
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -128,7 +129,9 @@ const PropertyListingPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const userId = useSelector((state: PropertyRootState) => state.auth.user.id);
-  const currentUser = useSelector((state: PropertyRootState) => state.auth.user);
+  const currentUser = useSelector(
+    (state: PropertyRootState) => state.auth.user
+  );
   const selectedPropertyDetails = useSelector(selectSelectedPropertyDetails);
   const calendarError = useSelector(
     (state: PropertyRootState) => state.datePicker.errorMessage
@@ -163,19 +166,7 @@ const PropertyListingPage = () => {
           return;
         }
         const response = await propertyImageapi(id);
-  
-        // const filterByPropertySpaceId = response.data.data.filter(
-        //   (image: Image) => image.propertySpace.id === propertyId
-        // );
-        // console.log("filterByPropertySpaceId", filterByPropertySpaceId);
-
-  
-        // const sortedImages = filterByPropertySpaceId.sort(
-        //   (a, b) => a.displayOrder - b.displayOrder
-        // );
-  
         setImageDetails(response.data.data);
-
         setLoadingImages(false);
       } catch (error) {
         console.error("Error fetching property images:", error);
@@ -183,6 +174,19 @@ const PropertyListingPage = () => {
     };
     fetchPropertyImages();
   }, [id]);
+  const groupedImages = imageDetails.reduce((acc, image) => {
+    const spaceId = image.propertySpace.space.id;
+    const spaceName = image.propertySpace.space.name;
+
+    if (!acc[spaceId]) {
+      acc[spaceId] = {
+        name: spaceName,
+        images: [],
+      };
+    }
+    acc[spaceId].images.push(image);
+    return acc;
+  }, {});
 
   const handleClickOpen = () => {
     setDialogOpen(true);
@@ -414,7 +418,6 @@ const PropertyListingPage = () => {
                 className="PropertyAddress monsterrat "
                 style={{ opacity: 0.9, fontWeight: "bolder" }}
               >
-                
                 <div>{selectedProperty.address || "Property Address"},</div>
                 <div>{selectedProperty.city || "Property Address"},</div>
                 <div>{selectedProperty.state || "Property Address"},</div>
@@ -448,7 +451,7 @@ const PropertyListingPage = () => {
             </a>
           </div>
         </div>
-        <div className="d-flex pt-2 h-100">
+        <div className="d-flex pt-2 h-100 Proprespo">
           <div className="col-6 col-md-7 GridWidth h-100">
             <div id="myShare" className="mt-4">
               <Showmore
@@ -490,7 +493,7 @@ const PropertyListingPage = () => {
           }}
         />
         <div id="rooms" className="mt-5">
-          <SingleDevice propertyId={id}/>
+          <SingleDevice propertyId={id} />
         </div>
         <div id="location">
           <MapEmbed
@@ -504,7 +507,12 @@ const PropertyListingPage = () => {
         <div id="info">
           <ThingsToKnow propId={Number(id) || Number(0)} />
         </div>
-        <Dialog open={dialogOpen} onClose={handleClose} fullWidth maxWidth="md">
+        <Dialog
+          open={dialogOpen}
+          onClose={handleClose}
+          fullWidth
+          maxWidth="x-lg"
+        >
           <DialogTitle className="d-flex justify-content-between">
             <Typography variant="h6">More Photos</Typography>
             <IconButton
@@ -518,7 +526,7 @@ const PropertyListingPage = () => {
           </DialogTitle>
           <DialogContent>
             <Grid container spacing={2}>
-              {!loadingImages
+              {loadingImages
                 ? Array.from({ length: 6 }).map((_, index) => (
                     <Grid item xs={12} sm={6} md={4} key={index}>
                       <Skeleton
@@ -528,17 +536,34 @@ const PropertyListingPage = () => {
                       />
                     </Grid>
                   ))
-                : imageDetails.map((image, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={index}>
-                      <Card>
-                        <img
-                          src={image.url}
-                          alt={image.imageName}
-                          style={{ width: "100%", height: "auto" }}
-                          loading="lazy"
-                        />
-                      </Card>
-                    </Grid>
+                : Object.keys(groupedImages).map((spaceId) => (
+                    <div key={spaceId} className="ListingImg">
+                      <Typography
+                        variant="h6"
+                        gutterBottom
+                        className="mt-3 mb-3 GroupedImg"
+                      >
+                        {groupedImages[spaceId].name}
+                      </Typography>
+                      <Grid container spacing={2} className="GroupImgPic">
+                        {groupedImages[spaceId].images.map((image, index) => (
+                          <Grid item xs={12} sm={4} md={3} key={index}>
+                            <Card>
+                              <img
+                                src={image.url}
+                                alt={image.description}
+                                style={{
+                                  width: "100%",
+                                  height: "250px",
+                                  objectFit: "cover",
+                                }}
+                                loading="lazy"
+                              />
+                            </Card>
+                          </Grid>
+                        ))}
+                      </Grid>
+                    </div>
                   ))}
             </Grid>
           </DialogContent>
