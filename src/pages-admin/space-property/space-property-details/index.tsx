@@ -1,12 +1,17 @@
-import { Button, TextField, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
+import { Button, TextField, Dialog, DialogTitle, DialogContent, DialogActions, IconButton, Box, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { FaPlus, FaTrash } from "react-icons/fa"; // Import the plus and trash icons
-import axios from 'axios'; // Import axios for API call
+import { FaPlus, FaTrash } from "react-icons/fa";
+import { MdKeyboardArrowRight, MdDelete } from "react-icons/md";
+import { IoIosClose, IoIosImages } from "react-icons/io";
+import { GoPlus } from "react-icons/go";
 import styles from './spacepropertydetails.module.css';
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/reducers";
-import { propertySpaceImageuploadapi } from "@/api";
+import { uploadPropertySpaceImages } from "@/api";
+import { VscTrash } from "react-icons/vsc";
+
+
 
 
 const SpacePropertyDetails: React.FC = () => {
@@ -40,6 +45,14 @@ const SpacePropertyDetails: React.FC = () => {
             const filePreviews = selectedFiles.map((file) => URL.createObjectURL(file));
             setPhotoPreviews((prevPreviews) => [...prevPreviews, ...filePreviews]);
         }
+    };
+
+    const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+        event.preventDefault();
+        const files = Array.from(event.dataTransfer.files);
+
+        // Reuse the handlePhotoUpload function
+        handlePhotoUpload({ target: { files } } as unknown as React.ChangeEvent<HTMLInputElement>);
     };
 
     // Handles deleting individual photos and their previews
@@ -83,7 +96,7 @@ const SpacePropertyDetails: React.FC = () => {
 
         try {
             // Call the upload API
-            await propertySpaceImageuploadapi(formData);
+            await uploadPropertySpaceImages(formData);
             console.log('Images uploaded successfully');
             setIsDialogOpen(false); // Close dialog after successful upload
         } catch (error) {
@@ -96,28 +109,36 @@ const SpacePropertyDetails: React.FC = () => {
             <div className={styles.maincontainer}>
                 {/* First Section: Name and Add Button */}
                 <div className={styles.headersection}>
-                    <h2>{space?.space.name || "Space Name"}</h2>
-                    <Button variant="outlined" startIcon={<FaPlus />} onClick={() => setIsDialogOpen(true)}>
+                    <h2>{space?.space.name || "Space Name"} {space?.instanceNumber}</h2>
+                    <Button variant="outlined" size="small" startIcon={<FaPlus />} onClick={() => setIsDialogOpen(true)}>
                         Add Photos
                     </Button>
                 </div>
-
-                {/* Second Section: Amenities */}
-                <div className={styles.amenitiescontainer}>
-                    <h3>Amenities</h3>
-                    <TextField
-                        label="Add an Amenity"
-                        value={amenities}
-                        onChange={(e) => setAmenities(e.target.value)}
-                        style={{ marginRight: '10px' }}
-                    />
-                    <Button variant="outlined" startIcon={<FaPlus />} onClick={handleAddAmenity}>
-                        Add
-                    </Button>
+                {/* Second Section: Images */}
+                <div className={styles.imageContainer} onClick={() => setIsDialogOpen(true)}>
+                    <div className={styles.uploadContent}>
+                        <img src="https://fraxionedportal.s3.us-west-2.amazonaws.com/properties/1/coverImages/Paradise+Shores+%28eighths%29-coverImage.jpg" />
+                    </div>
+                    <div className={styles.uploadLabel} >
+                        <span>Add Photo</span>
+                    </div>
                 </div>
 
+
+                {/* Third Section: Amenities */}
+                <div className={styles.amenitiescontainer}>
+                    <div className={styles.amenitiesheader}>
+                        <h3>Amenities</h3>
+                        <span><MdKeyboardArrowRight style={{ fontSize: '1.6rem' }} /></span>
+                    </div>
+                    <div className={styles.amenitiesname}>
+                        Displaying the selected amenities
+                    </div>
+                </div>
+
+
                 {/* Display List of Added Amenities */}
-                <div>
+                {/* <div>
                     {amenitiesList.length > 0 && (
                         <ul>
                             {amenitiesList.map((amenity, index) => (
@@ -134,8 +155,7 @@ const SpacePropertyDetails: React.FC = () => {
                             ))}
                         </ul>
                     )}
-                </div>
-
+                </div> */}
                 <hr />
 
                 {/* Fourth Section: Delete Room or Space */}
@@ -145,48 +165,108 @@ const SpacePropertyDetails: React.FC = () => {
                 </div>
             </div>
 
-            {/* Image Upload Dialog */}
-            <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)} maxWidth="md" fullWidth>
-                <DialogTitle>Upload Photos</DialogTitle>
-                <DialogContent>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        onChange={handlePhotoUpload}
-                        style={{ marginBottom: '10px' }}
-                    />
+            <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)} maxWidth="xs" fullWidth>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
 
-                    {/* Preview Uploaded Images */}
-                    <div className={styles.photoPreviewContainer}>
-                        {photoPreviews.length > 0 && (
-                            <div className={styles.photoGrid}>
-                                {photoPreviews.map((preview, index) => (
-                                    <div key={index} className={styles.photoItem}>
-                                        <img
-                                            src={preview}
-                                            alt={`Uploaded Preview ${index}`}
-                                            className={styles.previewImage}
+                    <DialogTitle sx={{
+                        height: '44px',
+                        letterSpacing: '.02rem',
+                        fontSize: 15,
+                        paddingX: 2,
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        position: 'sticky',
+                        top: 0,
+                        zIndex: 2,
+                        backgroundColor: '#fff'
+                    }}>
+                        <IconButton sx={{ padding: 0 }}>
+                            <IoIosClose size={24} onClick={() => setIsDialogOpen(false)} />
+                        </IconButton>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <Typography sx={{ fontSize: 12, fontWeight: 600 }}>
+                                Upload Photos
+                            </Typography>
+                            <Typography sx={{ fontSize: 9 }}>
+                                {photoPreviews.length === 0 ? 'No Photos Selected' : `${photoPreviews.length} photo selected`}
+                            </Typography>
+                        </div>
+                        <Button sx={{ padding: .4, minWidth: 0, borderRadius: '50%' }} size="small" component="label">
+                            <GoPlus size={20} color="#666" />
+                            <input
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                hidden
+                                onChange={handlePhotoUpload}
+                            />
+                        </Button>
+                    </DialogTitle>
+
+                    <DialogContent sx={{ paddingBottom: 0 }}>
+                        {/* Conditionally Render Upload Container or Previews */}
+                        {photoPreviews.length === 0 ? (
+                            <div
+                                className={styles.uploadContainer}
+                                onDragOver={(e) => e.preventDefault()}
+                                onDrop={handleDrop}
+                            >
+                                <div className={styles.dragDropArea}>
+                                    <IoIosImages className={styles.icon} />
+                                    <p className={styles.dragDropText}>Drag and drop</p>
+                                    <p className={styles.orText}>or browse for photos</p>
+                                    <Button variant="contained" size="small" component="label" className={styles.browseButton}>
+                                        Browse
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            multiple
+                                            hidden
+                                            onChange={handlePhotoUpload}
                                         />
-                                        <Button
-                                            variant="text"
-                                            startIcon={<FaTrash />}
-                                            onClick={() => handleDeletePhoto(index)}
-                                            className={styles.deleteButton}
-                                        >
-                                            Delete
-                                        </Button>
-                                    </div>
-                                ))}
+                                    </Button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className={styles.photoPreviewContainer}>
+                                {/* Preview Uploaded Images */}
+                                <div className={styles.photoGrid}>
+                                    {photoPreviews.map((preview, index) => (
+                                        <div key={index} className={styles.photoItem}>
+                                            <img
+                                                src={preview}
+                                                alt={`Uploaded Preview ${index}`}
+                                                className={styles.previewImage}
+                                            />
+                                            <button
+                                                onClick={() => handleDeletePhoto(index)}
+                                                className={styles.deleteButton}
+                                            >
+                                                <VscTrash size={12} style={{ padding: .2 }} />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         )}
-                    </div>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setIsDialogOpen(false)} color="primary">Close</Button>
-                    <Button onClick={handleUploadImages} color="primary">Upload</Button>
-                </DialogActions>
+                    </DialogContent>
+
+                    <DialogActions sx={{
+                        paddingTop: 1, display: 'flex', justifyContent: 'space-between', borderTop: 1, borderTopColor: '#ddd', position: 'sticky',
+                        bottom: 0,
+                        zIndex: 2,
+                        backgroundColor: '#fff'
+                    }}>
+                        <Button onClick={() => setPhotoPreviews([])} size="small" sx={{ color: '#00636d' }} disabled={photoPreviews.length === 0}>Reset</Button>
+                        <Button onClick={handleUploadImages} size="small" variant="contained" sx={{ backgroundColor: '#066670', color: '#fff' }} disabled={!photoPreviews.length}>
+                            Upload
+                        </Button>
+                    </DialogActions>
+                </Box>
             </Dialog>
+
+
         </div>
     );
 };
