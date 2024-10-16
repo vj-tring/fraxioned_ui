@@ -46,7 +46,7 @@ export const fetchAmenities = createAsyncThunk(
   }
 );
 
-const amenitiesSlice = createSlice({
+const amenitySlice = createSlice({
   name: 'propertyAmenities',
   initialState,
   reducers: {},
@@ -69,4 +69,4 @@ const amenitiesSlice = createSlice({
   },
 });
 
-export default amenitiesSlice.reducer;
+export default amenitySlice.reducer;

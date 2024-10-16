@@ -31,7 +31,10 @@ import BedTypesTab from "./property-space-tabs/bed-type-tab";
 import { Trash2 } from "lucide-react";
 import BathTypesTab from "./property-space-tabs/bath-type-tab";
 import { deleteExistingSpaceProperty } from "@/store/slice/spacePropertySlice";
-import { createOrDeletePropertySpaceBeds, fetchAllPropertySpaceBeds } from "@/store/slice/bedSlice";
+import {
+  createOrDeletePropertySpaceBeds,
+  fetchAllPropertySpaceBeds,
+} from "@/store/slice/bedSlice";
 
 export default function Component({ initialSpace = {} }) {
   const location = useLocation();
@@ -59,7 +62,11 @@ export default function Component({ initialSpace = {} }) {
   const spaceImageError = useSelector(
     (state: RootState) => state.spaceImage.error
   );
-  const { propertySpaceBeds, loading: bedTypesLoading, error: bedTypesError } = useSelector((state: RootState) => state.bed);
+  const {
+    propertySpaceBeds,
+    loading: bedTypesLoading,
+    error: bedTypesError,
+  } = useSelector((state: RootState) => state.bed);
 
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedAmenity, setSelectedAmenity] = useState<string>("");
@@ -85,15 +92,15 @@ export default function Component({ initialSpace = {} }) {
       { value: "photos", label: "Photos" },
       { value: "amenities", label: "Amenities" },
     ];
-    
+
     if (showBathTypesTab) {
       tabs.splice(1, 0, { value: "bathTypes", label: "Bath Types" });
     }
-    
+
     if (showBedTypesTab) {
       tabs.splice(1, 0, { value: "bedTypes", label: "Bed Types" });
     }
-    
+
     return tabs;
   };
   const tabsList = generateTabsList();
@@ -113,14 +120,11 @@ export default function Component({ initialSpace = {} }) {
     { id: 5, name: "Bunk Bed", count: 0 },
   ]);
 
-  
-
   useEffect(() => {
     if (space?.id) {
       dispatch(getByPropertySpaceId(space.id));
       dispatch(fetchImagesByPropertySpaceId(space.id));
       dispatch(fetchAllPropertySpaceBeds());
-
     }
     dispatch(fetchAmenities());
   }, [space, dispatch]);
@@ -279,7 +283,6 @@ export default function Component({ initialSpace = {} }) {
     }
   };
 
-
   const handleBedCountChange = (id: number, increment: number) => {
     setBedTypes((prevBedTypes) =>
       prevBedTypes.map((bed) =>
@@ -306,17 +309,17 @@ export default function Component({ initialSpace = {} }) {
     }
   };
 
-
-
-  const handleSaveBedTypes = (updatedBedTypes: Array<{ id: number; count: number }>) => {
+  const handleSaveBedTypes = (
+    updatedBedTypes: Array<{ id: number; count: number }>
+  ) => {
     if (space?.id) {
       const data = {
         propertySpace: { id: space.id },
-        spaceBedTypes: updatedBedTypes.map(bed => ({
+        spaceBedTypes: updatedBedTypes.map((bed) => ({
           spaceBedType: { id: bed.id },
           count: bed.count,
         })),
-        updatedBy: { id: 1 }
+        updatedBy: { id: 1 },
       };
       dispatch(createOrDeletePropertySpaceBeds(data));
     }
@@ -364,7 +367,7 @@ export default function Component({ initialSpace = {} }) {
         </Dialog>
       </CardHeader>
       <CardContent>
-<Tabs defaultValue="photos" className="space-y-4">
+        <Tabs defaultValue="photos" className="space-y-4">
           <TabsList className={`grid w-full grid-cols-${tabsList.length}`}>
             {tabsList.map((tab) => (
               <TabsTrigger key={tab.value} value={tab.value}>
@@ -402,12 +405,12 @@ export default function Component({ initialSpace = {} }) {
             toggleCategory={toggleCategory}
           />
           {showBedTypesTab && (
-             <BedTypesTab
-             propertySpaceBeds={propertySpaceBeds}
-             loading={bedTypesLoading}
-             error={bedTypesError}
-             onSave={handleSaveBedTypes}
-           />
+            <BedTypesTab
+              propertySpaceBeds={propertySpaceBeds}
+              loading={bedTypesLoading}
+              error={bedTypesError}
+              onSave={handleSaveBedTypes}
+            />
           )}
           {showBathTypesTab && (
             <BathTypesTab bathTypes={bathTypes} onSave={handleSaveBathType} />

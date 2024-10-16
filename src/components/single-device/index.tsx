@@ -26,7 +26,7 @@ import { RootState } from "@/store/reducers";
 import Bedroom1Image from "../../assets/images/bedroom1.jpg";
 import KingBedImage from "../../assets/images/bedroom1.jpg";
 import { fetchSpacePropertiesById } from "@/store/slice/spacePropertySlice";
-import {fetchPropertyImagesByPropertyId } from "@/api/api-endpoints";
+import {fetchPropertyImagesByPropertyId, getAllSpacePropertyImageById } from "@/api/api-endpoints";
 
 interface SingleDeviceProps {
   propertyId: number;
@@ -65,7 +65,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
     propertyAmenities: propertyAmenities,
     loading,
     error,
-  } = useSelector((state: RootState) => state.amenities);
+  } = useSelector((state: RootState) => state.amenitiesID);
   const propertySpace = useSelector(
     (state: RootState) => state.spaceProperties.spaceProperties || []
   );
