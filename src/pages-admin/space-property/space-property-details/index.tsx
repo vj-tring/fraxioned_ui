@@ -7,7 +7,7 @@ import {
   getByPropertySpaceId,
   updatePropertyAmenities,
 } from "@/store/slice/auth/propertyamenities";
-import { propertySpaceImageuploadapi } from "@/api";
+import { propertySpaceImageuploadapi } from "@/api/api-endpoints";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -31,13 +31,13 @@ import BedTypesTab from "./property-space-tabs/bed-type-tab";
 import { Trash2 } from "lucide-react";
 import BathTypesTab from "./property-space-tabs/bath-type-tab";
 import { deleteExistingSpaceProperty } from "@/store/slice/spacePropertySlice";
+import { createOrDeletePropertySpaceBeds, fetchAllPropertySpaceBeds } from "@/store/slice/bedSlice";
 
 export default function Component({ initialSpace = {} }) {
   const location = useLocation();
   const { space = initialSpace } = location.state || {};
   const navigate = useNavigate();
   const { id: propertyId } = useParams();
-  console.log("Property ID:", propertyId);
   const dispatch = useDispatch<AppDispatch>();
   const showBedTypesTab = space?.space?.isBedTypeAllowed ?? false;
   const showBathTypesTab = space?.space?.isBathroomTypeAllowed ?? false;
@@ -59,6 +59,7 @@ export default function Component({ initialSpace = {} }) {
   const spaceImageError = useSelector(
     (state: RootState) => state.spaceImage.error
   );
+  const { propertySpaceBeds, loading: bedTypesLoading, error: bedTypesError } = useSelector((state: RootState) => state.bed);
 
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedAmenity, setSelectedAmenity] = useState<string>("");
@@ -118,6 +119,8 @@ export default function Component({ initialSpace = {} }) {
     if (space?.id) {
       dispatch(getByPropertySpaceId(space.id));
       dispatch(fetchImagesByPropertySpaceId(space.id));
+      dispatch(fetchAllPropertySpaceBeds());
+
     }
     dispatch(fetchAmenities());
   }, [space, dispatch]);
@@ -302,6 +305,22 @@ export default function Component({ initialSpace = {} }) {
       }
     }
   };
+
+
+
+  const handleSaveBedTypes = (updatedBedTypes: Array<{ id: number; count: number }>) => {
+    if (space?.id) {
+      const data = {
+        propertySpace: { id: space.id },
+        spaceBedTypes: updatedBedTypes.map(bed => ({
+          spaceBedType: { id: bed.id },
+          count: bed.count,
+        })),
+        updatedBy: { id: 1 }
+      };
+      dispatch(createOrDeletePropertySpaceBeds(data));
+    }
+  };
   return (
     <Card className="w-full max-w-5xl mx-auto">
       <CardHeader>
@@ -383,10 +402,12 @@ export default function Component({ initialSpace = {} }) {
             toggleCategory={toggleCategory}
           />
           {showBedTypesTab && (
-            <BedTypesTab
-              bedTypes={bedTypes}
-              handleBedCountChange={handleBedCountChange}
-            />
+             <BedTypesTab
+             propertySpaceBeds={propertySpaceBeds}
+             loading={bedTypesLoading}
+             error={bedTypesError}
+             onSave={handleSaveBedTypes}
+           />
           )}
           {showBathTypesTab && (
             <BathTypesTab bathTypes={bathTypes} onSave={handleSaveBathType} />

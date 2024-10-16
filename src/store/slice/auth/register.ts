@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
-import { sendInvite } from '../../../api'
+import { sendInvite } from '../../../api/api-endpoints'
 import { RegisterState } from '../../model'
 
 

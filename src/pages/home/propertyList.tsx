@@ -8,7 +8,7 @@ import PorpImg from "../../assests/crown-jewel.jpg";
 import { resetLimits } from "@/store/slice/auth/propertyGuestSlice";
 import { clearDates } from "@/store/slice/datePickerSlice";
 import { User } from "@/store/model";
-import { propertyImageapi, getProperties } from "@/api"; // Ensure getProperties is imported
+import { propertyImageapi, getProperties } from "@/api/api-endpoints"; // Ensure getProperties is imported
 import { fetchProperties } from "@/store/slice/auth/property-slice";
 import NewsLetter from "./NewsLetter";
 interface Property {

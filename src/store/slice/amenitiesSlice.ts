@@ -1,4 +1,4 @@
-import { getAmenitiesByPropertyId } from '@/api';
+import { getAmenitiesByPropertyId } from '@/api/api-endpoints';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 export interface AmenityGroup {

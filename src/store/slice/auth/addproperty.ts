@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { addPropertyApi } from '@/api';
+import { addPropertyApi } from '@/api/api-endpoints';
 
 interface PropertyData {
     createdBy: { id: number };

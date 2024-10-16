@@ -25,7 +25,7 @@ import { RootState } from "@/store/reducers";
 import Bedroom1Image from "../../assets/images/bedroom1.jpg";
 import KingBedImage from "../../assets/images/bedroom1.jpg";
 import { fetchSpacePropertiesById } from "@/store/slice/spacePropertySlice";
-import {fetchPropertyImagesByPropertyId } from "@/api";
+import {fetchPropertyImagesByPropertyId } from "@/api/api-endpoints";
 
 interface SingleDeviceProps {
   propertyId: number;

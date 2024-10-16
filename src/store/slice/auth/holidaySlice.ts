@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { addHolidayApi, updateHolidaysApi, fetchpropertyHolidaysApi } from '@/api';
+import { addHolidayApi, updateHolidaysApi, fetchpropertyHolidaysApi } from '@/api/api-endpoints';
 
 interface Property {
     id: number;

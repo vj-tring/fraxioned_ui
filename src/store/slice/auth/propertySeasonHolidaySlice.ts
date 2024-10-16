@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { getPropertySeasonHoliday } from '../../../api/index';
+import { getPropertySeasonHoliday } from '../../../api/api-endpoints/index';
 import { RootState } from '@/store/reducers';
 
 export interface Holiday {

@@ -5,7 +5,7 @@ import {
   getBookings,
   getUserBookings,
   modifyBooking,
-} from "../../../api/index";
+} from "../../../api/api-endpoints/index";
 
 export interface BookingData {
   userId(userId: any): string;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getpropertyImageById, propertyImageeditapi, propertyspaceapi, propertyspacetypesapi } from '@/api';
+import { getpropertyImageById, propertyImageeditapi, propertyspaceapi, propertyspacetypesapi } from '@/api/api-endpoints';
 import Loader from '@/components/loader';
 import styles from './editphoto.module.css';
 import { X } from 'lucide-react';

@@ -6,7 +6,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { Image } from "../property-listing-page";
-import { propertyImageapi } from "@/api";
+import { propertyImageapi } from "@/api/api-endpoints";
 import { Card } from "../../store/slice/auth/property-slice";
 
 interface RootState {

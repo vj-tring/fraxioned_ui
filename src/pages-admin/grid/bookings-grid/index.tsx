@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid, GridColDef, GridFilterModel } from "@mui/x-data-grid";
-import { getBookings, userbookingCancelapi } from "@/api";
+import { getBookings, userbookingCancelapi } from "@/api/api-endpoints";
 import styles from "./bookingsgrid.module.css";
 import {
   Alert,
