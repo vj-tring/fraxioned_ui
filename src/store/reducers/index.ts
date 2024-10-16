@@ -25,6 +25,9 @@ import userpropertiesReducer from '../slice/auth/userproperties';
 import userReducer from '../slice/user-slice';
 import userpropertyReducer from '../slice/auth/userpropertiesSlice';
 import rolesReducer from '../slice/auth/rolesSlice';
+import { propertycodecatogoryReducer } from '../slice/auth/propertycodeCatogorySlice';
+import { propertyCodesReducer } from '../slice/auth/propertycodeSlice';
+import propertydetailReducer from '../slice/auth/property-detail';
 import spaceImageReducer from '../slice/spaceImagesSlice'
 
 const appReducer = combineReducers({
@@ -55,7 +58,9 @@ const appReducer = combineReducers({
   user: userReducer,
   userProperty: userpropertyReducer,
   roles: rolesReducer,
-
+  propertycodecatogory: propertycodecatogoryReducer,
+  propertycode: propertyCodesReducer,
+  propertydetail: propertydetailReducer,
 });
 
 const rootReducer = (

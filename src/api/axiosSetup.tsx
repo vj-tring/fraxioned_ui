@@ -47,7 +47,7 @@ const AxiosInterceptor: React.FC<AxiosInterceptorProps> = ({ children }) => {
           }
 
           const isImageUpload =
-            (config.url?.includes('/propertyImages') || config.url?.includes('/spaces/space') || config.url?.includes('/properties/property')) || config.url?.includes('/property-space-images') &&
+            (config.url?.includes('/propertyImages') || config.url?.includes('/spaces/space') || config.url?.includes('/properties/property')) || config.url?.includes('/property-space-images')  &&
             (config.method === 'post' || config.method === 'patch');
 
           if (isImageUpload) {

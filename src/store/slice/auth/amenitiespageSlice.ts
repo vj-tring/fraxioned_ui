@@ -21,13 +21,13 @@ export interface AmenitiesState {
 }
 
 const initialState: AmenitiesState = {
-  loading: false,
-  error: null,
-  success: false,
-  deleteLoading: false,
-  deleteError: null,
-  deleteSuccess: false,
-};
+    loading: false,
+    error: null,
+    success: false,
+    deleteLoading: false,
+    deleteError: null,
+    deleteSuccess: false,
+};  
 
 export const updateAmenity = createAsyncThunk(
   "amenities/updateAmenity",

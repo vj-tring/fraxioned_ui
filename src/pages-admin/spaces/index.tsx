@@ -1,5 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { FaPlus } from "react-icons/fa";
+// src/components/Spaces.tsx
+import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@/store";
+import { RootState } from "@/store/reducers";
+import styles from "./spaces.module.css";
+import {
+  createNewSpace,
+  fetchAllSpaces,
+  updateExistingSpace,
+  deleteExistingSpace,
+  type Space
+} from "@/store/slice/spaceSlice";
 import {
   Dialog,
   DialogTitle,
@@ -10,112 +21,221 @@ import {
   Checkbox,
   FormControlLabel,
   Box,
+  Skeleton,
 } from "@mui/material";
-import styles from "./spaces.module.css";
-import { RootState } from "@/store/reducers";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "@/store";
-import {
-  createNewSpace,
-  fetchAllSpaces,
-  updateExistingSpace,
-  deleteExistingSpace,
-  Space,
-} from "@/store/slice/spaceSlice";
-import { Delete, Edit } from "@mui/icons-material";
-import { fontSize } from "@mui/system";
+import { FaPlus } from "react-icons/fa";
+import CustomizedSnackbars from "@/components/customized-snackbar";
+import Loader from "@/components/loader";
+import DeleteConfirmationDialog from "@/components/deleteconfirmationdialog";
+import ImageUpload from "@/components/imageupload";
+import { Edit, Trash2 } from "lucide-react";
+import { IoClose } from "react-icons/io5";
 
-const Spaces: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
+
+// Types
+interface FormValues {
+  name: string;
+  isBedTypeAllowed: boolean;
+  isBathroomTypeAllowed: boolean;
+  imageFile: File | null;
+}
+
+interface FormErrors {
+  name: boolean;
+  imageFile: boolean;
+}
+
+interface SnackbarState {
+  open: boolean;
+  message: string;
+  severity: "success" | "info" | "warning" | "error";
+}
+
+interface SpacesProps {
+  isSidebarOpen: boolean;
+}
+
+const INITIAL_FORM_VALUES: FormValues = {
+  name: "",
+  isBedTypeAllowed: false,
+  isBathroomTypeAllowed: false,
+  imageFile: null,
+};
+
+const INITIAL_FORM_ERRORS: FormErrors = {
+  name: false,
+  imageFile: false,
+};
+
+const VALID_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif'];
+
+const Spaces: React.FC<SpacesProps> = ({ isSidebarOpen }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const spaces = useSelector((state: RootState) => state.spaces.spaces || []);
+  const userId = useSelector((state: RootState) => state.auth.user?.id);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+
+  // State management
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedSpace, setSelectedSpace] = useState<Space | null>(null);
-  const userId = useSelector((state: any) => state.auth.user?.id);
-  const [formValues, setFormValues] = useState<{
-    name: string;
-    isBedTypeAllowed: boolean;
-    isBathroomTypeAllowed: boolean;
-    imageFile: File | null;
-  }>({
-    name: "",
-    isBedTypeAllowed: false,
-    isBathroomTypeAllowed: false,
-    imageFile: null,
-  });
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const spaces = useSelector((state: RootState) => state.spaces.spaces || []);
+  const [formValues, setFormValues] = useState<FormValues>(INITIAL_FORM_VALUES);
+  const [formErrors, setFormErrors] = useState<FormErrors>(INITIAL_FORM_ERRORS);
+  const [loadingSpaces, setLoadingSpaces] = useState(true);
+  const [loadingAction, setLoadingAction] = useState(false);
+  const [snackbar, setSnackbar] = useState<SnackbarState>({ open: false, message: "", severity: "success" });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        await dispatch(fetchAllSpaces()).unwrap();
-      } catch (error) {
-        setError("Failed to load spaces or properties");
-      } finally {
-        setLoading(false);
+  // States for image upload
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  // Memoized values
+  const isFormValid = useMemo(() => {
+    const hasName = formValues.name.trim() !== "";
+    const hasImage = selectedSpace ? true : formValues.imageFile !== null;
+    return hasName && hasImage;
+  }, [formValues.name, formValues.imageFile, selectedSpace]);
+
+  // Form handling
+  const resetForm = useCallback(() => {
+    setFormValues(INITIAL_FORM_VALUES);
+    setSelectedSpace(null);
+    setFormErrors(INITIAL_FORM_ERRORS);
+    setUploadProgress(0);
+    setImagePreview(null);
+    setFileName(null);
+  }, []);
+
+  const handleDeleteSpace = async (space: Space) => {
+    try {
+      setLoadingAction(true);
+
+      const result = await dispatch(deleteExistingSpace(space.id!)).unwrap();
+
+      if (result.statusCode === 204) {
+        setSnackbar({ open: true, message: "Space deleted successfully", severity: "success" });
+        setIsDeleteDialogOpen(false);
+      } else if (result.statusCode === 409) {
+        setSnackbar({ open: true, message: result.message!, severity: "warning" });
+      } else if (result.statusCode === 500) {
+        setSnackbar({ open: true, message: result.message || "Unexpected error occurred", severity: "error" });
       }
-    };
-    fetchData();
-  }, [dispatch]);
+    } catch (error) {
+      setSnackbar({ open: true, message: "Failed to delete space", severity: "error" });
+    } finally {
+      setLoadingAction(false);
+      setIsDeleteDialogOpen(false);
+    }
+  };
+
 
   const handleAddSpace = async () => {
+    if (!isFormValid) {
+      setFormErrors({
+        name: formValues.name.trim() === "",
+        imageFile: selectedSpace ? false : formValues.imageFile === null,
+      });
+      return;
+    }
+
     try {
+      setLoadingAction(true);
       const formData = new FormData();
-      formData.append("name", formValues.name);
+      formData.append("name", formValues.name.trim());
       formData.append("isBedTypeAllowed", String(formValues.isBedTypeAllowed));
-      formData.append(
-        "isBathroomTypeAllowed",
-        String(formValues.isBathroomTypeAllowed)
-      );
-
-      const createdBy = { id: userId };
-      formData.append("createdBy", JSON.stringify(createdBy));
-
+      formData.append("isBathroomTypeAllowed", String(formValues.isBathroomTypeAllowed));
       if (formValues.imageFile) {
         formData.append("imageFile", formValues.imageFile);
       }
 
-      if (selectedSpace) {
-        await dispatch(
-          updateExistingSpace({ id: selectedSpace.id!, spaceData: formData })
-        ).unwrap();
-      } else {
-        await dispatch(createNewSpace(formData)).unwrap();
+      const userIdData = JSON.stringify({ id: userId });
+      formData.append(selectedSpace ? "updatedBy" : "createdBy", userIdData);
+
+      const action = selectedSpace
+        ? updateExistingSpace({ id: selectedSpace.id!, spaceData: formData })
+        : createNewSpace(formData);
+
+      const res = await (dispatch(action) as any).unwrap();
+
+      if (res.statusCode === 200 || res.statusCode === 201) {
+        const message = selectedSpace ? "Space updated successfully" : "Space created successfully";
+        setSnackbar({ open: true, message, severity: "success" });
+        setIsDialogOpen(false);
+        resetForm();
+        await dispatch(fetchAllSpaces()).unwrap();
+      } else if (res.statusCode === 409) {
+        setSnackbar({
+          open: true,
+          message: res.message || "Conflict: Space already exists.",
+          severity: "error",
+        });
       }
-
-      setIsDialogOpen(false);
-      resetForm();
-      await dispatch(fetchAllSpaces()).unwrap();
     } catch (error) {
-      setError("Failed to save space");
+      console.error("Error saving space:", error);
+      setSnackbar({
+        open: true,
+        message: "Failed to save space",
+        severity: "error",
+      });
+    } finally {
+      setLoadingAction(false);
     }
   };
 
-  const resetForm = () => {
-    setFormValues({
-      name: "",
-      isBedTypeAllowed: false,
-      isBathroomTypeAllowed: false,
-      imageFile: null,
-    });
+  const handleFile = (file: File | null) => {
+
+    if (!file) {
+      setImagePreview(null);
+      return null;
+    }
+
+    if (!VALID_IMAGE_TYPES.includes(file.type)) {
+      throw new Error('Please upload an image file (jpeg, png, gif).');
+    }
+    setFileName(file.name);
+    setFormValues((prev) => ({ ...prev, imageFile: file }));
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result as string);
+      simulateProgress(); // Start the progress animation
+    };
+    reader.readAsDataURL(file);
+  }
+
+  const simulateProgress = () => {
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += 10;
+      setUploadProgress(progress);
+      if (progress >= 100) clearInterval(interval);
+    }, 200);
+  };
+
+  const handleCancelPreview = () => {
+    setFormValues((prev) => ({ ...prev, imageFile: null }));
     setImagePreview(null);
-    setSelectedSpace(null);
+    setFileName("");
+    setUploadProgress(0);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setFormValues((prev) => ({ ...prev, imageFile: file }));
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  // Initial data fetch
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoadingSpaces(true);
+        await dispatch(fetchAllSpaces()).unwrap();
+      } catch (error) {
+        console.error("Failed to load spaces:", error);
+      } finally {
+        setLoadingSpaces(false);
+      }
+    };
+    fetchData();
+  }, [dispatch]);
 
   const handleEditSpace = (space: Space) => {
     setSelectedSpace(space);
@@ -123,216 +243,143 @@ const Spaces: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
       name: space.name,
       isBedTypeAllowed: space.isBedTypeAllowed,
       isBathroomTypeAllowed: space.isBathroomTypeAllowed,
-      imageFile: null,
+      imageFile: null, // Reset imageFile to null for updates
     });
-    setImagePreview(space.s3_url || null);
+    // setImagePreview(space.s3_url || null);
     setIsDialogOpen(true);
   };
-
-  const handleDeleteSpace = async (space: Space) => {
-    try {
-      await dispatch(deleteExistingSpace(space.id!)).unwrap();
-      setIsDeleteDialogOpen(false);
-    } catch (error) {
-      setError("Failed to delete space");
-    }
-  };
-
   const confirmDeleteSpace = (space: Space) => {
     setSelectedSpace(space);
     setIsDeleteDialogOpen(true);
   };
 
-  const handleDialogClose = () => {
-    setIsDialogOpen(false);
-    resetForm();
+  const getProgressColor = () => {
+    if (uploadProgress < 50) return "#ff4d4f"; // Red
+    if (uploadProgress < 80) return "#ffa940"; // Orange
+    return "#4caf50"; // Green
   };
 
   return (
-    <div
-      className={`${styles.usersContainer} ${
-        isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
-      }`}
-    >
+    <div className={`${styles.usersContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed}`}>
       <div className={styles.fullContainer}>
-        {loading && <div>Loading...</div>}
-        {error && <div className={styles.error}>{error}</div>}
-        <div className={styles.headersection}>
-          <h2>Add Space</h2>
-          <div
-            className={styles.addspace}
-            onClick={() => setIsDialogOpen(true)}
-          >
-            <FaPlus style={{ fontSize: ".8rem" }} /> Create Space
-          </div>
-        </div>
-
-        <div className={styles.mainsection}>
-          <div
-            className={`${styles.spaceList} ${
-              !spaces || spaces.length === 0 ? styles.noRooms : ""
-            }`}
-          >
-            {Array.isArray(spaces) && spaces.length > 0 ? (
-              spaces.map((space, index) => (
-                <div key={index} className={styles.spaceItem}>
-                  <div className={styles.photoGridContainer}>
-                    <div className={styles.photoGrid}>
-                      <img
-                        src={space.s3_url || "https://via.placeholder.com/150"}
-                        alt={space.name}
-                        className={styles.spaceImage}
-                      />
-                    </div>
-
-                    <div className={styles.spaceNameRow}>
-                      <p>{space.name}</p>
-                    </div>
-                    <div className={styles.editOverlay}>
-                      <button
-                        className={styles.iconButton}
-                        onClick={() => handleEditSpace(space)}
-                      >
-                        <Edit />
-                      </button>
-                      <button
-                        className={styles.iconButton}
-                        onClick={() => confirmDeleteSpace(space)}
-                      >
-                        <Delete />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className={styles.error}>No Available Spaces</p>
-            )}
-          </div>
-        </div>
-
-        {/* Dialog for Adding/Editing Space */}
-        <Dialog
-          open={isDialogOpen}
-          onClose={handleDialogClose}
-          sx={{
-            "& .MuiDialog-paper": {
-              height: "1000px",
-            },
-          }}
-        >
-          <DialogTitle
-            sx={{
-              fontSize: "medium",
-              fontWeight: "600",
-            }}
-          >
-            {selectedSpace ? "Edit Space" : "Create Space"}
-          </DialogTitle>
-          <DialogContent
-            sx={{ gap: 3, display: "flex", flexDirection: "column" }}
-          >
-            <TextField
-              label="Space Name"
-              id="outlined-size-small"
-              value={formValues.name}
-              onChange={(e) =>
-                setFormValues({ ...formValues, name: e.target.value })
-              }
-              fullWidth
-              className="mt-2 font-medium"
-              size="small"
-            />
-            <Box>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={formValues.isBedTypeAllowed}
-                    onChange={() =>
-                      setFormValues({
-                        ...formValues,
-                        isBedTypeAllowed: !formValues.isBedTypeAllowed,
-                      })
-                    }
-                  />
-                }
-                label="Is Bed Type Allowed"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={formValues.isBathroomTypeAllowed}
-                    onChange={() =>
-                      setFormValues({
-                        ...formValues,
-                        isBathroomTypeAllowed:
-                          !formValues.isBathroomTypeAllowed,
-                      })
-                    }
-                  />
-                }
-                label="Is Bathroom Type Allowed"
-              />
-            </Box>
-            <input type="file" accept="image/*" onChange={handleImageChange} />
-
-            <div className={styles.imagePreviewContainer}>
-              {imagePreview ? (
-                <div className={styles.imagePreview}>
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className={styles.previewImage}
-                  />
-                  <button
-                    className={styles.cancelPreviewButton}
-                    onClick={() => setImagePreview(null)} // Clear the image file
-                  >
-                    Cancel Preview
-                  </button>
-                </div>
-              ) : (
-                <div className={styles.defaultPreview}>
-                  <p>Preview your image</p>
-                </div>
-              )}
+        {loadingSpaces ? (
+          Array(5).fill(0).map((_, index) => (
+            <Skeleton key={index} variant="rectangular" height={200} />
+          ))
+        ) : (
+          <>
+            <div className={styles.headersection}>
+              <h2>Add Space</h2>
+              <div className={styles.addspace} onClick={() => setIsDialogOpen(true)}>
+                <FaPlus style={{ fontSize: ".8rem" }} /> Create Space
+              </div>
             </div>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleDialogClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={handleAddSpace} color="primary">
-              {selectedSpace ? "Update" : "Save"}
-            </Button>
-          </DialogActions>
-        </Dialog>
 
-        {/* Confirmation Dialog for Deleting Space */}
-        <Dialog
-          open={isDeleteDialogOpen}
-          onClose={() => setIsDeleteDialogOpen(false)}
-        >
-          <DialogTitle>Confirm Deletion</DialogTitle>
-          <DialogContent>
-            Are you sure you want to delete {selectedSpace?.name}?
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() => setIsDeleteDialogOpen(false)}
-              color="primary"
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={() => handleDeleteSpace(selectedSpace!)}
-              color="secondary"
-            >
-              Delete
-            </Button>
-          </DialogActions>
-        </Dialog>
+            <div className={styles.mainsection}>
+              <div className={styles.spaceList}>
+                {spaces.length > 0 ? (
+                  spaces.map((space) => (
+                    <div key={space.id} className={styles.spaceItem}>
+                      <div className={styles.spaceCard}>
+                        <div className={styles.photoGridContainer}>
+                          <img
+                            src={space.s3_url || "https://via.placeholder.com/150"}
+                            alt={space.name}
+                            className={styles.spaceImage}
+                          />
+                          <div className={styles.spaceContent}>
+                            <h4 className={styles.cardTitle}>{space.name}</h4>
+                            <div className={styles.editOverlay}>
+                              <button
+                                className={styles.iconButton}
+                                onClick={() => handleEditSpace(space)}
+                              >
+                                <Edit size={20} />
+                              </button>
+                              <button
+                                className={styles.iconButton}
+                                onClick={() => confirmDeleteSpace(space)}
+                              >
+                                <Trash2 size={20} />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p>No Available Spaces</p>
+                )}
+              </div>
+            </div>
+
+          </>
+        )}
+
+        {loadingAction && <Loader />}
       </div>
+
+      {/* Add/Edit Dialog */}
+      <Dialog open={isDialogOpen} onClose={() => { setIsDialogOpen(false); resetForm(); }}>
+        <DialogTitle sx={{ fontSize: '1.3rem', fontWeight: "600", letterSpacing: '.1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          {selectedSpace ? "Edit Space" : "Create Space"}
+          <IoClose size={26} style={{ cursor: 'pointer' }} onClick={() => { setIsDialogOpen(false); resetForm(); }} />
+        </DialogTitle>
+        <DialogContent sx={{ gap: 3, display: "flex", flexDirection: "column", width: '550px' }}>
+          <TextField
+            label="Space Name"
+            value={formValues.name}
+            onChange={(e) => setFormValues(prev => ({ ...prev, name: e.target.value }))}
+            error={formErrors.name}
+            helperText={formErrors.name ? "Space name is required" : ""}
+            fullWidth
+            className="mt-2 font-medium"
+            size="small"
+          />
+          <Box>
+            <FormControlLabel
+              control={<Checkbox size="small" checked={formValues.isBedTypeAllowed} onChange={() => setFormValues(prev => ({ ...prev, isBedTypeAllowed: !prev.isBedTypeAllowed }))} />}
+              label="Is Bed Type Allowed"
+            />
+            <FormControlLabel
+              control={<Checkbox size="small" checked={formValues.isBathroomTypeAllowed} onChange={() => setFormValues(prev => ({ ...prev, isBathroomTypeAllowed: !prev.isBathroomTypeAllowed }))} />}
+              label="Is Bathroom Type Allowed"
+            />
+          </Box>
+
+          <ImageUpload
+            selectedSpace={selectedSpace ? { s3_url: selectedSpace.s3_url! } : null}
+            uploadProgress={uploadProgress}
+            imagePreview={imagePreview}
+            fileName={fileName}
+            isDragging={isDragging}
+            handleFile={handleFile}
+            handleCancelPreview={handleCancelPreview}
+            setIsDragging={setIsDragging}
+            getProgressColor={getProgressColor}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setIsDialogOpen(false); resetForm(); }} color="primary">Cancel</Button>
+          <Button onClick={handleAddSpace} disabled={!isFormValid} color="primary">{selectedSpace ? "Update" : "Save"}</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Confirmation Dialog for Deleting Space */}
+      <DeleteConfirmationDialog
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+        onDelete={() => handleDeleteSpace(selectedSpace!)}
+        selectedSpace={selectedSpace}
+      />
+
+      <CustomizedSnackbars
+        open={snackbar.open}
+        handleClose={() => setSnackbar({ ...snackbar, open: false })}
+        message={snackbar.message}
+        severity={snackbar.severity}
+      />
     </div>
   );
 };

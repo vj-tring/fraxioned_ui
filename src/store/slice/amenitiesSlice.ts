@@ -1,5 +1,5 @@
-import { getPropertySpaceAmenities, propertyAmenitiesapi } from "@/api";
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { getAmenitiesByPropertyId } from '@/api';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 export interface AmenityGroup {
   id: number;
@@ -44,7 +44,7 @@ const initialState: AmenitiesState = {
 export const fetchAmenities = createAsyncThunk(
   "amenities/fetchPropertyAmenities",
   async (propertyId: number) => {
-    const response = await getPropertySpaceAmenities(propertyId);
+    const response = await getAmenitiesByPropertyId(propertyId);
     return response.data.data;
   }
 );

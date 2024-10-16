@@ -1,274 +1,398 @@
-import { Button, TextField, Dialog, DialogTitle, DialogContent, DialogActions, IconButton, Box, Typography } from "@mui/material";
-import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
-import { FaPlus, FaTrash } from "react-icons/fa";
-import { MdKeyboardArrowRight, MdDelete } from "react-icons/md";
-import { IoIosClose, IoIosImages } from "react-icons/io";
-import { GoPlus } from "react-icons/go";
-import styles from './spacepropertydetails.module.css';
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/reducers";
-import { uploadPropertySpaceImages } from "@/api";
-import { VscTrash } from "react-icons/vsc";
+import { AppDispatch } from "@/store";
+import {
+  getByPropertySpaceId,
+  updatePropertyAmenities,
+} from "@/store/slice/auth/propertyamenities";
+import { propertySpaceImageuploadapi } from "@/api";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { fetchAmenities } from "@/store/slice/auth/amenitySlice";
+import {
+  deleteImagesBatch,
+  fetchImagesByPropertySpaceId,
+  selectSpaceImages,
+} from "@/store/slice/spaceImagesSlice";
+import AmenitiesTab from "./property-space-tabs/amenities-tab";
+import PhotosTab from "./property-space-tabs/photos-tab";
+import BedTypesTab from "./property-space-tabs/bed-type-tab";
+import { Trash2 } from "lucide-react";
+import BathTypesTab from "./property-space-tabs/bath-type-tab";
+import { deleteExistingSpaceProperty } from "@/store/slice/spacePropertySlice";
 
+export default function Component({ initialSpace = {} }) {
+  const location = useLocation();
+  const { space = initialSpace } = location.state || {};
+  const navigate = useNavigate();
+  const { id: propertyId } = useParams();
+  console.log("Property ID:", propertyId);
+  const dispatch = useDispatch<AppDispatch>();
+  const showBedTypesTab = space?.space?.isBedTypeAllowed ?? false;
+  const showBathTypesTab = space?.space?.isBathroomTypeAllowed ?? false;
+  const userId = useSelector((state: RootState) => state.auth.user?.id);
+  const {
+    amenities: allAmenities,
+    status: amenitiesStatus,
+    error: amenitiesError,
+  } = useSelector((state: RootState) => state.amenities);
+  const {
+    amenities: propertySpaceAmenities,
+    loading: propertyAmenitiesLoading,
+    error: propertyAmenitiesError,
+  } = useSelector((state: RootState) => state.propertyAmenities);
+  const spaceImages = useSelector(selectSpaceImages);
+  const spaceImageLoading = useSelector(
+    (state: RootState) => state.spaceImage.loading
+  );
+  const spaceImageError = useSelector(
+    (state: RootState) => state.spaceImage.error
+  );
 
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedAmenity, setSelectedAmenity] = useState<string>("");
+  const [updatedAmenities, setUpdatedAmenities] = useState<number[]>([]);
+  const [localPropertyAmenities, setLocalPropertyAmenities] = useState<
+    typeof propertySpaceAmenities
+  >([]);
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [openCategories, setOpenCategories] = useState<Record<string, boolean>>(
+    {}
+  );
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [imagesToDelete, setImagesToDelete] = useState<number[]>([]);
+  const [combinedImages, setCombinedImages] = useState<
+    Array<{ id?: number; url: string; isNew?: boolean }>
+  >([]);
 
+  const generateTabsList = () => {
+    const tabs = [
+      { value: "photos", label: "Photos" },
+      { value: "amenities", label: "Amenities" },
+    ];
+    
+    if (showBathTypesTab) {
+      tabs.splice(1, 0, { value: "bathTypes", label: "Bath Types" });
+    }
+    
+    if (showBedTypesTab) {
+      tabs.splice(1, 0, { value: "bedTypes", label: "Bed Types" });
+    }
+    
+    return tabs;
+  };
+  const tabsList = generateTabsList();
 
-const SpacePropertyDetails: React.FC = () => {
-    const location = useLocation();
-    const { space } = location.state || {};
-    const userId = useSelector((state: RootState) => state.auth.user?.id);
+  const [bathTypes, setBathTypes] = useState([
+    { id: 1, name: "Full Bath" },
+    { id: 2, name: "Three-Quarter Bath" },
+    { id: 3, name: "Half Bath" },
+    { id: 4, name: "Quarter Bath" },
+  ]);
 
+  const [bedTypes, setBedTypes] = useState([
+    { id: 1, name: "Single Bed", count: 0 },
+    { id: 2, name: "Double Bed", count: 0 },
+    { id: 3, name: "Queen Bed", count: 0 },
+    { id: 4, name: "King Bed", count: 0 },
+    { id: 5, name: "Bunk Bed", count: 0 },
+  ]);
 
-    // State for the uploaded photos (multiple)
-    const [photos, setPhotos] = useState<File[]>([]);
-    // State for photo previews
-    const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
-    // State for the amenities input and list
-    const [amenities, setAmenities] = useState<string>("");
-    const [amenitiesList, setAmenitiesList] = useState<string[]>([]);
-    // State for the description
-    const [description, setDescription] = useState<string>("");
+  
 
-    // Dialog open/close state for image uploading
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+  useEffect(() => {
+    if (space?.id) {
+      dispatch(getByPropertySpaceId(space.id));
+      dispatch(fetchImagesByPropertySpaceId(space.id));
+    }
+    dispatch(fetchAmenities());
+  }, [space, dispatch]);
 
-    // Handles adding multiple photo uploads and generating previews
-    const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.files) {
-            const selectedFiles = Array.from(event.target.files);
+  useEffect(() => {
+    if (propertySpaceAmenities.length > 0) {
+      setUpdatedAmenities(
+        propertySpaceAmenities.map((amenity) => amenity.amenity.id)
+      );
+      setLocalPropertyAmenities(propertySpaceAmenities);
+    }
+  }, [propertySpaceAmenities]);
 
-            // Update photos state
-            setPhotos((prevPhotos) => [...prevPhotos, ...selectedFiles]);
+  useEffect(() => {
+    const fetchedImages = spaceImages.map((img) => ({
+      id: img.id,
+      url: img.url,
+    }));
+    const newImages = photoPreviews.map((url, index) => ({
+      url,
+      isNew: true,
+      id: `new-${index}`,
+    }));
+    setCombinedImages([...fetchedImages, ...newImages]);
+  }, [spaceImages, photoPreviews]);
 
-            // Generate previews
-            const filePreviews = selectedFiles.map((file) => URL.createObjectURL(file));
-            setPhotoPreviews((prevPreviews) => [...prevPreviews, ...filePreviews]);
-        }
-    };
+  const amenityGroups = allAmenities.reduce((groups, amenity) => {
+    const groupName = amenity.amenityGroup.name;
+    if (!groups[groupName]) {
+      groups[groupName] = [];
+    }
+    groups[groupName].push(amenity);
+    return groups;
+  }, {} as Record<string, typeof allAmenities>);
 
-    const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        const files = Array.from(event.dataTransfer.files);
+  const propertyAmenityGroups = localPropertyAmenities.reduce(
+    (groups, amenity) => {
+      const groupName = amenity.amenity.amenityGroup.name;
+      if (!groups[groupName]) {
+        groups[groupName] = [];
+      }
+      groups[groupName].push(amenity);
+      return groups;
+    },
+    {} as Record<string, typeof localPropertyAmenities>
+  );
 
-        // Reuse the handlePhotoUpload function
-        handlePhotoUpload({ target: { files } } as unknown as React.ChangeEvent<HTMLInputElement>);
-    };
-
-    // Handles deleting individual photos and their previews
-    const handleDeletePhoto = (index: number) => {
-        setPhotos((prevPhotos) => prevPhotos.filter((_, i) => i !== index));
-        setPhotoPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
-    };
-
-    // Handles adding an amenity to the list
-    const handleAddAmenity = () => {
-        if (amenities.trim() !== "") {
-            setAmenitiesList((prevList) => [...prevList, amenities]);
-            setAmenities(""); // Clear input field
-        }
-    };
-
-    // Handles deleting an amenity from the list
-    const handleDeleteAmenity = (index: number) => {
-        setAmenitiesList(amenitiesList.filter((_, i) => i !== index));
-    };
-
-    // Handle the image upload API call
-    const handleUploadImages = async () => {
-        const formData = new FormData();
-
-        // Prepare metadata for each image
-        const propertySpaceImages = photos.map((photo, index) => ({
-            description: photo.name,
-            displayOrder: index + 1,
+  const handleAddAmenity = () => {
+    if (selectedAmenity) {
+      const amenityId = parseInt(selectedAmenity);
+      setUpdatedAmenities((prev) => [...prev, amenityId]);
+      const newAmenity = allAmenities.find(
+        (amenity) => amenity.id === amenityId
+      );
+      if (newAmenity) {
+        setLocalPropertyAmenities((prev) => [
+          ...prev,
+          {
+            amenity: newAmenity,
             propertySpace: { id: space.id },
-            createdBy: { id: userId }
-        }));
+            createdBy: { id: userId },
+          },
+        ]);
+      }
+      setSelectedAmenity("");
+    }
+  };
 
-        // Append metadata as text field
-        formData.append('propertySpaceImages', JSON.stringify(propertySpaceImages));
-
-        // Append each photo to formData
-        photos.forEach((photo) => {
-            formData.append('imageFiles', photo); // Make sure 'files' matches the backend expectations
-        });
-
-        try {
-            // Call the upload API
-            await uploadPropertySpaceImages(formData);
-            console.log('Images uploaded successfully');
-            setIsDialogOpen(false); // Close dialog after successful upload
-        } catch (error) {
-            console.error('Error uploading images:', error);
-        }
-    };
-
-    return (
-        <div className={styles.fullContainer}>
-            <div className={styles.maincontainer}>
-                {/* First Section: Name and Add Button */}
-                <div className={styles.headersection}>
-                    <h2>{space?.space.name || "Space Name"} {space?.instanceNumber}</h2>
-                    <Button variant="outlined" size="small" startIcon={<FaPlus />} onClick={() => setIsDialogOpen(true)}>
-                        Add Photos
-                    </Button>
-                </div>
-                {/* Second Section: Images */}
-                <div className={styles.imageContainer} onClick={() => setIsDialogOpen(true)}>
-                    <div className={styles.uploadContent}>
-                        <img src="https://fraxionedportal.s3.us-west-2.amazonaws.com/properties/1/coverImages/Paradise+Shores+%28eighths%29-coverImage.jpg" />
-                    </div>
-                    <div className={styles.uploadLabel} >
-                        <span>Add Photo</span>
-                    </div>
-                </div>
-
-
-                {/* Third Section: Amenities */}
-                <div className={styles.amenitiescontainer}>
-                    <div className={styles.amenitiesheader}>
-                        <h3>Amenities</h3>
-                        <span><MdKeyboardArrowRight style={{ fontSize: '1.6rem' }} /></span>
-                    </div>
-                    <div className={styles.amenitiesname}>
-                        Displaying the selected amenities
-                    </div>
-                </div>
-
-
-                {/* Display List of Added Amenities */}
-                {/* <div>
-                    {amenitiesList.length > 0 && (
-                        <ul>
-                            {amenitiesList.map((amenity, index) => (
-                                <li key={index} className={styles.amenityItem}>
-                                    {amenity}
-                                    <Button
-                                        variant="text"
-                                        startIcon={<FaTrash />}
-                                        onClick={() => handleDeleteAmenity(index)}
-                                    >
-                                        Delete
-                                    </Button>
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div> */}
-                <hr />
-
-                {/* Fourth Section: Delete Room or Space */}
-                <div className={styles.deletecontainer}>
-                    <FaTrash style={{ fontSize: '.7rem' }} />
-                    <h3>Delete room or space</h3>
-                </div>
-            </div>
-
-            <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)} maxWidth="xs" fullWidth>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-
-                    <DialogTitle sx={{
-                        height: '44px',
-                        letterSpacing: '.02rem',
-                        fontSize: 15,
-                        paddingX: 2,
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        position: 'sticky',
-                        top: 0,
-                        zIndex: 2,
-                        backgroundColor: '#fff'
-                    }}>
-                        <IconButton sx={{ padding: 0 }}>
-                            <IoIosClose size={24} onClick={() => setIsDialogOpen(false)} />
-                        </IconButton>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <Typography sx={{ fontSize: 12, fontWeight: 600 }}>
-                                Upload Photos
-                            </Typography>
-                            <Typography sx={{ fontSize: 9 }}>
-                                {photoPreviews.length === 0 ? 'No Photos Selected' : `${photoPreviews.length} photo selected`}
-                            </Typography>
-                        </div>
-                        <Button sx={{ padding: .4, minWidth: 0, borderRadius: '50%' }} size="small" component="label">
-                            <GoPlus size={20} color="#666" />
-                            <input
-                                type="file"
-                                accept="image/*"
-                                multiple
-                                hidden
-                                onChange={handlePhotoUpload}
-                            />
-                        </Button>
-                    </DialogTitle>
-
-                    <DialogContent sx={{ paddingBottom: 0 }}>
-                        {/* Conditionally Render Upload Container or Previews */}
-                        {photoPreviews.length === 0 ? (
-                            <div
-                                className={styles.uploadContainer}
-                                onDragOver={(e) => e.preventDefault()}
-                                onDrop={handleDrop}
-                            >
-                                <div className={styles.dragDropArea}>
-                                    <IoIosImages className={styles.icon} />
-                                    <p className={styles.dragDropText}>Drag and drop</p>
-                                    <p className={styles.orText}>or browse for photos</p>
-                                    <Button variant="contained" size="small" component="label" className={styles.browseButton}>
-                                        Browse
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            multiple
-                                            hidden
-                                            onChange={handlePhotoUpload}
-                                        />
-                                    </Button>
-                                </div>
-                            </div>
-                        ) : (
-                            <div className={styles.photoPreviewContainer}>
-                                {/* Preview Uploaded Images */}
-                                <div className={styles.photoGrid}>
-                                    {photoPreviews.map((preview, index) => (
-                                        <div key={index} className={styles.photoItem}>
-                                            <img
-                                                src={preview}
-                                                alt={`Uploaded Preview ${index}`}
-                                                className={styles.previewImage}
-                                            />
-                                            <button
-                                                onClick={() => handleDeletePhoto(index)}
-                                                className={styles.deleteButton}
-                                            >
-                                                <VscTrash size={12} style={{ padding: .2 }} />
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </DialogContent>
-
-                    <DialogActions sx={{
-                        paddingTop: 1, display: 'flex', justifyContent: 'space-between', borderTop: 1, borderTopColor: '#ddd', position: 'sticky',
-                        bottom: 0,
-                        zIndex: 2,
-                        backgroundColor: '#fff'
-                    }}>
-                        <Button onClick={() => setPhotoPreviews([])} size="small" sx={{ color: '#00636d' }} disabled={photoPreviews.length === 0}>Reset</Button>
-                        <Button onClick={handleUploadImages} size="small" variant="contained" sx={{ backgroundColor: '#066670', color: '#fff' }} disabled={!photoPreviews.length}>
-                            Upload
-                        </Button>
-                    </DialogActions>
-                </Box>
-            </Dialog>
-
-
-        </div>
+  const handleRemoveAmenity = (amenityId: number) => {
+    setUpdatedAmenities((prev) => prev.filter((id) => id !== amenityId));
+    setLocalPropertyAmenities((prev) =>
+      prev.filter((amenity) => amenity.amenity.id !== amenityId)
     );
-};
+  };
 
-export default SpacePropertyDetails;
+  const saveAmenityChanges = () => {
+    if (space?.id && userId) {
+      const updateData = {
+        property: { id: space.property.id },
+        propertySpace: { id: space.id },
+        amenities: updatedAmenities.map((id) => ({ id })),
+        updatedBy: { id: userId },
+      };
+      dispatch(updatePropertyAmenities(updateData));
+    }
+  };
+
+  const toggleCategory = (category: string) => {
+    setOpenCategories((prev) => ({
+      ...prev,
+      [category]: !prev[category],
+    }));
+  };
+  const handleDeletePhoto = (imageId: number | string) => {
+    if (typeof imageId === "number") {
+      setImagesToDelete((prev) => [...prev, imageId]);
+      setCombinedImages((prev) => prev.filter((img) => img.id !== imageId));
+    } else {
+      const index = parseInt(imageId.split("-")[1]);
+      setPhotos((prev) => prev.filter((_, i) => i !== index));
+      setPhotoPreviews((prev) => prev.filter((_, i) => i !== index));
+      setCombinedImages((prev) => prev.filter((img) => img.id !== imageId));
+    }
+  };
+
+  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const selectedFiles = Array.from(event.target.files);
+      setPhotos((prevPhotos) => [...prevPhotos, ...selectedFiles]);
+      const filePreviews = selectedFiles.map((file) =>
+        URL.createObjectURL(file)
+      );
+      setPhotoPreviews((prevPreviews) => [...prevPreviews, ...filePreviews]);
+    }
+  };
+
+  const handleUploadImages = async () => {
+    setIsUploading(true);
+    setUploadError(null);
+
+    try {
+      // Delete marked images
+      if (imagesToDelete.length > 0) {
+        await dispatch(deleteImagesBatch({ ids: imagesToDelete })).unwrap();
+      }
+
+      // Upload new images
+      if (photos.length > 0) {
+        const formData = new FormData();
+        const propertySpaceImages = photos.map((photo, index) => ({
+          description: photo.name,
+          displayOrder: index + 1,
+          propertySpace: { id: space.id },
+          createdBy: { id: userId },
+        }));
+        formData.append(
+          "propertySpaceImages",
+          JSON.stringify(propertySpaceImages)
+        );
+        photos.forEach((photo) => {
+          formData.append("imageFiles", photo);
+        });
+        await propertySpaceImageuploadapi(formData);
+      }
+
+      console.log("Images updated successfully");
+      dispatch(fetchImagesByPropertySpaceId(space.id));
+      setIsUploading(false);
+      setPhotos([]);
+      setPhotoPreviews([]);
+      setImagesToDelete([]);
+    } catch (error) {
+      console.error("Error updating images:", error);
+      setIsUploading(false);
+      setUploadError("Failed to update images. Please try again.");
+    }
+  };
+
+
+  const handleBedCountChange = (id: number, increment: number) => {
+    setBedTypes((prevBedTypes) =>
+      prevBedTypes.map((bed) =>
+        bed.id === id
+          ? { ...bed, count: Math.max(0, bed.count + increment) }
+          : bed
+      )
+    );
+  };
+  const handleSaveBathType = (selectedBathTypeId: number) => {
+    console.log(`Saved bath type with ID: ${selectedBathTypeId}`);
+  };
+
+  const handleDeletePropertySpace = async () => {
+    if (space?.id) {
+      try {
+        await dispatch(deleteExistingSpaceProperty(space.id)).unwrap();
+        console.log("Property space deleted successfully");
+        setDeleteDialogOpen(false);
+        navigate(`/admin/property/${propertyId}/rooms`);
+      } catch (error) {
+        console.error("Failed to delete property space:", error);
+      }
+    }
+  };
+  return (
+    <Card className="w-full max-w-5xl mx-auto">
+      <CardHeader>
+        <CardTitle className="text-3xl font-bold">
+          {space?.space?.name || "Space Name"} {space?.instanceNumber}
+        </CardTitle>
+        <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <DialogTrigger asChild>
+            <Button variant="ghost" size="icon" className="text-destructive">
+              <Trash2 className="h-5 w-5" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>
+                Are you sure you want to delete this room or space?
+              </DialogTitle>
+              <DialogDescription>
+                This action cannot be undone. This will permanently delete the
+                room or space and remove all associated data.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex justify-end space-x-2">
+              <Button
+                variant="outline"
+                onClick={() => setDeleteDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() => {
+                  handleDeletePropertySpace();
+                  setDeleteDialogOpen(false);
+                }}
+              >
+                Delete
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </CardHeader>
+      <CardContent>
+<Tabs defaultValue="photos" className="space-y-4">
+          <TabsList className={`grid w-full grid-cols-${tabsList.length}`}>
+            {tabsList.map((tab) => (
+              <TabsTrigger key={tab.value} value={tab.value}>
+                {tab.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          <PhotosTab
+            combinedImages={combinedImages}
+            spaceImageLoading={spaceImageLoading}
+            spaceImageError={spaceImageError}
+            handleDeletePhoto={handleDeletePhoto}
+            handlePhotoUpload={handlePhotoUpload}
+            handleUploadImages={handleUploadImages}
+            photos={photos}
+            imagesToDelete={imagesToDelete}
+            isUploading={isUploading}
+            uploadError={uploadError}
+          />
+          <AmenitiesTab
+            amenitiesStatus={amenitiesStatus}
+            propertyAmenitiesLoading={propertyAmenitiesLoading}
+            amenitiesError={amenitiesError}
+            propertyAmenitiesError={propertyAmenitiesError}
+            amenityGroups={amenityGroups}
+            propertyAmenityGroups={propertyAmenityGroups}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            selectedAmenity={selectedAmenity}
+            setSelectedAmenity={setSelectedAmenity}
+            handleAddAmenity={handleAddAmenity}
+            handleRemoveAmenity={handleRemoveAmenity}
+            saveAmenityChanges={saveAmenityChanges}
+            openCategories={openCategories}
+            toggleCategory={toggleCategory}
+          />
+          {showBedTypesTab && (
+            <BedTypesTab
+              bedTypes={bedTypes}
+              handleBedCountChange={handleBedCountChange}
+            />
+          )}
+          {showBathTypesTab && (
+            <BathTypesTab bathTypes={bathTypes} onSave={handleSaveBathType} />
+          )}
+        </Tabs>
+      </CardContent>
+    </Card>
+  );
+}
