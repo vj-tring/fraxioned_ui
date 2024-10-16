@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { axiosInstance } from '@/api/axiosSetup';
-import { getAmenitiesByPropertySpaceId, updateamenityforproperty } from '@/api';
+import { getAmenitiesByPropertyId, getAmenitiesByPropertySpaceId, updateamenityforproperty } from '@/api';
 
 interface AmenityType {
     id: number;
@@ -60,8 +60,19 @@ const initialState: PropertyAmenitiesState = {
     amenities: [],
 };
 
-export const getByPropertySpaceId = createAsyncThunk(
+export const getByPropertyId = createAsyncThunk(
     'propertyAmenities/getById',
+    async (id: number, { rejectWithValue }) => {
+        try {
+            const response = await getAmenitiesByPropertyId(id);
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data?.message || 'An error occurred');
+        }
+    }
+);
+export const getByPropertySpaceId = createAsyncThunk(
+    'propertySpaceAmenities/getById',
     async (id: number, { rejectWithValue }) => {
         try {
             const response = await getAmenitiesByPropertySpaceId(id);
@@ -97,6 +108,19 @@ const propertyAmenitiesSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+        .addCase(getByPropertyId.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(getByPropertyId.fulfilled, (state, action) => {
+            state.loading = false;
+            state.error = null;
+            state.amenities = action.payload.data;
+        })
+        .addCase(getByPropertyId.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload as string;
+        })
             .addCase(getByPropertySpaceId.pending, (state) => {
                 state.loading = true;
                 state.error = null;
