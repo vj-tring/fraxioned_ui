@@ -9,7 +9,10 @@ interface BedTypesTabProps {
   handleBedCountChange: (id: number, increment: number) => void;
 }
 
-const BedTypesTab: React.FC<BedTypesTabProps> = ({ bedTypes, handleBedCountChange }) => {
+const BedTypesTab: React.FC<BedTypesTabProps> = ({
+  bedTypes,
+  handleBedCountChange,
+}) => {
   return (
     <TabsContent value="bedTypes" className="space-y-4">
       <ScrollArea className="h-[300px] w-full rounded-md border p-4">

@@ -115,7 +115,9 @@ const PhotosTab: React.FC<PhotosTabProps> = ({
       )}
       <Button
         onClick={handleUploadImages}
-        disabled={photos.length === 0 && imagesToDelete.length === 0 || isUploading}
+        disabled={
+          (photos.length === 0 && imagesToDelete.length === 0) || isUploading
+        }
         className="w-full mt-4"
       >
         {isUploading ? (

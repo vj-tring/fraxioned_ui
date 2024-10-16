@@ -1,9 +1,23 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Loader2, AlertTriangle, Plus, ChevronUp, ChevronDown, X, Save } from "lucide-react";
+import {
+  Loader2,
+  AlertTriangle,
+  Plus,
+  ChevronUp,
+  ChevronDown,
+  X,
+  Save,
+} from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Alert, AlertDescription, AlertTitle } from "@/src/components/ui/alert";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Badge } from "@/src/components/ui/badge";
 import { TabsContent } from "@/components/ui/tabs";
 
@@ -44,16 +58,18 @@ const AmenitiesTab: React.FC<AmenitiesTabProps> = ({
 }) => {
   return (
     <TabsContent value="amenities" className="space-y-4">
-      {amenitiesStatus === 'loading' || propertyAmenitiesLoading ? (
+      {amenitiesStatus === "loading" || propertyAmenitiesLoading ? (
         <div className="flex justify-center items-center h-[300px]">
           <Loader2 className="h-8 w-8 animate-spin" />
         </div>
-      ) : amenitiesStatus === 'failed' || propertyAmenitiesError ? (
+      ) : amenitiesStatus === "failed" || propertyAmenitiesError ? (
         <Alert variant="destructive">
           <AlertTriangle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>
-            {amenitiesError || propertyAmenitiesError || "Failed to load amenities. Please try again later."}
+            {amenitiesError ||
+              propertyAmenitiesError ||
+              "Failed to load amenities. Please try again later."}
           </AlertDescription>
         </Alert>
       ) : (
@@ -102,41 +118,43 @@ const AmenitiesTab: React.FC<AmenitiesTabProps> = ({
           </div>
           <ScrollArea className="h-[300px] w-full rounded-md border p-4">
             <div className="space-y-4">
-              {Object.entries(propertyAmenityGroups).map(([category, amenities]) => (
-                <div key={category} className="space-y-2">
-                  <div
-                    className="flex items-center justify-between cursor-pointer"
-                    onClick={() => toggleCategory(category)}
-                  >
-                    <h3 className="text-lg font-semibold">{category}</h3>
-                    {openCategories[category] ? (
-                      <ChevronUp className="h-4 w-4" />
-                    ) : (
-                      <ChevronDown className="h-4 w-4" />
+              {Object.entries(propertyAmenityGroups).map(
+                ([category, amenities]) => (
+                  <div key={category} className="space-y-2">
+                    <div
+                      className="flex items-center justify-between cursor-pointer"
+                      onClick={() => toggleCategory(category)}
+                    >
+                      <h3 className="text-lg font-semibold">{category}</h3>
+                      {openCategories[category] ? (
+                        <ChevronUp className="h-4 w-4" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4" />
+                      )}
+                    </div>
+                    {openCategories[category] && (
+                      <div className="grid grid-cols-2 gap-2">
+                        {amenities.map((amenity) => (
+                          <Badge
+                            key={amenity.amenity.id}
+                            variant="default"
+                            className="text-sm py-1 px-2 flex items-center justify-between"
+                          >
+                            <span>{amenity.amenity.amenityName}</span>
+                            <X
+                              className="h-3 w-3 ml-2 cursor-pointer"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleRemoveAmenity(amenity.amenity.id);
+                              }}
+                            />
+                          </Badge>
+                        ))}
+                      </div>
                     )}
                   </div>
-                  {openCategories[category] && (
-                    <div className="grid grid-cols-2 gap-2">
-                      {amenities.map((amenity) => (
-                        <Badge
-                          key={amenity.amenity.id}
-                          variant="default"
-                          className="text-sm py-1 px-2 flex items-center justify-between"
-                        >
-                          <span>{amenity.amenity.amenityName}</span>
-                          <X
-                            className="h-3 w-3 ml-2 cursor-pointer"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleRemoveAmenity(amenity.amenity.id);
-                            }}
-                          />
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
+                )
+              )}
             </div>
           </ScrollArea>
           <Button
