@@ -7,11 +7,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/store";
 import { fetchAllSpaces, Space } from "@/store/slice/spaceSlice";
 import { createNewSpaceProperty, fetchSpacePropertiesById } from "@/store/slice/spacePropertySlice";
-import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
+import { useParams, useNavigate } from "react-router-dom";
 
 const SpaceProperty: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const navigate = useNavigate(); // Initialize useNavigate hook
+    const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const userId = useSelector((state: RootState) => state.auth.user?.id);
     const [isDialogOpen, setIsDialogOpen] = useState(false);

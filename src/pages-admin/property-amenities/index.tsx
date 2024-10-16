@@ -7,9 +7,10 @@ import { amenitiesapi } from '@/api';
 import CustomizedSnackbars from '@/components/customized-snackbar';
 import ConfirmationModal from '@/components/confirmation-modal';
 import {
-  getAmenitiesById,
+  getByPropertySpaceId,
   updatePropertyAmenities,
-  resetPropertyAmenities
+  resetPropertyAmenities,
+  getByPropertyId
 } from '@/store/slice/auth/propertyamenities';
 import { RootState } from '@/store/reducers';
 import { AppDispatch } from '@/store';
@@ -56,7 +57,7 @@ const PropertyAmenities: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      dispatch(getAmenitiesById(Number(id)));
+      dispatch(getByPropertyId(Number(id)));
     }
   }, [id, dispatch]);
 
@@ -82,7 +83,7 @@ const PropertyAmenities: React.FC = () => {
       setShowConfirmModal(false);
       dispatch(resetPropertyAmenities());
       if (id) {
-        dispatch(getAmenitiesById(Number(id)));
+        dispatch(getByPropertyId(Number(id)));
       }
       fetchAmenities();
     }
@@ -92,12 +93,12 @@ const PropertyAmenities: React.FC = () => {
     }
   }, [success, error, dispatch, id]);
 
-  const showSnackbar = (message: string, severity: 'success' | 'info' | 'warning' | 'error') => {
-    setSnackbar({ open: true, message, severity });
-    setTimeout(() => {
-      setSnackbar(prev => ({ ...prev, open: false }));
-    }, 3000);
-  };
+    const showSnackbar = (message: string, severity: 'success' | 'info' | 'warning' | 'error') => {
+      setSnackbar({ open: true, message, severity });
+      setTimeout(() => {
+        setSnackbar(prev => ({ ...prev, open: false }));
+      }, 3000);
+    };
 
   const getSelectedCountForGroup = useCallback((group: string) => {
     return amenities[group]?.filter(amenity => selectedAmenities.includes(amenity.id)).length || 0;
@@ -294,5 +295,3 @@ const PropertyAmenities: React.FC = () => {
 };
 
 export default PropertyAmenities;
-
-
