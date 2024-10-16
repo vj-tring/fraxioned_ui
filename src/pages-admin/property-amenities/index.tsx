@@ -9,7 +9,8 @@ import ConfirmationModal from '@/components/confirmation-modal';
 import {
   getByPropertySpaceId,
   updatePropertyAmenities,
-  resetPropertyAmenities
+  resetPropertyAmenities,
+  getByPropertyId
 } from '@/store/slice/auth/propertyamenities';
 import { RootState } from '@/store/reducers';
 import { AppDispatch } from '@/store';
@@ -56,7 +57,7 @@ const PropertyAmenities: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      dispatch(getByPropertySpaceId(Number(id)));
+      dispatch(getByPropertyId(Number(id)));
     }
   }, [id, dispatch]);
 
@@ -82,7 +83,7 @@ const PropertyAmenities: React.FC = () => {
       setShowConfirmModal(false);
       dispatch(resetPropertyAmenities());
       if (id) {
-        dispatch(getByPropertySpaceId(Number(id)));
+        dispatch(getByPropertyId(Number(id)));
       }
       fetchAmenities();
     }
