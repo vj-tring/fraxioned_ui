@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/store";
 import { fetchAllSpaces, Space } from "@/store/slice/spaceSlice";
 import { createNewSpaceProperty, fetchSpacePropertiesById } from "@/store/slice/spacePropertySlice";
-import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
+import { useParams, useNavigate } from "react-router-dom";
 import { fetchAllImages } from "@/store/slice/spaceImagesSlice";
 import Loader from "@/components/loader";
 
@@ -75,7 +75,7 @@ const SpaceProperty: React.FC = () => {
 
         const spaceProperty = spaces.find(sp => sp.id === spaceId);
         if (spaceProperty && spaceProperty.s3_url) {
-            return spaceProperty.s3_url; // Use space image if available
+            return spaceProperty.s3_url; 
         }
 
         return 'https://via.placeholder.com/150';
@@ -83,7 +83,9 @@ const SpaceProperty: React.FC = () => {
 
     // Navigate to space details page when a space is clicked
     const handleSpaceClick = (space: any) => {
-        navigate(`/admin/property/${id}/rooms/${space.space.id}`, { state: { space } }); // Pass space details in state
+        // Sending all rooms, regardless of isBedTypeAllowed or isBathroomTypeAllowed
+        console.log("Sending all room data:", space);
+        navigate(`/admin/property/${id}/rooms/${space.space.id}`, { state: { space } }); 
     };
 
     return (
@@ -96,7 +98,6 @@ const SpaceProperty: React.FC = () => {
                 </div>
             </div>
 
-            {/* Main Section for Added Spaces */}
             <div className={styles.mainsection}>
                 <div className={`${styles.spaceList} ${(!propertySpace || propertySpace.length === 0) ? styles.noRooms : ''}`}>
                     {Array.isArray(propertySpace) && propertySpace.length > 0 ? (
