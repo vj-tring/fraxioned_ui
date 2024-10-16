@@ -9,7 +9,6 @@ import styles from "./userproperty.module.css";
 import { Building, Users, Calendar, Fingerprint } from "lucide-react";
 import profile from "../../assets/images/profile.jpeg";
 import { Avatar } from "@mui/material";
-// import { Fingerprint } from "@mui/icons-material";
 interface User {
   id: number;
   firstName: string;
@@ -76,7 +75,6 @@ const PropertyUsers: React.FC = () => {
             return (
               <div key={owner.userId} className={styles.userCard}>
                 <div className={styles.userInfo1}>
-                  {/* <User size={10}  /> */}
                   <Avatar alt="Remy Sharp" src={profile} />
 
                   <span className={styles.userName}>

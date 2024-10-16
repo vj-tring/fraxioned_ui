@@ -114,7 +114,8 @@ export const addPropertyApi = (propertyData: {
     longitude: number;
     isActive: boolean;
     displayOrder: number;
-}) => axiosInstance.post('/properties/property', propertyData);
+}) => axiosInstance.post('/properties/property', propertyData
+);
 
 export const updatePropertyImage = (id: number, formData: FormData) =>
     axiosInstance.patch(`/properties/property/${id}`, formData);
@@ -125,8 +126,26 @@ export const deletePropertyApi = (id: number) =>
 export const getPropertyById = (id: number) =>
     axiosInstance.get(`/properties/property/${id}`);
 
-export const updatePropertyapi = (id: number, data: any) =>
-    axiosInstance.patch(`/properties/property/${id}`, data);
+export const updatePropertyapi = (id: number, data: any) => {
+    const formData = new FormData();
+
+    Object.keys(data).forEach(key => {
+        if (key === 'updatedBy') {
+            formData.append(key, JSON.stringify(data[key]));
+        } else if (key === 'mailBannerFile' || key === 'coverImageFile') {
+            // Append null for these fields
+            formData.append(key, 'null');
+        } else if (data[key] !== undefined && data[key] !== null) {
+            formData.append(key, data[key].toString());
+        }
+    });
+
+    return axiosInstance.patch(`/properties/property/${id}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+};
 
 export const userdetails = () =>
     axiosInstance.get('/users');
@@ -316,6 +335,26 @@ export const fetchPropertyImagesByPropertySpaceId = (propertySpaceId: number) =>
 // Update Space Image Details with Image (Patch)
 export const updateSpaceImageById = (imageId: number, formData: FormData) =>
     axiosInstance.patch(`/property-space-images/property-space-image/${imageId}`, formData);
+
+//for proeprty
+export const getAllpropertycodes = () =>
+    axiosInstance.get(`/property-codes`);
+
+
+//add for a property
+export const postpropertycode = (payload: {
+    property: number;
+    propertyCodeCategory: number;
+    createdBy: number;
+    propertyCode: string;
+}) => axiosInstance.post(`/property-codes/property-code`, payload);
+
+
+export const getAllpropertycodecatogory = () =>
+    axiosInstance.get(`/property-code-categories`);
+
+export const createpropertycodecatogory = (data: { name: string; createdBy: { id: number } }) =>
+    axiosInstance.post(`/property-code-categories`, data);
 
 // Delete Space Image by ID (Single)
 export const deleteSpaceImageById = (id: number) =>
