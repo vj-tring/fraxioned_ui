@@ -46,15 +46,15 @@ const initialState: SpaceImageState = {
 
 // Fetch All Space Property Images
 export const fetchAllImages = createAsyncThunk(
-  "spaceImage/fetchAllImages",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await fetchAllPropertySpaceImages();
-      return response.data;
-    } catch (error) {
-      return rejectWithValue("Failed to fetch property space images");
+    'spaceImage/fetchAllImages',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await fetchAllPropertySpaceImages();
+            return response.data.data;
+        } catch (error) {
+            return rejectWithValue('Failed to fetch property space images');
+        }
     }
-  }
 );
 
 // Fetch Images by Property ID
