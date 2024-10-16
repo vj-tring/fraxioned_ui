@@ -242,9 +242,15 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
           Amenities
         </Typography>
         {propertyAmenities && propertyAmenities.length > 0 ? (
-          <Box sx={{ display: "flex", gap: 2 }} className="AmenRes">
-            <Box sx={{ display: "flex", gap: 2 }} className="AmenRes">
-              <Grid container spacing={2}>
+          <Box sx={{ display: "flex",
+            flexDirection:'column'
+           }} className="AmenRes">
+            <Box>
+              <Grid container spacing={2} 
+              sx={{
+                display: "flex",
+                flexDirection:'column'
+              }}>
                 {displayedAmenities.map((amenity, index) => (
                   <Grid item xs={6} key={index}>
                     <Typography variant="body2" className="monsterrat">
@@ -293,10 +299,12 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
         maxWidth="md"
         className="aminityPopup"
       >
-        <DialogTitle>
-          <Typography variant="h3" className="aminityPopupTitle">
-            Amenities
-          </Typography>
+        <DialogTitle
+          sx={{
+            // background:'red',
+            height: "60px",
+          }}
+        >
           <IconButton
             edge="end"
             color="inherit"
@@ -307,6 +315,9 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
             <CloseIcon />
           </IconButton>
         </DialogTitle>
+        <Typography variant="h3" className="aminityPopupTitle">
+          Amenities
+        </Typography>
         <DialogContent>
           {Object.keys(groupedAmenities).map((groupName) => (
             <Box key={groupName} sx={{ marginBottom: 2 }}>
@@ -321,6 +332,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                     className="monsterrat amenityName"
                   >
                     {amenity.amenityName}
+                    <div className="line mt-4"></div>
                   </Typography>
                 ))}
               </Box>
