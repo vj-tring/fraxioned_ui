@@ -5,20 +5,11 @@ interface Amenity {
   id: number;
   amenityName: string;
   amenityDescription: string;
-  createdAt: string;
-  updatedAt: string;
-  createdBy: {
-    id: number;
-  } | null;
-  updatedBy: {
-    id: number;
-  } | null;
   amenityGroup: {
     id: number;
     name: string;
   };
 }
-
 export interface AmenitiesState {
   amenities: Amenity[];
   status: "idle" | "loading" | "succeeded" | "failed";
@@ -35,7 +26,8 @@ export const fetchAmenities = createAsyncThunk(
   "amenities/fetchAmenities",
   async (id: number) => {
     const response = await propertyAmenitiesapi(id);
-    return response.data;
+    console.log("API Response:", response.data); // Log the response to verify structure
+    return response.data; // Ensure this matches the structure you're using in your slice
   }
 );
 

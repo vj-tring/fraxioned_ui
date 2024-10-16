@@ -16,6 +16,7 @@ import {
   DialogContent,
   DialogActions,
   IconButton,
+  Grid,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CustomPagination from "../custom-pagination";
@@ -60,9 +61,11 @@ const groupAmenitiesByGroup = (data: PropertyAmenity[]) => {
 
 const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { propertyAmenities, loading, error } = useSelector(
-    (state: RootState) => state.amenities.amenities
-  );
+  const {
+    amenities: propertyAmenities,
+    loading,
+    error,
+  } = useSelector((state: RootState) => state.amenities);
   const propertySpace = useSelector(
     (state: RootState) => state.spaceProperties.spaceProperties || []
   );
@@ -74,6 +77,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
 
   useEffect(() => {
     dispatch(fetchAmenities(propertyId));
+    console.log("amenties", propertyAmenities);
     dispatch(fetchSpacePropertiesById(propertyId));
   }, [dispatch, propertyId]);
 
@@ -182,19 +186,20 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                   sx={{
                     display: "flex",
                     flexDirection: "column",
-                    height: "70%",
+                    height: "100%",
+                    alignContent: "center",
                     width: "100%",
                   }}
                 >
                   <CardMedia
                     component="img"
-                    height="200px"
+                    // height="100px"
                     image={
                       getImageUrlByPropertyAndSpace(space.space.id) ||
                       "https://via.placeholder.com/100"
                     } // Placeholder for space image
                     alt={space.space.name}
-                    sx={{ objectFit: "cover" }}
+                    sx={{ objectFit: "cover", height: "200px" }}
                   />
                 </Card>
                 <CardContent sx={{ padding: 1, paddingTop: 2 }}>
@@ -238,16 +243,16 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
         </Typography>
         {propertyAmenities && propertyAmenities.length > 0 ? (
           <Box sx={{ display: "flex", gap: 2 }} className="AmenRes">
-            <Box sx={{ flex: 1 }}>
-              {displayedAmenities
-                .slice(0, Math.ceil(displayedAmenities.length / 2))
-                .map((amenity, index) => (
-                  <Box key={index} sx={{ marginBottom: 1 }}>
+            <Box sx={{ display: "flex", gap: 2 }} className="AmenRes">
+              <Grid container spacing={2}>
+                {displayedAmenities.map((amenity, index) => (
+                  <Grid item xs={6} key={index}>
                     <Typography variant="body2" className="monsterrat">
                       {amenity.amenityName}
                     </Typography>
-                  </Box>
+                  </Grid>
                 ))}
+              </Grid>
             </Box>
 
             <Box sx={{ flex: 1 }}>
