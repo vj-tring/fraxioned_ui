@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/reducers";
 import { AppDispatch } from "@/store";
@@ -30,10 +30,14 @@ import PhotosTab from "./property-space-tabs/photos-tab";
 import BedTypesTab from "./property-space-tabs/bed-type-tab";
 import { Trash2 } from "lucide-react";
 import BathTypesTab from "./property-space-tabs/bath-type-tab";
+import { deleteExistingSpaceProperty } from "@/store/slice/spacePropertySlice";
 
 export default function Component({ initialSpace = {} }) {
   const location = useLocation();
   const { space = initialSpace } = location.state || {};
+  const navigate = useNavigate();
+  const { id: propertyId } = useParams();
+  console.log("Property ID:", propertyId);
   const dispatch = useDispatch<AppDispatch>();
   const showBedTypesTab = space?.space?.isBedTypeAllowed ?? false;
   const showBathTypesTab = space?.space?.isBathroomTypeAllowed ?? false;
@@ -284,7 +288,19 @@ export default function Component({ initialSpace = {} }) {
   };
   const handleSaveBathType = (selectedBathTypeId: number) => {
     console.log(`Saved bath type with ID: ${selectedBathTypeId}`);
-    // Implement your save logic here
+  };
+
+  const handleDeletePropertySpace = async () => {
+    if (space?.id) {
+      try {
+        await dispatch(deleteExistingSpaceProperty(space.id)).unwrap();
+        console.log("Property space deleted successfully");
+        setDeleteDialogOpen(false);
+        navigate(`/admin/property/${propertyId}/rooms`);
+      } catch (error) {
+        console.error("Failed to delete property space:", error);
+      }
+    }
   };
   return (
     <Card className="w-full max-w-5xl mx-auto">
@@ -318,8 +334,7 @@ export default function Component({ initialSpace = {} }) {
               <Button
                 variant="destructive"
                 onClick={() => {
-                  // Implement delete logic here
-                  console.log("Deleting room or space");
+                  handleDeletePropertySpace();
                   setDeleteDialogOpen(false);
                 }}
               >
