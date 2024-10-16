@@ -30,7 +30,6 @@
     width: 100%;
     justify-content: flex-start;
     align-items: flex-start;
-    flex-grow: 1;
 }
 
 .noRooms {
@@ -41,62 +40,49 @@
 }
 
 .spaceItem {
-    display: flex;
-    justify-content: flex-start;
+    position: relative;
 }
 
 .spaceCard {
     border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px;
+    border-radius: 5px;
     background-color: #f9f9f9;
-    width: 200px;
+    width: 215px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.spaceCard:hover {
+    transform: scale(1.02);
 }
 
 .spaceImageRow {
     text-align: center;
-    margin-bottom: 10px;
+    padding: 10px;
+
 }
 
 .spaceImage {
     width: 100%;
-    height: auto;
-    border-radius: 8px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5px 5px 0 0;
 }
 
 .spaceNameRow {
+    padding: 10px;
     text-align: center;
+}
+
+.spaceName {
     font-size: 16px;
     font-weight: bold;
-}
-
-.spaceOption {
-    cursor: pointer;
-    text-align: center;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px;
-    transition: all 0.3s;
-}
-
-.spaceOption img {
-    width: 100%;
-    height: auto;
-}
-
-.spaceOption:hover {
-    border-color: #000;
-}
-
-.selected {
-    border-color: blue;
+    margin: 0;
 }
 
 .error {
-    font-size: 18px;
-    font-weight: bold;
+    color: red;
     text-align: center;
-    opacity: .6;
 }
 
 .addspace {
