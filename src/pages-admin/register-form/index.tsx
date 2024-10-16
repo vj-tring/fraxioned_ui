@@ -3,13 +3,15 @@ import styles from "./register.module.css";
 import { IoMdClose } from "react-icons/io";
 import { FaSave, FaEdit, FaTrash } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../store/slice/auth/register";
-import { AppDispatch } from "../../store";
-import { getProperties, getRoles } from "../../api";
+import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
+import { fetchRoles } from "@/store/slice/auth/rolesSlice"; // Import the fetchRoles action
+import { RootState } from "@/store/reducers";
 import Loader from "@/components/loader";
 import CustomizedSnackbars from "@/components/customized-snackbar";
 import { ChangeEvent } from "react";
+import { AppDispatch } from "@/store";
 
 interface RegisterFormContentProps {
   onClose: () => void;
@@ -31,8 +33,6 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
     acquisitionDate: new Date().toISOString().split("T")[0],
   });
 
-  const [roles, setRoles] = useState<any[]>([]);
-  const [properties, setProperties] = useState<any[]>([]);
   const [errors, setErrors] = useState({
     firstName: "",
     lastName: "",
@@ -57,33 +57,21 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
   const [editIndex, setEditIndex] = useState<number | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
+  const properties = useSelector((state: RootState) => state.property.properties);
+  const propertiesStatus = useSelector((state: RootState) => state.property.status);
+  const roles = useSelector((state: RootState) => state.roles.roles);
+  const rolesStatus = useSelector((state: RootState) => state.roles.status);
 
   useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        const response = await getProperties();
-        setProperties(response.data);
-        if (response.data.length > 0) {
-          updateShareholderLimits(response.data[0].id);
-        }
-      } catch (error) {
-        console.error("Failed to fetch properties", error);
-      }
-    };
+    dispatch(fetchProperties());
+    dispatch(fetchRoles()); // Dispatch fetchRoles action
+  }, [dispatch]);
 
-    const fetchRoles = async () => {
-      try {
-        const response = await getRoles();
-        console.log("Roles fetched:", response.data.roles);
-        setRoles(response.data.roles);
-      } catch (error) {
-        console.error("Failed to fetch roles", error);
-      }
-    };
-
-    fetchRoles();
-    fetchProperties();
-  }, []);
+  useEffect(() => {
+    if (properties.length > 0) {
+      updateShareholderLimits(properties[0].id);
+    }
+  }, [properties]);
 
   const handleTextFieldChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -328,8 +316,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
   return (
     <>
       <div className={styles.modalContent}>
-        {isLoading && <Loader />}
-        <div className={styles.modalHeader}>
+        {(isLoading || propertiesStatus === 'loading' || rolesStatus === 'loading') && <Loader />}        <div className={styles.modalHeader}>
           <h2 className={styles.modalTitle}>Create a New Account</h2>
           <button className={styles.modalCloseButton} onClick={onClose}>
             <IoMdClose size={20} />
