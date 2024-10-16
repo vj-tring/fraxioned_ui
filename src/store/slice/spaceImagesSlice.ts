@@ -6,7 +6,8 @@ import {
     uploadPropertySpaceImages,
     updateSpaceImageById,
     deleteSpaceImageById,
-    deleteMultipleSpaceImages
+    deleteMultipleSpaceImages,
+    fetchPropertyImagesByPropertySpaceId
 } from '@/api';
 import { RootState } from '@/store/reducers';
 
@@ -63,6 +64,18 @@ export const fetchImagesByPropertyId = createAsyncThunk(
         try {
             const response = await fetchPropertyImagesByPropertyId(propertyId);
             return response.data;
+        } catch (error) {
+            return rejectWithValue('Failed to fetch images for the property');
+        }
+    }
+);
+
+export const fetchImagesByPropertySpaceId = createAsyncThunk(
+    'spaceImage/fetchImagesByPropertyId',
+    async (propertyId: number, { rejectWithValue }) => {
+        try {
+            const response = await fetchPropertyImagesByPropertySpaceId(propertyId);
+            return response.data.data;
         } catch (error) {
             return rejectWithValue('Failed to fetch images for the property');
         }
@@ -140,8 +153,22 @@ const spaceImageSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload as string;
             })
+            .addCase(fetchImagesByPropertySpaceId.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(fetchImagesByPropertySpaceId.fulfilled, (state, action: PayloadAction<SpaceImage[]>) => {
+                state.images = action.payload;
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(fetchImagesByPropertySpaceId.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
             .addCase(uploadImages.fulfilled, (state, action: PayloadAction<SpaceImage[]>) => {
                 state.images.push(...action.payload);
+                state.loading = false;
+                state.error = null;
             })
             .addCase(updateImageById.fulfilled, (state, action: PayloadAction<SpaceImage>) => {
                 const index = state.images.findIndex((img) => img.id === action.payload.id);
@@ -150,8 +177,17 @@ const spaceImageSlice = createSlice({
             .addCase(deleteImageById.fulfilled, (state, action: PayloadAction<number>) => {
                 state.images = state.images.filter((img) => img.id !== action.payload);
             })
+            .addCase(deleteImagesBatch.pending, (state) => {
+                state.loading = true;
+            })
             .addCase(deleteImagesBatch.fulfilled, (state, action: PayloadAction<number[]>) => {
                 state.images = state.images.filter((img) => !action.payload.includes(img.id));
+                state.loading = false;
+                state.error = null;
+            })
+            .addCase(deleteImagesBatch.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
             });
     },
 });

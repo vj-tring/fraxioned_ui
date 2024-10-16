@@ -310,6 +310,9 @@ export const getAllSpacePropertyImageById = (propertyId: number) => {
 export const fetchSpaceImageDetailsById = (imageId: number) =>
     axiosInstance.get(`/property-space-images/property-space-image/${imageId}`);
 
+export const fetchPropertyImagesByPropertySpaceId = (propertySpaceId: number) =>
+    axiosInstance.get(`/property-space-images/property-space/${propertySpaceId}/images`);
+
 // Update Space Image Details with Image (Patch)
 export const updateSpaceImageById = (imageId: number, formData: FormData) =>
     axiosInstance.patch(`/property-space-images/property-space-image/${imageId}`, formData);

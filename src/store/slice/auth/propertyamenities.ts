@@ -77,7 +77,7 @@ export const getByPropertySpaceId = createAsyncThunk(
         try {
             const response = await getAmenitiesByPropertySpaceId(id);
             return response.data;
-        } catch (error: any) {
+        } catch (error: any) {  
             return rejectWithValue(error.response?.data?.message || 'An error occurred');
         }
     }
