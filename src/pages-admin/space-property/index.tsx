@@ -8,6 +8,8 @@ import { AppDispatch } from "@/store";
 import { fetchAllSpaces, Space } from "@/store/slice/spaceSlice";
 import { createNewSpaceProperty, fetchSpacePropertiesById } from "@/store/slice/spacePropertySlice";
 import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
+import { fetchAllImages } from "@/store/slice/spaceImagesSlice";
+import Loader from "@/components/loader";
 
 const SpaceProperty: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -16,10 +18,11 @@ const SpaceProperty: React.FC = () => {
     const userId = useSelector((state: RootState) => state.auth.user?.id);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [selectedSpace, setSelectedSpace] = useState<Space | null>(null);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const spaces = useSelector((state: RootState) => state.spaces.spaces || []);
     const propertySpace = useSelector((state: RootState) => state.spaceProperties.spaceProperties || []);
+    const propertySpaceImages = useSelector((state: RootState) => state.spaceImage.images || []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -35,6 +38,10 @@ const SpaceProperty: React.FC = () => {
         };
         fetchData();
     }, [dispatch, id]);
+
+    useEffect(() => {
+        dispatch(fetchAllImages());
+    }, [dispatch])
 
     const handleAddSpace = async () => {
         if (selectedSpace) {
@@ -57,6 +64,23 @@ const SpaceProperty: React.FC = () => {
         }
     };
 
+    const getSpaceImage = (spaceId: number): string => {
+        const propertyImages = propertySpaceImages
+            .filter((img: any) => img.propertySpace.space.id === spaceId)
+            .sort((a: any, b: any) => a.displayOrder - b.displayOrder);
+
+        if (propertyImages.length > 0) {
+            return propertyImages[0].url;
+        }
+
+        const spaceProperty = spaces.find(sp => sp.id === spaceId);
+        if (spaceProperty && spaceProperty.s3_url) {
+            return spaceProperty.s3_url; // Use space image if available
+        }
+
+        return 'https://via.placeholder.com/150';
+    };
+
     // Navigate to space details page when a space is clicked
     const handleSpaceClick = (space: any) => {
         navigate(`/admin/property/${id}/rooms/${space.space.id}`, { state: { space } }); // Pass space details in state
@@ -64,8 +88,7 @@ const SpaceProperty: React.FC = () => {
 
     return (
         <div className={styles.fullContainer}>
-            {loading && <div>Loading...</div>}
-            {error && <div className={styles.error}>{error}</div>}
+            {loading && <Loader />}
             <div className={styles.headersection}>
                 <h2>Add Space Property</h2>
                 <div className={styles.addspace} onClick={() => setIsDialogOpen(true)}>
@@ -82,13 +105,16 @@ const SpaceProperty: React.FC = () => {
                                 <div className={styles.spaceCard}>
                                     <div className={styles.spaceImageRow}>
                                         <img
-                                            src={"https://via.placeholder.com/150"} // Placeholder image
+                                            src={getSpaceImage(space.space.id)}
                                             alt={space.space.name}
                                             className={styles.spaceImage}
+                                            loading="lazy"
                                         />
                                     </div>
                                     <div className={styles.spaceNameRow}>
-                                        <p>{space.space.name} {space.instanceNumber}</p>
+                                        <p className={styles.spaceName}>
+                                            {space.space.name} {space.instanceNumber}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -108,22 +134,32 @@ const SpaceProperty: React.FC = () => {
                     ) : (
                         <Grid container spacing={3}>
                             {spaces.map((space, index) => (
-                                <Grid item xs={6} key={index}>
+                                <Grid item xs={12} sm={6} md={4} key={index}>
                                     <div
                                         onClick={() => setSelectedSpace(space)}
                                         style={{
                                             cursor: 'pointer',
                                             padding: '10px',
                                             textAlign: 'center',
-                                            border: selectedSpace?.id === space.id ? '2px solid blue' : '1px solid #ddd'
+                                            border: selectedSpace?.id === space.id ? '2px solid blue' : '1px solid #ddd',
+                                            borderRadius: '5px', // Rounded corners
+                                            backgroundColor: '#f9f9f9', // Background color
+                                            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Subtle shadow
+                                            transition: 'transform 0.2s ease', // Smooth transform on hover
                                         }}
                                     >
                                         <img
-                                            src={space.s3_url || "https://via.placeholder.com/150"} // Placeholder image
+                                            src={space.s3_url || "https://via.placeholder.com/150"}
                                             alt={space.name}
-                                            style={{ width: '100%', height: '100px', marginBottom: '10px' }}
+                                            loading="lazy"
+                                            style={{
+                                                width: '100%',
+                                                height: '100px',
+                                                marginBottom: '10px',
+                                                borderRadius: '5px 5px 0 0', // Rounded top corners for the image
+                                            }}
                                         />
-                                        <Typography>{space.name}</Typography>
+                                        <Typography variant="h6">{space.name}</Typography>
                                     </div>
                                 </Grid>
                             ))}
