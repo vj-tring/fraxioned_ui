@@ -13,7 +13,7 @@ import Loader from "@/components/loader";
 
 const SpaceProperty: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const navigate = useNavigate(); // Initialize useNavigate hook
+    const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const userId = useSelector((state: RootState) => state.auth.user?.id);
     const [isDialogOpen, setIsDialogOpen] = useState(false);

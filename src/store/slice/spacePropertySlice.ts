@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@/store/reducers';
 import { createSpaceProperty, deleteSpaceProperty, getAllSpaceProperties, getAllSpacePropertiesById } from '@/api'; // Import your API functions
 
-// Define the Space interface
 export interface Space {
     id: number;
     name: string;
@@ -10,18 +9,15 @@ export interface Space {
     isBathroomTypeAllowed: boolean;
 }
 
-// Define the Property interface
 export interface Property {
     id: number;
     propertyName: string;
 }
 
-// Define the CreatedBy interface
 export interface CreatedBy {
     id: number;
 }
 
-// Define the SpaceProperty interface
 export interface SpaceProperty {
     id: number;
     instanceNumber: number;
@@ -33,29 +29,25 @@ export interface SpaceProperty {
     updatedBy: CreatedBy | null;
 }
 
-// Response structure for fetching all space properties
 export interface SpacePropertyResponse {
     success: boolean;
     message: string;
-    data: SpaceProperty[]; // An array of SpaceProperty
+    data: SpaceProperty[];
     statusCode: number;
 }
 
-// State interface for the slice
 export interface SpacePropertyState {
     spaceProperties: SpaceProperty[];
     loading: boolean;
     error: string | null;
 }
 
-// Initial state for the slice
 const initialState: SpacePropertyState = {
     spaceProperties: [],
     loading: false,
     error: null,
 };
 
-// Thunks
 export const fetchAllSpaceProperties = createAsyncThunk<SpaceProperty[], void>(
     'spaceProperty/fetchAllSpaceProperties',
     async (_, { rejectWithValue }) => {
@@ -86,7 +78,7 @@ export const createNewSpaceProperty = createAsyncThunk<SpaceProperty, SpacePrope
     async (spacePropertyData, { rejectWithValue }) => {
         try {
             const response = await createSpaceProperty(spacePropertyData);
-            return response.data; // Assuming the API returns the created SpaceProperty
+            return response.data;
         } catch (error) {
             return rejectWithValue("Failed to create space property");
         }
@@ -98,7 +90,7 @@ export const deleteExistingSpaceProperty = createAsyncThunk<number, number>(
     async (propertyId, { rejectWithValue }) => {
         try {
             await deleteSpaceProperty(propertyId);
-            return propertyId; // Return the deleted property ID
+            return propertyId;
         } catch (error) {
             return rejectWithValue("Failed to delete space property");
         }
@@ -140,14 +132,11 @@ const spacePropertySlice = createSlice({
             //     state.spaceProperties.push(action.payload);
             // })
             .addCase(deleteExistingSpaceProperty.fulfilled, (state, action: PayloadAction<number>) => {
-                // Remove the deleted space property from the state
                 state.spaceProperties = state.spaceProperties.filter(sp => sp.id !== action.payload);
             });
     },
 });
 
-// Selectors
 export const selectSpaceProperties = (state: RootState) => state.spaceProperties.spaceProperties;
 
-// Export the reducer
 export default spacePropertySlice.reducer;
