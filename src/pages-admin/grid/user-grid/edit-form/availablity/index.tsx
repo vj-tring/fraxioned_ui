@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from './availablity.module.css';
-import { getUserProperties } from '@/api';
+import { getUserProperties } from '@/api/api-endpoints';
 
 interface UserProperty {
   year: number;

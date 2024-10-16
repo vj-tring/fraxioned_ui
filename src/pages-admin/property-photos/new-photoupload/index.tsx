@@ -5,7 +5,7 @@ import {
   propertyImageuploadapi,
   propertyspaceapi,
   propertyspacetypesapi,
-} from "@/api";
+} from "@/api/api-endpoints";
 import Loader from "@/components/loader";
 import { Trash2 } from "lucide-react";
 

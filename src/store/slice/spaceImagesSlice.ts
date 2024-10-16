@@ -8,7 +8,7 @@ import {
   deleteSpaceImageById,
   deleteMultipleSpaceImages,
   fetchPropertyImagesByPropertySpaceId,
-} from "@/api";
+} from "@/api/api-endpoints";
 import { RootState } from "@/store/reducers";
 
 // Define Space Image Interface
