@@ -376,6 +376,10 @@ export const fetchPropertyImagesByPropertyId = (propertyId: number) =>
 export const fetchSpaceImageDetailsById = (imageId: number) =>
     axiosInstance.get(`/property-space-images/property-space-image/${imageId}`);
 
+// Update Space Image Details with Image (Patch)
+export const updateSpaceImageById = (imageId: number, formData: FormData) =>
+    axiosInstance.patch(`/property-space-images/property-space-image/${imageId}`, formData);
+
 //for proeprty
 export const getAllpropertycodes = () =>
     axiosInstance.get(`/property-codes`);
@@ -395,13 +399,6 @@ export const getAllpropertycodecatogory = () =>
 
 export const createpropertycodecatogory = (data: { name: string; createdBy: { id: number } }) =>
     axiosInstance.post(`/property-code-categories`, data);
-
-
-
-
-// Update Space Image Details with Image (Patch)
-export const updateSpaceImageById = (imageId: number, formData: FormData) =>
-    axiosInstance.patch(`/property-space-images/property-space-image/${imageId}`, formData);
 
 // Delete Space Image by ID (Single)
 export const deleteSpaceImageById = (id: number) =>
