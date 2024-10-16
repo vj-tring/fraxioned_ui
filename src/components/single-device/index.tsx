@@ -255,7 +255,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
               </Grid>
             </Box>
 
-            <Box sx={{ flex: 1 }}>
+            {/* <Box sx={{ flex: 1 }}>
               {displayedAmenities
                 .slice(
                   Math.ceil(displayedAmenities.length / 2),
@@ -268,7 +268,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                     </Typography>
                   </Box>
                 ))}
-            </Box>
+            </Box> */}
           </Box>
         ) : (
           <Typography variant="body1">No amenities available.</Typography>
