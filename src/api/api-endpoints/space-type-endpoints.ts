@@ -8,6 +8,9 @@ export const createPropertySpaceBed = (data: CreatePropertySpaceBedDto) =>
 export const getAllPropertySpaceBeds = () =>
     axiosInstance.get('/property-space-beds/property-space-bed');
 
+export const getAllPropertySpaceBedsByPropertySpace = (propertySpaceId: number) =>
+    axiosInstance.get(`/property-space-beds/property-space/${propertySpaceId}/property-space-beds`);
+
 export const getPropertySpaceBedById = (id: number) =>
     axiosInstance.get(`/property-space-beds/property-space-bed/${id}`);
 

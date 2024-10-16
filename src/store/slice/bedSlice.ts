@@ -30,6 +30,14 @@ export const fetchAllPropertySpaceBeds = createAsyncThunk(
   }
 );
 
+export const fetchAllPropertySpaceBedsByPropertySpace = createAsyncThunk(
+    'bed/fetchAllPropertySpaceBeds',
+    async (propertySpaceId: number) => {
+      const response = await api.getAllPropertySpaceBedsByPropertySpace(propertySpaceId);
+      return response.data.data;
+    }
+  );
+
 export const createPropertySpaceBed = createAsyncThunk(
   'bed/createPropertySpaceBed',
   async (data: CreatePropertySpaceBedDto) => {

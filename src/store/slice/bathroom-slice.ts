@@ -8,7 +8,6 @@ import {
   UpdatePropertySpaceBathroomDto
 } from '@/store/model/space-types';
 
-// Define the state structure
 interface BathroomState {
   propertySpaceBathrooms: any[];
   spaceBathroomTypes: any[];
@@ -23,7 +22,6 @@ const initialState: BathroomState = {
   error: null,
 };
 
-// Create async thunks
 export const fetchAllPropertySpaceBathrooms = createAsyncThunk(
   'bathroom/fetchAllPropertySpaceBathrooms',
   async () => {

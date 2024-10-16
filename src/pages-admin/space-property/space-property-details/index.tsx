@@ -31,7 +31,7 @@ import BedTypesTab from "./property-space-tabs/bed-type-tab";
 import { Trash2 } from "lucide-react";
 import BathTypesTab from "./property-space-tabs/bath-type-tab";
 import { deleteExistingSpaceProperty } from "@/store/slice/spacePropertySlice";
-import { createOrDeletePropertySpaceBeds, fetchAllPropertySpaceBeds } from "@/store/slice/bedSlice";
+import { createOrDeletePropertySpaceBeds, fetchAllPropertySpaceBeds, fetchAllPropertySpaceBedsByPropertySpace } from "@/store/slice/bedSlice";
 
 export default function Component({ initialSpace = {} }) {
   const location = useLocation();
@@ -119,7 +119,7 @@ export default function Component({ initialSpace = {} }) {
     if (space?.id) {
       dispatch(getByPropertySpaceId(space.id));
       dispatch(fetchImagesByPropertySpaceId(space.id));
-      dispatch(fetchAllPropertySpaceBeds());
+      dispatch(fetchAllPropertySpaceBedsByPropertySpace(space.id));
 
     }
     dispatch(fetchAmenities());
