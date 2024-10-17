@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import {axiosInstance} from '@/api/axiosSetup';
+import { axiosInstance } from '@/api/axiosSetup';
 
 interface AddAmenityData {
   amenityGroup: { id: number };
   createdBy: { id: number };
   amenityName: string;
   amenityDescription: string;
+  imageFile: File | null;
 }
 
 export interface AddAmenityState {
@@ -18,7 +19,21 @@ export const addAmenity = createAsyncThunk(
   'amenities/addAmenity',
   async (data: AddAmenityData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post('/amenities/amenity', data);
+      const formData = new FormData();
+      formData.append('amenityGroup', JSON.stringify(data.amenityGroup));
+      formData.append('createdBy', JSON.stringify(data.createdBy));
+      formData.append('amenityName', data.amenityName);
+      formData.append('amenityDescription', data.amenityDescription);
+      
+      if (data.imageFile) {
+        formData.append('imageFile', data.imageFile);
+      }
+
+      const response = await axiosInstance.post('/amenities/amenity', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'An error occurred');

@@ -23,6 +23,7 @@ interface NewAmenityFormProps {
 }
 
 const NewAmenityForm: React.FC<NewAmenityFormProps> = ({ onClose, onAmenityAdded }) => {
+    const [isUploading, setIsUploading] = useState(false);
     const dispatch = useDispatch<AppDispatch>();
     const {
         loading: addAmenityLoading,
@@ -43,8 +44,12 @@ const NewAmenityForm: React.FC<NewAmenityFormProps> = ({ onClose, onAmenityAdded
         showCustomAmenityInput: false,
         amenityName: '',
         amenityDescription: '',
+        imageFile: null as File | null,
     });
     const [error, setError] = useState('');
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [uploadProgress, setUploadProgress] = useState(0);
+
 
     useEffect(() => {
         dispatch(fetchAmenityGroups());
@@ -73,6 +78,74 @@ const NewAmenityForm: React.FC<NewAmenityFormProps> = ({ onClose, onAmenityAdded
         setFormData(prev => ({ ...prev, [name]: value }));
     }, []);
 
+    const handleFileChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setIsUploading(true);
+            setFormData(prev => ({ ...prev, imageFile: file }));
+
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                setUploadProgress(progress);
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setIsUploading(false);
+                }
+            }, 100);
+
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewUrl(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    }, []);
+
+    const handleRemoveFile = useCallback((e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setPreviewUrl(null);
+        setFormData(prev => ({ ...prev, imageFile: null }));
+        setUploadProgress(0);
+    }, []);
+
+    const FileUploadPreview = () => (
+        <div className={styles.fileUploadPreview}>
+            {previewUrl ? (
+                <div className={styles.previewContainer}>
+                    <div className={styles.imagePreview}>
+                        <img src={previewUrl} alt="Preview" />
+                        <button className={styles.removeButton} onClick={handleRemoveFile}>
+                            <AiOutlineClose />
+                        </button>
+                    </div>
+                    <div className={styles.fileInfo}>
+                        <span className={styles.fileName}>
+                            {formData.imageFile?.name}
+                        </span>
+                        <div className={styles.progressBar}>
+                            <div
+                                className={styles.progressFill}
+                                style={{ width: `${uploadProgress}%` }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <label className={styles.uploadLabel}>
+                    <input
+                        type="file"
+                        onChange={handleFileChange}
+                        accept="image/*"
+                        className={styles.fileInput}
+                    />
+                    <span>Choose file or drag here</span>
+                </label>
+            )}
+        </div>
+    );
+
     const handleAddCustomAmenityType = useCallback(async () => {
         const { customAmenityType } = formData;
         if (customAmenityType && !amenityGroups?.some(group => group.name === customAmenityType)) {
@@ -85,7 +158,7 @@ const NewAmenityForm: React.FC<NewAmenityFormProps> = ({ onClose, onAmenityAdded
         e.preventDefault();
         setError('');
 
-        const { selectedAmenityGroup, amenityName, amenityDescription } = formData;
+        const { selectedAmenityGroup, amenityName, amenityDescription, imageFile } = formData;
         if (!selectedAmenityGroup || !amenityName) {
             setError('Amenity Group and Name are required.');
             return;
@@ -95,7 +168,8 @@ const NewAmenityForm: React.FC<NewAmenityFormProps> = ({ onClose, onAmenityAdded
             amenityGroup: { id: selectedAmenityGroup.id },
             createdBy: { id: 1 },
             amenityName,
-            amenityDescription
+            amenityDescription,
+            imageFile
         }));
     }, [formData, dispatch]);
 
@@ -187,7 +261,10 @@ const NewAmenityForm: React.FC<NewAmenityFormProps> = ({ onClose, onAmenityAdded
                             placeholder="Enter amenity name"
                         />
                     </div>
-
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>Icon Upload</label>
+                        <FileUploadPreview />
+                    </div>
                     <div className={styles.formGroup}>
                         <label htmlFor="amenityDescription" className={styles.label}>Description (Optional)</label>
                         <textarea
@@ -199,7 +276,6 @@ const NewAmenityForm: React.FC<NewAmenityFormProps> = ({ onClose, onAmenityAdded
                             placeholder="Enter amenity description"
                         />
                     </div>
-
                     <div className={styles.formActions}>
                         <button type="button" onClick={onClose} className={styles.cancelButton}>Cancel</button>
                         <button type="submit" className={styles.submitButton}>Add Amenity</button>
