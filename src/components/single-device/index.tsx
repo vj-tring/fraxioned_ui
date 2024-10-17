@@ -125,12 +125,11 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
 
     return image ? image.url : null;
   };
-
   const getIconUrlByAmenitiesId = (amenityId: number) => {
     console.log("amenity", amenitites);
     const icons = amenitites.find((icon) => icon.id === amenityId);
 
-    return icons.s3_url !== null
+    return icons != null && icons.s3_url
       ? icons.s3_url
       : "https://placehold.jp/150x150.png";
   };
@@ -281,7 +280,10 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
               >
                 {displayedAmenities.map((amenity, index) => (
                   <Grid item xs={6} key={index}>
-                    <Typography variant="body2" className="monsterrat d-flex gap-3">
+                    <Typography
+                      variant="body2"
+                      className="monsterrat d-flex gap-3"
+                    >
                       <img
                         src={getIconUrlByAmenitiesId(amenity.id)}
                         className="ImgIcons"
