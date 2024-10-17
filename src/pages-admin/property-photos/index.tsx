@@ -14,6 +14,8 @@ interface PropertyImage {
   url: string;
   description: string;
   propertySpace: {
+    id: number;
+    instanceNumber: number;
     space: {
       id: number;
       name: string;
@@ -21,8 +23,16 @@ interface PropertyImage {
   };
 }
 
+interface SpaceGroup {
+  name: string;
+  instances: {
+    instanceNumber: number;
+    images: PropertyImage[];
+  }[];
+}
+
 const PropertyPhotos: React.FC = () => {
-  const [imagesBySpace, setImagesBySpace] = useState<{ [key: string]: PropertyImage[] }>({});
+  const [imagesBySpace, setImagesBySpace] = useState<{ [key: string]: SpaceGroup }>({});
   const [activeTab, setActiveTab] = useState<string>("All Photos");
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [imageToDelete, setImageToDelete] = useState<number | null>(null);
@@ -41,20 +51,33 @@ const PropertyPhotos: React.FC = () => {
     try {
       const response = await propertyImageapi(parseInt(id || "0"));
       if (response.data && response.data.success) {
-        const allPhotos: PropertyImage[] = [];
-        const groupedBySpace = response.data.data.reduce(
-          (acc: { [key: string]: PropertyImage[] }, img: PropertyImage) => {
+        const allPhotos: PropertyImage[] = response.data.data;
+        const groupedBySpace = allPhotos.reduce(
+          (acc: { [key: string]: SpaceGroup }, img: PropertyImage) => {
             const spaceName = img.propertySpace.space.name;
             if (!acc[spaceName]) {
-              acc[spaceName] = [];
+              acc[spaceName] = { name: spaceName, instances: [] };
             }
-            acc[spaceName].push(img);
-            allPhotos.push(img);
+
+            let instance = acc[spaceName].instances.find(
+              i => i.instanceNumber === img.propertySpace.instanceNumber
+            );
+
+            if (!instance) {
+              instance = { instanceNumber: img.propertySpace.instanceNumber, images: [] };
+              acc[spaceName].instances.push(instance);
+            }
+
+            instance.images.push(img);
             return acc;
           },
           {}
         );
-        setImagesBySpace({ "All Photos": allPhotos, ...groupedBySpace });
+
+        setImagesBySpace({
+          "All Photos": { name: "All Photos", instances: [{ instanceNumber: 0, images: allPhotos }] },
+          ...groupedBySpace
+        });
       }
     } catch (error) {
       console.error("Error fetching property images:", error);
@@ -123,29 +146,33 @@ const PropertyPhotos: React.FC = () => {
     setLoadedImages(prevLoadedImages => new Set(prevLoadedImages).add(imageId));
   };
 
-  const filteredImages = imagesBySpace[activeTab] || [];
-
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>Property Photos</h1>
         <div className={styles.tabsContainer}>
-          {Object.keys(imagesBySpace).map((spaceName) => (
+          {Object.entries(imagesBySpace).map(([spaceName, spaceGroup]) => (
             <button
               key={spaceName}
               className={`${styles.tab} ${activeTab === spaceName ? styles.activeTab : ''}`}
               onClick={() => handleTabClick(spaceName)}
             >
               {spaceName}
-              <span className={styles.photoCount}>
-                ({imagesBySpace[spaceName].length})
-              </span>
+              {spaceName === "All Photos" ? (
+                <span className={styles.photoCount}>
+                  ({spaceGroup.instances[0].images.length})
+                </span>
+              ) : (
+                <span className={styles.instanceCount}>
+                  {spaceGroup.instances.map(instance => instance.instanceNumber).join(",  ")}
+                </span>
+              )}
             </button>
           ))}
         </div>
       </div>
 
-      <motion.div 
+      <motion.div
         className={styles.gridContainer}
         initial={false}
         animate={{ opacity: 1 }}
@@ -159,56 +186,60 @@ const PropertyPhotos: React.FC = () => {
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.3 }}
           >
-            {filteredImages.length === 0 ? (
+            {imagesBySpace[activeTab]?.instances.flatMap(instance => instance.images).length === 0 ? (
               <div className={styles.emptyState}>
                 <p>No photos found for this space</p>
               </div>
             ) : (
               <div className={styles.photoGrid}>
-                {filteredImages.map((image) => (
-                  <motion.div
-                    key={image.id}
-                    className={styles.photoCard}
-                    layout
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    whileHover={{ y: -5 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <div className={styles.imageContainer} onClick={() => handleImageClick(image.url)}>
-                      {!loadedImages.has(image.id) && (
-                        <div className={styles.skeleton}></div>
-                      )}
-                      <img 
-                        src={image.url} 
-                        alt={image.description} 
-                        className={`${styles.propertyImage} ${loadedImages.has(image.id) ? styles.loaded : ''}`}
-                        onLoad={() => handleImageLoad(image.id)}
-                      />
-                      <div className={styles.overlay}>
-                        <button 
-                          className={styles.iconButton}
-                          onClick={(e) => handleEditImage(e, image.id)}
-                        >
-                          <Edit size={20} />
-                        </button>
-                        <button 
-                          className={styles.iconButton}
-                          onClick={(e) => handleDeleteImage(e, image.id)}
-                        >
-                          <Trash2 size={20} />
-                        </button>
+                {imagesBySpace[activeTab]?.instances.flatMap(instance =>
+                  instance.images.map((image) => (
+                    <motion.div
+                      key={image.id}
+                      className={styles.photoCard}
+                      layout
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      whileHover={{ y: -5 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <div className={styles.imageContainer} onClick={() => handleImageClick(image.url)}>
+                        {!loadedImages.has(image.id) && (
+                          <div className={styles.skeleton}></div>
+                        )}
+                        <img
+                          src={image.url}
+                          alt={image.description}
+                          className={`${styles.propertyImage} ${loadedImages.has(image.id) ? styles.loaded : ''}`}
+                          onLoad={() => handleImageLoad(image.id)}
+                        />
+                        <div className={styles.overlay}>
+                          <button
+                            className={styles.iconButton}
+                            onClick={(e) => handleEditImage(e, image.id)}
+                          >
+                            <Edit size={20} />
+                          </button>
+                          <button
+                            className={styles.iconButton}
+                            onClick={(e) => handleDeleteImage(e, image.id)}
+                          >
+                            <Trash2 size={20} />
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                    <div className={styles.imageDescription}>
-                      {image.description}
-                      {activeTab === "All Photos" && (
-                        <span className={styles.spaceTag}>{image.propertySpace.space.name}</span>
-                      )}
-                    </div>
-                  </motion.div>
-                ))}
+                      <div className={styles.imageDescription}>
+                        {image.description}
+                        {activeTab === "All Photos" && (
+                          <span className={styles.spaceTag}>
+                            {`${image.propertySpace.space.name} ${image.propertySpace.instanceNumber}`}
+                          </span>
+                        )}
+                      </div>
+                    </motion.div>
+                  ))
+                )}
               </div>
             )}
           </motion.div>
@@ -222,14 +253,14 @@ const PropertyPhotos: React.FC = () => {
       )}
 
       {selectedImageUrl && (
-        <motion.div 
+        <motion.div
           className={styles.lightbox}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={() => setSelectedImageUrl(null)}
         >
-          <motion.div 
+          <motion.div
             className={styles.lightboxContent}
             initial={{ scale: 0.9 }}
             animate={{ scale: 1 }}
