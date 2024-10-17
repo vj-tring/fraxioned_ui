@@ -186,7 +186,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                   sx={{
                     display: "flex",
                     flexDirection: "column",
-                    height: "100%",
+                    height: "200px",
                     alignContent: "center",
                     width: "100%",
                   }}
