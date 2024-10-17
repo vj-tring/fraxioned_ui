@@ -23,7 +23,7 @@ interface PropertyImage {
 
 const PropertyPhotos: React.FC = () => {
   const [imagesBySpace, setImagesBySpace] = useState<{ [key: string]: PropertyImage[] }>({});
-  const [activeTab, setActiveTab] = useState<string>("Bedroom");
+  const [activeTab, setActiveTab] = useState<string>("All Photos");
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [imageToDelete, setImageToDelete] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,6 +41,7 @@ const PropertyPhotos: React.FC = () => {
     try {
       const response = await propertyImageapi(parseInt(id || "0"));
       if (response.data && response.data.success) {
+        const allPhotos: PropertyImage[] = [];
         const groupedBySpace = response.data.data.reduce(
           (acc: { [key: string]: PropertyImage[] }, img: PropertyImage) => {
             const spaceName = img.propertySpace.space.name;
@@ -48,21 +49,19 @@ const PropertyPhotos: React.FC = () => {
               acc[spaceName] = [];
             }
             acc[spaceName].push(img);
+            allPhotos.push(img);
             return acc;
           },
           {}
         );
-        setImagesBySpace(groupedBySpace);
-        if (!activeTab && groupedBySpace["Bedroom"]) {
-          setActiveTab("Bedroom");
-        }
+        setImagesBySpace({ "All Photos": allPhotos, ...groupedBySpace });
       }
     } catch (error) {
       console.error("Error fetching property images:", error);
     } finally {
       setIsLoading(false);
     }
-  }, [id, activeTab]);
+  }, [id]);
 
   useEffect(() => {
     refreshPhotos();
@@ -202,7 +201,12 @@ const PropertyPhotos: React.FC = () => {
                         </button>
                       </div>
                     </div>
-                    <div className={styles.imageDescription}>{image.description}</div>
+                    <div className={styles.imageDescription}>
+                      {image.description}
+                      {activeTab === "All Photos" && (
+                        <span className={styles.spaceTag}>{image.propertySpace.space.name}</span>
+                      )}
+                    </div>
                   </motion.div>
                 ))}
               </div>
