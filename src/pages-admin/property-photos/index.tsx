@@ -9,7 +9,6 @@ import EditPhoto from "./edit-propertyphoto";
 import PhotoUpload from "./new-photoupload";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Define the PropertyImage interface
 interface PropertyImage {
   id: number;
   url: string;
@@ -32,6 +31,7 @@ const PropertyPhotos: React.FC = () => {
   const [showEditPopup, setShowEditPopup] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState<number | null>(null);
   const [showNewForm, setShowNewForm] = useState(false);
+  const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
@@ -112,12 +112,16 @@ const PropertyPhotos: React.FC = () => {
   };
 
   const handleNewFormOpen = () => {
-    setShowNewForm(true); // Open the new form
+    setShowNewForm(true);
   };
 
   const handleNewFormClose = () => {
     setShowNewForm(false);
     refreshPhotos();
+  };
+
+  const handleImageLoad = (imageId: number) => {
+    setLoadedImages(prevLoadedImages => new Set(prevLoadedImages).add(imageId));
   };
 
   const filteredImages = imagesBySpace[activeTab] || [];
@@ -174,7 +178,15 @@ const PropertyPhotos: React.FC = () => {
                     transition={{ duration: 0.2 }}
                   >
                     <div className={styles.imageContainer} onClick={() => handleImageClick(image.url)}>
-                      <img src={image.url} alt={image.description} className={styles.propertyImage} />
+                      {!loadedImages.has(image.id) && (
+                        <div className={styles.skeleton}></div>
+                      )}
+                      <img 
+                        src={image.url} 
+                        alt={image.description} 
+                        className={`${styles.propertyImage} ${loadedImages.has(image.id) ? styles.loaded : ''}`}
+                        onLoad={() => handleImageLoad(image.id)}
+                      />
                       <div className={styles.overlay}>
                         <button 
                           className={styles.iconButton}
@@ -249,12 +261,10 @@ const PropertyPhotos: React.FC = () => {
         </div>
       )}
 
-      {/* Button to trigger Photo Upload form */}
       <button className={styles.addButton} onClick={handleNewFormOpen}>
         <Plus size={24} />
       </button>
 
-      {/* Photo Upload Form Popup */}
       {showNewForm && (
         <div className={styles.newFormOverlay}>
           <div className={styles.newFormContent}>

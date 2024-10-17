@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/store";
@@ -9,6 +9,7 @@ import styles from "./userproperty.module.css";
 import { Building, Users, Calendar, Fingerprint } from "lucide-react";
 import profile from "../../assets/images/profile.jpeg";
 import { Avatar } from "@mui/material";
+
 interface User {
   id: number;
   firstName: string;
@@ -28,6 +29,37 @@ interface PropertyDetails {
   owners: PropertyUser[];
 }
 
+const UserCard: React.FC<{ owner: PropertyUser; user: User | undefined; propertyShare: number }> = React.memo(
+  ({ owner, user, propertyShare }) => (
+    <div className={styles.userCard}>
+      <div className={styles.userInfo1}>
+        <Avatar alt={user ? `${user.firstName} ${user.lastName}` : `User ${owner.userId}`} src={profile} />
+        <span className={styles.userName}>
+          {user ? `${user.firstName} ${user.lastName}` : `User ${owner.userId}`}
+        </span>
+      </div>
+      <div className={styles.profileDetails}>
+        <div className={styles.userInfo}>
+          <Fingerprint size={15} className={styles.icon} />
+          <span className={styles.userId}>ID: {owner.userId}</span>
+        </div>
+        <div className={styles.userInfo}>
+          <Users size={15} className={styles.icon} />
+          <span className={styles.userShares}>
+            Shares: {owner.noOfShare}/{propertyShare}
+          </span>
+        </div>
+        <div className={styles.userInfo}>
+          <Calendar size={15} className={styles.icon} />
+          <span className={styles.userAcquisitionDate}>
+            Acquired: {new Date(owner.acquisitionDate).toLocaleDateString()}
+          </span>
+        </div>
+      </div>
+    </div>
+  )
+);
+
 const PropertyUsers: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
@@ -41,6 +73,13 @@ const PropertyUsers: React.FC = () => {
     }
   }, [dispatch, id]);
 
+  const userMap = useMemo(() => {
+    return users.reduce((acc, user) => {
+      acc[user.id] = user;
+      return acc;
+    }, {} as Record<number, User>);
+  }, [users]);
+
   if (userStatus === 'loading' || propertyLoading) {
     return <div className={styles.loading}>Loading...</div>;
   }
@@ -52,11 +91,6 @@ const PropertyUsers: React.FC = () => {
   if (!propertyDetails) {
     return <div className={styles.error}>Error: Property details not found.</div>;
   }
-
-  const userMap = users.reduce((acc, user) => {
-    acc[user.id] = user;
-    return acc;
-  }, {} as Record<number, typeof users[0]>);
 
   return (
     <div className={styles.propertyUsersContainer}>
@@ -70,40 +104,14 @@ const PropertyUsers: React.FC = () => {
             No Users available for this property.
           </div>
         ) : (
-          propertyDetails.owners.map((owner) => {
-            const user = userMap[owner.userId];
-            return (
-              <div key={owner.userId} className={styles.userCard}>
-                <div className={styles.userInfo1}>
-                  <Avatar alt="Remy Sharp" src={profile} />
-
-                  <span className={styles.userName}>
-                    {user
-                      ? `${user.firstName} ${user.lastName}`
-                      : `User ${owner.userId}`}
-                  </span>
-                </div>
-                <div className={styles.profileDetails}>
-                  <div className={styles.userInfo}>
-                    <Fingerprint size={15} className={styles.icon} />
-                    <span className={styles.userId}>ID: {owner.userId}</span>
-                  </div>
-                  <div className={styles.userInfo}>
-                    <Users size={15} className={styles.icon} />
-                    <span className={styles.userShares}>
-                      Shares: {owner.noOfShare}/{propertyDetails.propertyShare}
-                    </span>
-                  </div>
-                  <div className={styles.userInfo}>
-                    <Calendar size={15} className={styles.icon} />
-                    <span className={styles.userAcquisitionDate}>
-                      Acquired: {new Date(owner.acquisitionDate).toLocaleDateString()}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            );
-          })
+          propertyDetails.owners.map((owner) => (
+            <UserCard
+              key={owner.userId}
+              owner={owner}
+              user={userMap[owner.userId]}
+              propertyShare={propertyDetails.propertyShare}
+            />
+          ))
         )}
       </div>
     </div>
