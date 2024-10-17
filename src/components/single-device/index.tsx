@@ -26,7 +26,10 @@ import { RootState } from "@/store/reducers";
 import Bedroom1Image from "../../assets/images/bedroom1.jpg";
 import KingBedImage from "../../assets/images/bedroom1.jpg";
 import { fetchSpacePropertiesById } from "@/store/slice/spacePropertySlice";
-import {fetchPropertyImagesByPropertyId, getAllSpacePropertyImageById } from "@/api/api-endpoints";
+import {
+  fetchPropertyImagesByPropertyId,
+  getAllSpacePropertyImageById,
+} from "@/api/api-endpoints";
 
 interface SingleDeviceProps {
   propertyId: number;
@@ -94,6 +97,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
         );
         setImagesData(sortedImages); // Sort images by displayOrder
         console.log("Images fetched and sorted successfully");
+        console.log("Images fetched and sorted successfully", sortedImages);
       } catch (error) {
         console.error("Error fetching images:", error);
       }
@@ -106,7 +110,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
     const image = imagesData.find(
       (img) => img.propertySpace?.id === spaceId && img.displayOrder === 1
     );
-
+    // console.log("imageURL", image.url);
     return image ? image.url : null;
   };
 
@@ -186,7 +190,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                   sx={{
                     display: "flex",
                     flexDirection: "column",
-                    height: "100%",
+                    height: "200px",
                     alignContent: "center",
                     width: "100%",
                   }}
@@ -242,15 +246,19 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
           Amenities
         </Typography>
         {propertyAmenities && propertyAmenities.length > 0 ? (
-          <Box sx={{ display: "flex",
-            flexDirection:'column'
-           }} className="AmenRes">
-            <Box>
-              <Grid container spacing={2} 
-              sx={{
-                display: "flex",
-                flexDirection:'column'
-              }}>
+          <Box
+            sx={{ display: "flex", flexDirection: "row" }}
+            className="AmenRes"
+          >
+            <Box >
+              <Grid
+                container
+                spacing={2}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
                 {displayedAmenities.map((amenity, index) => (
                   <Grid item xs={6} key={index}>
                     <Typography variant="body2" className="monsterrat">
