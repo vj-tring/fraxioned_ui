@@ -7,7 +7,6 @@ import { MinusCircle, PlusCircle, Save } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TabsContent } from "@/components/ui/tabs";
 import { RootState } from "@/store/reducers";
-import { TypeSpecimen } from "@mui/icons-material";
 
 interface BedType {
   id: number;
@@ -64,7 +63,6 @@ const BedTypesTab: React.FC<BedTypesTabProps> = ({
       }
       setBedTypes(types);
 
-      console.log("types", types);
 
     }
   }, [spaceBedTypes, initialBedTypes]);
