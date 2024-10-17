@@ -82,10 +82,12 @@ const BathTypesTab: React.FC<BathTypesTabProps> = ({ bathTypes: initialBathTypes
           ))}
         </div>
       </ScrollArea>
-      <Button className="w-full mt-4" onClick={handleSave}>
-        <Save className="mr-2 h-4 w-4" />
-        Save Bath Types
-      </Button>
+      <div className="flex justify-center mt-4">
+        <Button className="w-1/2 border-solid border-2 border-[##4b7a7f] text-center bg-[#4b7a7f] text-[#fff] rounded" onClick={handleSave}>
+          <Save className="mr-2 h-4 w-4" />
+          Save Bath Types
+        </Button>
+      </div>
     </TabsContent>
   );
 };

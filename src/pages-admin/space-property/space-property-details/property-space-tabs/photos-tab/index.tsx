@@ -64,7 +64,7 @@ const PhotosTab: React.FC<PhotosTabProps> = ({
                   <Button
                     variant="destructive"
                     size="icon"
-                    className="absolute top-1 right-1 h-6 w-6 rounded-full"
+                    className="absolute top-1 right-1 h-6 w-6 rounded-full bg-[#333] hover:bg-[#000]"
                     onClick={() => handleDeletePhoto(image.id!)}
                     aria-label={`Delete photo ${image.id}`}
                   >
@@ -113,20 +113,23 @@ const PhotosTab: React.FC<PhotosTabProps> = ({
           <AlertDescription>{uploadError}</AlertDescription>
         </Alert>
       )}
-      <Button
-        onClick={handleUploadImages}
-        disabled={
-          (photos.length === 0 && imagesToDelete.length === 0) || isUploading
-        }
-        className="w-full mt-4"
-      >
-        {isUploading ? (
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Save className="mr-2 h-4 w-4" />
-        )}
-        Save Photos Changes
-      </Button>
+      <div className="flex justify-center mt-4">
+        <Button
+          onClick={handleUploadImages}
+          disabled={
+            (photos.length === 0 && imagesToDelete.length === 0) || isUploading
+          }
+          className="w-1/2 border-solid border-2 border-[#c7eaee] text-center bg-[#4b7a7f] text-[#fff] rounded"
+        >
+          {isUploading ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <Save className="mr-2 h-4 w-4" />
+          )}
+          Save Photos Changes
+        </Button>
+      </div>
+
     </TabsContent>
   );
 };
