@@ -3,12 +3,7 @@ import { updateamenities, deleteAmenity } from '@/api/api-endpoints';
 
 interface UpdateAmenityPayload {
   id: number;
-  updateData: {
-    updatedBy: { id: number };
-    amenityName: string;
-    amenityDescription: string;
-    amenityGroup: { id: number };
-  };
+  updateData: FormData;
 }
 
 export interface AmenitiesState {
@@ -21,13 +16,13 @@ export interface AmenitiesState {
 }
 
 const initialState: AmenitiesState = {
-    loading: false,
-    error: null,
-    success: false,
-    deleteLoading: false,
-    deleteError: null,
-    deleteSuccess: false,
-};  
+  loading: false,
+  error: null,
+  success: false,
+  deleteLoading: false,
+  deleteError: null,
+  deleteSuccess: false,
+};
 
 export const updateAmenity = createAsyncThunk(
   "amenities/updateAmenity",

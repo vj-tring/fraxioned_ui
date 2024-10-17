@@ -153,20 +153,29 @@ const AmenityManagement: React.FC = () => {
 
   const handleSave = async () => {
     if (editingAmenity) {
-      const updateData = {
-        updatedBy: { id: 1 },
-        amenityName: editingAmenity.amenityName,
-        amenityDescription: editingAmenity.amenityDescription || '',
-        amenityGroup: { id: editingAmenity.amenityGroup.id }
-      };
+      const formData = new FormData();
+      formData.append('updatedBy', JSON.stringify({ id: 1 }));
+      formData.append('amenityName', editingAmenity.amenityName);
+      formData.append('amenityDescription', editingAmenity.amenityDescription || '');
+      formData.append('amenityGroup', JSON.stringify({ id: editingAmenity.amenityGroup.id }));
 
-      await dispatch(updateAmenity({
-        id: editingAmenity.id,
-        updateData
-      }));
-      setEditingAmenity(null);
+      if (editingAmenity.imageFile) {
+        formData.append('imageFile', editingAmenity.imageFile);
+      }
+
+      try {
+        await dispatch(updateAmenity({
+          id: editingAmenity.id,
+          updateData: formData
+        }));
+        setEditingAmenity(null);
+      } catch (error) {
+        console.error('Error updating amenity:', error);
+        showSnackbar('Failed to update amenity', 'error');
+      }
     }
   };
+
 
   const handleUpdateCancel = () => {
     setShowUpdateModal(false);
