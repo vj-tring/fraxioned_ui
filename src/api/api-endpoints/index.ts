@@ -193,12 +193,12 @@ export const addamenity = (data: {
 export const updateamenityforproperty = (updateData: UpdateAmenityPayload) => 
     axiosInstance.patch(`/property-space-amenities`, updateData);
 
-export const updateamenities = (id: number, updateData: {
-    updatedBy: { id: number };
-    amenityName: string;
-    amenityDescription: string;
-    amenityGroup: { id: number };
-}) => axiosInstance.patch(`/amenities/amenity/${id}`, updateData);
+export const updateamenities = (id: number, updateData: FormData) => 
+    axiosInstance.patch(`/amenities/amenity/${id}`, updateData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
 
 export const propertyImageapi = (propertyId: number) =>
     axiosInstance.get(`/property-space-images/property/${propertyId}/images`);
