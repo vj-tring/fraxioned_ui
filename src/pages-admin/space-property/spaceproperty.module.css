@@ -17,6 +17,9 @@
     align-items: center;
 }
 
+.headersection>h2{
+    font-weight: 700;
+}
 .mainsection {
     flex-grow: 1;
     display: flex;

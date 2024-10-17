@@ -1,5 +1,5 @@
 import { UpdateAmenityPayload } from "@/store/slice/auth/propertyamenities";
-import { axiosInstance } from "./axiosSetup";
+import { axiosInstance } from "../axiosSetup";
 
 export interface SpaceProperty {
     space: {
@@ -363,3 +363,5 @@ export const deleteSpaceImageById = (id: number) =>
 // Delete Multiple Space Images (Batch Delete)
 export const deleteMultipleSpaceImages = (spaceImages: { ids: number[] }) =>
     axiosInstance.delete(`/property-space-images/property-space-images`, { data: spaceImages });
+
+

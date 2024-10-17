@@ -4,7 +4,7 @@ import background from '../../assets/images/background.png'
 import styles from './recover.module.css'
 import logo from '../../assets/images/fraxioned.png'
 import Loader from '../../components/loader'
-import { recoverPasswordApi } from '../../api'
+import { recoverPasswordApi } from '../../api/api-endpoints'
 
 const Change: React.FC = () => {
   const [newPassword, setNewPassword] = useState('')

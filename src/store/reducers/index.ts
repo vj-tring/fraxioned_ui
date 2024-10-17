@@ -28,7 +28,11 @@ import rolesReducer from '../slice/auth/rolesSlice';
 import { propertycodecatogoryReducer } from '../slice/auth/propertycodeCatogorySlice';
 import { propertyCodesReducer } from '../slice/auth/propertycodeSlice';
 import propertydetailReducer from '../slice/auth/property-detail';
-import spaceImageReducer from '../slice/spaceImagesSlice'
+import spaceImageReducer from '../slice/spaceImagesSlice';
+import bedReducer from '../slice/bedSlice';
+import bathroomReducer from '../slice/bathroom-slice';
+import amenityReducer from "../slice/amenitiesSlice";
+
 
 const appReducer = combineReducers({
   auth: authReducer,
@@ -51,8 +55,8 @@ const appReducer = combineReducers({
   amenitiesPage: amenitiesPageReducer,
   amenities: amenitiesReducer,
   spaceImage: spaceImageReducer,
-  spaces: spaceReducer, // Add space reducer
-  spaceProperties: spacePropertyReducer, // Add space property reducer
+  spaces: spaceReducer,
+  spaceProperties: spacePropertyReducer,
   userDetails: userDetailsReducer,
   userProperties: userpropertiesReducer,
   user: userReducer,
@@ -61,6 +65,10 @@ const appReducer = combineReducers({
   propertycodecatogory: propertycodecatogoryReducer,
   propertycode: propertyCodesReducer,
   propertydetail: propertydetailReducer,
+  bed: bedReducer,
+  bathroom: bathroomReducer,
+  amenitiesID: amenityReducer,
+
 });
 
 const rootReducer = (

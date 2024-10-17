@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../../reducers';
-import { loginUser, logoutUserApi } from '../../../api';
+import { loginUser, logoutUserApi } from '../../../api/api-endpoints';
 import { AuthState, User, Session } from '../../model';
 
 const loadStateFromLocalStorage = (): AuthState => {

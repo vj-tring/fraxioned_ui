@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@/store/reducers';
-import { getAllSpaces, createSpace, updateSpace, deleteSpace } from '@/api';
+import { getAllSpaces, createSpace, updateSpace, deleteSpace } from '@/api/api-endpoints';
 
 // Space interface updated to match your API structure
 export interface Space {
