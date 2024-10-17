@@ -68,3 +68,9 @@
   height: 1px !important;
   background-color: rgb(221, 221, 221) !important;
 }
+
+.ImgIcons{
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+}

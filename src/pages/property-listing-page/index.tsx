@@ -324,6 +324,8 @@ const PropertyListingPage = () => {
     navigate("/booking-summary");
   };
 
+
+  
   return (
     <div className="container-fluid d-flex flex-column gap-4 px-14">
       <div className="img-row pt-4 px-12">
