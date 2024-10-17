@@ -186,7 +186,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                   sx={{
                     display: "flex",
                     flexDirection: "column",
-                    height: "100%",
+                    height: "200px",
                     alignContent: "center",
                     width: "100%",
                   }}
@@ -249,7 +249,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
               <Grid container spacing={2} 
               sx={{
                 display: "flex",
-                flexDirection:'column'
+                flexDirection:'row'
               }}>
                 {displayedAmenities.map((amenity, index) => (
                   <Grid item xs={6} key={index}>
