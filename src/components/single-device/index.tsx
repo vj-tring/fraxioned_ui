@@ -26,7 +26,10 @@ import { RootState } from "@/store/reducers";
 import Bedroom1Image from "../../assets/images/bedroom1.jpg";
 import KingBedImage from "../../assets/images/bedroom1.jpg";
 import { fetchSpacePropertiesById } from "@/store/slice/spacePropertySlice";
-import {fetchPropertyImagesByPropertyId, getAllSpacePropertyImageById } from "@/api/api-endpoints";
+import {
+  fetchPropertyImagesByPropertyId,
+  getAllSpacePropertyImageById,
+} from "@/api/api-endpoints";
 
 interface SingleDeviceProps {
   propertyId: number;
@@ -242,15 +245,19 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
           Amenities
         </Typography>
         {propertyAmenities && propertyAmenities.length > 0 ? (
-          <Box sx={{ display: "flex",
-            flexDirection:'column'
-           }} className="AmenRes">
+          <Box
+            sx={{ display: "flex", flexDirection: "column" }}
+            className="AmenRes"
+          >
             <Box>
-              <Grid container spacing={2} 
-              sx={{
-                display: "flex",
-                flexDirection:'row'
-              }}>
+              <Grid
+                container
+                spacing={2}
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                }}
+              >
                 {displayedAmenities.map((amenity, index) => (
                   <Grid item xs={6} key={index}>
                     <Typography variant="body2" className="monsterrat">
@@ -300,17 +307,18 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
         className="aminityPopup"
       >
         <DialogTitle
-          sx={{
-            // background:'red',
-            height: "60px",
-          }}
+          sx={
+            {
+              // background:'red',
+            }
+          }
         >
           <IconButton
             edge="end"
             color="inherit"
             onClick={handleShowLessClick}
             aria-label="close"
-            sx={{ position: "absolute", right: 8, top: 8, paddingRight: 3 }}
+            sx={{ position: "absolute", right: 18, top: 16   ,marginRight:"10px" }}
           >
             <CloseIcon />
           </IconButton>

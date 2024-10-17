@@ -116,10 +116,6 @@ export default function Component({ initialSpace = {} }) {
     dispatch(fetchAmenities());
   }, [space, dispatch, showBedTypesTab, showBathTypesTab]);
 
-  console.log("Property Space Beds:", propertySpaceBeds);
-  console.log("propertySpaceBathrooms:", propertySpaceBathrooms);
-
-
   useEffect(() => {
     if (propertySpaceAmenities.length > 0) {
       setUpdatedAmenities(
@@ -299,6 +295,8 @@ export default function Component({ initialSpace = {} }) {
         updatedBy: { id: userId }
       };
       dispatch(createOrDeletePropertySpaceBeds(data));
+      dispatch(fetchAllPropertySpaceBedsByPropertySpace(space.id));
+
     }
   };
 
@@ -313,6 +311,7 @@ export default function Component({ initialSpace = {} }) {
         updatedBy: { id: userId }
       };
       dispatch(createOrDeletePropertySpaceBathrooms(data));
+      dispatch(fetchAllPropertySpaceBathroomsByPropertySpace(space.id));
     }
   };
 
