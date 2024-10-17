@@ -188,22 +188,77 @@
 .amenityItem {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    padding: 0.4rem;
+    align-items: center;
+    padding: 5px;
     border-bottom: 1px solid #e0e0e0;
     transition: background-color 0.3s;
 }
 
-
 .amenityContent {
     flex-grow: 1;
     margin-right: 1rem;
+    display: flex;
+    align-items: center;
 }
 
 .displayContainer {
     display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.amenityIcon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f1f3f5;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.amenityImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.amenityDetails {
+    display: flex;
     flex-direction: column;
+}
+
+.fileInputWrapper {
+    display: flex;
+    align-items: center;
+}
+
+.fileName {
+    margin-left: 1rem;
+    font-size: 14px;
+    color: #666;
+}
+
+.hiddenFileInput {
+    display: none;
+}
+
+.fileInputButton {
+    display: flex;
+    align-items: center;
     gap: 0.5rem;
+    padding: 6px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.fileInputButton:hover {
+    background-color: #e0e0e0;
 }
 
 .editingContainer {
@@ -211,6 +266,24 @@
     flex-direction: column;
     gap: 0.5rem;
     width: 100%;
+}
+
+.editInput,
+.editDescription {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.editDescription {
+    min-height: 60px;
+    resize: vertical;
+}
+
+.fileInput {
+    margin-top: 0.5rem;
 }
 
 .amenityItem:last-child {
@@ -294,19 +367,6 @@
     width: 100%;
 }
 
-.editDescription {
-    padding: 0.4rem;
-    min-height: 60px;
-    font-size: 14px;
-    border: 1px solid #c7eaee;
-    border-radius: 4px;
-    outline: none;
-    transition: border-color 0.3s;
-    width: 100%;
-    resize: vertical;
-    font-family: inherit;
-}
-
 .editInput:focus,
 .editDescription:focus {
     border: 1px solid #c7eaee;
@@ -375,4 +435,3 @@
         width: 100%;
     }
 }
-
