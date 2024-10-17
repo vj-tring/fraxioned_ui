@@ -103,7 +103,6 @@ export const deleteSpaceBathroomType = createAsyncThunk(
   }
 );
 
-// Create the slice
 const bathroomSlice = createSlice({
   name: 'bathroom',
   initialState,

@@ -31,8 +31,8 @@ import BedTypesTab from "./property-space-tabs/bed-type-tab";
 import { Trash2 } from "lucide-react";
 import BathTypesTab from "./property-space-tabs/bath-type-tab";
 import { deleteExistingSpaceProperty } from "@/store/slice/spacePropertySlice";
-import { createOrDeletePropertySpaceBeds, fetchAllPropertySpaceBeds, fetchAllPropertySpaceBedsByPropertySpace } from "@/store/slice/bedSlice";
-import { createOrDeletePropertySpaceBathrooms, fetchAllPropertySpaceBathroomsByPropertySpace } from "@/store/slice/bathroom-slice";
+import { createOrDeletePropertySpaceBeds, fetchAllPropertySpaceBedsByPropertySpace, fetchAllSpaceBedTypes } from "@/store/slice/bedSlice";
+import { createOrDeletePropertySpaceBathrooms, fetchAllPropertySpaceBathroomsByPropertySpace, fetchAllSpaceBathroomTypes } from "@/store/slice/bathroom-slice";
 
 export default function Component({ initialSpace = {} }) {
   const location = useLocation();
@@ -61,9 +61,7 @@ export default function Component({ initialSpace = {} }) {
     (state: RootState) => state.spaceImage.error
   );
   const { propertySpaceBeds, loading: bedTypesLoading, error: bedTypesError } = useSelector((state: RootState) => state.bed);
-  const { propertySpaceBathrooms, loading: bathTypesLoading, error: bathTypesError } = useSelector(
-    (state: RootState) => state.bathroom
-  );
+  const { propertySpaceBathrooms, loading: bathTypesLoading, error: bathTypesError } = useSelector((state: RootState) => state.bathroom);
 
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedAmenity, setSelectedAmenity] = useState<string>("");
@@ -106,12 +104,21 @@ export default function Component({ initialSpace = {} }) {
     if (space?.id) {
       dispatch(getByPropertySpaceId(space.id));
       dispatch(fetchImagesByPropertySpaceId(space.id));
-      dispatch(fetchAllPropertySpaceBedsByPropertySpace(space.id));
-      dispatch(fetchAllPropertySpaceBathroomsByPropertySpace(space.id));
-
+      dispatch(fetchAllSpaceBedTypes());
+      dispatch(fetchAllSpaceBathroomTypes());
+      if (showBedTypesTab) {
+        dispatch(fetchAllPropertySpaceBedsByPropertySpace(space.id));
+      }
+      if (showBathTypesTab) {
+        dispatch(fetchAllPropertySpaceBathroomsByPropertySpace(space.id));
+      }
     }
     dispatch(fetchAmenities());
-  }, [space, dispatch]);
+  }, [space, dispatch, showBedTypesTab, showBathTypesTab]);
+
+  console.log("Property Space Beds:", propertySpaceBeds);
+  console.log("propertySpaceBathrooms:", propertySpaceBathrooms);
+
 
   useEffect(() => {
     if (propertySpaceAmenities.length > 0) {
@@ -352,9 +359,13 @@ export default function Component({ initialSpace = {} }) {
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="photos" className="space-y-4">
-          <TabsList className={`grid w-full grid-cols-${tabsList.length}`}>
+        <TabsList className="flex flex-wrap">
             {tabsList.map((tab) => (
-              <TabsTrigger key={tab.value} value={tab.value}>
+              <TabsTrigger
+                key={tab.value}
+                value={tab.value}
+                className="flex-1 min-w-[100px]"
+              >
                 {tab.label}
               </TabsTrigger>
             ))}

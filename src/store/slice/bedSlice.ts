@@ -31,7 +31,7 @@ export const fetchAllPropertySpaceBeds = createAsyncThunk(
 );
 
 export const fetchAllPropertySpaceBedsByPropertySpace = createAsyncThunk(
-    'bed/fetchAllPropertySpaceBeds',
+    'bed/fetchAllPropertySpaceBedsByPropertySpace',
     async (propertySpaceId: number) => {
       const response = await api.getAllPropertySpaceBedsByPropertySpace(propertySpaceId);
       return response.data.data;
@@ -116,6 +116,17 @@ const bedSlice = createSlice({
         state.propertySpaceBeds = action.payload;
       })
       .addCase(fetchAllPropertySpaceBeds.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || null;
+      })
+      .addCase(fetchAllPropertySpaceBedsByPropertySpace.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchAllPropertySpaceBedsByPropertySpace.fulfilled, (state, action) => {
+        state.loading = false;
+        state.propertySpaceBeds = action.payload;
+      })
+      .addCase(fetchAllPropertySpaceBedsByPropertySpace.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || null;
       })

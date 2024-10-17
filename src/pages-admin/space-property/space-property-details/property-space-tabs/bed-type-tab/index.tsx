@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@/store";
+import { fetchAllSpaceBedTypes } from "@/store/slice/bedSlice";
 import { Button } from "@/components/ui/button";
 import { MinusCircle, PlusCircle, Save } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TabsContent } from "@/components/ui/tabs";
+import { RootState } from "@/store/reducers";
+import { TypeSpecimen } from "@mui/icons-material";
 
 interface BedType {
   id: number;
@@ -20,29 +25,49 @@ interface PropertySpaceBed {
 }
 
 interface BedTypesTabProps {
-  propertySpaceBeds: PropertySpaceBed[];
+  propertySpaceBeds: PropertySpaceBed[] | null;
   loading: boolean;
   error: string | null;
   onSave: (updatedBedTypes: Array<{ id: number; count: number }>) => void;
 }
 
 const BedTypesTab: React.FC<BedTypesTabProps> = ({
-  propertySpaceBeds,
+  propertySpaceBeds: initialBedTypes,
   loading,
   error,
   onSave,
 }) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const spaceBedTypes = useSelector((state: RootState) => state.bed.spaceBedTypes);
   const [bedTypes, setBedTypes] = useState<BedType[]>([]);
+
   useEffect(() => {
-    if (propertySpaceBeds.length > 0) {
-      const initialBedTypes = propertySpaceBeds.map(bed => ({
-        id: bed.spaceBedType.id,
-        name: bed.spaceBedType.bedType,
-        count: bed.count
-      }));
-      setBedTypes(initialBedTypes);
+    dispatch(fetchAllSpaceBedTypes());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (Array.isArray(spaceBedTypes) && spaceBedTypes.length > 0) {
+      let types: BedType[];
+      if (!initialBedTypes) {
+        types = spaceBedTypes.map(type => ({
+          id: type.id,
+          name: type.bedType,
+          count: 0
+        }));
+      } else {
+        const initialCounts = new Map(initialBedTypes.map(bed => [bed.spaceBedType.id, bed.count]));
+        types = spaceBedTypes.map(type => ({
+          id: type.id,
+          name: type.bedType,
+          count: initialCounts.get(type.id) || 0
+        }));
+      }
+      setBedTypes(types);
+
+      console.log("types", types);
+
     }
-  }, [propertySpaceBeds]);
+  }, [spaceBedTypes, initialBedTypes]);
 
   const handleBedCountChange = (id: number, increment: number) => {
     setBedTypes(prevBedTypes =>
@@ -62,7 +87,7 @@ const BedTypesTab: React.FC<BedTypesTabProps> = ({
   }
 
   if (error) {
-    return <div>Error loading bed types: {error}</div>;
+    return <div>Error: {error}</div>;
   }
 
   return (
