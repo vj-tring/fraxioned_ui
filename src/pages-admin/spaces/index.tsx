@@ -278,40 +278,44 @@ const Spaces: React.FC<SpacesProps> = ({ isSidebarOpen }) => {
             <div className={styles.mainsection}>
               <div className={styles.spaceList}>
                 {spaces.length > 0 ? (
-                  spaces.map((space) => (
-                    <div key={space.id} className={styles.spaceItem}>
-                      <div className={styles.spaceCard}>
-                        <div className={styles.photoGridContainer}>
-                          <img
-                            src={space.s3_url || "https://via.placeholder.com/150"}
-                            alt={space.name}
-                            className={styles.spaceImage}
-                          />
-                          <div className={styles.spaceContent}>
-                            <h4 className={styles.cardTitle}>{space.name}</h4>
-                            <div className={styles.editOverlay}>
-                              <button
-                                className={styles.iconButton}
-                                onClick={() => handleEditSpace(space)}
-                              >
-                                <Edit size={20} />
-                              </button>
-                              <button
-                                className={styles.iconButton}
-                                onClick={() => confirmDeleteSpace(space)}
-                              >
-                                <Trash2 size={20} />
-                              </button>
+                  [...spaces] // Create a shallow copy to avoid mutation
+                    .sort((a, b) => a.name.localeCompare(b.name)) // Sort the copied array
+                    .map((space) => (
+                      <div key={space.id} className={styles.spaceItem}>
+                        <div className={styles.spaceCard}>
+                          <div className={styles.photoGridContainer}>
+                            <img
+                              src={space.s3_url || "https://via.placeholder.com/150"}
+                              alt={space.name}
+                              className={styles.spaceImage}
+                            />
+                            <div className={styles.spaceContent}>
+                              <h4 className={styles.cardTitle}>{space.name}</h4>
+                              <div className={styles.editOverlay}>
+                                <button
+                                  className={styles.iconButton}
+                                  onClick={() => handleEditSpace(space)}
+                                >
+                                  <Edit size={20} />
+                                </button>
+                                <button
+                                  className={styles.iconButton}
+                                  onClick={() => confirmDeleteSpace(space)}
+                                >
+                                  <Trash2 size={20} />
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))
+                    ))
                 ) : (
                   <p>No Available Spaces</p>
                 )}
               </div>
+
+
             </div>
 
           </>

@@ -59,7 +59,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                         <>
                             <IoIosImages className={styles.icon} />
                             <p className={styles.dragDropText}>Drag and drop</p>
-                            <p className={styles.orText}>or browse for photos</p>
+                            <p className={styles.orText}>or browse for photo</p>
                             <button
                                 className={styles.uploadButton}
                                 onClick={() => fileInputRef.current?.click()}

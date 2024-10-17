@@ -28,7 +28,7 @@ import {
 import AmenitiesTab from "./property-space-tabs/amenities-tab";
 import PhotosTab from "./property-space-tabs/photos-tab";
 import BedTypesTab from "./property-space-tabs/bed-type-tab";
-import { Trash2 } from "lucide-react";
+import { ArrowLeft, CircleArrowLeft, MoveLeft, Trash2 } from "lucide-react";
 import BathTypesTab from "./property-space-tabs/bath-type-tab";
 import { deleteExistingSpaceProperty } from "@/store/slice/spacePropertySlice";
 import { createOrDeletePropertySpaceBeds, fetchAllPropertySpaceBedsByPropertySpace, fetchAllSpaceBedTypes } from "@/store/slice/bedSlice";
@@ -315,16 +315,21 @@ export default function Component({ initialSpace = {} }) {
       dispatch(createOrDeletePropertySpaceBathrooms(data));
     }
   };
+
+  const handleback = () => {
+    navigate(`/admin/property/${space.property.id}/rooms`);
+  };
+
   return (
-    <Card className="w-full max-w-5xl mx-auto">
-      <CardHeader>
-        <CardTitle className="text-3xl font-bold">
+    <Card className="w-full max-w-5xl mx-auto bg-[#fff] text-black h-full rounded-lg">
+      <CardHeader className="flex flex-row justify-between items-center">
+        <CardTitle className="text-2xl font-bold">
           {space?.space?.name || "Space Name"} {space?.instanceNumber}
         </CardTitle>
         <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
           <DialogTrigger asChild>
-            <Button variant="ghost" size="icon" className="text-destructive">
-              <Trash2 className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className="text-[#00636D] m-0">
+              <Trash2 size={20} />
             </Button>
           </DialogTrigger>
           <DialogContent>
@@ -357,7 +362,7 @@ export default function Component({ initialSpace = {} }) {
           </DialogContent>
         </Dialog>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pb-2">
         <Tabs defaultValue="photos" className="space-y-4">
         <TabsList className="flex flex-wrap">
             {tabsList.map((tab) => (
@@ -408,15 +413,23 @@ export default function Component({ initialSpace = {} }) {
             />
           )}
           {showBathTypesTab && (
-           <BathTypesTab
-           bathTypes={propertySpaceBathrooms}
-           loading={bathTypesLoading}
-           error={bathTypesError}
-           onSave={handleSaveBathTypes}
-         />
+            <BathTypesTab
+              bathTypes={propertySpaceBathrooms}
+              loading={bathTypesLoading}
+              error={bathTypesError}
+              onSave={handleSaveBathTypes}
+            />
           )}
         </Tabs>
       </CardContent>
+      <div className="flex justify-center px-6 py-0 pb-2 items-center">
+        <Button
+          onClick={handleback}
+          className="w-1/2 border-solid border-2 border-[#000]-500 text-center text-[#000000aa] display-flex gap-1 rounded"
+        >
+          <MoveLeft size={20} color='#000000aa' /> Back to rooms
+        </Button>
+      </div>
     </Card>
   );
 }

@@ -119,10 +119,12 @@ const BedTypesTab: React.FC<BedTypesTabProps> = ({
           ))}
         </div>
       </ScrollArea>
-      <Button className="w-full mt-4" onClick={handleSave}>
-        <Save className="mr-2 h-4 w-4" />
-        Save Bed Types
-      </Button>
+      <div className="flex justify-center mt-4">
+        <Button className="w-1/2 border-solid border-2 border-[#c7eaee] text-center bg-[#4b7a7f] text-[#fff] rounded" onClick={handleSave}>
+          <Save className="mr-2 h-4 w-4" />
+          Save Bed Types
+        </Button>
+      </div>
     </TabsContent>
   );
 };

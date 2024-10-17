@@ -116,7 +116,7 @@ const AmenitiesTab: React.FC<AmenitiesTabProps> = ({
               Add
             </Button>
           </div>
-          <ScrollArea className="h-[300px] w-full rounded-md border p-4">
+          <ScrollArea className="h-[300px] w-full rounded-md border p-4 mt-2">
             <div className="space-y-4">
               {Object.entries(propertyAmenityGroups).map(
                 ([category, amenities]) => (
@@ -157,18 +157,20 @@ const AmenitiesTab: React.FC<AmenitiesTabProps> = ({
               )}
             </div>
           </ScrollArea>
-          <Button
-            onClick={saveAmenityChanges}
-            disabled={propertyAmenitiesLoading}
-            className="w-full mt-4"
-          >
-            {propertyAmenitiesLoading ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <Save className="mr-2 h-4 w-4" />
-            )}
-            Save Amenities Changes
-          </Button>
+          <div className="flex justify-center mt-4">
+            <Button
+              onClick={saveAmenityChanges}
+              disabled={propertyAmenitiesLoading}
+              className="w-1/2 border-solid border-2 border-[#c7eaee] text-center bg-[#4b7a7f] text-[#fff] rounded"
+            >
+              {propertyAmenitiesLoading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Save className="mr-2 h-4 w-4" />
+              )}
+              Save Amenities Changes
+            </Button>
+          </div>
         </>
       )}
     </TabsContent>
