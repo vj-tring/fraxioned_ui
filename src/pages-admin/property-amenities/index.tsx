@@ -3,13 +3,14 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Search, ChevronDown, ChevronUp } from 'lucide-react';
 import styles from './propertyamenities.module.css';
-import { amenitiesapi } from '@/api';
+import { amenitiesapi } from '@/api/api-endpoints';
 import CustomizedSnackbars from '@/components/customized-snackbar';
 import ConfirmationModal from '@/components/confirmation-modal';
 import {
-  getAmenitiesById,
+  getByPropertySpaceId,
   updatePropertyAmenities,
-  resetPropertyAmenities
+  resetPropertyAmenities,
+  getByPropertyId
 } from '@/store/slice/auth/propertyamenities';
 import { RootState } from '@/store/reducers';
 import { AppDispatch } from '@/store';
@@ -56,13 +57,13 @@ const PropertyAmenities: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      dispatch(getAmenitiesById(Number(id)));
+      dispatch(getByPropertyId(Number(id)));
     }
   }, [id, dispatch]);
 
   useEffect(() => {
     if (propertyAmenities.length > 0) {
-      setSelectedAmenities(propertyAmenities.map(item => item.amenity.id));
+      setSelectedAmenities(propertyAmenities.map((item: { amenity: { id: any; }; }) => item.amenity.id));
     }
   }, [propertyAmenities]);
 
@@ -72,7 +73,7 @@ const PropertyAmenities: React.FC = () => {
       setShowConfirmModal(false);
       dispatch(resetPropertyAmenities());
       if (id) {
-        dispatch(getAmenitiesById(Number(id)));
+        dispatch(getByPropertyId(Number(id)));
       }
       fetchAmenities();
     }
@@ -82,12 +83,12 @@ const PropertyAmenities: React.FC = () => {
     }
   }, [success, error, dispatch, id]);
 
-  const showSnackbar = (message: string, severity: 'success' | 'info' | 'warning' | 'error') => {
-    setSnackbar({ open: true, message, severity });
-    setTimeout(() => {
-      setSnackbar(prev => ({ ...prev, open: false }));
-    }, 3000);
-  };
+    const showSnackbar = (message: string, severity: 'success' | 'info' | 'warning' | 'error') => {
+      setSnackbar({ open: true, message, severity });
+      setTimeout(() => {
+        setSnackbar(prev => ({ ...prev, open: false }));
+      }, 3000);
+    };
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') return;

@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { amenitiesapi } from '@/api';
+import { amenitiesapi } from '@/api/api-endpoints';
 import { updateAmenity, resetAmenitiesState, deleteAmenityAsync } from '@/store/slice/auth/amenitiespageSlice';
 import { RootState } from '@/store/reducers';
 import styles from './amenitypage.module.css';
 import NewAmenityForm from '../property-amenities/new-amenity';
-import { Edit2, Trash2, Plus, ChevronRight, ChevronDown, RefreshCw, Search } from 'lucide-react';
+import { Edit2, Trash2, Plus, ChevronRight, ChevronDown, RefreshCw, Search, ImageIcon, Upload } from 'lucide-react';
 import ConfirmationModal from '@/components/confirmation-modal';
 import CustomizedSnackbars from '@/components/customized-snackbar';
 import { IconButton, Tooltip } from '@mui/material';
@@ -15,10 +15,12 @@ interface Amenity {
   id: number;
   amenityName: string;
   amenityDescription?: string;
+  s3_url?: string;
   amenityGroup: {
     id: number;
     name: string;
   };
+  imageFile?: File | null;
 }
 
 interface AmenityGroup {
@@ -57,6 +59,7 @@ const AmenityManagement: React.FC = () => {
   const [editingAmenity, setEditingAmenity] = useState<Amenity | null>(null);
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [amenityToDelete, setAmenityToDelete] = useState<Amenity | null>(null);
   const [snackbar, setSnackbar] = useState<SnackbarState>({
@@ -113,6 +116,20 @@ const AmenityManagement: React.FC = () => {
       showSnackbar('Failed to fetch amenities', 'error');
       setLoading(false);
     }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    if (editingAmenity && file) {
+      setEditingAmenity({
+        ...editingAmenity,
+        imageFile: file
+      });
+    }
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
   };
 
   const handleGroupSearch = (group: string, term: string) => {
@@ -337,17 +354,43 @@ const AmenityManagement: React.FC = () => {
                                 className={styles.editDescription}
                                 placeholder="Description (optional)"
                               />
+                              <div className={styles.fileInputWrapper}>
+                                <button type="button" onClick={triggerFileInput} className={styles.fileInputButton}>
+                                  <Upload size={10} />
+                                  <span>Choose File</span>
+                                </button>
+                                <span className={styles.fileName}>
+                                  {editingAmenity.imageFile?.name || 'No file chosen'}
+                                </span>
+                                <input
+                                  ref={fileInputRef}
+                                  type="file"
+                                  onChange={handleFileChange}
+                                  accept="image/*"
+                                  className={styles.hiddenFileInput}
+                                />
+                              </div>
                             </div>
+
                           ) : (
                             <div className={styles.displayContainer}>
-                              <span className={styles.amenityName}>
-                                {amenity.amenityName}
-                              </span>
-                              {amenity.amenityDescription && (
-                                <p className={styles.amenityDescription}>
-                                  {amenity.amenityDescription}
-                                </p>
-                              )}
+                              <div className={styles.amenityIcon}>
+                                {amenity.s3_url ? (
+                                  <img src={amenity.s3_url} alt={amenity.amenityName} className={styles.amenityImage} />
+                                ) : (
+                                  <ImageIcon size={14} />
+                                )}
+                              </div>
+                              <div className={styles.amenityDetails}>
+                                <span className={styles.amenityName}>
+                                  {amenity.amenityName}
+                                </span>
+                                {amenity.amenityDescription && (
+                                  <p className={styles.amenityDescription}>
+                                    {amenity.amenityDescription}
+                                  </p>
+                                )}
+                              </div>
                             </div>
                           )}
                         </div>
@@ -428,173 +471,5 @@ const AmenityManagement: React.FC = () => {
     </div>
   );
 };
-
-
-// const filteredAmenities = Object.entries(amenities).reduce(
-//   (acc, [group, amenitiesList]) => {
-//     const groupSearchTerm = groupSearchTerms[group] || "";
-//     const filtered = amenitiesList.filter((amenity) =>
-//       amenity.amenityName
-//         .toLowerCase()
-//         .includes(groupSearchTerm.toLowerCase())
-//     );
-//     acc[group] = filtered;
-//     return acc;
-//   },
-//   {} as { [key: string]: Amenity[] }
-// );
-
-// if (loading) return <div className={styles.loading}>Loading...</div>;
-
-// return (
-//   <div className={styles.container}>
-//     <div className={styles.header}>
-//       <h1 className={styles.title}>Amenity Management</h1>
-//       <div className={styles.actions}>
-//         <Tooltip title="Add New Amenity" arrow>
-//           <button className={styles.addButton} onClick={handleAddNew}>
-//             <Plus size={20} />
-//             <span className={styles.buttonText}>New Amenity</span>
-//           </button>
-//         </Tooltip>
-//       </div>
-//     </div>
-//     <div className={styles.content}>
-//       {isAddingNew && (
-//         <NewAmenityForm
-//           onClose={handleCloseNewAmenityForm}
-//           onAmenityAdded={handleAmenityAdded}
-//         />
-//       )}
-//       <div className={styles.amenitiesList}>
-//         {Object.entries(filteredAmenities).map(([group, amenitiesList]) => (
-//           <div key={group} className={styles.amenityGroup}>
-//             <div
-//               className={styles.groupHeader}
-//               onClick={() => toggleGroupExpansion(group)}
-//             >
-//               {expandedGroups.includes(group) ? (
-//                 <ChevronDown size={20} />
-//               ) : (
-//                 <ChevronRight size={20} />
-//               )}
-//               <h2>{group}</h2>
-//               <span className={styles.amenityCount}>
-//                 {amenitiesList.length}
-//               </span>
-//             </div>
-//             {expandedGroups.includes(group) && (
-//               <div className={styles.amenityItems}>
-//                 <div className={styles.groupSearchContainer}>
-//                   <h3 className={styles.groupSearchHeading}>
-//                     {group} amenity list
-//                   </h3>
-//                   <div className={styles.groupSearchBar}>
-//                     <Search size={20} />
-//                     <input
-//                       type="text"
-//                       placeholder={`Search in ${group}...`}
-//                       value={groupSearchTerms[group] || ""}
-//                       onChange={(e) =>
-//                         handleGroupSearch(group, e.target.value)
-//                       }
-//                     />
-//                   </div>
-//                 </div>
-//                 {amenitiesList.length > 0 ? (
-//                   amenitiesList.map((amenity) => (
-//                     <div key={amenity.id} className={styles.amenityItem}>
-//                       {editingAmenity?.id === amenity.id ? (
-//                         <input
-//                           type="text"
-//                           value={editingAmenity.amenityName}
-//                           onChange={(e) =>
-//                             setEditingAmenity({
-//                               ...editingAmenity,
-//                               amenityName: e.target.value,
-//                             })
-//                           }
-//                           className={styles.editInput}
-//                         />
-//                       ) : (
-//                         <span className={styles.amenityName}>
-//                           {amenity.amenityName}
-//                         </span>
-//                       )}
-//                       <div className={styles.actionButtons}>
-//                         {editingAmenity?.id === amenity.id ? (
-//                           <>
-//                             <Tooltip title="Save" arrow>
-//                               <button
-//                                 onClick={handleSave}
-//                                 className={styles.saveButton}
-//                                 disabled={updateLoading}
-//                               >
-//                                 Save
-//                               </button>
-//                             </Tooltip>
-//                             <Tooltip title="Cancel" arrow>
-//                               <button
-//                                 onClick={handleCancel}
-//                                 className={styles.cancelButton}
-//                                 disabled={updateLoading}
-//                               >
-//                                 Cancel
-//                               </button>
-//                             </Tooltip>
-//                           </>
-//                         ) : (
-//                           <>
-//                             <Tooltip title="Edit" arrow>
-//                               <button
-//                                 onClick={() => handleEdit(amenity)}
-//                                 className={styles.editButton}
-//                               >
-//                                 <Edit2 size={16} />
-//                               </button>
-//                             </Tooltip>
-//                             <Tooltip title="Delete" arrow>
-//                               <button
-//                                 onClick={() => handleDeleteClick(amenity)}
-//                                 className={styles.deleteButton}
-//                                 disabled={deleteLoading}
-//                               >
-//                                 <Trash2 size={16} />
-//                               </button>
-//                             </Tooltip>
-//                           </>
-//                         )}
-//                       </div>
-//                     </div>
-//                   ))
-//                 ) : (
-//                   <div className={styles.notFoundMessage}>
-//                     No amenities found in {group} for this search.
-//                   </div>
-//                 )}
-//               </div>
-//             )}
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//     <ConfirmationModal
-//       show={showDeleteModal}
-//       onHide={handleDeleteCancel}
-//       onConfirm={handleDeleteConfirm}
-//       title="Delete Amenity"
-//       message={`Are you sure you want to delete the amenity "${amenityToDelete?.amenityName}"?`}
-//       confirmLabel="Delete"
-//       cancelLabel="Cancel"
-//     />
-//     <CustomizedSnackbars
-//       open={snackbar.open}
-//       handleClose={handleSnackbarClose}
-//       message={snackbar.message}
-//       severity={snackbar.severity}
-//     />
-//   </div>
-// );
-// };
 
 export default AmenityManagement;

@@ -16,6 +16,7 @@ import {
   DialogContent,
   DialogActions,
   IconButton,
+  Grid,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CustomPagination from "../custom-pagination";
@@ -25,7 +26,10 @@ import { RootState } from "@/store/reducers";
 import Bedroom1Image from "../../assets/images/bedroom1.jpg";
 import KingBedImage from "../../assets/images/bedroom1.jpg";
 import { fetchSpacePropertiesById } from "@/store/slice/spacePropertySlice";
-import { getAllSpacePropertyImageById, getAllSpacePropertyImages } from "@/api";
+import {
+  fetchPropertyImagesByPropertyId,
+  getAllSpacePropertyImageById,
+} from "@/api/api-endpoints";
 
 interface SingleDeviceProps {
   propertyId: number;
@@ -60,10 +64,14 @@ const groupAmenitiesByGroup = (data: PropertyAmenity[]) => {
 
 const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { propertyAmenities, loading, error } = useSelector(
-    (state: RootState) => state.amenities
+  const {
+    propertyAmenities: propertyAmenities,
+    loading,
+    error,
+  } = useSelector((state: RootState) => state.amenitiesID);
+  const propertySpace = useSelector(
+    (state: RootState) => state.spaceProperties.spaceProperties || []
   );
-  const propertySpace = useSelector((state: RootState) => state.spaceProperties.spaceProperties || [])
   const [imagesData, setImagesData] = useState<any[]>([]);
 
   const [page, setPage] = useState(1);
@@ -72,6 +80,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
 
   useEffect(() => {
     dispatch(fetchAmenities(propertyId));
+    console.log("amenties", propertyAmenities);
     dispatch(fetchSpacePropertiesById(propertyId));
   }, [dispatch, propertyId]);
 
@@ -83,28 +92,26 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
     const imageFetching = async () => {
       try {
         const response = await getAllSpacePropertyImageById(Number(propertyId));
-        const sortedImages = response.data.data.sort((a: any, b: any) => a.displayOrder - b.displayOrder);
+        const sortedImages = response.data.data.sort(
+          (a: any, b: any) => a.displayOrder - b.displayOrder
+        );
         setImagesData(sortedImages); // Sort images by displayOrder
-        console.log('Images fetched and sorted successfully');
+        console.log("Images fetched and sorted successfully");
       } catch (error) {
-        console.error('Error fetching images:', error);
+        console.error("Error fetching images:", error);
       }
     };
 
     imageFetching();
-  }, [propertyId]); // 
+  }, [propertyId]); //
 
   const getImageUrlByPropertyAndSpace = (spaceId: number): string | null => {
     const image = imagesData.find(
-      (img) =>
-        img.propertySpace?.id === spaceId &&
-        img.displayOrder === 1
+      (img) => img.propertySpace?.id === spaceId && img.displayOrder === 1
     );
 
     return image ? image.url : null;
   };
-
-
 
   const handleShowMoreClick = () => {
     setOpen(true);
@@ -127,7 +134,9 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const totalspacePages = Math.ceil(propertySpace.length / ITEMS_PER_PAGE);
 
   const groupedAmenities = groupAmenitiesByGroup(propertyAmenities || []);
-  const allAmenities = propertyAmenities ? propertyAmenities.map((pa) => pa.amenity) : [];
+  const allAmenities = propertyAmenities
+    ? propertyAmenities.map((pa) => pa.amenity)
+    : [];
   const displayedAmenities = showAllAmenities
     ? allAmenities
     : allAmenities.slice(0, AMENITIES_PER_PAGE);
@@ -140,13 +149,16 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
       sx={{ display: "flex", flexDirection: "row", gap: 10 }}
       className="singleDevice"
     >
-
       <Box
         sx={{ display: "flex", flexDirection: "column", gap: 3, width: "50%" }}
         className="RoomsRes"
       >
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="h6" component="div" className="monsterrat checkIn">
+          <Typography
+            variant="h6"
+            component="div"
+            className="monsterrat checkIn"
+          >
             Spaces for Property
           </Typography>
           <Box>
@@ -159,7 +171,9 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
         </Box>
 
         {propertySpace.length === 0 ? (
-          <Typography variant="body1">No spaces available for this property.</Typography>
+          <Typography variant="body1">
+            No spaces available for this property.
+          </Typography>
         ) : (
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
             {paginatedSpaces.map((space, index) => (
@@ -175,16 +189,20 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                   sx={{
                     display: "flex",
                     flexDirection: "column",
-                    height: "70%",
+                    height: "200px",
+                    alignContent: "center",
                     width: "100%",
                   }}
                 >
                   <CardMedia
                     component="img"
-                    height="100%"
-                    image={getImageUrlByPropertyAndSpace(space.space.id) || 'https://via.placeholder.com/100'} // Placeholder for space image
+                    // height="100px"
+                    image={
+                      getImageUrlByPropertyAndSpace(space.space.id) ||
+                      "https://via.placeholder.com/100"
+                    } // Placeholder for space image
                     alt={space.space.name}
-                    sx={{ objectFit: "cover" }}
+                    sx={{ objectFit: "cover", height: "200px" }}
                   />
                 </Card>
                 <CardContent sx={{ padding: 1, paddingTop: 2 }}>
@@ -220,7 +238,6 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
         )}
       </Box>
 
-
       <Box
         sx={{ width: "50%", display: "flex", flexDirection: "column", gap: 3 }}
       >
@@ -228,20 +245,30 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
           Amenities
         </Typography>
         {propertyAmenities && propertyAmenities.length > 0 ? (
-          <Box sx={{ display: "flex", gap: 2 }} className="AmenRes">
-            <Box sx={{ flex: 1 }}>
-              {displayedAmenities
-                .slice(0, Math.ceil(displayedAmenities.length / 2))
-                .map((amenity, index) => (
-                  <Box key={index} sx={{ marginBottom: 1 }}>
+          <Box
+            sx={{ display: "flex", flexDirection: "column" }}
+            className="AmenRes"
+          >
+            <Box>
+              <Grid
+                container
+                spacing={2}
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                }}
+              >
+                {displayedAmenities.map((amenity, index) => (
+                  <Grid item xs={6} key={index}>
                     <Typography variant="body2" className="monsterrat">
                       {amenity.amenityName}
                     </Typography>
-                  </Box>
+                  </Grid>
                 ))}
+              </Grid>
             </Box>
 
-            <Box sx={{ flex: 1 }}>
+            {/* <Box sx={{ flex: 1 }}>
               {displayedAmenities
                 .slice(
                   Math.ceil(displayedAmenities.length / 2),
@@ -254,7 +281,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                     </Typography>
                   </Box>
                 ))}
-            </Box>
+            </Box> */}
           </Box>
         ) : (
           <Typography variant="body1">No amenities available.</Typography>
@@ -279,18 +306,26 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
         maxWidth="md"
         className="aminityPopup"
       >
-        <DialogTitle>
-          <Typography variant="h3" className="aminityPopupTitle">Amenities</Typography>
+        <DialogTitle
+          sx={
+            {
+              // background:'red',
+            }
+          }
+        >
           <IconButton
             edge="end"
             color="inherit"
             onClick={handleShowLessClick}
             aria-label="close"
-            sx={{ position: "absolute", right: 8, top: 8, paddingRight: 3 }}
+            sx={{ position: "absolute", right: 18, top: 16   ,marginRight:"10px" }}
           >
             <CloseIcon />
           </IconButton>
         </DialogTitle>
+        <Typography variant="h3" className="aminityPopupTitle">
+          Amenities
+        </Typography>
         <DialogContent>
           {Object.keys(groupedAmenities).map((groupName) => (
             <Box key={groupName} sx={{ marginBottom: 2 }}>
@@ -305,6 +340,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                     className="monsterrat amenityName"
                   >
                     {amenity.amenityName}
+                    <div className="line mt-4"></div>
                   </Typography>
                 ))}
               </Box>

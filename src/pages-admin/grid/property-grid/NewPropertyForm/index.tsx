@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
     TextField,
     Button,
@@ -11,61 +12,96 @@ import {
     IconButton
 } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
-import styles from './NewPropertyForm.module.css';
 import CloseIcon from '@mui/icons-material/Close';
-import { addPropertyApi } from '@/api';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/reducers';
+import styles from './NewPropertyForm.module.css';
+import { addProperty } from '@/store/slice/auth/addproperty';
+import { AppDispatch } from '@/store';
 
 interface NewPropertyFormProps {
     onClose: () => void;
     onPropertyAdded: () => void;
 }
 
-const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAdded }) => {
-    const [propertyName, setPropertyName] = useState('');
-    const [address, setAddress] = useState('');
-    const [city, setCity] = useState('');
-    const [state, setState] = useState('');
-    const [country, setCountry] = useState('');
-    const [zipcode, setZipcode] = useState('');
-    const [houseDescription, setHouseDescription] = useState('');
-    const [propertyShare, setPropertyShare] = useState('');
-    const [latitude, setLatitude] = useState('');
-    const [longitude, setLongitude] = useState('');
-    const [isActive, setIsActive] = useState(true);
+interface PropertyData {
+    createdBy: { id: number };
+    propertyName: string;
+    ownerRezPropId: number;
+    address: string;
+    city: string;
+    state: string;
+    country: string;
+    zipcode: number;
+    houseDescription: string;
+    isExclusive: boolean;
+    propertyShare: number;
+    latitude: number;
+    longitude: number;
+    isActive: boolean;
+    displayOrder: number;
+}
 
-    const userId = useSelector((state: RootState) => state.auth.user?.id);
+const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAdded }) => {
+    const dispatch = useDispatch<AppDispatch>();
+    const [formData, setFormData] = useState({
+        propertyName: '',
+        address: '',
+        city: '',
+        state: '',
+        country: '',
+        zipcode: '',
+        houseDescription: '',
+        propertyShare: '',
+        latitude: '',
+        longitude: '',
+        isActive: true,
+    });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value, type, checked } = e.target;
+        setFormData({
+            ...formData,
+            [name]: type === 'checkbox' ? checked : value
+        });
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!userId) {
-            console.error('User ID not found. Please log in again.');
+
+        if (!formData.propertyName.trim()) {
+            alert('Property Name is required.');
             return;
         }
+
         try {
-            const propertyData = {
-                createdBy: { id: userId },
-                propertyName,
-                ownerRezPropId: 0,
-                address,
-                city,
-                state,
-                country,
-                zipcode: parseInt(zipcode),
-                houseDescription,
-                isExclusive: true,
-                propertyShare: parseFloat(propertyShare),
-                latitude: parseFloat(latitude),
-                longitude: parseFloat(longitude),
-                isActive,
-                displayOrder: 0
+            const propertyData: PropertyData = {
+                createdBy: { id: 1 },
+                propertyName: formData.propertyName.trim(),
+                ownerRezPropId: 0, 
+                address: formData.address.trim(),
+                city: formData.city.trim(),
+                state: formData.state.trim(),
+                country: formData.country.trim(),
+                zipcode: parseInt(formData.zipcode, 10) || 0,
+                houseDescription: formData.houseDescription.trim(),
+                isExclusive: true, 
+                propertyShare: parseFloat(formData.propertyShare) || 0,
+                latitude: parseFloat(formData.latitude) || 0,
+                longitude: parseFloat(formData.longitude) || 0,
+                isActive: formData.isActive,
+                displayOrder: 0 
             };
-            await addPropertyApi(propertyData);
-            onPropertyAdded();
-            onClose();
+
+            console.log('before', propertyData)
+            const result = await dispatch(addProperty(propertyData));
+            if (addProperty.fulfilled.match(result)) {
+                onPropertyAdded();
+                onClose();
+            } else if (addProperty.rejected.match(result)) {
+                alert(`Failed to add property: ${result.error.message}`);
+            }
         } catch (err) {
             console.error('Error in adding the property:', err);
+            alert('An error occurred while adding the property. Please try again.');
         }
     };
 
@@ -85,15 +121,15 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
                         >
                             <CloseIcon />
                         </IconButton>
-
                     </Box>
                     <form onSubmit={handleSubmit} className={styles.form}>
                         <Grid container spacing={1}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     label="Property Name"
-                                    value={propertyName}
-                                    onChange={(e) => setPropertyName(e.target.value)}
+                                    name="propertyName"
+                                    value={formData.propertyName}
+                                    onChange={handleChange}
                                     autoFocus
                                     fullWidth
                                     required
@@ -104,8 +140,9 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     label="Address"
-                                    value={address}
-                                    onChange={(e) => setAddress(e.target.value)}
+                                    name="address"
+                                    value={formData.address}
+                                    onChange={handleChange}
                                     fullWidth
                                     required
                                     variant="outlined"
@@ -115,8 +152,9 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
                             <Grid item xs={12} sm={4}>
                                 <TextField
                                     label="City"
-                                    value={city}
-                                    onChange={(e) => setCity(e.target.value)}
+                                    name="city"
+                                    value={formData.city}
+                                    onChange={handleChange}
                                     fullWidth
                                     required
                                     variant="outlined"
@@ -126,8 +164,9 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
                             <Grid item xs={12} sm={4}>
                                 <TextField
                                     label="State"
-                                    value={state}
-                                    onChange={(e) => setState(e.target.value)}
+                                    name="state"
+                                    value={formData.state}
+                                    onChange={handleChange}
                                     fullWidth
                                     required
                                     variant="outlined"
@@ -137,8 +176,9 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
                             <Grid item xs={12} sm={4}>
                                 <TextField
                                     label="Country"
-                                    value={country}
-                                    onChange={(e) => setCountry(e.target.value)}
+                                    name="country"
+                                    value={formData.country}
+                                    onChange={handleChange}
                                     fullWidth
                                     required
                                     variant="outlined"
@@ -148,9 +188,10 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
                             <Grid item xs={12} sm={4}>
                                 <TextField
                                     label="Zipcode"
+                                    name="zipcode"
                                     type="number"
-                                    value={zipcode}
-                                    onChange={(e) => setZipcode(e.target.value)}
+                                    value={formData.zipcode}
+                                    onChange={handleChange}
                                     fullWidth
                                     required
                                     variant="outlined"
@@ -160,9 +201,10 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
                             <Grid item xs={12} sm={4}>
                                 <TextField
                                     label="Property Share"
+                                    name="propertyShare"
                                     type="number"
-                                    value={propertyShare}
-                                    onChange={(e) => setPropertyShare(e.target.value)}
+                                    value={formData.propertyShare}
+                                    onChange={handleChange}
                                     fullWidth
                                     required
                                     variant="outlined"
@@ -173,8 +215,8 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
                                 <FormControlLabel
                                     control={
                                         <Checkbox
-                                            checked={isActive}
-                                            onChange={(e) => setIsActive(e.target.checked)}
+                                            checked={formData.isActive}
+                                            onChange={handleChange}
                                             name="isActive"
                                             color="primary"
                                         />
@@ -186,8 +228,9 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
                             <Grid item xs={12}>
                                 <TextField
                                     label="House Description"
-                                    value={houseDescription}
-                                    onChange={(e) => setHouseDescription(e.target.value)}
+                                    name="houseDescription"
+                                    value={formData.houseDescription}
+                                    onChange={handleChange}
                                     fullWidth
                                     multiline
                                     rows={3}
@@ -198,9 +241,10 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     label="Latitude"
+                                    name="latitude"
                                     type="number"
-                                    value={latitude}
-                                    onChange={(e) => setLatitude(e.target.value)}
+                                    value={formData.latitude}
+                                    onChange={handleChange}
                                     fullWidth
                                     required
                                     variant="outlined"
@@ -210,9 +254,10 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     label="Longitude"
+                                    name="longitude"
                                     type="number"
-                                    value={longitude}
-                                    onChange={(e) => setLongitude(e.target.value)}
+                                    value={formData.longitude}
+                                    onChange={handleChange}
                                     fullWidth
                                     required
                                     variant="outlined"

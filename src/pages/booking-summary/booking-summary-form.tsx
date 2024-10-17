@@ -23,7 +23,7 @@ import {
   selectSelectedPropertyDetails,
   User,
 } from "@/store/slice/auth/property-slice";
-import { propertyImageapi } from "@/api";
+import { propertyImageapi } from "@/api/api-endpoints";
 import { CheckCircle } from "lucide-react";
 
 const mockBooking = {

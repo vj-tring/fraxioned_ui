@@ -12,43 +12,118 @@
 }
 
 .maincontainer {
-    width: 70%;
+    width: 60%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.9rem;
 }
 
 .headersection {
     display: flex;
     justify-content: space-between;
     padding: .1rem .2rem;
-}
-
-.imagecontainer {
-    height: 5rem;
-    width: 100%;
-    border: 1px dotted grey;
-}
-
-.amenitiescontainer,
-.deletecontainer {
-    display: flex;
-    justify-content: space-between;
-    padding: .1rem .2rem;
     align-items: center;
 }
 
-.deletecontainer {
-    gap: .3rem;
-    justify-content: flex-start;
+.headersection h2 {
+    font-size: 1.7rem;
+    font-weight: 600;
+}
+
+.imageContainer {
+    width: 100%;
+    height: 15rem;
+    border: 2px dotted #ccc;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    gap: .7rem;
+    cursor: pointer;
+}
+
+.uploadContent {
+    text-align: center;
+}
+
+.uploadContent img {
+    width: 10rem;
+}
+
+.uploadLabel {
+    display: inline-block;
+    cursor: pointer;
+    padding: .2rem .8rem;
+    border: 1px solid rgb(135, 135, 135);
+    border-radius: .2rem;
+}
+
+.uploadLabel span {
+    font-size: .8rem;
+    color: #333;
+}
+
+
+.amenitiescontainer {
+    width: 100%;
+    /* height: 2rem; */
+    display: flex;
+    flex-direction: column;
+    padding: .2rem .8rem;
+}
+
+.amenitiescontainer:hover,
+.deletecontainer:hover {
+    background-color: rgb(239, 239, 239);
+    border-radius: .2rem;
+}
+
+.amenitiesheader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.amenitiesheader h3 {
+    font-size: 1rem;
+}
+
+.amenitiesname {
+    font-size: .8rem;
+    opacity: .9;
 }
 
 .photoItem {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
+    position: relative;
+    display: inline-block;
+    width: 12rem;
+    height: 10rem;
+}
+
+.previewImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.deleteButton {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: rgb(255, 255, 255);
+    padding: 0.2rem;
+    border-radius: 50%;
+    font-size: 12px;
+    z-index: 1;
+}
+
+.deleteButton:hover {
+    padding: .25rem;
 }
 
 .amenityItem {
@@ -56,6 +131,68 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 5px;
+}
+
+.deletecontainer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: .4rem;
+    opacity: .8;
+    padding: .2rem .6rem;
+    width: 30%;
+    cursor: pointer;
+}
+
+.deletecontainer h3 {
+    font-size: .8rem;
+}
+
+.uploadContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    border: 2px dashed #ccc;
+    /* Dotted border similar to the reference image */
+    border-radius: 8px;
+    text-align: center;
+    position: relative;
+}
+
+.dragDropArea {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.icon {
+    font-size: 3rem;
+    color: #ccc;
+    margin-bottom: 10px;
+}
+
+.dragDropText {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.orText {
+    margin: 10px 0;
+    color: #999;
+    font-size: 0.9rem;
+}
+
+.browseButton {
+    background-color: #066670 !important;
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
 }
 
 .photoPreviewContainer {
@@ -67,28 +204,7 @@
 .photoGrid {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.photoItem {
-    position: relative;
-    display: inline-block;
-}
-
-.previewImage {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 8px;
-}
-
-.deleteButton {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background-color: rgba(255, 0, 0, 0.7);
-    color: white;
-    padding: 0.2rem;
-    border-radius: 50%;
-    font-size: 12px;
+    gap: .5rem;
+    justify-content: space-between;
+    width: 100%;
 }

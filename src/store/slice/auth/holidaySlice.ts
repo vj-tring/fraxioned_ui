@@ -1,5 +1,15 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { addHolidayApi, updateHolidaysApi } from '@/api';
+import { addHolidayApi, updateHolidaysApi, fetchpropertyHolidaysApi } from '@/api/api-endpoints';
+
+interface Property {
+    id: number;
+    propertyName: string;
+}
+
+interface PropertySeasonHoliday {
+    id: number;
+    property: Property;
+}
 
 interface Holiday {
     id: number;
@@ -7,23 +17,50 @@ interface Holiday {
     year: number;
     startDate: string;
     endDate: string;
+    createdAt: string;
+    updatedAt: string;
     createdBy: {
         id: number;
     };
+    updatedBy: {
+        id: number;
+    };
     properties: { id: number }[];
+    propertySeasonHolidays?: PropertySeasonHoliday[];
+}
+
+interface FetchHolidayResponse {
+    success: boolean;
+    message: string;
+    data: Holiday;
+    statusCode: number;
 }
 
 export interface HolidayState {
     holidays: Holiday[];
+    selectedHoliday: Holiday | null;
     loading: boolean;
     error: string | null;
 }
 
 const initialState: HolidayState = {
     holidays: [],
+    selectedHoliday: null,
     loading: false,
     error: null,
 };
+
+export const fetchPropertyHoliday = createAsyncThunk(
+    'holiday/fetchPropertyHoliday',
+    async (id: number, { rejectWithValue }) => {
+        try {
+            const response = await fetchpropertyHolidaysApi(id);
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
 
 export const addHoliday = createAsyncThunk(
     'holiday/addHoliday',
@@ -65,9 +102,27 @@ export const updateHoliday = createAsyncThunk(
 const holidaySlice = createSlice({
     name: 'holiday',
     initialState,
-    reducers: {},
+    reducers: {
+        clearSelectedHoliday: (state) => {
+            state.selectedHoliday = null;
+        },
+    },
     extraReducers: (builder) => {
         builder
+            // Fetch Property Holiday
+            .addCase(fetchPropertyHoliday.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchPropertyHoliday.fulfilled, (state, action: PayloadAction<FetchHolidayResponse>) => {
+                state.loading = false;
+                state.selectedHoliday = action.payload.data;
+            })
+            .addCase(fetchPropertyHoliday.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
+            // Add Holiday
             .addCase(addHoliday.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -80,6 +135,7 @@ const holidaySlice = createSlice({
                 state.loading = false;
                 state.error = action.payload as string;
             })
+            // Update Holiday
             .addCase(updateHoliday.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -90,6 +146,9 @@ const holidaySlice = createSlice({
                 if (index !== -1) {
                     state.holidays[index] = action.payload;
                 }
+                if (state.selectedHoliday?.id === action.payload.id) {
+                    state.selectedHoliday = action.payload;
+                }
             })
             .addCase(updateHoliday.rejected, (state, action) => {
                 state.loading = false;
@@ -98,4 +157,5 @@ const holidaySlice = createSlice({
     },
 });
 
+export const { clearSelectedHoliday } = holidaySlice.actions;
 export default holidaySlice.reducer;

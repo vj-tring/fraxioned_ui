@@ -7,17 +7,17 @@ import App from "./App.tsx";
 import "./index.css";
 
 const rootElement = document.getElementById("root");
-const disableConsole = (): void => {
-  if (process.env.NODE_ENV === "development") {
-    console.log = (): void => {};
-    console.warn = (): void => {};
-    // console.error = (): void => {};
-    console.info = (): void => {};
-    console.debug = (): void => {};
-  }
-};
+// const disableConsole = (): void => {
+//   if (process.env.NODE_ENV === "development") {
+//     console.log = (): void => {};
+//     console.warn = (): void => {};
+//     // console.error = (): void => {};
+//     console.info = (): void => {};
+//     console.debug = (): void => {};
+//   }
+// };
 
-disableConsole();
+// disableConsole();
 if (rootElement) {
   const root = createRoot(rootElement);
 

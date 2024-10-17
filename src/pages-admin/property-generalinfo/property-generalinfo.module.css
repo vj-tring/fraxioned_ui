@@ -49,6 +49,7 @@
   margin: 20px;
   height: 250px;
   position: relative;
+  width: 360px;
   border-radius: 8px;
   overflow: hidden;
 }

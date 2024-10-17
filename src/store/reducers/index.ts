@@ -23,6 +23,15 @@ import amenitiesPageReducer from '../slice/auth/amenitiespageSlice';
 import userDetailsReducer from '../slice/auth/userdetails';
 import userpropertiesReducer from '../slice/auth/userproperties';
 import userReducer from '../slice/user-slice';
+import userpropertyReducer from '../slice/auth/userpropertiesSlice';
+import rolesReducer from '../slice/auth/rolesSlice';
+import { propertycodecatogoryReducer } from '../slice/auth/propertycodeCatogorySlice';
+import { propertyCodesReducer } from '../slice/auth/propertycodeSlice';
+import propertydetailReducer from '../slice/auth/property-detail';
+import spaceImageReducer from '../slice/spaceImagesSlice';
+import bedReducer from '../slice/bedSlice';
+import bathroomReducer from '../slice/bathroom-slice';
+import amenityReducer from "../slice/amenitiesSlice";
 
 const appReducer = combineReducers({
   auth: authReducer,
@@ -44,11 +53,21 @@ const appReducer = combineReducers({
   propertyAmenities: propertyAmenitiesReducer,
   amenitiesPage: amenitiesPageReducer,
   amenities: amenitiesReducer,
-  spaces: spaceReducer, // Add space reducer
-  spaceProperties: spacePropertyReducer, // Add space property reducer
+  spaceImage: spaceImageReducer,
+  spaces: spaceReducer,
+  spaceProperties: spacePropertyReducer,
   userDetails: userDetailsReducer,
   userProperties: userpropertiesReducer,
   user: userReducer,
+  userProperty: userpropertyReducer,
+  roles: rolesReducer,
+  propertycodecatogory: propertycodecatogoryReducer,
+  propertycode: propertyCodesReducer,
+  propertydetail: propertydetailReducer,
+  bed: bedReducer,
+  bathroom: bathroomReducer,
+  amenitiesID: amenityReducer,
+
 });
 
 const rootReducer = (
