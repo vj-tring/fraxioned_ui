@@ -24,18 +24,8 @@ import EventIcon from "@mui/icons-material/Event";
 import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
 import { AppDispatch } from "@/store";
 import { fetchPropertyHoliday, updateHoliday } from "@/store/slice/auth/holidaySlice";
+import {EditFormProps} from '../holiday.types';
 
-interface EditFormProps {
-  onClose: () => void;
-  onHolidayUpdated: () => void;
-  holidayData: {
-    id: number;
-    name: string;
-    year: number;
-    startDate: string;
-    endDate: string;
-  };
-}
 
 const EditForm: React.FC<EditFormProps> = ({
   onClose,

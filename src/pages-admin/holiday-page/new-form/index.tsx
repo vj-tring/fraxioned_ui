@@ -24,12 +24,8 @@ import { RootState } from "@/store/reducers";
 import { AppDispatch } from "@/store";
 import { addHoliday } from "@/store/slice/auth/holidaySlice";
 import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
+import {NewFormProps} from '../holiday.types';
 
-
-interface NewFormProps {
-  onClose: () => void;
-  onHolidayAdded: () => void;
-}
 
 const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
   const [name, setName] = useState("");

@@ -7,8 +7,8 @@ import {
   deleteHolidaysApi,
 } from "@/api/api-endpoints";
 import styles from "./holiday.module.css";
-import NewForm from "@/pages-admin/grid/holiday-grid/new-form";
-import EditForm from "@/pages-admin/grid/holiday-grid/edit-form";
+import NewForm from "@/pages-admin/holiday-page/new-form";
+import EditForm from "@/pages-admin/holiday-page/edit-form";
 import PropertyImage from "@/pages-admin/property-image";
 import {
   Dialog,
@@ -21,20 +21,8 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ConfirmationModal from "@/components/confirmation-modal";
+import {Holiday} from './holiday.types';
 
-interface Holiday {
-  id: number;
-  name: string;
-  year: number;
-  start_date: string;
-  end_date: string;
-  created_at: string;
-  updated_at: string;
-  created_by: string;
-  updated_by: string | null;
-  propertyId: number | null;
-  propertySeasonHolidayId: number | null;
-}
 
 const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
   const [holidays, setHolidays] = useState<Holiday[]>([]);
@@ -121,13 +109,11 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
 
     try {
       if (selectedPropertyId === "all") {
-        // Attempt to delete the holiday
         const response = await deleteHolidaysApi(holidayToDelete.id);
         if (!response.data.success) {
           throw new Error(response.data.message);
         }
       } else {
-        // Delete property-season-holiday mapping
         if (holidayToDelete.propertySeasonHolidayId) {
           await propertyseasonholidaydelete(
             holidayToDelete.propertySeasonHolidayId

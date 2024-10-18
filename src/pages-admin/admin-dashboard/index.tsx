@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import SidePanel from '@/pages-admin/sidepanel';
-import Holidays from '../grid/holiday-grid';
+import Holidays from '../holiday-page';
 import Calendar from '@/components/big-calendar';
 import Property from '../grid/property-grid';
 import PropertySidePanel from '../propertysidepanel';
