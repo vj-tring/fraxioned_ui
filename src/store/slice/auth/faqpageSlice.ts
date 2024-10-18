@@ -9,10 +9,7 @@ export interface UpdateFaqPayload {
       updatedBy: {
         id: number;
       };
-      category: {
-        id: number;
-        name: string;
-      }; 
+      categoryId: number;
     };
   }
   

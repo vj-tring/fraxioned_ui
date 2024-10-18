@@ -13,6 +13,7 @@ import styles from "./faqnew.module.css";
 
 interface NewQuestionFormProps {
   onClose: () => void;
+  onQuestionAdded: () => void;
   categories: {
       categoryName: string; id: number; name: string 
 }[];
@@ -20,6 +21,7 @@ interface NewQuestionFormProps {
 
 const NewQuestionForm: React.FC<NewQuestionFormProps> = ({
   onClose,
+  onQuestionAdded,
   categories: initialCategories,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -102,6 +104,7 @@ const NewQuestionForm: React.FC<NewQuestionFormProps> = ({
 
     console.log("Submitting question data:", data);
     await dispatch(addQuestion(data));
+    onQuestionAdded();
   };
 
   return (
