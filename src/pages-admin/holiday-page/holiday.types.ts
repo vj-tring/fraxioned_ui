@@ -28,3 +28,4 @@ export interface Holiday {
     onClose: () => void;
     onHolidayAdded: () => void;
   }
+  
