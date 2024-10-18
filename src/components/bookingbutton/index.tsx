@@ -6,7 +6,7 @@ const BookingButton = () => {
   return (
     <div className={styles.bookingLinkContainer}>
       <span className={styles.line}>|</span>
-      <Link to="/admin/bookings-grid" className={styles.bookingLink}>
+      <Link to="/admin/bookings-page" className={styles.bookingLink}>
         <Calendar className={styles.icon} size={15} />
         Go to Bookings
       </Link>
