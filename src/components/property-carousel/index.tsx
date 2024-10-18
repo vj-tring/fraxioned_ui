@@ -42,18 +42,18 @@ export default function BasicSelect() {
   );
   const user = useSelector((state: RootState) => state.auth.user);
 
-  useEffect(() => {
-    const fetchPropertyImages = async () => {
-      try {
-        const response = await propertyImageapi();
-        setImageDetails(response.data.data);
-      } catch (error) {
-        console.error("Error fetching property images:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchPropertyImages = async () => {
+  //     try {
+  //       const response = await propertyImageapi();
+  //       setImageDetails(response.data.data);
+  //     } catch (error) {
+  //       console.error("Error fetching property images:", error);
+  //     }
+  //   };
 
-    fetchPropertyImages();
-  }, []);
+  //   fetchPropertyImages();
+  // }, []);
 
   useEffect(() => {
     if (user) {
@@ -69,7 +69,9 @@ export default function BasicSelect() {
     if (selectedCardIndex != null) {
       if (cards.length > 0) {
         setSelectedCard(cards[selectedCardIndex]);
-        setYears(Object?.keys(cards[selectedCardIndex]?.details ?? {}).map(Number));
+        setYears(
+          Object?.keys(cards[selectedCardIndex]?.details ?? {}).map(Number)
+        );
         setSelectedCardIndex(selectedCardIndex);
         const card = cards[selectedCardIndex];
         dispatch(selectProperty(card.id));
@@ -346,7 +348,10 @@ export default function BasicSelect() {
                     </span>
                     <span className={`CardImage ${imageClass}`}>
                       <img
-                        src={selectedCard.coverImageUrl!}
+                        src={
+                          selectedCard.coverImageUrl! ||
+                          "https://placehold.jp/150x150.png"
+                        }
                         alt={selectedCard.name}
                         className="property-image"
                         loading="lazy"

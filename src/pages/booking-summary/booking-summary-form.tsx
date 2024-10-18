@@ -71,7 +71,7 @@ export interface Image {
   createdAt: string;
   updatedAt: string;
   id: number;
-  imageUrl: string;
+  url: string;
   imageName: string;
   displayOrder: number;
   spaceType: SpaceType;
@@ -105,6 +105,7 @@ const BookingSummaryForm: React.FC = () => {
   const currentBookingId = useSelector(
     (state: RootState) => state.properties.selectedCard?.id
   );
+  const properties = useSelector((state: RootState) => state.properties.cards);
 
   const [notes, setNotesValue] = useState<string>(currentBooking?.notes || "");
   const [isLoading, setIsLoading] = useState(false);
@@ -124,11 +125,12 @@ const BookingSummaryForm: React.FC = () => {
   const [imageDetails, setImageDetails] = useState<Image[]>([]);
   const [bookingSuccess, setBookingSuccess] = useState(false); // New state for booking success
   const [isVisible, setIsVisible] = useState(false);
+  const property = useSelector((state: RootState) => state.properties);
 
   useEffect(() => {
     const fetchPropertyImages = async () => {
       try {
-        const response = await propertyImageapi();
+        const response = await propertyImageapi(property.selectedPropertyId);
         const filterById = response.data.data.filter(
           (image: Image) =>
             image.property?.id === currentBookingId && image.displayOrder
@@ -136,7 +138,7 @@ const BookingSummaryForm: React.FC = () => {
         const sortedImages = filterById.sort(
           (a: Image, b: Image) => a.displayOrder - b.displayOrder
         );
-        setImageDetails(sortedImages);
+        setImageDetails(response.data.data);
       } catch (error) {
         console.error("Error fetching property images:", error);
       }
@@ -270,7 +272,7 @@ const BookingSummaryForm: React.FC = () => {
                   <Skeleton variant="rectangular" width="100%" height={200} />
                 ) : imageDetails[0] ? (
                   <img
-                    src={imageDetails[0].imageUrl}
+                    src={imageDetails[0].url || "https://placehold.jp/150x150.png"} 
                     alt={`Image ${imageDetails[0].displayOrder}`}
                     loading="lazy"
                     style={{
@@ -302,7 +304,7 @@ const BookingSummaryForm: React.FC = () => {
               {imageDetails.slice(1, 4).map((image, index) => (
                 <Col sm={4} key={index}>
                   <img
-                    src={image.imageUrl}
+                    src={image.url || "https://placehold.jp/150x150.png"}
                     alt={`Image ${image.displayOrder}`}
                     loading="lazy"
                     style={{

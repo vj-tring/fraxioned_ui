@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { propertyImageapi, deletetpropertyImageById } from "@/api/api-endpoints";
+import {
+  propertyImageapi,
+  deletetpropertyImageById,
+} from "@/api/api-endpoints";
 import { Edit, Trash2, X, Plus } from "lucide-react";
 import Loader from "@/components/loader";
 import styles from "./propertyphoto.module.css";
@@ -32,7 +35,9 @@ interface SpaceGroup {
 }
 
 const PropertyPhotos: React.FC = () => {
-  const [imagesBySpace, setImagesBySpace] = useState<{ [key: string]: SpaceGroup }>({});
+  const [imagesBySpace, setImagesBySpace] = useState<{
+    [key: string]: SpaceGroup;
+  }>({});
   const [activeTab, setActiveTab] = useState<string>("All Photos");
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [imageToDelete, setImageToDelete] = useState<number | null>(null);
@@ -60,11 +65,14 @@ const PropertyPhotos: React.FC = () => {
             }
 
             let instance = acc[spaceName].instances.find(
-              i => i.instanceNumber === img.propertySpace.instanceNumber
+              (i) => i.instanceNumber === img.propertySpace.instanceNumber
             );
 
             if (!instance) {
-              instance = { instanceNumber: img.propertySpace.instanceNumber, images: [] };
+              instance = {
+                instanceNumber: img.propertySpace.instanceNumber,
+                images: [],
+              };
               acc[spaceName].instances.push(instance);
             }
 
@@ -75,8 +83,11 @@ const PropertyPhotos: React.FC = () => {
         );
 
         setImagesBySpace({
-          "All Photos": { name: "All Photos", instances: [{ instanceNumber: 0, images: allPhotos }] },
-          ...groupedBySpace
+          "All Photos": {
+            name: "All Photos",
+            instances: [{ instanceNumber: 0, images: allPhotos }],
+          },
+          ...groupedBySpace,
         });
       }
     } catch (error) {
@@ -91,7 +102,10 @@ const PropertyPhotos: React.FC = () => {
   }, [refreshPhotos]);
 
   useEffect(() => {
-    if (location.state && (location.state.fromEdit || location.state.fromUpload)) {
+    if (
+      location.state &&
+      (location.state.fromEdit || location.state.fromUpload)
+    ) {
       refreshPhotos();
       navigate(location.pathname, { replace: true, state: {} });
     }
@@ -143,7 +157,9 @@ const PropertyPhotos: React.FC = () => {
   };
 
   const handleImageLoad = (imageId: number) => {
-    setLoadedImages(prevLoadedImages => new Set(prevLoadedImages).add(imageId));
+    setLoadedImages((prevLoadedImages) =>
+      new Set(prevLoadedImages).add(imageId)
+    );
   };
 
   return (
@@ -154,7 +170,9 @@ const PropertyPhotos: React.FC = () => {
           {Object.entries(imagesBySpace).map(([spaceName, spaceGroup]) => (
             <button
               key={spaceName}
-              className={`${styles.tab} ${activeTab === spaceName ? styles.activeTab : ''}`}
+              className={`${styles.tab} ${
+                activeTab === spaceName ? styles.activeTab : ""
+              }`}
               onClick={() => handleTabClick(spaceName)}
             >
               {spaceName}
@@ -164,7 +182,9 @@ const PropertyPhotos: React.FC = () => {
                 </span>
               ) : (
                 <span className={styles.instanceCount}>
-                  {spaceGroup.instances.map(instance => instance.instanceNumber).join(",  ")}
+                  {spaceGroup.instances
+                    .map((instance) => instance.instanceNumber)
+                    .join(",  ")}
                 </span>
               )}
             </button>
@@ -186,13 +206,15 @@ const PropertyPhotos: React.FC = () => {
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.3 }}
           >
-            {imagesBySpace[activeTab]?.instances.flatMap(instance => instance.images).length === 0 ? (
+            {imagesBySpace[activeTab]?.instances.flatMap(
+              (instance) => instance.images
+            ).length === 0 ? (
               <div className={styles.emptyState}>
                 <p>No photos found for this space</p>
               </div>
             ) : (
               <div className={styles.photoGrid}>
-                {imagesBySpace[activeTab]?.instances.flatMap(instance =>
+                {imagesBySpace[activeTab]?.instances.flatMap((instance) =>
                   instance.images.map((image) => (
                     <motion.div
                       key={image.id}
@@ -204,14 +226,19 @@ const PropertyPhotos: React.FC = () => {
                       whileHover={{ y: -5 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <div className={styles.imageContainer} onClick={() => handleImageClick(image.url)}>
+                      <div
+                        className={styles.imageContainer}
+                        onClick={() => handleImageClick(image.url)}
+                      >
                         {!loadedImages.has(image.id) && (
                           <div className={styles.skeleton}></div>
                         )}
                         <img
                           src={image.url}
                           alt={image.description}
-                          className={`${styles.propertyImage} ${loadedImages.has(image.id) ? styles.loaded : ''}`}
+                          className={`${styles.propertyImage} ${
+                            loadedImages.has(image.id) ? styles.loaded : ""
+                          }`}
                           onLoad={() => handleImageLoad(image.id)}
                         />
                         <div className={styles.overlay}>
@@ -267,7 +294,10 @@ const PropertyPhotos: React.FC = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <img src={selectedImageUrl} alt="Selected property" />
-            <button className={styles.closeButton} onClick={() => setSelectedImageUrl(null)}>
+            <button
+              className={styles.closeButton}
+              onClick={() => setSelectedImageUrl(null)}
+            >
               <X size={24} />
             </button>
           </motion.div>

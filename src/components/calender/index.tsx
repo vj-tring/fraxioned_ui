@@ -120,7 +120,6 @@ export function DatePickerWithRange({
   }, [dispatch]);
 
   useEffect(() => {
-    // console.log('Bookings in component:', bookings);
   }, [bookings]);
 
   useEffect(() => {
@@ -131,20 +130,7 @@ export function DatePickerWithRange({
     dispatch(clearBookingMessages());
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   if (bookingError) {
-  //     dispatch(setErrorMessage(bookingError));
-  //   }
-  //   if (bookingSuccessMessage) {
-  //     console.log(bookingSuccessMessage);
-  //     dispatch(clearDates());
-  //   }
-  //   const timer = setTimeout(() => {
-  //     dispatch(clearBookingMessages());
-  //   }, 5000);
 
-  //   return () => clearTimeout(timer);
-  // }, [bookingError, bookingSuccessMessage, dispatch]);
 
   useEffect(() => {
     if (selectedPropertyDetails?.id) {
