@@ -38,9 +38,7 @@ const Home: React.FC = () => {
     error,
   } = useSelector((state: RootState) => state.properties);
 
- 
   const dispatch = useDispatch();
-
 
   useEffect(() => {
     dispatch(resetLimits());
