@@ -20,6 +20,7 @@ const userPropertyDocumentsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // Fetch all documents
+      .addCase(fetchUserPropertyDocuments.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(fetchUserPropertyDocuments.fulfilled, (state, action) => {
