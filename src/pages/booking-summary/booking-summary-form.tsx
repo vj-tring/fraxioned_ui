@@ -272,7 +272,9 @@ const BookingSummaryForm: React.FC = () => {
                   <Skeleton variant="rectangular" width="100%" height={200} />
                 ) : imageDetails[0] ? (
                   <img
-                    src={imageDetails[0].url || "https://placehold.jp/150x150.png"} 
+                    src={
+                      imageDetails[0].url || "https://placehold.jp/150x150.png"
+                    }
                     alt={`Image ${imageDetails[0].displayOrder}`}
                     loading="lazy"
                     style={{
