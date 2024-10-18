@@ -386,3 +386,35 @@ export const deleteSpaceImageById = (id: number) =>
 // Delete Multiple Space Images (Batch Delete)
 export const deleteMultipleSpaceImages = (spaceImages: { ids: number[] }) =>
   axiosInstance.delete(`/property-space-images`, { data: spaceImages });
+
+export const getCategories = () =>
+  axiosInstance.get(`/faq-categories`)
+
+export const getQuestions = (selectedCategory: number) =>
+  axiosInstance.get(`/faq-questions`)
+
+export const getCategoryById = (id: number) =>
+  axiosInstance.get(`/faq-categories/category/${id}`);
+
+export const getQuestionsByCategoryId = (id: number) =>
+  axiosInstance.get(`/faq-questions/question/${id}`);
+
+export const createQuestion = (data: { question: string; answer: string; createdBy: { id: number } }) => {
+  return axiosInstance.post('/faq-questions/question', data);
+};
+
+export const createCategory = (data: { createdBy: { id: number; }; categoryName: string; }) => {
+  return axiosInstance.post('/faq-categories/category', data); 
+};
+
+export const updateQuestion = (id: number, data: { question: string; answer: string; updatedBy: { id: number } }) => {
+  return axiosInstance.patch(`/faq-questions/question/${id}`, data);
+};
+
+export const deleteQuestion = (id: number) => {
+  return axiosInstance.delete(`/faq-questions/question/${id}`);
+};
+
+export const fetchFaqs = () => {
+  return axiosInstance.get('/faq-questions'); 
+};
