@@ -14,11 +14,8 @@ export default function NewsLetter() {
         height: 280,
         marginTop: "12px",
         marginBottom: "20px",
-        marginRight: "15px",
         overflowY: "scroll",
         borderRadius: "10px",
-        // boxShadow: "none",
-        // border:'1px solid #ccc',
       }}
     >
       <div>

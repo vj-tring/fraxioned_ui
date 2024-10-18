@@ -57,8 +57,7 @@ const Home: React.FC = () => {
       <div className="Container1">
         <PropertyList />
       </div>
-      {/* <DashboardAcc/> */}
-      {/* <BackgroundBeamsDemo/> */}
+  
     </div>
   );
 };
