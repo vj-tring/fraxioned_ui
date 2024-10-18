@@ -7,8 +7,6 @@ import {
 } from "./actions";
 import { SpacePropertyState, SpaceProperty } from "@/store/model";
 
-
-
 // Initial state for the slice
 const initialState: SpacePropertyState = {
   spaceProperties: [],
@@ -59,7 +57,6 @@ const spacePropertySlice = createSlice({
       .addCase(
         deleteExistingSpaceProperty.fulfilled,
         (state, action: PayloadAction<number>) => {
-          // Remove the deleted space property from the state
           state.spaceProperties = state.spaceProperties.filter(
             (sp) => sp.id !== action.payload
           );
@@ -68,10 +65,7 @@ const spacePropertySlice = createSlice({
   },
 });
 
-// Selectors
 export const selectSpaceProperties = (state: RootState) =>
   state.spaceProperties.spaceProperties;
-//actions
-export * from "./actions";
-// Export the reducer
+
 export default spacePropertySlice.reducer;

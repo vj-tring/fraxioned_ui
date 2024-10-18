@@ -1,56 +1,13 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   fetchAllPropertySpaceImages,
   fetchPropertyImagesByPropertyId,
-  fetchSpaceImageDetailsById,
   uploadPropertySpaceImages,
   updateSpaceImageById,
   deleteSpaceImageById,
   deleteMultipleSpaceImages,
   fetchPropertyImagesByPropertySpaceId,
-} from "@/api";
-import { RootState } from "@/store/reducers";
-
-// Define Space Image Interface
-export interface SpaceImage {
-  id: number;
-  description: string;
-  url: string;
-  displayOrder: number;
-  createdAt: string;
-  updatedAt: string;
-  propertySpace: {
-    id: number;
-    space: { id: number; name: string };
-    property: { id: number; propertyName: string };
-  };
-  createdBy: { id: number };
-  updatedBy: { id: number } | null;
-}
-
-// State Interface
-interface SpaceImageState {
-  images: SpaceImage[];
-  loading: boolean;
-  error: string | null;
-}
-
-// Initial State
-const initialState: SpaceImageState = {
-  images: [],
-  loading: false,
-  error: null,
-};
-
-// Thunks for Async Actions
-    fetchAllPropertySpaceImages,
-    fetchPropertyImagesByPropertyId,
-    uploadPropertySpaceImages,
-    updateSpaceImageById,
-    deleteSpaceImageById,
-    deleteMultipleSpaceImages
-} from '@/api';
+} from "@/api/api-endpoints";
 
 // Fetch All Space Property Images
 export const fetchAllImages = createAsyncThunk(
@@ -58,7 +15,7 @@ export const fetchAllImages = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetchAllPropertySpaceImages();
-      return response.data;
+      return response.data.data;
     } catch (error) {
       return rejectWithValue("Failed to fetch property space images");
     }
