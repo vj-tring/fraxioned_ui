@@ -2,7 +2,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "@/components/snackbar-provider";
 import React, { ReactNode, useLayoutEffect } from "react";
-import { BACKEND_URL } from "@/constants";
 
 
 // const navigate = useNavigate();
@@ -11,7 +10,7 @@ import { BACKEND_URL } from "@/constants";
 
 // Create an Axios instance
 const axiosInstance = axios.create({
-  baseURL: BACKEND_URL,
+  baseURL: import.meta.env.VITE_BACKEND_URL,
 });
 
 interface AxiosInterceptorProps {

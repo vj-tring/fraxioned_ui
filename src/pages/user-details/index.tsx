@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./user-details.css";
 import userImage from "../../assets/images/profile.jpeg";
 import EditIcon from "../../assets/images/edit-icon.png";
-import { BACKEND_URL } from "@/constants";
+// import { BACKEND_URL } from "@/constants";
 
 interface Document {
   title: string;
@@ -46,7 +46,7 @@ const UserDetails: React.FC = () => {
       const userDataObject = JSON.parse(userData);
       const localStorageId = userDataObject.id;
 
-      fetch(`${BACKEND_URL}/users/user/${localStorageId}`)
+      fetch(`${import.meta.env.VITE_BACKEND_URL}/users/user/${localStorageId}`)
         .then((response) => response.json())
         .then((data) => {
           if (data) {
