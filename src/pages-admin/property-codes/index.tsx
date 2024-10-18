@@ -116,7 +116,7 @@ const PropertyCode: React.FC = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.fullContainer}>
       <Paper elevation={3} className={styles.content}>
         <div className={styles.header}>
           <Typography variant="h6" component="h2" className={styles.title}>
