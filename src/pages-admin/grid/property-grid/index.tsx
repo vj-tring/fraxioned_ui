@@ -85,7 +85,7 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
     {
       field: "propertyName",
       headerName: "Property Name",
-      minWidth: 200,
+      minWidth: 250,
       align: "center",
       headerAlign: "center",
     },
@@ -113,7 +113,7 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
     {
       field: "country",
       headerName: "Country",
-      width: 160,
+      width: 170,
       align: "center",
       headerAlign: "center",
     },
@@ -128,6 +128,8 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
       field: "actions",
       headerName: "Actions",
       width: 150,
+      align: "center",
+      headerAlign: "center",
       renderCell: (params) => (
         <>
           <IconButton

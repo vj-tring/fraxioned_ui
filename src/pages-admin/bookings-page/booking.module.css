@@ -23,10 +23,10 @@
 .row-active {
   background-color: rgb(255, 255, 255) !important;
 }
-.row-cancelled {
+.row-completed {
   background-color: #ebecec !important;
 }
-.row-completed {
+.row-cancelled {
   background-color:    #cccece !important;
 
 }

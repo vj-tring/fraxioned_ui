@@ -152,7 +152,7 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     {
       field: "firstName",
       headerName: "First Name",
-      minWidth: 120,
+      minWidth: 150,
       align: "center",
       headerAlign: "center",
     },
@@ -173,7 +173,7 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     {
       field: "lastLoginTime",
       headerName: "Last Login",
-      minWidth: 240,
+      minWidth: 250,
       align: "center",
       headerAlign: "center",
     },
@@ -233,8 +233,8 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
       field: "actions",
       headerName: "Actions",
       width: 180,
-      // align: "center",
-      // headerAlign: "center",
+      align: "center",
+      headerAlign: "center",
       renderCell: (params) => (
         <>
           <IconButton

@@ -557,12 +557,9 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
             }
             if (params.row.isCompleted) {
               return styles.rowCompleted; 
-
             }
-            
-            return styles.rowActive;;
+            return styles.rowActive;
           }}
-          
           pageSizeOptions={[5, 10, 25]}
           disableRowSelectionOnClick
           disableColumnMenu
