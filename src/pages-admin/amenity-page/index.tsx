@@ -10,6 +10,7 @@ import ConfirmationModal from '@/components/confirmation-modal';
 import CustomizedSnackbars from '@/components/customized-snackbar';
 import { IconButton, Tooltip } from '@mui/material';
 import { AppDispatch } from '@/store';
+import Loader from '@/components/loader';
 
 interface Amenity {
   id: number;
@@ -21,11 +22,6 @@ interface Amenity {
     name: string;
   };
   imageFile?: File | null;
-}
-
-interface AmenityGroup {
-  id: number;
-  name: string;
 }
 
 interface SnackbarState {
@@ -57,6 +53,7 @@ const AmenityManagement: React.FC = () => {
   const [groupSearchTerms, setGroupSearchTerms] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(true);
   const [editingAmenity, setEditingAmenity] = useState<Amenity | null>(null);
+  const [loadingImages, setLoadingImages] = useState<{ [key: number]: boolean }>({});
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -118,13 +115,16 @@ const AmenityManagement: React.FC = () => {
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
     if (editingAmenity && file) {
+      setLoadingImages(prev => ({ ...prev, [editingAmenity.id]: true }));
       setEditingAmenity({
         ...editingAmenity,
         imageFile: file
       });
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      setLoadingImages(prev => ({ ...prev, [editingAmenity.id]: false }));
     }
   };
 
@@ -383,9 +383,16 @@ const AmenityManagement: React.FC = () => {
 
                           ) : (
                             <div className={styles.displayContainer}>
-                              <div className={styles.amenityIcon}>
-                                {amenity.s3_url ? (
-                                  <img src={amenity.s3_url} alt={amenity.amenityName} className={styles.amenityImage} />
+                            <div className={styles.amenityIcon}>
+                              {loadingImages[amenity.id] ? (
+                                <Loader />
+                              ) : amenity.s3_url ? (
+                                <img
+                                  src={amenity.s3_url}
+                                  alt={amenity.amenityName}
+                                  className={styles.amenityImage}
+                                  onLoad={() => setLoadingImages(prev => ({ ...prev, [amenity.id]: false }))}
+                                />
                                 ) : (
                                   <ImageIcon size={14} />
                                 )}
