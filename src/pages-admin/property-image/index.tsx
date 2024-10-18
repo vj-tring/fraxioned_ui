@@ -17,18 +17,19 @@ interface PropertyImageProps {
   selectedPropertyId: number | string;
 }
 
-interface PropertyType {
-  id: number | string;
+interface Property {
+  id: number;
   propertyName: string;
-  color: string;
 }
+
+const ALL_HOLIDAY_ID = 'all';
 
 const PropertyImage: React.FC<PropertyImageProps> = ({
   onPropertySelect,
   selectedPropertyId,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { properties, loading, error } = useSelector(
+  const { properties, status, error } = useSelector(
     (state: RootState) => state.property
   );
 
@@ -41,15 +42,15 @@ const PropertyImage: React.FC<PropertyImageProps> = ({
   }, [dispatch]);
 
   const handleChange = (event: SelectChangeEvent<number | string>) => {
-    const selectedValue = event.target.value as number | string;
+    const selectedValue = event.target.value;
     onPropertySelect(selectedValue);
   };
 
-  if (loading) {
+  if (status === 'loading') {
     return <div>Loading...</div>;
   }
 
-  if (error) {
+  if (status === 'failed') {
     return <div>Error: {error}</div>;
   }
 
@@ -70,11 +71,10 @@ const PropertyImage: React.FC<PropertyImageProps> = ({
               },
             },
           }}
-          sx={{ height: "40px" ,
-            fontSize:'small'
-          }}
+          sx={{ height: "40px", fontSize: 'small' }}
         >
-          {properties.map((property: PropertyType) => (
+          <MenuItem value={ALL_HOLIDAY_ID}>All Properties</MenuItem>
+          {properties.map((property: Property) => (
             <MenuItem key={property.id} value={property.id}>
               {property.propertyName}
             </MenuItem>
