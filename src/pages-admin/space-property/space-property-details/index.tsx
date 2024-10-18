@@ -28,7 +28,7 @@ import {
 import AmenitiesTab from "./property-space-tabs/amenities-tab";
 import PhotosTab from "./property-space-tabs/photos-tab";
 import BedTypesTab from "./property-space-tabs/bed-type-tab";
-import { ArrowLeft, CircleArrowLeft, MoveLeft, Trash2 } from "lucide-react";
+import { ArrowLeft, Box, ChevronLeft, CircleArrowLeft, MoveLeft, Trash2 } from "lucide-react";
 import BathTypesTab from "./property-space-tabs/bath-type-tab";
 import { deleteExistingSpaceProperty } from "@/store/slice/spacePropertySlice";
 import { createOrDeletePropertySpaceBeds, fetchAllPropertySpaceBedsByPropertySpace, fetchAllSpaceBedTypes } from "@/store/slice/bedSlice";
@@ -320,50 +320,59 @@ export default function Component({ initialSpace = {} }) {
   };
 
   return (
-    <Card className="w-full max-w-5xl mx-auto bg-[#fff] text-black h-full rounded-lg">
-      <CardHeader className="flex flex-row justify-between items-center">
+    <Card className="w-full m-0 bg-[#fff] text-black h-full rounded-lg flex flex-column justify-between gap-3">
+      <CardHeader className="flex flex-row justify-between items-center py-1 px-3">
         <CardTitle className="text-2xl font-bold">
           {space?.space?.name || "Space Name"} {space?.instanceNumber}
         </CardTitle>
-        <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-          <DialogTrigger asChild>
-            <Button variant="ghost" size="icon" className="text-[#00636D] m-0">
-              <Trash2 size={20} />
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>
-                Are you sure you want to delete this room or space?
-              </DialogTitle>
-              <DialogDescription>
-                This action cannot be undone. This will permanently delete the
-                room or space and remove all associated data.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="flex justify-end space-x-2">
-              <Button
-                variant="outline"
-                onClick={() => setDeleteDialogOpen(false)}
-              >
-                Cancel
+        <div className="flex justify-between items-center m-0 gap-2 text-sm h-7">
+          <Button
+            onClick={handleback}
+            variant="ghost"
+            className="w-100 h-100 border-solid border-1 border-[#00636D]-500 text-center text-sm text-[#00636D] flex justify-center items-center rounded px-3 py-1"
+          >
+            <ChevronLeft style={{ height: '100%', width: '100%' }} /> Back to rooms
+          </Button>
+          <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-100 border-solid border-1 border-[#00636D]-500 text-center text-xl text-[#00636D] flex justify-center items-center rounded px-2 py-1">
+                <Trash2 style={{ height: '100%', width: '100%' }} />
               </Button>
-              <Button
-                variant="destructive"
-                onClick={() => {
-                  handleDeletePropertySpace();
-                  setDeleteDialogOpen(false);
-                }}
-              >
-                Delete
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>
+                  Are you sure you want to delete this room or space?
+                </DialogTitle>
+                <DialogDescription>
+                  This action cannot be undone. This will permanently delete the
+                  room or space and remove all associated data.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex justify-end space-x-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setDeleteDialogOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={() => {
+                    handleDeletePropertySpace();
+                    setDeleteDialogOpen(false);
+                  }}
+                >
+                  Delete
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
       </CardHeader>
-      <CardContent className="pb-2">
-        <Tabs defaultValue="photos" className="space-y-4">
-        <TabsList className="flex flex-wrap">
+      <CardContent className="pb-2 h-full">
+        <Tabs defaultValue="photos" className="flex flex-column h-full">
+          <TabsList className="flex flex-wrap">
             {tabsList.map((tab) => (
               <TabsTrigger
                 key={tab.value}
@@ -421,14 +430,6 @@ export default function Component({ initialSpace = {} }) {
           )}
         </Tabs>
       </CardContent>
-      <div className="flex justify-center px-6 py-0 pb-2 items-center">
-        <Button
-          onClick={handleback}
-          className="w-1/2 border-solid border-2 border-[#000]-500 text-center text-[#000000aa] display-flex gap-1 rounded"
-        >
-          <MoveLeft size={20} color='#000000aa' /> Back to rooms
-        </Button>
-      </div>
     </Card>
   );
 }
