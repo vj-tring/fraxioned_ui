@@ -65,7 +65,6 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             propertySeasonHolidayId: item.id || null,
           };
         });
-
         setHolidays(mappedData);
         setFilteredHolidays(
           propertyId === "all"
@@ -153,63 +152,38 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     {
       field: "name",
       headerName: "Name",
-      minWidth: 150,
+      minWidth: 300,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "year",
       headerName: "Year",
-      width: 120,
+      width: 200,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "start_date",
       headerName: "Start Date",
-      width: 150,
+      width: 300,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "end_date",
       headerName: "End Date",
-      width: 150,
+      width: 300,
       align: "center",
       headerAlign: "center",
     },
-    {
-      field: "created_at",
-      headerName: "Created At",
-      width: 150,
-      align: "center",
-      headerAlign: "center",
-    },
-    {
-      field: "updated_at",
-      headerName: "Updated At",
-      width: 170,
-      align: "center",
-      headerAlign: "center",
-    },
-    {
-      field: "created_by",
-      headerName: "Created By",
-      width: 120,
-      align: "center",
-      headerAlign: "center",
-    },
-    {
-      field: "updated_by",
-      headerName: "Updated By",
-      width: 120,
-      align: "center",
-      headerAlign: "center",
-    },
+    
     {
       field: "actions",
       headerName: "Actions",
-      width: 150,
+      width: 250,
+      align: "center",
+      headerAlign: "center",
       renderCell: (params) => (
         <>
           <IconButton
@@ -219,6 +193,7 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
           >
             <EditIcon
               sx={{
+              
                 color: "#709C7E",
               }}
             />
@@ -293,18 +268,7 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
               fontSize: "small",
               fontFamily: " 'Roboto', sans-serif !important ",
             },
-            "&  .MuiDataGrid-cell--textLeft ": {
-              // position: "sticky",
-              // right: 0,
-              // backgroundColor: "#ebecec",
-              // paddingLeft:"50px"
-            },
-            "& .MuiDataGrid-columnHeader--last": {
-              // backgroundColor: "lightgrey",
-              // position: "sticky",
-              // right: 0,
-              // paddingLeft:"50px"
-            },
+          
           }}
           getRowClassName={(params) => {
             if (params.indexRelativeToCurrentPage % 2 === 0) {
