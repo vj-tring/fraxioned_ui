@@ -28,6 +28,7 @@ import SpaceProperty from '../space-property';
 import SpacePropertyDetails from '../space-property/space-property-details';
 import Spaces from '../spaces';
 import "./admin-dashboard.css";
+import Faq from '../faq';
 
 const AdminDashboard: React.FC = () => {
     const navigate = useNavigate();
@@ -62,6 +63,7 @@ const AdminDashboard: React.FC = () => {
                         <Route path="/user" element={<UserGrid isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/reports" element={<ReportsGrid isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/spaces" element={<Spaces isSidebarOpen={isSidebarOpen} />} />
+                        <Route path='/Faq' element={<Faq isSidebarOpen={isSidebarOpen}/>} />
 
                         <Route path="/property" element={<Property isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/property/:id" element={

@@ -25,6 +25,9 @@ import userpropertiesReducer from '../slice/auth/userproperties';
 import userReducer from '../slice/user-slice';
 import userpropertyReducer from '../slice/auth/userpropertiesSlice';
 import rolesReducer from '../slice/auth/rolesSlice';
+import addQuestionReducer from '../slice/auth/addfaqSlice';
+import faqPageReducer from '../slice/auth/faqpageSlice';
+import addCategoryReducer from '../slice/auth/addcategorySlice';
 
 const appReducer = combineReducers({
   auth: authReducer,
@@ -53,6 +56,9 @@ const appReducer = combineReducers({
   user: userReducer,
   userProperty: userpropertyReducer,
   roles: rolesReducer,
+  addQuestion: addQuestionReducer,
+  faqPage: faqPageReducer,
+  addCategory: addCategoryReducer,
 
 });
 
