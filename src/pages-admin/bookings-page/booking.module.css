@@ -20,12 +20,19 @@
   color: #5ba3aa !important;
 }
 
-.evenRow {
+.row-active {
   background-color: rgb(255, 255, 255) !important;
 }
-.oddRow {
+.row-cancelled {
   background-color: #ebecec !important;
 }
+.row-completed {
+  background-color:    #cccece !important;
+
+}
+
+
+
 
 @media (max-width: 768px) {
   .refreshIcon {
@@ -185,6 +192,31 @@
 .actionButton:hover {
   background-color: #5ba3aa !important;
 }
+
+.datePickerContainer {
+  position: relative;
+  display: inline-block;
+  margin-left: 16px;
+  margin-bottom: 8px;
+}
+
+.monthPicker {
+  width: 200px;
+}
+
+.clearDateFilter {
+  position: absolute !important;
+  right: 34px; 
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.selectContainer {
+  margin-left: 20px !important; 
+  width: 100px;
+}
+
 
 .dataGridWrapper {
   flex-grow: 1;

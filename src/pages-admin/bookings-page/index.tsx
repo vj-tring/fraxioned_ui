@@ -22,14 +22,17 @@ import { ClearIcon } from "@mui/x-date-pickers/icons";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import ViewBookings from "@/components/userbooking-form";
-import {  Property, Booking } from './booking.types';
+import { Property, Booking } from './booking.types';
 import { exportBookingsToCSV } from './bookings-export';
 import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/store";
 import { RootState } from "@/store/reducers";
 import { fetchUserDetails } from "@/store/slice/auth/userdetails";
-
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { FormControl, Select, MenuItem } from "@mui/material";
 
 
 
@@ -40,7 +43,9 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
   const properties = useSelector((state: RootState) => state.property.properties);
   const propertiesStatus = useSelector((state: RootState) => state.property.status);
   const propertiesError = useSelector((state: RootState) => state.property.error);
-  
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+
   // Add these lines to get user details from Redux
   const users = useSelector((state: RootState) => state.userDetails.users);
   const userDetailsStatus = useSelector((state: RootState) => state.userDetails.status);
@@ -61,11 +66,19 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
   const [filterModel] = useState<GridFilterModel>({
     items: [],
   });
+  const [selectedOption, setSelectedOption] = useState<string>("all");
+  const options = [
+    { value: "all", label: "All" },
+    { value: "active", label: "Active" },
+    { value: "completed", label: "Completed" },
+    { value: "cancelled", label: "Cancelled" },
+  ];
+
   const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchProperties());
-    dispatch(fetchUserDetails());  
+    dispatch(fetchUserDetails());
   }, [dispatch]);
 
   useEffect(() => {
@@ -111,7 +124,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     };
 
     if (propertiesStatus === 'succeeded' && properties.length > 0 &&
-        userDetailsStatus === 'succeeded' && users.length > 0) {
+      userDetailsStatus === 'succeeded' && users.length > 0) {
       fetchBookings();
     } else if (propertiesStatus === 'failed') {
       setError(propertiesError || "Failed to fetch properties. Please try again.");
@@ -133,6 +146,55 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     setFilteredBookings(filtered);
   }, [filterValue, bookings]);
 
+  useEffect(() => {
+    const lowercasedFilter = filterValue.toLowerCase();
+    const filtered = bookings.filter((booking) => {
+      const matchesSearch =
+        booking.bookingId.toLowerCase().includes(lowercasedFilter) ||
+        booking.userName.toLowerCase().includes(lowercasedFilter) ||
+        booking.propertyName.toLowerCase().includes(lowercasedFilter);
+
+      if (selectedDate) {
+        const bookingDate = new Date(booking.checkinDate);
+        return (
+          matchesSearch &&
+          bookingDate.getMonth() === selectedDate.getMonth() &&
+          bookingDate.getFullYear() === selectedDate.getFullYear()
+        );
+      }
+
+      return matchesSearch;
+    });
+    setFilteredBookings(filtered);
+  }, [filterValue, bookings, selectedDate]);
+
+  useEffect(() => {
+    const lowercasedFilter = filterValue.toLowerCase();
+    const filtered = bookings.filter((booking) => {
+      const matchesSearch =
+        booking.bookingId.toLowerCase().includes(lowercasedFilter) ||
+        booking.userName.toLowerCase().includes(lowercasedFilter) ||
+        booking.propertyName.toLowerCase().includes(lowercasedFilter);
+
+      const matchesStatus = (() => {
+        switch (selectedOption) {
+          case "active":
+            return !booking.isCompleted && !booking.isCancelled;
+          case "completed":
+            return booking.isCompleted;
+          case "cancelled":
+            return booking.isCancelled;
+          default:
+            return true;
+        }
+      })();
+
+      return matchesSearch && matchesStatus;
+    });
+
+    setFilteredBookings(filtered);
+  }, [filterValue, bookings, selectedOption]);
+
   const handleEditClick = (id: number) => {
     console.log("Edit booking with id:", id);
   };
@@ -145,6 +207,13 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
 
   const handleSearchClear = () => {
     setFilterValue("");
+  };
+
+  const handleDateChange = (date: Date | null) => {
+    setSelectedDate(date);
+  };
+  const handleClearDateFilter = () => {
+    setSelectedDate(null);
   };
 
   const handleDeleteClick = (booking: Booking) => {
@@ -191,7 +260,6 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
   };
 
 
-
   const handleExportCSV = () => {
     exportBookingsToCSV(filteredBookings);
   };
@@ -229,7 +297,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     {
       field: "checkoutDate",
       headerName: "Check-out Date",
-      width: 150,
+      width: 190,
       align: "center",
       headerAlign: "center",
     },
@@ -260,9 +328,14 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     {
       field: "actions",
       headerName: "Actions",
-      width: 180,
+      align: "center",
+      headerAlign: "center",
+      width: 200,
 
       renderCell: (params) => (
+
+
+
         <div>
           <IconButton
             aria-label="view"
@@ -303,6 +376,8 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     },
   ];
 
+
+
   return (
     <div
       className={`${styles.bookingsContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
@@ -339,6 +414,83 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
                 </IconButton>
               )}
             </Paper>
+            <FormControl variant="outlined" className={styles.selectContainer}>
+              <Select
+                value={selectedOption}
+                onChange={(e) => setSelectedOption(e.target.value)}
+                displayEmpty
+                inputProps={{ "aria-label": "Without label" }}
+                sx={{
+
+                  '& .MuiInputBase-input': {
+                    fontSize: '14px',
+                    height: '10px',
+                    padding: '8px',
+                    marginBottom: '0px'
+
+
+                  },
+                  '& .MuiInputLabel-root': {
+                    transform: 'translate(14px, 9px) scale(1)',
+                    position: 'absolute',
+                    top: '-5px'
+
+                  },
+                  '& .MuiInputLabel-shrink': {
+                    transform: 'translate(14px, -6px) scale(0.75)',
+                  },
+                }}
+              >
+                {options.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <div className={styles.datePickerContainer}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  views={['month', 'year']}
+                  label="Month/Year"
+                  value={selectedDate}
+                  onChange={handleDateChange}
+                  slotProps={{ textField: { helperText: null } }}
+                  className={styles.monthPicker}
+                  sx={{
+                    '& .MuiInputBase-root': {
+                      height: '35px',
+                    },
+                    '& .MuiInputBase-input': {
+                      fontSize: '13px',
+                    },
+                    '& .MuiInputLabel-root': {
+                      transform: 'translate(14px, 9px) scale(1)',
+                      position: 'absolute',
+                      top: '-5px'
+
+                    },
+                    '& .MuiInputLabel-shrink': {
+                      transform: 'translate(14px, -6px) scale(0.75)',
+                    },
+                  }}
+                />
+
+
+              </LocalizationProvider>
+              {selectedDate && (
+                <IconButton
+                  className={styles.clearDateFilter}
+                  size="small"
+                  onClick={handleClearDateFilter}
+                  aria-label="Clear date filter"
+                >
+                  <ClearIcon />
+                </IconButton>
+              )}
+            </div>
+
 
 
 
@@ -400,12 +552,17 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
             },
           }}
           getRowClassName={(params) => {
-            if (params.indexRelativeToCurrentPage % 2 === 0) {
-              return styles.evenRow;
-            } else {
-              return styles.oddRow;
+            if (params.row.isCancelled) {
+              return styles.rowCancelled; 
             }
+            if (params.row.isCompleted) {
+              return styles.rowCompleted; 
+
+            }
+            
+            return styles.rowActive;;
           }}
+          
           pageSizeOptions={[5, 10, 25]}
           disableRowSelectionOnClick
           disableColumnMenu
