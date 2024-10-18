@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { sendInvite } from '../../api/api-endpoints';
+import { useSelector, UseSelector } from 'react-redux';
+import { RootState } from '@/store/reducers';
 
 const useSendInviteHandler = () => {
   const [email, setEmail] = useState('')
@@ -17,10 +19,10 @@ const useSendInviteHandler = () => {
     setErrorMessage('')
 
     try {
-      const userString = localStorage.getItem('user')
-      if (userString) {
-        const userObject = JSON.parse(userString)
-        const invitedBy = userObject.id
+      const user = useSelector((state: RootState) => state.auth.user);
+      if (user) {
+        // const userObject = JSON.parse(userString)
+        const invitedBy = user.id
         console.log('userEmail', invitedBy)
         const payload = { email, roleId: selectedRole, invitedBy }
 
