@@ -2,7 +2,6 @@
   background-color: #ffffff;
   flex: 1;
   height: 100%;
-  padding: 0 32px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   gap: 0.8rem;
@@ -21,6 +20,7 @@
   background-color: #e28525;
   color: #fff;
 }
+
 .usersContainer {
   padding: 12px;
   background-color: #f8f6f6;
@@ -47,16 +47,20 @@
   position: sticky;
   top: 0;
   background-color: #fff;
-  padding: 1rem 0.3rem;
+  padding: 1rem 2rem;
   z-index: 1;
 }
-.headersection > h2 {
+
+.headersection>h2 {
   font-weight: 600;
 }
+
 .mainsection {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  padding-bottom: .8rem;
+  padding: 0 32px;
 }
 
 .spaceList {
@@ -66,14 +70,6 @@
   width: 100%;
   justify-content: flex-start;
   align-items: flex-start;
-  flex-grow: 1;
-}
-
-.noRooms {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
 }
 
 .spaceItem {
@@ -83,74 +79,28 @@
 .spaceCard {
   border: 1px solid #ddd;
   border-radius: 5px;
-  padding: 4px;
   background-color: #f9f9f9;
-  width: 250px;
+  width: 230px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.spaceImageRow {
+.photoGridContainer {
   text-align: center;
-  margin-bottom: 10px;
+  padding: 10px;
 }
 
 .spaceImage {
-  width: 200px;
-  height: 200px;
-  border-radius: 3px;
+  width: 100%;
+  height: 10rem;
+  border-radius: 5px 5px 0 0;
+  object-fit: cover;
 }
 
-.spaceNameRow {
-  text-align: center;
-  font-size: 16px;
+.cardTitle {
+  font-size: 18px;
   font-weight: bold;
-  margin-bottom: 10px;
-  margin-top: 20px;
-  gap: 10px;
-  padding: 5px;
-}
-.spaceNameRow > p {
-  display: flex;
-  font-size: medium !important;
-  font-weight: 600;
-  margin-left: 5px;
-}
-.editBtn {
-  /* background-color: #4373e3 !important; */
-  color: rgb(115, 114, 114) !important;
-  font-size: small !important;
-  padding: 0px !important;
-  margin-top: 15px !important;
-  height: 25px !important;
-  margin: 0px !important;
-  min-width: none !important;
-}
-.btn {
-  display: flex;
-  justify-content: flex-end;
-  position: relative;
-  top: -140px;
-  right: 80px;
-}
-
-.deleteBtn {
-  /* background-color: #ffa57c !important; */
-  color: rgb(255, 96, 96) !important;
-  font-size: small !important;
-  /* margin-left: 10px !important; */
-  padding: 0px !important;
-  margin-top: 15px !important;
-  display: none;
-  margin: 0px !important;
-  margin-left: 10px !important;
-}
-
-.spaceOption {
-  cursor: pointer;
-  text-align: center;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 10px;
-  transition: all 0.3s;
+  margin: 0;
+  padding: .9rem 0;
 }
 
 .iconButton {
@@ -158,8 +108,6 @@
   border: none;
   color: white;
   cursor: pointer;
-  margin: 0 10px;
-  padding: 5px;
   transition: transform 0.2s ease;
 }
 
@@ -172,55 +120,22 @@
   overflow-y: auto;
 }
 
-.photoGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 10px;
-  /* padding-right: 5px; */
-  /* padding-bottom: 20px; */
-}
-
 .editOverlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 76%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  border-radius: 5px;
   justify-content: center;
   align-items: center;
   opacity: 0;
   transition: opacity 0.3s ease;
   cursor: pointer;
+  gap: .8rem;
 }
 
 .editOverlay:hover {
   opacity: 1;
 }
-.photoItem:hover .editOverlay {
-  opacity: 1;
-}
-
-.imagePreviewContainer {
-  height: 50px;
-}
-.defaultPreview {
-    width: 100%;
-    border: 2px dashed #ccc;
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 17rem;
-    text-align: center;
-    color: #888;
-  }
-  .previewImage{
-    height: 17rem !important;
-
-  }
-  .cancelPreviewButton{
-    
-  }

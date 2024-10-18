@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid, GridColDef, GridFilterModel } from "@mui/x-data-grid";
-import {
-  getBookings,
-  userdetails,
-  getProperties,
-  userbookingCancelapi,
-} from "@/api";
+import { getBookings, userbookingCancelapi } from "@/api/api-endpoints";
 import styles from "./booking.module.css";
 import {
   Alert,
@@ -27,8 +22,13 @@ import { ClearIcon } from "@mui/x-date-pickers/icons";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import ViewBookings from "@/components/userbooking-form";
-import { User, Property, Booking } from './booking.types';
+import {  Property, Booking } from './booking.types';
 import { exportBookingsToCSV } from './bookings-export';
+import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@/store";
+import { RootState } from "@/store/reducers";
+import { fetchUserDetails } from "@/store/slice/auth/userdetails";
 
 
 
@@ -36,6 +36,16 @@ import { exportBookingsToCSV } from './bookings-export';
 const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
   isSidebarOpen,
 }) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const properties = useSelector((state: RootState) => state.property.properties);
+  const propertiesStatus = useSelector((state: RootState) => state.property.status);
+  const propertiesError = useSelector((state: RootState) => state.property.error);
+  
+  // Add these lines to get user details from Redux
+  const users = useSelector((state: RootState) => state.userDetails.users);
+  const userDetailsStatus = useSelector((state: RootState) => state.userDetails.status);
+  const userDetailsError = useSelector((state: RootState) => state.userDetails.error);
+
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [filteredBookings, setFilteredBookings] = useState<Booking[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -54,19 +64,20 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchBookingsUsersAndProperties = async () => {
-      try {
-        const [bookingsResponse, usersResponse, propertiesResponse] =
-          await Promise.all([getBookings(), userdetails(), getProperties()]);
+    dispatch(fetchProperties());
+    dispatch(fetchUserDetails());  
+  }, [dispatch]);
 
-        const users: User[] = usersResponse.data.users;
-        const properties: Property[] = propertiesResponse.data;
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const bookingsResponse = await getBookings();
 
         const userMap = new Map(
           users.map((user) => [user.id, `${user.firstName} ${user.lastName}`])
         );
         const propertyMap = new Map(
-          properties.map((property) => [property.id, property.propertyName])
+          properties.map((property: Property) => [property.id, property.propertyName])
         );
 
         const mappedData = bookingsResponse.data.map((booking: any) => ({
@@ -93,14 +104,23 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
         setFilteredBookings(mappedData);
       } catch (err) {
         setError(
-          "Failed to fetch bookings, user, or property details. Please try again."
+          "Failed to fetch bookings. Please try again."
         );
         setShowErrorSnackbar(true);
       }
     };
 
-    fetchBookingsUsersAndProperties();
-  }, []);
+    if (propertiesStatus === 'succeeded' && properties.length > 0 &&
+        userDetailsStatus === 'succeeded' && users.length > 0) {
+      fetchBookings();
+    } else if (propertiesStatus === 'failed') {
+      setError(propertiesError || "Failed to fetch properties. Please try again.");
+      setShowErrorSnackbar(true);
+    } else if (userDetailsStatus === 'failed') {
+      setError(userDetailsError || "Failed to fetch user details. Please try again.");
+      setShowErrorSnackbar(true);
+    }
+  }, [propertiesStatus, properties, propertiesError, userDetailsStatus, users, userDetailsError]);
 
   useEffect(() => {
     const lowercasedFilter = filterValue.toLowerCase();

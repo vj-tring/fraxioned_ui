@@ -1,10 +1,40 @@
 .fullContainer {
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
-  width: 100%;
-  height: 100vh;
+  background-color: #f7fafc;
+  margin-top: 10px;
+  width: 1030px; 
+  margin-left: 70px;
+  height: calc(100vh - 60px); 
   overflow: hidden;
+  position: fixed;
+  top: 60px; 
+  left: 26rem; 
+}
+
+.groupAmenitiesCount {
+  background-color: #f1f5f9;
+  color: #4a5568;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px 8px 0 0;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+
+.totalAmenitiesCount {
+  background-color: #f1f5f9;
+  color: #4a5568;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .contentWrapper {
@@ -15,7 +45,8 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
 }
 
 .header {
@@ -32,8 +63,8 @@
 }
 
 .title {
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 24px;
+  font-weight: 700;
   color: #2d3748;
   margin: 0;
   font-family: 'Poppins', sans-serif;
@@ -43,19 +74,20 @@
   background-color: #e28f25;
   color: white;
   border: none;
-  padding: 0.35rem 1.0rem;
+  padding: 0.5rem 1.25rem;
   font-size: 14px;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.5px;
   transition: all 0.3s ease;
 }
 
 .updateButton:hover {
   background-color: #c97d1e;
-  box-shadow: 0 4px 6px rgba(226, 143, 37, 0.25);
+  box-shadow: 0 4px 12px rgba(226, 143, 37, 0.25);
+  transform: translateY(-2px);
 }
 
 .amenitiesScrollContainer {
@@ -64,30 +96,42 @@
   padding-right: 1rem;
   position: relative;
   scroll-behavior: smooth;
+  height: calc(100% - 120px); /* Adjust based on header and total amenities count height */
 }
 
 .amenityGroup {
-  margin-bottom: 1.0rem;
+  margin-bottom: 1.5rem;
   border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
   transition: all 0.3s ease;
   background-color: #ffffff;
 }
 
 .amenityGroup.expanded {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.amenityGroup.markedGroup {
+  /* border-color: #e28f25; */
+  box-shadow: 0 0 0 2px rgba(226, 143, 37, 0.2);
 }
 
 .groupHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: 1rem 1.5rem;
   background-color: #fbfbfb;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  height: 35px;
+  height: 32px;
+}
+
+.groupHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .groupHeader:hover {
@@ -95,21 +139,47 @@
 }
 
 .groupTitle {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: #3e4551;
   margin: 0;
   font-family: 'Poppins', sans-serif;
 }
 
+.groupHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.selectedCount {
+  background-color: #e28f25;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 12px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.searchWrapper {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  margin-right: 1rem;
+}
+
 .groupContent {
   background-color: #ffffff;
 }
 
+
 .searchContainer {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  padding: 0.45rem 1rem;
+  padding: 0.60rem 1.5rem;
   border-bottom: 1px solid #e9ebef;
   background-color: #f8fafc;
 }
@@ -118,17 +188,35 @@
   color: #a0aec0;
 }
 
+.groupCount {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4a5568;
+  background-color: #e2e8f0;
+  padding: 3px 3px;
+  height: 26px;
+  border-radius: 6px;
+  min-width: 200px;
+  /* Increased to fit the new text */
+  text-align: center;
+  white-space: nowrap;
+}
+
+
 .searchInput {
   flex-grow: 1;
   margin-left: 0.5rem;
   border: 1px solid #cbd5e0;
-  padding: 0.52rem;
-  font-size: 0.80rem;
-  border-radius: 10px;
+  padding: 0.50rem 1rem;
+  height: 28px;
+  font-size: 14px;
+  border-radius: 8px;
   outline: none;
   background-color: #ffffff;
   color: #4a5568;
   transition: all 0.3s ease;
+  width: calc(100% - 220px);
+  /* Adjusted to accommodate longer text */
 }
 
 .searchInput:focus {
@@ -141,7 +229,7 @@
 }
 
 .amenityList {
-  padding: 1rem;
+  padding: 0.75rem;
   background-color: #ffffff;
 }
 
@@ -149,15 +237,14 @@
   display: flex;
   align-items: center;
   position: relative;
-  padding: 0.5rem 0;
+  padding: 0.50rem 1rem;
+  height: 30px;
   cursor: pointer;
   font-size: 1rem;
   user-select: none;
   transition: all 0.2s ease;
-}
-
-.amenityItem:hover {
-  background-color: #f7fafc;
+  border-radius: 8px;
+  margin-bottom: 2px;
 }
 
 .checkbox {
@@ -170,20 +257,20 @@
 
 .checkmark {
   position: relative;
-  height: 20px;
-  width: 20px;
+  height: 22px;
+  width: 22px;
   background-color: #fff;
   border: 2px solid #cbd5e0;
-  border-radius: 4px;
-  margin-right: 0.75rem;
+  border-radius: 6px;
+  margin-right: 1rem;
   transition: all 0.3s ease;
 }
 
-.amenityItem:hover input ~ .checkmark {
+.amenityItem:hover input~.checkmark {
   border-color: #e28f25;
 }
 
-.amenityItem input:checked ~ .checkmark {
+.amenityItem input:checked~.checkmark {
   background-color: #e28f25;
   border-color: #e28f25;
 }
@@ -194,24 +281,29 @@
   display: none;
 }
 
-.amenityItem input:checked ~ .checkmark:after {
+.amenityItem input:checked~.checkmark:after {
   display: block;
 }
 
 .amenityItem .checkmark:after {
-  left: 6px;
-  top: 2px;
-  width: 5px;
-  height: 10px;
+  left: 7px;
+  top: 3px;
+  width: 6px;
+  height: 11px;
   border: solid white;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
 
 .amenityName {
-  font-size: 14px;
+  font-size: 12px;
   color: #353d4a;
   font-family: 'Inter', sans-serif;
+  transition: color 0.2s ease;
+}
+
+.amenityItem:hover .amenityName {
+  color: #e28f25;
 }
 
 .loading {
@@ -240,7 +332,7 @@
   }
 
   .title {
-    font-size: 1.5rem;
+    font-size: 20px;
   }
 
   .updateButton {
@@ -249,7 +341,7 @@
   }
 
   .groupTitle {
-    font-size: 1rem;
+    font-size: 14px;
   }
 
   .amenityName {
@@ -259,19 +351,49 @@
 
 /* Scrollbar styles */
 .amenitiesScrollContainer::-webkit-scrollbar {
-  width: 6px;
+  width: 2px;
+  /* Increased width for better usability */
 }
 
 .amenitiesScrollContainer::-webkit-scrollbar-track {
   background: #f1f1f1;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 .amenitiesScrollContainer::-webkit-scrollbar-thumb {
   background: #cbd5e0;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 .amenitiesScrollContainer::-webkit-scrollbar-thumb:hover {
   background: #a0aec0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.amenityGroup {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes slideDown {
+  from {
+    max-height: 0;
+  }
+
+  to {
+    max-height: 1000px;
+  }
+}
+
+.groupContent {
+  animation: slideDown 0.3s ease-in-out;
+  overflow: hidden;
 }

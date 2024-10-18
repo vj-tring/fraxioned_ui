@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Card, CardContent, Typography } from "@mui/material";
-import { getUserProperties } from "@/api";
+import { getUserProperties } from "@/api/api-endpoints";
 import styles from "./propertyTab.module.css";
 import { Image as ImageIcon } from "lucide-react";
 import imageone from '../../../../../assests/bear-lake-bluffs.jpg';

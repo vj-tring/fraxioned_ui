@@ -30,7 +30,7 @@
     padding: 2rem;
     border-radius: 12px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-    width: 800px;
+    width: 900px;
     max-width: 90vw;
     position: relative;
 }
@@ -85,7 +85,7 @@
 .input,
 .textarea,
 .selectInput {
-    padding: 0.5rem;
+    padding: 0.65rem;
     border: 1px solid #ddd;
     border-radius: 6px;
     font-size: 0.875rem;
@@ -153,7 +153,7 @@
 
 .customAmenityInput {
     flex-grow: 1;
-    padding: 0.5rem;
+    padding: 0.75rem;
     border: 1px solid #ddd;
     border-radius: 6px;
     font-size: 0.875rem;
@@ -163,12 +163,11 @@
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
-    margin-top: 1rem;
 }
 
 .submitButton,
 .cancelButton {
-    padding: 0.625rem 1.25rem;
+    padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 6px;
     font-size: 0.875rem;
@@ -211,4 +210,107 @@
     background-color: #fdecea;
     border-radius: 6px;
     text-align: center;
+}
+
+.fileUploadPreview {
+    border: 2px dashed #e0e0e0;
+    border-radius: 8px;
+    padding: 4px;
+    background: #fafafa;
+    transition: all 0.2s ease;
+}
+
+.fileUploadPreview:hover {
+    border-color: #e28f25;
+    background: #fff;
+}
+
+.uploadLabel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 40px;
+    cursor: pointer;
+    color: #666;
+    font-size: 0.875rem;
+}
+
+.fileInput {
+    display: none;
+}
+
+.previewContainer {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.imagePreview {
+    position: relative;
+    width: 96px;  /* Doubled from 48px */
+    height: 65px; /* Doubled from 48px */
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.imagePreview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.removeButton {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 24px; /* Increased from 20px */
+    height: 24px; /* Increased from 20px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    font-size: 14px; /* Increased from 12px */
+    color: #666;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+}
+
+.removeButton:hover {
+    background: #f0f0f0;
+    transform: scale(1.1);
+}
+
+.fileInfo {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-width: calc(100% - 120px); /* Ensure file info doesn't overlap with image */
+}
+
+.fileName {
+    font-size: 0.925rem;
+    color: #333;
+    word-break: break-all;
+    line-height: 1.4;
+}
+
+.progressBar {
+    height: 1.5px; /* Increased from 4px */
+    background: #eee;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background: #e28f25;
+    transition: width 0.3s ease;
 }

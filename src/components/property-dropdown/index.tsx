@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getProperties } from "@/api";
+import { getProperties } from "@/api/api-endpoints";
 import { AxiosResponse } from "axios";
 import styles from "./property-dropdown.module.css";
 import {Property,PropertyDropdownProps} from './property-dropdown.types.ts';

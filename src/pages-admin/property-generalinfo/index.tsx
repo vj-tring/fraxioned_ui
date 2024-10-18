@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  getPropertyById,
-  getProperrtDetailsbyId,
-  updatePropertyImage,
-} from "@/api"; // Added updatePropertyImage
-import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchPropertyById,
-  fetchPropertyDetailsById,
-} from "@/store/slice/auth/propertiesSlice";
-import { AppDispatch } from "@/store";
+import { updatePropertyImage } from "@/api/api-endpoints";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPropertyById, fetchPropertyDetailsById } from "@/store/slice/auth/propertiesSlice";
+import { AppDispatch } from '@/store';
 import { RootState } from "@/store/reducers";
 import EditButton from "@/components/edit";
 import styles from "./property-generalinfo.module.css";
@@ -19,17 +12,14 @@ import imagetwo from "../../assests/crown-jewel.jpg";
 import imagethree from "../../assests/lake-escape.jpg";
 import Loader from "@/components/loader";
 import pinImage from "../../assets/images/pin.jpg";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit } from "lucide-react";
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
   Button,
-  TextField,
 } from "@mui/material";
-import { AsyncThunkAction, ThunkDispatch } from "@reduxjs/toolkit";
-import { UnknownAction } from "redux";
 
 const PropertyGeneralInfo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -82,9 +72,7 @@ const PropertyGeneralInfo: React.FC = () => {
 
     try {
       await updatePropertyImage(Number(id), formData); // Call the PATCH API
-      setDialogOpen(false); // Close the dialog after upload
-      // Optionally, refetch property data to reflect the updated image
-      // await fetchData();
+      setDialogOpen(false);
     } catch (err) {
       console.error("Error uploading image:", err);
       // setError("Failed to upload image. Please try again.");

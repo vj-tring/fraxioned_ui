@@ -12,18 +12,42 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { useSelector, useDispatch } from "react-redux";
-import { updatePropertyapi } from "@/api";
+import { updaterulesapi, getProperrtDetailsbyId } from "@/api/api-endpoints";
 import { fetchPropertyById } from "@/store/slice/auth/propertiesSlice";
 import Loader from "@/components/loader";
 import styles from "./EditPropertyForm.module.css";
 import { RootState } from "@/store/reducers";
 import { AppDispatch } from "@/store";
 
+interface PropertyDetails {
+  noOfBedrooms: number;
+  noOfBathrooms: number;
+  squareFootage: string;
+  cleaningFee: number;
+  noOfGuestsAllowed: number;
+  noOfBathroomsFull: number;
+  noOfBathroomsHalf: number;
+  checkInTime: number;
+  checkOutTime: number;
+  noOfPetsAllowed: number;
+  petPolicy: string;
+  feePerPet: number;
+  peakSeasonStartDate: string;
+  peakSeasonEndDate: string;
+  peakSeasonAllottedNights: number;
+  offSeasonAllottedNights: number;
+  peakSeasonAllottedHolidayNights: number;
+  offSeasonAllottedHolidayNights: number;
+  lastMinuteBookingAllottedNights: number;
+  wifiNetwork: string;
+}
+
 const EditPropertyForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [formData, setFormData] = useState<any>(null);
+  const [propertyDetails, setPropertyDetails] = useState<PropertyDetails | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const userId = useSelector((state: RootState) => state.auth.user?.id);
@@ -34,6 +58,7 @@ const EditPropertyForm: React.FC = () => {
   useEffect(() => {
     if (id) {
       dispatch(fetchPropertyById(Number(id)));
+      fetchPropertyDetails();
     }
   }, [dispatch, id]);
 
@@ -49,6 +74,16 @@ const EditPropertyForm: React.FC = () => {
     }
   }, [reduxError]);
 
+  const fetchPropertyDetails = async () => {
+    try {
+      const response = await getProperrtDetailsbyId(Number(id));
+      setPropertyDetails(response.data);
+    } catch (err) {
+      console.error("Error fetching property details:", err);
+      setError("Failed to fetch property details. Please try again.");
+    }
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevData: any) => ({
@@ -57,34 +92,65 @@ const EditPropertyForm: React.FC = () => {
     }));
   };
 
+  const handlePropertyDetailsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setPropertyDetails((prevDetails: any) => ({
+      ...prevDetails,
+      [name]: value,
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!userId) {
-      setError("User ID not found. Please log in again.");
+    if (!userId || userId < 1) {
+      setError("Invalid user ID. Please log in again.");
       return;
     }
     try {
       const updatedPropertyData = {
-        updatedBy: {
-          id: userId,
+        updatedBy: { id: userId },
+        property: {
+          id: Number(id),
+          propertyName: formData.propertyName,
+          ownerRezPropId: Number(formData.ownerRezPropId),
+          address: formData.address,
+          city: formData.city,
+          state: formData.state,
+          country: formData.country,
+          zipcode: Number(formData.zipcode),
+          houseDescription: formData.houseDescription,
+          isExclusive: formData.isExclusive,
+          propertyShare: Number(formData.propertyShare),
+          latitude: Number(formData.latitude),
+          longitude: Number(formData.longitude),
+          isActive: formData.isActive,
+          displayOrder: Number(formData.displayOrder),
+          mailBannerFile: null,
+          coverImageFile: null
         },
-        propertyName: formData.propertyName,
-        ownerRezPropId: formData.ownerRezPropId,
-        address: formData.address,
-        city: formData.city,
-        state: formData.state,
-        country: formData.country,
-        zipcode: formData.zipcode,
-        houseDescription: formData.houseDescription,
-        isExclusive: formData.isExclusive,
-        propertyShare: formData.propertyShare,
-        latitude: formData.latitude,
-        longitude: formData.longitude,
-        isActive: formData.isActive,
-        displayOrder: formData.displayOrder,
+        noOfBedrooms: Number(propertyDetails?.noOfBedrooms),
+        noOfBathrooms: Number(propertyDetails?.noOfBathrooms),
+        squareFootage: propertyDetails?.squareFootage,
+        cleaningFee: Number(propertyDetails?.cleaningFee),
+        noOfGuestsAllowed: Number(propertyDetails?.noOfGuestsAllowed),
+        noOfBathroomsFull: Number(propertyDetails?.noOfBathroomsFull),
+        noOfBathroomsHalf: Number(propertyDetails?.noOfBathroomsHalf),
+        checkInTime: Number(propertyDetails?.checkInTime),
+        checkOutTime: Number(propertyDetails?.checkOutTime),
+        noOfPetsAllowed: Number(propertyDetails?.noOfPetsAllowed),
+        petPolicy: propertyDetails?.petPolicy,
+        feePerPet: Number(propertyDetails?.feePerPet),
+        peakSeasonStartDate: propertyDetails?.peakSeasonStartDate,
+        peakSeasonEndDate: propertyDetails?.peakSeasonEndDate,
+        peakSeasonAllottedNights: Number(propertyDetails?.peakSeasonAllottedNights),
+        offSeasonAllottedNights: Number(propertyDetails?.offSeasonAllottedNights),
+        peakSeasonAllottedHolidayNights: Number(propertyDetails?.peakSeasonAllottedHolidayNights),
+        offSeasonAllottedHolidayNights: Number(propertyDetails?.offSeasonAllottedHolidayNights),
+        lastMinuteBookingAllottedNights: Number(propertyDetails?.lastMinuteBookingAllottedNights),
+        wifiNetwork: propertyDetails?.wifiNetwork
       };
 
-      await updatePropertyapi(Number(id), updatedPropertyData);
+      await updaterulesapi(Number(id), updatedPropertyData);
       navigate(`/admin/property/${id}`);
     } catch (err) {
       console.error("Error updating property:", err);
@@ -94,7 +160,8 @@ const EditPropertyForm: React.FC = () => {
 
   if (status === 'loading') return <Loader />;
   if (error) return <div>{error}</div>;
-  if (!formData) return <div>No property data found.</div>;
+  if (!formData || !propertyDetails) return <div>No property data found.</div>;
+
   return (
     <div className={styles.formContainer}>
       <Paper elevation={3} className={styles.formPaper}>
@@ -207,7 +274,6 @@ const EditPropertyForm: React.FC = () => {
                   className={styles.inputField}
                 />
               </Grid>
-
               <Grid item xs={12}>
                 <TextField
                   label="House Description"
@@ -253,6 +319,57 @@ const EditPropertyForm: React.FC = () => {
                   value={formData.longitude}
                   onChange={handleInputChange}
                   fullWidth
+                  variant="outlined"
+                  className={styles.inputField}
+                />
+              </Grid>
+              <Grid item xs={6} sm={3}>
+                <TextField
+                  label="Number of Bedrooms"
+                  name="noOfBedrooms"
+                  type="number"
+                  value={propertyDetails.noOfBedrooms}
+                  onChange={handlePropertyDetailsChange}
+                  fullWidth
+                  required
+                  variant="outlined"
+                  className={styles.inputField}
+                />
+              </Grid>
+              <Grid item xs={6} sm={3}>
+                <TextField
+                  label="Number of Bathrooms"
+                  name="noOfBathrooms"
+                  type="number"
+                  value={propertyDetails.noOfBathrooms}
+                  onChange={handlePropertyDetailsChange}
+                  fullWidth
+                  required
+                  variant="outlined"
+                  className={styles.inputField}
+                />
+              </Grid>
+              <Grid item xs={6} sm={3}>
+                <TextField
+                  label="Square Footage"
+                  name="squareFootage"
+                  value={propertyDetails.squareFootage}
+                  onChange={handlePropertyDetailsChange}
+                  fullWidth
+                  required
+                  variant="outlined"
+                  className={styles.inputField}
+                />
+              </Grid>
+              <Grid item xs={6} sm={3}>
+                <TextField
+                  label="Cleaning Fee"
+                  name="cleaningFee"
+                  type="number"
+                  value={propertyDetails.cleaningFee}
+                  onChange={handlePropertyDetailsChange}
+                  fullWidth
+                  required
                   variant="outlined"
                   className={styles.inputField}
                 />

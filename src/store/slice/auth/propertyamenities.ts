@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { axiosInstance } from '@/api/axiosSetup';
+import { getAmenitiesByPropertyId, getAmenitiesByPropertySpaceId, updateamenityforproperty } from '@/api/api-endpoints';
 
 interface AmenityType {
     id: number;
@@ -39,7 +40,7 @@ export interface PropertyAmenitiesState {
     amenities: PropertyAmenity[];
 }
 
-interface UpdateAmenityPayload {
+export interface  UpdateAmenityPayload {
     property: {
         id: number;
     };
@@ -59,13 +60,24 @@ const initialState: PropertyAmenitiesState = {
     amenities: [],
 };
 
-export const getAmenitiesById = createAsyncThunk(
+export const getByPropertyId = createAsyncThunk(
     'propertyAmenities/getById',
     async (id: number, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.get(`/property-space-amenities/property/${id}`);
+            const response = await getAmenitiesByPropertyId(id);
             return response.data;
         } catch (error: any) {
+            return rejectWithValue(error.response?.data?.message || 'An error occurred');
+        }
+    }
+);
+export const getByPropertySpaceId = createAsyncThunk(
+    'propertySpaceAmenities/getById',
+    async (id: number, { rejectWithValue }) => {
+        try {
+            const response = await getAmenitiesByPropertySpaceId(id);
+            return response.data;
+        } catch (error: any) {  
             return rejectWithValue(error.response?.data?.message || 'An error occurred');
         }
     }
@@ -75,7 +87,7 @@ export const updatePropertyAmenities = createAsyncThunk(
     'propertyAmenities/update',
     async (updateData: UpdateAmenityPayload, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.patch('/property-space-amenities', updateData);
+            const response = await updateamenityforproperty(updateData);
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message || 'An error occurred');
@@ -96,16 +108,29 @@ const propertyAmenitiesSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getAmenitiesById.pending, (state) => {
+        .addCase(getByPropertyId.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(getByPropertyId.fulfilled, (state, action) => {
+            state.loading = false;
+            state.error = null;
+            state.amenities = action.payload.data;
+        })
+        .addCase(getByPropertyId.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload as string;
+        })
+            .addCase(getByPropertySpaceId.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(getAmenitiesById.fulfilled, (state, action) => {
+            .addCase(getByPropertySpaceId.fulfilled, (state, action) => {
                 state.loading = false;
                 state.error = null;
                 state.amenities = action.payload.data;
             })
-            .addCase(getAmenitiesById.rejected, (state, action) => {
+            .addCase(getByPropertySpaceId.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
             })

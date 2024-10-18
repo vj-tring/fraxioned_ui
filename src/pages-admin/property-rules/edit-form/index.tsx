@@ -10,11 +10,12 @@ import {
     InputAdornment
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import { useSelector } from 'react-redux';
-import { updaterulesapi, getProperrtDetailsbyId } from '@/api';
+import { useSelector, useDispatch } from 'react-redux';
 import Loader from '@/components/loader';
-import styles from './editrulesform.module.css'
+import styles from './editrulesform.module.css';
 import { RootState } from '@/store/reducers';
+import { fetchPropertyDetails, updatePropertyRules } from '@/store/slice/auth/property-detail';
+import { AppDispatch } from '@/store';
 
 interface PropertyRulesData {
     noOfGuestsAllowed: number;
@@ -42,27 +43,45 @@ interface PropertyRulesData {
 const EditPropertyRulesForm: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
     const [formData, setFormData] = useState<PropertyRulesData | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(true);
 
     const userId = useSelector((state: RootState) => state.auth.user?.id);
+    const propertyDetails = useSelector((state: RootState) => state.propertydetail.data);
+    const loading = useSelector((state: RootState) => state.propertydetail.loading);
+    const updateError = useSelector((state: RootState) => state.propertydetail.error);
 
     useEffect(() => {
-        const fetchPropertyRules = async () => {
-            try {
-                const response = await getProperrtDetailsbyId(Number(id));
-                setFormData(response.data);
-                setLoading(false);
-            } catch (err) {
-                console.error('Error fetching property rules:', err);
-                setError('Failed to fetch property rules. Please try again.');
-                setLoading(false);
-            }
-        };
+        dispatch(fetchPropertyDetails(Number(id)));
+    }, [id, dispatch]);
 
-        fetchPropertyRules();
-    }, [id]);
+    useEffect(() => {
+        if (propertyDetails) {
+            setFormData({
+                noOfGuestsAllowed: propertyDetails.noOfGuestsAllowed,
+                noOfBedrooms: propertyDetails.noOfBedrooms,
+                noOfBathrooms: propertyDetails.noOfBathrooms,
+                noOfBathroomsFull: propertyDetails.noOfBathroomsFull,
+                noOfBathroomsHalf: propertyDetails.noOfBathroomsHalf,
+                squareFootage: propertyDetails.squareFootage,
+                noOfPetsAllowed: propertyDetails.noOfPetsAllowed,
+                checkInTime: propertyDetails.checkInTime,
+                checkOutTime: propertyDetails.checkOutTime,
+                cleaningFee: propertyDetails.cleaningFee,
+                wifiNetwork: propertyDetails.wifiNetwork,
+                peakSeasonStartDate: propertyDetails.peakSeasonStartDate,
+                peakSeasonEndDate: propertyDetails.peakSeasonEndDate,
+                petPolicy: propertyDetails.petPolicy,
+                feePerPet: propertyDetails.feePerPet,
+                peakSeasonAllottedNights: propertyDetails.peakSeasonAllottedNights,
+                offSeasonAllottedNights: propertyDetails.offSeasonAllottedNights,
+                peakSeasonAllottedHolidayNights: propertyDetails.peakSeasonAllottedHolidayNights,
+                offSeasonAllottedHolidayNights: propertyDetails.offSeasonAllottedHolidayNights,
+                lastMinuteBookingAllottedNights: propertyDetails.lastMinuteBookingAllottedNights,
+            });
+        }
+    }, [propertyDetails]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -85,7 +104,7 @@ const EditPropertyRulesForm: React.FC = () => {
         try {
             const updatedRulesData = {
                 updatedBy: {
-                    id: 1
+                    id: userId
                 },
                 property: {
                     id: Number(id)
@@ -112,14 +131,15 @@ const EditPropertyRulesForm: React.FC = () => {
                 wifiNetwork: formData.wifiNetwork
             };
 
-            await updaterulesapi(Number(id), updatedRulesData);
-            navigate(`/admin/property/${id}/rules`);
+            await dispatch(updatePropertyRules({ id: Number(id), data: updatedRulesData }));
+            if (!updateError) {
+                navigate(`/admin/property/${id}/rules`);
+            }
         } catch (err) {
             console.error('Error updating property rules:', err);
             setError('Failed to update property rules. Please try again.');
         }
     };
-
 
     if (loading) return <Loader />;
     if (error) return <div>{error}</div>;
