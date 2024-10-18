@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getPropertyDocuments, getPropertyDocument, createPropertyDocument, updatePropertyDocument, deletePropertyDocument } from "@/api/api-endpoints";
+import { getPropertyDocuments, getPropertyDocument, createPropertyDocuments, updatePropertyDocument, deletePropertyDocument } from "@/api/api-endpoints";
 
 // Create async thunks for CRUD operations
 export const fetchPropertyDocuments = createAsyncThunk(
@@ -30,7 +30,7 @@ export const fetchPropertyDocuments = createAsyncThunk(
     "propertyDocuments/create",
     async (documentData: FormData, { rejectWithValue }) => {
       try {
-        const response = await createPropertyDocument(documentData);
+        const response = await createPropertyDocuments(documentData);
         return response.data;
       } catch (error: any) {
         return rejectWithValue(error.response.data);

@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { ScrollArea } from '../../components/ui/scroll-area';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { fetchPropertyDocuments, createPropertyDocumentThunk, updatePropertyDocumentThunk, deletePropertyDocumentThunk, setCurrentDocument } from '../../store/slice/propertyDocumentSlice';
-import { useAppDispatch, useAppSelector } from '../../store';
+import { useDispatch, useAppSelector } from '../../store';
 import styles from './propertydocuments.module.css';
 import mammoth from 'mammoth';
 import { createPropertyDocuments } from '@/api/api-endpoints';
@@ -26,7 +26,7 @@ interface PropertyDocument {
 const categories = ["Blueprint", "Legal", "General", "Contracts", "Invoices", "Reports"];
 
 const PropertyDocuments: React.FC = () => {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
   const propertyDocumentsState = useAppSelector((state) => state.propertyDocuments);
   const { documents, isLoading, error } = propertyDocumentsState;
   const data = documents?.data || [];
@@ -228,7 +228,7 @@ const PropertyDocuments: React.FC = () => {
                             <Eye className="h-4 w-4 mr-2" /> Preview
                           </Button>
                         </DialogTrigger>
-                        <DialogContent className="w-[100vw] ml-30">
+                        <DialogContent className= {styles.preview}>
                           <DialogHeader>
                             <DialogTitle>{previewDocument?.documentName}</DialogTitle>
                           </DialogHeader>
@@ -241,7 +241,7 @@ const PropertyDocuments: React.FC = () => {
                                   src={`${previewDocument.documentUrl}#toolbar=0`}
                                   width="100%"
                                   height="100%"
-                                  style={{ border: 'none', minHeight: '60vh' }}
+                                  style={{ border: 'none', minHeight: '70vh' }} 
                                 />
                               )
                             )}

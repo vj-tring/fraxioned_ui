@@ -21,7 +21,7 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   Action<string>
 >
 
-export const useAppDispatch = () => useReduxDispatch<AppDispatch>()
+export const useDispatch = () => useReduxDispatch<AppDispatch>()
 export const useAppSelector: TypedUseSelectorHook<RootState> = useReduxSelector
 
 export default store
