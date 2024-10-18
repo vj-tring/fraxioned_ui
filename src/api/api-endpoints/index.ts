@@ -372,6 +372,6 @@ export const deleteSpaceImageById = (id: number) =>
 
 // Delete Multiple Space Images (Batch Delete)
 export const deleteMultipleSpaceImages = (spaceImages: { ids: number[] }) =>
-    axiosInstance.delete(`/property-space-images/property-space-images`, { data: spaceImages });
+    axiosInstance.delete(`/property-space-images`, { data: spaceImages });
 
 
