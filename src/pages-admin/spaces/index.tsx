@@ -9,8 +9,8 @@ import {
   fetchAllSpaces,
   updateExistingSpace,
   deleteExistingSpace,
-  type Space
-} from "@/store/slice/spaceSlice";
+} from "@/store/slice/space";
+import { Space } from "@/store/model";
 import {
   Dialog,
   DialogTitle,

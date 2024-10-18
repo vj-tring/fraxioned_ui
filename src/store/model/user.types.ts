@@ -1,3 +1,4 @@
+import { Role } from "./roles.types";
 export interface User {
   id?: number;
   role: Role;
@@ -26,10 +27,6 @@ export interface ContactDetails {
   secondaryPhone: string | null;
   optionalPhoneOne: string | null;
   optionalPhoneTwo: string | null;
-}
-export interface Role {
-  id: number;
-  roleName: string;
 }
 export interface UserState {
   user: User;

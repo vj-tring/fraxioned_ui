@@ -4,6 +4,12 @@ import { useSnackbar } from "@/components/snackbar-provider";
 import React, { ReactNode, useLayoutEffect } from "react";
 import { BACKEND_URL } from "@/constants";
 
+
+// const navigate = useNavigate();
+// const { showSnackbar } = useSnackbar();
+// const { handleUnauthorized } = createAuthHelpers(navigate, showSnackbar);
+
+// Create an Axios instance
 const axiosInstance = axios.create({
   baseURL: BACKEND_URL,
 });
@@ -23,14 +29,16 @@ const AxiosInterceptor: React.FC<AxiosInterceptorProps> = ({ children }) => {
     const addInterceptors = () => {
       requestInterceptor = axiosInstance.interceptors.request.use(
         (config) => {
-          const user = JSON.parse(localStorage.getItem("user") || "{}");
+          // Get the access token from local storage or state
+          // const user = JSON.parse(localStorage.getItem("user") || "{}");
+          // const user = useSelector((state: RootState) => state.auth.user);
           const session = JSON.parse(localStorage.getItem("session") || "{}");
-          const userId = user.id;
+          const userId = session.userId;
           const token = session.token;
           const searchParams = new URLSearchParams(window.location.search);
           const resetToken = searchParams.get("resetToken");
-
-          if (userId && token) {
+          // If the access token exists, set it in the Authorization header
+          if (userId && token ) {
             config.headers["user-id"] = userId;
             config.headers["access-token"] = token;
           }

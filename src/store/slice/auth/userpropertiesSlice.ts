@@ -87,7 +87,7 @@ interface PropertyDetails {
     userProperties: UserProperty[];
 }
 
-interface UserPropertyState {
+export interface UserPropertyState {
     properties: PropertyDetails[];
     status: 'idle' | 'loading' | 'succeeded' | 'failed';
     error: string | null;
