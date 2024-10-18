@@ -9,7 +9,7 @@ import {
 
 const initialState: AmenitiesState = {
   amenities: [],
-  loading: false,
+  loading: true,
   status: "idle",
   error: null,
   success: false,
@@ -56,15 +56,17 @@ const amenitiesSlice = createSlice({
         state.error = null;
         state.success = false;
       })
-      .addCase(createAmenity.fulfilled, (state) => {
+      .addCase(createAmenity.fulfilled, (state,action) => {
         state.loading = false;
         state.error = null;
         state.success = true;
+        state.amenities.push(action.payload.data);
       })
       .addCase(createAmenity.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
         state.success = false;
+        
       })
       .addCase(updateAmenity.pending, (state) => {
         state.loading = true;
@@ -78,12 +80,10 @@ const amenitiesSlice = createSlice({
           state.error = null;
           state.success = true;
           const updatedAmenity = action.payload.data;
-
           // Find the index of the amenity to update based on its id
           const index = state.amenities.findIndex(
             (amenity) => amenity.id === updatedAmenity.id
           );
-
           if (index !== -1) {
             // Replace the old amenity with the updated one
             state.amenities[index] = updatedAmenity;
@@ -104,6 +104,9 @@ const amenitiesSlice = createSlice({
         state.deleteLoading = false;
         state.deleteError = null;
         state.deleteSuccess = true;
+        // state.amenities = state.amenities.filter((amenity) => {
+        //   return amenity.id !== state.deleteSuccess;
+        // });
       })
       .addCase(deleteAmenityAsync.rejected, (state, action) => {
         state.deleteLoading = false;

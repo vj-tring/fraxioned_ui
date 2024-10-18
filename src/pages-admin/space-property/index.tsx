@@ -17,7 +17,7 @@ import { fetchAllSpaces } from "@/store/slice/space";
 import { Space } from "@/store/model";
 import { createNewSpaceProperty, fetchSpacePropertiesById } from "@/store/slice/space/property";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchAllImages } from "@/store/slice/spaceImagesSlice";
+import { fetchAllImages } from "@/store/slice/space/images";
 import Loader from "@/components/loader";
 
 const SpaceProperty: React.FC = () => {

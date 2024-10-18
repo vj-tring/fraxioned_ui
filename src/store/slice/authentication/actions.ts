@@ -1,5 +1,5 @@
 import { RootState } from "../../reducers";
-import { loginUser, logoutUserApi, getUserById } from "../../../api";
+import { loginUser, logoutUserApi, getUserById } from "../../../api/api-endpoints";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { User, Session, AuthState } from "../../model";
 

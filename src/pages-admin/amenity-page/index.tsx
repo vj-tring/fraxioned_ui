@@ -1,28 +1,31 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { amenitiesapi } from '@/api/api-endpoints';
-import { updateAmenity, resetAmenitiesState, deleteAmenityAsync, fetchAmenities } from '@/store/slice/amenity';
-import { RootState } from '@/store/reducers';
-import styles from './amenitypage.module.css';
-import NewAmenityForm from '../property-amenities/new-amenity';
-import { Edit2, Trash2, Plus, ChevronRight, ChevronDown, RefreshCw, Search, ImageIcon, Upload } from 'lucide-react';
-import ConfirmationModal from '@/components/confirmation-modal';
-import CustomizedSnackbars from '@/components/customized-snackbar';
-import { IconButton, Tooltip } from '@mui/material';
-import { AppDispatch } from '@/store';
-import Loader from '@/components/loader';
-import { Amenity } from '@/store/model';
-// interface Amenity {
-//   id: number;
-//   amenityName: string;
-//   amenityDescription?: string;
-//   s3_url?: string;
-//   amenityGroup: {
-//     id: number;
-//     name: string;
-//   };
-//   imageFile?: File | null;
-// }
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  updateAmenity,
+  resetAmenitiesState,
+  deleteAmenityAsync,
+  fetchAmenities,
+} from "@/store/slice/amenity";
+import {  AppDispatch } from "@/store";
+import { RootState } from "@/store/reducers";
+import styles from "./amenitypage.module.css";
+import NewAmenityForm from "../property-amenities/new-amenity";
+import {
+  Edit2,
+  Trash2,
+  Plus,
+  ChevronRight,
+  ChevronDown,
+  RefreshCw,
+  Search,
+  ImageIcon,
+  Upload,
+} from "lucide-react";
+import ConfirmationModal from "@/components/confirmation-modal";
+import CustomizedSnackbars from "@/components/customized-snackbar";
+import { IconButton, Tooltip } from "@mui/material";
+import Loader from "@/components/loader";
+import { Amenity } from "@/store/model";
 
 interface SnackbarState {
   open: boolean;
@@ -56,11 +59,12 @@ const AmenityManagement: React.FC = () => {
   }>({});
   const [loading, setLoading] = useState(true);
   const [editingAmenity, setEditingAmenity] = useState<Amenity | null>(null);
-  const [loadingImages, setLoadingImages] = useState<{ [key: number]: boolean }>({});
+  const [loadingImages, setLoadingImages] = useState<{
+    [key: number]: boolean;
+  }>({});
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [amenityToDelete, setAmenityToDelete] = useState<Amenity | null>(null);
   const [snackbar, setSnackbar] = useState<SnackbarState>({
     open: false,
@@ -72,9 +76,33 @@ const AmenityManagement: React.FC = () => {
     {}
   );
 
+  const getAmenities = useCallback(async () => {
+    try {
+      await dispatch(fetchAmenities());
+      setLoading(false);
+    } catch (err) {
+      showSnackbar("Failed to fetch amenities", "error");
+      setLoading(false);
+    }
+  }, [dispatch]);
+
   useEffect(() => {
     getAmenities();
-  }, []);
+  }, [getAmenities]);
+
+  useEffect(() => {
+    if (amenities.length > 0) {
+      const groupedAmenities = groupAmenitiesByType(amenities);
+      setGroupAmenities(groupedAmenities);
+
+      // Initialize refs for each group
+      Object.keys(groupedAmenities).forEach((group) => {
+        if (!groupRefs.current[group]) {
+          groupRefs.current[group] = React.createRef();
+        }
+      });
+    }
+  }, [amenities]);
 
   useEffect(() => {
     if (updateSuccess) {
@@ -87,7 +115,7 @@ const AmenityManagement: React.FC = () => {
       showSnackbar(updateError, "error");
       dispatch(resetAmenitiesState());
     }
-  }, [updateSuccess, updateError, dispatch]);
+  }, [updateSuccess, updateError, dispatch, getAmenities]);
 
   useEffect(() => {
     if (deleteSuccess) {
@@ -99,37 +127,18 @@ const AmenityManagement: React.FC = () => {
       showSnackbar(deleteError, "error");
       dispatch(resetAmenitiesState());
     }
-  }, [deleteSuccess, deleteError, dispatch]);
-
-  const getAmenities = async () => {
-    try {
-      dispatch(fetchAmenities());
-      const groupedAmenities = groupAmenitiesByType(amenities);
-      setGroupAmenities(groupedAmenities);
-      setLoading(false);
-
-      // Initialize refs for each group
-      Object.keys(groupedAmenities).forEach((group) => {
-        if (!groupRefs.current[group]) {
-          groupRefs.current[group] = React.createRef();
-        }
-      });
-    } catch (err) {
-      showSnackbar("Failed to fetch amenities", "error");
-      setLoading(false);
-    }
-  };
+  }, [deleteSuccess, deleteError, dispatch, getAmenities]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
     if (editingAmenity && file) {
-      setLoadingImages(prev => ({ ...prev, [editingAmenity.id]: true }));
+      setLoadingImages((prev) => ({ ...prev, [editingAmenity.id]: true }));
       setEditingAmenity({
         ...editingAmenity,
         imageFile: file,
       });
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      setLoadingImages(prev => ({ ...prev, [editingAmenity.id]: false }));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      setLoadingImages((prev) => ({ ...prev, [editingAmenity.id]: false }));
     }
   };
 
@@ -192,7 +201,6 @@ const AmenityManagement: React.FC = () => {
       }
     }
   };
-
 
   const handleCancel = () => {
     setEditingAmenity(null);
@@ -267,7 +275,7 @@ const AmenityManagement: React.FC = () => {
   };
 
   const handleSnackbarClose = (
-    event?: React.SyntheticEvent |   Event,
+    event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
     if (reason === "clickaway") {
@@ -426,16 +434,21 @@ const AmenityManagement: React.FC = () => {
                             </div>
                           ) : (
                             <div className={styles.displayContainer}>
-                            <div className={styles.amenityIcon}>
-                              {loadingImages[amenity.id] ? (
-                                <Loader />
-                              ) : amenity.s3_url ? (
-                                <img
-                                  src={amenity.s3_url}
-                                  alt={amenity.amenityName}
-                                  className={styles.amenityImage}
-                                  onLoad={() => setLoadingImages(prev => ({ ...prev, [amenity.id]: false }))}
-                                />
+                              <div className={styles.amenityIcon}>
+                                {loadingImages[amenity.id] ? (
+                                  <Loader />
+                                ) : amenity.s3_url ? (
+                                  <img
+                                    src={amenity.s3_url}
+                                    alt={amenity.amenityName}
+                                    className={styles.amenityImage}
+                                    onLoad={() =>
+                                      setLoadingImages((prev) => ({
+                                        ...prev,
+                                        [amenity.id]: false,
+                                      }))
+                                    }
+                                  />
                                 ) : (
                                   <ImageIcon size={14} />
                                 )}
