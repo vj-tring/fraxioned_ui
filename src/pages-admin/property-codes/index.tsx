@@ -3,12 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   Button, Paper, Typography, Table, TableBody, TableCell,
-  TableContainer, TableHead, TableRow, IconButton, Chip
+  TableContainer, TableHead, TableRow, IconButton, Chip, TextField
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { fetchPropertyCodes } from '@/store/slice/auth/propertycodeSlice';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Cancel';
+import { fetchPropertyCodes, editPropertyCode, deletePropertyCode } from '@/store/slice/auth/propertycodeSlice';
 import styles from './propertycode.module.css';
 import { RootState } from '@/store/reducers';
 import { AppDispatch } from '@/store';
@@ -43,6 +45,8 @@ const PropertyCode: React.FC = () => {
   const [filteredCodes, setFilteredCodes] = useState<PropertyCode[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editValue, setEditValue] = useState('');
 
   useEffect(() => {
     dispatch(fetchPropertyCodes());
@@ -69,8 +73,43 @@ const PropertyCode: React.FC = () => {
     setIsModalOpen(false);
     setRefreshTrigger(prev => prev + 1);
   };
-  const handleEdit = (codeId: number) => console.log('Edit code', codeId);
-  const handleDelete = (codeId: number) => console.log('Delete code', codeId);
+
+  const handleEdit = (code: PropertyCode) => {
+    setEditingId(code.id);
+    setEditValue(code.propertyCode);
+  };
+
+  const handleSave = async (code: PropertyCode) => {
+    if (editValue !== code.propertyCode) {
+      try {
+        await dispatch(editPropertyCode({
+          id: code.id,
+          property: { id: code.property.id },
+          propertyCodeCategory: { id: code.propertyCodeCategory.id },
+          updatedBy: { id: 1 },
+          propertyCode: editValue
+        })).unwrap();
+        setRefreshTrigger(prev => prev + 1);
+      } catch (error) {
+        console.error('Failed to edit property code:', error);
+      }
+    }
+    setEditingId(null);
+  };
+
+  const handleCancel = () => {
+    setEditingId(null);
+    setEditValue('');
+  };
+
+  const handleDelete = async (codeId: number) => {
+    try {
+      await dispatch(deletePropertyCode(codeId)).unwrap();
+      setRefreshTrigger(prev => prev + 1);
+    } catch (error) {
+      console.error('Failed to delete property code:', error);
+    }
+  };
 
   if (status === 'loading') {
     return <div className={styles.loading}>Loading...</div>;
@@ -112,22 +151,56 @@ const PropertyCode: React.FC = () => {
                       className={styles.categoryChip}
                     />
                   </TableCell>
-                  <TableCell>{code.propertyCode}</TableCell>
+                  <TableCell>
+                    {editingId === code.id ? (
+                      <TextField
+                        value={editValue}
+                        onChange={(e) => setEditValue(e.target.value)}
+                        size="small"
+                        fullWidth
+                        variant="outlined"
+                        className={styles.editInput}
+                      />
+                    ) : (
+                      code.propertyCode
+                    )}
+                  </TableCell>
                   <TableCell align="right">
-                    <IconButton
-                      size="small"
-                      onClick={() => handleEdit(code.id)}
-                      className={styles.actionButton}
-                    >
-                      <EditIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton
-                      size="small"
-                      onClick={() => handleDelete(code.id)}
-                      className={styles.actionButton}
-                    >
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
+                    {editingId === code.id ? (
+                      <>
+                        <IconButton
+                          size="small"
+                          onClick={() => handleSave(code)}
+                          className={styles.actionButton}
+                        >
+                          <SaveIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          onClick={handleCancel}
+                          className={styles.actionButton}
+                        >
+                          <CancelIcon fontSize="small" />
+                        </IconButton>
+                      </>
+                    ) : (
+                      <>
+                        <IconButton
+                          size="small"
+                          onClick={() => handleEdit(code)}
+                          className={styles.actionButton}
+                        >
+                          <EditIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          onClick={() => handleDelete(code.id)}
+                          className={styles.actionButton}
+                        >
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      </>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

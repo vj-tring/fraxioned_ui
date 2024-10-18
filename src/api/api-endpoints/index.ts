@@ -190,14 +190,14 @@ export const addamenity = (data: {
     amenityDescription: string;
 }) => axiosInstance.post('/amenities/amenity', data);
 
-export const updateamenityforproperty = (updateData: UpdateAmenityPayload) => 
+export const updateamenityforproperty = (updateData: UpdateAmenityPayload) =>
     axiosInstance.patch(`/property-space-amenities`, updateData);
 
-export const updateamenities = (id: number, updateData: FormData) => 
+export const updateamenities = (id: number, updateData: FormData) =>
     axiosInstance.patch(`/amenities/amenity/${id}`, updateData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
     });
 
 export const propertyImageapi = (propertyId: number) =>
@@ -340,6 +340,9 @@ export const updateSpaceImageById = (imageId: number, formData: FormData) =>
 export const getAllpropertycodes = () =>
     axiosInstance.get(`/property-codes`);
 
+//delete a  property code
+export const deletePropertycode = (id: number) =>
+    axiosInstance.delete(`/property-codes/property-code/${id}`);
 
 //add for a property
 export const postpropertycode = (payload: {
@@ -352,6 +355,13 @@ export const postpropertycode = (payload: {
 
 export const getAllpropertycodecatogory = () =>
     axiosInstance.get(`/property-code-categories`);
+
+export const editPropertyCode = (id: number, payload: {
+    property: number;
+    propertyCodeCategory: number;
+    updatedBy: number;
+    propertyCode: string;
+}) => axiosInstance.patch(`/property-codes/property-code/${id}`, payload);
 
 export const createpropertycodecatogory = (data: { name: string; createdBy: { id: number } }) =>
     axiosInstance.post(`/property-code-categories`, data);
