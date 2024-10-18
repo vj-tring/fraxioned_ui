@@ -21,12 +21,10 @@ const useSendInviteHandler = () => {
       if (userString) {
         const userObject = JSON.parse(userString)
         const invitedBy = userObject.id
-        console.log('userEmail', invitedBy)
         const payload = { email, roleId: selectedRole, invitedBy }
 
         // const response = await sendInvite(payload);
         await sendInvite(payload)
-        console.log(`Invite sent to: ${email}`)
         setStatus('success')
       }
     } catch (error) {

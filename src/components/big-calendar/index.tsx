@@ -143,7 +143,6 @@ const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
   };
 
   const handleEdit = () => {
-    console.log("Edit clicked for event:", clickedEvent);
   };
 
   return (

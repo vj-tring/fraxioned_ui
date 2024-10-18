@@ -100,7 +100,6 @@ const EditForm: React.FC<EditFormProps> = ({
         isActive: true,
       };
       if (id) {
-        console.log("updateuser", dataToSend);
         await dispatch(updateUserById({ userId: id, userData: dataToSend }));
       }
       onUserUpdated();

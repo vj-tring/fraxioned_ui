@@ -75,7 +75,6 @@ export const editProperty =
                 };
 
                 const response = await updatePropertyapi(propertyId, updatedPropertyData);
-                console.log(response)
 
                 if (response.status === 200) {
                     dispatch(editPropertySuccess('Property updated successfully!'));
