@@ -3,23 +3,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AiOutlinePlus, AiOutlineSave, AiOutlineClose } from 'react-icons/ai';
 import styles from './addamenity.module.css';
 import Loader from '@/components/loader';
-import { addAmenity, resetAddAmenityState } from '@/store/slice/auth/addamenitySlice';
+import { createAmenity, resetAmenitiesState } from '@/store/slice/amenity';
 import {
     addAmenityGroup,
     resetAmenityGroupState,
     fetchAmenityGroups
-} from '@/store/slice/auth/amenityGroups';
+} from '@/store/slice/amenity/group';
 import { AppDispatch } from '@/store';
 import { RootState } from '@/store/reducers';
 
 interface AmenityGroup {
-    id: number;
-    name: string;
+  id: number;
+  name: string;
 }
 
 interface NewAmenityFormProps {
-    onClose: () => void;
-    onAmenityAdded: () => void;
+  onClose: () => void;
+  onAmenityAdded: () => void;
 }
 
 const NewAmenityForm: React.FC<NewAmenityFormProps> = ({ onClose, onAmenityAdded }) => {
@@ -29,7 +29,7 @@ const NewAmenityForm: React.FC<NewAmenityFormProps> = ({ onClose, onAmenityAdded
         loading: addAmenityLoading,
         error: addAmenityError,
         success: addAmenitySuccess
-    } = useSelector((state: RootState) => state.addAmenity);
+    } = useSelector((state: RootState) => state.amenities);
     const {
         loading: amenityGroupLoading,
         error: amenityGroupError,
@@ -51,23 +51,23 @@ const NewAmenityForm: React.FC<NewAmenityFormProps> = ({ onClose, onAmenityAdded
     const [uploadProgress, setUploadProgress] = useState(0);
 
 
-    useEffect(() => {
-        dispatch(fetchAmenityGroups());
-    }, [dispatch, addAmenityGroupSuccess]);
+  useEffect(() => {
+    dispatch(fetchAmenityGroups());
+  }, [dispatch, addAmenityGroupSuccess]);
 
-    useEffect(() => {
-        if (addAmenitySuccess) {
-            onAmenityAdded();
-            onClose();
-            dispatch(resetAddAmenityState());
-        }
-    }, [addAmenitySuccess, onAmenityAdded, onClose, dispatch]);
+  useEffect(() => {
+    if (addAmenitySuccess) {
+      onAmenityAdded();
+      onClose();
+      dispatch(resetAmenitiesState());
+    }
+  }, [addAmenitySuccess, onAmenityAdded, onClose, dispatch]);
 
-    useEffect(() => {
-        if (addAmenityGroupSuccess) {
-            dispatch(resetAmenityGroupState());
-        }
-    }, [addAmenityGroupSuccess, dispatch]);
+  useEffect(() => {
+    if (addAmenityGroupSuccess) {
+      dispatch(resetAmenityGroupState());
+    }
+  }, [addAmenityGroupSuccess, dispatch]);
 
     useEffect(() => {
         setError(addAmenityError || amenityGroupError || '');
@@ -164,7 +164,7 @@ const NewAmenityForm: React.FC<NewAmenityFormProps> = ({ onClose, onAmenityAdded
             return;
         }
 
-        dispatch(addAmenity({
+        dispatch(createAmenity({
             amenityGroup: { id: selectedAmenityGroup.id },
             createdBy: { id: 1 },
             amenityName,

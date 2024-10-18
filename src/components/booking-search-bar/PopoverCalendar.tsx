@@ -54,7 +54,7 @@ const PopoverCalendar: React.FC<PopoverCalendarProps> = ({
         </PopoverTrigger>
         <PopoverContent className="calendar-popover" align="start">
           <DatePickerWithRange
-            onSelect={handleDateSelect}
+            onDateSelect={handleDateSelect}
             initialRange={dateRange}
             selectingFrom={activeDate === 'check-in'} propertyColor={''}          />
         </PopoverContent>

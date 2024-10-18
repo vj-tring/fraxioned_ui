@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import SidePanel from '@/pages-admin/sidepanel';
-import Holidays from '../grid/holiday-grid';
+import Holidays from '../holiday-page';
 import Calendar from '@/components/big-calendar';
 import Property from '../grid/property-grid';
 import PropertySidePanel from '../propertysidepanel';
@@ -18,7 +18,7 @@ import UserProperty from '../property-user';
 import EditPropertyRulesForm from '../property-rules/edit-form';
 import PropertyPhotos from '../property-photos';
 import CustomNavbar from '@/components/navbar';
-import BookingGrid from '../grid/bookings-grid';
+import BookingsPage from '../bookings-page';
 import fraxionedLogo from '../../assets/images/fraxioned.png'
 import userImage from '../../assets/images/profile.jpeg'
 import './admin-dashboard.css'
@@ -57,7 +57,7 @@ const AdminDashboard: React.FC = () => {
                     <Routes>
                         <Route path="/" element={<Navigate to="admin/bookings" replace />} />
                         <Route path="/bookings" element={<Calendar isSidebarOpen={isSidebarOpen} />} />
-                        <Route path="/bookings-grid" element={<BookingGrid isSidebarOpen={isSidebarOpen} />} />
+                        <Route path="/bookings-page" element={<BookingsPage isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/amenity" element={<AmenityManagement />} />
                         <Route path="/user/:id/edit" element={<TabSwitch onUserUpdated={handleUserUpdated} />} />
                         <Route path="/holidays" element={<Holidays isSidebarOpen={isSidebarOpen} />} />

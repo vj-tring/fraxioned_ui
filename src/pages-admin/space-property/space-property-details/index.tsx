@@ -19,18 +19,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { fetchAmenities } from "@/store/slice/auth/amenitySlice";
+import { fetchAmenities } from "@/store/slice/amenity";
 import {
   deleteImagesBatch,
   fetchImagesByPropertySpaceId,
   selectSpaceImages,
-} from "@/store/slice/spaceImagesSlice";
+} from "@/store/slice/space/images";
 import AmenitiesTab from "./property-space-tabs/amenities-tab";
 import PhotosTab from "./property-space-tabs/photos-tab";
 import BedTypesTab from "./property-space-tabs/bed-type-tab";
 import { ArrowLeft, CircleArrowLeft, MoveLeft, Trash2 } from "lucide-react";
 import BathTypesTab from "./property-space-tabs/bath-type-tab";
-import { deleteExistingSpaceProperty } from "@/store/slice/spacePropertySlice";
+import { deleteExistingSpaceProperty } from "@/store/slice/space/property";
 import { createOrDeletePropertySpaceBeds, fetchAllPropertySpaceBedsByPropertySpace, fetchAllSpaceBedTypes } from "@/store/slice/bedSlice";
 import { createOrDeletePropertySpaceBathrooms, fetchAllPropertySpaceBathroomsByPropertySpace, fetchAllSpaceBathroomTypes } from "@/store/slice/bathroom-slice";
 
