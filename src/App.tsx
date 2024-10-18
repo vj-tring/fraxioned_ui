@@ -28,7 +28,6 @@ function AppRoutes() {
   const session = localStorage.getItem("session");
   const parsedSession = session !== null ? JSON.parse(session) : null;
   const isPublicRoute = publicRoutes.includes(location.pathname);
-  console.log("session", parsedSession);
   useEffect(() => {
     if (user == null && !isPublicRoute && parsedSession != null) {
       dispatch(fetchAuthState());
