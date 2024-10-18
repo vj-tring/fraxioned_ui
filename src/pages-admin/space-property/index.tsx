@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Grid, Typography } from '@mui/material';
-import styles from './spaceproperty.module.css';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Grid,
+  Typography,
+} from "@mui/material";
+import styles from "./spaceproperty.module.css";
 import { RootState } from "@/store/reducers";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/store";
-import { fetchAllSpaces, Space } from "@/store/slice/spaceSlice";
-import { createNewSpaceProperty, fetchSpacePropertiesById } from "@/store/slice/spacePropertySlice";
+import { fetchAllSpaces } from "@/store/slice/space";
+import { Space } from "@/store/model";
+import { createNewSpaceProperty, fetchSpacePropertiesById } from "@/store/slice/space/property";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchAllImages } from "@/store/slice/spaceImagesSlice";
+import { fetchAllImages } from "@/store/slice/space/images";
 import Loader from "@/components/loader";
 
 const SpaceProperty: React.FC = () => {

@@ -1,5 +1,5 @@
 import { sendContactMessage } from '../../api/functions/contact-us'
-import { ContactMessage } from '../../types/contact'
+import { ContactMessage } from '../../store/model/contact-message'
 
 export const handleSubmit = async (
   event: React.FormEvent<HTMLFormElement>,
