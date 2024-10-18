@@ -1,7 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { amenitiesapi, addAmenity, updateamenities, deleteAmenity } from "@/api";
+import { amenitiesapi, addamenity, updateamenities, deleteAmenity } from "@/api/api-endpoints";
 import { Amenity } from "@/store/model";
 
+interface AddAmenityData {
+  amenityGroup: { id: number };
+  createdBy: { id: number };
+  amenityName: string;
+  amenityDescription: string;
+  imageFile: File | null;
+}
 export const fetchAmenities = createAsyncThunk(
   "amenities/fetchAmenities",
   async () => {
@@ -10,20 +17,41 @@ export const fetchAmenities = createAsyncThunk(
   }
 );
 export const createAmenity = createAsyncThunk(
-    'amenities/addAmenity',
-    async (data: Amenity, { rejectWithValue }) => {
-      try {
-        const response = await addAmenity(data);
-        return response.data;
-      } catch (error: any) {
-        return rejectWithValue(error.response?.data?.message || 'An error occurred');
+  'amenities/addAmenity',
+  async (data: AddAmenityData, { rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      formData.append('amenityGroup', JSON.stringify(data.amenityGroup));
+      formData.append('createdBy', JSON.stringify(data.createdBy));
+      formData.append('amenityName', data.amenityName);
+      formData.append('amenityDescription', data.amenityDescription);
+      
+      if (data.imageFile) {
+        formData.append('imageFile', data.imageFile);
       }
+
+      const response = await addamenity(formData);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || 'An error occurred');
     }
-  );
+  }
+);
+// export const createAmenity = createAsyncThunk(
+//     'amenities/addAmenity',
+//     async (data: Amenity, { rejectWithValue }) => {
+//       try {
+//         const response = await addamenity(data);
+//         return response.data;
+//       } catch (error: any) {
+//         return rejectWithValue(error.response?.data?.message || 'An error occurred');
+//       }
+//     }
+//   );
 
   export const updateAmenity = createAsyncThunk(
     'amenities/updateAmenity',
-    async ({ id, updateData }: { id: number; updateData: Amenity }, { rejectWithValue }) => {
+    async ({ id, updateData }: { id: number; updateData: FormData }, { rejectWithValue }) => {
         try {
             const response = await updateamenities(id, updateData);
             return response.data;

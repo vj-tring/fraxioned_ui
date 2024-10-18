@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AiOutlinePlus, AiOutlineSave, AiOutlineClose } from 'react-icons/ai';
 import styles from './addamenity.module.css';
 import Loader from '@/components/loader';
-import { addAmenity, resetAddAmenityState } from '@/store/slice/auth/addamenitySlice';
+import { createAmenity, resetAmenitiesState } from '@/store/slice/amenity';
 import {
     addAmenityGroup,
     resetAmenityGroupState,
     fetchAmenityGroups
-} from '@/store/slice/auth/amenityGroups';
+} from '@/store/slice/amenity/group';
 import { AppDispatch } from '@/store';
 import { RootState } from '@/store/reducers';
 
@@ -29,7 +29,7 @@ const NewAmenityForm: React.FC<NewAmenityFormProps> = ({ onClose, onAmenityAdded
         loading: addAmenityLoading,
         error: addAmenityError,
         success: addAmenitySuccess
-    } = useSelector((state: RootState) => state.addAmenity);
+    } = useSelector((state: RootState) => state.amenities);
     const {
         loading: amenityGroupLoading,
         error: amenityGroupError,
@@ -164,7 +164,7 @@ const NewAmenityForm: React.FC<NewAmenityFormProps> = ({ onClose, onAmenityAdded
             return;
         }
 
-        dispatch(addAmenity({
+        dispatch(createAmenity({
             amenityGroup: { id: selectedAmenityGroup.id },
             createdBy: { id: 1 },
             amenityName,

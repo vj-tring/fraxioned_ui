@@ -24,6 +24,12 @@ import userReducer from "../slice/user-slice";
 import userpropertyReducer from "../slice/auth/userpropertiesSlice";
 import rolesReducer from "../slice/roles";
 import spaceImageReducer from "../slice/space/images";
+import { propertycodecatogoryReducer } from '../slice/auth/propertycodeCatogorySlice';
+import { propertyCodesReducer } from '../slice/auth/propertycodeSlice';
+import propertydetailReducer from '../slice/auth/property-detail';
+import bedReducer from '../slice/bedSlice';
+import bathroomReducer from '../slice/bathroom-slice';
+import amenityReducer from "../slice/amenitiesSlice";
 
 const appReducer = combineReducers({
   auth: authReducer,

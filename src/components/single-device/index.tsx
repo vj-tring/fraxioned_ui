@@ -25,7 +25,7 @@ import { AppDispatch } from "@/store";
 import { RootState } from "@/store/reducers";
 import Bedroom1Image from "../../assets/images/bedroom1.jpg";
 import KingBedImage from "../../assets/images/bedroom1.jpg";
-import { fetchSpacePropertiesById } from "@/store/slice/spacePropertySlice";
+import { fetchSpacePropertiesById } from "@/store/slice/space/property";
 import {
   amenitiesapi,
   fetchPropertyImagesByPropertyId,
@@ -117,11 +117,9 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
 
     imageFetching();
   }, [propertyId]); //
-  }, [propertyId]); //
 
   const getImageUrlByPropertyAndSpace = (spaceId: number): string | null => {
     const image = imagesData.find(
-      (img) => img.propertySpace?.id === spaceId && img.displayOrder === 1
       (img) => img.propertySpace?.id === spaceId && img.displayOrder === 1
     );
 

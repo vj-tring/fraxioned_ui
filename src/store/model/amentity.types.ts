@@ -2,11 +2,12 @@ export interface Amenity {
   id?: number;
   amenityName: string;
   amenityDescription: string;
+  s3_url?: string;
   createdAt?: string;
   updatedAt?: string;
   createdBy: {
     id: number;
-  } ;
+  };
   updatedBy: {
     id: number;
   };
@@ -14,6 +15,7 @@ export interface Amenity {
     id: number;
     name?: string;
   };
+  imageFile?: File | null;
 }
 
 export interface AmenitiesState {

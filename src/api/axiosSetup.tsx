@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "@/components/snackbar-provider";
 import React, { ReactNode, useLayoutEffect } from "react";
 import { BACKEND_URL } from "@/constants";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/reducers";
 
 
 // const navigate = useNavigate();

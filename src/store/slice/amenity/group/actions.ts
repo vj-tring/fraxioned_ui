@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { addamenitygroup, getamenitygroup } from '@/api';
+import { addamenitygroup, getamenitygroup } from '@/api/api-endpoints';
 
 export const fetchAmenityGroups = createAsyncThunk(
     'amenityGroups/fetchAmenityGroups',

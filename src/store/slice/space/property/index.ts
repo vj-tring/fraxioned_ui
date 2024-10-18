@@ -67,5 +67,5 @@ const spacePropertySlice = createSlice({
 
 export const selectSpaceProperties = (state: RootState) =>
   state.spaceProperties.spaceProperties;
-
+export * from './actions'
 export default spacePropertySlice.reducer;

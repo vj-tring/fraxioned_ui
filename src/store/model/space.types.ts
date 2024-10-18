@@ -1,5 +1,5 @@
 export interface Space {
-  id?: number; // Optional for create and update
+  id: number; // Optional for create and update
   name: string;
   s3_url?: string; // Added for fetched spaces
   isBedTypeAllowed: boolean;
