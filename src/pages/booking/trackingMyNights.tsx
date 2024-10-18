@@ -45,26 +45,11 @@ const TrackingMyNigts: React.FC = () => {
   const selectedProperty = properties.find(
     (property) => property.id === selectedPropertyId
   );
-  // console.log("proeprtyid",selectedProperty.id)
   const propertyDetails = selectedProperty?.details[selectedYear];
   const availableYears = Object.keys(selectedProperty?.details || {}).map(
     (year) => parseInt(year)
   );
 
-  // useEffect(() => {
-  //   const fetchPropertyImages = async () => {
-  //     try {
-  //       const propertyId :number=selectedProperty?.id;
-  //       const response = await propertyImageapi(propertyId);
-  //       setImageDetails(response.data.data);
-  //       console.log("ImgApi",response.data.data);
-  //     } catch (error) {
-  //       console.error("Error fetching property images:", error);
-  //     }
-  //   };
-
-  //   fetchPropertyImages();
-  // }, []);
 
   const showselectedimage = (id: number) => {
     const filteredImage = properties

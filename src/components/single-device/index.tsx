@@ -75,7 +75,6 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   );
 
   const [imagesData, setImagesData] = useState<any[]>([]);
-  console.log("imagedara",imagesData);
   const [amenitites, setAmenities] = useState<any[]>([]);
 
   const [page, setPage] = useState(1);
@@ -96,9 +95,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
     try {
       const response = await amenitiesapi();
       setAmenities(response.data.data);
-      // console.log("amrnities")
     } catch (err) {
-      console.log(err);
     }
   };
   useEffect(() => {
@@ -109,7 +106,6 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
           (a: any, b: any) => a.displayOrder - b.displayOrder
         );
         setImagesData(sortedImages); // Sort images by displayOrder
-        console.log("Images fetched and sorted successfully");
       } catch (error) {
         console.error("Error fetching images:", error);
       }
@@ -122,12 +118,9 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
     const image = imagesData.find(
       (img) => img.propertySpace?.id === spaceId && img.displayOrder === 1
     );
-    console.log("image",image);
-    console.log("imagesdata",imagesData);
     return image ? image.url : null;
   };
   const getIconUrlByAmenitiesId = (amenityId: number) => {
-    // console.log("amenity", amenitites);
     const icons = amenitites.find((icon) => icon.id === amenityId);
 
     return icons != null && icons.s3_url

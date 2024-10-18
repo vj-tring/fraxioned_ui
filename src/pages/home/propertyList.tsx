@@ -57,7 +57,6 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
   const showCarousel = properties.length > 4;
   const showPlusIcon = true;
 
-  // console.log("properties", properties);
   const fetchAdditionalProperties = async () => {
     try {
       const response = await getProperties();
@@ -69,9 +68,7 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
       const allProperties = response.data as Property[];
       const numberOfUserProperties = properties.length;
 
-      console.log("proplength", numberOfUserProperties);
       const numberOfPropertiesToShow = 5 - numberOfUserProperties;
-      console.log("numberOfPropertiesToShow", numberOfPropertiesToShow);
 
       setAdditionalProperties(allProperties.slice(0, numberOfPropertiesToShow));
     } catch (error) {
@@ -87,7 +84,6 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
     fetchAdditionalProperties();
   }, [dispatch]);
 
-  // console.log("userid", userId);
 
   const scroll = (scrollOffset: number) => {
     if (carouselRef.current) {

@@ -74,7 +74,6 @@ export default function BasicSelect() {
         );
         setSelectedCardIndex(selectedCardIndex);
         const card = cards[selectedCardIndex];
-        console.log("card", card);
         dispatch(selectProperty(card.id));
         dispatch(selectcardindex(selectedCardIndex));
         dispatch(selectcard(cards[selectedCardIndex]));

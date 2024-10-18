@@ -24,7 +24,6 @@ export const fetchAuthState = createAsyncThunk<
       };
     }
   } catch (error) {
-    console.log("Failed to load state:", error);
   }
   return {
     user: null,

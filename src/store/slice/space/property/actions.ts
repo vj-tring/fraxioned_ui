@@ -28,7 +28,6 @@ export const fetchSpacePropertiesById = createAsyncThunk<
   async (propertyId: number, { rejectWithValue }) => {
     try {
       const response = await getAllSpacePropertiesById(propertyId);
-      // console.log("space proerpyty",response.data.data);
 
       return response.data.data;
     } catch (error) {

@@ -224,7 +224,6 @@ export const getpropertyImageById = (id: number) =>
   axiosInstance.get(`/property-images/property-image/${id}`);
 
 export const propertyImageuploadapi = (formData: FormData) => {
-  console.log("to backend", formData);
   return axiosInstance.post(`/property-images`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
@@ -233,7 +232,6 @@ export const propertyImageuploadapi = (formData: FormData) => {
   });
 };
 export const propertyImageeditapi = (id: number, formData: FormData) => {
-  console.log("to backend", formData);
   return axiosInstance.patch(`/property-images/property-image/${id}`, formData);
 };
 

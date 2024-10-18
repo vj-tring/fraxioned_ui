@@ -37,27 +37,10 @@ const Home: React.FC = () => {
     loading,
     error,
   } = useSelector((state: RootState) => state.properties);
-  // const userId = useSelector((state: any) => state.auth.user?.id);
 
-  // useEffect(() => {
-  //   const data = fetchProperties(userId);
-  //   console.log("data", data);
-  // }, []);
-
+ 
   const dispatch = useDispatch();
 
-  // const displayProperties = properties.length ? properties : mockProperties;
-  // const showCarousel = displayProperties.length > 4;
-  // const carouselRef = useRef<HTMLDivElement>(null);
-  // const showPlusIcon = true;
-  // const scroll = (scrollOffset: number) => {
-  //   if (carouselRef.current) {
-  //     carouselRef.current.scrollBy({
-  //       left: scrollOffset,
-  //       behavior: "smooth",
-  //     });
-  //   }
-  // };
 
   useEffect(() => {
     dispatch(resetLimits());

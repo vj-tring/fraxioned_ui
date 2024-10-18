@@ -131,7 +131,6 @@ const ReportsGrid: React.FC<{ isSidebarOpen: boolean }> = ({
         setUsersMap(userMap);
         setUserPropertyMap(usersPropertyMap);
 
-        console.log("reponse:", userPropertyResponse);
       } catch (error) {
         console.error("Error fetching users or properties:", error);
       }
@@ -160,14 +159,10 @@ const ReportsGrid: React.FC<{ isSidebarOpen: boolean }> = ({
 
     const userProperties = usersPropertyMap.get(Number(selectedUserId)) || [];
 
-    console.log("Selected User ID:", selectedUserId);
-    console.log("User Properties:", userProperties);
 
     return Array.from(propertiesMap.entries()).filter(([propertyId]) => {
       const isIncluded = userProperties.includes(Number(propertyId));
-      console.log(
-        `Checking Property ID: ${propertyId}, Included: ${isIncluded}`
-      );
+   
       return isIncluded;
     });
   };
@@ -226,7 +221,6 @@ const ReportsGrid: React.FC<{ isSidebarOpen: boolean }> = ({
       if (isCompleted) requestData.isCompleted = isCompleted;
       if (withPets) requestData.withPets = withPets;
 
-      console.log("Request Data:", requestData);
 
       const response = await axios.post(
         "http://192.168.1.47:3008/api/v1/bookings-report",
