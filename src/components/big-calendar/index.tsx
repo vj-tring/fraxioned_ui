@@ -9,7 +9,7 @@ import imagethree from "../../assests/blue-bear-lake.jpg";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import BookingButton from "../bookingbutton";
+import BookingButton from "../../components/bookingbutton";
 import PropertyDropdown from "../property-dropdown";
 import { getBookings, userdetails } from "@/api/api-endpoints";
 import "./big-calender.css";
@@ -22,44 +22,9 @@ import {
   CancelOutlined,
   Group,
 } from "@mui/icons-material";
+import { User, Booking, Event } from './big-calender.types';
 
 const localizer = momentLocalizer(moment);
-
-interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-}
-
-interface Booking {
-  id: number;
-  createdAt: string;
-  bookingId: string;
-  checkinDate: string;
-  isLastMinuteBooking: number;
-  checkoutDate: string;
-  totalNights: number;
-  noOfGuests: number;
-  property: {
-    id: number;
-    propertyName: string;
-  };
-  user: {
-    id: number;
-  };
-}
-
-interface Event {
-  id: number;
-  title: string;
-  start: Date;
-  end: Date;
-  desc: string;
-  propertyId: number;
-  userId: number;
-  createdAt: string;
-}
-
 const propertyColors: { [key: number]: string } = {
   1: "#88cdd4",
   2: "#e28f25",
@@ -183,9 +148,8 @@ const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
 
   return (
     <div
-      className={`calendar-container ${
-        isSidebarOpen ? "sidebar-open" : "sidebar-closed"
-      }`}
+      className={`calendar-container ${isSidebarOpen ? "sidebar-open" : "sidebar-closed"
+        }`}
     >
       <div className="calendar-header">
         <PropertyDropdown onPropertySelect={handlePropertySelect} />

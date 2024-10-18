@@ -31,17 +31,8 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
   onNewAccountClick,
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [storedName, setStoredName] = useState<string>("");
   const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
-
-  useEffect(() => {
-    const userDataString = localStorage.getItem("user");
-    if (userDataString) {
-      const { firstName, lastName } = JSON.parse(userDataString);
-      setStoredName(`${firstName || ""} ${lastName || ""}`);
-    }
-  }, []);
-
+  const user = useSelector((state: RootState) => state.auth.user);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -79,7 +70,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({
             }}
             className={`monsterrat ${styles.UserName}`}
           >
-            {storedName || userName}
+            {`${user?.firstName || ""} ${user?.lastName || ""}` || userName}
           </Typography>
           <Avatar sx={{ width: 32, height: 32 }}>
             {userImage ? (

@@ -1,13 +1,22 @@
 .propertyUsersContainer {
   display: flex;
-  width: 100%;
   flex-direction: column;
-  border-radius: 10px;
-  height: 610px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  flex: 1;
+  height: calc(100vh - 60px);
+  margin-right: 17px;
   overflow: hidden;
-  background-color: #fdfdfd;
   font-family: "Arial", sans-serif;
+}
+
+.fullContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f7fa;
+  flex: 1;
+  height: calc(100vh - 60px);
+  margin-right: 27px;
+  overflow: hidden;
 }
 
 .title {
@@ -77,10 +86,12 @@
   /* padding: 2px; */
   /* background-color: #7f8c8d; */
 }
+
 .icon {
   margin-right: 0.75rem;
   color: #00636d;
 }
+
 /* .monsterrat {
   font-family: "Montserrat", sans-serif !important;
 } */
@@ -93,6 +104,7 @@
   color: #011e3b;
   font-family: "Montserrat", sans-serif !important;
 }
+
 .profileDetails {
   display: flex;
   flex-direction: column;

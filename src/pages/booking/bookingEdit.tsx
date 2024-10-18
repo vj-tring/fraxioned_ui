@@ -249,7 +249,7 @@ useEffect(() => {
           </Grid>
           <Grid item xs={12} className='property-calendar'>
             <DatePickerWithRange
-              onSelect={handleDateSelect}
+              onDateSelect={handleDateSelect}
               initialRange={dateRange}
               propertyColor={''}    
               isEditMode={true}

@@ -17,9 +17,16 @@
     align-items: center;
 }
 
-.headersection>h2{
-    font-weight: 700;
+
+
+.headersection>h2 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #343a40;
+    margin: 0;
 }
+
+
 .mainsection {
     flex-grow: 1;
     display: flex;

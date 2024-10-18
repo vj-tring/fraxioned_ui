@@ -25,8 +25,9 @@ import { AppDispatch } from "@/store";
 import { RootState } from "@/store/reducers";
 import Bedroom1Image from "../../assets/images/bedroom1.jpg";
 import KingBedImage from "../../assets/images/bedroom1.jpg";
-import { fetchSpacePropertiesById } from "@/store/slice/spacePropertySlice";
+import { fetchSpacePropertiesById } from "@/store/slice/space/property";
 import {
+  amenitiesapi,
   fetchPropertyImagesByPropertyId,
   getAllSpacePropertyImageById,
 } from "@/api/api-endpoints";
@@ -72,7 +73,9 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const propertySpace = useSelector(
     (state: RootState) => state.spaceProperties.spaceProperties || []
   );
+
   const [imagesData, setImagesData] = useState<any[]>([]);
+  const [amenitites, setAmenities] = useState<any[]>([]);
 
   const [page, setPage] = useState(1);
   const [showAllAmenities, setShowAllAmenities] = useState(false);
@@ -80,6 +83,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
 
   useEffect(() => {
     dispatch(fetchAmenities(propertyId));
+    fetchAmenities1();
     console.log("amenties", propertyAmenities);
     dispatch(fetchSpacePropertiesById(propertyId));
   }, [dispatch, propertyId]);
@@ -88,6 +92,15 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
     setPage(value);
   };
 
+  const fetchAmenities1 = async () => {
+    try {
+      const response = await amenitiesapi();
+      setAmenities(response.data.data);
+      // console.log("amrnities")
+    } catch (err) {
+      console.log(err);
+    }
+  };
   useEffect(() => {
     const imageFetching = async () => {
       try {
@@ -112,7 +125,14 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
 
     return image ? image.url : null;
   };
+  const getIconUrlByAmenitiesId = (amenityId: number) => {
+    console.log("amenity", amenitites);
+    const icons = amenitites.find((icon) => icon.id === amenityId);
 
+    return icons != null && icons.s3_url
+      ? icons.s3_url
+      : "https://placehold.jp/150x150.png";
+  };
   const handleShowMoreClick = () => {
     setOpen(true);
   };
@@ -260,8 +280,15 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
               >
                 {displayedAmenities.map((amenity, index) => (
                   <Grid item xs={6} key={index}>
-                    <Typography variant="body2" className="monsterrat">
-                      {amenity.amenityName}
+                    <Typography
+                      variant="body2"
+                      className="monsterrat d-flex gap-3"
+                    >
+                      <img
+                        src={getIconUrlByAmenitiesId(amenity.id)}
+                        className="ImgIcons"
+                      />
+                      <div className="pt-1">{amenity.amenityName}</div>
                     </Typography>
                   </Grid>
                 ))}
@@ -318,7 +345,12 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
             color="inherit"
             onClick={handleShowLessClick}
             aria-label="close"
-            sx={{ position: "absolute", right: 18, top: 16   ,marginRight:"10px" }}
+            sx={{
+              position: "absolute",
+              right: 18,
+              top: 16,
+              marginRight: "10px",
+            }}
           >
             <CloseIcon />
           </IconButton>
@@ -337,9 +369,13 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                   <Typography
                     key={index}
                     variant="body2"
-                    className="monsterrat amenityName"
+                    className="monsterrat amenityName d-flex gap-4 "
                   >
-                    {amenity.amenityName}
+                    <img
+                      src={getIconUrlByAmenitiesId(amenity.id)}
+                      className="ImgIcons"
+                    />
+                    <div className="pt-1"> {amenity.amenityName}</div>
                     <div className="line mt-4"></div>
                   </Typography>
                 ))}

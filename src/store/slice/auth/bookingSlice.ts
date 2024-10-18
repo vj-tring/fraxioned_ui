@@ -25,6 +25,7 @@ export interface BookingData {
   petFee: number;
   createdAt: string;
   notes?: string; // Added notes field
+  isCancelled?: boolean;
 }
 
 interface BookingSummaryResponse {

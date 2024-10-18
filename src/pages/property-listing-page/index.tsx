@@ -324,6 +324,8 @@ const PropertyListingPage = () => {
     navigate("/booking-summary");
   };
 
+
+  
   return (
     <div className="container-fluid d-flex flex-column gap-4 px-14">
       <div className="img-row pt-4 px-12">
@@ -466,7 +468,7 @@ const PropertyListingPage = () => {
             <div id="basicRangeShortcuts" className="mt-5 mb-3 normalcalendar">
               <h1 className="checkIn mb-3">Select check-in date</h1>
               <DatePickerWithRange
-                onSelect={handleDateRangeSelect}
+                onDateSelect={handleDateRangeSelect}
                 initialRange={dateRange}
                 propertyColor={""}
               />
