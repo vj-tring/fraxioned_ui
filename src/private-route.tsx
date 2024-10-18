@@ -13,7 +13,11 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
 }) => {
   const user = useSelector((state: RootState) => state.auth.user);
   const loading = useSelector((state: RootState) => state.auth.loading);
-  const session = JSON.parse(localStorage.getItem("session") || "{}");
+  const session = localStorage.getItem("session");
+  const parsedSession = session !== null ? JSON.parse(session) : null;
+  if(parsedSession == null){
+    return <Navigate to="/login" />
+  }
   if (loading) {
     return <Loader />; // Or return null or a spinner
   }
