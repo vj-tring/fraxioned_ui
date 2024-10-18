@@ -73,7 +73,7 @@ const PropertyImage: React.FC<PropertyImageProps> = ({
           }}
           sx={{ height: "40px", fontSize: 'small' }}
         >
-          <MenuItem value={ALL_HOLIDAY_ID}>All Holiday</MenuItem>
+          <MenuItem value={ALL_HOLIDAY_ID}>All Properties</MenuItem>
           {properties.map((property: Property) => (
             <MenuItem key={property.id} value={property.id}>
               {property.propertyName}
