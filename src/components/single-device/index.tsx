@@ -75,6 +75,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   );
 
   const [imagesData, setImagesData] = useState<any[]>([]);
+  console.log("imagedara",imagesData);
   const [amenitites, setAmenities] = useState<any[]>([]);
 
   const [page, setPage] = useState(1);
@@ -84,7 +85,6 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   useEffect(() => {
     dispatch(fetchAmenities(propertyId));
     fetchAmenities1();
-    console.log("amenties", propertyAmenities);
     dispatch(fetchSpacePropertiesById(propertyId));
   }, [dispatch, propertyId]);
 
@@ -122,11 +122,12 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
     const image = imagesData.find(
       (img) => img.propertySpace?.id === spaceId && img.displayOrder === 1
     );
-
+    console.log("image",image);
+    console.log("imagesdata",imagesData);
     return image ? image.url : null;
   };
   const getIconUrlByAmenitiesId = (amenityId: number) => {
-    console.log("amenity", amenitites);
+    // console.log("amenity", amenitites);
     const icons = amenitites.find((icon) => icon.id === amenityId);
 
     return icons != null && icons.s3_url
@@ -218,9 +219,10 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                     component="img"
                     // height="100px"
                     image={
-                      getImageUrlByPropertyAndSpace(space.space.id) ||
+                      getImageUrlByPropertyAndSpace(space.id) ||
                       "https://via.placeholder.com/100"
                     } // Placeholder for space image
+                    
                     alt={space.space.name}
                     sx={{ objectFit: "cover", height: "200px" }}
                   />

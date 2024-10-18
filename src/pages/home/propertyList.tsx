@@ -4,7 +4,7 @@ import Card from "../../components/cards";
 import { useSelector, useDispatch } from "react-redux";
 import image1 from "../../assests/bear-lake-bluffs.jpg";
 import { FaPlus } from "react-icons/fa";
-import PorpImg from "../../assests/crown-jewel.jpg";
+import PorpImg from "../../assests/lake-escape.jpg";
 import { resetLimits } from "@/store/slice/auth/propertyGuestSlice";
 import { clearDates } from "@/store/slice/datePickerSlice";
 import { User } from "@/store/model";
@@ -57,7 +57,7 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
   const showCarousel = properties.length > 4;
   const showPlusIcon = true;
 
-  console.log("properties", properties);
+  // console.log("properties", properties);
   const fetchAdditionalProperties = async () => {
     try {
       const response = await getProperties();
