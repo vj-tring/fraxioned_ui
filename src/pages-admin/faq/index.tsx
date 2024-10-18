@@ -10,6 +10,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { Edit2, Trash2, Plus, RefreshCw } from "lucide-react";
+import { getCategories } from "@/api";
 import ConfirmationModal from "@/components/confirmation-modal";
 import NewQuestionForm from "../faq-add/faq-new";
 import CustomizedSnackbars from "@/components/customized-snackbar";
@@ -42,7 +43,7 @@ const FAQPage = () => {
   const questions = useSelector((state: RootState) => state.faqPage.faqs);
   const categories = useSelector((state: RootState) => state.addCategory.data);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(1);
-  const [loadingQuestions] = useState<boolean>(false);
+  const [loadingQuestions, setLoadingQuestions] = useState<boolean>(false);
   // const [loadingCategories, setLoadingCategories] = useState<boolean>(true);
   const [snackbar, setSnackbar] = useState<{
     open: boolean;
@@ -190,6 +191,7 @@ const FAQPage = () => {
 
       <div className={styles.content}>
         <Grid container spacing={4}>
+          {/* Categories Section */}
           <Grid item xs={12} sm={4}>
             {!categories ? (
               <CircularProgress />
@@ -215,6 +217,7 @@ const FAQPage = () => {
             )}
           </Grid>
 
+          {/* Questions Section */}
           <Grid item xs={12} sm={8}>
             {loadingQuestions ? (
               <CircularProgress />
@@ -265,6 +268,7 @@ const FAQPage = () => {
         </Grid>
       </div>
 
+      {/* Delete confirmation modal */}
       <ConfirmationModal
         show={showDeleteModal}
         onHide={() => setShowDeleteModal(false)}
@@ -275,6 +279,7 @@ const FAQPage = () => {
         cancelLabel="Cancel"
       />
 
+      {/* Snackbar for notifications */}
       <CustomizedSnackbars
         open={snackbar.open}
         handleClose={handleSnackbarClose}
