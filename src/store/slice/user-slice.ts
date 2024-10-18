@@ -1,4 +1,4 @@
-import { getUserById, updateuserapi } from "@/api";
+import { getUserById, updateuserapi } from "@/api/api-endpoints";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { UserState, User } from "../model";
 

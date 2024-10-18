@@ -4,59 +4,14 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import moment from "moment";
-import { getBookings, userdetails } from "@/api";
+import { getBookings, userdetails } from "@/api/api-endpoints";
 import { Edit, CalendarToday, Person, Home, CheckCircle, CancelOutlined, Group, Pets, AttachMoney, Schedule, Block } from '@mui/icons-material';
 import imageone from '../../assests/blue-bear-lake.jpg';
 import imagetwo from '../../assests/crown-jewel.jpg';
 import imagethree from '../../assests/blue-bear-lake.jpg';
 import styles from './userbooking.module.css';
+import { User, Booking, BookingProps } from './userbooking.types';
 
-interface BookingProps {
-    openEvent: boolean;
-    handleClose: () => void;
-    eventId: number;
-}
-
-interface User {
-    id: number;
-    firstName: string;
-    lastName: string;
-}
-
-interface Booking {
-    id: number;
-    bookingId: string;
-    checkinDate: string;
-    checkoutDate: string;
-    totalNights: number;
-    noOfGuests: number;
-    noOfPets: number;
-    createdAt: string;
-    updatedAt: string;
-    cancelledAt: string | null;
-    isLastMinuteBooking: number;
-    noOfAdults: number;
-    noOfChildren: number;
-    notes: string;
-    confirmationCode: string | null;
-    cleaningFee: number;
-    petFee: number;
-    isCancelled: boolean;
-    isCompleted: boolean;
-    user: {
-        id: number;
-    };
-    property: {
-        id: number;
-        propertyName: string;
-    };
-    createdBy: {
-        id: number;
-    };
-    updatedBy: {
-        id: number;
-    };
-}
 
 const ViewBookings: React.FC<BookingProps> = ({ openEvent, handleClose, eventId }) => {
     const [users, setUsers] = useState<User[]>([]);

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
-import { getUserProperties } from '@/api';
+import { getUserProperties } from '@/api/api-endpoints';
 
 
 interface UserProperty {

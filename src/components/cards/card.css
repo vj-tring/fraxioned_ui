@@ -296,7 +296,16 @@
     border-radius: 10px;
     padding: 0;
   }
-
+  .Container4 {
+    display: block !important;
+  }
+  .Cardcontainer{
+    margin: 0;
+    padding: 20px !important;
+  }
+  .carousel-controls{
+    display: none;
+  }
   .AddProps {
     display: flex;
     flex-direction: column;

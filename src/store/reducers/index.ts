@@ -44,13 +44,20 @@ const appReducer = combineReducers({
   propertyAmenities: propertyAmenitiesReducer,
   amenities: amenitiesReducer,
   spaceImage: spaceImageReducer,
-  spaces: spaceReducer, // Add space reducer
-  spaceProperties: spacePropertyReducer, // Add space property reducer
+  spaces: spaceReducer,
+  spaceProperties: spacePropertyReducer,
   userDetails: userDetailsReducer,
   userProperties: userpropertiesReducer,
   user: userReducer,
   userProperty: userpropertyReducer,
   roles: rolesReducer,
+  propertycodecatogory: propertycodecatogoryReducer,
+  propertycode: propertyCodesReducer,
+  propertydetail: propertydetailReducer,
+  bed: bedReducer,
+  bathroom: bathroomReducer,
+  amenitiesID: amenityReducer,
+
 });
 
 const rootReducer = (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/reducers";
 import { AppDispatch } from "@/store";
@@ -7,11 +7,10 @@ import {
   getByPropertySpaceId,
   updatePropertyAmenities,
 } from "@/store/slice/auth/propertyamenities";
-import { propertySpaceImageuploadapi } from "@/api";
+import { propertySpaceImageuploadapi } from "@/api/api-endpoints";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
 import {
   Dialog,
   DialogContent,
@@ -28,14 +27,21 @@ import {
 } from "@/store/slice/spaceImagesSlice";
 import AmenitiesTab from "./property-space-tabs/amenities-tab";
 import PhotosTab from "./property-space-tabs/photos-tab";
-import BedTypesTab from "./property-space-tabs/type-tab";
-import { Trash2 } from "lucide-react";
+import BedTypesTab from "./property-space-tabs/bed-type-tab";
+import { ArrowLeft, CircleArrowLeft, MoveLeft, Trash2 } from "lucide-react";
+import BathTypesTab from "./property-space-tabs/bath-type-tab";
+import { deleteExistingSpaceProperty } from "@/store/slice/spacePropertySlice";
+import { createOrDeletePropertySpaceBeds, fetchAllPropertySpaceBedsByPropertySpace, fetchAllSpaceBedTypes } from "@/store/slice/bedSlice";
+import { createOrDeletePropertySpaceBathrooms, fetchAllPropertySpaceBathroomsByPropertySpace, fetchAllSpaceBathroomTypes } from "@/store/slice/bathroom-slice";
 
 export default function Component({ initialSpace = {} }) {
   const location = useLocation();
   const { space = initialSpace } = location.state || {};
+  const navigate = useNavigate();
+  const { id: propertyId } = useParams();
   const dispatch = useDispatch<AppDispatch>();
-
+  const showBedTypesTab = space?.space?.isBedTypeAllowed ?? false;
+  const showBathTypesTab = space?.space?.isBathroomTypeAllowed ?? false;
   const userId = useSelector((state: RootState) => state.auth.user?.id);
   const {
     amenities: allAmenities,
@@ -54,6 +60,8 @@ export default function Component({ initialSpace = {} }) {
   const spaceImageError = useSelector(
     (state: RootState) => state.spaceImage.error
   );
+  const { propertySpaceBeds, loading: bedTypesLoading, error: bedTypesError } = useSelector((state: RootState) => state.bed);
+  const { propertySpaceBathrooms, loading: bathTypesLoading, error: bathTypesError } = useSelector((state: RootState) => state.bathroom);
 
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedAmenity, setSelectedAmenity] = useState<string>("");
@@ -74,13 +82,39 @@ export default function Component({ initialSpace = {} }) {
     Array<{ id?: number; url: string; isNew?: boolean }>
   >([]);
 
+  const generateTabsList = () => {
+    const tabs = [
+      { value: "photos", label: "Photos" },
+      { value: "amenities", label: "Amenities" },
+    ];
+
+    if (showBathTypesTab) {
+      tabs.splice(1, 0, { value: "bathTypes", label: "Bath Types" });
+    }
+
+    if (showBedTypesTab) {
+      tabs.splice(1, 0, { value: "bedTypes", label: "Bed Types" });
+    }
+
+    return tabs;
+  };
+  const tabsList = generateTabsList();
+
   useEffect(() => {
     if (space?.id) {
       dispatch(getByPropertySpaceId(space.id));
       dispatch(fetchImagesByPropertySpaceId(space.id));
+      dispatch(fetchAllSpaceBedTypes());
+      dispatch(fetchAllSpaceBathroomTypes());
+      if (showBedTypesTab) {
+        dispatch(fetchAllPropertySpaceBedsByPropertySpace(space.id));
+      }
+      if (showBathTypesTab) {
+        dispatch(fetchAllPropertySpaceBathroomsByPropertySpace(space.id));
+      }
     }
     dispatch(fetchAmenities());
-  }, [space, dispatch]);
+  }, [space, dispatch, showBedTypesTab, showBathTypesTab]);
 
   useEffect(() => {
     if (propertySpaceAmenities.length > 0) {
@@ -199,12 +233,10 @@ export default function Component({ initialSpace = {} }) {
     setUploadError(null);
 
     try {
-      // Delete marked images
       if (imagesToDelete.length > 0) {
         await dispatch(deleteImagesBatch({ ids: imagesToDelete })).unwrap();
       }
 
-      // Upload new images
       if (photos.length > 0) {
         const formData = new FormData();
         const propertySpaceImages = photos.map((photo, index) => ({
@@ -236,34 +268,67 @@ export default function Component({ initialSpace = {} }) {
     }
   };
 
-  const [bedTypes, setBedTypes] = useState([
-    { id: 1, name: "Single Bed", count: 0 },
-    { id: 2, name: "Double Bed", count: 0 },
-    { id: 3, name: "Queen Bed", count: 0 },
-    { id: 4, name: "King Bed", count: 0 },
-    { id: 5, name: "Bunk Bed", count: 0 },
-  ]);
 
-  const handleBedCountChange = (id: number, increment: number) => {
-    setBedTypes((prevBedTypes) =>
-      prevBedTypes.map((bed) =>
-        bed.id === id
-          ? { ...bed, count: Math.max(0, bed.count + increment) }
-          : bed
-      )
-    );
+  const handleDeletePropertySpace = async () => {
+    if (space?.id) {
+      try {
+        await dispatch(deleteExistingSpaceProperty(space.id)).unwrap();
+        console.log("Property space deleted successfully");
+        setDeleteDialogOpen(false);
+        navigate(`/admin/property/${propertyId}/rooms`);
+      } catch (error) {
+        console.error("Failed to delete property space:", error);
+      }
+    }
+  };
+
+  const handleSaveBedTypes = (
+    updatedBedTypes: Array<{ id: number; count: number }>
+  ) => {
+    if (space?.id) {
+      const data = {
+        propertySpace: { id: space.id },
+        spaceBedTypes: updatedBedTypes.map((bed) => ({
+          spaceBedType: { id: bed.id },
+          count: bed.count,
+        })),
+        updatedBy: { id: userId }
+      };
+      dispatch(createOrDeletePropertySpaceBeds(data));
+      dispatch(fetchAllPropertySpaceBedsByPropertySpace(space.id));
+
+    }
+  };
+
+  const handleSaveBathTypes = (updatedBathTypes: Array<{ id: number; count: number }>) => {
+    if (space?.id) {
+      const data = {
+        propertySpace: { id: space.id },
+        spaceBathroomTypes: updatedBathTypes.map(bath => ({
+          spaceBathroomType: { id: bath.id },
+          count: bath.count,
+        })),
+        updatedBy: { id: userId }
+      };
+      dispatch(createOrDeletePropertySpaceBathrooms(data));
+      dispatch(fetchAllPropertySpaceBathroomsByPropertySpace(space.id));
+    }
+  };
+
+  const handleback = () => {
+    navigate(`/admin/property/${space.property.id}/rooms`);
   };
 
   return (
-    <Card className="w-full max-w-5xl mx-auto">
-      <CardHeader>
-        <CardTitle className="text-3xl font-bold">
+    <Card className="w-full max-w-5xl mx-auto bg-[#fff] text-black h-full rounded-lg">
+      <CardHeader className="flex flex-row justify-between items-center">
+        <CardTitle className="text-2xl font-bold">
           {space?.space?.name || "Space Name"} {space?.instanceNumber}
         </CardTitle>
         <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
           <DialogTrigger asChild>
-            <Button variant="ghost" size="icon" className="text-destructive">
-              <Trash2 className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className="text-[#00636D] m-0">
+              <Trash2 size={20} />
             </Button>
           </DialogTrigger>
           <DialogContent>
@@ -286,8 +351,7 @@ export default function Component({ initialSpace = {} }) {
               <Button
                 variant="destructive"
                 onClick={() => {
-                  // Implement delete logic here
-                  console.log("Deleting room or space");
+                  handleDeletePropertySpace();
                   setDeleteDialogOpen(false);
                 }}
               >
@@ -297,12 +361,18 @@ export default function Component({ initialSpace = {} }) {
           </DialogContent>
         </Dialog>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pb-2">
         <Tabs defaultValue="photos" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="photos">Photos</TabsTrigger>
-            <TabsTrigger value="bedTypes">Bed Types</TabsTrigger>
-            <TabsTrigger value="amenities">Amenities</TabsTrigger>
+        <TabsList className="flex flex-wrap">
+            {tabsList.map((tab) => (
+              <TabsTrigger
+                key={tab.value}
+                value={tab.value}
+                className="flex-1 min-w-[100px]"
+              >
+                {tab.label}
+              </TabsTrigger>
+            ))}
           </TabsList>
           <PhotosTab
             combinedImages={combinedImages}
@@ -333,12 +403,32 @@ export default function Component({ initialSpace = {} }) {
             openCategories={openCategories}
             toggleCategory={toggleCategory}
           />
-          <BedTypesTab
-            bedTypes={bedTypes}
-            handleBedCountChange={handleBedCountChange}
-          />
+          {showBedTypesTab && (
+            <BedTypesTab
+              propertySpaceBeds={propertySpaceBeds}
+              loading={bedTypesLoading}
+              error={bedTypesError}
+              onSave={handleSaveBedTypes}
+            />
+          )}
+          {showBathTypesTab && (
+            <BathTypesTab
+              bathTypes={propertySpaceBathrooms}
+              loading={bathTypesLoading}
+              error={bathTypesError}
+              onSave={handleSaveBathTypes}
+            />
+          )}
         </Tabs>
       </CardContent>
+      <div className="flex justify-center px-6 py-0 pb-2 items-center">
+        <Button
+          onClick={handleback}
+          className="w-1/2 border-solid border-2 border-[#000]-500 text-center text-[#000000aa] display-flex gap-1 rounded"
+        >
+          <MoveLeft size={20} color='#000000aa' /> Back to rooms
+        </Button>
+      </div>
     </Card>
   );
 }

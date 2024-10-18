@@ -74,7 +74,7 @@
 .detailItem {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 2px;
     font-size: small;
     color: #34495e;
     padding: 3px 0;

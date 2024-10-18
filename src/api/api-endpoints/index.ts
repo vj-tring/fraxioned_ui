@@ -1,7 +1,17 @@
 import { UpdateAmenityPayload } from "@/store/slice/auth/propertyamenities";
-import { axiosInstance } from "./axiosSetup";
-import { SpaceProperty } from "@/store/model";
+import { axiosInstance } from "../axiosSetup";
 
+export interface SpaceProperty {
+    space: {
+        id: number;
+    };
+    property: {
+        id: number;
+    };
+    createdBy: {
+        id: number;
+    };
+}
 
 export interface Space {
     id?: number;
@@ -104,7 +114,8 @@ export const addPropertyApi = (propertyData: {
     longitude: number;
     isActive: boolean;
     displayOrder: number;
-}) => axiosInstance.post('/properties/property', propertyData);
+}) => axiosInstance.post('/properties/property', propertyData
+);
 
 export const updatePropertyImage = (id: number, formData: FormData) =>
     axiosInstance.patch(`/properties/property/${id}`, formData);
@@ -115,8 +126,26 @@ export const deletePropertyApi = (id: number) =>
 export const getPropertyById = (id: number) =>
     axiosInstance.get(`/properties/property/${id}`);
 
-export const updatePropertyapi = (id: number, data: any) =>
-    axiosInstance.patch(`/properties/property/${id}`, data);
+export const updatePropertyapi = (id: number, data: any) => {
+    const formData = new FormData();
+
+    Object.keys(data).forEach(key => {
+        if (key === 'updatedBy') {
+            formData.append(key, JSON.stringify(data[key]));
+        } else if (key === 'mailBannerFile' || key === 'coverImageFile') {
+            // Append null for these fields
+            formData.append(key, 'null');
+        } else if (data[key] !== undefined && data[key] !== null) {
+            formData.append(key, data[key].toString());
+        }
+    });
+
+    return axiosInstance.patch(`/properties/property/${id}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+};
 
 export const userdetails = () =>
     axiosInstance.get('/users');
@@ -154,7 +183,7 @@ export const getAmenitiesById = (id: number) =>
 export const getuserbyproperty = (id: number) =>
     axiosInstance.get(`/properties/property/${id}/details`);
 
-export const addAmenity = (data: {
+export const addamenity = (data: {
     amenityGroup: { id: number };
     createdBy: { id: number };
     amenityName: string;
@@ -164,12 +193,12 @@ export const addAmenity = (data: {
 export const updateamenityforproperty = (updateData: UpdateAmenityPayload) => 
     axiosInstance.patch(`/property-space-amenities`, updateData);
 
-export const updateamenities = (id: number, updateData: {
-    updatedBy: { id: number };
-    amenityName: string;
-    amenityDescription: string;
-    amenityGroup: { id: number };
-}) => axiosInstance.patch(`/amenities/amenity/${id}`, updateData);
+export const updateamenities = (id: number, updateData: FormData) => 
+    axiosInstance.patch(`/amenities/amenity/${id}`, updateData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
 
 export const propertyImageapi = (propertyId: number) =>
     axiosInstance.get(`/property-space-images/property/${propertyId}/images`);
@@ -207,23 +236,23 @@ export const propertyspacetypesapi = () =>
     axiosInstance.get(`/space-types`);
 
 export const getPropertyDocuments = () =>
-    axiosInstance.get('/propertyDocuments');
+    axiosInstance.get('/api/propertyDocuments');
 
 export const getPropertyDocument = (id: number) =>
-    axiosInstance.get(`/propertyDocuments/propertyDocument/${id}`);
+    axiosInstance.get(`/api/propertyDocuments/propertyDocument/${id}`);
 
 export const createPropertyDocument = (formData: FormData) =>
-    axiosInstance.post('/propertyDocuments', formData, {
+    axiosInstance.post('/api/propertyDocuments', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
     });
 
 export const updatePropertyDocument = (id: number, formData: FormData) =>
-    axiosInstance.patch(`/propertyDocuments/propertyDocument/${id}`, formData, {
+    axiosInstance.patch(`/api/propertyDocuments/propertyDocument/${id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
     });
 
 export const deletePropertyDocument = (id: number) =>
-    axiosInstance.delete(`/propertyDocuments/propertyDocument/${id}`);
+    axiosInstance.delete(`/api/propertyDocuments/propertyDocument/${id}`);
 
 export const getpropertycodes = () =>
     axiosInstance.get(`/property-codes`);
@@ -307,10 +336,32 @@ export const fetchPropertyImagesByPropertySpaceId = (propertySpaceId: number) =>
 export const updateSpaceImageById = (imageId: number, formData: FormData) =>
     axiosInstance.patch(`/property-space-images/property-space-image/${imageId}`, formData);
 
+//for proeprty
+export const getAllpropertycodes = () =>
+    axiosInstance.get(`/property-codes`);
+
+
+//add for a property
+export const postpropertycode = (payload: {
+    property: number;
+    propertyCodeCategory: number;
+    createdBy: number;
+    propertyCode: string;
+}) => axiosInstance.post(`/property-codes/property-code`, payload);
+
+
+export const getAllpropertycodecatogory = () =>
+    axiosInstance.get(`/property-code-categories`);
+
+export const createpropertycodecatogory = (data: { name: string; createdBy: { id: number } }) =>
+    axiosInstance.post(`/property-code-categories`, data);
+
 // Delete Space Image by ID (Single)
 export const deleteSpaceImageById = (id: number) =>
     axiosInstance.delete(`/property-space-images/property-space-images/${id}`);
 
 // Delete Multiple Space Images (Batch Delete)
 export const deleteMultipleSpaceImages = (spaceImages: { ids: number[] }) =>
-    axiosInstance.delete(`/property-space-images/property-space-images`, { data: spaceImages });
+    axiosInstance.delete(`/property-space-images`, { data: spaceImages });
+
+
