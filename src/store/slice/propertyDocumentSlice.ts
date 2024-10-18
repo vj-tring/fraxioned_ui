@@ -1,22 +1,37 @@
-import { getPropertyDocuments, getPropertyDocument, createPropertyDocument, updatePropertyDocument, deletePropertyDocument } from "@/api/api-endpoints";
+import { getPropertyDocuments, getPropertyDocument, updatePropertyDocument, deletePropertyDocument, createPropertyDocuments } from "@/api/api-endpoints";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
 export interface PropertyDocument {
   id: number;
-  property: { id: number };
-  createdBy: { id: number };
-  updatedBy?: { id: number };
-  name: string;
+  documentUrl: string;
+  documentName: string;
   documentType: string;
-  documentFile: File | null;
+  property: { id: number; propertyName: string };
+  createdAt: string;
+  updatedAt: string;
+  createdBy: { id: number };
+  updatedBy: { id: number } | null;
 }
 
 export interface PropertyDocumentState {
-  documents: PropertyDocument[];
+  documents: {
+    success: boolean;
+    message: string;
+    data: PropertyDocument[];
+    statusCode: number;
+  } | null;
   currentDocument: PropertyDocument | null;
   isLoading: boolean;
   error: string | null;
 }
+
+const initialState: PropertyDocumentState = {
+  documents: null,
+  currentDocument: null,
+  isLoading: false,
+  error: null,
+};
+
 
 // Create async thunks for CRUD operations
 export const fetchPropertyDocuments = createAsyncThunk(
@@ -47,14 +62,19 @@ export const createPropertyDocumentThunk = createAsyncThunk(
   "propertyDocuments/create",
   async (documentData: FormData, { rejectWithValue }) => {
     try {
-      const response = await createPropertyDocument(documentData);
+      const response = await createPropertyDocuments(documentData);
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response.data);
+      if (error.response) {
+        return rejectWithValue(error.response.data);
+      } else if (error.request) {
+        return rejectWithValue('No response received from server');
+      } else {
+        return rejectWithValue('Error setting up the request');
+      }
     }
   }
 );
-
 export const updatePropertyDocumentThunk = createAsyncThunk(
   "propertyDocuments/update",
   async ({ id, documentData }: { id: number; documentData: FormData }, { rejectWithValue }) => {
@@ -71,10 +91,14 @@ export const deletePropertyDocumentThunk = createAsyncThunk(
   "propertyDocuments/delete",
   async (id: number, { rejectWithValue }) => {
     try {
-      await deletePropertyDocument(id);
-      return id;
+      const response = await deletePropertyDocument(id);
+      if (response.data.success) {
+        return id; 
+      } else {
+        return rejectWithValue(response.data.message);
+      }
     } catch (error: any) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data?.message || 'An error occurred');
     }
   }
 );
@@ -82,12 +106,7 @@ export const deletePropertyDocumentThunk = createAsyncThunk(
 // Create the slice
 const propertyDocumentsSlice = createSlice({
   name: "propertyDocuments",
-  initialState: {
-    documents: [],
-    currentDocument: null,
-    isLoading: false,
-    error: null,
-  } as PropertyDocumentState,
+  initialState,
   reducers: {
     clearError: (state) => {
       state.error = null;
@@ -98,7 +117,6 @@ const propertyDocumentsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fetch all documents
       .addCase(fetchPropertyDocuments.pending, (state) => {
         state.isLoading = true;
       })
@@ -128,7 +146,16 @@ const propertyDocumentsSlice = createSlice({
       })
       .addCase(createPropertyDocumentThunk.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.documents.push(action.payload);
+        if (state.documents && state.documents.data) {
+          state.documents.data.push(action.payload);
+        } else {
+          state.documents = {
+            success: true,
+            message: "Document created successfully",
+            data: [action.payload],
+            statusCode: 200
+          };
+        }
       })
       .addCase(createPropertyDocumentThunk.rejected, (state, action) => {
         state.isLoading = false;
@@ -140,9 +167,11 @@ const propertyDocumentsSlice = createSlice({
       })
       .addCase(updatePropertyDocumentThunk.fulfilled, (state, action) => {
         state.isLoading = false;
-        const index = state.documents.findIndex((doc) => doc.id === action.payload.id);
-        if (index !== -1) {
-          state.documents[index] = action.payload;
+        if (state.documents && state.documents.data) {
+          const index = state.documents.data.findIndex((doc) => doc.id === action.payload.id);
+          if (index !== -1) {
+            state.documents.data[index] = action.payload;
+          }
         }
         state.currentDocument = action.payload;
       })
@@ -156,7 +185,9 @@ const propertyDocumentsSlice = createSlice({
       })
       .addCase(deletePropertyDocumentThunk.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.documents = state.documents.filter((doc) => doc.id !== action.payload);
+        if (state.documents && state.documents.data) {
+          state.documents.data = state.documents.data.filter(doc => doc.id !== action.payload);
+        }
         if (state.currentDocument && state.currentDocument.id === action.payload) {
           state.currentDocument = null;
         }

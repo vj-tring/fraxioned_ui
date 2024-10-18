@@ -236,23 +236,23 @@ export const propertyspacetypesapi = () =>
     axiosInstance.get(`/space-types`);
 
 export const getPropertyDocuments = () =>
-axiosInstance.get('/propertyDocuments');
+axiosInstance.get('/property-documents');
 
 export const getPropertyDocument = (id: number) =>
-    axiosInstance.get(`/propertyDocuments/propertyDocument/${id}`);
+    axiosInstance.get(`/property-documents/property-document/${id}`);
 
-export const createPropertyDocument = (formData: FormData) =>
-    axiosInstance.post('/propertyDocuments', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+export const createPropertyDocuments = (formData: FormData) =>{
+    return axiosInstance.post('/property-documents', formData, {
     });
+};
 
 export const updatePropertyDocument = (id: number, formData: FormData) =>
-    axiosInstance.patch(`/propertyDocuments/propertyDocument/${id}`, formData, {
+    axiosInstance.patch(`/property-documents/property-document/${id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
     });
 
 export const deletePropertyDocument = (id: number) =>
-    axiosInstance.delete(`/propertyDocuments/propertyDocument/${id}`);
+    axiosInstance.delete(`/property-documents/property-document/${id}`);
 
 
 export const getpropertycodes = () =>
@@ -365,4 +365,21 @@ export const deleteSpaceImageById = (id: number) =>
 export const deleteMultipleSpaceImages = (spaceImages: { ids: number[] }) =>
     axiosInstance.delete(`/property-space-images`, { data: spaceImages });
 
+export const createUserPropertyDocuments = (formData: FormData) => 
+    axiosInstance.post('/userPropertyDocuments/userPropertyDocument', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    });
 
+export const getAllUserPropertyDocuments = () => 
+    axiosInstance.get('/userPropertyDocuments');
+
+export const getUserPropertyDocument = (id: number) => 
+    axiosInstance.get(`/userPropertyDocuments/userPropertyDocument/${id}`);
+
+export const updateUserPropertyDocument = (id: number, formData: FormData) =>
+    axiosInstance.patch(`/userPropertyDocuments/userPropertyDocument/${id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    });
+
+export const deleteUserPropertyDocument = (id: number) =>
+    axiosInstance.delete(`/userPropertyDocuments/userPropertyDocument/${id}`);

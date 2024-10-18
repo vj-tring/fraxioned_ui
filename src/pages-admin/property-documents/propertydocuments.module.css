@@ -23,9 +23,15 @@
     right: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
     z-index: 1000;
-    margin-left: 160px; /* Adjust the value as needed */
+    margin-left: 160px;
+}
+.buttonOutlineSm {
+  background-color: #e28f25 !important;
+  color: #ffffff !important;
+  border: 1px solid #e28f25 !important;
+  border-radius: 8px !important;
+  font-size: 12px !important;
+  padding: 8px 16px !important;
+  text-transform: none !important;
 }
