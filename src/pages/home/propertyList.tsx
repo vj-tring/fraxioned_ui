@@ -6,7 +6,7 @@ import image1 from "../../assests/bear-lake-bluffs.jpg";
 import { FaPlus } from "react-icons/fa";
 import PorpImg from "../../assests/lake-escape.jpg";
 import { resetLimits } from "@/store/slice/auth/propertyGuestSlice";
-import { clearDates } from "@/store/slice/datePickerSlice";
+import { clearDates } from "@/store/slice/datepicker";
 import { User } from "@/store/model";
 import { propertyImageapi, getProperties } from "@/api/api-endpoints"; // Ensure getProperties is imported
 import { fetchProperties } from "@/store/slice/auth/property-slice";

@@ -1,11 +1,12 @@
 .fullContainer {
-    display: flex;
-    flex-direction: column;
-    background-color: #f5f7fa;
-    flex: 1;
-    height: 100%;
-    margin-right: 15px;
-  }
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f7fa;
+  flex: 1;
+  height: calc(100vh - 60px);
+  margin-right: 25px;
+  overflow: hidden;
+}
   
   .contentWrapper {
     padding: 32px;

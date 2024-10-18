@@ -18,7 +18,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 import { resetLimits } from "@/store/slice/auth/propertyGuestSlice";
-import { clearDates } from "@/store/slice/datePickerSlice";
+import { clearDates } from "@/store/slice/datepicker";
 import {
   selectSelectedPropertyDetails,
   User,

@@ -3,8 +3,9 @@
   flex-direction: column;
   background-color: #f5f7fa;
   flex: 1;
-  height: 40%;
+  height: calc(100vh - 60px);
   margin-right: 15px;
+  overflow: hidden;
 }
 
 .contentWrapper {
@@ -14,7 +15,6 @@
   height: 620px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  /* flex-grow: 1; */
 }
 
 .header {

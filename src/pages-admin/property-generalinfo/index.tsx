@@ -25,8 +25,8 @@ const PropertyGeneralInfo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const userId = useSelector((state: any) => state.auth.user?.id);
-  const [imageFile, setImageFile] = useState<File | null>(null); // State to hold the uploaded image
-  const [dialogOpen, setDialogOpen] = useState(false); // State to manage the dialog visibility
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const navigate = useNavigate();
 
   const propertyData = useSelector(

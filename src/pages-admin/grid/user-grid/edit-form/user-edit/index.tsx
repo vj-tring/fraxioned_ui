@@ -17,7 +17,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import { updateuserapi, getRoles } from "@/api/api-endpoints";
 import styles from "./useredit.module.css";
-import { User, Role, ContactDetails } from "@/store/model/user";
+import { User, Role, ContactDetails } from "@/store/model";
 import { updateUserById } from "@/store/slice/user-slice";
 import { useDispatch } from "@/store";
 
