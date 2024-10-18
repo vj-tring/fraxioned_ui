@@ -1,5 +1,5 @@
 export interface Amenity {
-  id?: number;
+  id: number;
   amenityName: string;
   amenityDescription: string;
   s3_url?: string;

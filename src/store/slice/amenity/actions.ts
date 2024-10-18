@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { amenitiesapi, addamenity, updateamenities, deleteAmenity } from "@/api/api-endpoints";
-import { Amenity } from "@/store/model";
 
 interface AddAmenityData {
   amenityGroup: { id: number };

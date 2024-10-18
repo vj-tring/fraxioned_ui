@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { amenitiesapi } from '@/api/api-endpoints';
-import { updateAmenity, resetAmenitiesState, deleteAmenityAsync } from '@/store/slice/auth/amenitiespageSlice';
+import { updateAmenity, resetAmenitiesState, deleteAmenityAsync, fetchAmenities } from '@/store/slice/amenity';
 import { RootState } from '@/store/reducers';
 import styles from './amenitypage.module.css';
 import NewAmenityForm from '../property-amenities/new-amenity';
@@ -11,18 +11,18 @@ import CustomizedSnackbars from '@/components/customized-snackbar';
 import { IconButton, Tooltip } from '@mui/material';
 import { AppDispatch } from '@/store';
 import Loader from '@/components/loader';
-
-interface Amenity {
-  id: number;
-  amenityName: string;
-  amenityDescription?: string;
-  s3_url?: string;
-  amenityGroup: {
-    id: number;
-    name: string;
-  };
-  imageFile?: File | null;
-}
+import { Amenity } from '@/store/model';
+// interface Amenity {
+//   id: number;
+//   amenityName: string;
+//   amenityDescription?: string;
+//   s3_url?: string;
+//   amenityGroup: {
+//     id: number;
+//     name: string;
+//   };
+//   imageFile?: File | null;
+// }
 
 interface SnackbarState {
   open: boolean;
