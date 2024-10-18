@@ -66,8 +66,6 @@ const Booking = () => {
 
   useEffect(() => {
     if (user && user.id) {
-      console.log("user", user);
-
       dispatch(fetchUserBookings(user.id));
       dispatch(fetchProperties(user.id));
     }
@@ -75,10 +73,10 @@ const Booking = () => {
 
   const formattedDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
     });
   };
 

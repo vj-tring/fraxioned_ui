@@ -48,7 +48,6 @@ export const updateUserById = createAsyncThunk(
   "user/updateUserDetails",
   async ({ userId, userData }: { userId: number; userData: User }) => {
     const response = await updateuserapi(userId, userData);
-    console.log("updateduser", response.data);
     return response.data.user;
   }
 );

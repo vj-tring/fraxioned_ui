@@ -20,7 +20,6 @@ export const handleSubmit = async (
     if (userString) {
       const userObject = JSON.parse(userString)
       const userId = userObject.id
-      console.log('userId', userId)
       const payload: ContactMessage = {
         userId,
         name,

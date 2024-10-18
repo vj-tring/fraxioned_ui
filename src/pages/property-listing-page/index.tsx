@@ -281,11 +281,9 @@ const PropertyListingPage = () => {
     };
 
     try {
-      console.log("Submitting booking data:", bookingData);
       const result = await dispatch(bookingSummary(bookingData)).unwrap();
 
       if (result && !result.error) {
-        console.log("Booking summary created successfully:", result);
 
         const updatedBookingData = {
           ...bookingData,
@@ -323,36 +321,43 @@ const PropertyListingPage = () => {
   const handleNavigateToSummary = () => {
     navigate("/booking-summary");
   };
+  const [loading, setLoading] = useState(true);
 
+  const handleImageLoad = () => {
+    setLoading(false);
+  };
 
-  
   return (
     <div className="container-fluid d-flex flex-column gap-4 px-14">
       <div className="img-row pt-4 px-12">
         <Grid container spacing={1}>
           <Grid item xs={12} md={6}>
-            {loadingImages ? ( // Step 2: Display Skeleton
+            {loading && (
               <Skeleton variant="rectangular" width="100%" height={400} />
-            ) : (
-              imageDetails
-                .slice(0, 1)
-                .map((image, index) => (
-                  <img
-                    key={index}
-                    src={image.url}
-                    alt={image.imageName}
-                    loading="lazy"
-                    className={`img-fluid img1 cornertop ${
-                      currentImage === index ? "active" : ""
-                    }`}
-                    onClick={() => setCurrentImage(index)}
-                  />
-                ))
             )}
+
+            <div className="image">
+              {imageDetails.slice(0, 1).map((image, index) => (
+                <img
+                  key={index}
+                  src={image.url}
+                  alt={image.imageName}
+                  onLoad={handleImageLoad}
+                  className={`img-fluid img1 cornertop ${
+                    currentImage === index ? "active" : ""
+                  }`}
+                  style={{
+                    display: loading ? "none" : "block",
+                    objectFit: "cover",
+                  }}
+                  onClick={() => setCurrentImage(index)}
+                />
+              ))}
+            </div>
           </Grid>
           <Grid item xs={12} md={6}>
             <Grid container spacing={1}>
-              {loadingImages // Step 2: Display Skeleton for thumbnails
+              {loading
                 ? Array.from({ length: 4 }).map((_, index) => (
                     <Grid item xs={6} key={index}>
                       <Skeleton
@@ -375,6 +380,7 @@ const PropertyListingPage = () => {
                       />
                     </Grid>
                   ))}
+
               {imageDetails.length > 5 && (
                 <Grid item xs={12}>
                   <div className="image-container">

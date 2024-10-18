@@ -68,7 +68,6 @@ const ViewBookings: React.FC<BookingProps> = ({ openEvent, handleClose, eventId 
     };
 
     const handleEdit = () => {
-        console.log("Edit clicked for booking:", booking);
     };
 
     return (
