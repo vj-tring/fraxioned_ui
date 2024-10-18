@@ -250,8 +250,8 @@ export const propertyspacetypesapi = () => axiosInstance.get(`/space-types`);
 export const getPropertyDocuments = () =>
 axiosInstance.get('/property-documents');
 
-export const getPropertyDocument = (id: number) =>
-    axiosInstance.get(`/property-documents/property-document/${id}`);
+export const getPropertyDocumentByProperty = (propertyId: number) =>
+    axiosInstance.get(`/property-documents/property/${propertyId}`);
 
 export const createPropertyDocuments = (formData: FormData) =>{
     return axiosInstance.post('/property-documents', formData, {
@@ -398,6 +398,9 @@ export const getAllUserPropertyDocuments = () =>
 
 export const getUserPropertyDocument = (id: number) => 
     axiosInstance.get(`/userPropertyDocuments/userPropertyDocument/${id}`);
+
+export const getUserPropertyDocumentByUser = (userId: number) => 
+    axiosInstance.get(`/userPropertyDocuments/user/${userId}`);
 
 export const updateUserPropertyDocument = (id: number, formData: FormData) =>
     axiosInstance.patch(`/userPropertyDocuments/userPropertyDocument/${id}`, formData, {

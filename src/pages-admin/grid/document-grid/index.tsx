@@ -6,12 +6,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import mammoth from 'mammoth';
 import { createPropertyDocuments } from '@/api/api-endpoints';
 import { useDispatch, useAppSelector } from '@/store';
-import { fetchPropertyDocuments, setCurrentDocument, deletePropertyDocumentThunk } from '@/store/slice/propertyDocumentSlice';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@radix-ui/react-scroll-area';
 import styles from './document.module.css';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { deletePropertyDocumentThunk, fetchPropertyDocuments } from '@/store/slice/property-document/actions';
+import { setCurrentDocument } from '@/store/slice/property-document';
 
 interface PropertyDocument {
   id: number;

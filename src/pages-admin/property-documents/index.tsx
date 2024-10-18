@@ -7,11 +7,13 @@ import { Input } from '../../components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 import { ScrollArea } from '../../components/ui/scroll-area';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { fetchPropertyDocuments, createPropertyDocumentThunk, updatePropertyDocumentThunk, deletePropertyDocumentThunk, setCurrentDocument } from '../../store/slice/propertyDocumentSlice';
 import { useDispatch, useAppSelector } from '../../store';
 import styles from './propertydocuments.module.css';
 import mammoth from 'mammoth';
 import { createPropertyDocuments } from '@/api/api-endpoints';
+import { useParams } from 'react-router-dom';
+import { deletePropertyDocumentThunk, fetchPropertyDocumentsByProperty, updatePropertyDocumentThunk } from '@/store/slice/property-document/actions';
+import { setCurrentDocument } from '@/store/slice/property-document';
 
 interface PropertyDocument {
   id: number;
@@ -26,6 +28,7 @@ interface PropertyDocument {
 const categories = ["Blueprint", "Legal", "General", "Contracts", "Invoices", "Reports"];
 
 const PropertyDocuments: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch();
   const propertyDocumentsState = useAppSelector((state) => state.propertyDocuments);
   const { documents, isLoading, error } = propertyDocumentsState;
@@ -39,17 +42,20 @@ const PropertyDocuments: React.FC = () => {
   const [previewContent, setPreviewContent] = useState<string | null>(null);
 
   useEffect(() => {
-    dispatch(fetchPropertyDocuments());
-  }, [dispatch]);
-
+    if (id) {
+      dispatch(fetchPropertyDocumentsByProperty(Number(id)));
+    }
+  }, [dispatch, id]);
+  console.log('Raw API response:', propertyDocumentsState);
+  console.log('Extracted documents:', documents);
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const newFiles = acceptedFiles.map(file => ({
       file,
       documentType: "General",
-      propertyId: 1
+      propertyId: Number(id)
     }));
     setFilesToUpload(prevFiles => [...prevFiles, ...newFiles]);
-  }, []);
+  }, [id]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
@@ -146,7 +152,7 @@ const PropertyDocuments: React.FC = () => {
       
       setFilesToUpload([]);
       setUploadError(null);
-      dispatch(fetchPropertyDocuments());
+      dispatch(fetchPropertyDocumentsByProperty(Number(id)));
   
       console.log('Documents uploaded successfully');
     } catch (error) {
@@ -376,3 +382,5 @@ const PropertyDocuments: React.FC = () => {
   );
 }; 
 export default PropertyDocuments;
+
+

@@ -22,8 +22,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { AppDispatch } from "@/store";
 import { RootState } from "@/store/reducers";
-import { UserPropertyDocument, fetchUserPropertyDocument, createUserPropertyDocumentThunk, deleteUserPropertyDocumentThunk, updateUserPropertyDocumentThunk } from "@/store/slice/userDocumentSlice";
-
+import { createUserPropertyDocumentThunk, deleteUserPropertyDocumentThunk, fetchUserPropertyDocumentByUser, updateUserPropertyDocumentThunk, UserPropertyDocument } from "@/store/slice/user-document/action";
 interface DocumentManagerCardProps {
   userId: number;
 }
@@ -35,7 +34,7 @@ const DocumentManagerCard: React.FC<DocumentManagerCardProps> = ({ userId }) => 
   const [editingDocument, setEditingDocument] = useState<UserPropertyDocument | null>(null);
 
   useEffect(() => {
-    dispatch(fetchUserPropertyDocument(userId));
+    dispatch(fetchUserPropertyDocumentByUser(userId));
   }, [dispatch, userId]);
 
   const filteredDocuments = Array.isArray(documents?.data)

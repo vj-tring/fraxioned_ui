@@ -30,7 +30,7 @@ import propertydetailReducer from '../slice/auth/property-detail';
 import bedReducer from '../slice/bedSlice';
 import bathroomReducer from '../slice/bathroom-slice';
 import amenityReducer from "../slice/amenitiesSlice";
-import userDocumentsReducer from '../slice/userDocumentSlice';
+import userDocumentsReducer from '../slice/user-document';
 
 const appReducer = combineReducers({
   auth: authReducer,
