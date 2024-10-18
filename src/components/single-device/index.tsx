@@ -84,7 +84,6 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   useEffect(() => {
     dispatch(fetchAmenities(propertyId));
     fetchAmenities1();
-    console.log("amenties", propertyAmenities);
     dispatch(fetchSpacePropertiesById(propertyId));
   }, [dispatch, propertyId]);
 
@@ -96,9 +95,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
     try {
       const response = await amenitiesapi();
       setAmenities(response.data.data);
-      // console.log("amrnities")
     } catch (err) {
-      console.log(err);
     }
   };
   useEffect(() => {
@@ -109,7 +106,6 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
           (a: any, b: any) => a.displayOrder - b.displayOrder
         );
         setImagesData(sortedImages); // Sort images by displayOrder
-        console.log("Images fetched and sorted successfully");
       } catch (error) {
         console.error("Error fetching images:", error);
       }
@@ -122,11 +118,9 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
     const image = imagesData.find(
       (img) => img.propertySpace?.id === spaceId && img.displayOrder === 1
     );
-
     return image ? image.url : null;
   };
   const getIconUrlByAmenitiesId = (amenityId: number) => {
-    console.log("amenity", amenitites);
     const icons = amenitites.find((icon) => icon.id === amenityId);
 
     return icons != null && icons.s3_url
@@ -218,9 +212,10 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                     component="img"
                     // height="100px"
                     image={
-                      getImageUrlByPropertyAndSpace(space.space.id) ||
+                      getImageUrlByPropertyAndSpace(space.id) ||
                       "https://via.placeholder.com/100"
                     } // Placeholder for space image
+                    
                     alt={space.space.name}
                     sx={{ objectFit: "cover", height: "200px" }}
                   />

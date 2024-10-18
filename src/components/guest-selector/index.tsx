@@ -161,7 +161,6 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({
         ? counts.Adults + counts.Children
         : counts.Adults + counts.Children - currentCount + newCount;
     const onChange = (newTotalGuests: number) => {
-      console.log("Total guests changed to: ", newTotalGuests);
     };
 
     onChange(newTotalGuests);

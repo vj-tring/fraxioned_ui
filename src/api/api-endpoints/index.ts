@@ -224,7 +224,6 @@ export const getpropertyImageById = (id: number) =>
   axiosInstance.get(`/property-images/property-image/${id}`);
 
 export const propertyImageuploadapi = (formData: FormData) => {
-  console.log("to backend", formData);
   return axiosInstance.post(`/property-images`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
@@ -233,7 +232,6 @@ export const propertyImageuploadapi = (formData: FormData) => {
   });
 };
 export const propertyImageeditapi = (id: number, formData: FormData) => {
-  console.log("to backend", formData);
   return axiosInstance.patch(`/property-images/property-image/${id}`, formData);
 };
 
@@ -343,9 +341,7 @@ export const fetchSpaceImageDetailsById = (imageId: number) =>
   axiosInstance.get(`/property-space-images/property-space-image/${imageId}`);
 
 export const fetchPropertyImagesByPropertySpaceId = (propertySpaceId: number) =>
-  axiosInstance.get(
-    `/property-space-images/property-space/${propertySpaceId}/images`
-  );
+    axiosInstance.get(`/property-space-images/property/${propertySpaceId}/images`);
 
 // Update Space Image Details with Image (Patch)
 export const updateSpaceImageById = (imageId: number, formData: FormData) =>

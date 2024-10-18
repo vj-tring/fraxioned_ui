@@ -13,10 +13,13 @@
 }
 
 .formContainer {
-    width: 1033px;
-    height: 90vh;
     display: flex;
     flex-direction: column;
+    background-color: #f5f7fa;
+    flex: 1;
+    height: calc(100vh - 80px);
+    margin-right: 15px;
+    overflow: hidden;
 }
 
 .formPaper {
@@ -42,13 +45,13 @@
 }
 
 .headerIcon {
-    font-size:medium !important;
+    font-size: medium !important;
     color: #e28f25;
     margin-right: 16px;
 }
 
 .formTitle {
-    font-size: medium !important;
+    font-size: 22px !important;
     font-weight: 600 !important;
     color: #333;
     font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
@@ -88,13 +91,12 @@
     display: flex;
     justify-content: flex-end;
     gap: 16px;
-    margin-top: 32px;
 }
 
 .updateButton,
 .cancelButton {
     min-width: 120px !important;
-    font-size: 14px !important  ;
+    font-size: 14px !important;
     font-weight: 500;
     padding: 4px 20px !important;
     text-transform: none;
@@ -194,7 +196,7 @@
     }
 }
 
-:global(.MuiFormControl-root  .MuiOutlinedInput-notchedOutline) {
+:global(.MuiFormControl-root .MuiOutlinedInput-notchedOutline) {
     border-color: #fabf95 !important;
     box-shadow: 0 4px 20px rgba(246, 169, 97, 0.1);
 }

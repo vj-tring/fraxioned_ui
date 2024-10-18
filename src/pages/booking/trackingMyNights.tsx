@@ -25,7 +25,8 @@ const TrackingMyNigts: React.FC = () => {
   const [selectedYear, setSelectedYear] = useState<number>(
     new Date().getFullYear()
   );
-  const [imageDetails, setImageDetails] = useState<Image[]>([]);
+  // const [imageDetails, setImageDetails] = useState<Image[]>([]);
+  // const  properties1  = useSelector((state: RootState) => state.property);
 
   useEffect(() => {
     if (properties.length > 0) {
@@ -45,29 +46,16 @@ const TrackingMyNigts: React.FC = () => {
     (property) => property.id === selectedPropertyId
   );
   const propertyDetails = selectedProperty?.details[selectedYear];
-  console.log(selectedProperty);
   const availableYears = Object.keys(selectedProperty?.details || {}).map(
     (year) => parseInt(year)
   );
 
-  useEffect(() => {
-    const fetchPropertyImages = async () => {
-      try {
-        const response = await propertyImageapi();
-        setImageDetails(response.data.data);
-      } catch (error) {
-        console.error("Error fetching property images:", error);
-      }
-    };
-
-    fetchPropertyImages();
-  }, []);
 
   const showselectedimage = (id: number) => {
-    const filteredImage = imageDetails
-      .filter((image) => image.property.id === id)
+    const filteredImage = properties
+      .filter((image) => image.propertyId=== id)
       .sort((a: Image, b: Image) => a.displayOrder - b.displayOrder);
-    return filteredImage[0]?.imageUrl;
+    return filteredImage[0]?.coverImageUrl;
   };
 
   const formatDate = (dateStr: string | number | Date | undefined) => {
@@ -242,7 +230,7 @@ const TrackingMyNigts: React.FC = () => {
       <div className="container3 mt-3 pt-4 d-flex">
         <div className="cardImg">
           <img
-            src={showselectedimage(selectedProperty?.propertyId ?? 1)}
+            src={showselectedimage(selectedProperty?.propertyId ?? 1) || "https://placehold.jp/150x150.png"} 
             className="PropImg1"
             alt="Property"
             loading="lazy"
