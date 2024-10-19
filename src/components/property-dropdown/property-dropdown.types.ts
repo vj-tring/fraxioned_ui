@@ -5,6 +5,7 @@ export interface Property {
     address: string;
     city: string;
     state: string;
+    coverImageUrl: string
   }
   
   export interface PropertyDropdownProps {

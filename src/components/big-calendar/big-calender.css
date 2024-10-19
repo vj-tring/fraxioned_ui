@@ -1,6 +1,6 @@
 .calendar-container {
-  margin-top: 16px;
-  height: 700px;
+  margin-top: 8px;
+  height: calc(100vh - 70px);
   width: 900px;
   padding: 20px;
   background-color: #ffffff;
@@ -12,8 +12,8 @@
 }
 
 .calendar-container.sidebar-open {
-  margin-left: 25px;
-  width: calc(100% - 40px);
+  margin-left: 18px;
+  width: calc(100% - 25px);
 }
 
 .calendar-container.sidebar-closed {
@@ -25,7 +25,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .calendar-view {
