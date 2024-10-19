@@ -3,10 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import {
     TextField,
     Button,
+    Box,
     Typography,
     Paper,
+    Grid,
     InputAdornment
 } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from '@/components/loader';
 import styles from './editrulesform.module.css';
@@ -181,7 +184,7 @@ const EditPropertyRulesForm: React.FC = () => {
                             <div className={styles.formRow}>
                                 <div className={styles.inputGroup}>
                                     <TextField
-                                        label="Peak Season(Allowed Nights)"
+                                        label="Peak Season(Alloted Nights)"
                                         name="peakSeasonAllottedNights"
                                         type="number"
                                         value={formData?.peakSeasonAllottedNights}
@@ -189,7 +192,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                         className={styles.numberInput}
                                     />
                                     <TextField
-                                        label="Off Season(Allowed Nights)"
+                                        label="Off Season(Alloted Nights)"
                                         name="offSeasonAllottedNights"
                                         type="number"
                                         value={formData?.offSeasonAllottedNights}
@@ -197,7 +200,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                         className={styles.numberInput}
                                     />
                                     <TextField
-                                        label="Peak season Holiday(Allowed Nights)"
+                                        label="Peak season Holiday(Alloted Nights)"
                                         name="peakSeasonAllottedHolidayNights"
                                         type="number"
                                         value={formData?.peakSeasonAllottedHolidayNights}
@@ -205,7 +208,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                         className={styles.numberInput}
                                     />
                                     <TextField
-                                        label="Off season Holiday(Allowed Nights)"
+                                        label="Off Season Holiday(Alloted Nights)"
                                         name="offSeasonAllottedHolidayNights"
                                         type="number"
                                         value={formData?.offSeasonAllottedHolidayNights}

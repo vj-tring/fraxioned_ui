@@ -26,7 +26,9 @@ interface PropertyDocument {
 
 const categories = ["Blueprint", "Legal", "General", "Contracts", "Invoices", "Reports"];
 
-const DocumentGrid: React.FC = () => {
+
+const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
+
   const dispatch = useDispatch();
   const propertyDocumentsState = useAppSelector((state) => state.propertyDocuments);
   const { documents, isLoading, error } = propertyDocumentsState;
@@ -116,36 +118,36 @@ const DocumentGrid: React.FC = () => {
 
   const handleUploadSubmit = async () => {
     setUploadError(null);
-  
+
     try {
-        const propertyDocuments = filesToUpload.map(({ file, documentType }, index) => ({
+      const propertyDocuments = filesToUpload.map(({ file, documentType }, index) => ({
         documentName: file.name,
         documentType: documentType,
         displayOrder: index + 1,
-        property: { id: 1},
+        property: { id: 1 },
         createdBy: { id: 1 },
       }));
-  
+
       const formData = new FormData();
       formData.append('propertyDocuments', JSON.stringify(propertyDocuments));
-  
+
       filesToUpload.forEach(({ file }) => {
         formData.append('documentFiles', file);
       });
-  
+
       await createPropertyDocuments(formData);
-      
+
       setFilesToUpload([]);
       setUploadError(null);
       dispatch(fetchPropertyDocuments());
-  
+
       console.log('Documents uploaded successfully');
     } catch (error) {
       console.error('Error uploading documents:', error);
       setUploadError('Failed to upload documents. Please try again.');
     }
   };
-  
+
   const filteredDocuments = React.useMemo(() => {
     return data.filter((doc: { documentType: string; documentName: string; }) =>
       (selectedCategory === "All" || doc.documentType === selectedCategory) &&
@@ -208,37 +210,37 @@ const DocumentGrid: React.FC = () => {
                         <span className="text-sm">{doc.documentName}</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button
-                            className={styles.buttonOutlineSm}
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handlePreview(doc)}
-                          >
-                            <Eye className="h-4 w-4 mr-2" /> Preview
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className= {styles.preview}>
-                          <DialogHeader>
-                            <DialogTitle>{previewDocument?.documentName}</DialogTitle>
-                          </DialogHeader>
-                          <div className="w-full h-full">
-                            {previewDocument && (
-                              previewContent ? (
-                                <div dangerouslySetInnerHTML={{ __html: previewContent }} />
-                              ) : (
-                                <iframe
-                                  src={`${previewDocument.documentUrl}#toolbar=0`}
-                                  width="100%"
-                                  height="100%"
-                                  style={{ border: 'none', minHeight: '70vh' }} 
-                                />
-                              )
-                            )}
-                          </div>
-                        </DialogContent>
-                      </Dialog>
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button
+                              className={styles.buttonOutlineSm}
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handlePreview(doc)}
+                            >
+                              <Eye className="h-4 w-4 mr-2" /> Preview
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className={styles.preview}>
+                            <DialogHeader>
+                              <DialogTitle>{previewDocument?.documentName}</DialogTitle>
+                            </DialogHeader>
+                            <div className="w-full h-full">
+                              {previewDocument && (
+                                previewContent ? (
+                                  <div dangerouslySetInnerHTML={{ __html: previewContent }} />
+                                ) : (
+                                  <iframe
+                                    src={`${previewDocument.documentUrl}#toolbar=0`}
+                                    width="100%"
+                                    height="100%"
+                                    style={{ border: 'none', minHeight: '70vh' }}
+                                  />
+                                )
+                              )}
+                            </div>
+                          </DialogContent>
+                        </Dialog>
                         <Button
                           size="icon"
                           onClick={(e) => {
@@ -314,8 +316,8 @@ const DocumentGrid: React.FC = () => {
                           <FileIcon className="mr-2" size={20} />
                           <span className="truncate">{file.name}</span>
                         </div>
-                        <Select 
-                          value={documentType} 
+                        <Select
+                          value={documentType}
                           onValueChange={(value) => {
                             const newFiles = [...filesToUpload];
                             newFiles[index].documentType = value;
@@ -337,7 +339,7 @@ const DocumentGrid: React.FC = () => {
                       </div>
                     ))}
                   </ScrollArea>
-                  <Button variant="outline" className="mt-2 w-full" style={{backgroundColor: '#e28f25', color: '#fff'}} onClick={handleUploadSubmit} disabled={filesToUpload.length === 0}>
+                  <Button variant="outline" className="mt-2 w-full" style={{ backgroundColor: '#e28f25', color: '#fff' }} onClick={handleUploadSubmit} disabled={filesToUpload.length === 0}>
                     Upload {filesToUpload.length} file(s)
                   </Button>
                 </div>
@@ -365,5 +367,5 @@ const DocumentGrid: React.FC = () => {
       </div>
     </div>
   );
-}; 
+};
 export default DocumentGrid;

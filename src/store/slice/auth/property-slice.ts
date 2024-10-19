@@ -233,6 +233,7 @@ export interface Card {
 }
 
 export interface PropertyState {
+  data: any;
   // find(arg0: (p: any) => boolean): unknown;
   cards: Card[];
   loading: boolean;
