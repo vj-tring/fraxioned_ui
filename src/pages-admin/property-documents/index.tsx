@@ -70,7 +70,6 @@ const EnhancedDocumentManager = () => {
 
   const handleShareDocument = (document: Document) => {
     // Implement sharing functionality here
-    console.log(`Sharing document: ${document.name}`);
   };
 
   const filteredDocuments = documents.filter(doc => 

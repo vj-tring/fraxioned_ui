@@ -91,7 +91,6 @@ const NewPropertyForm: React.FC<NewPropertyFormProps> = ({ onClose, onPropertyAd
                 displayOrder: 0 
             };
 
-            console.log('before', propertyData)
             const result = await dispatch(addProperty(propertyData));
             if (addProperty.fulfilled.match(result)) {
                 onPropertyAdded();

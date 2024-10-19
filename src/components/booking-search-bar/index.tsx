@@ -152,11 +152,9 @@ const BookingSearchBar: React.FC = () => {
     };
 
     try {
-      console.log("Submitting booking data:", bookingData);
       const result = await dispatch(bookingSummary(bookingData)).unwrap();
 
       if (result && !result.error) {
-        console.log("Booking summary created successfully:", result);
 
         const updatedBookingData = {
           ...bookingData,

@@ -42,8 +42,6 @@ const ForgetPassword: React.FC = () => {
       try {
         const response = await forgetPasswordApi(email)
         if (response.data.message === 'Password reset email sent successfully') {
-          console.log('Password reset requested for:', email)
-          console.log('Server response:', response.data)
           setSnackbarMessage('Password reset link sent successfully!')
           setSnackbarSeverity('success')
           setSnackbarOpen(true)

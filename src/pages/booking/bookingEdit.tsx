@@ -79,7 +79,6 @@ useEffect(() => {
       from: new Date(bookingRef.current.checkinDate),
       to: new Date(bookingRef.current.checkoutDate),
     };
-    console.log('Setting initial date range:', initialDateRange);
     setDateRange(initialDateRange);
     setDisplayDates({
       checkinDate: formattedDate(bookingRef.current.checkinDate),
@@ -100,7 +99,6 @@ useEffect(() => {
 
   useEffect(() => {
     if (updateStatus === "Booking updated successfully") {
-      console.log('Update successful, closing modal');
       onUpdateSuccess(booking);
       handleClose();
     }
@@ -116,7 +114,6 @@ useEffect(() => {
   };
 
   const handleDateSelect = (range: DateRange | undefined) => {
-    console.log('Date range selected:', range);
     setDateRange(range);
     setDateError(null);
     
@@ -149,12 +146,10 @@ useEffect(() => {
   };
 
   const handleGuestChange = (newCount: number) => {
-    console.log('Guest count changed:', newCount);
     setGuestCount(newCount);
   };
 
   const handleSubmit = async () => {
-    console.log('Submitting booking update');
     setIsSubmitting(true);
     try {
       const updatedBookingData = {
@@ -180,7 +175,6 @@ useEffect(() => {
         updatedBookingData.checkoutDate = bookingRef.current.checkoutDate;
       }
 
-      console.log('Updated booking data:', updatedBookingData);
       await dispatch(updateBooking({ bookingId: bookingRef.current.id, updatedData: updatedBookingData }));
       await dispatch(fetchUserBookings(userId));
       onUpdateSuccess(bookingRef.current);

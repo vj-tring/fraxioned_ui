@@ -23,7 +23,6 @@ const Change: React.FC = () => {
     const token = searchParams.get('resetToken')
     if (token) {
       setResetToken(token)
-      console.log(token)
     } else {
       setGeneralError(
         'Invalid reset link. Please request a new password reset link.'
@@ -53,7 +52,6 @@ const Change: React.FC = () => {
 
       try {
         const response = await recoverPasswordApi(newPassword)
-        console.log('Password change successful:', response.data)
         setIsLoading(false)
         navigate('/login')
       } catch (error) {

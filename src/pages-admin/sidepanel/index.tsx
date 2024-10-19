@@ -4,7 +4,8 @@ import fraxionedLogo from '../../assets/images/fraxioned.png';
 import logo from '../../assets/images/fraxionedpng.png'
 import {
     FaCalendar, FaPlane, FaUser, FaFile,
-    FaUserTag, FaChartBar, FaGavel, FaBars, FaHome, FaConciergeBell
+    FaUserTag, FaChartBar, FaGavel, FaBars, FaHome, FaConciergeBell,
+    FaQuestion
 } from 'react-icons/fa';
 import { IoIosImages } from "react-icons/io";
 
@@ -34,6 +35,7 @@ const menuItems: MenuItem[] = [
     { icon: <FaChartBar />, label: 'Reports', path: '/admin/reports', disabled: false },
     { icon: <IoIosImages /> , label: 'Spaces', path: '/admin/spaces', disabled: false },
     //{ icon: <FaGavel />, label: 'Rules', path: '/rules', disabled: true }
+    { icon: <FaQuestion /> , label: 'FAQ', path: '/admin/Faq', disabled: false },
 ];
 
 const SidePanel: React.FC<SidePanelProps> = ({ isOpen, toggleSidebar }) => {

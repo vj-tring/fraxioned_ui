@@ -59,7 +59,6 @@ const UserDetails: React.FC = () => {
               secondaryEmail: data.secondaryEmail,
               secondaryPhone: data.secondaryPhone,
             });
-            console.log("User details:", data);
           } else {
             console.error("No matching user found");
           }

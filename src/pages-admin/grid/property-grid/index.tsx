@@ -71,7 +71,6 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
     if (propertyToDelete === null) return;
 
     // Implement delete functionality here
-    console.log("Delete property:", propertyToDelete.id);
     setShowDeleteConfirmation(false);
     setPropertyToDelete(null);
   };

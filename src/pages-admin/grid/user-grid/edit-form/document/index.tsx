@@ -100,7 +100,6 @@ const DocumentManagerCard = () => {
   };
 
   const handleExport = (doc: Document) => {
-    console.log(`Exporting document: ${doc.name}`);
     alert(
       `Exporting ${doc.name}. In a real application, this would download the file.`
     );
