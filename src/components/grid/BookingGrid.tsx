@@ -145,8 +145,8 @@ const BookingGrid: React.FC<BookingGridProps> = ({
     columns.push({
       field: "actions",
       headerName: "Actions",
-      // headerAlign: "center",
-      // align: "center",
+      headerAlign: "center",
+      align: "center",
       flex:1,
       renderCell: (params) => (
         <div>

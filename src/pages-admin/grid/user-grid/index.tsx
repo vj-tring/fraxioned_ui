@@ -233,8 +233,8 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
       field: "actions",
       headerName: "Actions",
       flex:1,
-      // align: "center",
-      // headerAlign: "center",
+      align: "center",
+      headerAlign: "center",
       renderCell: (params) => (
         <>
           <IconButton

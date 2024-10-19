@@ -10,7 +10,6 @@ import {
   InputBase,
   Button,
   Link,
-
 } from "@mui/material";
 import AssistantDirectionOutlinedIcon from "@mui/icons-material/AssistantDirectionOutlined";
 import { useNavigate } from "react-router-dom";
@@ -22,29 +21,36 @@ import { ClearIcon } from "@mui/x-date-pickers/icons";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import ViewBookings from "@/components/userbooking-form";
-import {  Property, Booking } from './booking.types';
-import { exportBookingsToCSV } from './bookings-export';
+import { Property, Booking } from "./booking.types";
+import { exportBookingsToCSV } from "./bookings-export";
 import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/store";
 import { RootState } from "@/store/reducers";
 import { fetchUserDetails } from "@/store/slice/auth/userdetails";
 
-
-
-
 const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
   isSidebarOpen,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const properties = useSelector((state: RootState) => state.property.properties);
-  const propertiesStatus = useSelector((state: RootState) => state.property.status);
-  const propertiesError = useSelector((state: RootState) => state.property.error);
-  
+  const properties = useSelector(
+    (state: RootState) => state.property.properties
+  );
+  const propertiesStatus = useSelector(
+    (state: RootState) => state.property.status
+  );
+  const propertiesError = useSelector(
+    (state: RootState) => state.property.error
+  );
+
   // Add these lines to get user details from Redux
   const users = useSelector((state: RootState) => state.userDetails.users);
-  const userDetailsStatus = useSelector((state: RootState) => state.userDetails.status);
-  const userDetailsError = useSelector((state: RootState) => state.userDetails.error);
+  const userDetailsStatus = useSelector(
+    (state: RootState) => state.userDetails.status
+  );
+  const userDetailsError = useSelector(
+    (state: RootState) => state.userDetails.error
+  );
 
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [filteredBookings, setFilteredBookings] = useState<Booking[]>([]);
@@ -65,7 +71,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
 
   useEffect(() => {
     dispatch(fetchProperties());
-    dispatch(fetchUserDetails());  
+    dispatch(fetchUserDetails());
   }, [dispatch]);
 
   useEffect(() => {
@@ -77,7 +83,10 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
           users.map((user) => [user.id, `${user.firstName} ${user.lastName}`])
         );
         const propertyMap = new Map(
-          properties.map((property: Property) => [property.id, property.propertyName])
+          properties.map((property: Property) => [
+            property.id,
+            property.propertyName,
+          ])
         );
 
         const mappedData = bookingsResponse.data.map((booking: any) => ({
@@ -103,24 +112,37 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
         setBookings(mappedData);
         setFilteredBookings(mappedData);
       } catch (err) {
-        setError(
-          "Failed to fetch bookings. Please try again."
-        );
+        setError("Failed to fetch bookings. Please try again.");
         setShowErrorSnackbar(true);
       }
     };
 
-    if (propertiesStatus === 'succeeded' && properties.length > 0 &&
-        userDetailsStatus === 'succeeded' && users.length > 0) {
+    if (
+      propertiesStatus === "succeeded" &&
+      properties.length > 0 &&
+      userDetailsStatus === "succeeded" &&
+      users.length > 0
+    ) {
       fetchBookings();
-    } else if (propertiesStatus === 'failed') {
-      setError(propertiesError || "Failed to fetch properties. Please try again.");
+    } else if (propertiesStatus === "failed") {
+      setError(
+        propertiesError || "Failed to fetch properties. Please try again."
+      );
       setShowErrorSnackbar(true);
-    } else if (userDetailsStatus === 'failed') {
-      setError(userDetailsError || "Failed to fetch user details. Please try again.");
+    } else if (userDetailsStatus === "failed") {
+      setError(
+        userDetailsError || "Failed to fetch user details. Please try again."
+      );
       setShowErrorSnackbar(true);
     }
-  }, [propertiesStatus, properties, propertiesError, userDetailsStatus, users, userDetailsError]);
+  }, [
+    propertiesStatus,
+    properties,
+    propertiesError,
+    userDetailsStatus,
+    users,
+    userDetailsError,
+  ]);
 
   useEffect(() => {
     const lowercasedFilter = filterValue.toLowerCase();
@@ -140,8 +162,6 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilterValue(event.target.value);
   };
-
-
 
   const handleSearchClear = () => {
     setFilterValue("");
@@ -190,53 +210,50 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     navigate("/admin/bookings");
   };
 
-
-
   const handleExportCSV = () => {
     exportBookingsToCSV(filteredBookings);
   };
-
 
   const columns: GridColDef[] = [
     {
       field: "bookingId",
       headerName: "Booking ID",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "userName",
       headerName: "User Name",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "propertyName",
       headerName: "Property Name",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "checkinDate",
       headerName: "Check-in Date",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "checkoutDate",
       headerName: "Check-out Date",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "isLastMinuteBooking",
       headerName: "Last Min Booking",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
       renderCell: (params) => (params.row.isLastMinuteBooking ? "Yes" : "No"),
@@ -244,14 +261,15 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     {
       field: "isCancelled",
       headerName: "Cancelled",
-      flex:1,      align: "center",
+      flex: 1,
+      align: "center",
       headerAlign: "center",
       renderCell: (params) => (params.row.isCancelled ? "Yes" : "No"),
     },
     {
       field: "isCompleted",
       headerName: "Completed",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
       renderCell: (params) => (params.row.isCompleted ? "Yes" : "No"),
@@ -259,8 +277,9 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     {
       field: "actions",
       headerName: "Actions",
-      flex:1,
-
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
       renderCell: (params) => (
         <div>
           <IconButton
@@ -304,16 +323,14 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
 
   return (
     <div
-      className={`${styles.bookingsContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
-        }`}
+      className={`${styles.bookingsContainer} ${
+        isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
+      }`}
     >
       <div className={styles.titleContainer}>
         <h1 className={styles.title}>Booking Details</h1>
         <div className={styles.actionsContainer}>
           <div className={styles.gridActionContainer}>
-
-
-
             <Paper className={styles.searchContainer} elevation={1}>
               <IconButton
                 className={styles.searchIcon}
@@ -339,8 +356,6 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
               )}
             </Paper>
 
-
-
             <Button
               variant="contained"
               startIcon={<FileDownloadIcon />}
@@ -355,12 +370,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
               className={styles.calendarLink}
             >
               <>Go to Calendar</>
-              <AssistantDirectionOutlinedIcon
-                fontSize="small"
-                sx={{
-
-                }}
-              />
+              <AssistantDirectionOutlinedIcon fontSize="small" sx={{}} />
             </Link>
           </div>
         </div>
@@ -391,7 +401,6 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
               fontSize: "small",
               fontFamily: " 'Roboto', sans-serif !important ",
             },
-
           }}
           initialState={{
             pagination: {

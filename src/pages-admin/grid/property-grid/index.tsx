@@ -128,6 +128,8 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
       field: "actions",
       headerName: "Actions",
       flex:1,
+      align: "center",
+      headerAlign: "center",
       renderCell: (params) => (
         <>
           <IconButton
