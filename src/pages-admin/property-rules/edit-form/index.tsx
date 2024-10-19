@@ -3,16 +3,17 @@ import { useParams, useNavigate } from 'react-router-dom';
 import {
     TextField,
     Button,
-    Box,
     Typography,
     Paper,
-    Grid,
-    InputAdornment
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
 } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from '@/components/loader';
 import styles from './editrulesform.module.css';
+import { styled } from '@mui/material/styles';
 import { RootState } from '@/store/reducers';
 import { fetchPropertyDetails, updatePropertyRules } from '@/store/slice/auth/property-detail';
 import { AppDispatch } from '@/store';
@@ -91,6 +92,20 @@ const EditPropertyRulesForm: React.FC = () => {
         }) : null);
     };
 
+    const TimePickerContainer = styled('div')({
+        display: 'flex',
+        gap: '8px',
+        alignItems: 'center',
+        minWidth: '200px',
+    });
+
+    const TimeSelect = styled(Select)({
+        minWidth: '80px',
+        '& .MuiSelect-select': {
+            padding: '8px 12px',
+        },
+    });
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!userId) {
@@ -157,6 +172,78 @@ const EditPropertyRulesForm: React.FC = () => {
                 </div>
                 <div className={styles.scrollableContent}>
                     <form onSubmit={handleSubmit} className={styles.form}>
+
+
+                        <section className={styles.formSection}>
+                            <h3 className={styles.sectionTitle}>Property Details</h3>
+                            <div className={styles.formRow}>
+                                <div className={styles.inputGroup}>
+                                    <TextField
+                                        label="Square Footage"
+                                        name="squareFootage"
+                                        value={formData?.squareFootage}
+                                        onChange={handleInputChange}
+                                        className={styles.numberInput}
+                                    />
+                                    <TextField
+                                        label="Guests Allowed"
+                                        name="noOfGuestsAllowed"
+                                        type="number"
+                                        value={formData?.noOfGuestsAllowed}
+                                        onChange={handleInputChange}
+                                        className={styles.numberInput}
+                                    />
+                                    <TextField
+                                        label="Pets Allowed"
+                                        name="noOfPetsAllowed"
+                                        type="number"
+                                        value={formData?.noOfPetsAllowed}
+                                        onChange={handleInputChange}
+                                        className={styles.numberInput}
+                                    />
+                                </div>
+                            </div>
+                            <div className={styles.formRow}>
+                                <div className={styles.inputGroup}>
+                                    <TextField
+                                        label="Total Bathrooms"
+                                        name="noOfBathrooms"
+                                        type="number"
+                                        value={formData?.noOfBathrooms}
+                                        onChange={handleInputChange}
+                                        className={styles.numberInput}
+                                    />
+                                    <TextField
+                                        label="Full Bathrooms"
+                                        name="noOfBathroomsFull"
+                                        type="number"
+                                        value={formData?.noOfBathroomsFull}
+                                        onChange={handleInputChange}
+                                        className={styles.numberInput}
+                                    />
+                                    <TextField
+                                        label="Half Bathrooms"
+                                        name="noOfBathroomsHalf"
+                                        type="number"
+                                        value={formData?.noOfBathroomsHalf}
+                                        onChange={handleInputChange}
+                                        className={styles.numberInput}
+                                    />
+                                </div>
+                            </div>
+                            <div className={styles.formRow}>
+                                <div className={styles.inputGroup}>
+                                    <TextField
+                                        label="Bedrooms"
+                                        name="noOfBedrooms"
+                                        type="number"
+                                        value={formData?.noOfBedrooms}
+                                        onChange={handleInputChange}
+                                        className={styles.numberInput}
+                                    />
+                                </div>
+                            </div>
+                        </section>
                         <section className={styles.formSection}>
                             <h3 className={styles.sectionTitle}>Seasonal Settings</h3>
                             <div className={styles.formRow}>
@@ -168,7 +255,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                         value={formData?.peakSeasonStartDate}
                                         onChange={handleInputChange}
                                         InputLabelProps={{ shrink: true }}
-                                        className={styles.dateInput}
+                                        className={styles.numberInput}
                                     />
                                     <TextField
                                         label="Peak Season End"
@@ -177,7 +264,7 @@ const EditPropertyRulesForm: React.FC = () => {
                                         value={formData?.peakSeasonEndDate}
                                         onChange={handleInputChange}
                                         InputLabelProps={{ shrink: true }}
-                                        className={styles.dateInput}
+                                        className={styles.numberInput}
                                     />
                                 </div>
                             </div>
@@ -199,6 +286,13 @@ const EditPropertyRulesForm: React.FC = () => {
                                         onChange={handleInputChange}
                                         className={styles.numberInput}
                                     />
+                                </div>
+                            </div>
+                        </section>
+                        <section className={styles.formSection}>
+                            <h3 className={styles.sectionTitle}>Holiday Settings</h3>
+                            <div className={styles.formRow}>
+                                <div className={styles.inputGroup}>
                                     <TextField
                                         label="Peak season Holiday(Alloted Nights)"
                                         name="peakSeasonAllottedHolidayNights"
@@ -218,121 +312,80 @@ const EditPropertyRulesForm: React.FC = () => {
                                 </div>
                             </div>
                         </section>
-
                         <section className={styles.formSection}>
-                            <h3 className={styles.sectionTitle}>Property Details</h3>
+                            <h3 className={styles.sectionTitle}>Check-in & Check-out Time</h3>
                             <div className={styles.formRow}>
                                 <div className={styles.inputGroup}>
-                                    <TextField
-                                        label="Guests Allowed"
-                                        name="noOfGuestsAllowed"
-                                        type="number"
-                                        value={formData?.noOfGuestsAllowed}
-                                        onChange={handleInputChange}
-                                        className={styles.numberInput}
-                                    />
-                                    <TextField
-                                        label="Bedrooms"
-                                        name="noOfBedrooms"
-                                        type="number"
-                                        value={formData?.noOfBedrooms}
-                                        onChange={handleInputChange}
-                                        className={styles.numberInput}
-                                    />
-                                    <TextField
-                                        label="Total Bathrooms"
-                                        name="noOfBathrooms"
-                                        type="number"
-                                        value={formData?.noOfBathrooms}
-                                        onChange={handleInputChange}
-                                        className={styles.numberInput}
-                                    />
-                                </div>
-                            </div>
-                            <div className={styles.formRow}>
-                                <div className={styles.inputGroup}>
-                                    <TextField
-                                        label="Full Bathrooms"
-                                        name="noOfBathroomsFull"
-                                        type="number"
-                                        value={formData?.noOfBathroomsFull}
-                                        onChange={handleInputChange}
-                                        className={styles.numberInput}
-                                    />
-                                    <TextField
-                                        label="Half Bathrooms"
-                                        name="noOfBathroomsHalf"
-                                        type="number"
-                                        value={formData?.noOfBathroomsHalf}
-                                        onChange={handleInputChange}
-                                        className={styles.numberInput}
-                                    />
-                                    <TextField
-                                        label="Square Footage"
-                                        name="squareFootage"
-                                        value={formData?.squareFootage}
-                                        onChange={handleInputChange}
-                                        className={styles.numberInput}
-                                    />
+                                    <TimePickerContainer>
+                                        <FormControl className={styles.timeInput}>
+                                            <InputLabel>Check-in</InputLabel>
+                                            <TimeSelect
+                                                value={formData?.checkInTime || 0}
+                                                label="Check-in"
+                                                onChange={(e) => {
+                                                    setFormData(prevData => prevData ? ({
+                                                        ...prevData,
+                                                        checkInTime: Number(e.target.value)
+                                                    }) : null);
+                                                }}
+                                            >
+                                                {Array.from({ length: 24 }, (_, i) => (
+                                                    <MenuItem key={i} value={i}>
+                                                        {i === 0 ? '12:00 AM' :
+                                                            i < 12 ? `${i}:00 AM` :
+                                                                i === 12 ? '12:00 PM' :
+                                                                    `${i - 12}:00 PM`}
+                                                    </MenuItem>
+                                                ))}
+                                            </TimeSelect>
+                                        </FormControl>
+                                    </TimePickerContainer>
+
+                                    <TimePickerContainer>
+                                        <FormControl className={styles.timeInput}>
+                                            <InputLabel>Check-out</InputLabel>
+                                            <TimeSelect
+                                                value={formData?.checkOutTime || 0}
+                                                label="Check-out"
+                                                onChange={(e) => {
+                                                    setFormData(prevData => prevData ? ({
+                                                        ...prevData,
+                                                        checkOutTime: Number(e.target.value)
+                                                    }) : null);
+                                                }}
+                                            >
+                                                {Array.from({ length: 24 }, (_, i) => (
+                                                    <MenuItem key={i} value={i}>
+                                                        {i === 0 ? '12:00 AM' :
+                                                            i < 12 ? `${i}:00 AM` :
+                                                                i === 12 ? '12:00 PM' :
+                                                                    `${i - 12}:00 PM`}
+                                                    </MenuItem>
+                                                ))}
+                                            </TimeSelect>
+                                        </FormControl>
+                                    </TimePickerContainer>
                                 </div>
                             </div>
                         </section>
 
                         <section className={styles.formSection}>
-                            <h3 className={styles.sectionTitle}>Check-in & Fees</h3>
+                            <h3 className={styles.sectionTitle}>Fee details</h3>
                             <div className={styles.formRow}>
                                 <div className={styles.inputGroup}>
                                     <TextField
-                                        label="Check-in Time"
-                                        name="checkInTime"
+                                        label="Fee Per Pet"
+                                        name="feePerPet"
                                         type="number"
-                                        value={formData?.checkInTime}
+                                        value={formData?.feePerPet}
                                         onChange={handleInputChange}
-                                        InputProps={{
-                                            endAdornment: <InputAdornment position="end">:00</InputAdornment>,
-                                        }}
-                                        className={styles.timeInput}
-                                    />
-                                    <TextField
-                                        label="Check-out Time"
-                                        name="checkOutTime"
-                                        type="number"
-                                        value={formData?.checkOutTime}
-                                        onChange={handleInputChange}
-                                        InputProps={{
-                                            endAdornment: <InputAdornment position="end">:00</InputAdornment>,
-                                        }}
-                                        className={styles.timeInput}
+                                        className={styles.numberInput}
                                     />
                                     <TextField
                                         label="Cleaning Fee"
                                         name="cleaningFee"
                                         type="number"
                                         value={formData?.cleaningFee}
-                                        onChange={handleInputChange}
-                                        className={styles.numberInput}
-                                    />
-                                </div>
-                            </div>
-                        </section>
-
-                        <section className={styles.formSection}>
-                            <h3 className={styles.sectionTitle}>Pet Policy</h3>
-                            <div className={styles.formRow}>
-                                <div className={styles.inputGroup}>
-                                    <TextField
-                                        label="Pets Allowed"
-                                        name="noOfPetsAllowed"
-                                        type="number"
-                                        value={formData?.noOfPetsAllowed}
-                                        onChange={handleInputChange}
-                                        className={styles.numberInput}
-                                    />
-                                    <TextField
-                                        label="Fee Per Pet"
-                                        name="feePerPet"
-                                        type="number"
-                                        value={formData?.feePerPet}
                                         onChange={handleInputChange}
                                         className={styles.numberInput}
                                     />
