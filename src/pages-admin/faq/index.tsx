@@ -39,7 +39,8 @@ interface FaqQuestion {
   answer: string;
 }
 
-const FAQPage = () => {
+const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
+
   const questions = useSelector((state: RootState) => state.faqPage.faqs);
   const categories = useSelector((state: RootState) => state.addCategory.data);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(1);
@@ -110,24 +111,24 @@ const FAQPage = () => {
         question: updatedQuestion.question,
         answer: updatedQuestion.answer,
         updatedBy: {
-          id: 1, 
+          id: 1,
         },
         categoryId: updatedQuestion.category.id,
       },
     };
-  
+
     dispatch(updateFaq(updateData));
-  
+
     setSnackbar({
       open: true,
       message: "Updated successfully",
       severity: "success",
     });
-  
+
     setShowEditQuestionForm(false);
     setQuestionToEdit(null);
   };
-  
+
 
   const handleSnackbarClose = (
     event?: React.SyntheticEvent | Event,
@@ -225,43 +226,43 @@ const FAQPage = () => {
               <>
                 {questions.length > 0
                   ? questions
-                      .filter(
-                        (ques) =>
-                          ques.category && ques.category.id === selectedCategory
-                      )
-                      .map((question) => (
-                        <div key={question.id} className={styles.faqItem}>
-                          <Typography fontSize="h8" fontWeight={600}>
-                            {question.question}
-                          </Typography>
-                          <Typography variant="body2">
-                            {question.answer}
-                          </Typography>
-                          <div className={styles.actionButtons}>
-                            <Tooltip title="Edit" arrow>
-                              <button
-                                onClick={() => handleEditClick(question)}
-                                className={styles.editButton}
-                              >
-                                <Edit2 size={16} />
-                              </button>
-                            </Tooltip>
-                            <Tooltip title="Delete" arrow>
-                              <button
-                                onClick={() => handleDeleteClick(question)}
-                                className={styles.deleteButton}
-                              >
-                                <Trash2 size={16} />
-                              </button>
-                            </Tooltip>
-                          </div>
+                    .filter(
+                      (ques) =>
+                        ques.category && ques.category.id === selectedCategory
+                    )
+                    .map((question) => (
+                      <div key={question.id} className={styles.faqItem}>
+                        <Typography fontSize="h8" fontWeight={600}>
+                          {question.question}
+                        </Typography>
+                        <Typography variant="body2">
+                          {question.answer}
+                        </Typography>
+                        <div className={styles.actionButtons}>
+                          <Tooltip title="Edit" arrow>
+                            <button
+                              onClick={() => handleEditClick(question)}
+                              className={styles.editButton}
+                            >
+                              <Edit2 size={16} />
+                            </button>
+                          </Tooltip>
+                          <Tooltip title="Delete" arrow>
+                            <button
+                              onClick={() => handleDeleteClick(question)}
+                              className={styles.deleteButton}
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </Tooltip>
                         </div>
-                      ))
+                      </div>
+                    ))
                   : selectedCategory && (
-                      <Typography variant="body1">
-                        No questions found for this category.
-                      </Typography>
-                    )}
+                    <Typography variant="body1">
+                      No questions found for this category.
+                    </Typography>
+                  )}
               </>
             )}
           </Grid>
