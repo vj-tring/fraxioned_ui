@@ -1,36 +1,25 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { PropertyDocumentState, PropertyDocument } from "@/store/model";
-import {
-  fetchPropertyDocuments,
-  fetchPropertyDocument,
-  createPropertyDocumentThunk,
-  updatePropertyDocumentThunk,
-  deletePropertyDocumentThunk,
-} from "./actions";
+import { PropertyDocument, fetchPropertyDocuments, fetchPropertyDocumentsByProperty, createPropertyDocumentThunk, updatePropertyDocumentThunk, deletePropertyDocumentThunk, PropertyDocumentState } from "./actions";
 
-// Create the slice
+const initialState: PropertyDocumentState = {
+  documents: null,
+  currentDocument: null,
+  isLoading: false,
+  error: null,
+};
 const propertyDocumentsSlice = createSlice({
   name: "propertyDocuments",
-  initialState: {
-    documents: [],
-    currentDocument: null,
-    isLoading: false,
-    error: null,
-  } as PropertyDocumentState,
+  initialState,
   reducers: {
     clearError: (state) => {
       state.error = null;
     },
-    setCurrentDocument: (
-      state,
-      action: PayloadAction<PropertyDocument | null>
-    ) => {
+    setCurrentDocument: (state, action: PayloadAction<PropertyDocument | null>) => {
       state.currentDocument = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder
-      // Fetch all documents
       .addCase(fetchPropertyDocuments.pending, (state) => {
         state.isLoading = true;
       })
@@ -42,25 +31,34 @@ const propertyDocumentsSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload as string;
       })
-      // Fetch single document
-      .addCase(fetchPropertyDocument.pending, (state) => {
+      .addCase(fetchPropertyDocumentsByProperty.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(fetchPropertyDocument.fulfilled, (state, action) => {
+      .addCase(fetchPropertyDocumentsByProperty.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.currentDocument = action.payload;
+        state.documents = action.payload;
       })
-      .addCase(fetchPropertyDocument.rejected, (state, action) => {
+      .addCase(fetchPropertyDocumentsByProperty.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       })
+      
       // Create document
       .addCase(createPropertyDocumentThunk.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(createPropertyDocumentThunk.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.documents.push(action.payload);
+        if (state.documents && state.documents.data) {
+          state.documents.data.push(action.payload);
+        } else {
+          state.documents = {
+            success: true,
+            message: "Document created successfully",
+            data: [action.payload],
+            statusCode: 200
+          };
+        }
       })
       .addCase(createPropertyDocumentThunk.rejected, (state, action) => {
         state.isLoading = false;
@@ -72,11 +70,11 @@ const propertyDocumentsSlice = createSlice({
       })
       .addCase(updatePropertyDocumentThunk.fulfilled, (state, action) => {
         state.isLoading = false;
-        const index = state.documents.findIndex(
-          (doc) => doc.id === action.payload.id
-        );
-        if (index !== -1) {
-          state.documents[index] = action.payload;
+        if (state.documents && state.documents.data) {
+          const index = state.documents.data.findIndex((doc) => doc.id === action.payload.id);
+          if (index !== -1) {
+            state.documents.data[index] = action.payload;
+          }
         }
         state.currentDocument = action.payload;
       })
@@ -90,13 +88,10 @@ const propertyDocumentsSlice = createSlice({
       })
       .addCase(deletePropertyDocumentThunk.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.documents = state.documents.filter(
-          (doc) => doc.id !== action.payload
-        );
-        if (
-          state.currentDocument &&
-          state.currentDocument.id === action.payload
-        ) {
+        if (state.documents && state.documents.data) {
+          state.documents.data = state.documents.data.filter(doc => doc.id !== action.payload);
+        }
+        if (state.currentDocument && state.currentDocument.id === action.payload) {
           state.currentDocument = null;
         }
       })
@@ -107,7 +102,5 @@ const propertyDocumentsSlice = createSlice({
   },
 });
 
-export const { clearError, setCurrentDocument } =
-  propertyDocumentsSlice.actions;
-export * from "./actions";
+export const { clearError, setCurrentDocument } = propertyDocumentsSlice.actions;
 export default propertyDocumentsSlice.reducer;

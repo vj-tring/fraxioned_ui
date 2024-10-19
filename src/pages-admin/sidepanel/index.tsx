@@ -29,7 +29,7 @@ const menuItems: MenuItem[] = [
     { icon: <FaHome />, label: 'Property', path: '/admin/property', disabled: false },
     { icon: <FaUser />, label: 'User', path: '/admin/user', disabled: false },
     { icon: <FaConciergeBell />, label: 'Amenity', path: '/admin/amenity', disabled: false },
-    { icon: <FaFile />, label: 'Documents', path: '/documents', disabled: true },
+    { icon: <FaFile />, label: 'Documents', path: '/admin/documents', disabled: false },
 
     //{ icon: <FaUserTag />, label: 'Role', path: '/role', disabled: true },
     { icon: <FaChartBar />, label: 'Reports', path: '/admin/reports', disabled: false },
@@ -60,7 +60,9 @@ const SidePanel: React.FC<SidePanelProps> = ({ isOpen, toggleSidebar }) => {
         if (path === '/admin/reports') {
             return location.pathname.startsWith('/admin/reports');
         }
-
+        if (path === 'admin/documents') {
+            return location.pathname.startsWith('/admin/documents');
+        }
 
         return location.pathname === path;
     };
