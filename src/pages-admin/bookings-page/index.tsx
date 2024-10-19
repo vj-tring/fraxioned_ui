@@ -554,13 +554,11 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
             },
           }}
           getRowClassName={(params) => {
-            if (params.row.isCancelled) {
-              return styles.rowCancelled; 
+            if (params.indexRelativeToCurrentPage % 2 === 0) {
+              return styles.evenRow;
+            } else {
+              return styles.oddRow;
             }
-            if (params.row.isCompleted) {
-              return styles.rowCompleted; 
-            }
-            return styles.rowActive;
           }}
           pageSizeOptions={[5, 10, 25]}
           disableRowSelectionOnClick
