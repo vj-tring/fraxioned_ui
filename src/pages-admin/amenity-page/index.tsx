@@ -6,7 +6,7 @@ import {
   deleteAmenityAsync,
   fetchAmenities,
 } from "@/store/slice/amenity";
-import {  AppDispatch } from "@/store";
+import { AppDispatch } from "@/store";
 import { RootState } from "@/store/reducers";
 import styles from "./amenitypage.module.css";
 import NewAmenityForm from "../property-amenities/new-amenity";
@@ -16,14 +16,13 @@ import {
   Plus,
   ChevronRight,
   ChevronDown,
-  RefreshCw,
   Search,
   ImageIcon,
   Upload,
 } from "lucide-react";
 import ConfirmationModal from "@/components/confirmation-modal";
 import CustomizedSnackbars from "@/components/customized-snackbar";
-import { IconButton, Tooltip } from "@mui/material";
+import { Tooltip } from "@mui/material";
 import Loader from "@/components/loader";
 import { Amenity } from "@/store/model";
 
@@ -327,7 +326,7 @@ const AmenityManagement: React.FC = () => {
               <span className={styles.buttonText}>New Amenity</span>
             </button>
           </Tooltip>
-          <Tooltip title="Refresh" arrow>
+          {/* <Tooltip title="Refresh" arrow>
             <IconButton
               onClick={() => window.location.reload()}
               className={styles.refreshIcon}
@@ -335,7 +334,7 @@ const AmenityManagement: React.FC = () => {
             >
               <RefreshCw size={20} />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
         </div>
       </div>
       <div className={styles.content}>
@@ -378,7 +377,7 @@ const AmenityManagement: React.FC = () => {
                       />
                     </div>
                     <span className={styles.groupTotalCount}>
-                      Total {group} amenities: {amenitiesList.length}
+                      Total Count : {amenitiesList.length}
                     </span>
                   </div>
                   {amenitiesList.length > 0 ? (

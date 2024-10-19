@@ -13,7 +13,6 @@ import AmenityManagement from '../amenity-page';
 import EditAmenityForm from '../property-amenities/edit-amenityform';
 import PropertyAmenities from '../property-amenities';
 import UserGrid from '../grid/user-grid';
-import PropertyRules from '../property-rules';
 import UserProperty from '../property-user';
 import EditPropertyRulesForm from '../property-rules/edit-form';
 import PropertyPhotos from '../property-photos';
@@ -24,6 +23,7 @@ import userImage from '../../assets/images/profile.jpeg'
 import './admin-dashboard.css'
 import { PropertyDocuments } from '../property-documents';
 import ReportsGrid from '../grid/reports-grid';
+import PropertyRulesView from '../property-rules/edit-form';
 import SpaceProperty from '../space-property';
 import SpacePropertyDetails from '../space-property/space-property-details';
 import PropertyCode from '../property-codes';
@@ -85,15 +85,7 @@ const AdminDashboard: React.FC = () => {
                             <div className="property-details-container">
                                 <PropertySidePanel isOpen={true} />
                                 <div className="property-info-content">
-                                    <PropertyRules />
-                                </div>
-                            </div>
-                        } />
-                        <Route path="/property/:id/rules/edit" element={
-                            <div className="property-details-container">
-                                <PropertySidePanel isOpen={true} />
-                                <div className="property-info-content">
-                                    <EditPropertyRulesForm />
+                                    <PropertyRulesView />
                                 </div>
                             </div>
                         } />

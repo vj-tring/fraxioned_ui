@@ -117,6 +117,14 @@ const PropertyAmenities: React.FC = () => {
     );
   };
 
+  const getAmenityCount = (group: string) => {
+    const totalCount = amenities[group].length;
+    const selectedCount = amenities[group].filter(amenity =>
+      selectedAmenities.includes(amenity.id)
+    ).length;
+    return `Total: ${selectedCount}/${totalCount}`;
+  };
+
   const handleUpdate = async () => {
     const updateData = {
       property: { id: Number(id) },
@@ -141,8 +149,13 @@ const PropertyAmenities: React.FC = () => {
           {Object.entries(amenities).map(([group, amenitiesList]) => (
             <div key={group} className={styles.amenityGroup} ref={el => groupRefs.current[group] = el}>
               <div className={styles.groupHeader} onClick={() => toggleGroup(group)}>
-                <h3 className={styles.groupTitle}>{group}</h3>
-                {expandedGroup === group ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                <div className={styles.groupTitleContainer}>
+                  <h3 className={styles.groupTitle}>{group}</h3>
+                </div>
+                <div className={styles.groupHeaderRight}>
+                  <span className={styles.amenityCount}>{getAmenityCount(group)}</span>
+                  {expandedGroup === group ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                </div>
               </div>
               {expandedGroup === group && (
                 <>
