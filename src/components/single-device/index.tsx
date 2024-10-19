@@ -154,8 +154,8 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
     ? allAmenities
     : allAmenities.slice(0, AMENITIES_PER_PAGE);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  // if (loading) return <div>Loading...</div>;
+  // if (error) return <div>{error}</div>;
 
   return (
     <Box
