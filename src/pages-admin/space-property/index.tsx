@@ -93,7 +93,6 @@ const SpaceProperty: React.FC = () => {
     // Navigate to space details page when a space is clicked
     const handleSpaceClick = (space: any) => {
         // Sending all rooms, regardless of isBedTypeAllowed or isBathroomTypeAllowed
-        console.log("Sending all room data:", space);
         navigate(`/admin/property/${id}/rooms/${space.space.id}`, { state: { space } }); 
     };
 

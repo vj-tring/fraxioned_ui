@@ -8,7 +8,7 @@ import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { Image } from "../property-listing-page";
 import { propertyImageapi } from "@/api/api-endpoints";
 import { Card } from "../../store/slice/auth/property-slice";
-
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 interface RootState {
   properties: {
     cards: Card[];
@@ -17,6 +17,7 @@ interface RootState {
   };
 }
 
+import { Dropdown } from "primereact/dropdown";
 const TrackingMyNigts: React.FC = () => {
   const properties = useSelector((state: RootState) => state.properties.cards);
   const [selectedPropertyId, setSelectedPropertyId] = useState<number | null>(
@@ -25,7 +26,8 @@ const TrackingMyNigts: React.FC = () => {
   const [selectedYear, setSelectedYear] = useState<number>(
     new Date().getFullYear()
   );
-  const [imageDetails, setImageDetails] = useState<Image[]>([]);
+  // const [imageDetails, setImageDetails] = useState<Image[]>([]);
+  // const  properties1  = useSelector((state: RootState) => state.property);
 
   useEffect(() => {
     if (properties.length > 0) {
@@ -45,29 +47,15 @@ const TrackingMyNigts: React.FC = () => {
     (property) => property.id === selectedPropertyId
   );
   const propertyDetails = selectedProperty?.details[selectedYear];
-  console.log(selectedProperty);
   const availableYears = Object.keys(selectedProperty?.details || {}).map(
     (year) => parseInt(year)
   );
 
-  useEffect(() => {
-    const fetchPropertyImages = async () => {
-      try {
-        const response = await propertyImageapi();
-        setImageDetails(response.data.data);
-      } catch (error) {
-        console.error("Error fetching property images:", error);
-      }
-    };
-
-    fetchPropertyImages();
-  }, []);
-
   const showselectedimage = (id: number) => {
-    const filteredImage = imageDetails
-      .filter((image) => image.property.id === id)
+    const filteredImage = properties
+      .filter((image) => image.propertyId === id)
       .sort((a: Image, b: Image) => a.displayOrder - b.displayOrder);
-    return filteredImage[0]?.imageUrl;
+    return filteredImage[0]?.coverImageUrl;
   };
 
   const formatDate = (dateStr: string | number | Date | undefined) => {
@@ -139,6 +127,9 @@ const TrackingMyNigts: React.FC = () => {
         offSeasonAfter: { startDate: "", endDate: "" },
       };
 
+  const [selectedProperty1, setSelectedProperty1] = useState<number | null>(
+    null
+  );
   return (
     <div className="Container">
       <div className="My-nights">
@@ -150,7 +141,7 @@ const TrackingMyNigts: React.FC = () => {
 
       <div className="bar-btn-head">
         <div className="d-flex bar-btn">
-          <Select
+          {/* <Select
             value={selectedPropertyId || ""}
             onChange={handlePropertyChange}
             displayEmpty
@@ -184,14 +175,39 @@ const TrackingMyNigts: React.FC = () => {
               <MenuItem key={property.id} value={property.id}>
                 <div className="d-flex flex-column propertyMenu">
                   <MenuItem disableRipple className="ProperName monsterrat">
-                    {property.propertyName}
+                    {property.propertyName} <ArrowDropDownIcon />
                   </MenuItem>
                 </div>
               </MenuItem>
             ))}
-          </Select>
+          </Select> */}
+          <div className=" p-2.5 ">
+            <Dropdown
+              value={selectedProperty1}
+              onChange={(e) => {
+                setSelectedProperty1(e.value);
+                handlePropertyChange(e);
+              }}
+              options={properties.map((property, index) => ({
+                label: property.propertyName,
+                value: property.id,
+                style: {
+                  backgroundColor: "white",
+                  paddingTop: "10px",
+                  paddingBottom: "10px",
+
+                  width: "200px",
+                  paddingLeft: "15px",
+                  fontSize: "small",
+                },
+              }))}
+              optionLabel="label"
+              placeholder="Select a Property"
+              className="w-full md:w-14rem DropdownLabel "
+            />
+          </div>
           <hr className="vl mt-2"></hr>
-          <Select
+          {/* <Select
             // disableRipple
             value={selectedYear}
             onChange={handleYearChange}
@@ -228,21 +244,49 @@ const TrackingMyNigts: React.FC = () => {
                 value={year}
                 className="monsterrat "
               >
-                <div className="Year">{year}</div>
+                <div className="Year">
+                  {year} <ArrowDropDownIcon />
+                </div>
               </MenuItem>
             ))}
-          </Select>
+          </Select> */}
+
+          <div className=" p-2.5 ">
+            <Dropdown
+              value={selectedYear}
+              onChange={(e) => {
+                setSelectedYear(e.value);
+                handleYearChange(e);
+              }}
+              options={availableYears.map((year, index) => ({
+                label: year,
+                value: year,
+                style: {
+                  backgroundColor: "white",
+                  paddingTop: "10px",
+                  paddingBottom: "10px",
+
+                  width: "100px",
+                  paddingLeft: "27px",
+                  fontSize: "small",
+                },
+              }))}
+              optionLabel="label"
+              placeholder="Select a Property"
+              className="w-full md:w-14rem DropdownLabel1 "
+            />
+          </div>
           {/* <hr className="vl mt-3"></hr> */}
-          <button className="Track-btn">
-            <FontAwesomeIcon icon={faSearch} style={{ color: "#ffffff" }} />
-          </button>
         </div>
       </div>
 
       <div className="container3 mt-3 pt-4 d-flex">
         <div className="cardImg">
           <img
-            src={showselectedimage(selectedProperty?.propertyId ?? 1)}
+            src={
+              showselectedimage(selectedProperty?.propertyId ?? 1) ||
+              "https://placehold.jp/150x150.png"
+            }
             className="PropImg1"
             alt="Property"
             loading="lazy"

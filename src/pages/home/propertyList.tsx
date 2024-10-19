@@ -4,7 +4,7 @@ import Card from "../../components/cards";
 import { useSelector, useDispatch } from "react-redux";
 import image1 from "../../assests/bear-lake-bluffs.jpg";
 import { FaPlus } from "react-icons/fa";
-import PorpImg from "../../assests/crown-jewel.jpg";
+import PorpImg from "../../assests/lake-escape.jpg";
 import { resetLimits } from "@/store/slice/auth/propertyGuestSlice";
 import { clearDates } from "@/store/slice/datepicker";
 import { User } from "@/store/model";
@@ -57,7 +57,6 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
   const showCarousel = properties.length > 4;
   const showPlusIcon = true;
 
-  console.log("properties", properties);
   const fetchAdditionalProperties = async () => {
     try {
       const response = await getProperties();
@@ -69,9 +68,7 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
       const allProperties = response.data as Property[];
       const numberOfUserProperties = properties.length;
 
-      console.log("proplength", numberOfUserProperties);
       const numberOfPropertiesToShow = 5 - numberOfUserProperties;
-      console.log("numberOfPropertiesToShow", numberOfPropertiesToShow);
 
       setAdditionalProperties(allProperties.slice(0, numberOfPropertiesToShow));
     } catch (error) {
@@ -87,7 +84,6 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
     fetchAdditionalProperties();
   }, [dispatch]);
 
-  // console.log("userid", userId);
 
   const scroll = (scrollOffset: number) => {
     if (carouselRef.current) {
@@ -110,7 +106,7 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
   };
 
   return (
-    <div className={` Container1 ${properties.length > 5 ? "" : "flex"}`}>
+    <div className={` Container1 ${properties.length > 3 ? "" : "flex"}`}>
       <div>
         <div
           className="d-flex flex-row Container4"

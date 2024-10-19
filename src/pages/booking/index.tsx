@@ -66,8 +66,6 @@ const Booking = () => {
 
   useEffect(() => {
     if (user && user.id) {
-      console.log("user", user);
-
       dispatch(fetchUserBookings(user.id));
       dispatch(fetchProperties(user.id));
     }
@@ -75,10 +73,10 @@ const Booking = () => {
 
   const formattedDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
     });
   };
 
@@ -187,19 +185,15 @@ const Booking = () => {
   return (
     <>
       <Box sx={{ width: "90%", margin: "auto" }}>
-        {/* <div className="bookImg">
-          <span>My Bookings</span>{" "}
-        </div> */}
         <Typography
           variant="h4"
-          className="my-Book mt-5 monsterrat mb-3"
+          className="my-Book mt-4 monsterrat mb-3"
           gutterBottom
         >
           My Bookings
         </Typography>
         <div className="d-flex justify-between BookHeader">
           <Tabs
-            // disableRipple
             value={activeTab}
             onChange={handleTabChange}
             className="monsterrat "
@@ -228,22 +222,6 @@ const Booking = () => {
             >
               View as Calendar
             </Button>
-            {/* <Button
-              variant="outlined"
-              disableRipple
-              color="primary"
-              startIcon={<FilterListIcon />}
-              style={{
-                marginLeft: "16px",
-                border: "1px solid #88CDD4",
-                color: "black",
-                borderRadius: "10px",
-                textTransform: "capitalize",
-              }}
-              className='FilterView'
-            >
-              Filter
-            </Button> */}
           </div>
         </div>
 
@@ -253,7 +231,7 @@ const Booking = () => {
           activeTab={activeTab}
         />
 
-        <div className="TrackingMyNight mt-5 ">
+        <div className="TrackingMyNight mt-4 ">
           <TrackingMyNigts />
         </div>
 

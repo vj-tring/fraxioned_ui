@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
-  Search,
   Upload,
   File,
   Trash2,
@@ -20,106 +20,85 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { AppDispatch } from "@/store";
+import { RootState } from "@/store/reducers";
+import { createUserPropertyDocumentThunk, deleteUserPropertyDocumentThunk, fetchUserPropertyDocumentByUser, updateUserPropertyDocumentThunk, UserPropertyDocument } from "@/store/slice/user-document/action";
+interface DocumentManagerCardProps {
+  userId: number;
+}
 
-type Document = {
-  id: string;
-  name: string;
-  type: string;
-  size: string;
-  uploadDate: string;
-  content: string;
-};
-
-const DocumentManagerCard = () => {
-  const [documents, setDocuments] = useState<Document[]>([
-    {
-      id: "1",
-      name: "Report.pdf",
-      type: "PDF",
-      size: "2.5 MB",
-      uploadDate: "2023-05-15",
-      content: "This is a sample report content.",
-    },
-    {
-      id: "2",
-      name: "Presentation.pptx",
-      type: "PowerPoint",
-      size: "5.1 MB",
-      uploadDate: "2023-05-14",
-      content: "This is a sample presentation content.",
-    },
-    {
-      id: "3",
-      name: "Spreadsheet.xlsx",
-      type: "Excel",
-      size: "1.8 MB",
-      uploadDate: "2023-05-13",
-      content: "This is a sample spreadsheet content.",
-    },
-  ]);
+const DocumentManagerCard: React.FC<DocumentManagerCardProps> = ({ userId }) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { documents, isLoading, error } = useSelector((state: RootState) => state.userDocuments);
   const [searchTerm, setSearchTerm] = useState("");
-  const [editingDocument, setEditingDocument] = useState<Document | null>(null);
+  const [editingDocument, setEditingDocument] = useState<UserPropertyDocument | null>(null);
 
-  const filteredDocuments = documents.filter((doc) =>
-    doc.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    dispatch(fetchUserPropertyDocumentByUser(userId));
+  }, [dispatch, userId]);
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const filteredDocuments = Array.isArray(documents?.data)
+    ? documents.data.filter((doc: UserPropertyDocument) =>
+        doc.documentName.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const newDocument: Document = {
-        id: Date.now().toString(),
-        name: file.name,
-        type: file.type,
-        size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
-        uploadDate: new Date().toISOString().split("T")[0],
-        content: "New document content placeholder.",
-      };
-      setDocuments([...documents, newDocument]);
+      const formData = new FormData();
+      formData.append('documentFile', file);
+      formData.append('documentName', file.name);
+      formData.append('documentType', file.type);
+      formData.append('user', JSON.stringify({ id: userId }));
+      await dispatch(createUserPropertyDocumentThunk({ userId, formData }));
     }
   };
 
-  const handleDelete = (id: string) => {
-    setDocuments(documents.filter((doc) => doc.id !== id));
+  const handleDelete = async (id: number) => {
+    await dispatch(deleteUserPropertyDocumentThunk({ userId, documentId: id }));
   };
 
-  const handleEdit = (doc: Document) => {
+  const handleEdit = (doc: UserPropertyDocument) => {
     setEditingDocument(doc);
   };
 
-  const handleSaveEdit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSaveEdit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (editingDocument) {
-      setDocuments(
-        documents.map((doc) =>
-          doc.id === editingDocument.id ? editingDocument : doc
-        )
-      );
+      const formData = new FormData();
+      formData.append('documentName', editingDocument.documentName);
+      formData.append('documentType', editingDocument.documentType);
+      await dispatch(updateUserPropertyDocumentThunk({ userId, documentId: editingDocument.id, documentData: formData }));
       setEditingDocument(null);
     }
   };
 
-  const handleExport = (doc: Document) => {
-    console.log(`Exporting document: ${doc.name}`);
-    alert(
-      `Exporting ${doc.name}. In a real application, this would download the file.`
-    );
+  const handleExport = (doc: UserPropertyDocument) => {
+    window.open(doc.documentUrl, '_blank');
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <Card className="w-full max-xl mx-auto">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-1xl ">Document Manager</CardTitle>
+        <CardTitle className="text-1xl ">User Documents</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex space-x-4 mb-4">
           <div className="relative flex-grow">
-            {/* <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" /> */}
             <Input
               placeholder="Search documents..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-8"
+              className="pl-8 "
             />
           </div>
           <div className="relative">
@@ -131,7 +110,7 @@ const DocumentManagerCard = () => {
               accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx"
             />
             <label htmlFor="file-upload">
-              <Button as="span" style={{
+              <Button style={{
                 backgroundColor:'#2d6aa0',
                 color:'white',
                 height:'30px',
@@ -147,7 +126,7 @@ const DocumentManagerCard = () => {
         </div>
         <ScrollArea className="h-[400px]">
           <div className="space-y-2">
-            {filteredDocuments.map((doc) => (
+            {filteredDocuments.map((doc: UserPropertyDocument) => (
               <div
                 key={doc.id}
                 className="flex items-center justify-between p-2 hover:bg-muted rounded-md"
@@ -155,9 +134,9 @@ const DocumentManagerCard = () => {
                 <div className="flex items-center space-x-4">
                   <File className="h-8 w-8 text-blue-500" />
                   <div>
-                    <p className="font-small">{doc.name}</p>
-                    <p className="text-sm  text-muted-foreground">
-                      {doc.type} • {doc.size} • Uploaded on {doc.uploadDate}
+                    <p className="font-small">{doc.documentName}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {doc.documentType} • Property: {doc.property.propertyName}
                     </p>
                   </div>
                 </div>
@@ -171,10 +150,10 @@ const DocumentManagerCard = () => {
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>{doc.name}</DialogTitle>
+                        <DialogTitle>{doc.documentName}</DialogTitle>
                       </DialogHeader>
                       <div className="mt-2">
-                        <p>{doc.content}</p>
+                        <p>Document preview not available</p>
                       </div>
                     </DialogContent>
                   </Dialog>
@@ -194,30 +173,27 @@ const DocumentManagerCard = () => {
                       </DialogHeader>
                       <form onSubmit={handleSaveEdit} className="space-y-4">
                         <div>
-                          <Label htmlFor="name">Name</Label>
+                          <Label htmlFor="documentName">Name</Label>
                           <Input
-                            id="name"
-                            value={editingDocument?.name || ""}
+                            id="documentName"
+                            value={editingDocument?.documentName || ""}
                             onChange={(e) =>
                               setEditingDocument((prev) =>
-                                prev ? { ...prev, name: e.target.value } : null
+                                prev ? { ...prev, documentName: e.target.value } : null
                               )
                             }
                           />
                         </div>
                         <div>
-                          <Label htmlFor="content">Content</Label>
-                          <textarea
-                            id="content"
-                            value={editingDocument?.content || ""}
+                          <Label htmlFor="documentType">Document Type</Label>
+                          <Input
+                            id="documentType"
+                            value={editingDocument?.documentType || ""}
                             onChange={(e) =>
                               setEditingDocument((prev) =>
-                                prev
-                                  ? { ...prev, content: e.target.value }
-                                  : null
+                                prev ? { ...prev, documentType: e.target.value } : null
                               )
                             }
-                            className="w-full h-32 p-2 border rounded"
                           />
                         </div>
                         <Button type="submit">Save Changes</Button>

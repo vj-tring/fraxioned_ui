@@ -262,10 +262,8 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
         })),
       };
 
-      console.log("Payload:", payload);
       try {
         const register = await dispatch(registerUser(payload)).unwrap();
-        console.log("Register response:", register);
         setIsLoading(false);
         if (register.message === "Invite sent successfully") {
           setSnackbarMessage(register.message);

@@ -9,7 +9,6 @@ export const createAuthHelpers = (navigate: NavigateFunction, showSnackbar: Show
     const handleUnauthorized = () => {
         showSnackbar('Your session is invalid. Please log in again.', 'error');
         localStorage.clear();
-        console.log("inside auth helpers");
         navigate('/login');
     };
 

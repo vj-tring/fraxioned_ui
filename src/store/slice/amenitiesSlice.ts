@@ -60,7 +60,6 @@ const amenitySlice = createSlice({
         state.loading = false;
         
         state.propertyAmenities = action.payload;
-        console.log("Updated propertyAmenities:", state.propertyAmenities); 
       })
       .addCase(fetchAmenities.rejected, (state, action) => {
         state.loading = false;
