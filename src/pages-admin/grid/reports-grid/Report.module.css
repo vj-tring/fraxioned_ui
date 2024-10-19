@@ -12,9 +12,6 @@
   margin-left: 0 !important;
 }
 
-.sidebarClosed {
-  margin-left: 40px !important;
-}
 .reportsHeader {
   display: flex;
   justify-content: space-between;

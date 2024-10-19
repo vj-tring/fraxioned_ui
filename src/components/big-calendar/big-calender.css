@@ -17,8 +17,8 @@
 }
 
 .calendar-container.sidebar-closed {
-  margin-left: 80px;
-  width: calc(100% - 120px);
+  margin-left: 10px;
+  width: calc(100% - 20px);
 }
 
 .calendar-header {

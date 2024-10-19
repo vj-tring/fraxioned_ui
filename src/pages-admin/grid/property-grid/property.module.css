@@ -1,12 +1,11 @@
 .propertiesContainer {
-  padding: 24px;
+  padding: 18px 10px 0px 20px;
   background-color: #f8f6f6;
   margin-left: 2px;
   height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
   transition: margin-left 0.3s ease;
-  margin-left: 100px;
 }
 
 .dataGridPadding {
@@ -29,10 +28,6 @@
 
 .sidebarOpen {
   margin-left: 0 !important;
-}
-
-.sidebarClosed {
-  margin-left: 40px !important;
 }
 
 .titleContainer {
