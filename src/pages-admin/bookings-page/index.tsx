@@ -32,6 +32,9 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { FormControl, Select, MenuItem } from "@mui/material";
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import { Box, Typography } from '@mui/material';
+
 
 
 
@@ -83,6 +86,15 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     { value: "completed", label: "Completed" },
     { value: "cancelled", label: "Cancelled" },
   ];
+
+  const getStatusColor = (params: any) => {
+    if (params.row.isCancelled) {
+      return '#dd5c5c;'; 
+    } else if (params.row.isCompleted) {
+      return '#2d6aa0'; 
+    }
+    return '#1a95538a'; 
+  };
 
   const navigate = useNavigate();
 
@@ -287,14 +299,58 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     exportBookingsToCSV(filteredBookings);
   };
 
+  
   const columns: GridColDef[] = [
     {
       field: "bookingId",
       headerName: "Booking ID",
       flex: 1,
-      align: "center",
+      renderCell: (params) => {
+        const color = getStatusColor(params);
+        return (
+          <Box 
+            sx={{ 
+              display: 'flex', 
+              alignItems: "center",
+              justifyContent: 'center',
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            <Box 
+              sx={{ 
+                display: 'flex', 
+                alignItems: 'center',
+                width: '100%',
+              }}
+            >
+              <BookmarkIcon
+                sx={{
+                  color,
+                  marginLeft: '-18px', 
+                  transform: 'rotate(-90deg)',
+                  fontSize: 50, 
+                }}
+              />
+              <Typography 
+                sx={{
+                  fontSize: 'small',
+                  fontFamily: "'Roboto', sans-serif !important",
+                  flexGrow: 1, 
+                  textAlign: 'center',
+                  marginRight:'20px',
+                }}
+              >
+                {params.value}
+              </Typography>
+            </Box>
+          </Box>
+        );
+      },
       headerAlign: "center",
+      align: "center",
     },
+    
     {
       field: "userName",
       headerName: "User Name",
@@ -442,15 +498,15 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
                 
                 sx={{
                   
-                    marginBottom:'10px',
-
+                    marginBottom:'8px',
+                    width:'155px',
+                    height:'37px',
                  
                   
 
                   '& .MuiInputBase-input': {
                     fontSize: '14px',
-                    height: '5px',
-                    width:'50px',
+                    height: '4px',
                     padding: '5px',
 
 
@@ -464,7 +520,25 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
               >
                 {options.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
-                    {option.label}
+                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          {option.value !== 'all' && (
+            <BookmarkIcon
+              sx={{
+                color: option.value === 'active' ? '#1a95538a' : 
+                option.value === 'completed' ? '#2d6aa0' : 
+                option.value === 'cancelled' ? '#dd5c5c' : 'inherit',
+
+                transform: 'rotate(-90deg)',
+                fontSize: 22, 
+                alignItems:"center",
+              }}
+            />
+          )}
+          <Box sx={{ marginLeft: option.value !== 'all' ? 1 : 0 }}>
+            {option.label}
+          </Box>
+        </Box>
+                    
                   </MenuItem>
                 ))}
               </Select>
@@ -565,13 +639,11 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
             },
           }}
           getRowClassName={(params) => {
-            if (params.row.isCancelled) {
-              return styles.rowCancelled; 
+            if (params.indexRelativeToCurrentPage % 2 === 0) {
+              return styles.evenRow;
+            } else {
+              return styles.oddRow;
             }
-            if (params.row.isCompleted) {
-              return styles.rowCompleted; 
-            }
-            return styles.rowActive;
           }}
           pageSizeOptions={[5, 10, 25]}
           disableRowSelectionOnClick

@@ -7,7 +7,7 @@
   flex-direction: column;
   transition: margin-left 0.3s ease;
   margin-left: 100px;
-  /* font-family:  'Montserrat', sans-serif !important; */
+  
 }
 
 .refreshIcon {
@@ -20,15 +20,11 @@
   color: #5ba3aa !important;
 }
 
-.row-active {
-  background-color: rgb(255, 255, 255) !important;
+.evenRow {
+  background-color: rgb(255, 255, 255);
 }
-.row-completed {
-  background-color: #ebecec !important;
-}
-.row-cancelled {
-  background-color:    #ededed !important;
-
+.oddRow {
+  background-color: #ebecec;
 }
 
 
