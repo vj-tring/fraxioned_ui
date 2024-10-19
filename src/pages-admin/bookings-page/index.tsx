@@ -201,42 +201,42 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     {
       field: "bookingId",
       headerName: "Booking ID",
-      width: 140,
+      flex:1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "userName",
       headerName: "User Name",
-      width: 120,
+      flex:1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "propertyName",
       headerName: "Property Name",
-      width: 170,
+      flex:1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "checkinDate",
       headerName: "Check-in Date",
-      width: 190,
+      flex:1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "checkoutDate",
       headerName: "Check-out Date",
-      width: 150,
+      flex:1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "isLastMinuteBooking",
       headerName: "Last Min Booking",
-      width: 130,
+      flex:1,
       align: "center",
       headerAlign: "center",
       renderCell: (params) => (params.row.isLastMinuteBooking ? "Yes" : "No"),
@@ -244,15 +244,14 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     {
       field: "isCancelled",
       headerName: "Cancelled",
-      width: 90,
-      align: "center",
+      flex:1,      align: "center",
       headerAlign: "center",
       renderCell: (params) => (params.row.isCancelled ? "Yes" : "No"),
     },
     {
       field: "isCompleted",
       headerName: "Completed",
-      width: 120,
+      flex:1,
       align: "center",
       headerAlign: "center",
       renderCell: (params) => (params.row.isCompleted ? "Yes" : "No"),
@@ -260,7 +259,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     {
       field: "actions",
       headerName: "Actions",
-      width: 180,
+      flex:1,
 
       renderCell: (params) => (
         <div>
