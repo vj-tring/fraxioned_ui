@@ -287,86 +287,11 @@ const EditPropertyForm: React.FC = () => {
                   className={styles.inputField}
                 />
               </Grid>
-              <Grid item xs={6} sm={4}>
-                <TextField
-                  label="Display Order"
-                  name="displayOrder"
-                  type="number"
-                  value={formData.displayOrder}
-                  onChange={handleInputChange}
-                  fullWidth
-                  variant="outlined"
-                  className={styles.inputField}
-                />
-              </Grid>
-              <Grid item xs={6} sm={4}>
-                <TextField
-                  label="Latitude"
-                  name="latitude"
-                  type="number"
-                  value={formData.latitude}
-                  onChange={handleInputChange}
-                  fullWidth
-                  variant="outlined"
-                  className={styles.inputField}
-                />
-              </Grid>
-              <Grid item xs={6} sm={4}>
-                <TextField
-                  label="Longitude"
-                  name="longitude"
-                  type="number"
-                  value={formData.longitude}
-                  onChange={handleInputChange}
-                  fullWidth
-                  variant="outlined"
-                  className={styles.inputField}
-                />
-              </Grid>
-              <Grid item xs={6} sm={3}>
-                <TextField
-                  label="Number of Bedrooms"
-                  name="noOfBedrooms"
-                  type="number"
-                  value={propertyDetails.noOfBedrooms}
-                  onChange={handlePropertyDetailsChange}
-                  fullWidth
-                  required
-                  variant="outlined"
-                  className={styles.inputField}
-                />
-              </Grid>
-              <Grid item xs={6} sm={3}>
-                <TextField
-                  label="Number of Bathrooms"
-                  name="noOfBathrooms"
-                  type="number"
-                  value={propertyDetails.noOfBathrooms}
-                  onChange={handlePropertyDetailsChange}
-                  fullWidth
-                  required
-                  variant="outlined"
-                  className={styles.inputField}
-                />
-              </Grid>
               <Grid item xs={6} sm={3}>
                 <TextField
                   label="Square Footage"
                   name="squareFootage"
                   value={propertyDetails.squareFootage}
-                  onChange={handlePropertyDetailsChange}
-                  fullWidth
-                  required
-                  variant="outlined"
-                  className={styles.inputField}
-                />
-              </Grid>
-              <Grid item xs={6} sm={3}>
-                <TextField
-                  label="Cleaning Fee"
-                  name="cleaningFee"
-                  type="number"
-                  value={propertyDetails.cleaningFee}
                   onChange={handlePropertyDetailsChange}
                   fullWidth
                   required
@@ -396,9 +321,6 @@ const EditPropertyForm: React.FC = () => {
                       onChange={handleInputChange}
                       name="isActive"
                       color="primary"
-                      sx={{
-                        fontSize: 'small'
-                      }}
                     />
                   }
                   label="Is Active"

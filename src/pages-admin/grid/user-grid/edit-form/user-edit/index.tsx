@@ -19,7 +19,7 @@ import { updateuserapi, getRoles } from "@/api/api-endpoints";
 import styles from "./useredit.module.css";
 import { User, Role, ContactDetails } from "@/store/model";
 import { updateUserById } from "@/store/slice/user-slice";
-import { useDispatch } from "@/store";
+import { useDispatch } from "react-redux";
 
 interface EditFormProps {
   user: User;
@@ -100,7 +100,6 @@ const EditForm: React.FC<EditFormProps> = ({
         isActive: true,
       };
       if (id) {
-        console.log("updateuser", dataToSend);
         await dispatch(updateUserById({ userId: id, userData: dataToSend }));
       }
       onUserUpdated();

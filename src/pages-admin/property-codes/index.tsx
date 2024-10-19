@@ -54,7 +54,7 @@ const PropertyCode: React.FC = () => {
 
   useEffect(() => {
     if (propertyCodes.length > 0 && propertyId) {
-      const filtered = propertyCodes.filter((code): code is PropertyCode =>
+      const filtered = propertyCodes.filter((code: { property: { id: number; }; }): code is PropertyCode =>
         code &&
         typeof code === 'object' &&
         'property' in code &&

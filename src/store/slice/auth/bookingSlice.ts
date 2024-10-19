@@ -100,7 +100,6 @@ export const fetchBookings = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await getBookings();
-      // console.log("Fetched bookings:", response.data);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -139,9 +138,7 @@ export const bookingSummary = createAsyncThunk<
   "bookings/bookingSummary",
   async (bookingData: BookingData, { rejectWithValue }) => {
     try {
-      console.log("Sending booking data to API:", bookingData);
       const response = await createBookingSummary(bookingData);
-      console.log("API response:", response.data);
       return response.data;
     } catch (error: any) {
       console.error("Error in bookingSummary:", error);
@@ -181,16 +178,14 @@ export const confirmBooking = createAsyncThunk<
       // Make the API call with the filtered data
       const response = await createBooking(filteredBookingData);
 
-      if (response.data.statusCode === 201) {
+      if (response.data.status_code === 201) {
         return { message: response.data.message, data: response.data };
       } else {
-        console.log("rejected");
         return rejectWithValue(
           response.data.message || "Failed to confirm booking"
         );
       }
     } catch (error: any) {
-      console.log("error", error);
       const errorMessage =
         error.response?.data?.message ||
         "Something went wrong. Please try again later.";

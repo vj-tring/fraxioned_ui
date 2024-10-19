@@ -55,7 +55,6 @@ const PropertySidePanel: React.FC<PropertySidePanelProps> = ({ isOpen }) => {
         { icon: <FaMapMarkerAlt />, label: 'Location', path: `/admin/property/${id}/location`, enabled: false },
         { icon: <FaBitcoin />, label: 'Codes', path: `/admin/property/${id}/codes`, enabled: true },
         { icon: <FaFile />, label: 'Documents', path: `/admin/property/${id}/documents`, enabled: true },
-
     ];
 
     return (
@@ -82,14 +81,21 @@ const PropertySidePanel: React.FC<PropertySidePanelProps> = ({ isOpen }) => {
                     ))}
                 </ul>
             )}
-            {selectedProperty && (
+             {selectedProperty && (
                 <ul className={styles.menu}>
                     {menuItems.map((item, index) => (
                         <li key={index} className={`${styles.menuItem} ${location.pathname === item.path ? styles.active : ''}`}>
                             <Link
                                 to={item.enabled ? item.path : '#'}
                                 className={`${styles.menuLink} ${!item.enabled ? styles.disabled : ''}`}
-                                onClick={(e) => !item.enabled && e.preventDefault()}
+                                onClick={(e) => {
+                                    if (!item.enabled) {
+                                        e.preventDefault();
+                                    } else if (item.label === 'Rules') {
+                                        e.preventDefault();
+                                        navigate(`/admin/property/${id}/rules`);
+                                    }
+                                }}
                             >
                                 <span className={styles.icon}>{item.icon}</span>
                                 <span className={styles.label}>{item.label}</span>
@@ -103,3 +109,7 @@ const PropertySidePanel: React.FC<PropertySidePanelProps> = ({ isOpen }) => {
 };
 
 export default PropertySidePanel;
+
+
+
+

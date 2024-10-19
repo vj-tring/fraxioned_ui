@@ -132,7 +132,7 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
 
         {isOwner && selectedTab === 2 && <UserBookings userId={userId} />}
 
-        {selectedTab === 3 && <DocumentManagerCard />}
+        {isOwner && selectedTab === 3 && <DocumentManagerCard userId={userId} />}
       </div>
     </div>
   );
