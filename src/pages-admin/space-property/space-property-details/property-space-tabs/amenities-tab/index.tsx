@@ -1,14 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Loader2,
-  AlertTriangle,
-  Plus,
-  ChevronUp,
-  ChevronDown,
-  X,
-  Save,
-} from "lucide-react";
+import { Loader2, AlertTriangle, Plus, X, Save } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Alert, AlertDescription, AlertTitle } from "@/src/components/ui/alert";
 import {
@@ -56,123 +48,174 @@ const AmenitiesTab: React.FC<AmenitiesTabProps> = ({
   openCategories,
   toggleCategory,
 }) => {
-  return (
-    <TabsContent value="amenities" className="space-y-4">
-      {amenitiesStatus === "loading" || propertyAmenitiesLoading ? (
-        <div className="flex justify-center items-center h-[300px]">
-          <Loader2 className="h-8 w-8 animate-spin" />
+
+  const [choosenCategory, SetChoosenCategory] = useState<string>('All')
+
+  const renderAmenities = () => {
+    if (choosenCategory === "All") {
+      return Object.entries(propertyAmenityGroups).map(([category, amenities]) => (
+        <div key={category} className="flex flex-wrap py-1">
+          {/* <h3 className="text-sm font-semibold mb-2">{category}</h3> */}
+          <div className="flex gap-1 flex-wrap">
+            {amenities.map((amenity) => (
+              <Badge
+                key={amenity.amenity.id}
+                variant="default"
+                className="text-xs py-1 px-2 flex items-center justify-between rounded bg-[#f29011] hover:bg-[#E28F00]"
+              >
+                <span className="text-md">{amenity.amenity.amenityName}</span>
+                <X
+                  className="h-3 w-3 ml-2 cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemoveAmenity(amenity.amenity.id);
+                  }}
+                />
+              </Badge>
+            ))}
+          </div>
         </div>
-      ) : amenitiesStatus === "failed" || propertyAmenitiesError ? (
-        <Alert variant="destructive">
-          <AlertTriangle className="h-4 w-4" />
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>
-            {amenitiesError ||
-              propertyAmenitiesError ||
-              "Failed to load amenities. Please try again later."}
-          </AlertDescription>
-        </Alert>
-      ) : (
-        <>
-          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-            <Select
-              value={selectedCategory}
-              onValueChange={setSelectedCategory}
-            >
-              <SelectTrigger className="w-full sm:w-[180px]">
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.keys(amenityGroups).map((groupName) => (
-                  <SelectItem key={groupName} value={groupName}>
-                    {groupName}
-                  </SelectItem>
+      ));
+    } else {
+      return Object.entries(propertyAmenityGroups).map(
+        ([category, amenities]) =>
+          openCategories[category] && (
+            <div key={category} className="space-y-2">
+              <div className="flex gap-1 flex-wrap">
+                {amenities.map((amenity) => (
+                  <Badge
+                    key={amenity.amenity.id}
+                    variant="default"
+                    className="text-xs py-1 px-2 flex items-center justify-between rounded bg-[#f29011] hover:bg-[#E28F00]"
+                  >
+                    <span className="text-md">{amenity.amenity.amenityName}</span>
+                    <X
+                      className="h-3 w-3 ml-2 cursor-pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveAmenity(amenity.amenity.id);
+                      }}
+                    />
+                  </Badge>
                 ))}
-              </SelectContent>
-            </Select>
-            <Select
-              value={selectedAmenity}
-              onValueChange={setSelectedAmenity}
-              disabled={!selectedCategory}
-            >
-              <SelectTrigger className="w-full sm:w-[180px]">
-                <SelectValue placeholder="Amenity" />
-              </SelectTrigger>
-              <SelectContent>
-                {selectedCategory &&
-                  amenityGroups[selectedCategory].map((amenity) => (
-                    <SelectItem key={amenity.id} value={amenity.id.toString()}>
-                      {amenity.amenityName}
+              </div>
+            </div>
+          )
+      );
+    }
+  };
+
+  return (
+    <TabsContent value="amenities" className="space-y-4 h-100 rounded-md border">
+      <div className="h-full flex flex-col">
+        {amenitiesStatus === "loading" || propertyAmenitiesLoading ? (
+          <div className="flex justify-center items-center h-[300px]">
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </div>
+        ) : amenitiesStatus === "failed" || propertyAmenitiesError ? (
+          <Alert variant="destructive">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>
+              {amenitiesError || propertyAmenitiesError || "Failed to load amenities. Please try again later."}
+            </AlertDescription>
+          </Alert>
+        ) : (
+          <>
+            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 p-2">
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger className="w-full sm:w-[180px]">
+                  <SelectValue placeholder="Category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.keys(amenityGroups).map((groupName) => (
+                    <SelectItem key={groupName} value={groupName}>
+                      {groupName}
                     </SelectItem>
                   ))}
-              </SelectContent>
-            </Select>
-            <Button
-              onClick={handleAddAmenity}
-              disabled={!selectedAmenity}
-              className="w-full sm:w-auto"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Add
-            </Button>
-          </div>
-          <ScrollArea className="h-[300px] w-full rounded-md border p-4 mt-2">
-            <div className="space-y-4">
-              {Object.entries(propertyAmenityGroups).map(
-                ([category, amenities]) => (
-                  <div key={category} className="space-y-2">
-                    <div
-                      className="flex items-center justify-between cursor-pointer"
-                      onClick={() => toggleCategory(category)}
-                    >
-                      <h3 className="text-lg font-semibold">{category}</h3>
-                      {openCategories[category] ? (
-                        <ChevronUp className="h-4 w-4" />
-                      ) : (
-                        <ChevronDown className="h-4 w-4" />
-                      )}
-                    </div>
-                    {openCategories[category] && (
-                      <div className="grid grid-cols-2 gap-2">
-                        {amenities.map((amenity) => (
-                          <Badge
-                            key={amenity.amenity.id}
-                            variant="default"
-                            className="text-sm py-1 px-2 flex items-center justify-between"
-                          >
-                            <span>{amenity.amenity.amenityName}</span>
-                            <X
-                              className="h-3 w-3 ml-2 cursor-pointer"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleRemoveAmenity(amenity.amenity.id);
-                              }}
-                            />
-                          </Badge>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )
-              )}
+                </SelectContent>
+              </Select>
+
+              <Select
+                value={selectedAmenity}
+                onValueChange={setSelectedAmenity}
+                disabled={!selectedCategory}
+              >
+                <SelectTrigger className="w-full sm:w-[180px]">
+                  <SelectValue placeholder="Amenity" />
+                </SelectTrigger>
+                <SelectContent>
+                  {selectedCategory &&
+                    amenityGroups[selectedCategory]?.map((amenity) => (
+                      <SelectItem key={amenity.id} value={amenity.id.toString()}>
+                        {amenity.amenityName}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+
+              <Button
+                onClick={handleAddAmenity}
+                disabled={!selectedAmenity}
+                className="w-full sm:w-auto"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add
+              </Button>
             </div>
-          </ScrollArea>
-          <div className="flex justify-center mt-4">
-            <Button
-              onClick={saveAmenityChanges}
-              disabled={propertyAmenitiesLoading}
-              className="w-1/2 border-solid border-2 border-[#c7eaee] text-center bg-[#4b7a7f] text-[#fff] rounded"
-            >
-              {propertyAmenitiesLoading ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                <Save className="mr-2 h-4 w-4" />
-              )}
-              Save Amenities Changes
-            </Button>
-          </div>
-        </>
-      )}
+
+            <ScrollArea className="h-[400px] w-full py-2 px-3">
+              <div className="flex flex-column h-full gap-6">
+                <div className="flex text-xs flex-wrap gap-2">
+                  <div
+                    className={`cursor-pointer p-2 border rounded text-xs ${choosenCategory === "All" ? "bg-gray-100 font-semibold" : ""
+                      }`}
+                    onClick={() => {
+                      SetChoosenCategory("All");
+                      toggleCategory("All");
+                    }}
+                  >
+                    <h3 className="text-xs">All</h3>
+                  </div>
+
+                  {Object.keys(propertyAmenityGroups).map((category) => (
+                    <div
+                      key={category}
+                      className={`cursor-pointer p-2 border rounded text-xs ${openCategories[category] ? "bg-gray-100 font-semibold" : ""
+                        }`}
+                      onClick={() => {
+                        SetChoosenCategory('category');
+                        toggleCategory(category)
+                      }}
+                    >
+                      <h3 className="text-xs">{category}</h3>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="px-1 m-0">
+                  {renderAmenities()}
+                </div>
+              </div>
+            </ScrollArea>
+
+            <div className="flex justify-center mt-2 py-2">
+              <Button
+                onClick={saveAmenityChanges}
+                disabled={propertyAmenitiesLoading}
+                className="w-1/2 border-2 border-[#c7eaee] bg-[#4b7a7f] text-white rounded"
+              >
+                {propertyAmenitiesLoading ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Save className="mr-2 h-4 w-4" />
+                )}
+                Save Amenities Changes
+              </Button>
+            </div>
+          </>
+        )}
+      </div>
     </TabsContent>
   );
 };

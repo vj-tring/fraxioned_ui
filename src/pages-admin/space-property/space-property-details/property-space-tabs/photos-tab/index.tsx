@@ -32,9 +32,9 @@ const PhotosTab: React.FC<PhotosTabProps> = ({
   uploadError,
 }) => {
   return (
-    <TabsContent value="photos" className="space-y-4 h-100 rounded-md border">
-      <div className="h-full flex flex-column justify-between gap-3">
-        <ScrollArea className="h-100 w-full p-4 overflow-scroll">
+    <TabsContent value="photos" className="space-y-4 h-full rounded-md border">
+      <div className="h-full flex flex-column">
+        <ScrollArea className="h-100 w-full py-2 px-3">
           {spaceImageLoading ? (
             <div className="flex justify-center items-center h-full">
               <Loader2 className="h-8 w-8 animate-spin" />
@@ -115,7 +115,7 @@ const PhotosTab: React.FC<PhotosTabProps> = ({
             <AlertDescription>{uploadError}</AlertDescription>
           </Alert>
         )}
-        <div className="flex justify-center mt-0">
+        <div className="flex justify-center mt-0 py-1">
           <Button
             onClick={handleUploadImages}
             disabled={
