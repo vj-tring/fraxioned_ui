@@ -1,12 +1,9 @@
-
 .admin-dashboard-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
   background-color: #f8f6f6;
   font-family: "Roboto", sans-serif !important;
-
-  
+  height: 100%;
 }
 
 .dashboard-content {
@@ -23,10 +20,7 @@
 
 .property-info-content {
   flex-grow: 1;
-  padding-top: 14px;
-  padding-left: 20px;
-  padding-bottom: 20px;
-  overflow-y: auto;
+  padding: .9rem;
 }
 
 .content {
