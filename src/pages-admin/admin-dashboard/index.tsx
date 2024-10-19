@@ -22,13 +22,15 @@ import BookingsPage from '../bookings-page';
 import fraxionedLogo from '../../assets/images/fraxioned.png'
 import userImage from '../../assets/images/profile.jpeg'
 import './admin-dashboard.css'
-import { PropertyDocuments } from '../property-documents';
 import ReportsGrid from '../grid/reports-grid';
+import PropertyDocuments from '../property-documents';
+import DocumentGrid from '../grid/document-grid';
 import SpaceProperty from '../space-property';
 import SpacePropertyDetails from '../space-property/space-property-details';
 import PropertyCode from '../property-codes';
 import Spaces from '../spaces';
 import "./admin-dashboard.css";
+import Faq from '../faq';
 
 const AdminDashboard: React.FC = () => {
     const navigate = useNavigate();
@@ -61,8 +63,10 @@ const AdminDashboard: React.FC = () => {
                         <Route path="/user/:id/edit" element={<TabSwitch onUserUpdated={handleUserUpdated} />} />
                         <Route path="/holidays" element={<Holidays isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/user" element={<UserGrid isSidebarOpen={isSidebarOpen} />} />
+                        <Route path="/documents" element={<DocumentGrid isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/reports" element={<ReportsGrid isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/spaces" element={<Spaces isSidebarOpen={isSidebarOpen} />} />
+                        <Route path='/Faq' element={<Faq isSidebarOpen={isSidebarOpen}/>} />
 
                         <Route path="/property" element={<Property isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/property/:id" element={
