@@ -5,24 +5,23 @@
   font-family: "Roboto", sans-serif !important;
   height: 100%;
 }
-
 .dashboard-content {
   display: flex;
   flex: 1;
   position: relative;
 }
-
 .property-details-container {
   display: flex;
   position: relative;
   flex: 1;
 }
-
 .property-info-content {
   flex-grow: 1;
-  padding: .9rem;
+  padding-top: 14px;
+  padding-left: 20px;
+  padding-bottom: 10px;
+  overflow-y: auto;
 }
-
 .content {
   flex: 1;
   padding: 0;
@@ -30,17 +29,14 @@
   background-color: transparent;
   transition: margin-left 0.3s ease, width 0.3s ease;
 }
-
 .content.sidebar-open {
   margin-left: 212px;
   width: calc(100% - 220px);
 }
-
 .content.sidebar-closed {
   margin-left: 60px;
   width: calc(100% - 60px);
 }
-
 .custom-navbar {
   background-color: #ebad5c;
   position: fixed;
@@ -48,15 +44,12 @@
   width: 100%;
   z-index: 1000;
 }
-
 .custom-navbar .user-image {
   border: 2px solid #c7eaee;
 }
-
 .content.property-panel-open {
   margin-right: 220px;
 }
-
 .divider {
   position: absolute;
   top: 60px;
@@ -66,7 +59,6 @@
   background-color: #e0e0e0;
   z-index: 1;
 }
-
 .side-panel {
   position: fixed;
   left: 0;
@@ -76,24 +68,19 @@
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   transition: width 0.3s ease;
 }
-
 @media (max-width: 768px) {
   .sidePanel.open {
     width: 200px;
   }
-
   .sidePanel.closed {
     width: 60px;
   }
-
   .content.property-panel-open {
     margin-right: 200px;
   }
-
   .label {
     font-size: 14px;
   }
-
   .admin-dashboard-container {
     flex: 100%;
   }
