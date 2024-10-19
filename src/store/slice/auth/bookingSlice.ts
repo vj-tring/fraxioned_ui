@@ -178,7 +178,7 @@ export const confirmBooking = createAsyncThunk<
       // Make the API call with the filtered data
       const response = await createBooking(filteredBookingData);
 
-      if (response.data.statusCode === 201) {
+      if (response.data.status_code === 201) {
         return { message: response.data.message, data: response.data };
       } else {
         return rejectWithValue(

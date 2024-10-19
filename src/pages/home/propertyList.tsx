@@ -106,7 +106,7 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
   };
 
   return (
-    <div className={` Container1 ${properties.length > 5 ? "" : "flex"}`}>
+    <div className={` Container1 ${properties.length > 3 ? "" : "flex"}`}>
       <div>
         <div
           className="d-flex flex-row Container4"

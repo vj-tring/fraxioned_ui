@@ -18,14 +18,17 @@
   display: inline-block;
 }
 .bar-btn {
-  border-radius: 50px;
-  width: 30%;
+  /* border-radius: 50px; */
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+
+  width: 25%;
   display: flex;
   float: right;
   height: 50px;
-  justify-content: space-between;
+  justify-content: space-around;
   padding-right: 10px;
-  box-shadow: rgba(4, 66, 77, 0.24) 0px 3px 8px;
+  box-shadow: rgba(155, 155, 155, 0.24) 0px 3px 8px;
 }
 .Track-btn {
   background-color: #88cdd4;
@@ -261,4 +264,26 @@ tr > td {
     height: 270px;
     border-radius: 10px;
   }
+}
+
+.p-dropdown-items-wrapper{
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  margin-top: 15px;
+
+}
+
+.DropdownLabel{
+  width: 125px;
+  margin-left: 12px;
+  font-size: small;
+}
+.DropdownLabel1{
+  width: 50px;
+  /* margin-left: 12px; */
+  margin-right: 10px;
+  font-size: small;
+  /* font-family: 'Times New Roman', Times, serif !important; */
+}
+.p-dropdown-item:hover{
+  background-color: rgb(241, 241, 241) !important;
 }
