@@ -5,9 +5,11 @@ import MenuItem from "@mui/material/MenuItem";
 import "./available-night.css";
 import userImage from "../../assets/images/profile.jpeg";
 import { RootState } from "../../store/reducers";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Card } from "@/store/slice/auth/property-slice";
+import { fetchAllImages, fetchImagesByPropertySpaceId } from "@/store/slice/spaceImagesSlice";
+import { AppDispatch } from "@/store";
 
 export default function AvailableNights() {
   const currentDate = new Date();
@@ -17,8 +19,16 @@ export default function AvailableNights() {
   const [selectedYear, setSelectedYear] = useState<number>(currentYear);
   const { id } = useParams<{ id: string }>();
 
-  // const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>();
   const { cards } = useSelector((state: RootState) => state.properties);
+  // const { image: any } = useSelector(
+  //   (state: RootState) => state.spaceImage.images
+  // );
+
+  // useEffect(() => {
+  //   dispatch(fetchAllImages());
+  // }, [dispatch]);
+
   // const years = Object.keys(selectedCard?.details as { [year: number]: propertyAvailableDaysDetails }).map(Number);
   // const user = useSelector((state: RootState) => state.auth.user);
   const [selectedCardIndex, setSelectedCardIndex] = useState<number>(0);
