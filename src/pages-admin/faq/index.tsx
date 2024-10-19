@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  IconButton,
   Tooltip,
   Typography,
   CircularProgress,
@@ -9,8 +8,7 @@ import {
   ListItem,
   ListItemText,
 } from "@mui/material";
-import { Edit2, Trash2, Plus, RefreshCw } from "lucide-react";
-import { getCategories } from "@/api";
+import { Edit2, Trash2, Plus } from "lucide-react";
 import ConfirmationModal from "@/components/confirmation-modal";
 import NewQuestionForm from "../faq-add/faq-new";
 import CustomizedSnackbars from "@/components/customized-snackbar";
@@ -40,12 +38,10 @@ interface FaqQuestion {
 }
 
 const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
-
   const questions = useSelector((state: RootState) => state.faqPage.faqs);
   const categories = useSelector((state: RootState) => state.addCategory.data);
   const [selectedCategory, setSelectedCategory] = useState<number | null>(1);
   const [loadingQuestions, setLoadingQuestions] = useState<boolean>(false);
-  // const [loadingCategories, setLoadingCategories] = useState<boolean>(true);
   const [snackbar, setSnackbar] = useState<{
     open: boolean;
     message: string;
@@ -129,7 +125,6 @@ const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     setQuestionToEdit(null);
   };
 
-
   const handleSnackbarClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -139,6 +134,23 @@ const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     }
     setSnackbar({ ...snackbar, open: false });
   };
+
+  const handleEditCategory = (category: FaqCategory) => {
+    setCategoryToEdit(category);
+    setShowEditCategoryForm(true);
+  };
+  
+  const handleDeleteCategory = async (category: FaqCategory) => {
+    if (window.confirm(`Are you sure you want to delete the category "${category.name}"?`)) {
+      await dispatch(deleteCategoryAsync(category.id));
+      setSnackbar({
+        open: true,
+        message: "Category deleted successfully",
+        severity: "success",
+      });
+    }
+  };
+  
 
   return (
     <div className={styles.container}>
@@ -153,15 +165,6 @@ const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
               <Plus size={20} />
               <span className={styles.buttonText}>New FAQ</span>
             </button>
-          </Tooltip>
-          <Tooltip title="Refresh" arrow>
-            <IconButton
-              onClick={() => window.location.reload()}
-              className={styles.refreshIcon}
-              aria-label="refresh"
-            >
-              <RefreshCw size={20} />
-            </IconButton>
           </Tooltip>
         </div>
       </div>
@@ -192,8 +195,7 @@ const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
 
       <div className={styles.content}>
         <Grid container spacing={4}>
-          {/* Categories Section */}
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={3}>
             {!categories ? (
               <CircularProgress />
             ) : (
@@ -205,8 +207,27 @@ const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                       button
                       selected={category.id === selectedCategory}
                       onClick={() => setSelectedCategory(category.id)}
+                      className={styles.categoryItem}
                     >
                       <ListItemText primary={category.categoryName} />
+                      <div className={styles.iconContainer}>
+                        <Tooltip title="Edit Category" arrow>
+                          <button
+                            className={styles.editIcon}
+                            onClick={() => handleEditCategory(category)}
+                          >
+                            <Edit2 size={16} />
+                          </button>
+                        </Tooltip>
+                        <Tooltip title="Delete Category" arrow>
+                          <button
+                            className={styles.deleteIcon}
+                            onClick={() => handleDeleteCategory(category)}
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </Tooltip>
+                      </div>
                     </ListItem>
                   ))
                 ) : (
@@ -224,45 +245,57 @@ const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
               <CircularProgress />
             ) : (
               <>
-                {questions && questions.length > 0
+                {questions !== undefined && questions.length > 0
                   ? questions
-                    .filter(
-                      (ques) =>
-                        ques.category && ques.category.id === selectedCategory
-                    )
-                    .map((question) => (
-                      <div key={question.id} className={styles.faqItem}>
-                        <Typography fontSize="h8" fontWeight={600}>
-                          {question.question}
-                        </Typography>
-                        <Typography variant="body2">
-                          {question.answer}
-                        </Typography>
-                        <div className={styles.actionButtons}>
-                          <Tooltip title="Edit" arrow>
-                            <button
-                              onClick={() => handleEditClick(question)}
-                              className={styles.editButton}
-                            >
-                              <Edit2 size={16} />
-                            </button>
-                          </Tooltip>
-                          <Tooltip title="Delete" arrow>
-                            <button
-                              onClick={() => handleDeleteClick(question)}
-                              className={styles.deleteButton}
-                            >
-                              <Trash2 size={16} />
-                            </button>
-                          </Tooltip>
-                        </div>
-                      </div>
-                    ))
+                      .filter(
+                        (ques) =>
+                          ques.category && ques.category.id === selectedCategory
+                      )
+                      .map((question) => (
+                        <Grid
+                          item
+                          key={question.id}
+                          xs={12}
+                          className={`${styles.faqItem} ${
+                            question.isNew ? styles.newQuestion : ""
+                          }`}
+                        >
+                          <Typography
+                            fontSize="h8"
+                            fontWeight={600}
+                            marginTop={"6px"}
+                            marginBottom={"5px"}
+                          >
+                            {question.question}
+                          </Typography>
+                          <Typography variant="body2" marginLeft={"15px"}>
+                            {question.answer}
+                          </Typography>
+                          <div className={styles.actionButtons}>
+                            <Tooltip title="Edit" arrow>
+                              <button
+                                onClick={() => handleEditClick(question)}
+                                className={styles.editButton}
+                              >
+                                <Edit2 size={16} />
+                              </button>
+                            </Tooltip>
+                            <Tooltip title="Delete" arrow>
+                              <button
+                                onClick={() => handleDeleteClick(question)}
+                                className={styles.deleteButton}
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            </Tooltip>
+                          </div>
+                        </Grid>
+                      ))
                   : selectedCategory && (
-                    <Typography variant="body1">
-                      No questions found for this category.
-                    </Typography>
-                  )}
+                      <Typography variant="body1">
+                        No questions found for this category.
+                      </Typography>
+                    )}
               </>
             )}
           </Grid>
@@ -292,3 +325,15 @@ const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
 };
 
 export default FAQPage;
+function setCategoryToEdit(category: FaqCategory) {
+  throw new Error("Function not implemented.");
+}
+
+function setShowEditCategoryForm(arg0: boolean) {
+  throw new Error("Function not implemented.");
+}
+
+function deleteCategoryAsync(id: number): any {
+  throw new Error("Function not implemented.");
+}
+
