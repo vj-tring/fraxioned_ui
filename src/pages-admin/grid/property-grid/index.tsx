@@ -8,11 +8,12 @@ import styles from "./property.module.css";
 import NewPropertyForm from "./NewPropertyForm";
 import ConfirmationModal from "@/components/confirmation-modal";
 import { useNavigate } from "react-router-dom";
-import { fetchProperties, PropertiesState } from "@/store/slice/auth/propertiesSlice";
+import {
+  fetchProperties,
+  PropertiesState,
+} from "@/store/slice/auth/propertiesSlice";
 import { RootState } from "@/store/reducers";
 import { AppDispatch } from "@/store";
-
-
 
 interface Property {
   id: number;
@@ -84,49 +85,49 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
     {
       field: "propertyName",
       headerName: "Property Name",
-      minWidth: 250,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "address",
       headerName: "Address",
-      minWidth: 250,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "city",
       headerName: "City",
-      width: 180,
+      flex:1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "state",
       headerName: "State",
-      width: 170,
+      flex:1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "country",
       headerName: "Country",
-      width: 170,
+      flex:1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "propertyShare",
       headerName: "Property Share",
-      width: 170,
+      flex:1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "actions",
       headerName: "Actions",
-      width: 150,
+      flex:1,
       align: "center",
       headerAlign: "center",
       renderCell: (params) => (
@@ -215,7 +216,6 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
               // position: "sticky",
               // right: 0,
               // paddingLeft:"50px"
-
             },
           }}
           getRowClassName={(params) => {

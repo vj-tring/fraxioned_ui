@@ -26,13 +26,13 @@ import rolesReducer from '../slice/roles';
 import addQuestionReducer from '../slice/auth/addfaqSlice';
 import faqPageReducer from '../slice/auth/faqpageSlice';
 import addCategoryReducer from '../slice/auth/addcategorySlice';
-import propertycodecatogoryReducer from '../slice/property-document';
-import propertyCodesReducer from '../slice/property-document';
-import propertydetailReducer from '../slice/property-document';
 import bedReducer from '../slice/amenity';
+import propertydetailReducer from '../slice/auth/property-detail'
 import bathroomReducer from '../slice/amenity';
 import amenityReducer from '../slice/amenity';
 import userDocumentsReducer from '../slice/user-document';
+import { propertycodecatogoryReducer } from '../slice/auth/propertycodeCatogorySlice';
+import { propertyCodesReducer } from '../slice/auth/propertycodeSlice';
 
 const appReducer = combineReducers({
   auth: authReducer,

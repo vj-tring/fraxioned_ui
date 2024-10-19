@@ -145,42 +145,42 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     {
       field: "id",
       headerName: "Id",
-      minWidth: 110,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "firstName",
       headerName: "First Name",
-      minWidth: 150,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "lastName",
       headerName: "Last Name",
-      minWidth: 130,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "roleName",
       headerName: "Role",
-      minWidth: 150,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "lastLoginTime",
       headerName: "Last Login",
-      minWidth: 250,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "contactDetails",
       headerName: "Contact Details",
-      width: 120,
+      flex: 1,
       align: "center",
       headerAlign: "center",
       renderCell: (params) => {
@@ -202,7 +202,7 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     {
       field: "properties",
       headerName: "Properties",
-      width: 250,
+      flex:1,
       align: "center",
       headerAlign: "center",
       renderCell: (params) => {
@@ -232,7 +232,7 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     {
       field: "actions",
       headerName: "Actions",
-      width: 180,
+      flex:1,
       align: "center",
       headerAlign: "center",
       renderCell: (params) => (

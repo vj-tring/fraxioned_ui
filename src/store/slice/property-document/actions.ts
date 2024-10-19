@@ -14,6 +14,9 @@ export interface PropertyDocument {
 }
 
 export interface PropertyDocumentState {
+  data: any;
+  status: any;
+  propertyCodes: any;
   documents: {
     success: boolean;
     message: string;
