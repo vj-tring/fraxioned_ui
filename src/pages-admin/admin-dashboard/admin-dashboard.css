@@ -1,9 +1,9 @@
 .admin-dashboard-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
   background-color: #f8f6f6;
   font-family: "Roboto", sans-serif !important;
+  height: 100%;
 }
 
 .dashboard-content {
