@@ -122,7 +122,7 @@ const PropertyAmenities: React.FC = () => {
     const selectedCount = amenities[group].filter(amenity =>
       selectedAmenities.includes(amenity.id)
     ).length;
-    return `Total: ${selectedCount}/${totalCount}`;
+    return `Selected: ${selectedCount}/${totalCount}`;
   };
 
   const handleUpdate = async () => {
