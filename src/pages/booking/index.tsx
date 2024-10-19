@@ -31,7 +31,7 @@ import CustomizedSnackbars from "@/components/customized-snackbar";
 
 const Booking = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(1);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -82,10 +82,10 @@ const Booking = () => {
 
   const details = (Array.isArray(userBookings) ? userBookings : [])
     .filter((booking: BookingData) => {
-      if (activeTab === 0)
+      if (activeTab === 1)
         return !booking.isCancelled && booking.isCompleted !== 1;
-      if (activeTab === 1) return booking.isCompleted === 1;
-      if (activeTab === 2) return booking.isCancelled;
+      if (activeTab === 2) return booking.isCompleted === 1;
+      if (activeTab === 3) return booking.isCancelled;
       return true;
     })
     .map((booking: BookingData) => {
@@ -185,15 +185,19 @@ const Booking = () => {
   return (
     <>
       <Box sx={{ width: "90%", margin: "auto" }}>
+        {/* <div className="bookImg">
+          <span>My Bookings</span>{" "}
+        </div> */}
         <Typography
           variant="h4"
-          className="my-Book mt-4 monsterrat mb-3"
+          className="my-Book mt-5 monsterrat mb-3"
           gutterBottom
         >
           My Bookings
         </Typography>
         <div className="d-flex justify-between BookHeader">
           <Tabs
+            // disableRipple
             value={activeTab}
             onChange={handleTabChange}
             className="monsterrat "
@@ -202,10 +206,11 @@ const Booking = () => {
               "& .MuiTab-root.Mui-selected": { color: "black !important" },
             }}
           >
+            <Tab disableRipple label="All" className="monsterrat All" />
+
             <Tab disableRipple label="Upcoming" className="monsterrat Up" />
             <Tab disableRipple label="Completed" className="monsterrat Com" />
             <Tab disableRipple label="Cancelled" className="monsterrat Can" />
-            <Tab disableRipple label="All" className="monsterrat All" />
           </Tabs>
           <div>
             <Button
@@ -231,7 +236,7 @@ const Booking = () => {
           activeTab={activeTab}
         />
 
-        <div className="TrackingMyNight mt-4 ">
+        <div className="TrackingMyNight mt-5 ">
           <TrackingMyNigts />
         </div>
 

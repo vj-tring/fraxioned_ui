@@ -92,7 +92,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
     {
       field: "bookingId",
       headerName: "BookingID",
-      width: 150,
+      flex:1,
       headerAlign: "center",
       align: "center",
     },
@@ -100,7 +100,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
     {
       field: "property",
       headerName: "Property",
-      width: 160,
+      flex:1,
       headerAlign: "center",
       align: "center",
     },
@@ -109,45 +109,45 @@ const BookingGrid: React.FC<BookingGridProps> = ({
       headerName: "Check-in",
       headerAlign: "center",
       align: "center",
-      width: 180,
+      flex:1,
     },
     {
       field: "checkoutDate",
       headerName: "Checkout",
       headerAlign: "center",
       align: "center",
-      width: 180,
+      flex:1,
     },
     {
       field: "guest",
       headerName: "Guests",
-      width: 230,
+      flex:1,
       headerAlign: "center",
       align: "center",
     },
     {
       field: "createdAt",
       headerName: "Booked",
-      width: 200,
+      flex:1,
       headerAlign: "center",
       align: "center",
     },
     {
       field: "totalNights",
       headerName: "TotalNights",
-      width: 150,
+      flex:1,
       headerAlign: "center",
       align: "center",
     },
   ];
 
-  if (activeTab === 0) {
+  if (activeTab === 1) {
     columns.push({
       field: "actions",
       headerName: "Actions",
       // headerAlign: "center",
       // align: "center",
-      width: 130,
+      flex:1,
       renderCell: (params) => (
         <div>
           <IconButton
@@ -225,7 +225,6 @@ const BookingGrid: React.FC<BookingGridProps> = ({
             color: "white",
             fontSize: "small",
             textTransform: "uppercase",
-
             fontFamily: " 'Roboto', sans-serif !important",
           },
           "& .MuiDataGrid-cell": {
