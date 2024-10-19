@@ -8,13 +8,13 @@
   overflow: hidden;
 }
 
-
 .updateButton {
   background-color: #e28f25;
   color: white;
   border: none;
   padding: 8px 16px;
   border-radius: 4px;
+  margin-right: 14px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -108,11 +108,39 @@
   background-color: #e9ecef;
 }
 
+.groupTitleContainer {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
 .groupTitle {
   font-size: 13px;
   font-weight: 600;
   color: #495057;
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.groupHeaderRight {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.amenityCount {
+  font-size: 12px;
+  color: #6c757d;
+  background-color: #e9ecef;
+  margin-right: 12px;
+  padding: 4px 8px;
+  border-radius: 15px;
+  min-width: 80px;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .amenityList {
