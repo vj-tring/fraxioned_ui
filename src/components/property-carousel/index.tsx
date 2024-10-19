@@ -42,19 +42,6 @@ export default function BasicSelect() {
   );
   const user = useSelector((state: RootState) => state.auth.user);
 
-  // useEffect(() => {
-  //   const fetchPropertyImages = async () => {
-  //     try {
-  //       const response = await propertyImageapi();
-  //       setImageDetails(response.data.data);
-  //     } catch (error) {
-  //       console.error("Error fetching property images:", error);
-  //     }
-  //   };
-
-  //   fetchPropertyImages();
-  // }, []);
-
   useEffect(() => {
     if (user) {
       dispatch(fetchProperties(user.id));
@@ -142,13 +129,13 @@ export default function BasicSelect() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [open]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  // if (loading) return <p>Loading...</p>;
+  // if (error) return <p>Error: {error}</p>;
 
   const showCarousel = cards.length > 0;
   const showCarouselControls = cards.length > 1;
   const cardItemWidth =
-    cards.length === 1 ? "520px" : cards.length === 2 ? "380px" : "520px";
+    cards.length === 1 ? "520px" : cards.length === 2 ? "380px" : "540px";
   const buttonSize = {
     width:
       cards.length === 1 ? "3.7rem" : cards.length === 2 ? "3.7rem" : "5rem",
@@ -290,7 +277,6 @@ export default function BasicSelect() {
                           sx={{
                             flex: "0 0 auto",
                             margin: "2px",
-                            // padding: "5px",
                             display: "flex",
                             justifyContent: "center",
                           }}

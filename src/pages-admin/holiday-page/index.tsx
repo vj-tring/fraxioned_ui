@@ -21,8 +21,7 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ConfirmationModal from "@/components/confirmation-modal";
-import {Holiday} from './holiday.types';
-
+import { Holiday } from "./holiday.types";
 
 const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
   const [holidays, setHolidays] = useState<Holiday[]>([]);
@@ -152,36 +151,36 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     {
       field: "name",
       headerName: "Name",
-      minWidth: 300,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "year",
       headerName: "Year",
-      width: 200,
+      flex:1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "start_date",
       headerName: "Start Date",
-      width: 300,
+      flex:1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "end_date",
       headerName: "End Date",
-      width: 300,
+      flex:1,
       align: "center",
       headerAlign: "center",
     },
-    
+
     {
       field: "actions",
       headerName: "Actions",
-      width: 250,
+      flex:1,
       align: "center",
       headerAlign: "center",
       renderCell: (params) => (
@@ -193,7 +192,6 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
           >
             <EditIcon
               sx={{
-              
                 color: "#709C7E",
               }}
             />
@@ -268,7 +266,6 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
               fontSize: "small",
               fontFamily: " 'Roboto', sans-serif !important ",
             },
-          
           }}
           getRowClassName={(params) => {
             if (params.indexRelativeToCurrentPage % 2 === 0) {

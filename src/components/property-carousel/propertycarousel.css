@@ -492,14 +492,13 @@
   width: 10rem !important;
   border-radius: 13px !important;
   text-transform: capitalize !important;
-  /* border: 1px solid #7c7875 !important; */
   color: #1a1a19 !important;
-  margin-left: 0;
   background-color: rgba(255, 255, 255, 0.9);
   cursor: pointer;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px,
     rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
 }
+
 .property-names {
   font-size: 0.8rem !important;
 }

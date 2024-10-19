@@ -11,7 +11,8 @@ import bookingReducer from '../slice/auth/bookingSlice';
 import datePickerReducer from '../slice/datepicker';
 import propertyDocumentsReducer from "../slice/property-document";
 import spaceReducer from '../slice/space';
-import spacePropertyReducer from '../slice/space';
+import spacePropertyReducer from '../slice/space/property';
+import spaceImageReducer from '../slice/space/images'
 import ThingsToKnowReducer from '../slice/auth/ThingstoknowSlice';
 import propertiesReducer from '../slice/auth/propertiesSlice';
 import holidayReducer from '../slice/auth/holidaySlice';
@@ -52,7 +53,7 @@ const appReducer = combineReducers({
   amenityGroups: amenityGroupsReducer,
   propertyAmenities: propertyAmenitiesReducer,
   amenities: amenitiesReducer,
-  spaceImage: spaceReducer,
+  spaceImage: spaceImageReducer,
   spaces: spaceReducer,
   spaceProperties: spacePropertyReducer,
   userDetails: userDetailsReducer,
