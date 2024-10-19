@@ -20,7 +20,7 @@
   color: #5ba3aa !important;
 }
 
-/* .row-active {
+.row-active {
   background-color: rgb(255, 255, 255) !important;
 }
 .row-completed {
@@ -29,14 +29,9 @@
 .row-cancelled {
   background-color:    #ededed !important;
 
-} */
+}
 
-.evenRow {
-  background-color: rgb(255, 255, 255);
-}
-.oddRow {
-  background-color: #ebecec;
-}
+
 
 
 @media (max-width: 768px) {
