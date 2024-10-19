@@ -420,22 +420,24 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
                 onChange={(e) => setSelectedOption(e.target.value)}
                 displayEmpty
                 inputProps={{ "aria-label": "Without label" }}
+                
                 sx={{
+                  
+                    marginBottom:'10px',
+
+                 
+                  
 
                   '& .MuiInputBase-input': {
                     fontSize: '14px',
-                    height: '10px',
-                    padding: '8px',
-                    marginBottom: '0px'
+                    height: '5px',
+                    width:'50px',
+                    padding: '5px',
 
 
                   },
-                  '& .MuiInputLabel-root': {
-                    transform: 'translate(14px, 9px) scale(1)',
-                    position: 'absolute',
-                    top: '-5px'
-
-                  },
+                  
+                  
                   '& .MuiInputLabel-shrink': {
                     transform: 'translate(14px, -6px) scale(0.75)',
                   },

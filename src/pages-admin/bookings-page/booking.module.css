@@ -27,7 +27,7 @@
   background-color: #ebecec !important;
 }
 .row-cancelled {
-  background-color:    #cccece !important;
+  background-color:    #ededed !important;
 
 }
 
@@ -214,7 +214,6 @@
 
 .selectContainer {
   margin-left: 20px !important; 
-  width: 100px;
 }
 
 
