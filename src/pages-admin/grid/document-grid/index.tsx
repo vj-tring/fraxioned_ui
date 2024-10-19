@@ -2,17 +2,16 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Button } from "@/components/ui/button";
 import { FileIcon, UploadIcon, Eye, Trash2, Download } from "lucide-react";
 import { useDropzone } from "react-dropzone";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
-import { Input } from '../../components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
-import { ScrollArea } from '../../components/ui/scroll-area';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useDispatch, useAppSelector } from '../../store';
-import styles from './propertydocuments.module.css';
 import mammoth from 'mammoth';
 import { createPropertyDocuments } from '@/api/api-endpoints';
-import { useParams } from 'react-router-dom';
-import { deletePropertyDocumentThunk, fetchPropertyDocumentsByProperty, updatePropertyDocumentThunk } from '@/store/slice/property-document/actions';
+import { useDispatch, useAppSelector } from '@/store';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@radix-ui/react-scroll-area';
+import styles from './document.module.css';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { deletePropertyDocumentThunk, fetchPropertyDocuments } from '@/store/slice/property-document/actions';
 import { setCurrentDocument } from '@/store/slice/property-document';
 
 interface PropertyDocument {
@@ -27,8 +26,7 @@ interface PropertyDocument {
 
 const categories = ["Blueprint", "Legal", "General", "Contracts", "Invoices", "Reports"];
 
-const PropertyDocuments: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+const DocumentGrid: React.FC = () => {
   const dispatch = useDispatch();
   const propertyDocumentsState = useAppSelector((state) => state.propertyDocuments);
   const { documents, isLoading, error } = propertyDocumentsState;
@@ -42,20 +40,17 @@ const PropertyDocuments: React.FC = () => {
   const [previewContent, setPreviewContent] = useState<string | null>(null);
 
   useEffect(() => {
-    if (id) {
-      dispatch(fetchPropertyDocumentsByProperty(Number(id)));
-    }
-  }, [dispatch, id]);
-  console.log('Raw API response:', propertyDocumentsState);
-  console.log('Extracted documents:', documents);
+    dispatch(fetchPropertyDocuments());
+  }, [dispatch]);
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const newFiles = acceptedFiles.map(file => ({
       file,
       documentType: "General",
-      propertyId: Number(id)
+      propertyId: 1
     }));
     setFilesToUpload(prevFiles => [...prevFiles, ...newFiles]);
-  }, [id]);
+  }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
@@ -66,16 +61,6 @@ const PropertyDocuments: React.FC = () => {
   const handleDocumentDelete = (documentId: number) => {
     dispatch(deletePropertyDocumentThunk(documentId));
 
-  };
-
-  const handleCategoryChange = (documentId: number, newCategory: string) => {
-    const document = data.
-    find((doc: { id: number; }) => doc.id === documentId);
-    if (document) {
-      const formData = new FormData();
-      formData.append('documentType', newCategory);
-      dispatch(updatePropertyDocumentThunk({ id: documentId, documentData: formData }));
-    }
   };
 
   const handlePreview = async (document: PropertyDocument) => {
@@ -152,7 +137,7 @@ const PropertyDocuments: React.FC = () => {
       
       setFilesToUpload([]);
       setUploadError(null);
-      dispatch(fetchPropertyDocumentsByProperty(Number(id)));
+      dispatch(fetchPropertyDocuments());
   
       console.log('Documents uploaded successfully');
     } catch (error) {
@@ -381,6 +366,4 @@ const PropertyDocuments: React.FC = () => {
     </div>
   );
 }; 
-export default PropertyDocuments;
-
-
+export default DocumentGrid;
