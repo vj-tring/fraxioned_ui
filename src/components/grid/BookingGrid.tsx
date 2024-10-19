@@ -185,10 +185,10 @@ const BookingGrid: React.FC<BookingGridProps> = ({
   return (
     <div
       style={{
-        height: 350,
+        height: 480,
         width: "100%",
         border: "none",
-        marginTop: "2rem",
+        marginTop: "1rem",
         // boxShadow: "rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px"
       }}
     >
@@ -219,7 +219,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
           }
         }}
         sx={{
-          border: "none",
+          // border: "none",
           "& .MuiDataGrid-columnHeader": {
             backgroundColor: "grey",
             color: "white",
