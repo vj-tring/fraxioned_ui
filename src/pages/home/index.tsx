@@ -38,9 +38,7 @@ const Home: React.FC = () => {
     error,
   } = useSelector((state: RootState) => state.properties);
 
- 
   const dispatch = useDispatch();
-
 
   useEffect(() => {
     dispatch(resetLimits());
@@ -59,8 +57,7 @@ const Home: React.FC = () => {
       <div className="Container1">
         <PropertyList />
       </div>
-      {/* <DashboardAcc/> */}
-      {/* <BackgroundBeamsDemo/> */}
+  
     </div>
   );
 };

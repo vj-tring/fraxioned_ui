@@ -95,8 +95,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
     try {
       const response = await amenitiesapi();
       setAmenities(response.data.data);
-    } catch (err) {
-    }
+    } catch (err) {}
   };
   useEffect(() => {
     const imageFetching = async () => {
@@ -215,7 +214,6 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                       getImageUrlByPropertyAndSpace(space.id) ||
                       "https://via.placeholder.com/100"
                     } // Placeholder for space image
-                    
                     alt={space.space.name}
                     sx={{ objectFit: "cover", height: "200px" }}
                   />
