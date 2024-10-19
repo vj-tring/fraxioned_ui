@@ -9,7 +9,7 @@ import addpropertyReducer from '../slice/auth/addproperty';
 import propertySeasonHolidayReducer from '../slice/auth/propertySeasonHolidaySlice';
 import bookingReducer from '../slice/auth/bookingSlice';
 import datePickerReducer from '../slice/datepicker';
-import propertyDocumentsReducer from '../slice/property-document';
+import propertyDocumentsReducer from "../slice/property-document";
 import spaceReducer from '../slice/space';
 import spacePropertyReducer from '../slice/space';
 import ThingsToKnowReducer from '../slice/auth/ThingstoknowSlice';
@@ -32,6 +32,7 @@ import propertydetailReducer from '../slice/property-document';
 import bedReducer from '../slice/amenity';
 import bathroomReducer from '../slice/amenity';
 import amenityReducer from '../slice/amenity';
+import userDocumentsReducer from '../slice/user-document';
 
 const appReducer = combineReducers({
   auth: authReducer,
@@ -68,7 +69,7 @@ const appReducer = combineReducers({
   addQuestion: addQuestionReducer,
   faqPage: faqPageReducer,
   addCategory: addCategoryReducer,
-
+  userDocuments: userDocumentsReducer
 });
 
 const rootReducer = (
