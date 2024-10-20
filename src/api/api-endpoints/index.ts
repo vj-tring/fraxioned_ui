@@ -181,7 +181,8 @@ export const updateuserapi = (id: number, data: any) =>
 export const propertydetailsapi = () =>
   axiosInstance.get(`/properties/properties-with-details`);
 
-export const amenitiesapi = () => axiosInstance.get(`/amenities`);
+export const amenitiesapi = () =>
+  axiosInstance.get(`/amenities`);
 
 export const getAmenitiesByPropertyId = (id: number) =>
   axiosInstance.get(`/property-space-amenities/property/${id}`);
@@ -205,14 +206,14 @@ export const addamenity = (data: FormData) =>
   });
 
 export const updateamenityforproperty = (updateData: UpdateAmenityPayload) =>
-    axiosInstance.patch(`/property-space-amenities`, updateData);
+  axiosInstance.patch(`/property-space-amenities`, updateData);
 
 export const updateamenities = (id: number, updateData: FormData) =>
-    axiosInstance.patch(`/amenities/amenity/${id}`, updateData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        },
-    });
+  axiosInstance.patch(`/amenities/amenity/${id}`, updateData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 
 export const propertyImageapi = (propertyId: number) =>
   axiosInstance.get(`/property-space-images/property/${propertyId}/images`);
@@ -246,23 +247,23 @@ export const propertyspaceapi = () => axiosInstance.get(`/spaces`);
 export const propertyspacetypesapi = () => axiosInstance.get(`/space-types`);
 
 export const getPropertyDocuments = () =>
-axiosInstance.get('/property-documents');
+  axiosInstance.get('/property-documents');
 
 export const getPropertyDocumentByProperty = (propertyId: number) =>
-    axiosInstance.get(`/property-documents/property/${propertyId}`);
+  axiosInstance.get(`/property-documents/property/${propertyId}`);
 
-export const createPropertyDocuments = (formData: FormData) =>{
-    return axiosInstance.post('/property-documents', formData, {
-    });
+export const createPropertyDocuments = (formData: FormData) => {
+  return axiosInstance.post('/property-documents', formData, {
+  });
 };
 
 export const updatePropertyDocument = (id: number, formData: FormData) =>
-    axiosInstance.patch(`/property-documents/property-document/${id}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-    });
+  axiosInstance.patch(`/property-documents/property-document/${id}`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  });
 
 export const deletePropertyDocument = (id: number) =>
-    axiosInstance.delete(`/property-documents/property-document/${id}`);
+  axiosInstance.delete(`/property-documents/property-document/${id}`);
 
 
 export const getpropertycodes = () => axiosInstance.get(`/property-codes`);
@@ -338,7 +339,7 @@ export const fetchSpaceImageDetailsById = (imageId: number) =>
   axiosInstance.get(`/property-space-images/property-space-image/${imageId}`);
 
 export const fetchPropertyImagesByPropertySpaceId = (propertySpaceId: number) =>
-    axiosInstance.get(`/property-space-images/property/${propertySpaceId}/images`);
+  axiosInstance.get(`/property-space-images/property/${propertySpaceId}/images`);
 
 // Update Space Image Details with Image (Patch)
 export const updateSpaceImageById = (imageId: number, formData: FormData) =>
@@ -349,11 +350,11 @@ export const updateSpaceImageById = (imageId: number, formData: FormData) =>
 
 //for proeprty
 export const getAllpropertycodes = () =>
-    axiosInstance.get(`/property-codes`);
+  axiosInstance.get(`/property-codes`);
 
 //delete a  property code
 export const deletePropertycode = (id: number) =>
-    axiosInstance.delete(`/property-codes/property-code/${id}`);
+  axiosInstance.delete(`/property-codes/property-code/${id}`);
 
 //add for a property
 export const postpropertycode = (payload: {
@@ -367,14 +368,14 @@ export const getAllpropertycodecatogory = () =>
   axiosInstance.get(`/property-code-categories`);
 
 export const editPropertyCode = (id: number, payload: {
-    property: number;
-    propertyCodeCategory: number;
-    updatedBy: number;
-    propertyCode: string;
+  property: number;
+  propertyCodeCategory: number;
+  updatedBy: number;
+  propertyCode: string;
 }) => axiosInstance.patch(`/property-codes/property-code/${id}`, payload);
 
 export const createpropertycodecatogory = (data: { name: string; createdBy: { id: number } }) =>
-    axiosInstance.post(`/property-code-categories`, data);
+  axiosInstance.post(`/property-code-categories`, data);
 
 // Delete Space Image by ID (Single)
 export const deleteSpaceImageById = (id: number) =>
@@ -382,7 +383,7 @@ export const deleteSpaceImageById = (id: number) =>
 
 // Delete Multiple Space Images (Batch Delete)
 export const deleteMultipleSpaceImages = (spaceImages: { ids: number[] }) =>
-    axiosInstance.delete(`/property-space-images`, { data: spaceImages });
+  axiosInstance.delete(`/property-space-images`, { data: spaceImages });
 
 export const getCategories = () =>
   axiosInstance.get(`/faq-categories`)
@@ -401,7 +402,7 @@ export const createQuestion = (data: { question: string; answer: string; created
 };
 
 export const createCategory = (data: { createdBy: { id: number; }; categoryName: string; }) => {
-  return axiosInstance.post('/faq-categories/category', data); 
+  return axiosInstance.post('/faq-categories/category', data);
 };
 
 export const updateQuestion = (id: number, data: { question: string; answer: string; updatedBy: { id: number } }) => {
@@ -413,27 +414,27 @@ export const deleteQuestion = (id: number) => {
 };
 
 export const fetchFaqs = () => {
-  return axiosInstance.get('/faq-questions'); 
+  return axiosInstance.get('/faq-questions');
 };
-export const createUserPropertyDocuments = (formData: FormData) => 
-    axiosInstance.post('/userPropertyDocuments/userPropertyDocument', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-    });
+export const createUserPropertyDocuments = (formData: FormData) =>
+  axiosInstance.post('/userPropertyDocuments/userPropertyDocument', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  });
 
-export const getAllUserPropertyDocuments = () => 
-    axiosInstance.get('/userPropertyDocuments');
+export const getAllUserPropertyDocuments = () =>
+  axiosInstance.get('/userPropertyDocuments');
 
-export const getUserPropertyDocument = (id: number) => 
-    axiosInstance.get(`/userPropertyDocuments/userPropertyDocument/${id}`);
+export const getUserPropertyDocument = (id: number) =>
+  axiosInstance.get(`/userPropertyDocuments/userPropertyDocument/${id}`);
 
-export const getUserPropertyDocumentByUser = (userId: number) => 
-    axiosInstance.get(`/userPropertyDocuments/user/${userId}`);
+export const getUserPropertyDocumentByUser = (userId: number) =>
+  axiosInstance.get(`/userPropertyDocuments/user/${userId}`);
 
 export const updateUserPropertyDocument = (id: number, formData: FormData) =>
-    axiosInstance.patch(`/userPropertyDocuments/userPropertyDocument/${id}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-    });
+  axiosInstance.patch(`/userPropertyDocuments/userPropertyDocument/${id}`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  });
 
 export const deleteUserPropertyDocument = (id: number) =>
-    axiosInstance.delete(`/userPropertyDocuments/userPropertyDocument/${id}`);
+  axiosInstance.delete(`/userPropertyDocuments/userPropertyDocument/${id}`);
 

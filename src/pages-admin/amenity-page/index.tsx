@@ -63,7 +63,10 @@ const AmenityManagement: React.FC = () => {
   }>({});
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [noResultsFound, setNoResultsFound] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [globalSearchTerm, setGlobalSearchTerm] = useState("");
+  const [matchedGroups, setMatchedGroups] = useState<string[]>([]);
   const [amenityToDelete, setAmenityToDelete] = useState<Amenity | null>(null);
   const [snackbar, setSnackbar] = useState<SnackbarState>({
     open: false,
@@ -127,6 +130,45 @@ const AmenityManagement: React.FC = () => {
       dispatch(resetAmenitiesState());
     }
   }, [deleteSuccess, deleteError, dispatch, getAmenities]);
+
+  const handleGlobalSearch = (term: string) => {
+    setGlobalSearchTerm(term);
+    if (term.trim() === "") {
+      setMatchedGroups([]);
+      setExpandedGroups([]);
+      setNoResultsFound(false);
+      return;
+    }
+
+    const matched = Object.entries(groupAmenities).reduce((acc, [group, amenities]) => {
+      const groupMatch = group.toLowerCase().includes(term.toLowerCase());
+      const amenityMatch = amenities.some(amenity =>
+        amenity.amenityName.toLowerCase().includes(term.toLowerCase())
+      );
+      if (groupMatch || amenityMatch) {
+        acc.push(group);
+      }
+      return acc;
+    }, [] as string[]);
+
+    setMatchedGroups(matched);
+    setExpandedGroups(matched);
+    setNoResultsFound(matched.length === 0);
+
+    if (matched.length > 0) {
+      setTimeout(() => {
+        const groupRef = groupRefs.current[matched[0]];
+        if (groupRef && groupRef.current) {
+          groupRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      }, 100);
+    }
+  };
+
+
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
@@ -327,6 +369,17 @@ const AmenityManagement: React.FC = () => {
             </button>
           </div>
         </div>
+        <div className={styles.globalSearchContainer}>
+          <div className={styles.globalSearchBar}>
+            <Search size={20} />
+            <input
+              type="text"
+              placeholder="Search amenity groups or items..."
+              value={globalSearchTerm}
+              onChange={(e) => handleGlobalSearch(e.target.value)}
+            />
+          </div>
+        </div>
         <div className={styles.scrollableContent}>
           {isAddingNew && (
             <NewAmenityForm
@@ -334,11 +387,17 @@ const AmenityManagement: React.FC = () => {
               onAmenityAdded={handleAmenityAdded}
             />
           )}
+          {noResultsFound && globalSearchTerm && (
+            <div className={styles.notFoundMessage}>
+              Not found "{globalSearchTerm}" item
+            </div>
+          )}
+
           <div className={styles.amenitiesList}>
             {Object.entries(filteredAmenities).map(([group, amenitiesList]) => (
               <div
                 key={group}
-                className={styles.amenityGroup}
+                className={`${styles.amenityGroup} ${matchedGroups.includes(group) ? styles.matchedGroup : ''}`}
                 ref={groupRefs.current[group]}
               >
                 <div
@@ -351,11 +410,14 @@ const AmenityManagement: React.FC = () => {
                     <ChevronRight size={20} />
                   )}
                   <h2>{group}</h2>
+                  {/* <span className={styles.groupTotalCount}>
+                    Total Count: {amenitiesList.length}
+                  </span> */}
                 </div>
                 {expandedGroups.includes(group) && (
                   <div className={styles.amenityItems}>
                     <div className={styles.groupSearchContainer}>
-                      <div className={styles.groupSearchBar}>
+                      {/* <div className={styles.groupSearchBar}>
                         <Search size={15} />
                         <input
                           type="text"
@@ -365,14 +427,21 @@ const AmenityManagement: React.FC = () => {
                             handleGroupSearch(group, e.target.value)
                           }
                         />
-                      </div>
+                      </div> */}
                       <span className={styles.groupTotalCount}>
                         Total Count: {amenitiesList.length}
                       </span>
                     </div>
                     {amenitiesList.length > 0 ? (
                       amenitiesList.map((amenity) => (
-                        <div key={amenity.id} className={styles.amenityItem}>
+                        <div
+                          key={amenity.id}
+                          className={`${styles.amenityItem} ${globalSearchTerm &&
+                            amenity.amenityName.toLowerCase().includes(globalSearchTerm.toLowerCase())
+                            ? styles.matchedItem
+                            : ''
+                            }`}
+                        >
                           <div className={styles.amenityContent}>
                             {editingAmenity?.id === amenity.id ? (
                               <div className={styles.editingContainer}>
@@ -430,7 +499,7 @@ const AmenityManagement: React.FC = () => {
                                     <img
                                       src={amenity.s3_url}
                                       alt={amenity.amenityName}
-className={styles.amenityImage}
+                                      className={styles.amenityImage}
                                       onLoad={() =>
                                         setLoadingImages((prev) => ({
                                           ...prev,
