@@ -45,7 +45,7 @@ const BathTypesTab: React.FC<BathTypesTabProps> = ({
   }, [dispatch]);
 
   useEffect(() => {
-    if (spaceBathroomTypes.length > 0) {
+    if (spaceBathroomTypes && spaceBathroomTypes.length > 0) {
       let types: BathType[];
       if (!initialBathTypes) {
         types = spaceBathroomTypes.map(type => ({
@@ -64,7 +64,7 @@ const BathTypesTab: React.FC<BathTypesTabProps> = ({
       setBathTypes(types);
     }
   }, [spaceBathroomTypes, initialBathTypes]);
-
+  
   const handleBathCountChange = (id: number, increment: number) => {
     setBathTypes(prevBathTypes =>
       prevBathTypes.map(bath =>
@@ -84,6 +84,16 @@ const BathTypesTab: React.FC<BathTypesTabProps> = ({
 
   if (error) {
     return <div>Error: {error}</div>;
+  }
+
+  if (bathTypes && bathTypes.length ===0) {
+    return (
+      <TabsContent value="bathTypes" className="space-y-4 h-full rounded-md border">
+        <div className="h-full flex flex-column justify-center items-center">
+          <p>No bath types available.</p>
+        </div>
+      </TabsContent>
+    );
   }
 
   return (
