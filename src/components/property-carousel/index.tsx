@@ -9,7 +9,7 @@ import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/index";
 import { RootState } from "../../store/reducers";
-import { Image } from "@/pages/property-listing-page/index";
+// import { Image } from "@/pages/property-listing-page/index";
 import {
   fetchProperties,
   selectProperty,
@@ -17,7 +17,6 @@ import {
   selectcardindex,
 } from "../../store/slice/auth/property-slice";
 import "./propertycarousel.css";
-import { propertyImageapi } from "@/api/api-endpoints";
 import AddHomeOutlinedIcon from "@mui/icons-material/AddHomeOutlined";
 import { Card } from "../../store/slice/auth/property-slice";
 
@@ -32,12 +31,12 @@ export default function BasicSelect() {
   const [years, setYears] = useState<number[]>([]);
   const [selectedYear, setSelectedYear] = useState<number>(currentYear);
   const carouselRef = useRef<HTMLDivElement>(null);
-  const [imageDetails, setImageDetails] = useState<Image[]>([]);
+  // const [imageDetails, setImageDetails] = useState<Image[]>([]);
   const open = Boolean(anchorEl);
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { cards, loading, error } = useSelector(
+  const { cards } = useSelector(
     (state: RootState) => state.properties
   );
   const user = useSelector((state: RootState) => state.auth.user);
@@ -111,12 +110,12 @@ export default function BasicSelect() {
     setAnchorEl(null);
   };
 
-  const showselectedimage = (id: number) => {
-    const filteredImage = imageDetails
-      .filter((image) => image.property.id === id)
-      .sort((a: Image, b: Image) => a.displayOrder - b.displayOrder);
-    return filteredImage[0]?.imageUrl;
-  };
+  // const showselectedimage = (id: number) => {
+  //   const filteredImage = imageDetails
+  //     .filter((image) => image.property.id === id)
+  //     .sort((a: Image, b: Image) => a.displayOrder - b.displayOrder);
+  //   return filteredImage[0]?.imageUrl;
+  // };
 
   useEffect(() => {
     const handleScroll = () => {

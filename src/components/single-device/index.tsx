@@ -67,8 +67,8 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const dispatch = useDispatch<AppDispatch>();
   const {
     propertyAmenities: propertyAmenities,
-    loading,
-    error,
+    // loading,
+    // error,
   } = useSelector((state: RootState) => state.amenitiesID);
   const propertySpace = useSelector(
     (state: RootState) => state.spaceProperties.spaceProperties || []
@@ -156,7 +156,11 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
 
   // if (loading) return <div>Loading...</div>;
   // if (error) return <div>{error}</div>;
+  const [loading, setLoading] = useState(true);
 
+  const handleImageLoad = () => {
+    setLoading(false);
+  };
   return (
     <Box
       sx={{ display: "flex", flexDirection: "row", gap: 10 }}
@@ -207,13 +211,15 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                     width: "100%",
                   }}
                 >
+                  {/* {loading && <div className="skeleton"></div>} */}
+
                   <CardMedia
-                    component="img"
-                    // height="100px"
+                    // component="img"
+                    onLoad={handleImageLoad}
                     image={
                       getImageUrlByPropertyAndSpace(space.id) ||
                       "https://via.placeholder.com/100"
-                    } // Placeholder for space image
+                    }
                     alt={space.space.name}
                     sx={{ objectFit: "cover", height: "200px" }}
                   />

@@ -40,6 +40,8 @@ import DatePickerCard from "../../components/date-picker-card";
 import { Skeleton } from "@mui/material";
 import { RootState } from "@/store/reducers";
 import { fetchAmenities } from "@/store/slice/amenitiesSlice";
+import PropertyPhotos from "@/pages-admin/property-photos";
+import PropertyMorePhotos from "../property-listing-page-moreimg";
 
 interface Property {
   id: number;
@@ -284,7 +286,6 @@ const PropertyListingPage = () => {
       const result = await dispatch(bookingSummary(bookingData)).unwrap();
 
       if (result && !result.error) {
-
         const updatedBookingData = {
           ...bookingData,
           season: result.season,
@@ -332,9 +333,7 @@ const PropertyListingPage = () => {
       <div className="img-row pt-4 px-12">
         <Grid container spacing={1}>
           <Grid item xs={12} md={6}>
-            {loading && (
-              <Skeleton variant="rectangular" width="100%" height={400} />
-            )}
+            {loading && <div className="skeleton"></div>}
 
             <div className="image">
               {imageDetails.slice(0, 1).map((image, index) => (
@@ -360,11 +359,7 @@ const PropertyListingPage = () => {
               {loading
                 ? Array.from({ length: 4 }).map((_, index) => (
                     <Grid item xs={6} key={index}>
-                      <Skeleton
-                        variant="rectangular"
-                        width="100%"
-                        height={195}
-                      />
+                      <div className="skeleton1"></div>
                     </Grid>
                   ))
                 : imageDetails.slice(1, 5).map((image, index) => (
@@ -520,9 +515,15 @@ const PropertyListingPage = () => {
           onClose={handleClose}
           fullWidth
           maxWidth="x-lg"
+         
         >
           <DialogTitle className="d-flex justify-content-between">
-            <Typography variant="h6">More Photos</Typography>
+            <Typography variant="h6"
+            sx={{
+              fontSize:'large',
+              fontWeight:"600"
+            }}
+            > Property Photos</Typography>
             <IconButton
               edge="end"
               color="inherit"
@@ -534,45 +535,8 @@ const PropertyListingPage = () => {
           </DialogTitle>
           <DialogContent>
             <Grid container spacing={2}>
-              {loadingImages
-                ? Array.from({ length: 6 }).map((_, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={index}>
-                      <Skeleton
-                        variant="rectangular"
-                        width="100%"
-                        height={200}
-                      />
-                    </Grid>
-                  ))
-                : Object.keys(groupedImages).map((spaceId) => (
-                    <div key={spaceId} className="ListingImg">
-                      <Typography
-                        variant="h6"
-                        gutterBottom
-                        className="mt-3 mb-3 GroupedImg"
-                      >
-                        {groupedImages[spaceId].name}
-                      </Typography>
-                      <Grid container spacing={2} className="GroupImgPic">
-                        {groupedImages[spaceId].images.map((image, index) => (
-                          <Grid item xs={12} sm={4} md={3} key={index}>
-                            <Card>
-                              <img
-                                src={image.url}
-                                alt={image.description}
-                                style={{
-                                  width: "100%",
-                                  height: "250px",
-                                  objectFit: "cover",
-                                }}
-                                loading="lazy"
-                              />
-                            </Card>
-                          </Grid>
-                        ))}
-                      </Grid>
-                    </div>
-                  ))}
+              <PropertyMorePhotos />
+             
             </Grid>
           </DialogContent>
           <DialogActions>
