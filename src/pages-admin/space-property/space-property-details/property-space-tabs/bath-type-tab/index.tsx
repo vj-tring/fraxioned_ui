@@ -45,7 +45,7 @@ const BathTypesTab: React.FC<BathTypesTabProps> = ({
   }, [dispatch]);
 
   useEffect(() => {
-    if (spaceBathroomTypes.length > 0) {
+    if (spaceBathroomTypes && spaceBathroomTypes.length > 0) {
       let types: BathType[];
       if (!initialBathTypes) {
         types = spaceBathroomTypes.map(type => ({
@@ -90,36 +90,46 @@ const BathTypesTab: React.FC<BathTypesTabProps> = ({
     <TabsContent value="bathTypes" className="space-y-4 h-full rounded-md border">
       <div className="h-full flex flex-column">
         <ScrollArea className="h-100 w-full py-2 px-3">
-          <div className="space-y-4">
-            {bathTypes.map((bath) => (
-              <div key={bath.id} className="flex items-center justify-between">
-                <span className="text-md">{bath.name}</span>
-                <div className="flex items-center space-x-2 text-md">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => handleBathCountChange(bath.id, -1)}
-                    disabled={bath.count === 0}
-                    className="h-full w-5 rounded-none"
-                  >
-                    <MinusCircle className="h-4 w-4" />
-                  </Button>
-                  <span className="w-8 text-center">{bath.count}</span>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => handleBathCountChange(bath.id, 1)}
-                    className="h-full w-5 rounded-none"
-                  >
-                    <PlusCircle className="h-4 w-4" />
-                  </Button>
+          {bathTypes.length > 0 ? (
+            <div className="space-y-4">
+              {bathTypes.map((bath) => (
+                <div key={bath.id} className="flex items-center justify-between">
+                  <span className="text-md">{bath.name}</span>  
+                  <div className="flex items-center space-x-2 text-md">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => handleBathCountChange(bath.id, -1)}
+                      disabled={bath.count === 0}
+                      className="h-full w-5 rounded-none"
+                    >
+                      <MinusCircle className="h-4 w-4" />
+                    </Button>
+                    <span className="w-8 text-center">{bath.count}</span>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => handleBathCountChange(bath.id, 1)}
+                      className="h-full w-5 rounded-none"
+                    >
+                      <PlusCircle className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              <p className="text-gray-500">No bathroom types available.</p>
+            </div>
+          )}
         </ScrollArea>
         <div className="flex justify-center mt-0 py-1">
-          <Button className="w-1/2 border-solid border-2 border-[##4b7a7f] text-center bg-[#4b7a7f] text-[#fff] rounded" onClick={handleSave}>
+          <Button 
+            className="w-1/2 border-solid border-2 border-[#4b7a7f] text-center bg-[#4b7a7f] text-[#fff] rounded" 
+            onClick={handleSave}
+            disabled={bathTypes.length === 0}
+          >
             <Save className="mr-2 h-4 w-4" />
             Save Bath Types
           </Button>
