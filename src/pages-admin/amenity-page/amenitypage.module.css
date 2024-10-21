@@ -20,7 +20,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 18px;
+    padding-top: 12px;
     padding-left: 25px;
     padding-right: 25px;
     padding-bottom: 5px;
@@ -42,16 +42,17 @@
 }
 
 .globalSearchContainer {
-    padding: 15px 25px;
+    padding: 4px 25px;
+    padding-bottom: 7px;
     background-color: #ffffff;
-    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 2px 0px;
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 1px 2px 0px;
 }
 
 .globalSearchBar {
     display: flex;
     align-items: center;
     background-color: white;
-    border-radius: 15px;
+    border-radius: 8px;
     padding: 0.5rem 1rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -76,17 +77,6 @@
     padding-bottom: 24px;
     padding-top: 18px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
-}
-
-.groupSearchContainer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-    padding: 0.4rem 1.0rem;
-    background-color: #f8f9fa;
-    border-radius: 10px;
-    gap: 0.5rem;
 }
 
 .groupSearchBar {
@@ -201,10 +191,10 @@
 .groupSearchContainer {
     display: flex;
     align-items: center;
+    margin-right: 13px;
     justify-content: space-between;
-    padding: 0.4rem 1.0rem;
-    background-color: #f8f9fa;
     border-radius: 10px;
+    padding-top: 9px;
     gap: 1rem;
 }
 
@@ -234,7 +224,10 @@
 }
 
 .amenityItems {
-    padding: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 2px;
 }
 
 .amenityItem {
@@ -384,15 +377,15 @@
 }
 
 .editButton {
-    color: #3498db;
+    color: #646464;
 }
 
 .deleteButton {
-    color: #e74c3c;
+    color: #646464;
 }
 
 .saveButton {
-    color: #2ecc71;
+    color: #333935;
 }
 
 .cancelButton {

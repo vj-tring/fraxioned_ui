@@ -13,6 +13,7 @@ import NewAmenityForm from "../property-amenities/new-amenity";
 import {
   Edit2,
   Trash2,
+  Pencil,
   Plus,
   ChevronRight,
   ChevronDown,
@@ -131,19 +132,15 @@ const AmenityManagement: React.FC = () => {
     }
   }, [deleteSuccess, deleteError, dispatch, getAmenities]);
 
-  const handleGlobalSearch = (term: string) => {
-    setGlobalSearchTerm(term);
-    if (term.trim() === "") {
-      setMatchedGroups([]);
-      setExpandedGroups([]);
-      setNoResultsFound(false);
-      return;
-    }
 
-    const matched = Object.entries(groupAmenities).reduce((acc, [group, amenities]) => {
-      const groupMatch = group.toLowerCase().includes(term.toLowerCase());
+  //Search case 
+  const handleGlobalSearch = (searchValue: string) => {
+    setGlobalSearchTerm(searchValue);
+    resetSearchStates();
+    const getMatchedItems = Object.entries(groupAmenities).reduce((acc, [group, amenities]) => {
+      const groupMatch = group.toLowerCase().includes(searchValue.toLowerCase());
       const amenityMatch = amenities.some(amenity =>
-        amenity.amenityName.toLowerCase().includes(term.toLowerCase())
+        amenity.amenityName.toLowerCase().includes(searchValue.toLowerCase())
       );
       if (groupMatch || amenityMatch) {
         acc.push(group);
@@ -151,13 +148,12 @@ const AmenityManagement: React.FC = () => {
       return acc;
     }, [] as string[]);
 
-    setMatchedGroups(matched);
-    setExpandedGroups(matched);
-    setNoResultsFound(matched.length === 0);
+    updateSearchResults(getMatchedItems);
 
-    if (matched.length > 0) {
+    // scroll to focus searched item
+    if (getMatchedItems.length > 0) {
       setTimeout(() => {
-        const groupRef = groupRefs.current[matched[0]];
+        const groupRef = groupRefs.current[getMatchedItems[0]];
         if (groupRef && groupRef.current) {
           groupRef.current.scrollIntoView({
             behavior: "smooth",
@@ -166,6 +162,25 @@ const AmenityManagement: React.FC = () => {
         }
       }, 100);
     }
+  };
+
+  // Update search results
+  const updateSearchResults = (matchedItems: string[]) => {
+    setMatchedGroups(matchedItems);
+    setExpandedGroups(matchedItems);
+    setNoResultsFound(matchedItems.length === 0);
+  };
+
+  // reset function
+  const resetSearchStates = () => {
+    setGlobalSearchTerm("");
+    setMatchedGroups([]);
+    setExpandedGroups([]);
+    setNoResultsFound(false);
+  };
+
+  const handleResetSearch = () => {
+    resetSearchStates();
   };
 
 
@@ -185,10 +200,6 @@ const AmenityManagement: React.FC = () => {
 
   const triggerFileInput = () => {
     fileInputRef.current?.click();
-  };
-
-  const handleGroupSearch = (group: string, term: string) => {
-    setGroupSearchTerms((prev) => ({ ...prev, [group]: term }));
   };
 
   const groupAmenitiesByType = (data: Amenity[]) => {
@@ -316,7 +327,7 @@ const AmenityManagement: React.FC = () => {
   };
 
   const handleSnackbarClose = (
-    event?: React.SyntheticEvent | Event,
+    _event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
     if (reason === "clickaway") {
@@ -553,7 +564,7 @@ const AmenityManagement: React.FC = () => {
                                     onClick={() => handleEdit(amenity)}
                                     className={styles.editButton}
                                   >
-                                    <Edit2 size={16} />
+                                    <Pencil size={16} />
                                   </button>
                                 </Tooltip>
                                 <Tooltip title="Delete" arrow>
