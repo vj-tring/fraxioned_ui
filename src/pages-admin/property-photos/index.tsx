@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, {useRef, useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import {
   propertyImageapi,
@@ -11,7 +11,8 @@ import ConfirmationModal from "@/components/confirmation-modal";
 import EditPhoto from "./edit-propertyphoto";
 import PhotoUpload from "./new-photoupload";
 import { motion, AnimatePresence } from "framer-motion";
-
+import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
+import ArrowBackIosOutlinedIcon from "@mui/icons-material/ArrowBackIosOutlined";
 interface PropertyImage {
   id: number;
   url: string;
@@ -50,6 +51,34 @@ const PropertyPhotos: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0); // To track the current index of carousel
+  const dotsContainerRef = useRef<HTMLDivElement>(null); // Ref for dots container
+  const scrollToActiveDot = (index: number) => {
+    if (dotsContainerRef.current) {
+      const activeDot = dotsContainerRef.current.children[
+        index
+      ] as HTMLDivElement;
+      if (activeDot) {
+        const containerWidth = dotsContainerRef.current.offsetWidth;
+        const dotWidth = activeDot.offsetWidth;
+        const dotOffsetLeft = activeDot.offsetLeft;
+
+        // Center the active dot in the container
+        const scrollPosition =
+          dotOffsetLeft - containerWidth / 2 + dotWidth / 2;
+
+        dotsContainerRef.current.scrollTo({
+          left: scrollPosition,
+          behavior: "smooth", // Adds a smooth scrolling effect
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    scrollToActiveDot(selectedImageIndex); // Scroll when the active image index changes
+  }, [selectedImageIndex]);
 
   const refreshPhotos = useCallback(async () => {
     setIsLoading(true);
@@ -128,7 +157,18 @@ const PropertyPhotos: React.FC = () => {
   };
 
   const handleImageClick = (imageUrl: string) => {
+    // Filter the images based on the active section
+    const imagesForCarousel =
+      imagesBySpace[activeTab]?.instances.flatMap(
+        (instance) => instance.images
+      ) || [];
+
+    const clickedImageIndex = imagesForCarousel.findIndex(
+      (img) => img.url === imageUrl
+    );
+
     setSelectedImageUrl(imageUrl);
+    setSelectedImageIndex(clickedImageIndex);
   };
 
   const handleConfirmDelete = async () => {
@@ -160,6 +200,34 @@ const PropertyPhotos: React.FC = () => {
     setLoadedImages((prevLoadedImages) =>
       new Set(prevLoadedImages).add(imageId)
     );
+  };
+
+  // Navigation functions for the carousel
+  const handlePrevImage = () => {
+    const imagesForCarousel =
+      imagesBySpace[activeTab]?.instances.flatMap(
+        (instance) => instance.images
+      ) || [];
+
+    const prevIndex =
+      (selectedImageIndex - 1 + imagesForCarousel.length) %
+      imagesForCarousel.length;
+    setSelectedImageIndex(prevIndex);
+    setSelectedImageUrl(imagesForCarousel[prevIndex].url);
+  };
+  const handleNextImage = () => {
+    const imagesForCarousel =
+      imagesBySpace[activeTab]?.instances.flatMap(
+        (instance) => instance.images
+      ) || [];
+
+    const nextIndex = (selectedImageIndex + 1) % imagesForCarousel.length;
+    setSelectedImageIndex(nextIndex);
+    setSelectedImageUrl(imagesForCarousel[nextIndex].url);
+  };
+  const handleCardClick = (index: number) => {
+    setSelectedImageIndex(index);
+    scrollToActiveDot(index);
   };
 
   return (
@@ -293,7 +361,72 @@ const PropertyPhotos: React.FC = () => {
             animate={{ scale: 1 }}
             onClick={(e) => e.stopPropagation()}
           >
-            <img src={selectedImageUrl} alt="Selected property" />
+            <div className={styles.carouselContainer}>
+              <button className={styles.prevButton} onClick={handlePrevImage}>
+                <ArrowBackIosOutlinedIcon
+                  sx={{
+                    fontSize: "50px",
+                  }}
+                />
+              </button>
+
+              <img
+                src={
+                  imagesBySpace[activeTab]?.instances.flatMap(
+                    (instance) => instance.images
+                  )[selectedImageIndex]?.url
+                }
+                alt={
+                  imagesBySpace[activeTab]?.instances.flatMap(
+                    (instance) => instance.images
+                  )[selectedImageIndex]?.description
+                }
+                className={styles.carouselImage}
+              />
+              {/* Next Button */}
+              <button className={styles.nextButton} onClick={handleNextImage}>
+                <ArrowForwardIosOutlinedIcon
+                  sx={{
+                    fontSize: "50px",
+                  }}
+                />
+              </button>
+            </div>
+            <div
+              className={`${styles.dotscontainer} ${
+                selectedImageIndex !== null ? styles.active : ""
+              }`}
+              ref={dotsContainerRef}
+            >
+              {imagesBySpace[activeTab]?.instances
+                .flatMap((instance) => instance.images)
+                .slice(
+                  Math.max(0, selectedImageIndex - 5), // Show images around the active one
+                  selectedImageIndex + 8 // 5 before and 5 after the active
+                )
+                .map((image, index: number) => (
+                  <div
+                    key={index}
+                    className={`${styles.dot} ${
+                      index + Math.max(0, selectedImageIndex - 5) ===
+                      selectedImageIndex
+                        ? `${styles.active}`
+                        : ""
+                    }`}
+                    onClick={() =>
+                      handleCardClick(
+                        index + Math.max(0, selectedImageIndex - 5)
+                      )
+                    }
+                  >
+                    <img
+                      src={image.url}
+                      alt={image.description}
+                      className={styles.carouselImage1}
+                    />
+                  </div>
+                ))}
+            </div>
             <button
               className={styles.closeButton}
               onClick={() => setSelectedImageUrl(null)}

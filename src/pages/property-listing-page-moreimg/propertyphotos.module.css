@@ -208,10 +208,10 @@
   z-index: 1000;
 }
 .carouselImage {
-  max-height: 490px !important;
-  min-height: 490px !important;
-  max-width: 700px !important;
-  min-width: 700px !important;
+  max-height: calc(100vh - 60px) !important;
+  min-height: calc(90vh - 100px) !important;
+  max-width: calc(100vh - 100px) !important;
+  min-width: calc(100vh - 10px) !important;
 }
 .dotscontainer {
   display: flex;
@@ -257,7 +257,10 @@
 .lightboxContent {
   position: relative;
   max-width: 90vw;
-  max-height: 90vh;
+  /* margin: 10px; */
+  /* margin-top: 20px; */
+  /* max-height: 90vh; */
+  height: calc(100vh - 60px);
 }
 
 .lightboxContent img {

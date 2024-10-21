@@ -68,6 +68,7 @@ const PropertyMorePhotos: React.FC = () => {
   useEffect(() => {
     scrollToActiveDot(selectedImageIndex); // Scroll when the active image index changes
   }, [selectedImageIndex]);
+  
   const refreshPhotos = useCallback(async () => {
     setIsLoading(true);
     try {
