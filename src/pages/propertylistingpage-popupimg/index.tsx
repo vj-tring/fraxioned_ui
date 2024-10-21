@@ -1,25 +1,23 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useParams  } from "react-router-dom";
-import { X } from "lucide-react";
+import { useParams } from "react-router-dom";
 import Loader from "@/components/loader";
 import styles from "./propertyphotos.module.css";
-import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
-import ArrowBackIosOutlinedIcon from "@mui/icons-material/ArrowBackIosOutlined";
+
 import { motion, AnimatePresence } from "framer-motion";
 import {
   fetchPropertyImages,
   selectPropertyImages,
 } from "../../store/slice/auth/propertyImagesSlice ";
 import { useDispatch, useSelector } from "react-redux";
+import Carousel from "./Carousel";
 
 const PropertyMorePhotos: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("All Photos");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
   const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
   const { id } = useParams<{ id: string }>();
-  // const navigate = useNavigate();
-  // const location = useLocation();
+
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0); // To track the current index of carousel
 
   const dispatch = useDispatch();
@@ -81,34 +79,6 @@ const PropertyMorePhotos: React.FC = () => {
     setLoadedImages((prevLoadedImages) =>
       new Set(prevLoadedImages).add(imageId)
     );
-  };
-
-  // Navigation functions for the carousel
-  const handlePrevImage = () => {
-    const imagesForCarousel =
-      imagesBySpace[activeTab]?.instances.flatMap(
-        (instance) => instance.images
-      ) || [];
-
-    const prevIndex =
-      (selectedImageIndex - 1 + imagesForCarousel.length) %
-      imagesForCarousel.length;
-    setSelectedImageIndex(prevIndex);
-    setSelectedImageUrl(imagesForCarousel[prevIndex].url);
-  };
-  const handleNextImage = () => {
-    const imagesForCarousel =
-      imagesBySpace[activeTab]?.instances.flatMap(
-        (instance) => instance.images
-      ) || [];
-
-    const nextIndex = (selectedImageIndex + 1) % imagesForCarousel.length;
-    setSelectedImageIndex(nextIndex);
-    setSelectedImageUrl(imagesForCarousel[nextIndex].url);
-  };
-  const handleCardClick = (index: number) => {
-    setSelectedImageIndex(index);
-    scrollToActiveDot(index); // Ensure the scroll is triggered after setting the selected index
   };
 
   return (
@@ -212,95 +182,15 @@ const PropertyMorePhotos: React.FC = () => {
           <Loader />
         </div>
       )}
+
       {selectedImageUrl && (
-        <motion.div
-          className={styles.lightbox}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={() => setSelectedImageUrl(null)}
-        >
-          <motion.div
-            className={styles.lightboxContent}
-            initial={{ scale: 0.9 }}
-            animate={{ scale: 1 }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className={styles.carouselContainer}>
-              <button className={styles.prevButton} onClick={handlePrevImage}>
-                <ArrowBackIosOutlinedIcon
-                  sx={{
-                    fontSize: "50px",
-                  }}
-                />
-              </button>
-
-              <img
-                src={
-                  imagesBySpace[activeTab]?.instances.flatMap(
-                    (instance) => instance.images
-                  )[selectedImageIndex]?.url
-                }
-                alt={
-                  imagesBySpace[activeTab]?.instances.flatMap(
-                    (instance) => instance.images
-                  )[selectedImageIndex]?.description
-                }
-                className={styles.carouselImage}
-              />
-              {/* Next Button */}
-              <button className={styles.nextButton} onClick={handleNextImage}>
-                <ArrowForwardIosOutlinedIcon
-                  sx={{
-                    fontSize: "50px",
-                  }}
-                />
-              </button>
-            </div>
-            <div
-              className={`${styles.dotscontainer} ${
-                selectedImageIndex !== null ? styles.active : ""
-              }`}
-              ref={dotsContainerRef}
-            >
-              {imagesBySpace[activeTab]?.instances
-                .flatMap((instance) => instance.images)
-                .slice(
-                  Math.max(0, selectedImageIndex - 5), // Show images around the active one
-                  selectedImageIndex + 8 // 5 before and 5 after the active
-                )
-                .map((image, index: number) => (
-                  <div
-                    key={index}
-                    className={`${styles.dot} ${
-                      index + Math.max(0, selectedImageIndex - 5) ===
-                      selectedImageIndex
-                        ? `${styles.active}`
-                        : ""
-                    }`}
-                    onClick={() =>
-                      handleCardClick(
-                        index + Math.max(0, selectedImageIndex - 5)
-                      )
-                    }
-                  >
-                    <img
-                      src={image.url}
-                      alt={image.description}
-                      className={styles.carouselImage1}
-                    />
-                  </div>
-                ))}
-            </div>
-
-            <button
-              className={styles.closeButton}
-              onClick={() => setSelectedImageUrl(null)}
-            >
-              <X size={24} />
-            </button>
-          </motion.div>
-        </motion.div>
+        <Carousel
+          images={imagesBySpace[activeTab]?.instances.flatMap(
+            (instance) => instance.images
+          )}
+          initialIndex={selectedImageIndex}
+          onClose={() => setSelectedImageUrl(null)}
+        />
       )}
     </div>
   );
