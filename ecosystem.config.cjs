@@ -8,6 +8,7 @@ module.exports = {
       name: "fraxionui",
       script: "serve",
       args: "dist",
+      append_env_to_name: true,
       env: {
         NODE_ENV: "production",
         PM2_SERVE_PORT: 5000,
