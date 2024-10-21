@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 
 module.exports = {
   apps: [
@@ -8,9 +8,15 @@ module.exports = {
       args: "dist",
       env: {
         NODE_ENV: "production",
-        PM2_SERVE_PORT:  process.env.VITE_PORT,
+        PM2_SERVE_PORT: 5000,
         PM2_SERVE_SPA: "true",
-        PM2_SERVE_HOMEPAGE: "/index.html"
+        PM2_SERVE_HOMEPAGE: "/index.html",
+      },
+      env_testing: {
+        NODE_ENV: "testing",
+        PM2_SERVE_PORT: 5001,
+        PM2_SERVE_SPA: "true",
+        PM2_SERVE_HOMEPAGE: "/index.html",
       },
     },
   ],
