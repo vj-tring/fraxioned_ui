@@ -52,24 +52,11 @@ const allRooms: Room[] = [
   { name: "Guest Room", image: KingBedImage, Bed: "Comfortable Guest Bed" },
 ];
 
-const groupAmenitiesByGroup = (data: PropertyAmenity[]) => {
-  return data.reduce((acc, propertyAmenity) => {
-    const groupName = propertyAmenity.amenity.amenityGroup.name;
-    if (!acc[groupName]) {
-      acc[groupName] = [];
-    }
-    acc[groupName].push(propertyAmenity.amenity);
-    return acc;
-  }, {} as { [key: string]: PropertyAmenity["amenity"][] });
-};
-
 const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const {
-    propertyAmenities: propertyAmenities,
-    // loading,
-    // error,
-  } = useSelector((state: RootState) => state.amenitiesID);
+  const { propertyAmenities: propertyAmenities } = useSelector(
+    (state: RootState) => state.amenitiesID
+  );
   const propertySpace = useSelector(
     (state: RootState) => state.spaceProperties.spaceProperties || []
   );
@@ -84,6 +71,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   useEffect(() => {
     dispatch(fetchAmenities(propertyId));
     fetchAmenities1();
+    console.log("fetch amentis called ");
     dispatch(fetchSpacePropertiesById(propertyId));
   }, [dispatch, propertyId]);
 
@@ -95,7 +83,9 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
     try {
       const response = await amenitiesapi();
       setAmenities(response.data.data);
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };
   useEffect(() => {
     const imageFetching = async () => {
@@ -112,6 +102,21 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
 
     imageFetching();
   }, [propertyId]); //
+
+  const groupAmenitiesByGroup = (data: PropertyAmenity[]) => {
+    if (!Array.isArray(data)) {
+      console.warn("Expected an array, but received:", data);
+      return {};
+    }
+    return data.reduce((acc, propertyAmenity) => {
+      const groupName = propertyAmenity.amenity.amenityGroup.name;
+      if (!acc[groupName]) {
+        acc[groupName] = [];
+      }
+      acc[groupName].push(propertyAmenity.amenity);
+      return acc;
+    }, {} as { [key: string]: PropertyAmenity["amenity"][] });
+  };
 
   const getImageUrlByPropertyAndSpace = (spaceId: number): string | null => {
     const image = imagesData.find(
@@ -134,12 +139,6 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
     setOpen(false);
   };
 
-  const paginatedRooms = allRooms.slice(
-    (page - 1) * ITEMS_PER_PAGE,
-    page * ITEMS_PER_PAGE
-  );
-  const totalPages = Math.ceil(allRooms.length / ITEMS_PER_PAGE);
-
   const paginatedSpaces = propertySpace.slice(
     (page - 1) * ITEMS_PER_PAGE,
     page * ITEMS_PER_PAGE
@@ -147,9 +146,10 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const totalspacePages = Math.ceil(propertySpace.length / ITEMS_PER_PAGE);
 
   const groupedAmenities = groupAmenitiesByGroup(propertyAmenities || []);
-  const allAmenities = propertyAmenities
+  console.log("grouped amenties", groupedAmenities);
+  const allAmenities = Array.isArray(propertyAmenities)
     ? propertyAmenities.map((pa) => pa.amenity)
-    : [];
+    : []; //
   const displayedAmenities = showAllAmenities
     ? allAmenities
     : allAmenities.slice(0, AMENITIES_PER_PAGE);

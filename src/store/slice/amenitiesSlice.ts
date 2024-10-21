@@ -42,6 +42,7 @@ export const fetchAmenities = createAsyncThunk(
   'amenities/fetchPropertyAmenities',
   async (propertyId: number) => {
     const response = await getAmenitiesByPropertyId(propertyId);
+    console.log(response.data.data);
     return response.data.data;
   }
 );
@@ -58,8 +59,8 @@ const amenitySlice = createSlice({
       })
       .addCase(fetchAmenities.fulfilled, (state, action) => {
         state.loading = false;
-        
         state.propertyAmenities = action.payload;
+        console.log("action", state.propertyAmenities);
       })
       .addCase(fetchAmenities.rejected, (state, action) => {
         state.loading = false;
