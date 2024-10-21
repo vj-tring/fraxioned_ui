@@ -224,7 +224,7 @@ const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
               <CircularProgress />
             ) : (
               <>
-                {questions.length > 0
+                {questions && questions.length > 0
                   ? questions
                     .filter(
                       (ques) =>
