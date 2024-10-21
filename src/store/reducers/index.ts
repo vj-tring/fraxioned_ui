@@ -27,9 +27,9 @@ import rolesReducer from '../slice/roles';
 import addQuestionReducer from '../slice/auth/addfaqSlice';
 import faqPageReducer from '../slice/auth/faqpageSlice';
 import addCategoryReducer from '../slice/auth/addcategorySlice';
-import bedReducer from '../slice/amenity';
+import bedReducer from '../slice/bedSlice';
 import propertydetailReducer from '../slice/auth/property-detail'
-import bathroomReducer from '../slice/amenity';
+import bathroomReducer from '../slice/bathroom-slice';
 import amenityReducer from '../slice/amenity';
 import userDocumentsReducer from '../slice/user-document';
 import { propertycodecatogoryReducer } from '../slice/auth/propertycodeCatogorySlice';

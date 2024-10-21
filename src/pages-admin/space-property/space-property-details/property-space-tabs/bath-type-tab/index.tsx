@@ -96,7 +96,6 @@ const BathTypesTab: React.FC<BathTypesTabProps> = ({
                 <span className="text-md">{bath.name}</span>
                 <div className="flex items-center space-x-2 text-md">
                   <Button
-                    variant="outline"
                     size="icon"
                     onClick={() => handleBathCountChange(bath.id, -1)}
                     disabled={bath.count === 0}
@@ -106,7 +105,6 @@ const BathTypesTab: React.FC<BathTypesTabProps> = ({
                   </Button>
                   <span className="w-8 text-center">{bath.count}</span>
                   <Button
-                    variant="outline"
                     size="icon"
                     onClick={() => handleBathCountChange(bath.id, 1)}
                     className="h-full w-5 rounded-none"

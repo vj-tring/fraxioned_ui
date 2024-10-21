@@ -40,7 +40,7 @@ export interface PropertyAmenitiesState {
     amenities: PropertyAmenity[];
 }
 
-export interface  UpdateAmenityPayload {
+export interface UpdateAmenityPayload {
     property: {
         id: number;
     };
@@ -76,8 +76,8 @@ export const getByPropertySpaceId = createAsyncThunk(
     async (id: number, { rejectWithValue }) => {
         try {
             const response = await getAmenitiesByPropertySpaceId(id);
-            return response.data;
-        } catch (error: any) {  
+            return response.data.data;
+        } catch (error: any) {
             return rejectWithValue(error.response?.data?.message || 'An error occurred');
         }
     }
@@ -108,19 +108,19 @@ const propertyAmenitiesSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-        .addCase(getByPropertyId.pending, (state) => {
-            state.loading = true;
-            state.error = null;
-        })
-        .addCase(getByPropertyId.fulfilled, (state, action) => {
-            state.loading = false;
-            state.error = null;
-            state.amenities = action.payload.data;
-        })
-        .addCase(getByPropertyId.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.payload as string;
-        })
+            .addCase(getByPropertyId.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getByPropertyId.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = null;
+                state.amenities = action.payload.data;
+            })
+            .addCase(getByPropertyId.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
             .addCase(getByPropertySpaceId.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -128,7 +128,12 @@ const propertyAmenitiesSlice = createSlice({
             .addCase(getByPropertySpaceId.fulfilled, (state, action) => {
                 state.loading = false;
                 state.error = null;
-                state.amenities = action.payload.data;
+                if (action.payload.length > 0) {
+                    state.amenities = action.payload;
+                }
+                else {
+                    state.amenities = [];
+                }
             })
             .addCase(getByPropertySpaceId.rejected, (state, action) => {
                 state.loading = false;

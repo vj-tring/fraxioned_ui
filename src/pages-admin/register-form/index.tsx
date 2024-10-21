@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styles from "./register.module.css";
-import { IoMdClose } from "react-icons/io";
 import { FaSave, FaEdit, FaTrash } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +11,7 @@ import Loader from "@/components/loader";
 import CustomizedSnackbars from "@/components/customized-snackbar";
 import { ChangeEvent } from "react";
 import { AppDispatch } from "@/store";
+import { Plus, Save, Trash2, X, Edit } from "lucide-react";
 
 interface RegisterFormContentProps {
   onClose: () => void;
@@ -319,16 +319,28 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
         {(isLoading ||
           propertiesStatus === "loading" ||
           rolesStatus === "loading") && <Loader />}{" "}
-        <div className={styles.modalHeader}>
-          <h2 className={styles.modalTitle}>Create a New Account</h2>
-          <button className={styles.modalCloseButton} onClick={onClose}>
-            <IoMdClose size={20} />
-          </button>
-        </div>
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.formContent}>
             <div className={styles.leftContent}>
-              <h3 className={styles.sectionTitle}>Basic Details</h3>
+              <h3 className={styles.sectionTitle}>BASIC DETAILS</h3>
+              <div className={styles.inputGroup}>
+                <select
+                  id="roleId"
+                  name="roleId"
+                  value={formValues.roleId}
+                  onChange={handleSelectChange}
+                >
+                  <option value={0}>Select Role</option>
+                  {roles.map((role) => (
+                    <option key={role.id} value={role.id}>
+                      {role.roleName}
+                    </option>
+                  ))}
+                </select>
+                {errors.roleId && (
+                  <span className={styles.error}>{errors.roleId}</span>
+                )}
+              </div>
               <div className={styles.inputGroup}>
                 <input
                   type="text"
@@ -394,108 +406,90 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                   <span className={styles.error}>{errors.phoneNumber}</span>
                 )}
               </div>
-              <div className={styles.inputGroup}>
-                <select
-                  id="roleId"
-                  name="roleId"
-                  value={formValues.roleId}
-                  onChange={handleSelectChange}
-                >
-                  <option value={0}>Select Role</option>
-                  {roles.map((role) => (
-                    <option key={role.id} value={role.id}>
-                      {role.roleName}
-                    </option>
-                  ))}
-                </select>
-                {errors.roleId && (
-                  <span className={styles.error}>{errors.roleId}</span>
-                )}
-              </div>
             </div>
             <div className={styles.rightContent}>
-              <h3 className={styles.sectionTitle}>Property Details</h3>
-
-              <div className={styles.addPropertySection}>
-                <button
+              <div className="flex justify-between items-center mb-[.8rem]">
+                <h3 className={styles.sectionTitle}>Property Details</h3>
+                {/* <button
                   type="button"
-                  className={styles.addButton}
+                  className='border-1 px-2 py-1 text-sm rounded-sm border-[#008a99] bg-[#007988] text-white hover:bg-[#008a99] flex items-center gap-1'
                   onClick={() => setShowPropertyFields(true)}
                 >
-                  Add Property
-                </button>
-
-                {showPropertyFields && (
-                  <div className={styles.inlineInputGroup}>
-                    <div className={styles.propertyGroup}>
-                      <select
-                        id="propertyID"
-                        name="propertyID"
-                        value={formValues.propertyID}
-                        onChange={handleSelectChange}
-                        className={styles.addselectProperty}
-                      >
-                        <option value={0}>Select Property</option>
-                        {properties
-                          .filter(
-                            (property) =>
-                              !addedProperties.some(
-                                (added) => added.propertyID === property.id
-                              )
-                          )
-                          .map((property) => (
-                            <option key={property.id} value={property.id}>
-                              {property.propertyName}
-                            </option>
-                          ))}
-                      </select>
-                    </div>
-                    <div className={styles.propertyGroupshare}>
-                      <select
-                        id="noOfShares"
-                        name="noOfShares"
-                        value={formValues.noOfShares}
-                        onChange={handleSelectChange}
-                        className={styles.addselectshare}
-                      >
-                        {numberstate.map((shareCount) => (
-                          <option key={shareCount} value={shareCount}>
-                            {shareCount}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className={styles.propertyGroup}>
-                      <input
-                        type="date"
-                        id="acquisitionDate"
-                        name="acquisitionDate"
-                        value={formValues.acquisitionDate}
-                        onChange={handleDateChange}
-                        className={styles.addproptydate}
-                      />
-                    </div>
-                    <button
-                      type="button"
-                      className={styles.saveButton}
-                      onClick={addProperty}
-                    >
-                      <FaSave />
-                    </button>
-                    <button
-                      type="button"
-                      className={styles.saveButton}
-                      onClick={() => {
-                        setShowPropertyFields(false);
-                      }}
-                    >
-                      <MdCancel />
-                    </button>
-                  </div>
-                )}
+                  <Plus size={18} />Add Property
+                </button> */}
               </div>
 
-              {addedProperties.length !== 0 && (
+              <div className={styles.addPropertySection}>
+                <h2>Add a Property</h2>
+                <div className={styles.inlineInputGroup}>
+                  <div className={styles.propertyGroup}>
+                    <select
+                      id="propertyID"
+                      name="propertyID"
+                      value={formValues.propertyID}
+                      onChange={handleSelectChange}
+                      className={styles.addselectProperty}
+                    >
+                      <option value={0}>Select Property</option>
+                      {properties
+                        .filter(
+                          (property) =>
+                            !addedProperties.some(
+                              (added) => added.propertyID === property.id
+                            )
+                        )
+                        .map((property) => (
+                          <option key={property.id} value={property.id}>
+                            {property.propertyName}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
+                  <div className={styles.propertyGroupshare}>
+                    <select
+                      id="noOfShares"
+                      name="noOfShares"
+                      value={formValues.noOfShares}
+                      onChange={handleSelectChange}
+                      className={styles.addselectshare}
+                    >
+                      {numberstate.map((shareCount) => (
+                        <option key={shareCount} value={shareCount}>
+                          {shareCount}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className={styles.propertyGroup}>
+                    <input
+                      type="date"
+                      id="acquisitionDate"
+                      name="acquisitionDate"
+                      value={formValues.acquisitionDate}
+                      onChange={handleDateChange}
+                      className={styles.addproptydate}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    className='p-2 text-[#e28f25] rounded text-sm flex items-center gap-1'
+                    onClick={addProperty}
+                  >
+                    <Plus size={15} /> Add
+                  </button>
+                  {/* <button
+                    type="button"
+                    className='p-2 text-[#e28f25] rounded'
+                    onClick={() => {
+                      setShowPropertyFields(false);
+                    }}
+                  >
+                    <X size={18} />
+                  </button> */}
+                </div>
+              </div>
+
+              {addedProperties.length !== 0 ? (
                 <div className={styles.addedPropertiesList}>
                   {addedProperties.map((property, index) => (
                     <div key={index} className={styles.propertyItem}>
@@ -511,12 +505,12 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                                     prev.map((prop, i) =>
                                       i === index
                                         ? {
-                                            ...prop,
-                                            propertyID: parseInt(
-                                              e.target.value,
-                                              10
-                                            ),
-                                          }
+                                          ...prop,
+                                          propertyID: parseInt(
+                                            e.target.value,
+                                            10
+                                          ),
+                                        }
                                         : prop
                                     )
                                   )
@@ -538,12 +532,12 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                                     prev.map((prop, i) =>
                                       i === index
                                         ? {
-                                            ...prop,
-                                            noOfShares: parseInt(
-                                              e.target.value,
-                                              10
-                                            ),
-                                          }
+                                          ...prop,
+                                          noOfShares: parseInt(
+                                            e.target.value,
+                                            10
+                                          ),
+                                        }
                                         : prop
                                     )
                                   )
@@ -566,9 +560,9 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                                     prev.map((prop, i) =>
                                       i === index
                                         ? {
-                                            ...prop,
-                                            acquisitionDate: e.target.value,
-                                          }
+                                          ...prop,
+                                          acquisitionDate: e.target.value,
+                                        }
                                         : prop
                                     )
                                   )
@@ -579,17 +573,17 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                           <div className={styles.inlinebutton}>
                             <button
                               type="button"
-                              className={styles.UpdateButton}
+                              className='text-[#e28f25] rounded hover:text-[#e28f25]'
                               onClick={() => handleEditProperty(index)}
                             >
-                              <FaSave />
+                              <Save size={18} />
                             </button>
                             <button
                               type="button"
-                              className={styles.UpdateButton}
+                              className='text-[#e28f25] rounded hover:text-[#e28f25]'
                               onClick={() => handlecancelProperty(index)}
                             >
-                              <MdCancel />
+                              <X size={18} />
                             </button>
                           </div>
                         </>
@@ -610,14 +604,14 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                               className={styles.editButton}
                               onClick={() => handleEditProperty(index)}
                             >
-                              <FaEdit />
+                              <Edit size={16} />
                             </button>
                             <button
                               type="button"
                               className={styles.deleteButton}
                               onClick={() => handleDeleteProperty(index)}
                             >
-                              <FaTrash />
+                              <Trash2 size={16} />
                             </button>
                           </span>
                         </>
@@ -625,20 +619,25 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                     </div>
                   ))}
                 </div>
-              )}
+              )
+                :
+                <div className={styles.noProperty}>
+                  <span>No property Selected</span>
+                </div>
+              }
             </div>
           </div>
-          <div className={styles.modalFooter}>
+          <div className='flex md:justify-end gap-3 p-2.5 border-t sticky bottom-0 bg-[#fcfcfc] justify-between'>
             <button
               type="button"
-              className={styles.cancelButton}
+              className='px-4 py-1.5 bg-white font-medium text-sm rounded-sm text-slate-800 hover:bg-slate-50 border-1 border-[#227ed7b] hover:border-slate-300 focus:ring-slate-300'
               onClick={onClose}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className={styles.submitButton}
+              className='px-4 py-1.5 bg-[#f09200] font-medium rounded-sm text-sm text-white hover:bg-[#e28f25] shadow-sm hover:shadow-md focus:ring-slate-500 border-1 border-[#227ed7b]'
               onClick={() => handleSubmit}
             >
               Register

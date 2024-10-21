@@ -99,7 +99,6 @@ const BedTypesTab: React.FC<BedTypesTabProps> = ({
                   <span className="text-md">{bed.name}</span>
                   <div className="flex items-center space-x-2 text-md">
                     <Button
-                      variant="outline"
                       size="icon"
                       onClick={() => handleBedCountChange(bed.id, -1)}
                       disabled={bed.count === 0}
@@ -109,7 +108,6 @@ const BedTypesTab: React.FC<BedTypesTabProps> = ({
                     </Button>
                     <span className="w-8 text-center text-md">{bed.count}</span>
                     <Button
-                      variant="outline"
                       size="icon"
                       className="h-full w-5 rounded-none"
                       onClick={() => handleBedCountChange(bed.id, 1)}
