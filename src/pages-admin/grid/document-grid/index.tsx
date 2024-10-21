@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Button } from "@/components/ui/button";
-import { FileIcon, UploadIcon, Eye, Trash2, Download } from "lucide-react";
+import { FileIcon, UploadIcon, Eye, Trash2, Download, FileText, X } from "lucide-react";
 import { useDropzone } from "react-dropzone";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import mammoth from 'mammoth';
 import { createPropertyDocuments } from '@/api/api-endpoints';
 import { useDispatch, useAppSelector } from '@/store';
@@ -13,6 +13,7 @@ import styles from './document.module.css';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { deletePropertyDocumentThunk, fetchPropertyDocuments } from '@/store/slice/property-document/actions';
 import { setCurrentDocument } from '@/store/slice/property-document';
+import Loader from '@/components/loader';
 
 interface PropertyDocument {
   id: number;
@@ -31,7 +32,7 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
 
   const dispatch = useDispatch();
   const propertyDocumentsState = useAppSelector((state) => state.propertyDocuments);
-  const { documents, isLoading, error } = propertyDocumentsState;
+  const { documents, error } = propertyDocumentsState;
   const data = documents?.data || [];
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -40,6 +41,7 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
   const [documentToDelete, setDocumentToDelete] = useState<PropertyDocument | null>(null);
   const [filesToUpload, setFilesToUpload] = useState<{ file: File; documentType: string; propertyId: number }[]>([]);
   const [previewContent, setPreviewContent] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     dispatch(fetchPropertyDocuments());
@@ -60,9 +62,13 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
     dispatch(setCurrentDocument(document));
   };
 
-  const handleDocumentDelete = (documentId: number) => {
-    dispatch(deletePropertyDocumentThunk(documentId));
-
+  const handleDocumentDelete = async (documentId: number) => {
+    setIsLoading(true);
+    try {
+      await dispatch(deletePropertyDocumentThunk(documentId));
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handlePreview = async (document: PropertyDocument) => {
@@ -118,6 +124,7 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
 
   const handleUploadSubmit = async () => {
     setUploadError(null);
+    setIsLoading(true);
 
     try {
       const propertyDocuments = filesToUpload.map(({ file, documentType }, index) => ({
@@ -145,7 +152,9 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
     } catch (error) {
       console.error('Error uploading documents:', error);
       setUploadError('Failed to upload documents. Please try again.');
-    }
+    } finally {
+    setIsLoading(false);
+  }
   };
 
   const filteredDocuments = React.useMemo(() => {
@@ -155,8 +164,8 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
     );
   }, [data, selectedCategory, searchTerm]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (propertyDocumentsState.isLoading || isLoading) {
+    return <Loader />;
   }
 
   if (error) {
@@ -210,37 +219,37 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
                         <span className="text-sm">{doc.documentName}</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button
-                              className={styles.buttonOutlineSm}
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handlePreview(doc)}
-                            >
-                              <Eye className="h-4 w-4 mr-2" /> Preview
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className={styles.preview}>
-                            <DialogHeader>
-                              <DialogTitle>{previewDocument?.documentName}</DialogTitle>
-                            </DialogHeader>
-                            <div className="w-full h-full">
-                              {previewDocument && (
-                                previewContent ? (
-                                  <div dangerouslySetInnerHTML={{ __html: previewContent }} />
-                                ) : (
-                                  <iframe
-                                    src={`${previewDocument.documentUrl}#toolbar=0`}
-                                    width="100%"
-                                    height="100%"
-                                    style={{ border: 'none', minHeight: '70vh' }}
-                                  />
-                                )
-                              )}
-                            </div>
-                          </DialogContent>
-                        </Dialog>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            className={styles.buttonOutlineSm}
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handlePreview(doc)}
+                          >
+                            <Eye className="h-4 w-4 mr-2" /> Preview
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className= {styles.preview}>
+                          <DialogClose className="absolute right-4 top-4 z-10 bg-white rounded-full p-1 hover:bg-gray-100">
+                            <X className="h-4 w-4" />
+                          </DialogClose>
+                          <div className="w-full h-full">
+                            {previewDocument && (
+                              previewContent ? (
+                                <div dangerouslySetInnerHTML={{ __html: previewContent }} />
+                              ) : (
+                                <iframe
+                                  src={`${previewDocument.documentUrl}#toolbar=0`}
+                                  width="100%"
+                                  height="100%"
+                                  style={{ border: 'none', minHeight: '70vh' }} 
+                                />
+                              )
+                            )}
+                          </div>
+                        </DialogContent>
+                      </Dialog>
                         <Button
                           size="icon"
                           onClick={(e) => {
@@ -262,7 +271,7 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </DialogTrigger>
-                          <DialogContent>
+                          <DialogContent className={styles.delete}>
                             <DialogHeader>
                               <DialogTitle>Delete Document</DialogTitle>
                             </DialogHeader>
@@ -294,7 +303,27 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
               </ScrollArea>
             </TabsContent>
             <TabsContent value="upload" className="mt-4">
-              <div className="flex h-[calc(100vh-300px)]">
+              <div className="flex h-[calc(100vh-215px)]">
+              <div className="w-1/2  border rounded-md">
+                  {previewDocument ? (
+                    <div className="h-full overflow-auto">
+                      {/* <h3 className="text-lg font-semibold mb-2">{previewDocument.documentName}</h3> */}
+                      <iframe
+                        src={previewDocument.documentUrl}
+                        width="100%"
+                        height="100%"
+                        style={{ border: 'none', minHeight: '60vh' }}
+                      />
+                    </div>
+                  ) : (
+                    <div className='flex flex-col items-center justify-center h-full text-gray-500'>
+                      <FileText size={48} className="mb-2" />
+                      <div className="text-gray-500">
+                        Select a file to preview
+                      </div>
+                    </div>
+                  )}
+                </div>
                 <div className="w-1/2 pr-2">
                   <div {...getRootProps()} className="flex items-center justify-center h-32 border-2 border-dashed rounded-md mb-2">
                     <input {...getInputProps()} />
@@ -310,21 +339,22 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
                     </div>
                   </div>
                   <ScrollArea className="h-[calc(100vh-400px)] border rounded-md">
-                    {filesToUpload.map(({ file, documentType }, index) => (
-                      <div key={index} className="flex items-center justify-between p-2 m-2 bg-gray-50 rounded">
-                        <div className="flex items-center">
-                          <FileIcon className="mr-2" size={20} />
-                          <span className="truncate">{file.name}</span>
-                        </div>
-                        <Select
-                          value={documentType}
+                  {filesToUpload.map(({ file, documentType }, index) => (
+                    <div key={index} className="flex items-center justify-between p-2 m-2 bg-gray-50 rounded">
+                      <div className="flex items-center w-[300px]">
+                        <FileIcon className="mr-2 flex-shrink-0" size={20} />
+                        <span className="truncate" title={file.name}>{file.name}</span>
+                      </div>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <Select 
+                          value={documentType} 
                           onValueChange={(value) => {
                             const newFiles = [...filesToUpload];
                             newFiles[index].documentType = value;
                             setFilesToUpload(newFiles);
                           }}
                         >
-                          <SelectTrigger className="w-[180px]">
+                          <SelectTrigger className="w-[117px]">
                             <SelectValue placeholder="Document Type" />
                           </SelectTrigger>
                           <SelectContent>
@@ -333,33 +363,31 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
                             ))}
                           </SelectContent>
                         </Select>
-                        <Button variant="ghost" size="sm" onClick={() => handleFilePreview(file)}>
-                          Preview
-                        </Button>
+                        <div className="flex items-center gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const newFiles = filesToUpload.filter((_, i) => i !== index);
+                              setFilesToUpload(newFiles);
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="icon" onClick={() => handleFilePreview(file)}>
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
-                    ))}
-                  </ScrollArea>
-                  <Button variant="outline" className="mt-2 w-full" style={{ backgroundColor: '#e28f25', color: '#fff' }} onClick={handleUploadSubmit} disabled={filesToUpload.length === 0}>
+                    </div>
+                  ))}
+                </ScrollArea>
+                  <Button variant="outline" className="mt-2 w-full" style={{backgroundColor: '#e28f25', color: '#fff'}} onClick={handleUploadSubmit} disabled={filesToUpload.length === 0}>
                     Upload {filesToUpload.length} file(s)
                   </Button>
                 </div>
-                <div className="w-1/2 pl-2 border-l">
-                  {previewDocument ? (
-                    <div className="h-full overflow-auto">
-                      <h3 className="text-lg font-semibold mb-2">{previewDocument.documentName}</h3>
-                      <iframe
-                        src={previewDocument.documentUrl}
-                        width="100%"
-                        height="100%"
-                        style={{ border: 'none', minHeight: '60vh' }}
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-center h-full text-gray-500">
-                      Select a file to preview
-                    </div>
-                  )}
-                </div>
+                
               </div>
             </TabsContent>
           </Tabs>
@@ -367,5 +395,5 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
       </div>
     </div>
   );
-};
+}; 
 export default DocumentGrid;
