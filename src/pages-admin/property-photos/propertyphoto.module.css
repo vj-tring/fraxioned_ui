@@ -233,7 +233,7 @@
 .dot.active {
   border: 2px solid white;
   /* height: 75px !important; */
-  border-radius: 10px;
+  border-radius: 4px;
 }
 .carouselImage1 {
   /* height: 100% !important;
@@ -264,7 +264,7 @@
 .lightboxContent img {
   max-width: 100%;
   max-height: 90vh;
-  border-radius: 8px;
+  border-radius: 4px;
 }
 
 .closeButton {
