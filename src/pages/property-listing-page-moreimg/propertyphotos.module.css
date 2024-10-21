@@ -250,8 +250,8 @@
 }
 .carouselContainer {
   display: flex;
-  justify-content: space-around;
-  gap: 150px;
+  justify-content: space-evenly;
+  gap: 270px;
 }
 
 .lightboxContent {
