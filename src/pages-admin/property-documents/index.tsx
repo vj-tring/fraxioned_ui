@@ -42,14 +42,15 @@ const PropertyDocuments: React.FC = () => {
   const [filesToUpload, setFilesToUpload] = useState<{ file: File; documentType: string; propertyId: number }[]>([]);
   const [previewContent, setPreviewContent] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [documentsTabPreview, setDocumentsTabPreview] = useState<PropertyDocument | null>(null);
+  const [uploadTabPreview, setUploadTabPreview] = useState<PropertyDocument | null>(null);
+  const [activeTab, setActiveTab] = useState("documents");
 
   useEffect(() => {
     if (id) {
       dispatch(fetchPropertyDocumentsByProperty(Number(id)));
     }
   }, [dispatch, id]);
-  console.log('Raw API response:', propertyDocumentsState);
-  console.log('Extracted documents:', documents);
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const newFiles = acceptedFiles.map(file => ({
       file,
@@ -86,7 +87,8 @@ const PropertyDocuments: React.FC = () => {
   };
 
   const handlePreview = async (document: PropertyDocument) => {
-    setPreviewDocument(document);
+    const previewDocument = activeTab === "documents" ? setDocumentsTabPreview : setUploadTabPreview;
+    previewDocument(document);
     if (document.documentName.endsWith('.docx')) {
       try {
         const response = await fetch(document.documentUrl);
@@ -94,7 +96,6 @@ const PropertyDocuments: React.FC = () => {
         const result = await mammoth.convertToHtml({ arrayBuffer });
         setPreviewContent(result.value);
       } catch (error) {
-        console.error('Error converting DOCX:', error);
         setPreviewContent('<p>Error previewing DOCX file</p>');
       }
     } else {
@@ -123,7 +124,7 @@ const PropertyDocuments: React.FC = () => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const content = e.target?.result as string;
-      setPreviewDocument({
+      setUploadTabPreview({
         id: Date.now(),
         documentName: file.name,
         documentUrl: URL.createObjectURL(file),
@@ -136,35 +137,47 @@ const PropertyDocuments: React.FC = () => {
     reader.readAsText(file);
   };
 
+  const handleTabChange = (newTab: string) => {
+    setActiveTab(newTab);
+    if (newTab === "documents") {
+      setUploadTabPreview(null);
+    } else {
+      setDocumentsTabPreview(null);
+    }
+  };
+
   const handleUploadSubmit = async () => {
     setUploadError(null);
     setIsLoading(true);
-  
+
     try {
       const propertyDocuments = filesToUpload.map(({ file, documentType }, index) => ({
         documentName: file.name,
         documentType: documentType,
         displayOrder: index + 1,
-        property: { id: Number(id)},
+        property: { id: Number(id) },
         createdBy: { id: 1 },
       }));
-  
+
       const formData = new FormData();
       formData.append('propertyDocuments', JSON.stringify(propertyDocuments));
-  
+
       filesToUpload.forEach(({ file }) => {
         formData.append('documentFiles', file);
       });
-  
-      await createPropertyDocuments(formData);
-      
+
+      const response = await createPropertyDocuments(formData);
+      const newDocuments = response.data;
+
       setFilesToUpload([]);
       setUploadError(null);
-      await dispatch(fetchPropertyDocumentsByProperty(Number(id)));
-  
-      console.log('Documents uploaded successfully');
+      dispatch(fetchPropertyDocumentsByProperty(Number(id)));
+
+      if (newDocuments && newDocuments.length > 0) {
+        setDocumentsTabPreview(newDocuments[0]);
+      }
+      setActiveTab("documents");
     } catch (error) {
-      console.error('Error uploading documents:', error);
       setUploadError('Failed to upload documents. Please try again.');
     } finally {
       setIsLoading(false);
@@ -181,7 +194,6 @@ const PropertyDocuments: React.FC = () => {
   if (propertyDocumentsState.isLoading || isLoading) {
     return <Loader />;
   }
-
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -190,8 +202,8 @@ const PropertyDocuments: React.FC = () => {
     <div className={styles.fullContainer}>
       <div className={styles.contentWrapper}>
         <div className="flex-1 p-4">
-          <Tabs defaultValue="documents" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="documents">Documents</TabsTrigger>
               <TabsTrigger value="upload">Upload</TabsTrigger>
             </TabsList>
@@ -244,17 +256,17 @@ const PropertyDocuments: React.FC = () => {
                             <Eye className="h-4 w-4 mr-2" /> Preview
                           </Button>
                         </DialogTrigger>
-                        <DialogContent className= {styles.preview}>
+                        <DialogContent className={styles.preview}>
                           <DialogClose className="absolute right-4 top-4 z-10 bg-white rounded-full p-1 hover:bg-gray-100">
                             <X className="h-4 w-4" />
                           </DialogClose>
                           <div className="w-full h-full">
-                            {previewDocument && (
+                            {documentsTabPreview && (
                               previewContent ? (
                                 <div dangerouslySetInnerHTML={{ __html: previewContent }} />
                               ) : (
                                 <iframe
-                                  src={`${previewDocument.documentUrl}#toolbar=0`}
+                                  src={`${documentsTabPreview.documentUrl}#toolbar=0`}
                                   width="100%"
                                   height="100%"
                                   style={{ border: 'none', minHeight: '70vh' }} 
@@ -319,11 +331,11 @@ const PropertyDocuments: React.FC = () => {
             <TabsContent value="upload" className="mt-4">
               <div className="flex h-[calc(100vh-215px)]">
               <div className="w-1/2  border rounded-md">
-                  {previewDocument ? (
+                  {uploadTabPreview ? (
                     <div className="h-full overflow-auto">
                       {/* <h3 className="text-lg font-semibold mb-2">{previewDocument.documentName}</h3> */}
                       <iframe
-                        src={previewDocument.documentUrl}
+                        src={uploadTabPreview.documentUrl}
                         width="100%"
                         height="100%"
                         style={{ border: 'none', minHeight: '60vh' }}

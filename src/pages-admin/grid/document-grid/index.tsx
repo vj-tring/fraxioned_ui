@@ -42,6 +42,9 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
   const [filesToUpload, setFilesToUpload] = useState<{ file: File; documentType: string; propertyId: number }[]>([]);
   const [previewContent, setPreviewContent] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [documentsTabPreview, setDocumentsTabPreview] = useState<PropertyDocument | null>(null);
+  const [uploadTabPreview, setUploadTabPreview] = useState<PropertyDocument | null>(null);
+  const [activeTab, setActiveTab] = useState("documents");
 
   useEffect(() => {
     dispatch(fetchPropertyDocuments());
@@ -72,7 +75,8 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
   };
 
   const handlePreview = async (document: PropertyDocument) => {
-    setPreviewDocument(document);
+    const previewDocument = activeTab === "documents" ? setDocumentsTabPreview : setUploadTabPreview;
+    previewDocument(document);
     if (document.documentName.endsWith('.docx')) {
       try {
         const response = await fetch(document.documentUrl);
@@ -80,7 +84,6 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
         const result = await mammoth.convertToHtml({ arrayBuffer });
         setPreviewContent(result.value);
       } catch (error) {
-        console.error('Error converting DOCX:', error);
         setPreviewContent('<p>Error previewing DOCX file</p>');
       }
     } else {
@@ -101,7 +104,6 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
       a.click();
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Error downloading document:', error);
     }
   };
 
@@ -109,7 +111,7 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
     const reader = new FileReader();
     reader.onload = (e) => {
       const content = e.target?.result as string;
-      setPreviewDocument({
+      setUploadTabPreview({
         id: Date.now(),
         documentName: file.name,
         documentUrl: URL.createObjectURL(file),
@@ -120,6 +122,15 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
       });
     };
     reader.readAsText(file);
+  };
+
+  const handleTabChange = (newTab: string) => {
+    setActiveTab(newTab);
+    if (newTab === "documents") {
+      setUploadTabPreview(null);
+    } else {
+      setDocumentsTabPreview(null);
+    }
   };
 
   const handleUploadSubmit = async () => {
@@ -142,20 +153,24 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
         formData.append('documentFiles', file);
       });
 
-      await createPropertyDocuments(formData);
+      const response = await createPropertyDocuments(formData);
+      const newDocuments = response.data;
 
       setFilesToUpload([]);
       setUploadError(null);
       dispatch(fetchPropertyDocuments());
+      if (newDocuments && newDocuments.length > 0) {
+        setDocumentsTabPreview(newDocuments[0]);
+      }
+      setActiveTab("documents");
 
-      console.log('Documents uploaded successfully');
     } catch (error) {
-      console.error('Error uploading documents:', error);
       setUploadError('Failed to upload documents. Please try again.');
     } finally {
-    setIsLoading(false);
-  }
+      setIsLoading(false);
+    }
   };
+
 
   const filteredDocuments = React.useMemo(() => {
     return data.filter((doc: { documentType: string; documentName: string; }) =>
@@ -176,7 +191,7 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
     <div className={styles.fullContainer}>
       <div className={styles.contentWrapper}>
         <div className="flex-1 p-4">
-          <Tabs defaultValue="documents" className="w-full">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="documents">Documents</TabsTrigger>
               <TabsTrigger value="upload">Upload</TabsTrigger>
@@ -220,36 +235,36 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
                       </div>
                       <div className="flex items-center space-x-2">
                       <Dialog>
-                        <DialogTrigger asChild>
-                          <Button
-                            className={styles.buttonOutlineSm}
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handlePreview(doc)}
-                          >
-                            <Eye className="h-4 w-4 mr-2" /> Preview
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className= {styles.preview}>
-                          <DialogClose className="absolute right-4 top-4 z-10 bg-white rounded-full p-1 hover:bg-gray-100">
-                            <X className="h-4 w-4" />
-                          </DialogClose>
-                          <div className="w-full h-full">
-                            {previewDocument && (
-                              previewContent ? (
-                                <div dangerouslySetInnerHTML={{ __html: previewContent }} />
-                              ) : (
-                                <iframe
-                                  src={`${previewDocument.documentUrl}#toolbar=0`}
-                                  width="100%"
-                                  height="100%"
-                                  style={{ border: 'none', minHeight: '70vh' }} 
-                                />
-                              )
-                            )}
-                          </div>
-                        </DialogContent>
-                      </Dialog>
+                            <DialogTrigger asChild>
+                            <Button
+                                className={styles.buttonOutlineSm}
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handlePreview(doc)}
+                            >
+                                <Eye className="h-4 w-4 mr-2" /> Preview
+                            </Button>
+                            </DialogTrigger>
+                            <DialogContent className={styles.preview}>
+                            <DialogClose className="absolute right-4 top-4 z-10 bg-white rounded-full p-1 hover:bg-gray-100">
+                                <X className="h-4 w-4" />
+                            </DialogClose>
+                            <div className="w-full h-full">
+                                {documentsTabPreview && (
+                                previewContent ? (
+                                    <div dangerouslySetInnerHTML={{ __html: previewContent }} />
+                                ) : (
+                                    <iframe
+                                    src={`${documentsTabPreview.documentUrl}#toolbar=0`}
+                                    width="100%"
+                                    height="100%"
+                                    style={{ border: 'none', minHeight: '70vh' }} 
+                                    />
+                                )
+                                )}
+                            </div>
+                            </DialogContent>
+                        </Dialog>
                         <Button
                           size="icon"
                           onClick={(e) => {
@@ -305,11 +320,11 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
             <TabsContent value="upload" className="mt-4">
               <div className="flex h-[calc(100vh-215px)]">
               <div className="w-1/2  border rounded-md">
-                  {previewDocument ? (
+                  {uploadTabPreview ? (
                     <div className="h-full overflow-auto">
                       {/* <h3 className="text-lg font-semibold mb-2">{previewDocument.documentName}</h3> */}
                       <iframe
-                        src={previewDocument.documentUrl}
+                        src={uploadTabPreview.documentUrl}
                         width="100%"
                         height="100%"
                         style={{ border: 'none', minHeight: '60vh' }}
