@@ -9,10 +9,9 @@ import {
   Paper,
   InputBase,
   Button,
-  Link,
+  
+
 } from "@mui/material";
-import AssistantDirectionOutlinedIcon from "@mui/icons-material/AssistantDirectionOutlined";
-import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import SearchIcon from "@mui/icons-material/Search";
@@ -34,14 +33,24 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { FormControl, Select, MenuItem } from "@mui/material";
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { Box, Typography } from '@mui/material';
+import Calendar from '@/components/big-calendar';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 
+
+
+
+
+
+ 
 
 
 const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
   isSidebarOpen,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
+  const [tabValue, setTabValue] = useState(0);
+
 
 
   const properties = useSelector(
@@ -98,7 +107,6 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     return '#1a95538a';
   };
 
-  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchProperties());
@@ -143,7 +151,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
         setBookings(mappedData);
         setFilteredBookings(mappedData);
       } catch (err) {
-        setError("Failed to fetch bookings. Please try again.");
+        setError("No bookings Found. Please try again.");
         setShowErrorSnackbar(true);
       }
     };
@@ -186,7 +194,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     setFilteredBookings(filtered);
   }, [filterValue, bookings]);
 
-  
+
 
   useEffect(() => {
     const lowercasedFilter = filterValue.toLowerCase();
@@ -213,7 +221,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
       const bookingCheckinDate = new Date(booking.checkinDate);
       const bookingCheckoutDate = new Date(booking.checkoutDate);
 
-      const matchesDateRange = 
+      const matchesDateRange =
         (!startDate || bookingCheckoutDate >= startDate) &&
         (!endDate || bookingCheckinDate <= endDate);
 
@@ -223,6 +231,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     setFilteredBookings(filtered);
   }, [filterValue, bookings, selectedOption, startDate, endDate]);
 
+  
 
 
   const handleEditClick = (id: number) => {
@@ -289,9 +298,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     setBookingToDelete(null);
   };
 
-  const handleCalendarClick = () => {
-    navigate("/admin/bookings");
-  };
+  
 
   const handleExportCSV = () => {
     exportBookingsToCSV(filteredBookings);
@@ -440,216 +447,211 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
 
 
 
+
   return (
-    <div
-      className={`${styles.bookingsContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
-        }`}
-    >
-      <div className={styles.titleContainer}>
-        <h1 className={styles.title}>Booking Details</h1>
-        <div className={styles.actionsContainer}>
-          <div className={styles.gridActionContainer}>
-            <Paper className={styles.searchContainer} elevation={1}>
-              <IconButton
-                className={styles.searchIcon}
-                size="small"
-                disableRipple
-              >
-                <SearchIcon />
-              </IconButton>
-              <InputBase
-                className={styles.searchInput}
-                placeholder="Search..."
-                value={filterValue}
-                onChange={handleSearchChange}
-              />
-              {filterValue && (
-                <IconButton
-                  className={styles.clearIcon}
-                  size="small"
-                  onClick={handleSearchClear}
-                >
-                  <ClearIcon />
-                </IconButton>
-              )}
-            </Paper>
- 
-            <div className={styles.datePickerContainer}>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker
-                  label="Check-in Date"
-                  value={startDate}
-                  onChange={handleStartDateChange}
-                  slotProps={{ textField: { helperText: null } }}
-                  className={styles.datePicker}
-
-                  sx={{
-
-                    '& .MuiInputBase-root': { height: '35px' },
-                    '& .MuiInputBase-input': { fontSize: '13px' },
-                    '& .MuiInputLabel-root': {
-                      transform: 'translate(14px, 9px) scale(1)',
-                      position: 'absolute',
-                      top: '-5px'
-                    },
-                    '& .MuiInputLabel-shrink': {
-                      transform: 'translate(14px, -6px) scale(0.75)',
-                    },
-                  }}
-                />
-                <DatePicker
-                  label="Check-Out Date"
-                  value={endDate}
-                  onChange={handleEndDateChange}
-                  slotProps={{ textField: { helperText: null } }}
-                  className={styles.datePicker}
-                  sx={{
-                    marginLeft:'10px',
-                    '& .MuiInputBase-root': { height: '35px' },
-                    '& .MuiInputBase-input': { fontSize: '13px' },
-                    '& .MuiInputLabel-root': {
-                      transform: 'translate(14px, 9px) scale(1)',
-                      position: 'absolute',
-                      top: '-5px'
-                    },
-                    '& .MuiInputLabel-shrink': {
-                      transform: 'translate(14px, -6px) scale(0.75)',
-                    },
-                  }}
-                />
-              </LocalizationProvider>
-              {(startDate && endDate) && (
-                <IconButton
-                  className={styles.clearDateFilter}
-                  size="small"
-                  onClick={handleClearDateFilter}
-                  aria-label="Clear date filter"
-                >
-                  <ClearIcon />
-                </IconButton>
-              )}
-            </div>
-
-            <FormControl variant="outlined" className={styles.selectContainer}>
-              <Select
-                value={selectedOption}
-                onChange={(e) => setSelectedOption(e.target.value)}
-                displayEmpty
-                inputProps={{ "aria-label": "Without label" }}
-                sx={{
-                  marginBottom: '8px',
-                  width: '155px',
-                  height: '37px',
-                  '& .MuiInputBase-input': {
-                    fontSize: '14px',
-                    height: '4px',
-                    padding: '5px',
-                  },
-                  '& .MuiInputLabel-shrink': {
-                    transform: 'translate(14px, -6px) scale(0.75)',
-                  },
-                }}
-              >
-                {options.map((option) => (
-                  <MenuItem
-                    key={option.value}
-                    value={option.value}
-
-                  >
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        paddingLeft: option.value === 'all' ? '15px' : '0px', 
-                      }}
-                    >
-                      {option.value !== 'all' && (
-                        <BookmarkIcon
-                          sx={{
-                            color: option.value === 'active' ? '#1a95538a' :
-                              option.value === 'completed' ? '#2d6aa0' :
-                                option.value === 'cancelled' ? '#dd5c5c' : 'inherit',
-                            transform: 'rotate(-90deg)',
-                            fontSize: 22,
-                            alignItems: 'center',
-                          }}
+    <div className={`${styles.bookingsContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed}`}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
+      <Tabs defaultValue="0" className={styles.fullWidthTabs}>
+      <TabsList className={styles.fullWidthTabsList}>
+      <TabsTrigger value="0" onClick={() => setTabValue(0)} className={styles.fullWidthTabsTrigger}>
+      Calendar View
+            </TabsTrigger>
+            <TabsTrigger value="1" onClick={() => setTabValue(1)} className={styles.fullWidthTabsTrigger}>
+            Bookings Details
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value={String(tabValue)}className={styles.fullWidthTabsContent}>
+            {tabValue === 0 && <Calendar isSidebarOpen={isSidebarOpen} />}
+            {tabValue === 1 && (
+              <>
+                <div className={styles.titleContainer}>
+                  <div className={styles.actionsContainer}>
+                    <div className={styles.gridActionContainer}>
+                      <Paper className={styles.searchContainer} elevation={1}>
+                        <IconButton className={styles.searchIcon} size="small" disableRipple>
+                          <SearchIcon />
+                        </IconButton>
+                        <InputBase
+                          className={styles.searchInput}
+                          placeholder="Search..."
+                          value={filterValue}
+                          onChange={handleSearchChange}
                         />
-                      )}
-                      <Box sx={{ marginLeft: option.value !== 'all' ? 1 : 0 }}>
-                        {option.label}
-                      </Box>
-                    </Box>
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+                        {filterValue && (
+                          <IconButton className={styles.clearIcon} size="small" onClick={handleSearchClear}>
+                            <ClearIcon />
+                          </IconButton>
+                        )}
+                      </Paper>
 
+                      <div className={styles.datePickerContainer}>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                          <DatePicker
+                            label="Check-in Date"
+                            value={startDate}
+                            onChange={handleStartDateChange}
+                            slotProps={{ textField: { helperText: null } }}
+                            className={styles.datePicker}
+                            sx={{
+                              '& .MuiInputBase-root': { height: '35px' },
+                              '& .MuiInputBase-input': { fontSize: '13px' },
+                              '& .MuiInputLabel-root': {
+                                transform: 'translate(14px, 9px) scale(1)',
+                                position: 'absolute',
+                                top: '-5px',
+                              },
+                              '& .MuiInputLabel-shrink': {
+                                transform: 'translate(14px, -6px) scale(0.75)',
+                              },
+                            }}
+                          />
+                          <DatePicker
+                            label="Check-Out Date"
+                            value={endDate}
+                            onChange={handleEndDateChange}
+                            slotProps={{ textField: { helperText: null } }}
+                            className={styles.datePicker}
+                            sx={{
+                              marginLeft: '10px',
+                              '& .MuiInputBase-root': { height: '35px' },
+                              '& .MuiInputBase-input': { fontSize: '13px' },
+                              '& .MuiInputLabel-root': {
+                                transform: 'translate(14px, 9px) scale(1)',
+                                position: 'absolute',
+                                top: '-5px',
+                              },
+                              '& .MuiInputLabel-shrink': {
+                                transform: 'translate(14px, -6px) scale(0.75)',
+                              },
+                            }}
+                          />
+                        </LocalizationProvider>
+                        {startDate && endDate && (
+                          <IconButton className={styles.clearDateFilter} size="small" onClick={handleClearDateFilter} aria-label="Clear date filter">
+                            <ClearIcon />
+                          </IconButton>
+                        )}
+                      </div>
 
-            <Button
-              variant="contained"
-              startIcon={<FileDownloadIcon />}
-              onClick={handleExportCSV}
-              className={styles.actionButton}
-            >
-              Export
-            </Button>
-            <Link
-              component="button"
-              onClick={handleCalendarClick}
-              className={styles.calendarLink}
-            >
-              <>Go to Calendar</>
-              <AssistantDirectionOutlinedIcon fontSize="small" sx={{}} />
-            </Link>
-          </div>
-        </div>
-      </div>
+                      <FormControl variant="outlined" className={styles.selectContainer}>
+                        <Select
+                          value={selectedOption}
+                          onChange={(e) => setSelectedOption(e.target.value as string)}
+                          displayEmpty
+                          inputProps={{ 'aria-label': 'Without label' }}
+                          sx={{
+                            marginBottom: '8px',
+                            width: '155px',
+                            height: '37px',
+                            '& .MuiInputBase-input': {
+                              fontSize: '14px',
+                              height: '4px',
+                              padding: '5px',
+                            },
+                            '& .MuiInputLabel-shrink': {
+                              transform: 'translate(14px, -6px) scale(0.75)',
+                            },
+                          }}
+                        >
+                          {options.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                              <Box sx={{ display: 'flex', paddingLeft: option.value === 'all' ? '15px' : '9px' }}>
+                                {option.value !== 'all' && (
+                                  <BookmarkIcon
+                                    sx={{
+                                      color: option.value === 'active' ? '#1a95538a'
+                                        : option.value === 'completed' ? '#2d6aa0'
+                                        : option.value === 'cancelled' ? '#dd5c5c'
+                                        : 'inherit',
+                                      transform: 'rotate(-90deg)',
+                                      fontSize: 22,
+                                      alignItems: 'center',
+                                    }}
+                                  />
+                                )}
+                                <Box sx={{ marginLeft: option.value !== 'all' ? 1 : 0 }}>
+                                  {option.label}
+                                </Box>
+                              </Box>
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+
+                      <Button
+                        variant="contained"
+                        startIcon={<FileDownloadIcon />}
+                        onClick={handleExportCSV}
+                        className={styles.actionButton}
+                      >
+                        Export
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={styles.dataGridWrapper}>
+                  <DataGrid
+                    rows={filteredBookings}
+                    columns={columns}
+                    rowHeight={40}
+                    columnHeaderHeight={40}
+                    
+
+                    sx={{
+                      '& .MuiDataGrid-columnHeader': {
+                        backgroundColor: 'grey',
+                        color: 'white',
+                        fontSize: 'small',
+                        textTransform: 'uppercase',
+                        fontFamily: "'Roboto', sans-serif !important",
+                      },
+                      '& .MuiDataGrid-cell': {
+                        fontSize: 'small',
+                        fontFamily: "'Roboto', sans-serif !important",
+                      },
+                    }}
+                    initialState={{
+                      pagination: {
+                        paginationModel: { page: 0, pageSize: 10 },
+                      },
+                    }}
+                    getRowClassName={(params) =>
+                      params.indexRelativeToCurrentPage % 2 === 0 ? styles.evenRow : styles.oddRow
+                    }
+                    pageSizeOptions={[5, 10, 25]}
+                    disableRowSelectionOnClick
+                    disableColumnMenu
+                    disableDensitySelector
+                    filterModel={filterModel}
+                    className={`${styles.dataGrid} ${styles.dataGridPadding}`}
+                    slots={{
+                      noRowsOverlay: () => (
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '100%',
+                          }}
+                        >
+                          <Typography>No bookings found. Try changing the date range, status, or search restrictions.</Typography>
+                        </Box>
+                      ),
+                    }}
+                  />
+                </div>
+              </>
+            )}
+          </TabsContent>
+        </Tabs>
+      </Box>
 
       <ViewBookings
         openEvent={isViewModalOpen}
         handleClose={handleCloseViewModal}
         eventId={selectedBookingId || 0}
       />
-
-      <div className={styles.dataGridWrapper}>
-        <DataGrid
-          rows={filteredBookings}
-          columns={columns}
-          rowHeight={40}
-          columnHeaderHeight={40}
-          sx={{
-            "& .MuiDataGrid-columnHeader": {
-              backgroundColor: "grey",
-              color: "white",
-              fontSize: "small",
-              textTransform: "uppercase",
-
-              fontFamily: " 'Roboto', sans-serif !important",
-            },
-            "& .MuiDataGrid-cell": {
-              fontSize: "small",
-              fontFamily: " 'Roboto', sans-serif !important ",
-            },
-          }}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 10 },
-            },
-          }}
-          getRowClassName={(params) => {
-            if (params.indexRelativeToCurrentPage % 2 === 0) {
-              return styles.evenRow;
-            } else {
-              return styles.oddRow;
-            }
-          }}
-          pageSizeOptions={[5, 10, 25]}
-          disableRowSelectionOnClick
-          disableColumnMenu
-          disableDensitySelector
-          filterModel={filterModel}
-          className={`${styles.dataGrid} ${styles.dataGridPadding}`}
-        />
-      </div>
 
       <ConfirmationModal
         show={showDeleteConfirmation}
@@ -665,13 +667,9 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
         open={showErrorSnackbar}
         autoHideDuration={6000}
         onClose={() => setShowErrorSnackbar(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert
-          onClose={() => setShowErrorSnackbar(false)}
-          severity="error"
-          sx={{ width: "100%" }}
-        >
+        <Alert onClose={() => setShowErrorSnackbar(false)} severity="error" sx={{ width: '100%' }}>
           {error}
         </Alert>
       </Snackbar>
@@ -680,18 +678,15 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
         open={showSuccessSnackbar}
         autoHideDuration={6000}
         onClose={() => setShowSuccessSnackbar(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert
-          onClose={() => setShowSuccessSnackbar(false)}
-          severity="success"
-          sx={{ width: "100%" }}
-        >
-          Booking cancelled successfully.
+        <Alert onClose={() => setShowSuccessSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+          Action completed successfully!
         </Alert>
       </Snackbar>
     </div>
   );
 };
+
 
 export default BookingsPage;
