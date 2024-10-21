@@ -7,6 +7,25 @@
   margin: 0 auto;
   overflow-y: auto;
 }
+.addPropertyButton {
+  margin-bottom: 20px;
+}
+
+.addPropertyCard {
+  margin-bottom: 20px;
+}
+
+.selectField {
+  margin-bottom: 15px;
+}
+
+.dateField {
+  margin-bottom: 15px;
+}
+
+.submitButton {
+  margin-top: 10px;
+}
 
 .loadingText,
 .errorText {

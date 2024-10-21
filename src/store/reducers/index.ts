@@ -20,9 +20,9 @@ import amenityGroupsReducer from '../slice/amenity/group'
 import propertyAmenitiesReducer from '../slice/auth/propertyamenities';
 import amenitiesReducer from '../slice/amenity'
 import userDetailsReducer from '../slice/auth/userdetails';
-import userpropertiesReducer from '../slice/auth/userproperties';
+import userpropertiesReducer from '../slice/user-properties';
 import userReducer from '../slice/user-slice';
-import userpropertyReducer from '../slice/auth/userpropertiesSlice';
+import userpropertyReducer from '../slice/auth/userproperties';
 import rolesReducer from '../slice/roles';
 import addQuestionReducer from '../slice/auth/addfaqSlice';
 import faqPageReducer from '../slice/auth/faqpageSlice';
