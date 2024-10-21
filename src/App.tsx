@@ -4,7 +4,6 @@ import {
   Route,
   Routes,
   useLocation,
-  Navigate,
   useNavigate,
 } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -19,8 +18,8 @@ import AxiosInterceptor from "./api/axiosSetup";
 import { fetchAuthState } from "./store/slice/authentication/actions";
 import { RootState } from "./store/reducers";
 import PrivateRoute from "./private-route";
-import { publicRoutes } from "./constants";
 function AppRoutes() {
+  const publicRoutes = JSON.parse(import.meta.env.VITE_PUBLIC_ROUTES);
   const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
@@ -30,6 +29,7 @@ function AppRoutes() {
   const isPublicRoute = publicRoutes.includes(location.pathname);
   useEffect(() => {
     if (user == null && !isPublicRoute && parsedSession != null) {
+      
       dispatch(fetchAuthState());
     } else {
       navigate("/login");

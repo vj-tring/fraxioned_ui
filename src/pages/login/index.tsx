@@ -7,7 +7,6 @@ import styles from "./login.module.css";
 import logo from "../../assets/images/fraxioned.png";
 import Loader from "../../components/loader/index";
 import CustomizedSnackbars from "../../components/customized-snackbar";
-// import { ENCRYPTION_KEY } from "@/constants";
 import { encrypt, decrypt } from "@/utils/encryption";
 
 export const validateEmail = (email: string): boolean => {
@@ -16,6 +15,7 @@ export const validateEmail = (email: string): boolean => {
 };
 
 const Login: React.FC = () => {
+  const ENCRYPTION_KEY = import.meta.env.VITE_ENCRYPTION_KEY
   const [formState, setFormState] = useState({
     email: "",
     password: "",
@@ -41,8 +41,8 @@ const Login: React.FC = () => {
     const storedPassword = localStorage.getItem("rememberedPassword");
     if (storedEmail && storedPassword) {
       setFormState({
-        email: decrypt(storedEmail, import.meta.env.VITE_ENCRYPTION_KEY),
-        password: decrypt(storedPassword, import.meta.env.VITE_ENCRYPTION_KEY),
+        email: decrypt(storedEmail, ENCRYPTION_KEY),
+        password: decrypt(storedPassword, ENCRYPTION_KEY),
         rememberMe: true,
       });
     }
@@ -95,11 +95,11 @@ const Login: React.FC = () => {
       if (formState.rememberMe) {
         localStorage.setItem(
           "rememberedEmail",
-          encrypt(formState.email, import.meta.env.VITE_ENCRYPTION_KEY)
+          encrypt(formState.email, ENCRYPTION_KEY)
         );
         localStorage.setItem(
           "rememberedPassword",
-          encrypt(formState.password, import.meta.env.VITE_ENCRYPTION_KEY)
+          encrypt(formState.password, ENCRYPTION_KEY)
         );
       } else {
         localStorage.removeItem("rememberedEmail");
