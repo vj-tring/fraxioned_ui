@@ -413,7 +413,7 @@ export const fetchFaqs = () => {
   return axiosInstance.get('/faq-questions'); 
 };
 
-export const updateCategory = (id: number , data: {createdBy: { id: number; }; categoryName: string;}) =>{
+export const updateCategory = (id: number , data :any) =>{
   return axiosInstance.patch(`/faq-categories/category/${id}`, data);
 };
 

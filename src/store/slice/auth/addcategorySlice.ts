@@ -3,15 +3,15 @@ import { createCategory, getCategories, updateCategory, deleteCategory } from '@
 
 interface CategoryState {
   data: {
-    id: number;          // Unique identifier for the category
-    categoryName: string; // Name of the category
+    id: number;          
+    categoryName: string; 
   }[];
   loading: boolean;
   error: string | null;
   success: boolean;
   addSuccess: boolean;
-  editSuccess: boolean;  // Track edit success
-  deleteSuccess: boolean; // Track delete success
+  editSuccess: boolean;  
+  deleteSuccess: boolean; 
 }
 
 const initialState: CategoryState = {
@@ -20,60 +20,56 @@ const initialState: CategoryState = {
   error: null,
   success: false,
   addSuccess: false,
-  editSuccess: false,  // Initial state for edit success
-  deleteSuccess: false,  // Initial state for delete success
+  editSuccess: false,  
+  deleteSuccess: false, 
 };
 
-// Add a new category
 export const addCategoryName = createAsyncThunk(
   'categories/addCategoryName',
   async (data: { createdBy: { id: number }; categoryName: string }, { rejectWithValue }) => {
     try {
       const response = await createCategory(data);
-      return response.data;  // Assuming the response includes the newly created category
+      return response.data; 
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'An error occurred while adding the category');
     }
   }
 );
 
-// Fetch categories
 export const fetchCategories = createAsyncThunk(
   'categories/fetchCategories',
   async (_, { rejectWithValue }) => {
     try {
       const response = await getCategories();
-      return response.data.data; // Assuming this structure contains the list of categories
+      return response.data.data; 
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'An error occurred while fetching categories');
     }
   }
 );
 
-// Edit category (Update category)
 export const editCategoryAsync = createAsyncThunk(
   'categories/editCategory',
-  async (data: { id: number; categoryName: string }, { rejectWithValue }) => {
+  async ({id,payload}:{id:number, payload:{categoryName:string,updatedBy:{id:number}}},{ rejectWithValue }) => {
     try {
-      const response = await updateCategory(data.id, {
-        categoryName: data.categoryName,
-        createdBy: { id: 0 } // Adjust as per your requirements
-      });
-      return { id: data.id, categoryName: data.categoryName }; // Return ID and updated name
+      const response = await updateCategory(id,payload)
+      return response.data; 
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'An error occurred while updating the category');
     }
   }
 );
 
-// Delete category
 export const deleteCategoryAsync = createAsyncThunk(
   'categories/deleteCategory',
   async (id: number, { rejectWithValue }) => {
     try {
-      await deleteCategory(id);
-      return id; // Return the ID for successful deletion
+      const response = await deleteCategory(id);
+      return response.data;
     } catch (error: any) {
+      if(error.response.status === 500){
+        return error.response.data;
+      }
       return rejectWithValue(error.response?.data?.message || 'An error occurred while deleting the category');
     }
   }
