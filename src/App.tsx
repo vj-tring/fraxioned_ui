@@ -4,6 +4,7 @@ import {
   Route,
   Routes,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "./store";
@@ -17,15 +18,21 @@ import AxiosInterceptor from "./api/axiosSetup";
 import { fetchAuthState } from "./store/slice/authentication/actions";
 import { RootState } from "./store/reducers";
 import PrivateRoute from "./private-route";
-import {publicRoutes} from './constants'
 function AppRoutes() {
+  const publicRoutes = JSON.parse(import.meta.env.VITE_PUBLIC_ROUTES);
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.user);
-  const isPublicRoute = publicRoutes.includes(location.pathname)
+  const session = localStorage.getItem("session");
+  const parsedSession = session !== null ? JSON.parse(session) : null;
+  const isPublicRoute = publicRoutes.includes(location.pathname);
   useEffect(() => {
-    if (user == null && !isPublicRoute){
+    if (user == null && !isPublicRoute && parsedSession != null) {
+      
       dispatch(fetchAuthState());
+    } else {
+      navigate("/login");
     }
   }, [dispatch]);
   return (
