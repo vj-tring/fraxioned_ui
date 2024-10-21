@@ -1,240 +1,124 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import styles from "./newphoto.module.css";
-import {
-  propertyImageuploadapi,
-  propertyspaceapi,
-  propertyspacetypesapi,
-} from "@/api/api-endpoints";
-import Loader from "@/components/loader";
-import { Trash2 } from "lucide-react";
-
-interface PhotoUploadProps {
-  propertyId: string | undefined;
+import React, { useState, useRef, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { X, Plus } from 'lucide-react';
+import styles from './newphoto.module.css';
+import { uploadPropertyImages, resetPropertyImagesState, clearPropertyImages } from '@/store/slice/auth/additional-image';
+import { RootState } from '@/store/reducers';
+import { AppDispatch } from '@/store';
+interface AddPhotoProps {
+  propertyId: number;
   onClose: () => void;
+  onPhotosAdded: () => void;
 }
 
-interface Space {
-  id: number;
-  name: string;
-}
+const AddPhoto: React.FC<AddPhotoProps> = ({ propertyId, onClose, onPhotosAdded }) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-interface SpaceType {
-  id: number;
-  name: string;
-  space: {
-    id: number;
-    name: string;
-  };
-}
-
-const PhotoUpload: React.FC<PhotoUploadProps> = ({ propertyId, onClose }) => {
-  const [images, setImages] = useState<File[]>([]);
-  const [name, setName] = useState("");
-  const [spaceType, setSpaceType] = useState<number | null>(null);
-  const [space, setSpace] = useState<number | null>(null);
-  const [spaces, setSpaces] = useState<Space[]>([]);
-  const [spaceTypes, setSpaceTypes] = useState<SpaceType[]>([]);
-  const [filteredSpaceTypes, setFilteredSpaceTypes] = useState<SpaceType[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const { id } = useParams<{ id: string }>();
-
-  const navigate = useNavigate();
+  const { loading, success, error } = useSelector((state: RootState) => state.propertyImages);
 
   useEffect(() => {
-    const fetchSpacesAndSpaceTypes = async () => {
-      try {
-        const [spacesResponse, spaceTypesResponse] = await Promise.all([
-          propertyspaceapi(),
-          propertyspacetypesapi(),
-        ]);
-
-        if (spacesResponse.data && spacesResponse.data.data) {
-          setSpaces(spacesResponse.data.data);
-        }
-
-        if (spaceTypesResponse.data && spaceTypesResponse.data.data) {
-          setSpaceTypes(spaceTypesResponse.data.data);
-        }
-      } catch (error) {
-        console.error("Error fetching spaces and space types:", error);
-      }
+    return () => {
+      dispatch(resetPropertyImagesState());
+      dispatch(clearPropertyImages());
+      previewUrls.forEach(url => URL.revokeObjectURL(url));
     };
-
-    fetchSpacesAndSpaceTypes();
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
-    if (space) {
-      const filtered = spaceTypes.filter((type) => type.space.id === space);
-      setFilteredSpaceTypes(filtered);
-      setSpaceType(filtered.length > 0 ? filtered[0].id : null);
-    } else {
-      setFilteredSpaceTypes([]);
-      setSpaceType(null);
+    if (success) {
+      onPhotosAdded();
+      onClose();
     }
-  }, [space, spaceTypes]);
+  }, [success, onPhotosAdded, onClose]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setImages([...images, ...Array.from(e.target.files)]);
-    }
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || []);
+    setSelectedFiles(prevFiles => [...prevFiles, ...files]);
+
+    const newPreviewUrls = files.map(file => URL.createObjectURL(file));
+    setPreviewUrls(prevUrls => [...prevUrls, ...newPreviewUrls]);
   };
 
-  const handleSubmit = async () => {
-    // Uncomment this section if you want to enforce space and space type selection
-    // if (!space || !spaceType) {
-    //   alert("Please select both Space and Space Type");
-    //   return;
-    // }
-
-    setIsLoading(true);
-    const createdBy = 1; // This should ideally come from your user context
-    const propertyImagesData = images.map((image, index) => ({
-      property: { id: parseInt(id || "0", 10) },
-      createdBy: { id: createdBy },
-      displayOrder: index + 1,
-      name: name,
-      spaceType: { id: spaceType },
-      space: { id: space },
-    }));
-    const formData = new FormData();
-
-    images.forEach((image) => {
-      formData.append(`imageFiles`, image);
+  const handleRemoveFile = (index: number) => {
+    setSelectedFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
+    setPreviewUrls(prevUrls => {
+      URL.revokeObjectURL(prevUrls[index]);
+      return prevUrls.filter((_, i) => i !== index);
     });
-    formData.append("propertyImages", JSON.stringify(propertyImagesData));
-
-    try {
-      await propertyImageuploadapi(formData);
-      navigate(`/admin/property/${id}/photos`, { state: { fromUpload: true } });
-      onClose(); // Call onClose after successful upload
-    } catch (error) {
-      console.error("Error uploading images:", error);
-      navigate(`/admin/property/${id}/photos`);
-    } finally {
-      setIsLoading(false);
-    }
   };
 
-  const handleRemoveImage = (index: number) => {
-    const newImages = images.filter((_, i) => i !== index);
-    setImages(newImages);
+  const handleSave = async () => {
+    const formData = new FormData();
+    const additionalImagesData = selectedFiles.map((_, index) => ({
+      description: "",
+      displayOrder: index + 1,
+      property: { id: propertyId },
+      createdBy: { id: 1 }
+    }));
+
+    formData.append('propertyAdditionalImages', JSON.stringify(additionalImagesData));
+    selectedFiles.forEach(file => {
+      formData.append('imageFiles', file);
+    });
+
+    dispatch(uploadPropertyImages(formData));
   };
 
   return (
-    <div className={styles.container}>
-      {isLoading && (
-        <div className={styles.loaderOverlay}>
-          <Loader />
-        </div>
-      )}
-      <h2 className={styles.title}>Upload Photos</h2>
-      <div className={styles.content}>
-        <div className={styles.formSection}>
-          <div className={styles.inputGroup}>
-            <label htmlFor="name" className={styles.label}>
-              Name
-            </label>
-            <input
-              id="name"
-              type="text"
-              className={styles.input}
-              placeholder="Enter name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-          <div className={styles.inputGroup}>
-            <label htmlFor="space" className={styles.label}>
-              Space
-            </label>
-            <select
-              id="space"
-              className={styles.select}
-              value={space || ""}
-              onChange={(e) => setSpace(parseInt(e.target.value))}
-            >
-              <option value="">Select a Space</option>
-              {spaces.map((spaceItem) => (
-                <option key={spaceItem.id} value={spaceItem.id}>
-                  {spaceItem.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className={styles.inputGroup}>
-            <label htmlFor="spaceType" className={styles.label}>
-              Space Type
-            </label>
-            <select
-              id="spaceType"
-              className={styles.select}
-              value={spaceType || ""}
-              onChange={(e) => setSpaceType(parseInt(e.target.value))}
-              disabled={!space}
-            >
-              <option value="">Select a Space Type</option>
-              {filteredSpaceTypes.map((type) => (
-                <option key={type.id} value={type.id}>
-                  {type.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className={styles.fileInputWrapper}>
-            <input
-              type="file"
-              multiple
-              className={styles.fileInput}
-              onChange={handleFileChange}
-              id="file-upload"
-            />
-            <label htmlFor="file-upload" className={styles.fileInputLabel}>
-              Choose Image files
-            </label>
-          </div>
-        </div>
-        <div className={styles.previewSection}>
-          <h3 className={styles.previewTitle}>Image Preview</h3>
-          <div className={styles.previewScroll}>
-            <div className={styles.previewGrid}>
-              {images.map((image, index) => (
-                <div key={index} className={styles.previewItem}>
-                  <img
-                    src={URL.createObjectURL(image)}
-                    alt={`Preview ${index + 1}`}
-                    className={styles.previewImage}
-                    loading="lazy"
-                  />
-                  <button
-                    className={styles.removeButton}
-                    onClick={() => handleRemoveImage(index)}
-                  >
-                    <Trash2 size={14} color="red" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className={styles.buttonGroup}>
-        <button className={styles.submitButton} onClick={handleSubmit}>
-          Submit
+    <div className={styles.addPhotoContainer}>
+      <div className={styles.header}>
+        <h2>Add Photos</h2>
+        <button className={styles.closeButton} onClick={onClose}>
+          <X size={24} />
         </button>
-        {/* <button
-          className={styles.cancelButton}
-          onClick={() => {
-            navigate(`/admin/property/${id}/photos`);
-            onClose();
-          }}
-        >
-          Cancel
-        </button> */}
       </div>
+      <div className={styles.content}>
+        {error && <div className={styles.errorMessage}>{error}</div>}
+        <div className={styles.photoGridContainer}>
+          <div className={styles.photoGrid}>
+            <div
+              className={styles.addPhotoButton}
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Plus size={24} />
+              <span>Add Photo</span>
+            </div>
+            {previewUrls.map((url, index) => (
+              <div key={index} className={styles.previewItem}>
+                <img src={url} alt={`Preview ${index + 1}`} />
+                <button
+                  className={styles.removeButton}
+                  onClick={() => handleRemoveFile(index)}
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className={styles.footer}>
+          <button
+            className={styles.saveButton}
+            onClick={handleSave}
+            disabled={selectedFiles.length === 0 || loading}
+          >
+            {loading ? 'Uploading...' : 'Save'}
+          </button>
+        </div>
+      </div>
+      <input
+        type="file"
+        ref={fileInputRef}
+        style={{ display: 'none' }}
+        multiple
+        accept="image/*"
+        onChange={handleFileChange}
+      />
     </div>
   );
 };
 
-export default PhotoUpload;
+export default AddPhoto;

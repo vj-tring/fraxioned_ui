@@ -203,46 +203,6 @@ const EditPropertyRulesForm: React.FC = () => {
                                     />
                                 </div>
                             </div>
-                            <div className={styles.formRow}>
-                                <div className={styles.inputGroup}>
-                                    <TextField
-                                        label="Total Bathrooms"
-                                        name="noOfBathrooms"
-                                        type="number"
-                                        value={formData?.noOfBathrooms}
-                                        onChange={handleInputChange}
-                                        className={styles.numberInput}
-                                    />
-                                    <TextField
-                                        label="Full Bathrooms"
-                                        name="noOfBathroomsFull"
-                                        type="number"
-                                        value={formData?.noOfBathroomsFull}
-                                        onChange={handleInputChange}
-                                        className={styles.numberInput}
-                                    />
-                                    <TextField
-                                        label="Half Bathrooms"
-                                        name="noOfBathroomsHalf"
-                                        type="number"
-                                        value={formData?.noOfBathroomsHalf}
-                                        onChange={handleInputChange}
-                                        className={styles.numberInput}
-                                    />
-                                </div>
-                            </div>
-                            <div className={styles.formRow}>
-                                <div className={styles.inputGroup}>
-                                    <TextField
-                                        label="Bedrooms"
-                                        name="noOfBedrooms"
-                                        type="number"
-                                        value={formData?.noOfBedrooms}
-                                        onChange={handleInputChange}
-                                        className={styles.numberInput}
-                                    />
-                                </div>
-                            </div>
                         </section>
                         <section className={styles.formSection}>
                             <h3 className={styles.sectionTitle}>Seasonal Settings</h3>

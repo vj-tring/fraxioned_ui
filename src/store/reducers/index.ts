@@ -32,6 +32,7 @@ import propertydetailReducer from '../slice/auth/property-detail'
 import bathroomReducer from '../slice/bathroom-slice';
 import amenityReducer from '../slice/amenitiesSlice';
 import userDocumentsReducer from '../slice/user-document';
+import propertyImagesReducer from '../slice/auth/additional-image'
 import { propertycodecatogoryReducer } from '../slice/auth/propertycodeCatogorySlice';
 import { propertyCodesReducer } from '../slice/auth/propertycodeSlice';
 
@@ -70,7 +71,9 @@ const appReducer: Reducer = combineReducers({
   addQuestion: addQuestionReducer,
   faqPage: faqPageReducer,
   addCategory: addCategoryReducer,
-  userDocuments: userDocumentsReducer
+  userDocuments: userDocumentsReducer,
+  propertyImages: propertyImagesReducer,
+
 });
 
 const rootReducer = (
