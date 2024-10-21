@@ -41,7 +41,7 @@ import { Skeleton } from "@mui/material";
 import { RootState } from "@/store/reducers";
 import { fetchAmenities } from "@/store/slice/amenitiesSlice";
 import PropertyPhotos from "@/pages-admin/property-photos";
-import PropertyMorePhotos from "../property-listing-page-moreimg";
+import PropertyMorePhotos from "../property-listing-viewmore";
 
 interface Property {
   id: number;

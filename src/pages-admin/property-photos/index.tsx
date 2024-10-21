@@ -14,7 +14,7 @@ import {
   selectPropertyImages,
 } from "../../store/slice/auth/propertyImagesSlice ";
 import { useDispatch, useSelector } from "react-redux";
-import Carousel from "@/pages/property-listing-page-moreimg/Carousel";
+import Carousel from "../../pages/property-listing-viewmore/Carousel/index";
 
 const PropertyPhotos: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>("All Photos");
