@@ -1,12 +1,11 @@
 .holidaysContainer {
-  padding: 24px;
+  padding: 10px 10px 0px 10px;
   background-color: #f8f6f6;
   margin-left: 2px;
   height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
   transition: margin-left 0.3s ease;
-  margin-left: 100px;
 }
 
 .evenRow {
@@ -21,7 +20,7 @@
 .refreshprop {
   margin-top: 10px;
   margin-bottom: 5px;
-  width: 70%;
+  width: 74%;
 }
 .dataGridPadding :global(.MuiDataGrid-footerContainer) {
   padding-left: 16px;
@@ -30,10 +29,6 @@
 
 .sidebarOpen {
   margin-left: 0 !important;
-}
-
-.sidebarClosed {
-  margin-left: 40px !important;
 }
 
 .titleContainer {
@@ -46,6 +41,7 @@
   font-size: large;
   font-weight: bold;
   color: #333;
+  padding-left: 5px;
 }
 
 .dataGridWrapper {

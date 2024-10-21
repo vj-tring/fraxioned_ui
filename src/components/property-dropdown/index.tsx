@@ -48,19 +48,27 @@ const PropertyDropdown: React.FC<PropertyDropdownProps> = ({
       </div>
       {isOpen && (
         <ul className={styles.propertyDropdownList}>
-          <li
-            style={{
-              backgroundColor: "#428BCA",
-              color: "white",
-            }}
-            key="all"
-            onClick={() => handleSelect(null)}
-          >
-            All Properties
+           <li className={styles.allProperties}
+              key="all"
+              onClick={() => handleSelect(null)}
+            >
+            Select All Properties  
           </li>
-          {properties.map((property) => (
+          {properties.map((property) => (         
             <li key={property.id} onClick={() => handleSelect(property.id)}>
-              {property.propertyName}
+              <div className={styles.propertyDropdownListDisplay}>
+                <div>
+                    <img src={
+                        property.coverImageUrl! ||
+                        "https://placehold.jp/150x150.png"
+                      }
+                      alt={property.propertyName}
+                      className={styles.propertyImage}
+                      loading="lazy"
+                    />
+                </div>         
+                <span className={styles.propertyDropdownListName}>{property.propertyName}</span>
+              </div>
             </li>
           ))}
         </ul>
