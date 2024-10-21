@@ -4,7 +4,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import UserForm from "@/pages-admin/grid/user-grid/edit-form/user-form";
 import EditForm from "@/pages-admin/grid/user-grid/edit-form/user-edit";
 import styles from "./user-profile.module.css";
-import { User } from "@/store/model/user";
+import { User } from "@/store/model";
 
 interface UserProfileModalProps {
   userData: User;
