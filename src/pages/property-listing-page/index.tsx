@@ -37,10 +37,8 @@ import CustomizedSnackbar from "@/components/customized-snackbar";
 import calendarData from "@/components/calender/calendarData.json";
 import { DateRange } from "react-day-picker";
 import DatePickerCard from "../../components/date-picker-card";
-import { Skeleton } from "@mui/material";
 import { RootState } from "@/store/reducers";
-import { fetchAmenities } from "@/store/slice/amenitiesSlice";
-import PropertyPhotos from "@/pages-admin/property-photos";
+
 import PropertyMorePhotos from "../property-listing-viewmore";
 
 interface Property {
@@ -176,19 +174,7 @@ const PropertyListingPage = () => {
     };
     fetchPropertyImages();
   }, [id]);
-  const groupedImages = imageDetails.reduce((acc, image) => {
-    const spaceId = image.propertySpace.space.id;
-    const spaceName = image.propertySpace.space.name;
 
-    if (!acc[spaceId]) {
-      acc[spaceId] = {
-        name: spaceName,
-        images: [],
-      };
-    }
-    acc[spaceId].images.push(image);
-    return acc;
-  }, {});
 
   const handleClickOpen = () => {
     setDialogOpen(true);

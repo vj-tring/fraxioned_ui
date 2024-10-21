@@ -14,7 +14,6 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
   IconButton,
   Grid,
 } from "@mui/material";
@@ -28,7 +27,6 @@ import KingBedImage from "../../assets/images/bedroom1.jpg";
 import { fetchSpacePropertiesById } from "@/store/slice/space/property";
 import {
   amenitiesapi,
-  fetchPropertyImagesByPropertyId,
   getAllSpacePropertyImageById,
 } from "@/api/api-endpoints";
 
@@ -44,13 +42,6 @@ interface Room {
 
 const ITEMS_PER_PAGE = 2;
 const AMENITIES_PER_PAGE = 12;
-
-const allRooms: Room[] = [
-  { name: "Bedroom 1", image: Bedroom1Image, Bed: "King size Bed" },
-  { name: "King Bed", image: KingBedImage, Bed: "King size Bed" },
-  { name: "Living Room", image: Bedroom1Image, Bed: "Spacious Living Area" },
-  { name: "Guest Room", image: KingBedImage, Bed: "Comfortable Guest Bed" },
-];
 
 const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -71,7 +62,6 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   useEffect(() => {
     dispatch(fetchAmenities(propertyId));
     fetchAmenities1();
-    console.log("fetch amentis called ");
     dispatch(fetchSpacePropertiesById(propertyId));
   }, [dispatch, propertyId]);
 
@@ -84,7 +74,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
       const response = await amenitiesapi();
       setAmenities(response.data.data);
     } catch (err) {
-      console.log(err);
+      console.warn(err);
     }
   };
   useEffect(() => {
@@ -103,7 +93,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
     imageFetching();
   }, [propertyId]); //
 
-  const groupAmenitiesByGroup = (data: PropertyAmenity[]) => {
+  const organizeAmenitiesByAmenityGroup = (data: PropertyAmenity[]) => {
     if (!Array.isArray(data)) {
       console.warn("Expected an array, but received:", data);
       return {};
@@ -145,11 +135,12 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   );
   const totalspacePages = Math.ceil(propertySpace.length / ITEMS_PER_PAGE);
 
-  const groupedAmenities = groupAmenitiesByGroup(propertyAmenities || []);
-  console.log("grouped amenties", groupedAmenities);
+  const groupedAmenities = organizeAmenitiesByAmenityGroup(
+    propertyAmenities || []
+  );
   const allAmenities = Array.isArray(propertyAmenities)
     ? propertyAmenities.map((pa) => pa.amenity)
-    : []; 
+    : [];
   const displayedAmenities = showAllAmenities
     ? allAmenities
     : allAmenities.slice(0, AMENITIES_PER_PAGE);
