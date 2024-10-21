@@ -23,7 +23,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/store";
 import { RootState } from "@/store/reducers";
-import { fetchCategories } from "@/store/slice/auth/addcategorySlice";
+import { deleteCategoryAsync, editCategoryAsync, fetchCategories } from "@/store/slice/auth/addcategorySlice";
 
 interface FaqCategory {
   id: number;
@@ -40,6 +40,8 @@ interface FaqQuestion {
 const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
   const questions = useSelector((state: RootState) => state.faqPage.faqs);
   const categories = useSelector((state: RootState) => state.addCategory.data);
+  const [editCategoryId, setEditCategoryId] = useState<number | null>(null); 
+  const [editCategoryName, setEditCategoryName] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<number | null>(1);
   const [loadingQuestions, setLoadingQuestions] = useState<boolean>(false);
   const [snackbar, setSnackbar] = useState<{
@@ -136,21 +138,54 @@ const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
   };
 
   const handleEditCategory = (category: FaqCategory) => {
-    setCategoryToEdit(category);
-    setShowEditCategoryForm(true);
-  };
-  
-  const handleDeleteCategory = async (category: FaqCategory) => {
-    if (window.confirm(`Are you sure you want to delete the category "${category.name}"?`)) {
-      await dispatch(deleteCategoryAsync(category.id));
+    const newCategoryName = prompt(`Edit category name for ${category.name}:`, category.name);
+    
+    if (newCategoryName && newCategoryName !== category.name) {
+      dispatch(editCategoryAsync({ id: category.id, categoryName: newCategoryName }));
       setSnackbar({
         open: true,
-        message: "Category deleted successfully",
-        severity: "success",
+        message: 'Category updated successfully',
+        severity: 'success',
       });
     }
   };
   
+  const handleDeleteCategory = async (category: FaqCategory) => {
+    await dispatch(deleteCategoryAsync(category.id));
+    setSnackbar({
+      open: true,
+      message: `Category  deleted successfully`,
+      severity: 'success',
+    });
+  };
+  
+  const handleEditCategoryClick = (category: FaqCategory) => {
+    setEditCategoryId(category.id);
+    setEditCategoryName(category.name); // Pre-fill with the existing category name
+  };
+
+  const handleCategoryNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditCategoryName(event.target.value); // Update the category name as the user types
+  };
+
+  const handleCategoryNameUpdate = async (category: FaqCategory) => {
+    if (editCategoryName.trim() && editCategoryName !== category.name) {
+      await dispatch(editCategoryAsync({ id: category.id, categoryName: editCategoryName.trim() }));
+      setSnackbar({
+        open: true,
+        message: 'Category updated successfully',
+        severity: 'success',
+      });
+    }
+    setEditCategoryId(null); // Exit edit mode
+  };
+
+  const handleCategoryNameKeyDown = (event: React.KeyboardEvent, category: FaqCategory) => {
+    if (event.key === 'Enter') {
+      handleCategoryNameUpdate(category); // Save on Enter key press
+    }
+  };
+
 
   return (
     <div className={styles.container}>
@@ -325,15 +360,5 @@ const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
 };
 
 export default FAQPage;
-function setCategoryToEdit(category: FaqCategory) {
-  throw new Error("Function not implemented.");
-}
 
-function setShowEditCategoryForm(arg0: boolean) {
-  throw new Error("Function not implemented.");
-}
-
-function deleteCategoryAsync(id: number): any {
-  throw new Error("Function not implemented.");
-}
 
