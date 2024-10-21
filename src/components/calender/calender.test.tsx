@@ -1,7 +1,5 @@
 import React from 'react';
-import { render, fireEvent, screen, act } from '@testing-library/react';
-import { DatePickerWithRange } from '.';
-import { addDays } from 'date-fns';
+// import { addDays } from 'date-fns';
 import '@testing-library/jest-dom';
 
 jest.mock('@/utils', () => ({
@@ -14,16 +12,16 @@ jest.mock('@/components/ui/button', () => ({
   ),
 }));
 
-jest.mock('@/components/ui/calendar', () => ({
-    Calendar: ({ onSelect, disabled }: { onSelect: (range: { from: Date; to: Date }) => void, disabled: (date: Date) => boolean }) => (
-      <div data-testid="mock-calendar">
-        <button onClick={() => onSelect({ from: new Date(), to: addDays(new Date(), 5) })}>
-          Select Date Range
-        </button>
-        <span data-testid="disabled-prop">{disabled.toString()}</span>
-      </div>
-    ),
-}));
+// jest.mock('@/components/ui/calendar', () => ({
+//     Calendar: ({ onSelect, disabled }: { onSelect: (range: { from: Date; to: Date }) => void, disabled: (date: Date) => boolean }) => (
+//       <div data-testid="mock-calendar">
+//         <button onClick={() => onSelect({ from: new Date(), to: addDays(new Date(), 5) })}>
+//           Select Date Range
+//         </button>
+//         <span data-testid="disabled-prop">{disabled.toString()}</span>
+//       </div>
+//     ),
+// }));
 
 jest.mock('@/components/ui/popover', () => ({
   Popover: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,

@@ -10,10 +10,11 @@
   ],
   "compilerOptions": {
     "jsx": "react",
+    "module": "esnext",
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
-  },
+  }
 }
