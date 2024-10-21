@@ -34,6 +34,7 @@ import amenityReducer from '../slice/amenity';
 import userDocumentsReducer from '../slice/user-document';
 import { propertycodecatogoryReducer } from '../slice/auth/propertycodeCatogorySlice';
 import { propertyCodesReducer } from '../slice/auth/propertycodeSlice';
+import propertyImagesReducer from '../slice/auth/propertyImagesSlice ';
 
 const appReducer: Reducer = combineReducers({
   auth: authReducer,
@@ -70,7 +71,9 @@ const appReducer: Reducer = combineReducers({
   addQuestion: addQuestionReducer,
   faqPage: faqPageReducer,
   addCategory: addCategoryReducer,
-  userDocuments: userDocumentsReducer
+  userDocuments: userDocumentsReducer,
+  propertyImages: propertyImagesReducer,
+
 });
 
 const rootReducer = (

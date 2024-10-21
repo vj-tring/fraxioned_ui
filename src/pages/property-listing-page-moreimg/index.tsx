@@ -1,47 +1,37 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { propertyImageapi } from "@/api/api-endpoints";
+import React, { useRef, useEffect, useState } from "react";
+import { useParams  } from "react-router-dom";
 import { X } from "lucide-react";
 import Loader from "@/components/loader";
 import styles from "./propertyphotos.module.css";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import ArrowBackIosOutlinedIcon from "@mui/icons-material/ArrowBackIosOutlined";
 import { motion, AnimatePresence } from "framer-motion";
-
-interface PropertyImage {
-  id: number;
-  url: string;
-  description: string;
-  propertySpace: {
-    id: number;
-    instanceNumber: number;
-    space: {
-      id: number;
-      name: string;
-    };
-  };
-}
-
-interface SpaceGroup {
-  name: string;
-  instances: {
-    instanceNumber: number;
-    images: PropertyImage[];
-  }[];
-}
+import {
+  fetchPropertyImages,
+  selectPropertyImages,
+} from "../../store/slice/auth/propertyImagesSlice ";
+import { useDispatch, useSelector } from "react-redux";
 
 const PropertyMorePhotos: React.FC = () => {
-  const [imagesBySpace, setImagesBySpace] = useState<{
-    [key: string]: SpaceGroup;
-  }>({});
   const [activeTab, setActiveTab] = useState<string>("All Photos");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
   const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const location = useLocation();
+  // const navigate = useNavigate();
+  // const location = useLocation();
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0); // To track the current index of carousel
+
+  const dispatch = useDispatch();
+
+  const imagesBySpace = useSelector(selectPropertyImages);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchPropertyImages(parseInt(id)));
+    }
+  }, [dispatch, id]);
+
   const dotsContainerRef = useRef<HTMLDivElement>(null); // Ref for dots container
   const scrollToActiveDot = (index: number) => {
     if (dotsContainerRef.current) {
@@ -68,74 +58,10 @@ const PropertyMorePhotos: React.FC = () => {
   useEffect(() => {
     scrollToActiveDot(selectedImageIndex); // Scroll when the active image index changes
   }, [selectedImageIndex]);
-  
-  const refreshPhotos = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const response = await propertyImageapi(parseInt(id || "0"));
-      if (response.data && response.data.success) {
-        const allPhotos: PropertyImage[] = response.data.data;
-        const groupedBySpace = allPhotos.reduce(
-          (acc: { [key: string]: SpaceGroup }, img: PropertyImage) => {
-            const spaceName = img.propertySpace.space.name;
-            if (!acc[spaceName]) {
-              acc[spaceName] = { name: spaceName, instances: [] };
-            }
-
-            let instance = acc[spaceName].instances.find(
-              (i) => i.instanceNumber === img.propertySpace.instanceNumber
-            );
-
-            if (!instance) {
-              instance = {
-                instanceNumber: img.propertySpace.instanceNumber,
-                images: [],
-              };
-              acc[spaceName].instances.push(instance);
-            }
-
-            instance.images.push(img);
-            return acc;
-          },
-          {}
-        );
-
-        setImagesBySpace({
-          "All Photos": {
-            name: "All Photos",
-            instances: [{ instanceNumber: 0, images: allPhotos }],
-          },
-          ...groupedBySpace,
-        });
-      }
-    } catch (error) {
-      console.error("Error fetching property images:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [id]);
-
-  useEffect(() => {
-    refreshPhotos();
-  }, [refreshPhotos]);
-
-  useEffect(() => {
-    if (
-      location.state &&
-      (location.state.fromEdit || location.state.fromUpload)
-    ) {
-      refreshPhotos();
-      navigate(location.pathname, { replace: true, state: {} });
-    }
-  }, [location, navigate, refreshPhotos]);
 
   const handleTabClick = (spaceName: string) => {
     setActiveTab(spaceName);
   };
-
-  const allImages: PropertyImage[] = Object.values(imagesBySpace).flatMap(
-    (spaceGroup) => spaceGroup.instances.flatMap((instance) => instance.images)
-  );
 
   const handleImageClick = (imageUrl: string) => {
     // Filter the images based on the active section
@@ -183,9 +109,6 @@ const PropertyMorePhotos: React.FC = () => {
   const handleCardClick = (index: number) => {
     setSelectedImageIndex(index);
     scrollToActiveDot(index); // Ensure the scroll is triggered after setting the selected index
-
-    // const card = cards[index];
-    // dispatch(selectProperty(card.id));
   };
 
   return (
