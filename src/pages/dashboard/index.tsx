@@ -8,7 +8,6 @@ import userImage from "../../assets/images/profile.jpeg";
 import "./dashboard.css";
 import CustomizedAccordions from "../../components/customized-accordians";
 import Contact from "../../pages/contact-us";
-import UserDetails from "../../pages/user-details";
 import ComingSoon from "../../components/coming-soon";
 import { isAuthenticated } from "../../authService";
 import Home from "../../pages/home";
@@ -49,7 +48,6 @@ const Dashboard: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/faq" element={<CustomizedAccordions />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/user-details" element={<UserDetails />} />
           <Route path="/property/:id" element={<PropertyListingPage />} />
           <Route path="/peak-season" element={<ComingSoon />} />
           <Route path="/bookings" element={<Booking />} />
