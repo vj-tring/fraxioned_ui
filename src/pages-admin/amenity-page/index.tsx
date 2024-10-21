@@ -133,11 +133,18 @@ const AmenityManagement: React.FC = () => {
   }, [deleteSuccess, deleteError, dispatch, getAmenities]);
 
 
-  //Search case 
+
+  //Search condition
   const handleGlobalSearch = (searchValue: string) => {
     setGlobalSearchTerm(searchValue);
-    resetSearchStates();
-    const getMatchedItems = Object.entries(groupAmenities).reduce((acc, [group, amenities]) => {
+
+    if (searchValue.trim() === "") {
+      handleEmptySearch();
+      return;
+    }
+
+    //getting matched value
+    const getMatchedValue = Object.entries(groupAmenities).reduce((acc, [group, amenities]) => {
       const groupMatch = group.toLowerCase().includes(searchValue.toLowerCase());
       const amenityMatch = amenities.some(amenity =>
         amenity.amenityName.toLowerCase().includes(searchValue.toLowerCase())
@@ -148,12 +155,12 @@ const AmenityManagement: React.FC = () => {
       return acc;
     }, [] as string[]);
 
-    updateSearchResults(getMatchedItems);
+    //show the matched result
+    updateSearchResults(getMatchedValue);
 
-    // scroll to focus searched item
-    if (getMatchedItems.length > 0) {
+    if (getMatchedValue.length > 0) {
       setTimeout(() => {
-        const groupRef = groupRefs.current[getMatchedItems[0]];
+        const groupRef = groupRefs.current[getMatchedValue[0]];
         if (groupRef && groupRef.current) {
           groupRef.current.scrollIntoView({
             behavior: "smooth",
@@ -163,20 +170,24 @@ const AmenityManagement: React.FC = () => {
       }, 100);
     }
   };
+  //Empty serach case
+  const handleEmptySearch = () => {
+    setMatchedGroups([]);
+    setExpandedGroups([]);
+    setNoResultsFound(false);
+  };
 
-  // Update search results
-  const updateSearchResults = (matchedItems: string[]) => {
-    setMatchedGroups(matchedItems);
-    setExpandedGroups(matchedItems);
-    setNoResultsFound(matchedItems.length === 0);
+  //update the result based on search item
+  const updateSearchResults = (matchedGroups: string[]) => {
+    setMatchedGroups(matchedGroups);
+    setExpandedGroups(matchedGroups);
+    setNoResultsFound(matchedGroups.length === 0);
   };
 
   // reset function
   const resetSearchStates = () => {
     setGlobalSearchTerm("");
-    setMatchedGroups([]);
-    setExpandedGroups([]);
-    setNoResultsFound(false);
+    handleEmptySearch();
   };
 
   const handleResetSearch = () => {
