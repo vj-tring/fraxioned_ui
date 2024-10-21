@@ -350,7 +350,6 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
       headerAlign: "center",
       align: "center",
     },
-    
     {
       field: "userName",
       headerName: "User Name",
@@ -364,6 +363,13 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
       flex: 1,
       align: "center",
       headerAlign: "center",
+    },
+    {
+      field: "totalNights",
+      headerName: "No of Nights",
+      flex: 1,
+      align: "center",
+      headerAlign: "center"
     },
     {
       field: "checkinDate",
@@ -388,31 +394,12 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
       renderCell: (params) => (params.row.isLastMinuteBooking ? "Yes" : "No"),
     },
     {
-      field: "isCancelled",
-      headerName: "Cancelled",
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      renderCell: (params) => (params.row.isCancelled ? "Yes" : "No"),
-    },
-    {
-      field: "isCompleted",
-      headerName: "Completed",
-      flex: 1,
-      align: "center",
-      headerAlign: "center",
-      renderCell: (params) => (params.row.isCompleted ? "Yes" : "No"),
-    },
-    {
       field: "actions",
       headerName: "Actions",
       flex: 1,
       align: "center",
       headerAlign: "center",
       renderCell: (params) => (
-
-
-
         <div>
           <IconButton
             aria-label="view"
