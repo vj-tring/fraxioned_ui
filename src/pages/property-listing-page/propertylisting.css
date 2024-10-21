@@ -37,7 +37,7 @@ body {
 }
 
 .img1 {
-  height: 400px;
+  height: 405px;
   width: 800px;
 }
 
@@ -101,10 +101,10 @@ body {
   background-color: rgb(243, 158, 48);
   color: white;
   border-radius: 2px;
-  width: 200px;
+  width: 200px !important;
   text-align: center;
 }
-.GroupImgPic{
+.GroupImgPic {
   width: 95% !important;
   margin-left: 3% !important;
 }
@@ -391,5 +391,38 @@ body {
   .Proprespo {
     display: flex;
     flex-direction: column;
+  }
+}
+
+.skeleton {
+  position: relative ;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 98%;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+.skeleton1 {
+  position: relative ;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 195px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
   }
 }

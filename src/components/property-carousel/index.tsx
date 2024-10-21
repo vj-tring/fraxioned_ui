@@ -9,7 +9,7 @@ import NavigateNextOutlinedIcon from "@mui/icons-material/NavigateNextOutlined";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/index";
 import { RootState } from "../../store/reducers";
-import { Image } from "@/pages/property-listing-page/index";
+// import { Image } from "@/pages/property-listing-page/index";
 import {
   fetchProperties,
   selectProperty,
@@ -17,7 +17,6 @@ import {
   selectcardindex,
 } from "../../store/slice/auth/property-slice";
 import "./propertycarousel.css";
-import { propertyImageapi } from "@/api/api-endpoints";
 import AddHomeOutlinedIcon from "@mui/icons-material/AddHomeOutlined";
 import { Card } from "../../store/slice/auth/property-slice";
 
@@ -32,12 +31,12 @@ export default function BasicSelect() {
   const [years, setYears] = useState<number[]>([]);
   const [selectedYear, setSelectedYear] = useState<number>(currentYear);
   const carouselRef = useRef<HTMLDivElement>(null);
-  const [imageDetails, setImageDetails] = useState<Image[]>([]);
+  // const [imageDetails, setImageDetails] = useState<Image[]>([]);
   const open = Boolean(anchorEl);
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { cards, loading, error } = useSelector(
+  const { cards } = useSelector(
     (state: RootState) => state.properties
   );
   const user = useSelector((state: RootState) => state.auth.user);
@@ -111,12 +110,7 @@ export default function BasicSelect() {
     setAnchorEl(null);
   };
 
-  const showselectedimage = (id: number) => {
-    const filteredImage = imageDetails
-      .filter((image) => image.property.id === id)
-      .sort((a: Image, b: Image) => a.displayOrder - b.displayOrder);
-    return filteredImage[0]?.imageUrl;
-  };
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -129,8 +123,6 @@ export default function BasicSelect() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [open]);
 
-  // if (loading) return <p>Loading...</p>;
-  // if (error) return <p>Error: {error}</p>;
 
   const showCarousel = cards.length > 0;
   const showCarouselControls = cards.length > 1;
@@ -146,8 +138,7 @@ export default function BasicSelect() {
 
   const BoxList =
     cards.length === 1 ? "7px" : cards.length === 2 ? "7px" : "10px";
-  // const BoxMargin =
-  //   cards.length === 1 ? "0px" : cards.length === 2 ? "0px" : "8px";
+  
   const cardItemHeight =
     cards.length === 1 ? "272px" : cards.length === 2 ? "232px" : "280px";
   const cardNameWeight =
@@ -171,7 +162,6 @@ export default function BasicSelect() {
         className="PropertyBtn"
         sx={{
           borderRadius: 10,
-          // width: 264,
           height: 70,
           border: "none",
           cursor: "pointer",
@@ -208,7 +198,6 @@ export default function BasicSelect() {
               position: "fixed",
               maxHeight: "60vh",
               overflowY: "auto",
-              //maxWidth: "70vh",
             },
           },
         }}
@@ -272,7 +261,6 @@ export default function BasicSelect() {
                           className={`additionalproperty ${
                             selectedCardIndex === index ? "active" : ""
                           }`}
-                          // style={{ padding: additionalPadding }}
                           onClick={() => handleCardClick(index)}
                           sx={{
                             flex: "0 0 auto",
@@ -324,8 +312,6 @@ export default function BasicSelect() {
                         style={{ fontWeight: cardNameWeight }}
                       >
                         {formatCardName(selectedCard.name)}
-                        {/* [{selectedCard.share}/
-                        {selectedCard.propertyShare} share] */}
                       </h4>
                       <p className="BlueFont">{selectedCard.address}</p>
                       <p className="BlueFont">{selectedCard.city}</p>
