@@ -31,11 +31,12 @@ const PropertyMorePhotos: React.FC = () => {
   }, [dispatch, id]);
 
   const dotsContainerRef = useRef<HTMLDivElement>(null); // Ref for dots container
-  const scrollToActiveDot = (index: number) => {
+  const scrollToActiveDot = (imageId: number) => {
     if (dotsContainerRef.current) {
-      const activeDot = dotsContainerRef.current.children[
-        index
-      ] as HTMLDivElement;
+      const activeDot = Array.from(dotsContainerRef.current.children).find(
+        (dot) => (dot as HTMLDivElement).dataset.imageId === imageId.toString()
+      ) as HTMLDivElement;
+
       if (activeDot) {
         const containerWidth = dotsContainerRef.current.offsetWidth;
         const dotWidth = activeDot.offsetWidth;
@@ -52,10 +53,16 @@ const PropertyMorePhotos: React.FC = () => {
       }
     }
   };
-
   useEffect(() => {
-    scrollToActiveDot(selectedImageIndex); // Scroll when the active image index changes
-  }, [selectedImageIndex]);
+    const imagesForCarousel =
+      imagesBySpace[activeTab]?.instances.flatMap(
+        (instance) => instance.images
+      ) || [];
+
+    if (imagesForCarousel[selectedImageIndex]) {
+      scrollToActiveDot(imagesForCarousel[selectedImageIndex].id); // Use image ID instead of index
+    }
+  }, [selectedImageIndex, activeTab, imagesBySpace]);
 
   const handleTabClick = (spaceName: string) => {
     setActiveTab(spaceName);

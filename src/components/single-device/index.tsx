@@ -149,13 +149,11 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   console.log("grouped amenties", groupedAmenities);
   const allAmenities = Array.isArray(propertyAmenities)
     ? propertyAmenities.map((pa) => pa.amenity)
-    : []; //
+    : []; 
   const displayedAmenities = showAllAmenities
     ? allAmenities
     : allAmenities.slice(0, AMENITIES_PER_PAGE);
 
-  // if (loading) return <div>Loading...</div>;
-  // if (error) return <div>{error}</div>;
   const [loading, setLoading] = useState(true);
 
   const handleImageLoad = () => {
