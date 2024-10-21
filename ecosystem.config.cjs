@@ -2,8 +2,6 @@ const dotenv = require("dotenv");
 const path = require("path");
 
 dotenv.config({ path: path.resolve(__dirname, ".env") });
-console.log("ENV path", path.resolve(__dirname, ".env"));
-console.log("ENV path1", process.env.VITE_BACKEND_URL);
 module.exports = {
   apps: [
     {
