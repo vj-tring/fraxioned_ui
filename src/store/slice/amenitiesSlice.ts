@@ -1,5 +1,5 @@
-import { getAmenitiesByPropertyId } from '@/api/api-endpoints';
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { getAmenitiesByPropertyId } from "@/api/api-endpoints";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { getAmenitiesByPropertyId } from '@/api';
 
 export interface AmenityGroup {
@@ -39,16 +39,15 @@ const initialState: AmenitiesState = {
 };
 
 export const fetchAmenities = createAsyncThunk(
-  'amenities/fetchPropertyAmenities',
+  "amenities/fetchPropertyAmenities",
   async (propertyId: number) => {
     const response = await getAmenitiesByPropertyId(propertyId);
-    console.log(response.data.data);
     return response.data.data;
   }
 );
 
 const amenitySlice = createSlice({
-  name: 'propertyAmenities',
+  name: "propertyAmenities",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -60,11 +59,10 @@ const amenitySlice = createSlice({
       .addCase(fetchAmenities.fulfilled, (state, action) => {
         state.loading = false;
         state.propertyAmenities = action.payload;
-        console.log("action", state.propertyAmenities);
       })
       .addCase(fetchAmenities.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Failed to fetch amenities';
+        state.error = action.error.message || "Failed to fetch amenities";
       });
   },
 });
