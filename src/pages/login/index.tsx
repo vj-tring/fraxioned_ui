@@ -7,7 +7,6 @@ import styles from "./login.module.css";
 import logo from "../../assets/images/fraxioned.png";
 import Loader from "../../components/loader/index";
 import CustomizedSnackbars from "../../components/customized-snackbar";
-import { ENCRYPTION_KEY } from "@/constants";
 import { encrypt, decrypt } from "@/utils/encryption";
 
 export const validateEmail = (email: string): boolean => {
@@ -16,6 +15,7 @@ export const validateEmail = (email: string): boolean => {
 };
 
 const Login: React.FC = () => {
+  const ENCRYPTION_KEY = import.meta.env.VITE_ENCRYPTION_KEY
   const [formState, setFormState] = useState({
     email: "",
     password: "",
