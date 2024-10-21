@@ -42,8 +42,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
   isSidebarOpen,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
-  
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
 
   const properties = useSelector(
     (state: RootState) => state.property.properties
@@ -79,9 +78,12 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
   const [filterModel] = useState<GridFilterModel>({
     items: [],
   });
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+
   const [selectedOption, setSelectedOption] = useState<string>("all");
   const options = [
-    { value: "all", label: "All" },
+    { value: "all", label: "All Bookings" },
     { value: "active", label: "Active" },
     { value: "completed", label: "Completed" },
     { value: "cancelled", label: "Cancelled" },
@@ -89,11 +91,11 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
 
   const getStatusColor = (params: any) => {
     if (params.row.isCancelled) {
-      return '#dd5c5c;'; 
+      return '#dd5c5c;';
     } else if (params.row.isCompleted) {
-      return '#2d6aa0'; 
+      return '#2d6aa0';
     }
-    return '#1a95538a'; 
+    return '#1a95538a';
   };
 
   const navigate = useNavigate();
@@ -109,7 +111,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
         const bookingsResponse = await getBookings();
 
         const userMap = new Map(
-          users.map((user) => [user.id, `${user.firstName} ${user.lastName}`])
+          users.map((user: { id: any; firstName: any; lastName: any; }) => [user.id, `${user.firstName} ${user.lastName}`])
         );
         const propertyMap = new Map(
           properties.map((property: Property) => [
@@ -184,30 +186,11 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     setFilteredBookings(filtered);
   }, [filterValue, bookings]);
 
-  useEffect(() => {
-    const lowercasedFilter = filterValue.toLowerCase();
-    const filtered = bookings.filter((booking) => {
-      const matchesSearch =
-        booking.bookingId.toLowerCase().includes(lowercasedFilter) ||
-        booking.userName.toLowerCase().includes(lowercasedFilter) ||
-        booking.propertyName.toLowerCase().includes(lowercasedFilter);
-
-      if (selectedDate) {
-        const bookingDate = new Date(booking.checkinDate);
-        return (
-          matchesSearch &&
-          bookingDate.getMonth() === selectedDate.getMonth() &&
-          bookingDate.getFullYear() === selectedDate.getFullYear()
-        );
-      }
-
-      return matchesSearch;
-    });
-    setFilteredBookings(filtered);
-  }, [filterValue, bookings, selectedDate]);
+  
 
   useEffect(() => {
     const lowercasedFilter = filterValue.toLowerCase();
+
     const filtered = bookings.filter((booking) => {
       const matchesSearch =
         booking.bookingId.toLowerCase().includes(lowercasedFilter) ||
@@ -227,11 +210,20 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
         }
       })();
 
-      return matchesSearch && matchesStatus;
+      const bookingCheckinDate = new Date(booking.checkinDate);
+      const bookingCheckoutDate = new Date(booking.checkoutDate);
+
+      const matchesDateRange = 
+        (!startDate || bookingCheckoutDate >= startDate) &&
+        (!endDate || bookingCheckinDate <= endDate);
+
+      return matchesSearch && matchesStatus && matchesDateRange;
     });
 
     setFilteredBookings(filtered);
-  }, [filterValue, bookings, selectedOption]);
+  }, [filterValue, bookings, selectedOption, startDate, endDate]);
+
+
 
   const handleEditClick = (id: number) => {
     console.log("Edit booking with id:", id);
@@ -245,11 +237,17 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     setFilterValue("");
   };
 
-  const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date);
+  const handleStartDateChange = (date: Date | null) => {
+    setStartDate(date);
   };
+
+  const handleEndDateChange = (date: Date | null) => {
+    setEndDate(date);
+  };
+
   const handleClearDateFilter = () => {
-    setSelectedDate(null);
+    setStartDate(null);
+    setEndDate(null);
   };
 
   const handleDeleteClick = (booking: Booking) => {
@@ -299,7 +297,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     exportBookingsToCSV(filteredBookings);
   };
 
-  
+
   const columns: GridColDef[] = [
     {
       field: "bookingId",
@@ -308,18 +306,18 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
       renderCell: (params) => {
         const color = getStatusColor(params);
         return (
-          <Box 
-            sx={{ 
-              display: 'flex', 
+          <Box
+            sx={{
+              display: 'flex',
               alignItems: "center",
               justifyContent: 'center',
               width: '100%',
               height: '100%',
             }}
           >
-            <Box 
-              sx={{ 
-                display: 'flex', 
+            <Box
+              sx={{
+                display: 'flex',
                 alignItems: 'center',
                 width: '100%',
               }}
@@ -327,18 +325,18 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
               <BookmarkIcon
                 sx={{
                   color,
-                  marginLeft: '-18px', 
+                  marginLeft: '-18px',
                   transform: 'rotate(-90deg)',
-                  fontSize: 50, 
+                  fontSize: 50,
                 }}
               />
-              <Typography 
+              <Typography
                 sx={{
                   fontSize: 'small',
                   fontFamily: "'Roboto', sans-serif !important",
-                  flexGrow: 1, 
+                  flexGrow: 1,
                   textAlign: 'center',
-                  marginRight:'20px',
+                  marginRight: '20px',
                 }}
               >
                 {params.value}
@@ -444,9 +442,8 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
 
   return (
     <div
-      className={`${styles.bookingsContainer} ${
-        isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
-      }`}
+      className={`${styles.bookingsContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
+        }`}
     >
       <div className={styles.titleContainer}>
         <h1 className={styles.title}>Booking Details</h1>
@@ -476,92 +473,52 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
                 </IconButton>
               )}
             </Paper>
-            <FormControl variant="outlined" className={styles.selectContainer}>
-              <Select
-                value={selectedOption}
-                onChange={(e) => setSelectedOption(e.target.value)}
-                displayEmpty
-                inputProps={{ "aria-label": "Without label" }}
-                
-                sx={{
-                  
-                    marginBottom:'8px',
-                    width:'155px',
-                    height:'37px',
-                 
-                  
-
-                  '& .MuiInputBase-input': {
-                    fontSize: '14px',
-                    height: '4px',
-                    padding: '5px',
-
-
-                  },
-                  
-                  
-                  '& .MuiInputLabel-shrink': {
-                    transform: 'translate(14px, -6px) scale(0.75)',
-                  },
-                }}
-              >
-                {options.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          {option.value !== 'all' && (
-            <BookmarkIcon
-              sx={{
-                color: option.value === 'active' ? '#1a95538a' : 
-                option.value === 'completed' ? '#2d6aa0' : 
-                option.value === 'cancelled' ? '#dd5c5c' : 'inherit',
-
-                transform: 'rotate(-90deg)',
-                fontSize: 22, 
-                alignItems:"center",
-              }}
-            />
-          )}
-          <Box sx={{ marginLeft: option.value !== 'all' ? 1 : 0 }}>
-            {option.label}
-          </Box>
-        </Box>
-                    
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
+ 
             <div className={styles.datePickerContainer}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
-                  views={['month', 'year']}
-                  label="Month/Year"
-                  value={selectedDate}
-                  onChange={handleDateChange}
+                  label="Check-in Date"
+                  value={startDate}
+                  onChange={handleStartDateChange}
                   slotProps={{ textField: { helperText: null } }}
-                  className={styles.monthPicker}
+                  className={styles.datePicker}
+
                   sx={{
-                    '& .MuiInputBase-root': {
-                      height: '35px',
-                    },
-                    '& .MuiInputBase-input': {
-                      fontSize: '13px',
-                    },
+
+                    '& .MuiInputBase-root': { height: '35px' },
+                    '& .MuiInputBase-input': { fontSize: '13px' },
                     '& .MuiInputLabel-root': {
                       transform: 'translate(14px, 9px) scale(1)',
                       position: 'absolute',
                       top: '-5px'
-
                     },
                     '& .MuiInputLabel-shrink': {
                       transform: 'translate(14px, -6px) scale(0.75)',
                     },
                   }}
                 />
-
-
+                <DatePicker
+                  label="Check-Out Date"
+                  value={endDate}
+                  onChange={handleEndDateChange}
+                  slotProps={{ textField: { helperText: null } }}
+                  className={styles.datePicker}
+                  sx={{
+                    marginLeft:'10px',
+                    '& .MuiInputBase-root': { height: '35px' },
+                    '& .MuiInputBase-input': { fontSize: '13px' },
+                    '& .MuiInputLabel-root': {
+                      transform: 'translate(14px, 9px) scale(1)',
+                      position: 'absolute',
+                      top: '-5px'
+                    },
+                    '& .MuiInputLabel-shrink': {
+                      transform: 'translate(14px, -6px) scale(0.75)',
+                    },
+                  }}
+                />
               </LocalizationProvider>
-              {selectedDate && (
+              {(startDate && endDate) && (
                 <IconButton
                   className={styles.clearDateFilter}
                   size="small"
@@ -572,6 +529,59 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
                 </IconButton>
               )}
             </div>
+
+            <FormControl variant="outlined" className={styles.selectContainer}>
+              <Select
+                value={selectedOption}
+                onChange={(e) => setSelectedOption(e.target.value)}
+                displayEmpty
+                inputProps={{ "aria-label": "Without label" }}
+                sx={{
+                  marginBottom: '8px',
+                  width: '155px',
+                  height: '37px',
+                  '& .MuiInputBase-input': {
+                    fontSize: '14px',
+                    height: '4px',
+                    padding: '5px',
+                  },
+                  '& .MuiInputLabel-shrink': {
+                    transform: 'translate(14px, -6px) scale(0.75)',
+                  },
+                }}
+              >
+                {options.map((option) => (
+                  <MenuItem
+                    key={option.value}
+                    value={option.value}
+
+                  >
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        paddingLeft: option.value === 'all' ? '15px' : '0px', 
+                      }}
+                    >
+                      {option.value !== 'all' && (
+                        <BookmarkIcon
+                          sx={{
+                            color: option.value === 'active' ? '#1a95538a' :
+                              option.value === 'completed' ? '#2d6aa0' :
+                                option.value === 'cancelled' ? '#dd5c5c' : 'inherit',
+                            transform: 'rotate(-90deg)',
+                            fontSize: 22,
+                            alignItems: 'center',
+                          }}
+                        />
+                      )}
+                      <Box sx={{ marginLeft: option.value !== 'all' ? 1 : 0 }}>
+                        {option.label}
+                      </Box>
+                    </Box>
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
 
             <Button
