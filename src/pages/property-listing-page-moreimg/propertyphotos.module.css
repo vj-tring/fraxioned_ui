@@ -235,13 +235,13 @@
 }
 .dot.active {
   border: 2px solid white;
-  height: 75px !important;
-  border-radius: 4px;
+  /* height: 75px !important; */
+  border-radius: 10px;
 }
-.carouselImage1 {
+/* .carouselImage1 {
   height: 100% !important;
   width: 100px;
-}
+} */
 .nextButton,
 .prevButton {
   color: rgb(121, 121, 121);
@@ -266,7 +266,7 @@
 .lightboxContent img {
   max-width: 100%;
   max-height: 90vh;
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .closeButton {

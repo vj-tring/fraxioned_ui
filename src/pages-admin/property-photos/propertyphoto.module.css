@@ -232,12 +232,16 @@
 }
 .dot.active {
   border: 2px solid white;
-  height: 75px !important;
-  border-radius: 4px;
+  /* height: 75px !important; */
+  border-radius: 10px;
 }
 .carouselImage1 {
-  height: 100% !important;
-  width: 100px;
+  /* height: 100% !important;
+  width: 100px; */
+  /* max-height: calc(20vh - 20px) !important;
+  min-height: calc(20vh - 20px) !important;
+  max-width: calc(20vh - 20px) !important;
+  min-width: calc(20vh - 20px) !important; */
 }
 .nextButton,
 .prevButton {
