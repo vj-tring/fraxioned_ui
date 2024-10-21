@@ -1,4 +1,4 @@
-import { combineReducers } from '@reduxjs/toolkit';
+import { Reducer, combineReducers } from '@reduxjs/toolkit';
 import authReducer from '../slice/authentication';
 import registerReducer from '../slice/auth/register';
 import forgotPasswordReducer from '../slice/auth/forget-password';
@@ -35,7 +35,7 @@ import userDocumentsReducer from '../slice/user-document';
 import { propertycodecatogoryReducer } from '../slice/auth/propertycodeCatogorySlice';
 import { propertyCodesReducer } from '../slice/auth/propertycodeSlice';
 
-const appReducer = combineReducers({
+const appReducer: Reducer = combineReducers({
   auth: authReducer,
   register: registerReducer,
   forgotPassword: forgotPasswordReducer,

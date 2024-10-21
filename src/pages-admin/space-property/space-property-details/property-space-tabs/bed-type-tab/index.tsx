@@ -87,7 +87,15 @@ const BedTypesTab: React.FC<BedTypesTabProps> = ({
   if (error) {
     return <div>Error: {error}</div>;
   }
-
+  if (bedTypes.length === 0) {
+    return (
+      <TabsContent value="bedTypes" className="space-y-4 h-full rounded-md border">
+        <div className="h-full flex flex-column justify-center items-center">
+          <p>No bed types available.</p>
+        </div>
+      </TabsContent>
+    );
+  }
   return (
     <TabsContent value="bedTypes" className="space-y-4 h-full rounded-md border">
       <div className="h-full flex flex-column">
