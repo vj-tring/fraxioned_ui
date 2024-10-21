@@ -208,8 +208,10 @@
   z-index: 1000;
 }
 .carouselImage {
-  max-height: 600px !important;
-  min-height: 580px !important;
+  max-height: 490px !important;
+  min-height: 490px !important;
+  max-width: 700px !important;
+  min-width: 700px !important;
 }
 .dotscontainer {
   display: flex;
