@@ -1,25 +1,35 @@
-.container {
-    max-width: 1300px;
-    margin: 0 auto;
-    padding: 1.5rem;
-    font-family: 'Roboto', 'Arial', sans-serif;
-    color: #333;
-    background-color: #f8f9fa;
-    min-height: 100vh;
+.pageContainer {
+    display: flex;
+    margin-left: 20px;
+    flex-direction: column;
+    height: calc(100vh - 50px);
+    background-color: #f4f5f6;
+}
+
+.contentWrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    margin: 20px;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
-    padding: 1.0rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.05);
+    padding-top: 12px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 5px;
+    background-color: white;
 }
 
+
 .title {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
     color: #2c3e50;
     margin: 0;
@@ -31,26 +41,59 @@
     align-items: center;
 }
 
-.searchBar {
+.globalSearchContainer {
+    padding: 4px 25px;
+    padding-bottom: 7px;
+    background-color: #ffffff;
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 1px 2px 0px;
+}
+
+.globalSearchBar {
     display: flex;
     align-items: center;
-    background-color: #f1f3f5;
-    border-radius: 25px;
+    background-color: white;
+    border-radius: 8px;
     padding: 0.5rem 1rem;
-    transition: box-shadow 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.searchBar:focus-within {
-    box-shadow: 0 0 0 2px #3498db;
-}
-
-.searchBar input {
+.globalSearchBar input {
     border: none;
-    background: transparent;
-    margin-left: 0.5rem;
-    font-size: 1rem;
     outline: none;
-    width: 200px;
+    margin-left: 0.5rem;
+    font-size: 13px;
+    width: 100%;
+}
+
+.matchedGroup {
+    border: 2px solid #51beca;
+}
+
+.scrollableContent {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 24px;
+    padding-left: 24px;
+    padding-bottom: 24px;
+    padding-top: 18px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+}
+
+.groupSearchBar {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 8px;
+    padding: 0.3rem 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.groupSearchBar input {
+    border: none;
+    outline: none;
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+    width: 790px;
 }
 
 .addButton {
@@ -60,7 +103,7 @@
     background-color: #51beca;
     color: white;
     border: none;
-    padding: 0.7rem 0.9rem;
+    padding: 0.6rem 0.8rem;
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.1s;
@@ -92,8 +135,8 @@
 .content {
     background-color: white;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+    padding: 1rem;
 }
 
 .amenitiesList {
@@ -148,11 +191,10 @@
 .groupSearchContainer {
     display: flex;
     align-items: center;
+    margin-right: 13px;
     justify-content: space-between;
-    margin-bottom: 1rem;
-    padding: 0.4rem 1.0rem;
-    background-color: #f8f9fa;
     border-radius: 10px;
+    padding-top: 9px;
     gap: 1rem;
 }
 
@@ -182,7 +224,10 @@
 }
 
 .amenityItems {
-    padding: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 2px;
 }
 
 .amenityItem {
@@ -332,15 +377,15 @@
 }
 
 .editButton {
-    color: #3498db;
+    color: #646464;
 }
 
 .deleteButton {
-    color: #e74c3c;
+    color: #646464;
 }
 
 .saveButton {
-    color: #2ecc71;
+    color: #333935;
 }
 
 .cancelButton {

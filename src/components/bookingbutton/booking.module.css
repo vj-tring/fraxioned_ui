@@ -1,7 +1,4 @@
 .bookingLinkContainer {
-  position: absolute;
-  right: 58px;
-  top: 40px;
   display: flex;
   align-items: center;
 }
@@ -34,3 +31,4 @@
   margin-right: 5px;
   color: white !important;
 }
+

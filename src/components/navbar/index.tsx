@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import NavbarLinks from "../navbar-links";
@@ -10,9 +10,8 @@ import ConfirmationModal from "../confirmation-modal";
 import ResetPasswordModal from "../reset-password-modal";
 import FormDialog from "../register-form-modal";
 import styles from "./navbar.module.css";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "@/store/reducers";
-import { fetchUserById } from "@/store/slice/user-slice";
 
 interface CustomNavbarProps {
   logo?: string;
@@ -33,15 +32,7 @@ const CustomNavbar = ({
   userImage,
   userName,
 }: CustomNavbarProps) => {
-  const dispatch = useDispatch();
-
-  const userId = useSelector((state: any) => state.auth.user?.id);
-  useEffect(() => {
-    if (userId) {
-      dispatch(fetchUserById(userId));
-    }
-  }, [dispatch, userId]);
-  const user = useSelector((state: RootState) => state.user.user);
+  const user = useSelector((state: RootState) => state.auth.user);
   const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
   const {
     showInviteModal,
@@ -67,7 +58,6 @@ const CustomNavbar = ({
   const handleProfileClick = () => {
     setShowUserForm(true);
   };
-
 
   const handleCloseUserForm = () => {
     setShowUserForm(false);

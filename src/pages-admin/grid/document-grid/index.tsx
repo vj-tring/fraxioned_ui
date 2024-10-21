@@ -8,7 +8,7 @@ import { createPropertyDocuments } from '@/api/api-endpoints';
 import { useDispatch, useAppSelector } from '@/store';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@radix-ui/react-scroll-area';
+import { ScrollArea } from "@/components/ui/scroll-area";
 import styles from './document.module.css';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { deletePropertyDocumentThunk, fetchPropertyDocuments } from '@/store/slice/property-document/actions';

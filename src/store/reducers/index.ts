@@ -1,4 +1,4 @@
-import { combineReducers } from '@reduxjs/toolkit';
+import { Reducer, combineReducers } from '@reduxjs/toolkit';
 import authReducer from '../slice/authentication';
 import registerReducer from '../slice/auth/register';
 import forgotPasswordReducer from '../slice/auth/forget-password';
@@ -16,9 +16,9 @@ import spaceImageReducer from '../slice/space/images'
 import ThingsToKnowReducer from '../slice/auth/ThingstoknowSlice';
 import propertiesReducer from '../slice/auth/propertiesSlice';
 import holidayReducer from '../slice/auth/holidaySlice';
-import amenityGroupsReducer from '../slice/amenity';
+import amenityGroupsReducer from '../slice/amenity/group'
 import propertyAmenitiesReducer from '../slice/auth/propertyamenities';
-import amenitiesReducer from '../slice/amenity';
+import amenitiesReducer from '../slice/amenity'
 import userDetailsReducer from '../slice/auth/userdetails';
 import userpropertiesReducer from '../slice/auth/userproperties';
 import userReducer from '../slice/user-slice';
@@ -35,7 +35,7 @@ import userDocumentsReducer from '../slice/user-document';
 import { propertycodecatogoryReducer } from '../slice/auth/propertycodeCatogorySlice';
 import { propertyCodesReducer } from '../slice/auth/propertycodeSlice';
 
-const appReducer = combineReducers({
+const appReducer: Reducer = combineReducers({
   auth: authReducer,
   register: registerReducer,
   forgotPassword: forgotPasswordReducer,
