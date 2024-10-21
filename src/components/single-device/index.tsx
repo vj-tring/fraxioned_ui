@@ -22,8 +22,6 @@ import CustomPagination from "../custom-pagination";
 import "./single-device.css";
 import { AppDispatch } from "@/store";
 import { RootState } from "@/store/reducers";
-import Bedroom1Image from "../../assets/images/bedroom1.jpg";
-import KingBedImage from "../../assets/images/bedroom1.jpg";
 import { fetchSpacePropertiesById } from "@/store/slice/space/property";
 import {
   amenitiesapi,
@@ -34,11 +32,6 @@ interface SingleDeviceProps {
   propertyId: number;
 }
 
-interface Room {
-  image: string;
-  name: string;
-  Bed?: string;
-}
 
 const ITEMS_PER_PAGE = 2;
 const AMENITIES_PER_PAGE = 12;
@@ -52,11 +45,11 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
     (state: RootState) => state.spaceProperties.spaceProperties || []
   );
 
-  const [imagesData, setImagesData] = useState<any[]>([]);
-  const [amenitites, setAmenities] = useState<any[]>([]);
+  const [imagesData, setImagesData] = useState<unknown[]>([]);
+  const [amenitites, setAmenities] = useState<unknown[]>([]);
 
   const [page, setPage] = useState(1);
-  const [showAllAmenities, setShowAllAmenities] = useState(false);
+  const [showAllAmenities, ] = useState(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -145,11 +138,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
     ? allAmenities
     : allAmenities.slice(0, AMENITIES_PER_PAGE);
 
-  const [loading, setLoading] = useState(true);
 
-  const handleImageLoad = () => {
-    setLoading(false);
-  };
   return (
     <Box
       sx={{ display: "flex", flexDirection: "row", gap: 10 }}
@@ -200,11 +189,9 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                     width: "100%",
                   }}
                 >
-                  {/* {loading && <div className="skeleton"></div>} */}
 
                   <CardMedia
                     // component="img"
-                    onLoad={handleImageLoad}
                     image={
                       getImageUrlByPropertyAndSpace(space.id) ||
                       "https://via.placeholder.com/100"
