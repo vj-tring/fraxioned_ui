@@ -16,9 +16,9 @@ import spaceImageReducer from '../slice/space/images'
 import ThingsToKnowReducer from '../slice/auth/ThingstoknowSlice';
 import propertiesReducer from '../slice/auth/propertiesSlice';
 import holidayReducer from '../slice/auth/holidaySlice';
-import amenityGroupsReducer from '../slice/amenity';
+import amenityGroupsReducer from '../slice/amenity/group'
 import propertyAmenitiesReducer from '../slice/auth/propertyamenities';
-import amenitiesReducer from '../slice/amenity';
+import amenitiesReducer from '../slice/amenity'
 import userDetailsReducer from '../slice/auth/userdetails';
 import userpropertiesReducer from '../slice/auth/userproperties';
 import userReducer from '../slice/user-slice';
@@ -27,10 +27,10 @@ import rolesReducer from '../slice/roles';
 import addQuestionReducer from '../slice/auth/addfaqSlice';
 import faqPageReducer from '../slice/auth/faqpageSlice';
 import addCategoryReducer from '../slice/auth/addcategorySlice';
-import bedReducer from '../slice/amenity';
+import bedReducer from '../slice/bedSlice';
 import propertydetailReducer from '../slice/auth/property-detail'
-import bathroomReducer from '../slice/amenity';
-import amenityReducer from '../slice/amenity';
+import bathroomReducer from '../slice/bathroom-slice';
+import amenityReducer from '../slice/amenitiesSlice';
 import userDocumentsReducer from '../slice/user-document';
 import { propertycodecatogoryReducer } from '../slice/auth/propertycodeCatogorySlice';
 import { propertyCodesReducer } from '../slice/auth/propertycodeSlice';
