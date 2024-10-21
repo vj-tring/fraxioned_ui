@@ -3,16 +3,17 @@ import { useParams, useNavigate } from 'react-router-dom';
 import {
     TextField,
     Button,
-    Box,
     Typography,
     Paper,
-    Grid,
-    InputAdornment
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
 } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
 import { useSelector, useDispatch } from 'react-redux';
 import Loader from '@/components/loader';
 import styles from './editrulesform.module.css';
+import { styled } from '@mui/material/styles';
 import { RootState } from '@/store/reducers';
 import { fetchPropertyDetails, updatePropertyRules } from '@/store/slice/auth/property-detail';
 import { AppDispatch } from '@/store';
@@ -91,6 +92,20 @@ const EditPropertyRulesForm: React.FC = () => {
         }) : null);
     };
 
+    const TimePickerContainer = styled('div')({
+        display: 'flex',
+        gap: '8px',
+        alignItems: 'center',
+        minWidth: '200px',
+    });
+
+    const TimeSelect = styled(Select)({
+        minWidth: '80px',
+        '& .MuiSelect-select': {
+            padding: '8px 12px',
+        },
+    });
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!userId) {
@@ -149,233 +164,239 @@ const EditPropertyRulesForm: React.FC = () => {
         <div className={styles.formContainer}>
             <Paper elevation={3} className={styles.formPaper}>
                 <div className={styles.staticHeader}>
-                    <Box className={styles.formHeader}>
-                        <EditIcon className={styles.headerIcon} />
+                    <div className={styles.formHeader}>
                         <Typography variant="h4" className={styles.formTitle}>
-                            Edit Property Rules
+                            Property Rules & Details
                         </Typography>
-                    </Box>
+                    </div>
                 </div>
                 <div className={styles.scrollableContent}>
                     <form onSubmit={handleSubmit} className={styles.form}>
-                        <Grid container spacing={3}>
-                            <Grid item xs={6} sm={3}>
-                                <TextField
-                                    fullWidth
-                                    label="Peak Season Start Date"
-                                    name="peakSeasonStartDate"
-                                    type="date"
-                                    value={formData.peakSeasonStartDate}
-                                    onChange={handleInputChange}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item xs={6} sm={3}>
-                                <TextField
-                                    fullWidth
-                                    label="Peak Season End Date"
-                                    name="peakSeasonEndDate"
-                                    type="date"
-                                    value={formData.peakSeasonEndDate}
-                                    onChange={handleInputChange}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item xs={6} sm={3}>
-                                <TextField
-                                    fullWidth
-                                    label="Peak Season Allotted Nights"
-                                    name="peakSeasonAllottedNights"
-                                    type="number"
-                                    value={formData.peakSeasonAllottedNights}
-                                    onChange={handleInputChange}
-                                />
-                            </Grid>
-                            <Grid item xs={6} sm={3}>
-                                <TextField
-                                    fullWidth
-                                    label="Off Season Allotted Nights"
-                                    name="offSeasonAllottedNights"
-                                    type="number"
-                                    value={formData.offSeasonAllottedNights}
-                                    onChange={handleInputChange}
-                                />
-                            </Grid>
-                            <Grid item xs={6} sm={3}>
-                                <TextField
-                                    fullWidth
-                                    label="Peak Season Allotted Holiday Nights"
-                                    name="peakSeasonAllottedHolidayNights"
-                                    type="number"
-                                    value={formData.peakSeasonAllottedHolidayNights}
-                                    onChange={handleInputChange}
-                                />
-                            </Grid>
-                            <Grid item xs={6} sm={3}>
-                                <TextField
-                                    fullWidth
-                                    label="Off Season Allotted Holiday Nights"
-                                    name="offSeasonAllottedHolidayNights"
-                                    type="number"
-                                    value={formData.offSeasonAllottedHolidayNights}
-                                    onChange={handleInputChange}
-                                />
-                            </Grid>
-                            <Grid item xs={6} sm={3}>
-                                <TextField
-                                    fullWidth
-                                    label="Last Minute Booking Allotted Nights"
-                                    name="lastMinuteBookingAllottedNights"
-                                    type="number"
-                                    value={formData.lastMinuteBookingAllottedNights}
-                                    onChange={handleInputChange}
-                                />
-                            </Grid>
-                            <Grid item xs={6} sm={3}>
-                                <TextField
-                                    fullWidth
-                                    label="Number of Guests Allowed"
-                                    name="noOfGuestsAllowed"
-                                    type="number"
-                                    value={formData.noOfGuestsAllowed}
-                                    onChange={handleInputChange}
-                                />
-                            </Grid>
-                            <Grid item xs={6} sm={3}>
-                                <TextField
-                                    fullWidth
-                                    label="Number of Bedrooms"
-                                    name="noOfBedrooms"
-                                    type="number"
-                                    value={formData.noOfBedrooms}
-                                    onChange={handleInputChange}
-                                />
-                            </Grid>
-                            <Grid item xs={6} sm={3}>
-                                <TextField
-                                    fullWidth
-                                    label="Number of Bathrooms"
-                                    name="noOfBathrooms"
-                                    type="number"
-                                    value={formData.noOfBathrooms}
-                                    onChange={handleInputChange}
-                                />
-                            </Grid>
-                            <Grid item xs={6} sm={3}>
-                                <TextField
-                                    fullWidth
-                                    label="Number of Full Bathrooms"
-                                    name="noOfBathroomsFull"
-                                    type="number"
-                                    value={formData.noOfBathroomsFull}
-                                    onChange={handleInputChange}
-                                />
-                            </Grid>
-                            <Grid item xs={6} sm={3}>
-                                <TextField
-                                    fullWidth
-                                    label="Number of Half Bathrooms"
-                                    name="noOfBathroomsHalf"
-                                    type="number"
-                                    value={formData.noOfBathroomsHalf}
-                                    onChange={handleInputChange}
-                                />
-                            </Grid>
-                            <Grid item xs={6} sm={3}>
-                                <TextField
-                                    fullWidth
-                                    label="Square Footage"
-                                    name="squareFootage"
-                                    value={formData.squareFootage}
-                                    onChange={handleInputChange}
-                                />
-                            </Grid>
-                            <Grid item xs={6} sm={3}>
-                                <TextField
-                                    fullWidth
-                                    label="Check-in Time"
-                                    name="checkInTime"
-                                    type="number"
-                                    value={formData.checkInTime}
-                                    onChange={handleInputChange}
-                                    InputProps={{
-                                        endAdornment: <InputAdornment position="end">:00</InputAdornment>,
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item xs={6} sm={3}>
-                                <TextField
-                                    fullWidth
-                                    label="Check-out Time"
-                                    name="checkOutTime"
-                                    type="number"
-                                    value={formData.checkOutTime}
-                                    onChange={handleInputChange}
-                                    InputProps={{
-                                        endAdornment: <InputAdornment position="end">:00</InputAdornment>,
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item xs={6} sm={3}>
-                                <TextField
-                                    fullWidth
-                                    label="Cleaning Fee"
-                                    name="cleaningFee"
-                                    type="number"
-                                    value={formData.cleaningFee}
-                                    onChange={handleInputChange}
-                                />
-                            </Grid>
-                            <Grid item xs={6} sm={3}>
-                                <TextField
-                                    fullWidth
-                                    label="Number of Pets Allowed"
-                                    name="noOfPetsAllowed"
-                                    type="number"
-                                    value={formData.noOfPetsAllowed}
-                                    onChange={handleInputChange}
-                                />
-                            </Grid>
-                            <Grid item xs={6} sm={3}>
-                                <TextField
-                                    fullWidth
-                                    label="Pet Policy"
-                                    name="petPolicy"
-                                    multiline
-                                    // rows={4}
-                                    value={formData.petPolicy}
-                                    onChange={handleInputChange}
-                                />
-                            </Grid>
-                            <Grid item xs={6} sm={3}>
-                                <TextField
-                                    fullWidth
-                                    label="Fee Per Pet"
-                                    name="feePerPet"
-                                    type="number"
-                                    value={formData.feePerPet}
-                                    onChange={handleInputChange}
-                                />
-                            </Grid>
-                            <Grid item xs={6} sm={3}>
-                                <TextField
-                                    fullWidth
-                                    label="WiFi Network"
-                                    name="wifiNetwork"
-                                    value={formData.wifiNetwork}
-                                    onChange={handleInputChange}
-                                />
-                            </Grid>
-                        </Grid>
+
+
+                        <section className={styles.formSection}>
+                            <h3 className={styles.sectionTitle}>Property Details</h3>
+                            <div className={styles.formRow}>
+                                <div className={styles.inputGroup}>
+                                    <TextField
+                                        label="Square Footage"
+                                        name="squareFootage"
+                                        value={formData?.squareFootage}
+                                        onChange={handleInputChange}
+                                        className={styles.numberInput}
+                                    />
+                                    <TextField
+                                        label="Guests Allowed"
+                                        name="noOfGuestsAllowed"
+                                        type="number"
+                                        value={formData?.noOfGuestsAllowed}
+                                        onChange={handleInputChange}
+                                        className={styles.numberInput}
+                                    />
+                                    <TextField
+                                        label="Pets Allowed"
+                                        name="noOfPetsAllowed"
+                                        type="number"
+                                        value={formData?.noOfPetsAllowed}
+                                        onChange={handleInputChange}
+                                        className={styles.numberInput}
+                                    />
+                                </div>
+                            </div>
+                            <div className={styles.formRow}>
+                                <div className={styles.inputGroup}>
+                                    <TextField
+                                        label="Total Bathrooms"
+                                        name="noOfBathrooms"
+                                        type="number"
+                                        value={formData?.noOfBathrooms}
+                                        onChange={handleInputChange}
+                                        className={styles.numberInput}
+                                    />
+                                    <TextField
+                                        label="Full Bathrooms"
+                                        name="noOfBathroomsFull"
+                                        type="number"
+                                        value={formData?.noOfBathroomsFull}
+                                        onChange={handleInputChange}
+                                        className={styles.numberInput}
+                                    />
+                                    <TextField
+                                        label="Half Bathrooms"
+                                        name="noOfBathroomsHalf"
+                                        type="number"
+                                        value={formData?.noOfBathroomsHalf}
+                                        onChange={handleInputChange}
+                                        className={styles.numberInput}
+                                    />
+                                </div>
+                            </div>
+                            <div className={styles.formRow}>
+                                <div className={styles.inputGroup}>
+                                    <TextField
+                                        label="Bedrooms"
+                                        name="noOfBedrooms"
+                                        type="number"
+                                        value={formData?.noOfBedrooms}
+                                        onChange={handleInputChange}
+                                        className={styles.numberInput}
+                                    />
+                                </div>
+                            </div>
+                        </section>
+                        <section className={styles.formSection}>
+                            <h3 className={styles.sectionTitle}>Seasonal Settings</h3>
+                            <div className={styles.formRow}>
+                                <div className={styles.inputGroup}>
+                                    <TextField
+                                        label="Peak Season Start"
+                                        name="peakSeasonStartDate"
+                                        type="date"
+                                        value={formData?.peakSeasonStartDate}
+                                        onChange={handleInputChange}
+                                        InputLabelProps={{ shrink: true }}
+                                        className={styles.numberInput}
+                                    />
+                                    <TextField
+                                        label="Peak Season End"
+                                        name="peakSeasonEndDate"
+                                        type="date"
+                                        value={formData?.peakSeasonEndDate}
+                                        onChange={handleInputChange}
+                                        InputLabelProps={{ shrink: true }}
+                                        className={styles.numberInput}
+                                    />
+                                </div>
+                            </div>
+                            <div className={styles.formRow}>
+                                <div className={styles.inputGroup}>
+                                    <TextField
+                                        label="Peak Season(Alloted Nights)"
+                                        name="peakSeasonAllottedNights"
+                                        type="number"
+                                        value={formData?.peakSeasonAllottedNights}
+                                        onChange={handleInputChange}
+                                        className={styles.numberInput}
+                                    />
+                                    <TextField
+                                        label="Off Season(Alloted Nights)"
+                                        name="offSeasonAllottedNights"
+                                        type="number"
+                                        value={formData?.offSeasonAllottedNights}
+                                        onChange={handleInputChange}
+                                        className={styles.numberInput}
+                                    />
+                                </div>
+                            </div>
+                        </section>
+                        <section className={styles.formSection}>
+                            <h3 className={styles.sectionTitle}>Holiday Settings</h3>
+                            <div className={styles.formRow}>
+                                <div className={styles.inputGroup}>
+                                    <TextField
+                                        label="Peak season Holiday(Alloted Nights)"
+                                        name="peakSeasonAllottedHolidayNights"
+                                        type="number"
+                                        value={formData?.peakSeasonAllottedHolidayNights}
+                                        onChange={handleInputChange}
+                                        className={styles.numberInput}
+                                    />
+                                    <TextField
+                                        label="Off Season Holiday(Alloted Nights)"
+                                        name="offSeasonAllottedHolidayNights"
+                                        type="number"
+                                        value={formData?.offSeasonAllottedHolidayNights}
+                                        onChange={handleInputChange}
+                                        className={styles.numberInput}
+                                    />
+                                </div>
+                            </div>
+                        </section>
+                        <section className={styles.formSection}>
+                            <h3 className={styles.sectionTitle}>Check-in & Check-out Time</h3>
+                            <div className={styles.formRow}>
+                                <div className={styles.inputGroup}>
+                                    <TimePickerContainer>
+                                        <FormControl className={styles.timeInput}>
+                                            <InputLabel>Check-in</InputLabel>
+                                            <TimeSelect
+                                                value={formData?.checkInTime || 0}
+                                                label="Check-in"
+                                                onChange={(e) => {
+                                                    setFormData(prevData => prevData ? ({
+                                                        ...prevData,
+                                                        checkInTime: Number(e.target.value)
+                                                    }) : null);
+                                                }}
+                                            >
+                                                {Array.from({ length: 24 }, (_, i) => (
+                                                    <MenuItem key={i} value={i}>
+                                                        {i === 0 ? '12:00 AM' :
+                                                            i < 12 ? `${i}:00 AM` :
+                                                                i === 12 ? '12:00 PM' :
+                                                                    `${i - 12}:00 PM`}
+                                                    </MenuItem>
+                                                ))}
+                                            </TimeSelect>
+                                        </FormControl>
+                                    </TimePickerContainer>
+
+                                    <TimePickerContainer>
+                                        <FormControl className={styles.timeInput}>
+                                            <InputLabel>Check-out</InputLabel>
+                                            <TimeSelect
+                                                value={formData?.checkOutTime || 0}
+                                                label="Check-out"
+                                                onChange={(e) => {
+                                                    setFormData(prevData => prevData ? ({
+                                                        ...prevData,
+                                                        checkOutTime: Number(e.target.value)
+                                                    }) : null);
+                                                }}
+                                            >
+                                                {Array.from({ length: 24 }, (_, i) => (
+                                                    <MenuItem key={i} value={i}>
+                                                        {i === 0 ? '12:00 AM' :
+                                                            i < 12 ? `${i}:00 AM` :
+                                                                i === 12 ? '12:00 PM' :
+                                                                    `${i - 12}:00 PM`}
+                                                    </MenuItem>
+                                                ))}
+                                            </TimeSelect>
+                                        </FormControl>
+                                    </TimePickerContainer>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section className={styles.formSection}>
+                            <h3 className={styles.sectionTitle}>Fee details</h3>
+                            <div className={styles.formRow}>
+                                <div className={styles.inputGroup}>
+                                    <TextField
+                                        label="Fee Per Pet"
+                                        name="feePerPet"
+                                        type="number"
+                                        value={formData?.feePerPet}
+                                        onChange={handleInputChange}
+                                        className={styles.numberInput}
+                                    />
+                                    <TextField
+                                        label="Cleaning Fee"
+                                        name="cleaningFee"
+                                        type="number"
+                                        value={formData?.cleaningFee}
+                                        onChange={handleInputChange}
+                                        className={styles.numberInput}
+                                    />
+                                </div>
+                            </div>
+                        </section>
                         {error && <Typography color="error" className={styles.error}>{error}</Typography>}
-                        <Box className={styles.buttonContainer}>
+
+                        <div className={styles.buttonContainer}>
                             <Button
                                 variant="outlined"
-                                color="secondary"
                                 onClick={() => navigate(`/admin/property/${id}/rules`)}
                                 className={styles.cancelButton}
                             >
@@ -384,12 +405,11 @@ const EditPropertyRulesForm: React.FC = () => {
                             <Button
                                 type="submit"
                                 variant="contained"
-                                color="primary"
                                 className={styles.updateButton}
                             >
-                                Update Rules
+                                Save Changes
                             </Button>
-                        </Box>
+                        </div>
                     </form>
                 </div>
             </Paper>

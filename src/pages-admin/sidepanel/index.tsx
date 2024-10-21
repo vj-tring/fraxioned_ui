@@ -4,7 +4,8 @@ import fraxionedLogo from '../../assets/images/fraxioned.png';
 import logo from '../../assets/images/fraxionedpng.png'
 import {
     FaCalendar, FaPlane, FaUser, FaFile,
-    FaUserTag, FaChartBar, FaGavel, FaBars, FaHome, FaConciergeBell
+    FaUserTag, FaChartBar, FaGavel, FaBars, FaHome, FaConciergeBell,
+    FaQuestion
 } from 'react-icons/fa';
 import { IoIosImages } from "react-icons/io";
 
@@ -28,12 +29,13 @@ const menuItems: MenuItem[] = [
     { icon: <FaHome />, label: 'Property', path: '/admin/property', disabled: false },
     { icon: <FaUser />, label: 'User', path: '/admin/user', disabled: false },
     { icon: <FaConciergeBell />, label: 'Amenity', path: '/admin/amenity', disabled: false },
-    { icon: <FaFile />, label: 'Documents', path: '/documents', disabled: true },
+    { icon: <FaFile />, label: 'Documents', path: '/admin/documents', disabled: false },
 
     //{ icon: <FaUserTag />, label: 'Role', path: '/role', disabled: true },
     { icon: <FaChartBar />, label: 'Reports', path: '/admin/reports', disabled: false },
     { icon: <IoIosImages /> , label: 'Spaces', path: '/admin/spaces', disabled: false },
     //{ icon: <FaGavel />, label: 'Rules', path: '/rules', disabled: true }
+    { icon: <FaQuestion /> , label: 'FAQ', path: '/admin/Faq', disabled: false },
 ];
 
 const SidePanel: React.FC<SidePanelProps> = ({ isOpen, toggleSidebar }) => {
@@ -58,7 +60,9 @@ const SidePanel: React.FC<SidePanelProps> = ({ isOpen, toggleSidebar }) => {
         if (path === '/admin/reports') {
             return location.pathname.startsWith('/admin/reports');
         }
-
+        if (path === 'admin/documents') {
+            return location.pathname.startsWith('/admin/documents');
+        }
 
         return location.pathname === path;
     };

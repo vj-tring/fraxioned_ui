@@ -32,10 +32,13 @@ const PropertyAmenities: React.FC = () => {
   const [amenities, setAmenities] = useState<{ [key: string]: Amenity[] }>({});
   const [selectedAmenities, setSelectedAmenities] = useState<number[]>([]);
   const [expandedGroup, setExpandedGroup] = useState<string | null>(null);
-  const [searchTerms, setSearchTerms] = useState<{ [key: string]: string }>({});
+  const [searchTerm, setSearchTerm] = useState('');
+  const [noResultsMessage, setNoResultsMessage] = useState('');
+  const [highlightedItemId, setHighlightedItemId] = useState<number | null>(null);
 
   const amenitiesContainerRef = useRef<HTMLDivElement>(null);
   const groupRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const highlightedItemRef = useRef<HTMLLabelElement | null>(null);
 
   const { loading, error, amenities: propertyAmenities } = useSelector(
     (state: RootState) => state.propertyAmenities
@@ -54,16 +57,20 @@ const PropertyAmenities: React.FC = () => {
     }
   }, [propertyAmenities]);
 
+  useEffect(() => {
+    if (highlightedItemRef.current) {
+      highlightedItemRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }
+  }, [highlightedItemId]);
+
   const fetchAmenities = async () => {
     try {
       const response = await amenitiesapi();
       const groupedAmenities = groupAmenitiesByGroup(response.data.data);
       setAmenities(groupedAmenities);
-      const initialSearchTerms = Object.keys(groupedAmenities).reduce((acc, group) => {
-        acc[group] = '';
-        return acc;
-      }, {} as { [key: string]: string });
-      setSearchTerms(initialSearchTerms);
     } catch (err) {
       console.error('Failed to fetch amenities:', err);
     }
@@ -86,35 +93,95 @@ const PropertyAmenities: React.FC = () => {
     );
   };
 
+  const scrollToGroup = (group: string) => {
+    if (groupRefs.current[group] && amenitiesContainerRef.current) {
+      const groupElement = groupRefs.current[group];
+      const containerElement = amenitiesContainerRef.current;
+      const containerTop = containerElement.getBoundingClientRect().top;
+      const groupTop = groupElement.getBoundingClientRect().top;
+      const scrollOffset = groupTop - containerTop - 20;
+
+      containerElement.scrollBy({
+        top: scrollOffset,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   const toggleGroup = (group: string) => {
     setExpandedGroup(prev => {
       const newExpandedGroup = prev === group ? null : group;
-      if (newExpandedGroup && groupRefs.current[group]) {
-        const groupElement = groupRefs.current[group];
-        const containerElement = amenitiesContainerRef.current;
-        if (groupElement && containerElement) {
-          setTimeout(() => {
-            const topPos = groupElement.offsetTop - containerElement.offsetTop;
-            containerElement.scrollTo({
-              top: topPos - 20,
-              behavior: 'smooth'
-            });
-          }, 100);
-        }
+      if (newExpandedGroup) {
+        setTimeout(() => {
+          scrollToGroup(group);
+        }, 100);
       }
       return newExpandedGroup;
     });
   };
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    setHighlightedItemId(null);
 
-  const handleSearch = (term: string, group: string) => {
-    setSearchTerms(prev => ({ ...prev, [group]: term }));
+    if (term === '') {
+      setExpandedGroup(null);
+      setNoResultsMessage('');
+      return;
+    }
+
+    const lowerTerm = term.toLowerCase();
+    let found = false;
+    let foundItemId: number | null = null;
+    let foundGroup: string | null = null;
+
+
+    Object.entries(amenities).forEach(([group, amenitiesList]) => {
+      const groupMatches = group.toLowerCase().includes(lowerTerm);
+      const matchingAmenity = amenitiesList.find(amenity =>
+        amenity.amenityName.toLowerCase().includes(lowerTerm)
+      );
+
+      if (groupMatches || matchingAmenity) {
+        setExpandedGroup(group);
+        found = true;
+        foundGroup = group;
+
+
+        if (matchingAmenity) {
+          foundItemId = matchingAmenity.id;
+          setHighlightedItemId(foundItemId);
+        }
+
+        setTimeout(() => {
+          scrollToGroup(group);
+        }, 100);
+      }
+    });
+
+    if (!found) {
+      setNoResultsMessage(`No "${term}" found`);
+    } else {
+      setNoResultsMessage('');
+      setTimeout(() => {
+        if (foundGroup) {
+          scrollToGroup(foundGroup);
+        }
+      }, 100);
+    }
   };
 
-  const filterAmenities = (amenitiesList: Amenity[], group: string) => {
-    const searchTerm = searchTerms[group].toLowerCase();
-    return amenitiesList.filter(amenity =>
-      amenity.amenityName.toLowerCase().includes(searchTerm)
-    );
+
+  const filterAmenities = (amenitiesList: Amenity[]) => {
+    if (!searchTerm) return amenitiesList;
+    return amenitiesList;
+  };
+
+  const getAmenityCount = (group: string) => {
+    const totalCount = amenities[group].length;
+    const selectedCount = amenities[group].filter(amenity =>
+      selectedAmenities.includes(amenity.id)
+    ).length;
+    return `Selected: ${selectedCount}/${totalCount}`;
   };
 
   const handleUpdate = async () => {
@@ -137,47 +204,64 @@ const PropertyAmenities: React.FC = () => {
           <h2 className={styles.title}>Property Amenities</h2>
           <UpdateButton onClick={handleUpdate} />
         </div>
+        <div className={styles.searchContainer}>
+          <Search size={19} className={styles.searchIcon} />
+          <input
+            type="text"
+            placeholder="Search amenities or groups..."
+            className={styles.searchInput}
+            value={searchTerm}
+            onChange={(e) => handleSearch(e.target.value)}
+          />
+        </div>
+        {noResultsMessage && (
+          <div className={styles.noResults}>{noResultsMessage}</div>
+        )}
         <div className={styles.amenitiesContainer} ref={amenitiesContainerRef}>
-          {Object.entries(amenities).map(([group, amenitiesList]) => (
-            <div key={group} className={styles.amenityGroup} ref={el => groupRefs.current[group] = el}>
-              <div className={styles.groupHeader} onClick={() => toggleGroup(group)}>
-                <h3 className={styles.groupTitle}>{group}</h3>
-                {expandedGroup === group ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-              </div>
-              {expandedGroup === group && (
-                <>
-                  <div className={styles.searchContainer}>
-                    <Search size={19} className={styles.searchIcon} />
-                    <input
-                      type="text"
-                      placeholder="Search amenities..."
-                      className={styles.searchInput}
-                      value={searchTerms[group]}
-                      onChange={(e) => handleSearch(e.target.value, group)}
-                    />
+          {Object.entries(amenities).map(([group, amenitiesList]) => {
+            const groupMatchesSearch = group.toLowerCase().includes(searchTerm.toLowerCase());
+
+            return (
+              <div
+                key={group}
+                className={`${styles.amenityGroup} ${groupMatchesSearch ? styles.highlightedGroup : ''}`}
+                ref={el => groupRefs.current[group] = el}
+              >
+                <div className={styles.groupHeader}
+                  onClick={() => toggleGroup(group)}>
+
+                  <div className={styles.groupTitleContainer}>
+                    <h3 className={styles.groupTitle}>{group}</h3>
                   </div>
+
+                  <div className={styles.groupHeaderRight}>
+                    <span className={styles.amenityCount}>{getAmenityCount(group)}</span>
+                    {expandedGroup === group ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                  </div>
+                </div>
+                {expandedGroup === group && (
                   <div className={styles.amenityList}>
-                    {filterAmenities(amenitiesList, group).length > 0 ? (
-                      filterAmenities(amenitiesList, group).map((amenity) => (
-                        <label key={amenity.id} className={styles.amenityItem}>
-                          <input
-                            type="checkbox"
-                            checked={selectedAmenities.includes(amenity.id)}
-                            onChange={() => handleCheckboxChange(amenity.id)}
-                            className={styles.checkbox}
-                          />
-                          <span className={styles.checkmark}></span>
-                          <span className={styles.amenityName}>{amenity.amenityName}</span>
-                        </label>
-                      ))
-                    ) : (
-                      <div className={styles.noResults}>Searched item not found</div>
-                    )}
+                    {filterAmenities(amenitiesList).map((amenity) => (
+                      <label
+                        key={amenity.id}
+                        className={`${styles.amenityItem} ${highlightedItemId === amenity.id ? styles.highlighted : ''}`}
+                        ref={highlightedItemId === amenity.id ? highlightedItemRef : null}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedAmenities.includes(amenity.id)}
+                          onChange={() => handleCheckboxChange(amenity.id)}
+                          className={styles.checkbox}
+                        />
+                        <span className={styles.checkmark}></span>
+                        <span className={styles.amenityName}>{amenity.amenityName}</span>
+                      </label>
+                    ))}
                   </div>
-                </>
-              )}
-            </div>
-          ))}
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

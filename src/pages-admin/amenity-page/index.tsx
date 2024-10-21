@@ -6,7 +6,7 @@ import {
   deleteAmenityAsync,
   fetchAmenities,
 } from "@/store/slice/amenity";
-import {  AppDispatch } from "@/store";
+import { AppDispatch } from "@/store";
 import { RootState } from "@/store/reducers";
 import styles from "./amenitypage.module.css";
 import NewAmenityForm from "../property-amenities/new-amenity";
@@ -16,14 +16,13 @@ import {
   Plus,
   ChevronRight,
   ChevronDown,
-  RefreshCw,
   Search,
   ImageIcon,
   Upload,
 } from "lucide-react";
 import ConfirmationModal from "@/components/confirmation-modal";
 import CustomizedSnackbars from "@/components/customized-snackbar";
-import { IconButton, Tooltip } from "@mui/material";
+import { Tooltip } from "@mui/material";
 import Loader from "@/components/loader";
 import { Amenity } from "@/store/model";
 
@@ -317,210 +316,201 @@ const AmenityManagement: React.FC = () => {
   if (loading) return <div className={styles.loading}>Loading...</div>;
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h1 className={styles.title}>Amenity Management</h1>
-        <div className={styles.actions}>
-          <Tooltip title="Add New Amenity" arrow>
+    <div className={styles.pageContainer}>
+      <div className={styles.contentWrapper}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Amenity Management</h1>
+          <div className={styles.actions}>
             <button className={styles.addButton} onClick={handleAddNew}>
               <Plus size={20} />
               <span className={styles.buttonText}>New Amenity</span>
             </button>
-          </Tooltip>
-          <Tooltip title="Refresh" arrow>
-            <IconButton
-              onClick={() => window.location.reload()}
-              className={styles.refreshIcon}
-              aria-label="refresh"
-            >
-              <RefreshCw size={20} />
-            </IconButton>
-          </Tooltip>
+          </div>
         </div>
-      </div>
-      <div className={styles.content}>
-        {isAddingNew && (
-          <NewAmenityForm
-            onClose={handleCloseNewAmenityForm}
-            onAmenityAdded={handleAmenityAdded}
-          />
-        )}
-        <div className={styles.amenitiesList}>
-          {Object.entries(filteredAmenities).map(([group, amenitiesList]) => (
-            <div
-              key={group}
-              className={styles.amenityGroup}
-              ref={groupRefs.current[group]}
-            >
+        <div className={styles.scrollableContent}>
+          {isAddingNew && (
+            <NewAmenityForm
+              onClose={handleCloseNewAmenityForm}
+              onAmenityAdded={handleAmenityAdded}
+            />
+          )}
+          <div className={styles.amenitiesList}>
+            {Object.entries(filteredAmenities).map(([group, amenitiesList]) => (
               <div
-                className={styles.groupHeader}
-                onClick={() => toggleGroupExpansion(group)}
+                key={group}
+                className={styles.amenityGroup}
+                ref={groupRefs.current[group]}
               >
-                {expandedGroups.includes(group) ? (
-                  <ChevronDown size={20} />
-                ) : (
-                  <ChevronRight size={20} />
-                )}
-                <h2>{group}</h2>
-              </div>
-              {expandedGroups.includes(group) && (
-                <div className={styles.amenityItems}>
-                  <div className={styles.groupSearchContainer}>
-                    <div className={styles.groupSearchBar}>
-                      <Search size={15} />
-                      <input
-                        type="text"
-                        placeholder={`Search in ${group}...`}
-                        value={groupSearchTerms[group] || ""}
-                        onChange={(e) =>
-                          handleGroupSearch(group, e.target.value)
-                        }
-                      />
-                    </div>
-                    <span className={styles.groupTotalCount}>
-                      Total {group} amenities: {amenitiesList.length}
-                    </span>
-                  </div>
-                  {amenitiesList.length > 0 ? (
-                    amenitiesList.map((amenity) => (
-                      <div key={amenity.id} className={styles.amenityItem}>
-                        <div className={styles.amenityContent}>
-                          {editingAmenity?.id === amenity.id ? (
-                            <div className={styles.editingContainer}>
-                              <input
-                                type="text"
-                                value={editingAmenity?.amenityName}
-                                onChange={(e) =>
-                                  setEditingAmenity({
-                                    ...(editingAmenity as Amenity),
-                                    amenityName: e.target.value,
-                                  })
-                                }
-                                className={styles.editInput}
-                                placeholder="Amenity name"
-                              />
-                              <textarea
-                                value={editingAmenity?.amenityDescription || ""}
-                                onChange={(e) =>
-                                  setEditingAmenity({
-                                    ...(editingAmenity as Amenity),
-                                    amenityDescription: e.target.value,
-                                  })
-                                }
-                                className={styles.editDescription}
-                                placeholder="Description (optional)"
-                              />
-                              <div className={styles.fileInputWrapper}>
-                                <button
-                                  type="button"
-                                  onClick={triggerFileInput}
-                                  className={styles.fileInputButton}
-                                >
-                                  <Upload size={10} />
-                                  <span>Choose File</span>
-                                </button>
-                                <span className={styles.fileName}>
-                                  {editingAmenity!.imageFile?.name ||
-                                    "No file chosen"}
-                                </span>
-                                <input
-                                  ref={fileInputRef}
-                                  type="file"
-                                  onChange={handleFileChange}
-                                  accept="image/*"
-                                  className={styles.hiddenFileInput}
-                                />
-                              </div>
-                            </div>
-                          ) : (
-                            <div className={styles.displayContainer}>
-                              <div className={styles.amenityIcon}>
-                                {loadingImages[amenity.id] ? (
-                                  <Loader />
-                                ) : amenity.s3_url ? (
-                                  <img
-                                    src={amenity.s3_url}
-                                    alt={amenity.amenityName}
-                                    className={styles.amenityImage}
-                                    onLoad={() =>
-                                      setLoadingImages((prev) => ({
-                                        ...prev,
-                                        [amenity.id]: false,
-                                      }))
-                                    }
-                                  />
-                                ) : (
-                                  <ImageIcon size={14} />
-                                )}
-                              </div>
-                              <div className={styles.amenityDetails}>
-                                <span className={styles.amenityName}>
-                                  {amenity.amenityName}
-                                </span>
-                                {amenity.amenityDescription && (
-                                  <p className={styles.amenityDescription}>
-                                    {amenity.amenityDescription}
-                                  </p>
-                                )}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                        <div className={styles.actionButtons}>
-                          {editingAmenity?.id === amenity.id ? (
-                            <>
-                              <Tooltip title="Save" arrow>
-                                <button
-                                  onClick={handleSave}
-                                  className={styles.saveButton}
-                                  disabled={updateLoading}
-                                >
-                                  Save
-                                </button>
-                              </Tooltip>
-                              <Tooltip title="Cancel" arrow>
-                                <button
-                                  onClick={handleCancel}
-                                  className={styles.cancelButton}
-                                  disabled={updateLoading}
-                                >
-                                  Cancel
-                                </button>
-                              </Tooltip>
-                            </>
-                          ) : (
-                            <>
-                              <Tooltip title="Edit" arrow>
-                                <button
-                                  onClick={() => handleEdit(amenity)}
-                                  className={styles.editButton}
-                                >
-                                  <Edit2 size={16} />
-                                </button>
-                              </Tooltip>
-                              <Tooltip title="Delete" arrow>
-                                <button
-                                  onClick={() => handleDeleteClick(amenity)}
-                                  className={styles.deleteButton}
-                                  disabled={deleteLoading}
-                                >
-                                  <Trash2 size={16} />
-                                </button>
-                              </Tooltip>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    ))
+                <div
+                  className={styles.groupHeader}
+                  onClick={() => toggleGroupExpansion(group)}
+                >
+                  {expandedGroups.includes(group) ? (
+                    <ChevronDown size={20} />
                   ) : (
-                    <div className={styles.notFoundMessage}>
-                      No amenities found in {group} for this search.
-                    </div>
+                    <ChevronRight size={20} />
                   )}
+                  <h2>{group}</h2>
                 </div>
-              )}
-            </div>
-          ))}
+                {expandedGroups.includes(group) && (
+                  <div className={styles.amenityItems}>
+                    <div className={styles.groupSearchContainer}>
+                      <div className={styles.groupSearchBar}>
+                        <Search size={15} />
+                        <input
+                          type="text"
+                          placeholder={`Search in ${group}...`}
+                          value={groupSearchTerms[group] || ""}
+                          onChange={(e) =>
+                            handleGroupSearch(group, e.target.value)
+                          }
+                        />
+                      </div>
+                      <span className={styles.groupTotalCount}>
+                        Total Count: {amenitiesList.length}
+                      </span>
+                    </div>
+                    {amenitiesList.length > 0 ? (
+                      amenitiesList.map((amenity) => (
+                        <div key={amenity.id} className={styles.amenityItem}>
+                          <div className={styles.amenityContent}>
+                            {editingAmenity?.id === amenity.id ? (
+                              <div className={styles.editingContainer}>
+                                <input
+                                  type="text"
+                                  value={editingAmenity?.amenityName}
+                                  onChange={(e) =>
+                                    setEditingAmenity({
+                                      ...(editingAmenity as Amenity),
+                                      amenityName: e.target.value,
+                                    })
+                                  }
+                                  className={styles.editInput}
+                                  placeholder="Amenity name"
+                                />
+                                <textarea
+                                  value={editingAmenity?.amenityDescription || ""}
+                                  onChange={(e) =>
+                                    setEditingAmenity({
+                                      ...(editingAmenity as Amenity),
+                                      amenityDescription: e.target.value,
+                                    })
+                                  }
+                                  className={styles.editDescription}
+                                  placeholder="Description (optional)"
+                                />
+                                <div className={styles.fileInputWrapper}>
+                                  <button
+                                    type="button"
+                                    onClick={triggerFileInput}
+                                    className={styles.fileInputButton}
+                                  >
+                                    <Upload size={10} />
+                                    <span>Choose File</span>
+                                  </button>
+                                  <span className={styles.fileName}>
+                                    {editingAmenity!.imageFile?.name ||
+                                      "No file chosen"}
+                                  </span>
+                                  <input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    onChange={handleFileChange}
+                                    accept="image/*"
+                                    className={styles.hiddenFileInput}
+                                  />
+                                </div>
+                              </div>
+                            ) : (
+                              <div className={styles.displayContainer}>
+                                <div className={styles.amenityIcon}>
+                                  {loadingImages[amenity.id] ? (
+                                    <Loader />
+                                  ) : amenity.s3_url ? (
+                                    <img
+                                      src={amenity.s3_url}
+                                      alt={amenity.amenityName}
+className={styles.amenityImage}
+                                      onLoad={() =>
+                                        setLoadingImages((prev) => ({
+                                          ...prev,
+                                          [amenity.id]: false,
+                                        }))
+                                      }
+                                    />
+                                  ) : (
+                                    <ImageIcon size={14} />
+                                  )}
+                                </div>
+                                <div className={styles.amenityDetails}>
+                                  <span className={styles.amenityName}>
+                                    {amenity.amenityName}
+                                  </span>
+                                  {amenity.amenityDescription && (
+                                    <p className={styles.amenityDescription}>
+                                      {amenity.amenityDescription}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                          <div className={styles.actionButtons}>
+                            {editingAmenity?.id === amenity.id ? (
+                              <>
+                                <Tooltip title="Save" arrow>
+                                  <button
+                                    onClick={handleSave}
+                                    className={styles.saveButton}
+                                    disabled={updateLoading}
+                                  >
+                                    Save
+                                  </button>
+                                </Tooltip>
+                                <Tooltip title="Cancel" arrow>
+                                  <button
+                                    onClick={handleCancel}
+                                    className={styles.cancelButton}
+                                    disabled={updateLoading}
+                                  >
+                                    Cancel
+                                  </button>
+                                </Tooltip>
+                              </>
+                            ) : (
+                              <>
+                                <Tooltip title="Edit" arrow>
+                                  <button
+                                    onClick={() => handleEdit(amenity)}
+                                    className={styles.editButton}
+                                  >
+                                    <Edit2 size={16} />
+                                  </button>
+                                </Tooltip>
+                                <Tooltip title="Delete" arrow>
+                                  <button
+                                    onClick={() => handleDeleteClick(amenity)}
+                                    className={styles.deleteButton}
+                                    disabled={deleteLoading}
+                                  >
+                                    <Trash2 size={16} />
+                                  </button>
+                                </Tooltip>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className={styles.notFoundMessage}>
+                        No amenities found in {group} for this search.
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

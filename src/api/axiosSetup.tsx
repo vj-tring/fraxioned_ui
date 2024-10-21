@@ -51,6 +51,7 @@ const AxiosInterceptor: React.FC<AxiosInterceptorProps> = ({ children }) => {
              config.url?.includes('/spaces/space') || 
              config.url?.includes('/properties/property') ||
              config.url?.includes('/property-space-images') || 
+             config.url?.includes('/property-documents') ||
              config.url?.includes('/amenities/amenity')) &&
             (config.method === 'post' || config.method === 'patch');
 

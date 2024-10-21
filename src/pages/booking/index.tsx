@@ -31,7 +31,7 @@ import CustomizedSnackbars from "@/components/customized-snackbar";
 
 const Booking = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(1);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -82,10 +82,10 @@ const Booking = () => {
 
   const details = (Array.isArray(userBookings) ? userBookings : [])
     .filter((booking: BookingData) => {
-      if (activeTab === 0)
+      if (activeTab === 1)
         return !booking.isCancelled && booking.isCompleted !== 1;
-      if (activeTab === 1) return booking.isCompleted === 1;
-      if (activeTab === 2) return booking.isCancelled;
+      if (activeTab === 2) return booking.isCompleted === 1;
+      if (activeTab === 3) return booking.isCancelled;
       return true;
     })
     .map((booking: BookingData) => {
@@ -206,10 +206,11 @@ const Booking = () => {
               "& .MuiTab-root.Mui-selected": { color: "black !important" },
             }}
           >
+            <Tab disableRipple label="All" className="monsterrat All" />
+
             <Tab disableRipple label="Upcoming" className="monsterrat Up" />
             <Tab disableRipple label="Completed" className="monsterrat Com" />
             <Tab disableRipple label="Cancelled" className="monsterrat Can" />
-            <Tab disableRipple label="All" className="monsterrat All" />
           </Tabs>
           <div>
             <Button
@@ -226,22 +227,6 @@ const Booking = () => {
             >
               View as Calendar
             </Button>
-            {/* <Button
-              variant="outlined"
-              disableRipple
-              color="primary"
-              startIcon={<FilterListIcon />}
-              style={{
-                marginLeft: "16px",
-                border: "1px solid #88CDD4",
-                color: "black",
-                borderRadius: "10px",
-                textTransform: "capitalize",
-              }}
-              className='FilterView'
-            >
-              Filter
-            </Button> */}
           </div>
         </div>
 

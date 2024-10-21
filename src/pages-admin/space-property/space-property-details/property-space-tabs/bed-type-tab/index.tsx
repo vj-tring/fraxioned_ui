@@ -87,41 +87,54 @@ const BedTypesTab: React.FC<BedTypesTabProps> = ({
   if (error) {
     return <div>Error: {error}</div>;
   }
-
-  return (
-    <TabsContent value="bedTypes" className="space-y-4">
-      <ScrollArea className="h-[300px] w-full rounded-md border p-4">
-        <div className="space-y-4">
-          {bedTypes.map((bed) => (
-            <div key={bed.id} className="flex items-center justify-between">
-              <span className="text-lg">{bed.name}</span>
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleBedCountChange(bed.id, -1)}
-                  disabled={bed.count === 0}
-                >
-                  <MinusCircle className="h-4 w-4" />
-                </Button>
-                <span className="w-8 text-center">{bed.count}</span>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleBedCountChange(bed.id, 1)}
-                >
-                  <PlusCircle className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          ))}
+  if (bedTypes.length === 0) {
+    return (
+      <TabsContent value="bedTypes" className="space-y-4 h-full rounded-md border">
+        <div className="h-full flex flex-column justify-center items-center">
+          <p>No bed types available.</p>
         </div>
-      </ScrollArea>
-      <div className="flex justify-center mt-4">
-        <Button className="w-1/2 border-solid border-2 border-[#c7eaee] text-center bg-[#4b7a7f] text-[#fff] rounded" onClick={handleSave}>
-          <Save className="mr-2 h-4 w-4" />
-          Save Bed Types
-        </Button>
+      </TabsContent>
+    );
+  }
+  return (
+    <TabsContent value="bedTypes" className="space-y-4 h-full rounded-md border">
+      <div className="h-full flex flex-column">
+        <ScrollArea className="h-100 w-full py-2 px-3">
+          <div className="space-y-4">
+            {bedTypes
+              .map((bed) => (
+                <div key={bed.id} className="flex items-center justify-between">
+                  <span className="text-md">{bed.name}</span>
+                  <div className="flex items-center space-x-2 text-md">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => handleBedCountChange(bed.id, -1)}
+                      disabled={bed.count === 0}
+                      className="h-full w-5 rounded-none"
+                    >
+                      <MinusCircle className="h-4 w-4" />
+                    </Button>
+                    <span className="w-8 text-center text-md">{bed.count}</span>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-full w-5 rounded-none"
+                      onClick={() => handleBedCountChange(bed.id, 1)}
+                    >
+                      <PlusCircle className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </ScrollArea>
+        <div className="flex justify-center mt-0 py-1">
+          <Button className="w-1/2 border-solid border-2 border-[#c7eaee] text-center bg-[#4b7a7f] text-[#fff] rounded" onClick={handleSave}>
+            <Save className="mr-2 h-4 w-4" />
+            Save Bed Types
+          </Button>
+        </div>
       </div>
     </TabsContent>
   );

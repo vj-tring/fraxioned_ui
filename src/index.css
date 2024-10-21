@@ -1,18 +1,22 @@
-
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
-*{
+* {
   font-family: 'Montserrat', sans-serif !important;
 
 }
 
-* body {
-  padding-right: 0px !important;
+body {
+  height: 100vh;
+}
+#root {
+  height: 100%;
 }
 
-.MuiFormControl-root .MuiOutlinedInput-notchedOutline{
+
+.MuiFormControl-root .MuiOutlinedInput-notchedOutline {
   border-color: rgb(208, 205, 205) !important;
 }
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -78,6 +82,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }

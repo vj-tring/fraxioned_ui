@@ -10,9 +10,8 @@ import ConfirmationModal from "../confirmation-modal";
 import ResetPasswordModal from "../reset-password-modal";
 import FormDialog from "../register-form-modal";
 import styles from "./navbar.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/reducers";
-import { useDispatch } from "@/store";
 import { fetchUserById } from "@/store/slice/user-slice";
 
 interface CustomNavbarProps {

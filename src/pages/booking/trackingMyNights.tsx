@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
 
 import "../booking/trackingMyNights.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
-import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { SelectChangeEvent } from "@mui/material";
 import { Image } from "../property-listing-page";
-import { propertyImageapi } from "@/api/api-endpoints";
 import { Card } from "../../store/slice/auth/property-slice";
-
 interface RootState {
   properties: {
     cards: Card[];
@@ -17,6 +13,7 @@ interface RootState {
   };
 }
 
+import { Dropdown } from "primereact/dropdown";
 const TrackingMyNigts: React.FC = () => {
   const properties = useSelector((state: RootState) => state.properties.cards);
   const [selectedPropertyId, setSelectedPropertyId] = useState<number | null>(
@@ -25,8 +22,6 @@ const TrackingMyNigts: React.FC = () => {
   const [selectedYear, setSelectedYear] = useState<number>(
     new Date().getFullYear()
   );
-  // const [imageDetails, setImageDetails] = useState<Image[]>([]);
-  // const  properties1  = useSelector((state: RootState) => state.property);
 
   useEffect(() => {
     if (properties.length > 0) {
@@ -50,10 +45,9 @@ const TrackingMyNigts: React.FC = () => {
     (year) => parseInt(year)
   );
 
-
   const showselectedimage = (id: number) => {
     const filteredImage = properties
-      .filter((image) => image.propertyId=== id)
+      .filter((image) => image.propertyId === id)
       .sort((a: Image, b: Image) => a.displayOrder - b.displayOrder);
     return filteredImage[0]?.coverImageUrl;
   };
@@ -74,7 +68,7 @@ const TrackingMyNigts: React.FC = () => {
         peakStart.getFullYear(),
         peakStart.getMonth(),
         peakStart.getDate() - 1
-      ), // Day before peak season starts
+      ),
     };
 
     const offSeasonAfterEnd = {
@@ -82,11 +76,10 @@ const TrackingMyNigts: React.FC = () => {
         peakEnd.getFullYear(),
         peakEnd.getMonth(),
         peakEnd.getDate() + 1
-      ), // Day after peak season ends
+      ),
       endDate: new Date(peakEnd.getFullYear(), 11, 31), // Dec 30 of the same year
     };
 
-    // Handle cases where peak season spans across years
     if (peakStart.getMonth() < 11) {
       offSeasonBeforeStart.endDate = new Date(
         peakStart.getFullYear(),
@@ -127,6 +120,9 @@ const TrackingMyNigts: React.FC = () => {
         offSeasonAfter: { startDate: "", endDate: "" },
       };
 
+  const [selectedProperty1, setSelectedProperty1] = useState<number | null>(
+    null
+  );
   return (
     <div className="Container">
       <div className="My-nights">
@@ -138,99 +134,72 @@ const TrackingMyNigts: React.FC = () => {
 
       <div className="bar-btn-head">
         <div className="d-flex bar-btn">
-          <Select
-            value={selectedPropertyId || ""}
-            onChange={handlePropertyChange}
-            displayEmpty
-            className="PropertyButton"
-            sx={{
-              width: "200px",
-              color: "#808080",
-              border: "none",
-              borderRadius: "10px",
-              "& .MuiSelect-select": {
-                padding: "10px 14px",
-              },
+          <div className="p-2.5">
+            <Dropdown
+              value={selectedProperty1}
+              onChange={(e) => {
+                setSelectedProperty1(e.value);
+                handlePropertyChange(e);
+              }}
+              options={properties.map((property, index) => ({
+                label: ` ${property.propertyName} `,
+                value: property.id,
+                style: {
+                  backgroundColor: "white",
+                  paddingTop: "10px",
+                  paddingBottom: "10px",
+                  width: "250px",
+                  paddingLeft: "25px",
+                  fontSize: "small",
+                  display:"flex",
+                  // position:"relative",
+                  // left:"10px"
+                  
+                },
+              }))}
+              optionLabel="label"
+              placeholder="Select a Property"
+              className="w-full md:w-14rem DropdownLabel"
+            />
+          </div>
 
-              "& .MuiOutlinedInput-notchedOutline": {
-                border: "none",
-              },
-              "& .MuiOutlinedInput-root.Mui-focused": {
-                boxShadow: "none",
-              },
-              "& .MuiSelect-icon": {
-                color: "#ffffff",
-                display: "none",
-              },
-              ".MuiOutlinedInput-root:hover": {
-                boxShadow: "none ",
-              },
-              backgroundColor: "none",
-            }}
-          >
-            {properties.map((property) => (
-              <MenuItem key={property.id} value={property.id}>
-                <div className="d-flex flex-column propertyMenu">
-                  <MenuItem disableRipple className="ProperName monsterrat">
-                    {property.propertyName}
-                  </MenuItem>
-                </div>
-              </MenuItem>
-            ))}
-          </Select>
           <hr className="vl mt-2"></hr>
-          <Select
-            // disableRipple
-            value={selectedYear}
-            onChange={handleYearChange}
-            displayEmpty
-            className="Year-btn"
-            sx={{
-              width: "100px",
-              color: "#808080",
-              border: "none",
-              borderRadius: "50px",
-              paddingLeft: "10px",
-              fontFamily: "Montserrat, sans-serif",
 
-              "& .MuiSelect-select": {
-                // padding: "10px 14px",
-                // fontSize: "16px",
-              },
-              "& .MuiOutlinedInput-notchedOutline": {
-                border: "none",
-              },
-              "& .MuiSelect-icon": {
-                color: "#ffffff",
-              },
-              "& .MuiOutlinedInput-root.Mui-focused": {
-                boxShadow: "none ",
-              },
-              backgroundColor: "none",
-            }}
-          >
-            {availableYears.map((year) => (
-              <MenuItem
-                disableRipple
-                key={year}
-                value={year}
-                className="monsterrat "
-              >
-                <div className="Year">{year}</div>
-              </MenuItem>
-            ))}
-          </Select>
-          {/* <hr className="vl mt-3"></hr> */}
-          <button className="Track-btn">
-            <FontAwesomeIcon icon={faSearch} style={{ color: "#ffffff" }} />
-          </button>
+          <div className=" p-2.5 ">
+            <Dropdown
+              value={selectedYear}
+              onChange={(e) => {
+                setSelectedYear(e.value);
+                handleYearChange(e);
+              }}
+              options={availableYears.map((year, index) => ({
+                label: year,
+                value: year,
+                style: {
+                  backgroundColor: "white",
+                  paddingTop: "10px",
+                  paddingBottom: "10px",
+
+                  width: "100px",
+                  paddingLeft: "27px",
+                  fontSize: "small",
+                },
+              }))}
+              optionLabel="label"
+              placeholder="Select a Property"
+              className="w-full md:w-14rem DropdownLabel1 "
+            />
+          </div>
         </div>
       </div>
 
       <div className="container3 mt-3 pt-4 d-flex">
         <div className="cardImg">
           <img
-            src={showselectedimage(selectedProperty?.propertyId ?? 1) || "https://placehold.jp/150x150.png"} 
+            src={
+              showselectedimage(selectedProperty?.propertyId ?? 1) ||
+              "https://placehold.jp/150x150.png"
+            }
             className="PropImg1"
             alt="Property"
             loading="lazy"

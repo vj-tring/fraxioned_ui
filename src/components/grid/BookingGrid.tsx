@@ -92,7 +92,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
     {
       field: "bookingId",
       headerName: "BookingID",
-      width: 150,
+      flex:1,
       headerAlign: "center",
       align: "center",
     },
@@ -100,7 +100,7 @@ const BookingGrid: React.FC<BookingGridProps> = ({
     {
       field: "property",
       headerName: "Property",
-      width: 160,
+      flex:1,
       headerAlign: "center",
       align: "center",
     },
@@ -109,45 +109,45 @@ const BookingGrid: React.FC<BookingGridProps> = ({
       headerName: "Check-in",
       headerAlign: "center",
       align: "center",
-      width: 180,
+      flex:1,
     },
     {
       field: "checkoutDate",
       headerName: "Checkout",
       headerAlign: "center",
       align: "center",
-      width: 180,
+      flex:1,
     },
     {
       field: "guest",
       headerName: "Guests",
-      width: 230,
+      flex:1,
       headerAlign: "center",
       align: "center",
     },
     {
       field: "createdAt",
       headerName: "Booked",
-      width: 200,
+      flex:1,
       headerAlign: "center",
       align: "center",
     },
     {
       field: "totalNights",
       headerName: "TotalNights",
-      width: 150,
+      flex:1,
       headerAlign: "center",
       align: "center",
     },
   ];
 
-  if (activeTab === 0) {
+  if (activeTab === 1) {
     columns.push({
       field: "actions",
       headerName: "Actions",
-      // headerAlign: "center",
-      // align: "center",
-      width: 130,
+      headerAlign: "center",
+      align: "center",
+      flex:1,
       renderCell: (params) => (
         <div>
           <IconButton
@@ -185,10 +185,10 @@ const BookingGrid: React.FC<BookingGridProps> = ({
   return (
     <div
       style={{
-        height: 350,
+        height: 480,
         width: "100%",
         border: "none",
-        marginTop: "2rem",
+        marginTop: "1rem",
         // boxShadow: "rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px"
       }}
     >
@@ -219,13 +219,12 @@ const BookingGrid: React.FC<BookingGridProps> = ({
           }
         }}
         sx={{
-          border: "none",
+          // border: "none",
           "& .MuiDataGrid-columnHeader": {
             backgroundColor: "grey",
             color: "white",
             fontSize: "small",
             textTransform: "uppercase",
-
             fontFamily: " 'Roboto', sans-serif !important",
           },
           "& .MuiDataGrid-cell": {
