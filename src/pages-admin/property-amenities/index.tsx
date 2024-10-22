@@ -8,15 +8,8 @@ import { AppDispatch } from '@/store';
 import { RootState } from "@/store/reducers";
 import { getByPropertyId, updatePropertyAmenities } from '@/store/slice/auth/propertyamenities';
 import Loader from "@/components/loader";
+import { Amenity } from './property-amenity.types';
 
-interface Amenity {
-  id: number;
-  amenityName: string;
-  amenityGroup: {
-    id: number;
-    name: string;
-  };
-}
 
 const UpdateButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
   <button className={styles.updateButton} onClick={onClick}>

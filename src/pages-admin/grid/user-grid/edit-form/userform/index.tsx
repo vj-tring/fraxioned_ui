@@ -15,33 +15,9 @@ import {
 import defaultProfile from "../../../../../assets/images/profile.jpeg";
 import defaultStyles from "./userform.module.css";
 import { AppDispatch } from "@/store";
+import { UserFormProp } from "../../user.types";
 
-interface UserFormProps {
-  userId: number;
-  onEditClick: () => void;
-  header: string;
-  editButtonName: string;
-  showActiveStatus: boolean;
-  customStyles?: {
-    userForm?: string;
-    header?: string;
-    userName?: string;
-    editButton?: string;
-    content?: string;
-    profileSection?: string;
-    imageContainer?: string;
-    profileImage?: string;
-    role?: string;
-    status?: string;
-    activeStatus?: string;
-    inactiveStatus?: string;
-    detailsSection?: string;
-    detailItem?: string;
-    error?: string;
-  };
-}
-
-const UserForm: React.FC<UserFormProps> = ({
+const UserForm: React.FC<UserFormProp> = ({
   userId,
   onEditClick,
   header = "User Details",
