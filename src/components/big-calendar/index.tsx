@@ -9,7 +9,6 @@ import imagethree from "../../assests/blue-bear-lake.jpg";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import BookingButton from "../../components/bookingbutton";
 import PropertyDropdown from "../property-dropdown";
 import { getBookings, userdetails } from "@/api/api-endpoints";
 import "./big-calender.css";
@@ -152,7 +151,6 @@ const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     >
       <div className="calendar-header">
         <PropertyDropdown onPropertySelect={handlePropertySelect} />
-        <BookingButton />
       </div>
       <BigCalendar
         localizer={localizer}
