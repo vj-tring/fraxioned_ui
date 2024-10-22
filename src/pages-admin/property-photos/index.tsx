@@ -5,7 +5,10 @@ import {
   propertyImageapi,
   deletetpropertyImageById,
 } from "@/api/api-endpoints";
-import { fetchAdditionalImages, clearAdditionalImages, resetPropertyImagesState } from "@/store/slice/auth/additional-image";
+import {
+  fetchAdditionalImages
+} from "@/store/slice/additional-image/action";
+import { clearAdditionalImages, resetPropertyImagesState } from "@/store/slice/additional-image";
 import { RootState } from "@/store/reducers";
 import { Edit, Trash2, X, Plus } from "lucide-react";
 import Loader from "@/components/loader";
@@ -39,8 +42,9 @@ interface SpaceGroup {
 
 const PropertyPhotos: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  // Updated selector to match your new Redux state structure
   const { additionalImages, fetchLoading, fetchError } = useSelector(
-    (state: RootState) => state.propertyImages
+    (state: RootState) => state.PropertyImage
   );
   const [imagesBySpace, setImagesBySpace] = useState<{
     [key: string]: SpaceGroup;
@@ -65,9 +69,10 @@ const PropertyPhotos: React.FC = () => {
     try {
       const propertyImagesResponse = await propertyImageapi(parseInt(id || "0"));
       dispatch(fetchAdditionalImages(parseInt(id || "0")));
-      console.log(propertyImagesResponse)
       if (propertyImagesResponse.data && propertyImagesResponse.data.success) {
         const allPhotos: PropertyImage[] = propertyImagesResponse.data.data;
+
+
         const groupedBySpace = allPhotos.reduce(
           (acc: { [key: string]: SpaceGroup }, img: PropertyImage) => {
             const spaceName = img.propertySpace?.space.name || "Uncategorized";
