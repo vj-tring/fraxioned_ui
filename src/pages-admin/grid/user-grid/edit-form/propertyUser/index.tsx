@@ -185,7 +185,6 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
     }
   };
 
-  
 
   if (loading)
     return <Typography className={styles.loadingText}>Loading...</Typography>;
