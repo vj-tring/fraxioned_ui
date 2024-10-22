@@ -44,7 +44,7 @@ const PropertyPhotos: React.FC = () => {
       const propertyImagesResponse = await propertyImageapi(parseInt(id || "0"));
       dispatch(fetchAdditionalImages(parseInt(id || "0")));
       if (propertyImagesResponse.data && propertyImagesResponse.data.success) {
-        const allPhotos: PropertyImage[] = propertyImagesResponse.data.data;
+        const allPhotos: PropertyImage[] = propertyImagesResponse.data.data.propertySpaceImages;
 
 
         const groupedBySpace = allPhotos.reduce(
@@ -67,6 +67,7 @@ const PropertyPhotos: React.FC = () => {
             }
 
             instance.images.push(img);
+            instance.images.sort((a, b) => a.displayOrder - b.displayOrder);
             return acc;
           },
           {}
@@ -202,6 +203,7 @@ const PropertyPhotos: React.FC = () => {
       ))}
     </div>
   );
+
 
   if (fetchError) {
     return <div className={styles.error}>Error: {fetchError}</div>;

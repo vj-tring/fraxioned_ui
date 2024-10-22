@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { axiosInstance } from '@/api/axiosSetup';
 import { getAmenitiesByPropertyId, getAmenitiesByPropertySpaceId, updateamenityforproperty } from '@/api/api-endpoints';
 
 interface AmenityType {
@@ -71,6 +70,8 @@ export const getByPropertyId = createAsyncThunk(
         }
     }
 );
+
+
 export const getByPropertySpaceId = createAsyncThunk(
     'propertySpaceAmenities/getById',
     async (id: number, { rejectWithValue }) => {
