@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { updatePropertyImage } from "@/api/api-endpoints";
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPropertyById, fetchPropertyDetailsById } from "@/store/slice/auth/propertiesSlice";
+import { fetchPropertyById, fetchPropertyDetailsById } from "@/store/slice/property/action";
 import { AppDispatch } from '@/store';
 import { RootState } from "@/store/reducers";
 import EditButton from "@/components/edit";
@@ -24,19 +24,16 @@ import {
 const PropertyGeneralInfo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
-  const userId = useSelector((state: any) => state.auth.user?.id);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
   const navigate = useNavigate();
 
-  const propertyData = useSelector(
-    (state: RootState) => state.property.selectedProperty
-  );
-  const propertyDetails = useSelector(
-    (state: RootState) => state.property.selectedPropertyDetails
-  );
+  // Redux selectors
+  const userId = useSelector((state: RootState) => state.auth.user?.id);
+  const propertyData = useSelector((state: RootState) => state.property.selectedProperty);
+  const propertyDetails = useSelector((state: RootState) => state.property.selectedPropertyDetails);
   const status = useSelector((state: RootState) => state.property.status);
   const error = useSelector((state: RootState) => state.property.error);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const images = [imageone, imagetwo, imagethree];
   const randomImage = images[Math.floor(Math.random() * images.length)];
@@ -46,6 +43,9 @@ const PropertyGeneralInfo: React.FC = () => {
       dispatch(fetchPropertyById(Number(id)));
       dispatch(fetchPropertyDetailsById(Number(id)));
     }
+
+    return () => {
+    };
   }, [id, dispatch]);
 
   const handleEdit = () => {
@@ -53,36 +53,36 @@ const PropertyGeneralInfo: React.FC = () => {
   };
 
   const handleEditImage = () => {
-    setDialogOpen(true); // Open the upload dialog
+    setDialogOpen(true);
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      setImageFile(event.target.files[0]); // Set the uploaded file
+      setImageFile(event.target.files[0]);
     }
   };
 
   const handleUpload = async () => {
-    if (!imageFile) return;
+    if (!imageFile || !id || !userId) return;
 
     const formData = new FormData();
-    const updatedBy = { id: userId };
-    formData.append("updatedBy", JSON.stringify(updatedBy));
+    formData.append("updatedBy", JSON.stringify({ id: userId }));
     formData.append("coverImageFile", imageFile);
 
     try {
-      await updatePropertyImage(Number(id), formData); // Call the PATCH API
+      await updatePropertyImage(Number(id), formData);
       setDialogOpen(false);
-    } catch (err) {
-      console.error("Error uploading image:", err);
-      // setError("Failed to upload image. Please try again.");
+      dispatch(fetchPropertyById(Number(id)));
+    } catch (error) {
+      console.error("Error uploading image:", error);
     }
   };
 
   if (status === "loading") return <Loader />;
   if (error) return <div className={styles.error}>{error}</div>;
-  if (!propertyData || !propertyDetails)
+  if (!propertyData || !propertyDetails) {
     return <div className={styles.noData}>No property data found.</div>;
+  }
 
   return (
     <div className={styles.fullContainer}>
@@ -100,9 +100,7 @@ const PropertyGeneralInfo: React.FC = () => {
             />
             <div className={styles.exclusiveTag}>
               <img src={pinImage} alt="Pin" className={styles.pinIcon} />
-              <span>
-                {propertyData.isExclusive ? "Exclusive" : "Collective"}
-              </span>
+              <span>{propertyData.isExclusive ? "Exclusive" : "Collective"}</span>
             </div>
             <div className={styles.editOverlay}>
               <button className={styles.iconButton} onClick={handleEditImage}>
@@ -110,85 +108,58 @@ const PropertyGeneralInfo: React.FC = () => {
               </button>
             </div>
           </div>
+
           <div className={styles.infoBlock}>
             <div className={styles.infoColumns}>
-              <h3 className={styles.propertyName}>
-                {propertyData.propertyName}
-              </h3>
+              <h3 className={styles.propertyName}>{propertyData.propertyName}</h3>
+
               <div className={styles.addressColumn}>
                 <div className={styles.infoRow}>
-                  <span className={styles.infoLabel}>
-                    Address <span>:</span>
-                  </span>
+                  <span className={styles.infoLabel}>Address <span>:</span></span>
                   <span className={styles.infoValue}>
                     {`${propertyData.address}, ${propertyData.city}, ${propertyData.state}, ${propertyData.country}, ${propertyData.zipcode}`}
                   </span>
                 </div>
                 <div className={styles.infoRow}>
-                  <span className={styles.infoLabel}>
-                    Square Footage <span>:</span>
-                  </span>
-                  <span className={styles.infoValue}>
-                    {propertyDetails.squareFootage} sq ft
-                  </span>
+                  <span className={styles.infoLabel}>Square Footage <span>:</span></span>
+                  <span className={styles.infoValue}>{propertyDetails.squareFootage} sq ft</span>
                 </div>
               </div>
+
               <div className={styles.detailsColumn}>
                 <div className={styles.infoRow}>
-                  <span className={styles.infoLabel}>
-                    Property Share <span>:</span>
-                  </span>
-                  <span className={styles.infoValue}>
-                    {propertyData.propertyShare}
-                  </span>
+                  <span className={styles.infoLabel}>Property Share <span>:</span></span>
+                  <span className={styles.infoValue}>{propertyData.propertyShare}</span>
                 </div>
                 <div className={styles.infoRow}>
-                  <span className={styles.infoLabel}>
-                    Bedrooms <span>:</span>
-                  </span>
-                  <span className={styles.infoValue}>
-                    {propertyDetails.noOfBedrooms}
-                  </span>
+                  <span className={styles.infoLabel}>Bedrooms <span>:</span></span>
+                  <span className={styles.infoValue}>{propertyDetails.noOfBedrooms}</span>
                 </div>
                 <div className={styles.infoRow}>
-                  <span className={styles.infoLabel}>
-                    Bathrooms <span>:</span>
-                  </span>
-                  <span className={styles.infoValue}>
-                    {propertyDetails.noOfBathrooms}
-                  </span>
+                  <span className={styles.infoLabel}>Bathrooms <span>:</span></span>
+                  <span className={styles.infoValue}>{propertyDetails.noOfBathrooms}</span>
                 </div>
                 <div className={styles.infoRow}>
-                  <span className={styles.infoLabel}>
-                    Share left <span>:</span>
-                  </span>
-                  <span className={styles.infoValue}>
-                    {propertyData.propertyRemainingShare}
-                  </span>
+                  <span className={styles.infoLabel}>Share left <span>:</span></span>
+                  <span className={styles.infoValue}>{propertyData.propertyRemainingShare}</span>
                 </div>
                 <div className={styles.infoRow}>
-                  <span className={styles.infoLabel}>
-                    Cleaning fee <span>:</span>
-                  </span>
-                  <span className={styles.infoValue}>
-                    {propertyDetails.cleaningFee}
-                  </span>
+                  <span className={styles.infoLabel}>Cleaning fee <span>:</span></span>
+                  <span className={styles.infoValue}>{propertyDetails.cleaningFee}</span>
                 </div>
               </div>
             </div>
           </div>
+
           <div className={styles.infoContainer}>
             <div className={styles.infoBlock1}>
               <h4 className={styles.descriptionTitle}>Description</h4>
-              <p className={styles.description}>
-                {propertyData.houseDescription}
-              </p>
+              <p className={styles.description}>{propertyData.houseDescription}</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Image Upload Dialog */}
       <Dialog
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
@@ -196,28 +167,24 @@ const PropertyGeneralInfo: React.FC = () => {
         maxWidth="sm"
       >
         <DialogTitle>Upload Image</DialogTitle>
-        <DialogContent
-          sx={{ gap: 4, display: "flex", flexDirection: "column" }}
-        >
+        <DialogContent sx={{ gap: 4, display: "flex", flexDirection: "column" }}>
           <input type="file" accept="image/*" onChange={handleFileChange} />
 
           <div className={styles.imagePreviewContainer}>
             {imageFile ? (
-              <>
-                <div className={styles.imagePreview}>
-                  <img
-                    src={URL.createObjectURL(imageFile)} // Create a URL for the selected file
-                    alt="Preview"
-                    className={styles.previewImage}
-                  />
-                  <button
-                    className={styles.cancelPreviewButton}
-                    onClick={() => setImageFile(null)} // Clear the image file
-                  >
-                    Cancel Preview
-                  </button>
-                </div>
-              </>
+              <div className={styles.imagePreview}>
+                <img
+                  src={URL.createObjectURL(imageFile)}
+                  alt="Preview"
+                  className={styles.previewImage}
+                />
+                <button
+                  className={styles.cancelPreviewButton}
+                  onClick={() => setImageFile(null)}
+                >
+                  Cancel Preview
+                </button>
+              </div>
             ) : (
               <div className={styles.defaultPreview}>
                 <p>Preview your image here</p>
