@@ -123,7 +123,7 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
               onClose={() => setIsEditing(false)}
               onUserUpdated={handleUpdateSuccess}
               formTitle={""}
-              isAdmin={false}
+              isAdmin={true}
             />
           )
         )}
