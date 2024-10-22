@@ -17,29 +17,7 @@ import { styled } from '@mui/material/styles';
 import { RootState } from '@/store/reducers';
 import { fetchPropertyDetails, updatePropertyRules } from '@/store/slice/auth/property-detail';
 import { AppDispatch } from '@/store';
-
-interface PropertyRulesData {
-    noOfGuestsAllowed: number;
-    noOfBedrooms: number;
-    noOfBathrooms: number;
-    noOfBathroomsFull: number;
-    noOfBathroomsHalf: number;
-    squareFootage: string;
-    noOfPetsAllowed: number;
-    checkInTime: number;
-    checkOutTime: number;
-    cleaningFee: number;
-    wifiNetwork: string;
-    peakSeasonStartDate: string;
-    peakSeasonEndDate: string;
-    petPolicy: string;
-    feePerPet: number;
-    peakSeasonAllottedNights: number;
-    offSeasonAllottedNights: number;
-    peakSeasonAllottedHolidayNights: number;
-    offSeasonAllottedHolidayNights: number;
-    lastMinuteBookingAllottedNights: number;
-}
+import { PropertyRulesData } from '../property-rules.types';
 
 const EditPropertyRulesForm: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -198,46 +176,6 @@ const EditPropertyRulesForm: React.FC = () => {
                                         name="noOfPetsAllowed"
                                         type="number"
                                         value={formData?.noOfPetsAllowed}
-                                        onChange={handleInputChange}
-                                        className={styles.numberInput}
-                                    />
-                                </div>
-                            </div>
-                            <div className={styles.formRow}>
-                                <div className={styles.inputGroup}>
-                                    <TextField
-                                        label="Total Bathrooms"
-                                        name="noOfBathrooms"
-                                        type="number"
-                                        value={formData?.noOfBathrooms}
-                                        onChange={handleInputChange}
-                                        className={styles.numberInput}
-                                    />
-                                    <TextField
-                                        label="Full Bathrooms"
-                                        name="noOfBathroomsFull"
-                                        type="number"
-                                        value={formData?.noOfBathroomsFull}
-                                        onChange={handleInputChange}
-                                        className={styles.numberInput}
-                                    />
-                                    <TextField
-                                        label="Half Bathrooms"
-                                        name="noOfBathroomsHalf"
-                                        type="number"
-                                        value={formData?.noOfBathroomsHalf}
-                                        onChange={handleInputChange}
-                                        className={styles.numberInput}
-                                    />
-                                </div>
-                            </div>
-                            <div className={styles.formRow}>
-                                <div className={styles.inputGroup}>
-                                    <TextField
-                                        label="Bedrooms"
-                                        name="noOfBedrooms"
-                                        type="number"
-                                        value={formData?.noOfBedrooms}
                                         onChange={handleInputChange}
                                         className={styles.numberInput}
                                     />
