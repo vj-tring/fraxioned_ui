@@ -31,7 +31,9 @@ const PropertyDropdown: React.FC<PropertyDropdownProps> = ({
   };
 
   return (
-    <div className={styles.propertyDropdownContainer}>
+    <div className={styles.propertyDropdownContainer}
+    tabIndex={0} 
+    onBlur={() => setIsOpen(false)} >
       <div
         className={styles.propertyDropdown}
         onClick={() => setIsOpen(!isOpen)}
