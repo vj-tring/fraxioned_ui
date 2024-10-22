@@ -8,13 +8,10 @@ import styles from "./property.module.css";
 import NewPropertyForm from "./NewPropertyForm";
 import ConfirmationModal from "@/components/confirmation-modal";
 import { useNavigate } from "react-router-dom";
-import {
-  fetchProperties,
-  PropertiesState,
-} from "@/store/slice/auth/propertiesSlice";
+import { fetchProperties } from "@/store/slice/property/action";
 import { RootState } from "@/store/reducers";
 import { AppDispatch } from "@/store";
-import { Properties } from "./property.types";
+import { Property as PropertyType } from "@/store/model/properties.types";
 
 interface PropertyComponentProps {
   isSidebarOpen: boolean;
@@ -23,14 +20,11 @@ interface PropertyComponentProps {
 const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { properties, status, error } = useSelector<RootState, PropertiesState>(
-    (state) => state.property
-  );
+  
+  const { properties, status, error } = useSelector((state: RootState) => state.property);
   const [isNewFormOpen, setIsNewFormOpen] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [propertyToDelete, setPropertyToDelete] = useState<Properties | null>(
-    null
-  );
+  const [propertyToDelete, setPropertyToDelete] = useState<PropertyType | null>(null);
 
   useEffect(() => {
     if (status === "idle") {
@@ -42,7 +36,7 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
     navigate(`/admin/property/${id}`);
   };
 
-  const handleDeleteClick = (property: Properties) => {
+  const handleDeleteClick = (property: PropertyType) => {
     setPropertyToDelete(property);
     setShowDeleteConfirmation(true);
   };
@@ -140,8 +134,9 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
 
   return (
     <div
-      className={`${styles.propertiesContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
-        }`}
+      className={`${styles.propertiesContainer} ${
+        isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
+      }`}
     >
       <div className={styles.titleContainer}>
         <h1 className={styles.title}>Properties Details</h1>
@@ -176,32 +171,17 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
               color: "white",
               fontSize: "small",
               textTransform: "uppercase",
-
-              fontFamily: " 'Roboto', sans-serif !important",
+              fontFamily: "'Roboto', sans-serif !important",
             },
             "& .MuiDataGrid-cell": {
               fontSize: "small",
-              fontFamily: " 'Roboto', sans-serif !important ",
-            },
-            "&  .MuiDataGrid-cell--textLeft ": {
-              // position: "sticky",
-              // right: 0,
-              // backgroundColor: "#ebecec",
-              // paddingLeft:"50px"
-            },
-            "& .MuiDataGrid-columnHeader--last": {
-              // backgroundColor: "lightgrey",
-              // position: "sticky",
-              // right: 0,
-              // paddingLeft:"50px"
+              fontFamily: "'Roboto', sans-serif !important",
             },
           }}
           getRowClassName={(params) => {
-            if (params.indexRelativeToCurrentPage % 2 === 0) {
-              return styles.evenRow;
-            } else {
-              return styles.oddRow;
-            }
+            return params.indexRelativeToCurrentPage % 2 === 0
+              ? styles.evenRow
+              : styles.oddRow;
           }}
           pageSizeOptions={[5, 10, 25]}
           disableRowSelectionOnClick

@@ -36,6 +36,8 @@ import propertyImagesReducer from '../slice/auth/additional-image'
 import { propertycodecatogoryReducer } from '../slice/auth/propertycodeCatogorySlice';
 import { propertyCodesReducer } from '../slice/auth/propertycodeSlice';
 import PropertyImageReducer from '../slice/additional-image';
+import PropertyReducer from '../slice/property';
+
 
 const appReducer: Reducer = combineReducers({
   auth: authReducer,
@@ -75,6 +77,7 @@ const appReducer: Reducer = combineReducers({
   userDocuments: userDocumentsReducer,
   propertyImages: propertyImagesReducer,
   PropertyImage: PropertyImageReducer,
+  Property: PropertyReducer
 
 });
 
