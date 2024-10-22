@@ -87,6 +87,7 @@ const PropertyPhotos: React.FC = () => {
     e.stopPropagation();
     setImageToDelete(imageId);
     setShowDeleteConfirmation(true);
+    
   };
 
   const handleImageClick = (imageUrl: string) => {
@@ -213,17 +214,19 @@ const PropertyPhotos: React.FC = () => {
                           onLoad={() => handleImageLoad(image.id)}
                         />
                         <div className={styles.overlay}>
-                          <button
+                          {/* <button
                             className={styles.iconButton}
                             onClick={(e) => handleEditImage(e, image.id)}
                           >
                             <Edit size={20} />
-                          </button>
+                          </button> */}
                           <button
                             className={styles.iconButton}
                             onClick={(e) => handleDeleteImage(e, image.id)}
                           >
-                            <Trash2 size={20} />
+                            <Trash2 size={14} 
+                          
+                            />
                           </button>
                         </div>
                       </div>

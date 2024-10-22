@@ -132,8 +132,6 @@ const AmenityManagement: React.FC = () => {
     }
   }, [deleteSuccess, deleteError, dispatch, getAmenities]);
 
-
-
   //Search condition
   const handleGlobalSearch = (searchValue: string) => {
     setGlobalSearchTerm(searchValue);
@@ -144,16 +142,21 @@ const AmenityManagement: React.FC = () => {
     }
 
     //getting matched value
-    const getMatchedValue = Object.entries(groupAmenities).reduce((acc, [group, amenities]) => {
-      const groupMatch = group.toLowerCase().includes(searchValue.toLowerCase());
-      const amenityMatch = amenities.some(amenity =>
-        amenity.amenityName.toLowerCase().includes(searchValue.toLowerCase())
-      );
-      if (groupMatch || amenityMatch) {
-        acc.push(group);
-      }
-      return acc;
-    }, [] as string[]);
+    const getMatchedValue = Object.entries(groupAmenities).reduce(
+      (acc, [group, amenities]) => {
+        const groupMatch = group
+          .toLowerCase()
+          .includes(searchValue.toLowerCase());
+        const amenityMatch = amenities.some((amenity) =>
+          amenity.amenityName.toLowerCase().includes(searchValue.toLowerCase())
+        );
+        if (groupMatch || amenityMatch) {
+          acc.push(group);
+        }
+        return acc;
+      },
+      [] as string[]
+    );
 
     //show the matched result
     updateSearchResults(getMatchedValue);
@@ -193,8 +196,6 @@ const AmenityManagement: React.FC = () => {
   const handleResetSearch = () => {
     resetSearchStates();
   };
-
-
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
@@ -419,7 +420,9 @@ const AmenityManagement: React.FC = () => {
             {Object.entries(filteredAmenities).map(([group, amenitiesList]) => (
               <div
                 key={group}
-                className={`${styles.amenityGroup} ${matchedGroups.includes(group) ? styles.matchedGroup : ''}`}
+                className={`${styles.amenityGroup} ${
+                  matchedGroups.includes(group) ? styles.matchedGroup : ""
+                }`}
                 ref={groupRefs.current[group]}
               >
                 <div
@@ -458,11 +461,14 @@ const AmenityManagement: React.FC = () => {
                       amenitiesList.map((amenity) => (
                         <div
                           key={amenity.id}
-                          className={`${styles.amenityItem} ${globalSearchTerm &&
-                            amenity.amenityName.toLowerCase().includes(globalSearchTerm.toLowerCase())
-                            ? styles.matchedItem
-                            : ''
-                            }`}
+                          className={`${styles.amenityItem} ${
+                            globalSearchTerm &&
+                            amenity.amenityName
+                              .toLowerCase()
+                              .includes(globalSearchTerm.toLowerCase())
+                              ? styles.matchedItem
+                              : ""
+                          }`}
                         >
                           <div className={styles.amenityContent}>
                             {editingAmenity?.id === amenity.id ? (
@@ -480,7 +486,9 @@ const AmenityManagement: React.FC = () => {
                                   placeholder="Amenity name"
                                 />
                                 <textarea
-                                  value={editingAmenity?.amenityDescription || ""}
+                                  value={
+                                    editingAmenity?.amenityDescription || ""
+                                  }
                                   onChange={(e) =>
                                     setEditingAmenity({
                                       ...(editingAmenity as Amenity),
