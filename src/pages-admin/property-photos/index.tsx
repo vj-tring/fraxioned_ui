@@ -10,7 +10,7 @@ import {
 } from "@/store/slice/additional-image/action";
 import { clearAdditionalImages, resetPropertyImagesState } from "@/store/slice/additional-image";
 import { RootState } from "@/store/reducers";
-import { Edit, Trash2, X, Plus } from "lucide-react";
+import { Trash2, X, Plus } from "lucide-react";
 import Loader from "@/components/loader";
 import styles from "./propertyphoto.module.css";
 import ConfirmationModal from "@/components/confirmation-modal";
@@ -54,8 +54,6 @@ const PropertyPhotos: React.FC = () => {
   const [imageToDelete, setImageToDelete] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
-  const [showEditPopup, setShowEditPopup] = useState(false);
-  const [selectedImageId, setSelectedImageId] = useState<number | null>(null);
   const [showNewForm, setShowNewForm] = useState(false);
   const [showAddPhoto, setShowAddPhoto] = useState(false);
   const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
@@ -133,12 +131,6 @@ const PropertyPhotos: React.FC = () => {
     setActiveTab(spaceName);
   };
 
-  const handleEditImage = (e: React.MouseEvent, imageId: number) => {
-    e.stopPropagation();
-    setSelectedImageId(imageId);
-    setShowEditPopup(true);
-  };
-
   const handleDeleteImage = (e: React.MouseEvent, imageId: number) => {
     e.stopPropagation();
     setImageToDelete(imageId);
@@ -214,12 +206,6 @@ const PropertyPhotos: React.FC = () => {
               onLoad={() => handleImageLoad(image.id)}
             />
             <div className={styles.overlay}>
-              <button
-                className={styles.iconButton}
-                onClick={(e) => handleEditImage(e, image.id)}
-              >
-                <Edit size={20} />
-              </button>
               <button
                 className={styles.iconButton}
                 onClick={(e) => handleDeleteImage(e, image.id)}
