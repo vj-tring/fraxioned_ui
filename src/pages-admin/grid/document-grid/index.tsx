@@ -13,16 +13,7 @@ import styles from './document.module.css';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { deletePropertyDocumentThunk, fetchPropertyDocuments } from '@/store/slice/property-document/actions';
 import { setCurrentDocument } from '@/store/slice/property-document';
-
-interface PropertyDocument {
-  id: number;
-  documentUrl: string;
-  documentName: string;
-  documentType: string;
-  property: { id: number; propertyName: string; };
-  createdAt: string;
-  updatedAt: string;
-}
+import { PropertyDocument } from './document.types';
 
 const categories = ["Blueprint", "Legal", "General", "Contracts", "Invoices", "Reports"];
 

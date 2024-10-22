@@ -14,29 +14,8 @@ import {
 } from "@/store/slice/auth/propertiesSlice";
 import { RootState } from "@/store/reducers";
 import { AppDispatch } from "@/store";
+import { Properties } from "./property.types";
 
-interface Property {
-  id: number;
-  ownerRezPropId: number;
-  propertyName: string;
-  address: string;
-  city: string;
-  state: string;
-  country: string;
-  zipcode: number;
-  houseDescription: string;
-  isExclusive: boolean;
-  propertyShare: number;
-  propertyRemainingShare: number;
-  latitude: number;
-  longitude: number;
-  isActive: boolean;
-  displayOrder: number;
-  createdAt: string;
-  updatedAt: string;
-  mailBannerUrl: string;
-  coverImageUrl: string;
-}
 interface PropertyComponentProps {
   isSidebarOpen: boolean;
 }
@@ -49,7 +28,7 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
   );
   const [isNewFormOpen, setIsNewFormOpen] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [propertyToDelete, setPropertyToDelete] = useState<Property | null>(
+  const [propertyToDelete, setPropertyToDelete] = useState<Properties | null>(
     null
   );
 
@@ -63,7 +42,7 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
     navigate(`/admin/property/${id}`);
   };
 
-  const handleDeleteClick = (property: Property) => {
+  const handleDeleteClick = (property: Properties) => {
     setPropertyToDelete(property);
     setShowDeleteConfirmation(true);
   };
@@ -99,35 +78,35 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
     {
       field: "city",
       headerName: "City",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "state",
       headerName: "State",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "country",
       headerName: "Country",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "propertyShare",
       headerName: "Property Share",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "actions",
       headerName: "Actions",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
       renderCell: (params) => (
@@ -161,9 +140,8 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
 
   return (
     <div
-      className={`${styles.propertiesContainer} ${
-        isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
-      }`}
+      className={`${styles.propertiesContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
+        }`}
     >
       <div className={styles.titleContainer}>
         <h1 className={styles.title}>Properties Details</h1>
