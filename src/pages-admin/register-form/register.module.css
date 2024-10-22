@@ -1,5 +1,5 @@
 .modalContent {
-  padding: 1rem;
+  height: 100%;
 }
 
 .modalHeader {
@@ -15,27 +15,19 @@
   color: #333;
 }
 
-.modalCloseButton {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: #666;
-}
-
-.modalCloseButton:hover {
-  color: #333;
-}
-
 .form {
   display: flex;
   flex-direction: column;
-  gap: .5rem;
+  height: inherit;
+  justify-content: space-between;
 }
 
 .formContent {
   display: flex;
   gap: 2rem;
+  padding: 1.3rem;
+  padding-bottom: 0;
+  position: relative;
 }
 
 .leftContent {
@@ -49,7 +41,7 @@
 .inputGroup {
   display: flex;
   flex-direction: column;
-  margin-bottom: .8rem;
+  margin-bottom: 1.1rem;
   gap: .25rem;
 }
 
@@ -59,10 +51,15 @@
 .propertyGroup select {
   width: 100%;
   padding: .6rem;
-  border: 1px solid #e1e1e1;
+  border: 1px solid #e4e4e7;
   border-radius: .3rem;
   font-size: 14px;
   transition: border-color 0.3s ease;
+}
+
+.inputGroup input::placeholder {
+  color: #71717a;
+  font-weight: 400;
 }
 
 
@@ -78,10 +75,19 @@
   transition: border-color 0.3s ease;
 }
 
+
 .inputGroup input:focus,
-.inputGroup select:focus {
-  border-color: #e8aa6c;
+.inputGroup select:focus,
+.propertyGroup input:focus,
+.propertyGroup select:focus,
+.propertyGroupshare select:focus {
+  border-color: #e28f25 !important;
   outline: none;
+}
+
+input:-webkit-autofill:focus,
+input:autofill:focus {
+  border-color: none !important;
 }
 
 .inlineInputGroup {
@@ -93,16 +99,56 @@
 
 .addPropertySection {
   margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
 }
 
-.addedPropertiesList {
+.addPropertySection h2 {
+  font-size: 1rem;
+}
+
+.addPropertySection .inlineInputGroup {
+  padding: 1rem .5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: .3rem;
+}
+
+.addedPropertiesList,
+.noProperty {
   padding: .8rem .5rem;
-  border: 1px solid #ddd;
+  border: 1px solid #e4e4e7;
+  border-radius: .3rem;
   display: flex;
   flex-direction: column;
   gap: 1.3rem;
-  max-height: 11.5rem;
-  overflow: scroll;
+  height: 14.5rem;
+  max-height: 15rem;
+  overflow-y: scroll;
+}
+
+.addedPropertiesList::-webkit-scrollbar {
+  width: 3px;
+}
+
+.addedPropertiesList::-webkit-scrollbar-track {
+  background-color: #9993 !important;
+}
+
+.addedPropertiesList::-webkit-scrollbar-thumb {
+  background-color: #bdbdbd99 !important;
+}
+
+.noProperty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: large;
+  font-weight: 500;
+}
+
+.noProperty span {
+  opacity: .3;
 }
 
 .propertylist {
@@ -135,27 +181,9 @@
   margin-top: 10px;
 }
 
-.addButton {
-  width: 9rem !important;
-  margin-bottom: .8rem;
-}
-
 .inlinebutton {
   display: flex;
   gap: 1rem;
-}
-
-.saveButton {
-  width: 2.5rem !important;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-
-.addButton:hover,
-.saveButton:hover {
-  background: #e49f63;
 }
 
 .propertyItem {
@@ -165,10 +193,13 @@
   height: 1.5rem;
   border-radius: 4px;
   gap: .4rem;
+  font-size: .9rem;
 }
 
 .editsavebutton {
-  gap: .6rem;
+  gap: .2rem;
+  display: flex;
+  color: #e28f25;
 }
 
 .addselectProperty {
@@ -199,31 +230,10 @@
   margin-left: 10px;
 }
 
-.editButton:hover {
-  color: #ffa500;
-}
-
-.deleteButton:hover {
-  color: red;
-}
-
 .modalFooter {
   display: flex;
   justify-content: flex-end;
-  gap: .9rem;
-}
-
-.submitButton,
-.cancelButton,
-.addButton,
-.saveButton {
-  background: #e8aa6c;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-  height: 2.5rem;
-  width: 6rem;
+  gap: .3rem;
 }
 
 select {
@@ -234,16 +244,11 @@ select {
   background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
   background-repeat: no-repeat;
   background-position: right 10px top 50%;
-  background-size: 20px;
+  background-size: 1rem;
 }
 
 .customSelect::-ms-expand {
   display: none;
-}
-
-.submitButton:hover,
-.cancelButton:hover {
-  background: #e49f63;
 }
 
 .error {
@@ -280,22 +285,42 @@ select {
 }
 
 .sectionTitle {
-  margin-bottom: .8rem;
+  font-size: 1rem;
+  letter-spacing: .08rem;
+  text-transform: uppercase;
+  font-weight: 600;
 }
 
+.leftContent .sectionTitle {
+  padding: .3rem 0 1.2rem;
+}
 
 .propertyItem select,
 .propertyItem input[type="date"] {
   width: 170px;
 }
 
-.UpdateButton {
-  background: #e8aa6c;
-  color: white;
+.updateButton {
+  border-color: #e8aa6c;
+  color: #008a99;
   border: none;
   padding: 8px 10px;
   cursor: pointer;
   border-radius: 4px;
   margin-top: -16px;
   transition: background-color 0.3s ease;
+}
+
+@media only screen and (max-width: 763px) {
+  .formContent {
+    flex-direction: column;
+  }
+
+  .leftContent,
+  .rightContent {
+    width: 100%;
+  }
+  .addPropertySection .inlineInputGroup {
+    flex-wrap: wrap;
+  }
 }

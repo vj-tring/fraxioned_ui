@@ -95,11 +95,11 @@ const PhotosTab: React.FC<PhotosTabProps> = ({
                     <Button
                       variant="destructive"
                       size="icon"
-                      className="absolute top-1 right-1 h-6 w-6 rounded-full bg-[#333] hover:bg-[#000]"
+                      className="absolute top-1 right-1 h-4 w-4 rounded-full bg-[#333] hover:bg-[#000]"
                       onClick={() => handleDeletePhoto(image.id!)}
                       aria-label={`Delete photo ${image.id}`}
                     >
-                      <X className="h-3 w-3" />
+                      <X size={12} />
                     </Button>
                   </motion.div>
                 ))}

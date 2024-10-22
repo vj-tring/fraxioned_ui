@@ -13,27 +13,8 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { AppDispatch } from "@/store";
+import { BookingProps, Booking, GroupedBookings } from "../../user.types";
 
-interface BookingProps {
-  userId: number;
-}
-interface Booking extends BookingData {
-  id: string;
-  bookingId: string;
-  totalNights: number;
-  noOfGuests: number;
-  property: {
-    id: string;
-    propertyName: string;
-  };
-}
-
-interface GroupedBookings {
-  [key: string]: {
-    propertyName: string;
-    bookings: Booking[];
-  };
-}
 
 const UserBookings: React.FC<BookingProps> = ({ userId }) => {
   const dispatch = useDispatch<AppDispatch>();

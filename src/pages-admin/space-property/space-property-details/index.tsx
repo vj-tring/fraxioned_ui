@@ -307,7 +307,7 @@ export default function Component({ initialSpace = {} }) {
     }
   };
 
-  const handleSaveBedTypes = (
+  const handleSaveBedTypes = async (
     updatedBedTypes: Array<{ id: number; count: number }>
   ) => {
     if (space?.id) {
@@ -319,13 +319,13 @@ export default function Component({ initialSpace = {} }) {
         })),
         updatedBy: { id: userId }
       };
-      dispatch(createOrDeletePropertySpaceBeds(data));
-      dispatch(fetchAllPropertySpaceBedsByPropertySpace(space.id));
+      await dispatch(createOrDeletePropertySpaceBeds(data));
+      await dispatch(fetchAllPropertySpaceBedsByPropertySpace(space.id));
 
     }
   };
 
-  const handleSaveBathTypes = (updatedBathTypes: Array<{ id: number; count: number }>) => {
+  const handleSaveBathTypes = async (updatedBathTypes: Array<{ id: number; count: number }>) => {
     if (space?.id) {
       const data = {
         propertySpace: { id: space.id },
@@ -335,8 +335,8 @@ export default function Component({ initialSpace = {} }) {
         })),
         updatedBy: { id: userId }
       };
-      dispatch(createOrDeletePropertySpaceBathrooms(data));
-      dispatch(fetchAllPropertySpaceBathroomsByPropertySpace(space.id));
+      await dispatch(createOrDeletePropertySpaceBathrooms(data));
+      await dispatch(fetchAllPropertySpaceBathroomsByPropertySpace(space.id));
     }
   };
 

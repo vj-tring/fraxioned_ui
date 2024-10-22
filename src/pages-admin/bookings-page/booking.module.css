@@ -1,12 +1,40 @@
 .bookingsContainer {
-  padding: 18px 10px 0px 20px;
+  padding: 2px 10px 0px 10px;
   background-color: transparent;
   margin-left: 2px;
   height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
   transition: margin-left 0.3s ease;
-  /* font-family:  'Montserrat', sans-serif !important; */
+}
+
+
+
+.fullWidthTabsList {
+  display: flex;
+  justify-content: flex-start !important; 
+  background-color: #c1bebe14 !important;
+  width: 100%; 
+  padding: 0; 
+  margin-left: -10px !important;
+  color: #525151a1 !important;
+
+}
+
+
+.fullWidthTabsTrigger{
+  
+  border-left: 2px solid #ababab14; 
+  border-left: 2px solid #ababab14; 
+  outline: none; 
+  box-shadow: none !important;
+  background-color: #ffffff14 !important;
+  
+}
+
+
+.searchContainer{
+  padding: 0 !important;
 }
 
 .refreshIcon {
@@ -46,20 +74,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1px; 
   flex-wrap: wrap;
 }
 
 .actionsContainer {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
 }
 
 .searchContainer {
   display: flex;
-  align-items: center;
-  width: 380px;
+  align-items: flex-start;
+  width: 550px;
   height: 35px;
   padding: 2px 8px;
   border-radius: 4px !important;
@@ -67,47 +93,8 @@
   font-size: small !important;
   transition: box-shadow 0.3s ease;
   margin-bottom: 10px;
-}
+  justify-content: flex-start;
 
-.actionLink {
-  color: #62a2a9 !important;
-  font-size: 15px !important;
-  text-decoration: underline !important;
-  transition: color 0.3s ease;
-  margin-left: 20px !important;
-  
-
-}
-
-.actionLink:hover {
-  color: #82cfd6 !important;
-  text-decoration: underline !important;
-}
-
-.linksContainer {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-}
-
-.calendarLink {
-  color: white !important;
-  font-size: small !important;
-  display: flex;
-  padding: 15px 12px !important;
-  align-items: center;
-  border-radius: 5px !important;
-  gap: 5px;
-  margin-left: 10px !important;
-  text-decoration: none;
-  height: 30px;
-  background-color: #2d6aa0 !important;
-  margin-bottom:10px !important;
-}
-
-.calendarLink:hover {
-  color: white !important;
-  text-decoration: none !important;
 }
 
 .searchContainer:hover {
@@ -151,18 +138,35 @@
   margin-left: 10px;
   color: #333;
   margin-right: 16px;
-  margin-bottom: 12px;
 }
 
 .gridActionContainer {
   display: flex;
-  justify-content: flex-end;
-  padding: 12px 18px;
   background-color: transparent;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   align-items: center;
+  width: 100%;
+  gap: 50px;
+  
+}
+.filtersContainer {
+  display: flex;
+  width: 100%; 
+  padding: 0;  
+  margin: 0; 
+  gap: 15px;  
+  flex-wrap: wrap; 
+ font-size: smaller !important;
+  
+}
+.filtersContainer > div {
+  flex: 1; 
+}
 
+.selectContainer{
+  width: 100%;
+  margin-right: 0; 
 }
 
 .actionButton {
@@ -170,14 +174,12 @@
   color: white !important;
   font-weight: 500 !important;
   text-transform: none !important;
-  height: 30px;
+  height: 35px;
   font-size: small !important;
-  padding: 0 16px !important;
   border-radius: 4px !important;
   transition: background-color 0.3s ease !important;
-  margin-left: 12px !important;
   margin-bottom:10px !important;
-  
+  margin-left: 0px !important;
 }
 
 .actionButton:hover {
@@ -186,26 +188,26 @@
 
 .datePickerContainer {
   position: relative;
-  display: inline-block;
-  margin-left: 16px;
+  display: flex;
   margin-bottom: 8px;
+  justify-content: flex-end !important;
 }
 
 .monthPicker {
   width: 200px;
+  justify-content: flex-end !important;
+
 }
 
 .clearDateFilter {
-  position: absolute !important;
-  right: 34px; 
-  top: 50%;
+  position: relative !important;
+  right: 84px; 
   transform: translateY(-50%);
   z-index: 1;
+  margin-top: 17px !important;
 }
 
-.selectContainer {
-  margin-left: 20px !important; 
-}
+
 
 
 .dataGridWrapper {
@@ -217,6 +219,8 @@
   display: flex;
   flex-direction: column;
   margin-top: 1px;
+  height: calc(100vh - 155px);
+
 }
 
 .dataGrid {
@@ -251,7 +255,7 @@
 }
 
 .dataGrid :global(.MuiDataGrid-toolbarContainer) {
-  padding: 8px;
+  padding: 8px !important;
 }
 
 .dataGrid :global(.MuiButton-root) {
@@ -285,8 +289,8 @@
 
   .searchContainer {
     width: 100%;
-    margin-right: 0;
-    margin-bottom: 16px;
+    margin-right: 0px;
+    margin-left:0 ;
   }
 
   .calendarLink {

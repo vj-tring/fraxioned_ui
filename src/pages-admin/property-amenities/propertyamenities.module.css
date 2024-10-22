@@ -66,7 +66,8 @@
 .searchContainer {
   display: flex;
   align-items: center;
-  width: 970px;
+  width: 100%;
+  max-width: 970px;
   margin-top: 15px;
   background-color: #fdfdfd;
   border-radius: 9px;
@@ -77,6 +78,7 @@
 .searchIcon {
   color: #adb5bd;
   margin-right: 8px;
+  flex-shrink: 0;
 }
 
 .searchInput {
@@ -84,6 +86,7 @@
   border: none;
   background: transparent;
   font-size: 14px;
+  width: 100%;
   color: #495057;
 }
 

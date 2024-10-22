@@ -6,55 +6,7 @@ import { Image as ImageIcon } from "lucide-react";
 import imageone from '../../../../../assests/bear-lake-bluffs.jpg';
 import imagetwo from '../../../../../assests/crown-jewel.jpg';
 import imagethree from '../../../../../assests/lake-escape.jpg';
-
-interface UserProperty {
-  id: number;
-  noOfShare: number;
-  acquisitionDate: string;
-  isActive: number;
-  year: number;
-  peakAllottedNights: number;
-  peakUsedNights: number;
-  peakBookedNights: number;
-  peakCancelledNights: number;
-  peakLostNights: number;
-  peakRemainingNights: number;
-  peakAllottedHolidayNights: number;
-  peakUsedHolidayNights: number;
-  peakBookedHolidayNights: number;
-  peakRemainingHolidayNights: number;
-  offAllottedNights: number;
-  offUsedNights: number;
-  offBookedNights: number;
-  offCancelledNights: number;
-  offLostNights: number;
-  offRemainingNights: number;
-  offAllottedHolidayNights: number;
-  offUsedHolidayNights: number;
-  offBookedHolidayNights: number;
-  offRemainingHolidayNights: number;
-  lastMinuteAllottedNights: number;
-  lastMinuteUsedNights: number;
-  lastMinuteBookedNights: number;
-  lastMinuteRemainingNights: number;
-}
-
-interface PropertyResponse {
-  propertyId: number;
-  propertyName: string;
-  address: string;
-  city: string;
-  state: string;
-  country: string;
-  zipcode: number;
-  isActive: boolean;
-  userProperties: UserProperty[];
-  propertyShare: number;
-}
-
-interface EnhancedPropertyTabProps {
-  userId: number;
-}
+import { UserProperty, PropertyResponse, EnhancedPropertyTabProps } from '../../user.types';
 
 const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
   const [propertyData, setPropertyData] = useState<PropertyResponse[]>([]);

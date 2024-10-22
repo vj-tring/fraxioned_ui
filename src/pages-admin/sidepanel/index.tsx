@@ -3,25 +3,13 @@ import { Link, useLocation } from 'react-router-dom';
 import fraxionedLogo from '../../assets/images/fraxioned.png';
 import logo from '../../assets/images/fraxionedpng.png'
 import {
-    FaCalendar, FaPlane, FaUser, FaFile,
-    FaUserTag, FaChartBar, FaGavel, FaBars, FaHome, FaConciergeBell,
+    FaCalendar, FaPlane, FaUser, FaFile, FaChartBar, FaBars, FaHome, FaConciergeBell,
     FaQuestion
 } from 'react-icons/fa';
 import { IoIosImages } from "react-icons/io";
-
 import styles from './sidepanel.module.css'
+import { MenuItem, SidePanelProps } from './sidepanel.types';
 
-interface MenuItem {
-    icon: React.ReactElement;
-    label: string;
-    path: string;
-    disabled: boolean;
-}
-
-interface SidePanelProps {
-    isOpen: boolean;
-    toggleSidebar: () => void;
-}
 
 const menuItems: MenuItem[] = [
     { icon: <FaCalendar />, label: 'Bookings', path: '/admin/bookings', disabled: false },
@@ -30,12 +18,9 @@ const menuItems: MenuItem[] = [
     { icon: <FaUser />, label: 'User', path: '/admin/user', disabled: false },
     { icon: <FaConciergeBell />, label: 'Amenity', path: '/admin/amenity', disabled: false },
     { icon: <FaFile />, label: 'Documents', path: '/admin/documents', disabled: false },
-
-    //{ icon: <FaUserTag />, label: 'Role', path: '/role', disabled: true },
     { icon: <FaChartBar />, label: 'Reports', path: '/admin/reports', disabled: false },
-    { icon: <IoIosImages /> , label: 'Spaces', path: '/admin/spaces', disabled: false },
-    //{ icon: <FaGavel />, label: 'Rules', path: '/rules', disabled: true }
-    { icon: <FaQuestion /> , label: 'FAQ', path: '/admin/Faq', disabled: false },
+    { icon: <IoIosImages />, label: 'Spaces', path: '/admin/spaces', disabled: false },
+    { icon: <FaQuestion />, label: 'FAQ', path: '/admin/Faq', disabled: false },
 ];
 
 const SidePanel: React.FC<SidePanelProps> = ({ isOpen, toggleSidebar }) => {

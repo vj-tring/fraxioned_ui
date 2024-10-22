@@ -20,15 +20,8 @@ import styles from "./useredit.module.css";
 import { User, Role, ContactDetails } from "@/store/model";
 import { updateUserById } from "@/store/slice/user-slice";
 import { useDispatch } from "@/store";
+import { EditFormProps } from "../../user.types";
 
-interface EditFormProps {
-  user: User;
-  onClose: () => void;
-  onUserUpdated: () => void;
-  showCloseIcon?: boolean;
-  formTitle?: string;
-  isAdmin: boolean;
-}
 
 const EditForm: React.FC<EditFormProps> = ({
   user,

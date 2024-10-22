@@ -391,6 +391,7 @@ export const deleteMultipleSpaceImages = (spaceImages: { ids: number[] }) =>
 
 export const getCategories = () => axiosInstance.get(`/faq-categories`);
 
+
 export const getQuestions = (selectedCategory: number) =>
   axiosInstance.get(`/faq-questions`);
 
@@ -429,10 +430,19 @@ export const deleteQuestion = (id: number) => {
 export const fetchFaqs = () => {
   return axiosInstance.get("/faq-questions");
 };
-export const createUserPropertyDocuments = (formData: FormData) =>
-  axiosInstance.post("/userPropertyDocuments/userPropertyDocument", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+
+export const updateCategory = (id: number , data :any) =>{
+  return axiosInstance.patch(`/faq-categories/category/${id}`, data);
+};
+
+export const deleteCategory =(id: number) => {
+  return axiosInstance.delete(`/faq-categories/category/${id}`);
+};
+
+export const createUserPropertyDocuments = (formData: FormData) => 
+    axiosInstance.post('/userPropertyDocuments/userPropertyDocument', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    });
 
 export const getAllUserPropertyDocuments = () =>
   axiosInstance.get("/userPropertyDocuments");
@@ -457,3 +467,16 @@ export const deleteUserPropertyDocument = (id: number) =>
 
 export const sendContactMessage = (payload: ContactMessage) =>
   axiosInstance.post("/contact-us", payload);
+
+export const createAddditionalImage = (data: FormData) =>
+  axiosInstance.post(`/property-additional-images`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+export const getAdditionalImageforProperty = (propertyId: number) => {
+  return axiosInstance.get(
+    `/property-additional-images/property/${propertyId}`
+  );
+};

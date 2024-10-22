@@ -30,12 +30,15 @@ import addCategoryReducer from '../slice/auth/addcategorySlice';
 import bedReducer from '../slice/bedSlice';
 import propertydetailReducer from '../slice/auth/property-detail'
 import bathroomReducer from '../slice/bathroom-slice';
-import amenityReducer from '../slice/amenitiesSlice';
+import amenityReducer from '../slice/amenity';
 import userDocumentsReducer from '../slice/user-document';
+import propertyImagesReducer from '../slice/auth/additional-image'
 import { propertycodecatogoryReducer } from '../slice/auth/propertycodeCatogorySlice';
 import { propertyCodesReducer } from '../slice/auth/propertycodeSlice';
-import propertyImagesReducer from '../slice/auth/propertyImagesSlice ';
 import propertyAllRoomsSpaceReducer from '../slice/properties/propertyallrooms';
+import PropertyImageReducer from '../slice/additional-image';
+import PropertyReducer from '../slice/property';
+
 
 const appReducer: Reducer = combineReducers({
   auth: authReducer,
@@ -75,6 +78,8 @@ const appReducer: Reducer = combineReducers({
   addCategory: addCategoryReducer,
   userDocuments: userDocumentsReducer,
   propertyImages: propertyImagesReducer,
+  PropertyImage: PropertyImageReducer,
+  Property: PropertyReducer
 
 });
 
