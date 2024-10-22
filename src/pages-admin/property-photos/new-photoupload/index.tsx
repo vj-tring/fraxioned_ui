@@ -41,7 +41,6 @@ const AddPhoto: React.FC<AddPhotoProps> = ({ propertyId, onClose, onPhotosAdded 
   useEffect(() => {
     if (success) {
       setShowSnackbar(true);
-      // Wait for the snackbar to show before closing
       const timer = setTimeout(() => {
         onPhotosAdded();
         onClose();
