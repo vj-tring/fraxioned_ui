@@ -19,9 +19,6 @@ import {
 } from "@/store/model/user-properties";
 import styles from "./propertyTab.module.css";
 import { Image as ImageIcon, Trash2, Plus } from "lucide-react";
-import imageone from "../../../../../assests/bear-lake-bluffs.jpg";
-import imagetwo from "../../../../../assests/crown-jewel.jpg";
-import imagethree from "../../../../../assests/lake-escape.jpg";
 import { useAppSelector, useDispatch } from "@/store";
 import {
   fetchUserPropertiesWithDetailsByUser,
@@ -59,7 +56,6 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
   const [selectedYears, setSelectedYears] = useState<{ [key: number]: number }>(
     {}
   );
-  const images = [imageone, imagetwo, imagethree];
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [deleteModal, setDeleteModal] = useState({
@@ -97,15 +93,6 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
     });
     setSelectedYears(initialYears);
   }, [userPropertiesWithDetails]);
-
-  const handleRemoveProperty = async (propertyId: number) => {
-    try {
-      await dispatch(deleteUserProperty({ userId, propertyId })).unwrap();
-      dispatch(fetchUserPropertiesWithDetailsByUser(userId));
-    } catch (error) {
-      console.error("Failed to delete property:", error);
-    }
-  };
 
   const handlePropertySelect = (value: string) => {
     const selectedProperty = properties.find(
@@ -387,18 +374,31 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
           if (!userProperty) return null;
 
           const shareFraction = `${userProperty.noOfShare}/${prop.propertyShare}`;
-          const randomImage = images[index % images.length];
+
+          const propertyDetails = properties.find(p => p.id === prop.propertyId);
+          const coverImage = propertyDetails?.coverImageUrl;
 
           return (
             <Card key={prop.propertyId} className={styles.propertyCard}>
               <div className={styles.propertyContent}>
                 <div className={styles.propertyLeftContent}>
                   <div className={styles.propertyImageWrapper}>
-                    {randomImage ? (
-                      <img
-                        src={randomImage}
-                        alt={prop.propertyName}
-                        className={styles.propertyImage}
+                  {coverImage ? (
+                    <img
+                      src={coverImage}
+                      alt={prop.propertyName}
+                      className={styles.propertyImage}
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        const parent = target.parentElement;
+                        if (parent) {
+                          const placeholder = document.createElement('div');
+                          placeholder.className = styles.propertyNoImage;
+                          placeholder.innerHTML = '<svg>...</svg>';
+                          parent.appendChild(placeholder);
+                        }
+                      }}
                       />
                     ) : (
                       <div className={styles.propertyNoImage}>
