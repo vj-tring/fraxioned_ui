@@ -1,17 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { Button, Card, CardContent, Typography, Select, MenuItem, TextField } from "@mui/material";
-import { SelectChangeEvent } from "@mui/material/Select";
-import { PropertyWithDetailsResponse, UserProperty } from "@/store/model/user-properties";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  FormControl,
+  Select as MuiSelect,
+  MenuItem,
+  TextField,
+} from "@mui/material";
+import {
+  PropertyWithDetailsResponse,
+  UserProperty,
+} from "@/store/model/user-properties";
 import styles from "./propertyTab.module.css";
 import { Image as ImageIcon, Trash2, Plus } from "lucide-react";
 import imageone from "../../../../../assests/bear-lake-bluffs.jpg";
 import imagetwo from "../../../../../assests/crown-jewel.jpg";
 import imagethree from "../../../../../assests/lake-escape.jpg";
 import { useAppSelector, useDispatch } from "@/store";
-import { fetchUserPropertiesWithDetailsByUser, deleteUserProperty, createUserProperty } from "@/store/action/user-properties";
+import {
+  fetchUserPropertiesWithDetailsByUser,
+  deleteUserProperty,
+  createUserProperty,
+} from "@/store/action/user-properties";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/reducers";
 import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
+import { clearError } from "@/store/slice/user-properties";
 
 interface EnhancedPropertyTabProps {
   userId: number;
@@ -25,79 +45,116 @@ interface Property {
 
 const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
   const dispatch = useDispatch();
-  const { userPropertiesWithDetails, loading, error } = useAppSelector(
-    (state) => state.userProperties
-  );
+  const {
+    userPropertiesWithDetails,
+    loading,
+    error,
+    isAddingProperty,
+    isDeletingProperty,
+  } = useAppSelector((state) => state.userProperties);
   const properties = useSelector(
     (state: RootState) => state.property.properties
   );
+
   const [selectedYears, setSelectedYears] = useState<{ [key: number]: number }>(
     {}
   );
-
   const images = [imageone, imagetwo, imagethree];
 
-  const [showAddProperty, setShowAddProperty] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newProperty, setNewProperty] = useState({
     propertyId: "",
     noOfShares: "",
     acquisitionDate: "",
   });
-
   const [maxShares, setMaxShares] = useState(0);
+  const assignedPropertyIds = userPropertiesWithDetails.map(
+    (prop: PropertyWithDetailsResponse) => prop.propertyId
+  );
+  const availableProperties = properties.filter(
+    (property: Property) => !assignedPropertyIds.includes(property.id)
+  );
 
   useEffect(() => {
     dispatch(fetchProperties());
     dispatch(fetchUserPropertiesWithDetailsByUser(userId));
-    const initialYears: { [key: number]: number } = {};
-    userPropertiesWithDetails.forEach((prop: PropertyWithDetailsResponse) => {
-      initialYears[prop.propertyId] = prop.userProperties[0].year;
-    });
-    setSelectedYears(initialYears);
   }, [dispatch, userId]);
 
-  const handleRemoveProperty = (propertyId: number) => {
-    dispatch(deleteUserProperty({ userId, propertyId }));
-  };
-
-  const handleAddPropertyClick = () => {
-    setShowAddProperty(true);
-  };
-
-  const handleAddPropertyChange = (
-    event: SelectChangeEvent<string> | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = event.target;
-    if (name === "propertyId") {
-      const selectedProperty = properties.find((p: Property) => p.id === Number(value));
-      if (selectedProperty) {
-        setMaxShares(selectedProperty.propertyRemainingShare);
-      }
-    }
-    setNewProperty((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleAddPropertySubmit = () => {
-    const payload = {
-      user: {
-        id: userId
-      },
-      property: {
-        id: Number(newProperty.propertyId)
-      },
-      createdBy: {
-        id: userId
-      },
-      noOfShare: Number(newProperty.noOfShares),
-      acquisitionDate: new Date(newProperty.acquisitionDate).toISOString(),
-      isActive: true
+  useEffect(() => {
+    return () => {
+      dispatch(clearError());
     };
+  }, [dispatch, isDialogOpen]);
 
-    dispatch(createUserProperty(payload));
-    setShowAddProperty(false);
+  useEffect(() => {
+    const initialYears: { [key: number]: number } = {};
+    userPropertiesWithDetails.forEach((prop: PropertyWithDetailsResponse) => {
+      initialYears[prop.propertyId] = new Date().getFullYear();
+    });
+    setSelectedYears(initialYears);
+  }, [userPropertiesWithDetails]);
+
+  const handleRemoveProperty = async (propertyId: number) => {
+    try {
+      await dispatch(deleteUserProperty({ userId, propertyId })).unwrap();
+      dispatch(fetchUserPropertiesWithDetailsByUser(userId));
+    } catch (error) {
+      console.error("Failed to delete property:", error);
+    }
+  };
+
+  const handlePropertySelect = (value: string) => {
+    const selectedProperty = properties.find(
+      (p: Property) => p.id === Number(value)
+    );
+    if (selectedProperty) {
+      setMaxShares(selectedProperty.propertyRemainingShare);
+    }
+    setNewProperty((prev) => ({ ...prev, propertyId: value }));
+  };
+
+  const handleShareSelect = (value: string) => {
+    setNewProperty((prev) => ({ ...prev, noOfShares: value }));
+  };
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewProperty((prev) => ({ ...prev, acquisitionDate: e.target.value }));
+  };
+
+  const handleAddPropertySubmit = async () => {
+    try {
+      const payload = {
+        user: {
+          id: userId,
+        },
+        property: {
+          id: Number(newProperty.propertyId),
+        },
+        createdBy: {
+          id: userId,
+        },
+        noOfShare: Number(newProperty.noOfShares),
+        acquisitionDate: new Date(newProperty.acquisitionDate).toISOString(),
+        isActive: true,
+      };
+
+      await dispatch(createUserProperty(payload)).unwrap();
+      dispatch(fetchUserPropertiesWithDetailsByUser(userId));
+
+      setIsDialogOpen(false);
+      setNewProperty({ propertyId: "", noOfShares: "", acquisitionDate: "" });
+      setMaxShares(0);
+    } catch (error) {
+      console.error("Failed to add property:", error);
+    }
+  };
+  const handleClose = () => {
+    setIsDialogOpen(false);
     setNewProperty({ propertyId: "", noOfShares: "", acquisitionDate: "" });
     setMaxShares(0);
   };
+  
+
   if (loading)
     return <Typography className={styles.loadingText}>Loading...</Typography>;
   if (error)
@@ -200,68 +257,97 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
 
   return (
     <div className={styles.propertyTabContainer}>
-        <Button
+      <Button
+        onClick={() => setIsDialogOpen(true)}
         variant="contained"
-        color="primary"
         startIcon={<Plus />}
-        onClick={handleAddPropertyClick}
         className={styles.addPropertyButton}
+        disabled={isAddingProperty}
       >
-        Add Property
+        {isAddingProperty ? "Adding Property..." : "Add Property"}
       </Button>
 
-      {showAddProperty && (
-        <Card className={styles.addPropertyCard}>
-          <CardContent>
-            <Typography variant="h6">Add New Property</Typography>
-            <Select
-        value={newProperty.propertyId}
-        onChange={handleAddPropertyChange}
-        name="propertyId"
-        displayEmpty
+      <Dialog
+        open={isDialogOpen}
+        onClose={handleClose}
+        maxWidth="sm"
         fullWidth
-        className={styles.selectField}
+        className={styles.addPropertyDialog}
       >
-        <MenuItem value="" disabled>Select Property</MenuItem>
-        {properties.map((property: Property) => (
-          <MenuItem key={property.id} value={property.id.toString()}>
-            {property.propertyName}
-          </MenuItem>
-        ))}
-      </Select>
-            <Select
-              value={newProperty.noOfShares}
-              onChange={handleAddPropertyChange}
-              name="noOfShares"
-              displayEmpty
-              fullWidth
-              className={styles.selectField}
-              disabled={!newProperty.propertyId}
-            >
-              <MenuItem value="" disabled>Select Number of Shares</MenuItem>
-              {[...Array(maxShares)].map((_, i) => (
-                <MenuItem key={i} value={i + 1}>{i + 1}</MenuItem>
-              ))}
-            </Select>
+        <DialogTitle>Add New Property</DialogTitle>
+        <DialogContent>
+          <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <FormControl fullWidth>
+              <MuiSelect
+                value={newProperty.propertyId}
+                onChange={(e) => handlePropertySelect(e.target.value as string)}
+                displayEmpty
+                placeholder="Select Property"
+              >
+                <MenuItem value="" disabled>
+                  Select Property
+                </MenuItem>
+                {availableProperties.map((property: Property) => (
+                  <MenuItem
+                    key={property.id}
+                    value={property.id.toString()}
+                  >
+                    {property.propertyName}
+                  </MenuItem>
+                ))}
+              </MuiSelect>
+            </FormControl>
+
+            <FormControl fullWidth>
+              <MuiSelect
+                value={newProperty.noOfShares}
+                onChange={(e) => handleShareSelect(e.target.value as string)}
+                displayEmpty
+                disabled={!newProperty.propertyId}
+                placeholder="Select Number of Shares"
+              >
+                <MenuItem value="" disabled>
+                  Select Number of Shares
+                </MenuItem>
+                {[...Array(maxShares)].map((_, i) => (
+                  <MenuItem key={i} value={(i + 1).toString()}>
+                    {i + 1}
+                  </MenuItem>
+                ))}
+              </MuiSelect>
+            </FormControl>
+
             <TextField
               type="date"
               value={newProperty.acquisitionDate}
-              onChange={handleAddPropertyChange}
-              name="acquisitionDate"
+              onChange={handleDateChange}
               fullWidth
-              className={styles.dateField}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              label="Acquisition Date"
             />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleAddPropertySubmit}
-              className={styles.submitButton}
-            >
-              Add Property
-            </Button>
-          </CardContent>
-        </Card>
-      )}
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleAddPropertySubmit}
+            color="primary"
+            variant="contained"
+            disabled={
+              !newProperty.propertyId ||
+              !newProperty.noOfShares ||
+              !newProperty.acquisitionDate
+            }
+          >
+            Add Property
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       {userPropertiesWithDetails.map(
         (prop: PropertyWithDetailsResponse, index: number) => {
           const userProperty = prop.userProperties.find(
@@ -350,6 +436,14 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
                         {up.year}
                       </Button>
                     ))}
+                    <Button
+                      variant="contained"
+                      color="error"
+                      startIcon={<Trash2 />}
+                      onClick={() => handleRemoveProperty(prop.propertyId)}
+                      className={styles.removePropertyButton}
+                      disabled={isDeletingProperty}
+                    ></Button>
                   </div>
                   <div className={styles.propertyAvailabilityContainer}>
                     <div className={styles.propertyAvailabilityInfo}>
@@ -360,15 +454,11 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
                   </div>
                 </div>
               </div>
-              <Button
-                variant="contained"
-                color="error"
-                startIcon={<Trash2 />}
-                onClick={() => handleRemoveProperty(prop.propertyId)}
-                className={styles.removePropertyButton}
-              >
-                Remove Property
-              </Button>
+              {error && (
+                <Typography color="error" className={styles.errorMessage}>
+                  {error}
+                </Typography>
+              )}
             </Card>
           );
         }

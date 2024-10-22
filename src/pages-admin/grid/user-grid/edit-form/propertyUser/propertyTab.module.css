@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: 24px;
   padding: 24px;
+  padding-top: 0px;
   max-width: 1200px;
   margin: 0 auto;
   overflow-y: auto;
@@ -10,6 +11,11 @@
 .addPropertyButton {
   margin-bottom: 20px;
 }
+
+.addPropertyDialog {
+  border-radius: 20px;
+}
+
 
 .addPropertyCard {
   margin-bottom: 20px;
