@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styles from "./register.module.css";
-import { FaSave, FaEdit, FaTrash } from "react-icons/fa";
-import { MdCancel } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../store/slice/auth/register";
 import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
-import { fetchRoles } from "@/store/slice/roles"; // Import the fetchRoles action
+import { fetchRoles } from "@/store/slice/roles";
 import { RootState } from "@/store/reducers";
 import Loader from "@/components/loader";
 import CustomizedSnackbars from "@/components/customized-snackbar";
@@ -48,7 +46,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
 
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [showPropertyFields, setShowPropertyFields] = useState(false);
+  // const [showPropertyFields, setShowPropertyFields] = useState(false);
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
     "success"
   );
@@ -58,12 +56,12 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
 
   const dispatch = useDispatch<AppDispatch>();
   const properties = useSelector(
-    (state: RootState) => state.property.properties
+    (state: RootState) => state.property.properties || []
   );
   const propertiesStatus = useSelector(
     (state: RootState) => state.property.status
   );
-  const roles = useSelector((state: RootState) => state.roles.roles);
+  const roles = useSelector((state: RootState) => state.roles.roles || []);
   const rolesStatus = useSelector((state: RootState) => state.roles.status);
 
   useEffect(() => {
@@ -158,7 +156,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
       noOfShares: 1,
       acquisitionDate: new Date().toISOString().split("T")[0],
     });
-    setShowPropertyFields(false);
+    // setShowPropertyFields(false);
     setSnackbarMessage("Property details successfully saved");
     setSnackbarSeverity("success");
     setShowSnackbar(true);
