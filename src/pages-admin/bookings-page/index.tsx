@@ -454,10 +454,10 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
         <Tabs defaultValue="0" className={styles.fullWidthTabs}>
           <TabsList className={styles.fullWidthTabsList}>
             <TabsTrigger value="0" onClick={() => setTabValue(0)} className={styles.fullWidthTabsTrigger}>
-              Calendar View
+              Calendar
             </TabsTrigger>
             <TabsTrigger value="1" onClick={() => setTabValue(1)} className={styles.fullWidthTabsTrigger}>
-              Bookings Details
+              Booking Details
             </TabsTrigger>
           </TabsList>
           <TabsContent value={String(tabValue)} className={styles.fullWidthTabsContent}>
