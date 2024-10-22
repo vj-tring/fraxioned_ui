@@ -17,40 +17,14 @@ import { RootState } from '@/store/reducers';
 import { AppDispatch } from '@/store';
 import PropertyCodeCategoryModal from './new-propertycode';
 import { Loader } from 'lucide-react';
-
-interface PropertyCode {
-  id: number;
-  propertyCode: string;
-  property: {
-    id: number;
-    propertyName: string;
-  };
-  propertyCodeCategory: {
-    id: number;
-    name: string;
-  };
-  createdAt: string;
-  updatedAt: string;
-  createdBy: {
-    id: number;
-  };
-  updatedBy: null | {
-    id: number;
-  };
-}
-
-interface SnackbarState {
-  open: boolean;
-  message: string;
-  severity: 'success' | 'error' | 'info' | 'warning';
-}
+import { PropertyCodes, SnackbarState } from './property-codes.types';
 
 const PropertyCode: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { id: propertyId } = useParams<{ id: string }>();
   const propertyCodes = useSelector((state: RootState) => state.propertycode.propertyCodes);
   const status = useSelector((state: RootState) => state.propertycode.status);
-  const [filteredCodes, setFilteredCodes] = useState<PropertyCode[]>([]);
+  const [filteredCodes, setFilteredCodes] = useState<PropertyCodes[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -67,7 +41,7 @@ const PropertyCode: React.FC = () => {
 
   useEffect(() => {
     if (propertyCodes.length > 0 && propertyId) {
-      const filtered = propertyCodes.filter((code: { property: { id: number; }; }): code is PropertyCode =>
+      const filtered = propertyCodes.filter((code: { property: { id: number; }; }): code is PropertyCodes =>
         code &&
         typeof code === 'object' &&
         'property' in code &&
@@ -104,12 +78,12 @@ const PropertyCode: React.FC = () => {
     setRefreshTrigger(prev => prev + 1);
   };
 
-  const handleEdit = (code: PropertyCode) => {
+  const handleEdit = (code: PropertyCodes) => {
     setEditingId(code.id);
     setEditValue(code.propertyCode);
   };
 
-  const handleSave = async (code: PropertyCode) => {
+  const handleSave = async (code: PropertyCodes) => {
     if (editValue !== code.propertyCode) {
       try {
         await dispatch(editPropertyCode({

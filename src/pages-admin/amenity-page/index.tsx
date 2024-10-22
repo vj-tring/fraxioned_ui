@@ -26,18 +26,7 @@ import CustomizedSnackbars from "@/components/customized-snackbar";
 import { Tooltip } from "@mui/material";
 import Loader from "@/components/loader";
 import { Amenity } from "@/store/model";
-
-interface SnackbarState {
-  open: boolean;
-  message: string;
-  severity: "success" | "info" | "warning" | "error";
-}
-
-interface ErrorResponse {
-  success: boolean;
-  message: string;
-  statusCode: number;
-}
+import { SnackbarState, ErrorResponse } from "./amenity-page.types";
 
 const AmenityManagement: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();

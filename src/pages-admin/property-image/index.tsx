@@ -11,16 +11,8 @@ import {
 } from "@mui/material";
 import { RootState } from "@/store/reducers";
 import { AppDispatch } from "@/store";
+import { PropertyImageProps, Property } from "./property-image.types";
 
-interface PropertyImageProps {
-  onPropertySelect: (propertyId: number | string) => void;
-  selectedPropertyId: number | string;
-}
-
-interface Property {
-  id: number;
-  propertyName: string;
-}
 
 const ALL_HOLIDAY_ID = 'all';
 
