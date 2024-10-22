@@ -15,6 +15,7 @@ export interface UpdateFaqPayload {
   
 
 export interface Faq {
+    isNew: any;
     editMode: any;
     category: any;
     id: number;

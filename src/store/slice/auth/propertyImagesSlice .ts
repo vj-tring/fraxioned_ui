@@ -1,4 +1,3 @@
-// redux/propertyImagesSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction, AsyncThunkAction  } from '@reduxjs/toolkit';
 import { propertyImageapi } from '@/api/api-endpoints';
 import { RootState } from '@/store/reducers';
