@@ -17,29 +17,7 @@ import { styled } from '@mui/material/styles';
 import { RootState } from '@/store/reducers';
 import { fetchPropertyDetails, updatePropertyRules } from '@/store/slice/auth/property-detail';
 import { AppDispatch } from '@/store';
-
-interface PropertyRulesData {
-    noOfGuestsAllowed: number;
-    noOfBedrooms: number;
-    noOfBathrooms: number;
-    noOfBathroomsFull: number;
-    noOfBathroomsHalf: number;
-    squareFootage: string;
-    noOfPetsAllowed: number;
-    checkInTime: number;
-    checkOutTime: number;
-    cleaningFee: number;
-    wifiNetwork: string;
-    peakSeasonStartDate: string;
-    peakSeasonEndDate: string;
-    petPolicy: string;
-    feePerPet: number;
-    peakSeasonAllottedNights: number;
-    offSeasonAllottedNights: number;
-    peakSeasonAllottedHolidayNights: number;
-    offSeasonAllottedHolidayNights: number;
-    lastMinuteBookingAllottedNights: number;
-}
+import { PropertyRulesData } from '../property-rules.types';
 
 const EditPropertyRulesForm: React.FC = () => {
     const { id } = useParams<{ id: string }>();

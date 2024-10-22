@@ -1,4 +1,3 @@
-// src/components/Spaces.tsx
 import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/store";

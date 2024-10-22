@@ -11,16 +11,8 @@ import {
 } from '@/store/slice/amenity/group';
 import { AppDispatch } from '@/store';
 import { RootState } from '@/store/reducers';
+import { AmenityGroup, NewAmenityFormProps } from '../property-amenity.types';
 
-interface AmenityGroup {
-  id: number;
-  name: string;
-}
-
-interface NewAmenityFormProps {
-  onClose: () => void;
-  onAmenityAdded: () => void;
-}
 
 const NewAmenityForm: React.FC<NewAmenityFormProps> = ({ onClose, onAmenityAdded }) => {
     const [isUploading, setIsUploading] = useState(false);
@@ -51,23 +43,23 @@ const NewAmenityForm: React.FC<NewAmenityFormProps> = ({ onClose, onAmenityAdded
     const [uploadProgress, setUploadProgress] = useState(0);
 
 
-  useEffect(() => {
-    dispatch(fetchAmenityGroups());
-  }, [dispatch, addAmenityGroupSuccess]);
+    useEffect(() => {
+        dispatch(fetchAmenityGroups());
+    }, [dispatch, addAmenityGroupSuccess]);
 
-  useEffect(() => {
-    if (addAmenitySuccess) {
-      onAmenityAdded();
-      onClose();
-      dispatch(resetAmenitiesState());
-    }
-  }, [addAmenitySuccess, onAmenityAdded, onClose, dispatch]);
+    useEffect(() => {
+        if (addAmenitySuccess) {
+            onAmenityAdded();
+            onClose();
+            dispatch(resetAmenitiesState());
+        }
+    }, [addAmenitySuccess, onAmenityAdded, onClose, dispatch]);
 
-  useEffect(() => {
-    if (addAmenityGroupSuccess) {
-      dispatch(resetAmenityGroupState());
-    }
-  }, [addAmenityGroupSuccess, dispatch]);
+    useEffect(() => {
+        if (addAmenityGroupSuccess) {
+            dispatch(resetAmenityGroupState());
+        }
+    }, [addAmenityGroupSuccess, dispatch]);
 
     useEffect(() => {
         setError(addAmenityError || amenityGroupError || '');
