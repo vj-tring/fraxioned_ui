@@ -101,9 +101,10 @@ const PropertyPhotos: React.FC = () => {
   const handleConfirmDelete = async () => {
     if (imageToDelete) {
       setIsLoading(true);
+      setShowDeleteConfirmation(false);
+
       try {
         await deletetpropertyImageById(imageToDelete);
-        setShowDeleteConfirmation(false);
         setImageToDelete(null);
       } catch (error) {
         console.error("Error deleting property image:", error);
