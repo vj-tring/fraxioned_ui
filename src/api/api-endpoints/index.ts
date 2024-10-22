@@ -141,6 +141,9 @@ export const deletePropertyApi = (id: number) =>
 export const getPropertyById = (id: number) =>
   axiosInstance.get(`/properties/property/${id}`);
 
+export const fetchAllRoomDetailsByPropertyId = (propertyId: number) =>
+  axiosInstance.get(`properties/property/${propertyId}/room-details`)
+
 export const updatePropertyapi = (id: number, data: any) => {
   const formData = new FormData();
 
