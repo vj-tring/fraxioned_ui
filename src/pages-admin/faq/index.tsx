@@ -28,6 +28,7 @@ import {
   editCategoryAsync,
   fetchCategories,
 } from "@/store/slice/auth/addcategorySlice";
+import Loader from "@/components/loader";
 
 interface FaqCategory {
   id: number;
@@ -44,11 +45,9 @@ interface FaqQuestion {
 const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
   const questions = useSelector((state: RootState) => state.faqPage.faqs);
   const categories = useSelector((state: RootState) => state.addCategory.data);
-  const [selectedCategory, setSelectedCategory] = useState<FaqCategory | null>(
-    null
-  );
+  const [selectedCategory, setSelectedCategory] = useState<FaqCategory | null>(null);
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [loadingQuestions] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [snackbar, setSnackbar] = useState<{
     open: boolean;
     message: string;
@@ -59,17 +58,10 @@ const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     severity: "info",
   });
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [questionToDelete, setQuestionToDelete] = useState<FaqQuestion | null>(
-    null
-  );
-  const [showNewQuestionForm, setShowNewQuestionForm] =
-    useState<boolean>(false);
-  const [showEditQuestionForm, setShowEditQuestionForm] =
-    useState<boolean>(false);
-  const [questionToEdit, setQuestionToEdit] = useState<FaqQuestion | null>(
-    null
-  );
-
+  const [questionToDelete, setQuestionToDelete] = useState<FaqQuestion | null>(null);
+  const [showNewQuestionForm, setShowNewQuestionForm] = useState<boolean>(false);
+  const [showEditQuestionForm, setShowEditQuestionForm] = useState<boolean>(false);
+  const [questionToEdit, setQuestionToEdit] = useState<FaqQuestion | null>(null);
   const [categoryName, setCategoryName] = useState("");
 
   const dispatch = useDispatch<AppDispatch>();
@@ -97,6 +89,7 @@ const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
       });
       setShowDeleteModal(false);
       setQuestionToDelete(null);
+      await dispatch(fetchFaqAsync()); // Refresh FAQs
     }
   };
 
@@ -109,7 +102,9 @@ const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     setShowEditQuestionForm(true);
   };
 
-  const handleQuestionUpdated = (updatedQuestion: FaqQuestion) => {
+  const handleQuestionUpdated = async (updatedQuestion: FaqQuestion) => {
+    setLoading(true); // Start loading
+
     const updateData: UpdateFaqPayload = {
       id: updatedQuestion.id,
       updateData: {
@@ -122,7 +117,7 @@ const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
       },
     };
 
-    dispatch(updateFaq(updateData));
+    await dispatch(updateFaq(updateData)); // Wait for the update to finish
 
     setSnackbar({
       open: true,
@@ -130,6 +125,8 @@ const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
       severity: "success",
     });
 
+    await dispatch(fetchFaqAsync()); // Refetch FAQs
+    setLoading(false); // Stop loading
     setShowEditQuestionForm(false);
     setQuestionToEdit(null);
   };
@@ -144,7 +141,7 @@ const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     setSnackbar({ ...snackbar, open: false });
   };
 
-   const handleSaveCategory = async () => {
+  const handleSaveCategory = async () => {
     if (selectedCategory && categoryName.trim() !== "") {
       const id: number = selectedCategory;
       const payload = {
@@ -189,6 +186,8 @@ const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     }
   };
 
+  if (loading) return <Loader />; // Loader when saving data
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -209,13 +208,16 @@ const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
       {showNewQuestionForm && (
         <NewQuestionForm
           onClose={() => setShowNewQuestionForm(false)}
-          onQuestionAdded={() => {
+          onQuestionAdded={async () => {
+            setLoading(true); // Start loading
+            await dispatch(fetchFaqAsync()); // Refresh FAQs
             setSnackbar({
               open: true,
               message: "Added successfully",
               severity: "success",
             });
             setShowNewQuestionForm(false);
+            setLoading(false); // Stop loading
           }}
           categories={categories}
         />
@@ -238,7 +240,7 @@ const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             ) : (
               <List component="nav">
                 {categories.length > 0 ? (
-                  categories.map((category : any) => (
+                  categories.map((category: any) => (
                     <ListItem
                       key={category.id}
                       button
@@ -287,72 +289,64 @@ const FAQPage: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                     </ListItem>
                   ))
                 ) : (
-                  <Typography variant="body1">
-                    No categories available
-                  </Typography>
+                  <Typography variant="body1">No categories available</Typography>
                 )}
               </List>
             )}
           </Grid>
 
           <Grid item xs={12} sm={8}>
-            {loadingQuestions ? (
-              <CircularProgress />
-            ) : (
-              <>
-                {questions !== undefined && questions.length > 0
-                  ? questions
-                      .filter(
-                        (ques :any) =>
-                          ques.category && ques.category.id === selectedCategory
-                      )
-                      .map((question:any) => (
-                        <Grid
-                          item
-                          key={question.id}
-                          xs={12}
-                          className={`${styles.faqItem} ${
-                            question.isNew ? styles.newQuestion : ""
-                          }`}
+            {questions !== undefined && questions.length > 0 ? (
+              questions
+                .filter(
+                  (ques: any) =>
+                    ques.category && ques.category.id === selectedCategory
+                )
+                .map((question: any) => (
+                  <Grid
+                    item
+                    key={question.id}
+                    xs={12}
+                    className={`${styles.faqItem} ${
+                      question.isNew ? styles.newQuestion : ""
+                    }`}
+                  >
+                    <Typography
+                      fontSize="h8"
+                      fontWeight={600}
+                      marginTop={"6px"}
+                      marginBottom={"5px"}
+                    >
+                      {question.question}
+                    </Typography>
+                    <Typography variant="body2" marginLeft={"15px"}>
+                      {question.answer}
+                    </Typography>
+                    <div className={styles.actionButtons}>
+                      <Tooltip title="Edit" arrow>
+                        <button
+                          onClick={() => handleEditClick(question)}
+                          className={styles.editButton}
                         >
-                          <Typography
-                            fontSize="h8"
-                            fontWeight={600}
-                            marginTop={"6px"}
-                            marginBottom={"5px"}
-                          >
-                            {question.question}
-                          </Typography>
-                          <Typography variant="body2" marginLeft={"15px"}>
-                            {question.answer}
-                          </Typography>
-                          <div className={styles.actionButtons}>
-                            <Tooltip title="Edit" arrow>
-                              <button
-                                onClick={() => handleEditClick(question)}
-                                className={styles.editButton}
-                              >
-                                <Edit2 size={16} />
-                              </button>
-                            </Tooltip>
-                            <Tooltip title="Delete" arrow>
-                              <button
-                                onClick={() => handleDeleteClick(question)}
-                                className={styles.deleteButton}
-                              >
-                                <Trash2 size={16} />
-                              </button>
-                            </Tooltip>
-                          </div>
-                        </Grid>
-                      ))
-                  : selectedCategory && (
-                      <Typography variant="body1">
-                        No questions found for this category.
-                      </Typography>
-                    )}
-              </>
-            )}
+                          <Edit2 size={16} />
+                        </button>
+                      </Tooltip>
+                      <Tooltip title="Delete" arrow>
+                        <button
+                          onClick={() => handleDeleteClick(question)}
+                          className={styles.deleteButton}
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </Tooltip>
+                    </div>
+                  </Grid>
+                ))
+            ) : selectedCategory ? (
+              <Typography variant="body1">
+                No questions found for this category.
+              </Typography>
+            ) : null}
           </Grid>
         </Grid>
       </div>
