@@ -14,7 +14,6 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
   IconButton,
   Grid,
 } from "@mui/material";
@@ -23,12 +22,9 @@ import CustomPagination from "../custom-pagination";
 import "./single-device.css";
 import { AppDispatch } from "@/store";
 import { RootState } from "@/store/reducers";
-import Bedroom1Image from "../../assets/images/bedroom1.jpg";
-import KingBedImage from "../../assets/images/bedroom1.jpg";
 import { fetchSpacePropertiesById } from "@/store/slice/space/property";
 import {
   amenitiesapi,
-  fetchPropertyImagesByPropertyId,
   getAllSpacePropertyImageById,
 } from "@/api/api-endpoints";
 
@@ -36,49 +32,24 @@ interface SingleDeviceProps {
   propertyId: number;
 }
 
-interface Room {
-  image: string;
-  name: string;
-  Bed?: string;
-}
 
 const ITEMS_PER_PAGE = 2;
 const AMENITIES_PER_PAGE = 12;
 
-const allRooms: Room[] = [
-  { name: "Bedroom 1", image: Bedroom1Image, Bed: "King size Bed" },
-  { name: "King Bed", image: KingBedImage, Bed: "King size Bed" },
-  { name: "Living Room", image: Bedroom1Image, Bed: "Spacious Living Area" },
-  { name: "Guest Room", image: KingBedImage, Bed: "Comfortable Guest Bed" },
-];
-
-const groupAmenitiesByGroup = (data: PropertyAmenity[]) => {
-  return data.reduce((acc, propertyAmenity) => {
-    const groupName = propertyAmenity.amenity.amenityGroup.name;
-    if (!acc[groupName]) {
-      acc[groupName] = [];
-    }
-    acc[groupName].push(propertyAmenity.amenity);
-    return acc;
-  }, {} as { [key: string]: PropertyAmenity["amenity"][] });
-};
-
 const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const {
-    propertyAmenities: propertyAmenities,
-    loading,
-    error,
-  } = useSelector((state: RootState) => state.amenitiesID);
+  const { propertyAmenities: propertyAmenities } = useSelector(
+    (state: RootState) => state.amenitiesID
+  );
   const propertySpace = useSelector(
     (state: RootState) => state.spaceProperties.spaceProperties || []
   );
 
-  const [imagesData, setImagesData] = useState<any[]>([]);
-  const [amenitites, setAmenities] = useState<any[]>([]);
+  const [imagesData, setImagesData] = useState<unknown[]>([]);
+  const [amenitites, setAmenities] = useState<unknown[]>([]);
 
   const [page, setPage] = useState(1);
-  const [showAllAmenities, setShowAllAmenities] = useState(false);
+  const [showAllAmenities, ] = useState(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -95,7 +66,9 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
     try {
       const response = await amenitiesapi();
       setAmenities(response.data.data);
-    } catch (err) {}
+    } catch (err) {
+      console.warn(err);
+    }
   };
   useEffect(() => {
     const imageFetching = async () => {
@@ -112,6 +85,21 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
 
     imageFetching();
   }, [propertyId]); //
+
+  const organizeAmenitiesByAmenityGroup = (data: PropertyAmenity[]) => {
+    if (!Array.isArray(data)) {
+      console.warn("Expected an array, but received:", data);
+      return {};
+    }
+    return data.reduce((acc, propertyAmenity) => {
+      const groupName = propertyAmenity.amenity.amenityGroup.name;
+      if (!acc[groupName]) {
+        acc[groupName] = [];
+      }
+      acc[groupName].push(propertyAmenity.amenity);
+      return acc;
+    }, {} as { [key: string]: PropertyAmenity["amenity"][] });
+  };
 
   const getImageUrlByPropertyAndSpace = (spaceId: number): string | null => {
     const image = imagesData.find(
@@ -134,28 +122,22 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
     setOpen(false);
   };
 
-  const paginatedRooms = allRooms.slice(
-    (page - 1) * ITEMS_PER_PAGE,
-    page * ITEMS_PER_PAGE
-  );
-  const totalPages = Math.ceil(allRooms.length / ITEMS_PER_PAGE);
-
   const paginatedSpaces = propertySpace.slice(
     (page - 1) * ITEMS_PER_PAGE,
     page * ITEMS_PER_PAGE
   );
   const totalspacePages = Math.ceil(propertySpace.length / ITEMS_PER_PAGE);
 
-  const groupedAmenities = groupAmenitiesByGroup(propertyAmenities || []);
-  const allAmenities = propertyAmenities
+  const groupedAmenities = organizeAmenitiesByAmenityGroup(
+    propertyAmenities || []
+  );
+  const allAmenities = Array.isArray(propertyAmenities)
     ? propertyAmenities.map((pa) => pa.amenity)
     : [];
   const displayedAmenities = showAllAmenities
     ? allAmenities
     : allAmenities.slice(0, AMENITIES_PER_PAGE);
 
-  // if (loading) return <div>Loading...</div>;
-  // if (error) return <div>{error}</div>;
 
   return (
     <Box
@@ -207,13 +189,13 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                     width: "100%",
                   }}
                 >
+
                   <CardMedia
-                    component="img"
-                    // height="100px"
+                    // component="img"
                     image={
                       getImageUrlByPropertyAndSpace(space.id) ||
                       "https://via.placeholder.com/100"
-                    } // Placeholder for space image
+                    }
                     alt={space.space.name}
                     sx={{ objectFit: "cover", height: "200px" }}
                   />
