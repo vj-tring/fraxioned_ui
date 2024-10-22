@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Button } from "@/components/ui/button";
-import { FileIcon, UploadIcon, Eye, Trash2, Download } from "lucide-react";
+import { FileIcon, UploadIcon, Eye, Trash2, Download, FileText, X } from "lucide-react";
 import { useDropzone } from "react-dropzone";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import mammoth from 'mammoth';
 import { createPropertyDocuments } from '@/api/api-endpoints';
 import { useDispatch, useAppSelector } from '@/store';
@@ -17,12 +17,10 @@ import { PropertyDocument } from './document.types';
 
 const categories = ["Blueprint", "Legal", "General", "Contracts", "Invoices", "Reports"];
 
-
 const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
-
   const dispatch = useDispatch();
   const propertyDocumentsState = useAppSelector((state) => state.propertyDocuments);
-  const { documents, isLoading, error } = propertyDocumentsState;
+  const { documents, error } = propertyDocumentsState;
   const data = documents?.data || [];
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -31,6 +29,10 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
   const [documentToDelete, setDocumentToDelete] = useState<PropertyDocument | null>(null);
   const [filesToUpload, setFilesToUpload] = useState<{ file: File; documentType: string; propertyId: number }[]>([]);
   const [previewContent, setPreviewContent] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [documentsTabPreview, setDocumentsTabPreview] = useState<PropertyDocument | null>(null);
+  const [uploadTabPreview, setUploadTabPreview] = useState<PropertyDocument | null>(null);
+  const [activeTab, setActiveTab] = useState("documents");
 
   useEffect(() => {
     dispatch(fetchPropertyDocuments());
@@ -47,17 +49,30 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleCategoryChange = (value: string) => {
+    setSelectedCategory(value);
+  };
+
   const handleDocumentSelect = (document: PropertyDocument) => {
     dispatch(setCurrentDocument(document));
   };
 
-  const handleDocumentDelete = (documentId: number) => {
-    dispatch(deletePropertyDocumentThunk(documentId));
-
+  const handleDocumentDelete = async (documentId: number) => {
+    setIsLoading(true);
+    try {
+      await dispatch(deletePropertyDocumentThunk(documentId));
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handlePreview = async (document: PropertyDocument) => {
-    setPreviewDocument(document);
+    const previewDocument = activeTab === "documents" ? setDocumentsTabPreview : setUploadTabPreview;
+    previewDocument(document);
     if (document.documentName.endsWith('.docx')) {
       try {
         const response = await fetch(document.documentUrl);
@@ -65,7 +80,6 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
         const result = await mammoth.convertToHtml({ arrayBuffer });
         setPreviewContent(result.value);
       } catch (error) {
-        console.error('Error converting DOCX:', error);
         setPreviewContent('<p>Error previewing DOCX file</p>');
       }
     } else {
@@ -73,7 +87,8 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
     }
   };
 
-  const handleDownload = async (doc: PropertyDocument) => {
+  const handleDownload = async (doc: PropertyDocument, e: React.MouseEvent) => {
+    e.stopPropagation();
     try {
       const response = await fetch(doc.documentUrl, { mode: 'no-cors' });
       const blob = await response.blob();
@@ -86,15 +101,31 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
       a.click();
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Error downloading document:', error);
+      console.error('Download failed:', error);
     }
+  };
+
+  const handleDeleteClick = (doc: PropertyDocument, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setDocumentToDelete(doc);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (documentToDelete) {
+      handleDocumentDelete(documentToDelete.id);
+      setDocumentToDelete(null);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setDocumentToDelete(null);
   };
 
   const handleFilePreview = (file: File) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const content = e.target?.result as string;
-      setPreviewDocument({
+      setUploadTabPreview({
         id: Date.now(),
         documentName: file.name,
         documentUrl: URL.createObjectURL(file),
@@ -107,8 +138,30 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
     reader.readAsText(file);
   };
 
+  const handleDocumentTypeChange = (value: string, index: number) => {
+    const newFiles = [...filesToUpload];
+    newFiles[index].documentType = value;
+    setFilesToUpload(newFiles);
+  };
+
+  const handleRemoveFile = (index: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const newFiles = filesToUpload.filter((_, i) => i !== index);
+    setFilesToUpload(newFiles);
+  };
+
+  const handleTabChange = (newTab: string) => {
+    setActiveTab(newTab);
+    if (newTab === "documents") {
+      setUploadTabPreview(null);
+    } else {
+      setDocumentsTabPreview(null);
+    }
+  };
+
   const handleUploadSubmit = async () => {
     setUploadError(null);
+    setIsLoading(true);
 
     try {
       const propertyDocuments = filesToUpload.map(({ file, documentType }, index) => ({
@@ -126,16 +179,27 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
         formData.append('documentFiles', file);
       });
 
-      await createPropertyDocuments(formData);
+      const response = await createPropertyDocuments(formData);
+      const newDocuments = response.data;
 
       setFilesToUpload([]);
       setUploadError(null);
       dispatch(fetchPropertyDocuments());
-
-      console.log('Documents uploaded successfully');
+      
+      if (Array.isArray(newDocuments) && newDocuments.length > 0) {
+        const firstUpload = newDocuments.find(doc => 
+          doc && doc.documentName && doc.documentUrl
+        );
+        if (firstUpload) {
+          setDocumentsTabPreview(firstUpload);
+        }
+      }
+      
+      setActiveTab("documents");
     } catch (error) {
-      console.error('Error uploading documents:', error);
       setUploadError('Failed to upload documents. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -146,8 +210,8 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
     );
   }, [data, selectedCategory, searchTerm]);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (propertyDocumentsState.isLoading || isLoading) {
+    return <Loader />;
   }
 
   if (error) {
@@ -158,7 +222,7 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
     <div className={styles.fullContainer}>
       <div className={styles.contentWrapper}>
         <div className="flex-1 p-4">
-          <Tabs defaultValue="documents" className="w-full">
+          <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="documents">Documents</TabsTrigger>
               <TabsTrigger value="upload">Upload</TabsTrigger>
@@ -169,10 +233,10 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
                   type="text"
                   placeholder="Search documents..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={handleSearchChange}
                   className="flex-grow"
                 />
-                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <Select value={selectedCategory} onValueChange={handleCategoryChange}>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Category" />
                   </SelectTrigger>
@@ -213,16 +277,16 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
                             </Button>
                           </DialogTrigger>
                           <DialogContent className={styles.preview}>
-                            <DialogHeader>
-                              <DialogTitle>{previewDocument?.documentName}</DialogTitle>
-                            </DialogHeader>
+                            <DialogClose className="absolute right-4 top-4 z-10 bg-white rounded-full p-1 hover:bg-gray-100">
+                              <X className="h-4 w-4" />
+                            </DialogClose>
                             <div className="w-full h-full">
-                              {previewDocument && (
+                              {documentsTabPreview && (
                                 previewContent ? (
                                   <div dangerouslySetInnerHTML={{ __html: previewContent }} />
                                 ) : (
                                   <iframe
-                                    src={`${previewDocument.documentUrl}#toolbar=0`}
+                                    src={`${documentsTabPreview.documentUrl}#toolbar=0`}
                                     width="100%"
                                     height="100%"
                                     style={{ border: 'none', minHeight: '70vh' }}
@@ -234,10 +298,7 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
                         </Dialog>
                         <Button
                           size="icon"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDownload(doc);
-                          }}
+                          onClick={(e) => handleDownload(doc, e)}
                         >
                           <Download className="h-4 w-4" />
                         </Button>
@@ -245,32 +306,24 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
                           <DialogTrigger asChild>
                             <Button
                               size="icon"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setDocumentToDelete(doc);
-                              }}
+                              onClick={(e) => handleDeleteClick(doc, e)}
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </DialogTrigger>
-                          <DialogContent>
+                          <DialogContent className={styles.delete}>
                             <DialogHeader>
                               <DialogTitle>Delete Document</DialogTitle>
                             </DialogHeader>
                             <div className="p-4">
                               <p>Are you sure you want to delete this document?</p>
                               <div className="flex justify-end space-x-2 mt-4">
-                                <Button variant="outline" onClick={() => setDocumentToDelete(null)}>
+                                <Button variant="outline" onClick={handleDeleteCancel}>
                                   Cancel
                                 </Button>
                                 <Button
                                   variant="destructive"
-                                  onClick={() => {
-                                    if (documentToDelete) {
-                                      handleDocumentDelete(documentToDelete.id);
-                                      setDocumentToDelete(null);
-                                    }
-                                  }}
+                                  onClick={handleDeleteConfirm}
                                 >
                                   Delete
                                 </Button>
@@ -285,7 +338,26 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
               </ScrollArea>
             </TabsContent>
             <TabsContent value="upload" className="mt-4">
-              <div className="flex h-[calc(100vh-300px)]">
+              <div className="flex h-[calc(100vh-215px)]">
+                <div className="w-1/2 border rounded-md">
+                  {uploadTabPreview ? (
+                    <div className="h-full overflow-auto">
+                      <iframe
+                        src={uploadTabPreview.documentUrl}
+                        width="100%"
+                        height="100%"
+                        style={{ border: 'none', minHeight: '60vh' }}
+                      />
+                    </div>
+                  ) : (
+                    <div className='flex flex-col items-center justify-center h-full text-gray-500'>
+                      <FileText size={48} className="mb-2" />
+                      <div className="text-gray-500">
+                        Select a file to preview
+                      </div>
+                    </div>
+                  )}
+                </div>
                 <div className="w-1/2 pr-2">
                   <div {...getRootProps()} className="flex items-center justify-center h-32 border-2 border-dashed rounded-md mb-2">
                     <input {...getInputProps()} />
@@ -294,7 +366,7 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
                         <p>Drop the files here ...</p>
                       ) : (
                         <>
-                          <UploadIcon className="mx-auto h-12 w-12 text-gray-400" />
+                        <UploadIcon className="mx-auto h-12 w-12 text-gray-400" />
                           <p className="mt-2 text-sm text-gray-500">Drag 'n' drop some files here, or click to select files</p>
                         </>
                       )}
@@ -303,53 +375,53 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
                   <ScrollArea className="h-[calc(100vh-400px)] border rounded-md">
                     {filesToUpload.map(({ file, documentType }, index) => (
                       <div key={index} className="flex items-center justify-between p-2 m-2 bg-gray-50 rounded">
-                        <div className="flex items-center">
-                          <FileIcon className="mr-2" size={20} />
-                          <span className="truncate">{file.name}</span>
+                        <div className="flex items-center w-[300px]">
+                          <FileIcon className="mr-2 flex-shrink-0" size={20} />
+                          <span className="truncate" title={file.name}>{file.name}</span>
                         </div>
-                        <Select
-                          value={documentType}
-                          onValueChange={(value) => {
-                            const newFiles = [...filesToUpload];
-                            newFiles[index].documentType = value;
-                            setFilesToUpload(newFiles);
-                          }}
-                        >
-                          <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Document Type" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {categories.map(category => (
-                              <SelectItem key={category} value={category}>{category}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <Button variant="ghost" size="sm" onClick={() => handleFilePreview(file)}>
-                          Preview
-                        </Button>
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          <Select 
+                            value={documentType} 
+                            onValueChange={(value) => handleDocumentTypeChange(value, index)}
+                          >
+                            <SelectTrigger className="w-[117px]">
+                              <SelectValue placeholder="Document Type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {categories.map(category => (
+                                <SelectItem key={category} value={category}>{category}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <div className="flex items-center gap-1">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={(e) => handleRemoveFile(index, e)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              onClick={() => handleFilePreview(file)}
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
                       </div>
                     ))}
                   </ScrollArea>
-                  <Button variant="outline" className="mt-2 w-full" style={{ backgroundColor: '#e28f25', color: '#fff' }} onClick={handleUploadSubmit} disabled={filesToUpload.length === 0}>
+                  <Button 
+                    variant="outline" 
+                    className="mt-2 w-full" 
+                    style={{backgroundColor: '#e28f25', color: '#fff'}} 
+                    onClick={handleUploadSubmit} 
+                    disabled={filesToUpload.length === 0}
+                  >
                     Upload {filesToUpload.length} file(s)
                   </Button>
-                </div>
-                <div className="w-1/2 pl-2 border-l">
-                  {previewDocument ? (
-                    <div className="h-full overflow-auto">
-                      <h3 className="text-lg font-semibold mb-2">{previewDocument.documentName}</h3>
-                      <iframe
-                        src={previewDocument.documentUrl}
-                        width="100%"
-                        height="100%"
-                        style={{ border: 'none', minHeight: '60vh' }}
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-center h-full text-gray-500">
-                      Select a file to preview
-                    </div>
-                  )}
                 </div>
               </div>
             </TabsContent>
@@ -359,4 +431,5 @@ const DocumentGrid: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) =
     </div>
   );
 };
+
 export default DocumentGrid;
