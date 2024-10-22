@@ -11,6 +11,9 @@
 .addPropertyButton {
   margin-bottom: 20px;
 }
+.removePropertyButton {
+  align-items: center;
+}
 
 .addPropertyDialog {
   border-radius: 20px;

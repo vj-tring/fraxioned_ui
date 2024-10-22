@@ -32,6 +32,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/reducers";
 import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
 import { clearError } from "@/store/slice/user-properties";
+import ConfirmationModal from "@/components/confirmation-modal";
 
 interface EnhancedPropertyTabProps {
   userId: number;
@@ -42,7 +43,6 @@ interface Property {
   propertyName: string;
   propertyRemainingShare: number;
 }
-
 const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
   const dispatch = useDispatch();
   const {
@@ -62,6 +62,10 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
   const images = [imageone, imagetwo, imagethree];
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [deleteModal, setDeleteModal] = useState({
+    show: false,
+    propertyId: null as number | null,
+  });
   const [newProperty, setNewProperty] = useState({
     propertyId: "",
     noOfShares: "",
@@ -153,6 +157,34 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
     setNewProperty({ propertyId: "", noOfShares: "", acquisitionDate: "" });
     setMaxShares(0);
   };
+
+  const handleShowDeleteModal = (propertyId: number) => {
+    setDeleteModal({
+      show: true,
+      propertyId,
+    });
+  };
+
+  const handleCloseDeleteModal = () => {
+    setDeleteModal({
+      show: false,
+      propertyId: null,
+    });
+  };
+
+  const handleConfirmDelete = async () => {
+    if (deleteModal.propertyId) {
+      try {
+        const propertyId = deleteModal.propertyId
+        await dispatch(deleteUserProperty({ userId, propertyId })).unwrap();
+        dispatch(fetchUserPropertiesWithDetailsByUser(userId));
+        handleCloseDeleteModal();
+      } catch (error) {
+        console.error("Failed to delete property:", error);
+      }
+    }
+  };
+
   
 
   if (loading)
@@ -437,13 +469,12 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
                       </Button>
                     ))}
                     <Button
-                      variant="contained"
-                      color="error"
-                      startIcon={<Trash2 />}
-                      onClick={() => handleRemoveProperty(prop.propertyId)}
-                      className={styles.removePropertyButton}
-                      disabled={isDeletingProperty}
-                    ></Button>
+                    variant="contained"
+                    color="error"
+                    onClick={() => handleShowDeleteModal(prop.propertyId)}
+                    className={styles.removePropertyButton}
+                    disabled={isDeletingProperty}
+                  ><Trash2/></Button>
                   </div>
                   <div className={styles.propertyAvailabilityContainer}>
                     <div className={styles.propertyAvailabilityInfo}>
@@ -463,6 +494,15 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
           );
         }
       )}
+     <ConfirmationModal
+        show={deleteModal.show}
+        onHide={handleCloseDeleteModal}
+        onConfirm={handleConfirmDelete}
+        title="Confirm Remove"
+        message={`Are you sure you want to remove property for this user?`}
+        confirmLabel="Remove"
+        cancelLabel="Cancel"
+      />
     </div>
   );
 };
