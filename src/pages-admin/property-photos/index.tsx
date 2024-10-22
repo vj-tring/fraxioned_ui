@@ -77,17 +77,10 @@ const PropertyPhotos: React.FC = () => {
     setActiveTab(spaceName);
   };
 
-  const handleEditImage = (e: React.MouseEvent, imageId: number) => {
-    e.stopPropagation();
-    setSelectedImageId(imageId);
-    setShowEditPopup(true);
-  };
-
   const handleDeleteImage = (e: React.MouseEvent, imageId: number) => {
     e.stopPropagation();
     setImageToDelete(imageId);
     setShowDeleteConfirmation(true);
-    
   };
 
   const handleImageClick = (imageUrl: string) => {
@@ -214,19 +207,11 @@ const PropertyPhotos: React.FC = () => {
                           onLoad={() => handleImageLoad(image.id)}
                         />
                         <div className={styles.overlay}>
-                          {/* <button
-                            className={styles.iconButton}
-                            onClick={(e) => handleEditImage(e, image.id)}
-                          >
-                            <Edit size={20} />
-                          </button> */}
                           <button
                             className={styles.iconButton}
                             onClick={(e) => handleDeleteImage(e, image.id)}
                           >
-                            <Trash2 size={14} 
-                          
-                            />
+                            <Trash2 size={14} />
                           </button>
                         </div>
                       </div>
