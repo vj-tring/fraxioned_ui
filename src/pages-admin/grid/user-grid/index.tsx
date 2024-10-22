@@ -3,12 +3,11 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { IconButton, Typography, Tooltip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import { userdetails, propertydetailsapi } from "@/api/api-endpoints";
+import { getAllUsers, propertydetailsapi } from "@/api/api-endpoints";
 import Search from "@/pages-admin/search-user";
 import styles from "./User.module.css";
 import { useNavigate } from "react-router-dom";
 import { UserData, PropertyData } from "./user.types";
-
 
 const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
   const [users, setUsers] = useState<UserData[]>([]);
@@ -28,7 +27,7 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
 
   const fetchUsers = async () => {
     try {
-      const response = await userdetails();
+      const response = await getAllUsers();
       const fetchedUsers = response.data.users.map((user: UserData) => ({
         ...user,
         id: user.id,
@@ -214,8 +213,9 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
 
   return (
     <div
-      className={`${styles.usersContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
-        }`}
+      className={`${styles.usersContainer} ${
+        isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
+      }`}
     >
       <div className={styles.headerContainer}>
         <h1 className={styles.title}>Users Details</h1>

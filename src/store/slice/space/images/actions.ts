@@ -1,12 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   fetchAllPropertySpaceImages,
-  fetchPropertyImagesByPropertyId,
-  uploadPropertySpaceImages,
-  updateSpaceImageById,
-  deleteSpaceImageById,
-  deleteMultipleSpaceImages,
-  fetchPropertyImagesByPropertySpaceId,
+  fetchPropertySpaceImagesByPropertyId,
+  propertySpaceImageUpload,
+  updatePropertySpaceImageById,
+  deletePropertySpaceImageById,
+  deleteMultiplePropertySpaceImages,
+  fetchPropertyImagesByPropertySpaceIds,
 } from "@/api/api-endpoints";
 
 // Fetch All Space Property Images
@@ -27,7 +27,7 @@ export const fetchImagesByPropertyId = createAsyncThunk(
   "spaceImage/fetchImagesByPropertyId",
   async (propertyId: number, { rejectWithValue }) => {
     try {
-      const response = await fetchPropertyImagesByPropertyId(propertyId);
+      const response = await fetchPropertySpaceImagesByPropertyId(propertyId);
       return response.data;
     } catch (error) {
       return rejectWithValue("Failed to fetch images for the property");
@@ -39,7 +39,7 @@ export const fetchImagesByPropertySpaceId = createAsyncThunk(
   "spaceImage/fetchImagesByPropertyId",
   async (propertyId: number, { rejectWithValue }) => {
     try {
-      const response = await fetchPropertyImagesByPropertySpaceId(propertyId);
+      const response = await fetchPropertyImagesByPropertySpaceIds(propertyId);
       return response.data.data;
     } catch (error) {
       return rejectWithValue("Failed to fetch images for the property");
@@ -52,7 +52,7 @@ export const uploadImages = createAsyncThunk(
   "spaceImage/uploadImages",
   async (formData: FormData, { rejectWithValue }) => {
     try {
-      const response = await uploadPropertySpaceImages(formData);
+      const response = await propertySpaceImageUpload(formData);
       return response.data;
     } catch (error) {
       return rejectWithValue("Failed to upload images");
@@ -68,7 +68,7 @@ export const updateImageById = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await updateSpaceImageById(imageId, formData);
+      const response = await updatePropertySpaceImageById(imageId, formData);
       return response.data;
     } catch (error) {
       return rejectWithValue("Failed to update image");
@@ -81,7 +81,7 @@ export const deleteImageById = createAsyncThunk(
   "spaceImage/deleteImageById",
   async (id: number, { rejectWithValue }) => {
     try {
-      await deleteSpaceImageById(id);
+      await deletePropertySpaceImageById(id);
       return id;
     } catch (error) {
       return rejectWithValue("Failed to delete image");
@@ -94,7 +94,7 @@ export const deleteImagesBatch = createAsyncThunk(
   "spaceImage/deleteImagesBatch",
   async (spaceImages: { ids: number[] }, { rejectWithValue }) => {
     try {
-      await deleteMultipleSpaceImages(spaceImages);
+      await deleteMultiplePropertySpaceImages(spaceImages);
       return spaceImages.ids;
     } catch (error) {
       return rejectWithValue("Failed to delete images");

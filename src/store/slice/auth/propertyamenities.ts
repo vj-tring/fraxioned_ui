@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { axiosInstance } from '@/api/axiosSetup';
 import { getAmenitiesByPropertyId, getAmenitiesByPropertySpaceId, updateamenityforproperty } from '@/api/api-endpoints';
 
 interface AmenityType {

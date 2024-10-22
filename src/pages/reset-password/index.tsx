@@ -4,7 +4,7 @@ import axios from "axios";
 import Loader from "../../components/loader";
 import { IoMdClose } from "react-icons/io";
 import CustomizedSnackbars from "../../components/customized-snackbar";
-import { resetPasswordApi } from "../../api/api-endpoints";
+import { resetPassword } from "../../api/api-endpoints";
 
 interface ResetPasswordProps {
   onClose: () => void;
@@ -53,11 +53,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({ onClose }) => {
     setIsLoading(true);
     try {
       if (userId) {
-        const response = await resetPasswordApi(
-          oldPassword,
-          newPassword,
-          userId
-        );
+        const response = await resetPassword(oldPassword, newPassword, userId);
         handleResponse(response.data.message);
       }
     } catch (error) {

@@ -30,7 +30,7 @@ import {
 } from "@/store/slice/auth/property-slice";
 import { AppDispatch } from "@/store";
 import { Session, User } from "@/store/model";
-import { propertyImageapi } from "@/api/api-endpoints";
+import { fetchPropertySpaceImagesByPropertyId } from "@/api/api-endpoints";
 import { PiDotsNineBold } from "react-icons/pi";
 import { bookingSummary, saveBooking } from "@/store/slice/auth/bookingSlice";
 import CustomizedSnackbar from "@/components/customized-snackbar";
@@ -165,7 +165,7 @@ const PropertyListingPage = () => {
           console.error("Invalid propertyId:", id);
           return;
         }
-        const response = await propertyImageapi(id);
+        const response = await fetchPropertySpaceImagesByPropertyId(id);
         setImageDetails(response.data.data);
         setLoadingImages(false);
       } catch (error) {
@@ -174,7 +174,6 @@ const PropertyListingPage = () => {
     };
     fetchPropertyImages();
   }, [id]);
-
 
   const handleClickOpen = () => {
     setDialogOpen(true);
@@ -501,15 +500,18 @@ const PropertyListingPage = () => {
           onClose={handleClose}
           fullWidth
           maxWidth="x-lg"
-         
         >
           <DialogTitle className="d-flex justify-content-between">
-            <Typography variant="h6"
-            sx={{
-              fontSize:'large',
-              fontWeight:"600"
-            }}
-            > Property Photos</Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                fontSize: "large",
+                fontWeight: "600",
+              }}
+            >
+              {" "}
+              Property Photos
+            </Typography>
             <IconButton
               edge="end"
               color="inherit"
@@ -522,7 +524,6 @@ const PropertyListingPage = () => {
           <DialogContent>
             <Grid container spacing={2}>
               <PropertyMorePhotos />
-             
             </Grid>
           </DialogContent>
           <DialogActions>

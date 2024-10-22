@@ -1,4 +1,4 @@
-import { axiosInstance } from "../axiosSetup";
+import { axiosInstance } from "@/store/axiosSetup";
 import { CreatePropertySpaceBedDto, UpdatePropertySpaceBedDto, CreateOrDeletePropertySpaceBedsDto, CreatePropertySpaceBathroomDto, CreateOrDeletePropertySpaceBathroomsDto, CreateSpaceBedTypeDto, UpdateSpaceBedTypeDto, CreateSpaceBathroomTypesDto, UpdateSpaceBathroomTypesDto, UpdatePropertySpaceBathroomDto } from "@/store/model/space-types";
 
 

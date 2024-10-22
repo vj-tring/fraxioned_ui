@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { axiosInstance } from '@/api/axiosSetup';
+import { axiosInstance } from '../../axiosSetup';
 
 interface UpdatedBy {
     id: number;

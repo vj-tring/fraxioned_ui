@@ -8,7 +8,10 @@ import PorpImg from "../../assests/lake-escape.jpg";
 import { resetLimits } from "@/store/slice/auth/propertyGuestSlice";
 import { clearDates } from "@/store/slice/datepicker";
 import { User } from "@/store/model";
-import { propertyImageapi, getProperties } from "@/api/api-endpoints"; // Ensure getProperties is imported
+import {
+  fetchPropertySpaceImagesByPropertyId,
+  getProperties,
+} from "@/api/api-endpoints"; // Ensure getProperties is imported
 import { fetchProperties } from "@/store/slice/auth/property-slice";
 import NewsLetter from "./NewsLetter";
 interface Property {
@@ -83,7 +86,6 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
     // fetchImages();
     fetchAdditionalProperties();
   }, [dispatch]);
-
 
   const scroll = (scrollOffset: number) => {
     if (carouselRef.current) {

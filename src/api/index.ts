@@ -1,4 +1,4 @@
-import { axiosInstance } from "./axiosSetup";
+import { axiosInstance } from "@/store/axiosSetup";
 
 export interface SpaceProperty {
     space: {
@@ -151,7 +151,7 @@ export const getPropertyById = (id: number) =>
 export const updatePropertyapi = (id: number, data: any) =>
     axiosInstance.patch(`/properties/property/${id}`, data);
 
-export const userdetails = () =>
+export const getAllUsers = () =>
     axiosInstance.get('/users');
 
 //propertydetails by id api

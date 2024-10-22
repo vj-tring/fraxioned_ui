@@ -23,7 +23,7 @@ import {
   selectSelectedPropertyDetails,
   User,
 } from "@/store/slice/auth/property-slice";
-import { propertyImageapi } from "@/api/api-endpoints";
+import { fetchPropertySpaceImagesByPropertyId } from "@/api/api-endpoints";
 import { CheckCircle } from "lucide-react";
 
 const mockBooking = {
@@ -130,7 +130,9 @@ const BookingSummaryForm: React.FC = () => {
   useEffect(() => {
     const fetchPropertyImages = async () => {
       try {
-        const response = await propertyImageapi(property.selectedPropertyId);
+        const response = await fetchPropertySpaceImagesByPropertyId(
+          property.selectedPropertyId
+        );
         const filterById = response.data.data.filter(
           (image: Image) =>
             image.property?.id === currentBookingId && image.displayOrder

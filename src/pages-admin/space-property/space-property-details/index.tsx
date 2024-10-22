@@ -7,7 +7,7 @@ import {
   getByPropertySpaceId,
   updatePropertyAmenities,
 } from "@/store/slice/auth/propertyamenities";
-import { propertySpaceImageuploadapi } from "@/api/api-endpoints";
+import { propertySpaceImageUpload } from "@/api/api-endpoints";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -28,11 +28,26 @@ import {
 import AmenitiesTab from "./property-space-tabs/amenities-tab";
 import PhotosTab from "./property-space-tabs/photos-tab";
 import BedTypesTab from "./property-space-tabs/bed-type-tab";
-import { ArrowLeft, Box, ChevronLeft, CircleArrowLeft, MoveLeft, Trash2 } from "lucide-react";
+import {
+  ArrowLeft,
+  Box,
+  ChevronLeft,
+  CircleArrowLeft,
+  MoveLeft,
+  Trash2,
+} from "lucide-react";
 import BathTypesTab from "./property-space-tabs/bath-type-tab";
 import { deleteExistingSpaceProperty } from "@/store/slice/space/property";
-import { createOrDeletePropertySpaceBeds, fetchAllPropertySpaceBedsByPropertySpace, fetchAllSpaceBedTypes } from "@/store/slice/bedSlice";
-import { createOrDeletePropertySpaceBathrooms, fetchAllPropertySpaceBathroomsByPropertySpace, fetchAllSpaceBathroomTypes } from "@/store/slice/bathroom-slice";
+import {
+  createOrDeletePropertySpaceBeds,
+  fetchAllPropertySpaceBedsByPropertySpace,
+  fetchAllSpaceBedTypes,
+} from "@/store/slice/bedSlice";
+import {
+  createOrDeletePropertySpaceBathrooms,
+  fetchAllPropertySpaceBathroomsByPropertySpace,
+  fetchAllSpaceBathroomTypes,
+} from "@/store/slice/bathroom-slice";
 
 export default function Component({ initialSpace = {} }) {
   const location = useLocation();
@@ -60,8 +75,16 @@ export default function Component({ initialSpace = {} }) {
   const spaceImageError = useSelector(
     (state: RootState) => state.spaceImage.error
   );
-  const { propertySpaceBeds, loading: bedTypesLoading, error: bedTypesError } = useSelector((state: RootState) => state.bed);
-  const { propertySpaceBathrooms, loading: bathTypesLoading, error: bathTypesError } = useSelector((state: RootState) => state.bathroom);
+  const {
+    propertySpaceBeds,
+    loading: bedTypesLoading,
+    error: bedTypesError,
+  } = useSelector((state: RootState) => state.bed);
+  const {
+    propertySpaceBathrooms,
+    loading: bathTypesLoading,
+    error: bathTypesError,
+  } = useSelector((state: RootState) => state.bathroom);
 
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedAmenity, setSelectedAmenity] = useState<string>("");
@@ -116,7 +139,7 @@ export default function Component({ initialSpace = {} }) {
     dispatch(fetchAmenities());
   }, [space, dispatch, showBedTypesTab, showBathTypesTab]);
 
-  console.log("propertySpaceAmenities", propertySpaceAmenities)
+  console.log("propertySpaceAmenities", propertySpaceAmenities);
 
   useEffect(() => {
     if (propertySpaceAmenities.length > 0) {
@@ -124,10 +147,9 @@ export default function Component({ initialSpace = {} }) {
         propertySpaceAmenities.map((amenity) => amenity.amenity.id)
       );
       setLocalPropertyAmenities(propertySpaceAmenities);
-    }
-    else {
+    } else {
       setUpdatedAmenities([]);
-      setLocalPropertyAmenities([])
+      setLocalPropertyAmenities([]);
     }
   }, [propertySpaceAmenities]);
 
@@ -258,7 +280,7 @@ export default function Component({ initialSpace = {} }) {
         photos.forEach((photo) => {
           formData.append("imageFiles", photo);
         });
-        await propertySpaceImageuploadapi(formData);
+        await propertySpaceImageUpload(formData);
       }
 
       console.log("Images updated successfully");
@@ -273,7 +295,6 @@ export default function Component({ initialSpace = {} }) {
       setUploadError("Failed to update images. Please try again.");
     }
   };
-
 
   const handleDeletePropertySpace = async () => {
     if (space?.id) {
@@ -298,23 +319,24 @@ export default function Component({ initialSpace = {} }) {
           spaceBedType: { id: bed.id },
           count: bed.count,
         })),
-        updatedBy: { id: userId }
+        updatedBy: { id: userId },
       };
       await dispatch(createOrDeletePropertySpaceBeds(data));
       await dispatch(fetchAllPropertySpaceBedsByPropertySpace(space.id));
-
     }
   };
 
-  const handleSaveBathTypes = async (updatedBathTypes: Array<{ id: number; count: number }>) => {
+  const handleSaveBathTypes = async (
+    updatedBathTypes: Array<{ id: number; count: number }>
+  ) => {
     if (space?.id) {
       const data = {
         propertySpace: { id: space.id },
-        spaceBathroomTypes: updatedBathTypes.map(bath => ({
+        spaceBathroomTypes: updatedBathTypes.map((bath) => ({
           spaceBathroomType: { id: bath.id },
           count: bath.count,
         })),
-        updatedBy: { id: userId }
+        updatedBy: { id: userId },
       };
       await dispatch(createOrDeletePropertySpaceBathrooms(data));
       await dispatch(fetchAllPropertySpaceBathroomsByPropertySpace(space.id));
@@ -337,12 +359,18 @@ export default function Component({ initialSpace = {} }) {
             variant="ghost"
             className="w-[1/2] h-100 border-solid border-1 border-[#00636D]-500 text-center text-sm text-[#00636D] flex justify-center items-center rounded px-2 py-1"
           >
-            <ChevronLeft style={{ height: '100%', width: '100%' }} /> Back to rooms
+            <ChevronLeft style={{ height: "100%", width: "100%" }} /> Back to
+            rooms
           </Button>
           <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
             <DialogTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-100 w-[1/2] border-solid border-1 border-[#00636D]-500 text-center text-sm text-[#00636D] flex justify-center items-center rounded px-3 py-1 gap-1">
-                <Trash2 size={12} />Delete
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-100 w-[1/2] border-solid border-1 border-[#00636D]-500 text-center text-sm text-[#00636D] flex justify-center items-center rounded px-3 py-1 gap-1"
+              >
+                <Trash2 size={12} />
+                Delete
               </Button>
             </DialogTrigger>
             <DialogContent>
@@ -439,4 +467,3 @@ export default function Component({ initialSpace = {} }) {
     </Card>
   );
 }
-

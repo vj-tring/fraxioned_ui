@@ -10,7 +10,7 @@ import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import PropertyDropdown from "../property-dropdown";
-import { getBookings, userdetails } from "@/api/api-endpoints";
+import { getBookings, getAllUsers } from "@/api/api-endpoints";
 import "./big-calender.css";
 import {
   Edit,
@@ -21,7 +21,7 @@ import {
   CancelOutlined,
   Group,
 } from "@mui/icons-material";
-import { User, Booking, Event } from './big-calender.types';
+import { User, Booking, Event } from "./big-calender.types";
 
 const localizer = momentLocalizer(moment);
 const propertyColors: { [key: number]: string } = {
@@ -80,7 +80,7 @@ const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
 
   const fetchUsers = async () => {
     try {
-      const response = await userdetails();
+      const response = await getAllUsers();
       setUsers(response.data.users);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -141,13 +141,13 @@ const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     return user ? `${user.firstName} ${user.lastName}` : "Unknown User";
   };
 
-  const handleEdit = () => {
-  };
+  const handleEdit = () => {};
 
   return (
     <div
-      className={`calendar-container ${isSidebarOpen ? "sidebar-open" : "sidebar-closed"
-        }`}
+      className={`calendar-container ${
+        isSidebarOpen ? "sidebar-open" : "sidebar-closed"
+      }`}
     >
       <div className="calendar-header">
         <PropertyDropdown onPropertySelect={handlePropertySelect} />

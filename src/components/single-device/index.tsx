@@ -25,7 +25,7 @@ import { RootState } from "@/store/reducers";
 import { fetchSpacePropertiesById } from "@/store/slice/space/property";
 import {
   amenitiesapi,
-  getAllSpacePropertyImageById,
+  fetchPropertySpaceImagesByPropertyId,
 } from "@/api/api-endpoints";
 
 interface SingleDeviceProps {
@@ -73,7 +73,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   useEffect(() => {
     const imageFetching = async () => {
       try {
-        const response = await getAllSpacePropertyImageById(Number(propertyId));
+        const response = await fetchPropertySpaceImagesByPropertyId(Number(propertyId));
         const sortedImages = response.data.data.sort(
           (a: any, b: any) => a.displayOrder - b.displayOrder
         );
