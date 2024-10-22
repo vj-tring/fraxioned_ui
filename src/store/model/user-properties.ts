@@ -1,9 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { AxiosError } from 'axios';
-import { getUserProperties } from '@/api/api-endpoints';
-
-
-interface UserProperty {
+export interface UserProperty {
     id: number;
     noOfShare: number;
     acquisitionDate: string;
@@ -19,8 +14,8 @@ interface UserProperty {
     peakUsedHolidayNights: number;
     peakBookedHolidayNights: number;
     peakRemainingHolidayNights: number;
-    peakCancelledHolidayNights: number | null;
-    peakLostHolidayNights: number | null;
+    peakCancelledHolidayNights: number;
+    peakLostHolidayNights: number;
     offAllottedNights: number;
     offUsedNights: number;
     offBookedNights: number;
@@ -31,18 +26,18 @@ interface UserProperty {
     offUsedHolidayNights: number;
     offBookedHolidayNights: number;
     offRemainingHolidayNights: number;
-    offCancelledHolidayNights: number | null;
-    offLostHolidayNights: number | null;
+    offCancelledHolidayNights: number;
+    offLostHolidayNights: number;
     lastMinuteAllottedNights: number;
-    lastMinuteUsedNights: number | null;
-    lastMinuteBookedNights: number | null;
+    lastMinuteUsedNights: number;
+    lastMinuteBookedNights: number;
     lastMinuteRemainingNights: number;
     maximumStayLength: number;
     createdAt: string;
     updatedAt: string;
-}
-
-interface PropertyDetails {
+  }
+  
+export  interface PropertyWithDetailsResponse {
     propertyId: number;
     propertyDetailsId: number;
     createdAt: string;
@@ -85,52 +80,5 @@ interface PropertyDetails {
     lastMinuteBookingAllottedNights: number;
     wifiNetwork: string;
     userProperties: UserProperty[];
-}
-
-export interface UserPropertyState {
-    properties: PropertyDetails[];
-    status: 'idle' | 'loading' | 'succeeded' | 'failed';
-    error: string | null;
-}
-
-const initialState: UserPropertyState = {
-    properties: [],
-    status: 'idle',
-    error: null,
-};
-
-export const fetchUserProperties = createAsyncThunk<
-    PropertyDetails[],
-    number,
-    { rejectValue: string }
->('userProperty/fetchUserProperties', async (userId, { rejectWithValue }) => {
-    try {
-        const response = await getUserProperties(userId);
-        return response.data;
-    } catch (err) {
-        const error: AxiosError = err as AxiosError;
-        return rejectWithValue(error.message || 'Failed to fetch user properties');
-    }
-});
-
-const userPropertySlice = createSlice({
-    name: 'userProperty',
-    initialState,
-    reducers: {},
-    extraReducers: (builder) => {
-        builder
-            .addCase(fetchUserProperties.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(fetchUserProperties.fulfilled, (state, action: PayloadAction<PropertyDetails[]>) => {
-                state.status = 'succeeded';
-                state.properties = action.payload;
-            })
-            .addCase(fetchUserProperties.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.payload || 'Failed to fetch user properties';
-            });
-    },
-});
-
-export default userPropertySlice.reducer;
+  }
+  

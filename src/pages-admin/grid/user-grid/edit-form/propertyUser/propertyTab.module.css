@@ -3,9 +3,37 @@
   flex-direction: column;
   gap: 24px;
   padding: 24px;
+  padding-top: 0px;
   max-width: 1200px;
   margin: 0 auto;
   overflow-y: auto;
+}
+.addPropertyButton {
+  margin-bottom: 20px;
+}
+.removePropertyButton {
+  align-items: center;
+}
+
+.addPropertyDialog {
+  border-radius: 20px;
+}
+
+
+.addPropertyCard {
+  margin-bottom: 20px;
+}
+
+.selectField {
+  margin-bottom: 15px;
+}
+
+.dateField {
+  margin-bottom: 15px;
+}
+
+.submitButton {
+  margin-top: 10px;
 }
 
 .loadingText,
