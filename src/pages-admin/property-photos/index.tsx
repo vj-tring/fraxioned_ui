@@ -106,7 +106,7 @@ const PropertyPhotos: React.FC = () => {
 
       try {
         await deletetpropertyImageById(imageToDelete);
-        dispatch(removeImageById(imageToDelete));  // Dispatch an action to remove the image from Redux state
+        dispatch(removeImageById(imageToDelete)); // Dispatch an action to remove the image from Redux state
 
         setImageToDelete(null);
       } catch (error) {

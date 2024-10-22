@@ -14,6 +14,13 @@ export interface SpaceProperty {
   };
 }
 
+interface EditPropertyCodePayload {
+  property: number;
+  propertyCodeCategory: number;
+  updatedBy: number;
+  propertyCode: string;
+}
+
 export interface Space {
   id?: number;
   name: string;
@@ -368,12 +375,7 @@ export const getAllpropertycodecatogory = () =>
 
 export const editPropertyCode = (
   id: number,
-  payload: {
-    property: number;
-    propertyCodeCategory: number;
-    updatedBy: number;
-    propertyCode: string;
-  }
+  payload: EditPropertyCodePayload
 ) => axiosInstance.patch(`/property-codes/property-code/${id}`, payload);
 
 export const createpropertycodecatogory = (data: {
