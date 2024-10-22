@@ -1,6 +1,5 @@
 .calendar-container {
-  margin-top: 8px;
-  height: calc(100vh - 78px);
+  height: calc(100vh - 105px);
   width: 900px;
   padding: 20px;
   background-color: #ffffff;
@@ -8,7 +7,7 @@
   border-radius: 8px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
   transition: margin-left 0.3s ease, width 0.3s ease;
-  
+  margin-top: -5px !important;
 }
 
 .calendar-container.sidebar-open {

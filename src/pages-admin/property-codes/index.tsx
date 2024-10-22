@@ -16,6 +16,7 @@ import styles from './propertycode.module.css';
 import { RootState } from '@/store/reducers';
 import { AppDispatch } from '@/store';
 import PropertyCodeCategoryModal from './new-propertycode';
+import { PropertyCodes, SnackbarState } from './property-codes.types';
 import { Loader } from 'lucide-react';
 import { PropertyCodes, SnackbarState } from './property-codes.types';
 

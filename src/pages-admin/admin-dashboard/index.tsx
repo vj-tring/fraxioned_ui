@@ -57,7 +57,7 @@ const AdminDashboard: React.FC = () => {
                 <div className={`content ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
                     <Routes>
                         <Route path="/" element={<Navigate to="admin/bookings" replace />} />
-                        <Route path="/bookings" element={<Calendar isSidebarOpen={isSidebarOpen} />} />
+                        <Route path="/bookings" element={<BookingsPage isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/bookings-page" element={<BookingsPage isSidebarOpen={isSidebarOpen} />} />
                         <Route path="/amenity" element={<AmenityManagement />} />
                         <Route path="/user/:id/edit" element={<TabSwitch onUserUpdated={handleUserUpdated} />} />
