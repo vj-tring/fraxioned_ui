@@ -1,5 +1,5 @@
 .bookingsContainer {
-  padding: 18px 10px 0px 20px;
+  padding: 2px 10px 0px 10px;
   background-color: transparent;
   margin-left: 2px;
   height: calc(100vh - 64px);
@@ -8,6 +8,33 @@
   transition: margin-left 0.3s ease;
   /* font-family:  'Montserrat', sans-serif !important; */
 }
+
+
+
+.fullWidthTabsList {
+  display: flex;
+  justify-content: flex-start !important; 
+  background-color: #c1bebe14 !important;
+  width: 100%; 
+  padding: 0; 
+  margin-left: -10px !important;
+  color: #525151a1 !important;
+
+}
+
+
+.fullWidthTabsTrigger{
+  
+  border-left: 2px solid #ababab14; /* Border consistent to prevent shifting */
+  border-left: 2px solid #ababab14; /* Border consistent to prevent shifting */
+  outline: none; /* Ensures no outline on active state */
+  box-shadow: none !important;
+  background-color: #ffffff14 !important;
+  
+}
+
+
+
 
 .refreshIcon {
   color: #75c8d1 !important;
@@ -46,7 +73,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1px; 
   flex-wrap: wrap;
 }
 
@@ -59,7 +85,7 @@
 .searchContainer {
   display: flex;
   align-items: center;
-  width: 380px;
+  width: 450px;
   height: 35px;
   padding: 2px 8px;
   border-radius: 4px !important;
@@ -67,6 +93,7 @@
   font-size: small !important;
   transition: box-shadow 0.3s ease;
   margin-bottom: 10px;
+  margin-left: 300px;
 }
 
 .actionLink {
@@ -151,13 +178,12 @@
   margin-left: 10px;
   color: #333;
   margin-right: 16px;
-  margin-bottom: 12px;
 }
 
 .gridActionContainer {
   display: flex;
   justify-content: flex-end;
-  padding: 12px 18px;
+  padding: 0px 18px;
   background-color: transparent;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
@@ -170,12 +196,12 @@
   color: white !important;
   font-weight: 500 !important;
   text-transform: none !important;
-  height: 30px;
+  height: 35px;
   font-size: small !important;
   padding: 0 16px !important;
   border-radius: 4px !important;
   transition: background-color 0.3s ease !important;
-  margin-left: 12px !important;
+  margin-left: 15px !important;
   margin-bottom:10px !important;
   
 }
@@ -204,7 +230,7 @@
 }
 
 .selectContainer {
-  margin-left: 20px !important; 
+  margin-left: 15px !important; 
 }
 
 
@@ -217,6 +243,8 @@
   display: flex;
   flex-direction: column;
   margin-top: 1px;
+  height: calc(100vh - 180px);
+
 }
 
 .dataGrid {
