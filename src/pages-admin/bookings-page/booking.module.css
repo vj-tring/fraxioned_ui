@@ -17,15 +17,20 @@
   background-color: #c1bebe14 !important;
   width: 100%; 
   padding: 0; 
+  margin-left: -10px !important;
+  color: #525151a1 !important;
+
 }
 
-.tabsTrigger {
-  padding: 10px;
-  cursor: pointer;
-  background-color: #c1bebe14 !important;
-  border: none;
-  border-bottom: 2px solid transparent;
-  transition: all 0.3s ease;
+
+.fullWidthTabsTrigger{
+  
+  border-left: 2px solid #ababab14; /* Border consistent to prevent shifting */
+  border-left: 2px solid #ababab14; /* Border consistent to prevent shifting */
+  outline: none; /* Ensures no outline on active state */
+  box-shadow: none !important;
+  background-color: #ffffff14 !important;
+  
 }
 
 
