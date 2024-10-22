@@ -61,7 +61,18 @@ export const fetchPropertyImages = createAsyncThunk(
 const propertyImagesSlice = createSlice({
   name: "propertyImages",
   initialState,
-  reducers: {},
+  reducers: {
+    removeImageById: (state, action: PayloadAction<number>) => {
+      const imageId = action.payload;
+      Object.values(state.imagesBySpace).forEach((spaceGroup) => {
+        spaceGroup.instances.forEach((instance) => {
+          instance.images = instance.images.filter(
+            (image) => image.id !== imageId
+          );
+        });
+      });
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchPropertyImages.pending, (state) => {
@@ -119,3 +130,4 @@ export const selectPropertyImages = (state: RootState) =>
 export const selectLoading = (state: RootState) => state.propertyImages.loading;
 
 export default propertyImagesSlice.reducer;
+export const { removeImageById } = propertyImagesSlice.actions;

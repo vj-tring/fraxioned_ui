@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import {
   fetchPropertyImages,
+  removeImageById,
   selectPropertyImages,
 } from "../../store/slice/auth/propertyImagesSlice ";
 import { useDispatch, useSelector } from "react-redux";
@@ -105,6 +106,8 @@ const PropertyPhotos: React.FC = () => {
 
       try {
         await deletetpropertyImageById(imageToDelete);
+        dispatch(removeImageById(imageToDelete));  // Dispatch an action to remove the image from Redux state
+
         setImageToDelete(null);
       } catch (error) {
         console.error("Error deleting property image:", error);
