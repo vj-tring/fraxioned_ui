@@ -17,38 +17,14 @@ import ConfirmationModal from "@/components/confirmation-modal";
 import { motion, AnimatePresence } from "framer-motion";
 import AddPhoto from "./new-photoupload";
 import { AppDispatch } from "@/store";
-
-interface PropertyImage {
-  id: number;
-  url: string;
-  description: string;
-  propertySpace?: {
-    id: number;
-    instanceNumber: number;
-    space: {
-      id: number;
-      name: string;
-    };
-  };
-}
-
-interface SpaceGroup {
-  name: string;
-  instances: {
-    instanceNumber: number;
-    images: PropertyImage[];
-  }[];
-}
+import { PropertyImage, SpaceGroup, ImagesBySpace } from "./property-photo.types";
 
 const PropertyPhotos: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  // Updated selector to match your new Redux state structure
   const { additionalImages, fetchLoading, fetchError } = useSelector(
     (state: RootState) => state.PropertyImage
   );
-  const [imagesBySpace, setImagesBySpace] = useState<{
-    [key: string]: SpaceGroup;
-  }>({});
+  const [imagesBySpace, setImagesBySpace] = useState<ImagesBySpace>({});
   const [activeTab, setActiveTab] = useState<string>("All Photos");
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [imageToDelete, setImageToDelete] = useState<number | null>(null);
