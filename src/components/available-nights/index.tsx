@@ -8,7 +8,10 @@ import { RootState } from "../../store/reducers";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Card } from "@/store/slice/auth/property-slice";
-import { fetchAllImages, fetchImagesByPropertySpaceId } from "@/store/slice/spaceImagesSlice";
+import {
+  fetchAllImages,
+  fetchImagesByPropertySpaceId,
+} from "@/store/slice/spaceImagesSlice";
 import { AppDispatch } from "@/store";
 
 export default function AvailableNights() {
@@ -21,16 +24,7 @@ export default function AvailableNights() {
 
   const dispatch = useDispatch<AppDispatch>();
   const { cards } = useSelector((state: RootState) => state.properties);
-  // const { image: any } = useSelector(
-  //   (state: RootState) => state.spaceImage.images
-  // );
 
-  // useEffect(() => {
-  //   dispatch(fetchAllImages());
-  // }, [dispatch]);
-
-  // const years = Object.keys(selectedCard?.details as { [year: number]: propertyAvailableDaysDetails }).map(Number);
-  // const user = useSelector((state: RootState) => state.auth.user);
   const [selectedCardIndex, setSelectedCardIndex] = useState<number>(0);
 
   useEffect(() => {
@@ -42,8 +36,12 @@ export default function AvailableNights() {
       });
 
       setSelectedCard(cardwithid);
-      setYears(Object.keys(cardwithid.details).map(Number));
-      // setYears(Object.keys(card)
+      setYears(
+        cardwithid.details ? Object.keys(cardwithid.details).map(Number) : []
+      );
+      console.log("selectedcard", selectedCard);
+      console.log("years", years);
+      console.log("selectedId", cardwithid);
     } else {
       setSelectedCardIndex(0);
       setSelectedCard(null);
@@ -92,35 +90,59 @@ export default function AvailableNights() {
               <div className="box1 d-flex  justify-content-around propertyDetailsYear">
                 <ul className="d-flex">
                   <div className="d-flex flex-column night-count">
-                    <li className="liststyle">
-                      {selectedCard.details[selectedYear]?.offSeason || "N/A"}
-                    </li>
+                    {selectedCard &&
+                      selectedCard.details &&
+                      selectedCard.details[selectedYear] && (
+                        <li className="liststyle">
+                          {selectedCard.details[selectedYear].offSeason ||
+                            "N/A"}
+                        </li>
+                      )}
                     <li className="Box-list1">Off-Season Nights</li>
                   </div>
                   <div className="d-flex flex-column night-count">
-                    <li className="liststyle">
-                      {selectedCard.details[selectedYear]?.peakSeason || "N/A"}
-                    </li>
+                    {selectedCard &&
+                      selectedCard.details &&
+                      selectedCard.details[selectedYear] && (
+                        <li className="liststyle">
+                          {selectedCard.details[selectedYear].peakSeason ||
+                            "N/A"}
+                        </li>
+                      )}
                     <li className="Box-list1">Peak-Season Nights</li>
                   </div>
                   <div className="d-flex flex-column night-count">
-                    <li className="liststyle">
-                      {selectedCard.details[selectedYear]?.peakHoliday || "N/A"}
-                    </li>
+                    {selectedCard &&
+                      selectedCard.details &&
+                      selectedCard.details[selectedYear] && (
+                        <li className="liststyle">
+                          {selectedCard.details[selectedYear].peakHoliday ||
+                            "N/A"}
+                        </li>
+                      )}
                     <li className="Box-list1">Peak-Season Holiday</li>
                   </div>
                   <div className="d-flex flex-column night-count">
-                    <li className="liststyle">
-                      {selectedCard.details[selectedYear]?.offSeasonHoliday ||
-                        "N/A"}
-                    </li>
+                    {selectedCard &&
+                      selectedCard.details &&
+                      selectedCard.details[selectedYear] && (
+                        <li className="liststyle">
+                          {selectedCard.details[selectedYear]
+                            .offSeasonHoliday || "N/A"}
+                        </li>
+                      )}
                     <li className="Box-list1">Off-Season Holiday</li>
                   </div>
 
                   <div className="d-flex flex-column night-count">
-                    <li className="liststyle">
-                      {selectedCard.details[selectedYear]?.lastMinute || "N/A"}
-                    </li>
+                    {selectedCard &&
+                      selectedCard.details &&
+                      selectedCard.details[selectedYear] && (
+                        <li className="liststyle">
+                          {selectedCard.details[selectedYear].lastMinute ||
+                            "N/A"}
+                        </li>
+                      )}
                     <li className="Box-list1">Last Minute Booking</li>
                   </div>
                 </ul>

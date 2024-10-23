@@ -1,10 +1,5 @@
 // redux/propertyImagesSlice.ts
-import {
-  createSlice,
-  createAsyncThunk,
-  PayloadAction,
-  AsyncThunkAction,
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { propertyImageapi } from "@/api/api-endpoints";
 import { RootState } from "@/store/reducers";
 
@@ -50,7 +45,7 @@ export const fetchPropertyImages = createAsyncThunk(
   async (propertyId: number, { rejectWithValue }) => {
     try {
       const response = await propertyImageapi(propertyId);
-      return response.data.data;
+      return response.data.data; // Adjust this if your response structure is different
     } catch (error) {
       console.error("Fetching property images failed:", error);
       return rejectWithValue("Failed to fetch property images");
@@ -80,9 +75,18 @@ const propertyImagesSlice = createSlice({
       })
       .addCase(
         fetchPropertyImages.fulfilled,
-        (state, action: PayloadAction<PropertyImage[]>) => {
-          const allPhotos = action.payload;
-          const groupedBySpace = allPhotos.reduce(
+        (
+          state,
+          action: PayloadAction<{
+            propertyAdditionalImages: PropertyImage[];
+            propertySpaceImages: PropertyImage[];
+          }>
+        ) => {
+          const { propertyAdditionalImages, propertySpaceImages } =
+            action.payload;
+
+          // Process property space images
+          const groupedBySpace = propertySpaceImages.reduce(
             (acc: { [key: string]: SpaceGroup }, img: PropertyImage) => {
               const spaceName = img.propertySpace.space.name;
               if (!acc[spaceName]) {
@@ -107,10 +111,16 @@ const propertyImagesSlice = createSlice({
             {}
           );
 
+          // Combine additional images with grouped images
           state.imagesBySpace = {
             "All Photos": {
               name: "All Photos",
-              instances: [{ instanceNumber: 0, images: allPhotos }],
+              instances: [
+                {
+                  instanceNumber: 0,
+                  images: [...propertyAdditionalImages, ...propertySpaceImages],
+                },
+              ],
             },
             ...groupedBySpace,
           };

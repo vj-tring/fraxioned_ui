@@ -18,12 +18,12 @@ const PropertyMorePhotos: React.FC = () => {
   const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
   const { id } = useParams<{ id: string }>();
 
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0); // To track the current index of carousel
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0); 
 
   const dispatch = useDispatch();
 
   const imagesBySpace = useSelector(selectPropertyImages);
-
+console.log("spaceImage",imagesBySpace)
   useEffect(() => {
     if (id) {
       dispatch(fetchPropertyImages(parseInt(id)));
@@ -171,7 +171,7 @@ const PropertyMorePhotos: React.FC = () => {
                         {image.description}
                         {activeTab === "All Photos" && (
                           <span className={styles.spaceTag}>
-                            {`${image.propertySpace.space.name} ${image.propertySpace.instanceNumber}`}
+                            {`${image.name} ${image.instanceNumber}`}
                           </span>
                         )}
                       </div>
