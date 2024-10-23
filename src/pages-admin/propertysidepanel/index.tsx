@@ -70,7 +70,7 @@ const PropertySidePanel: React.FC<PropertySidePanelProps> = ({ isOpen }) => {
             </div>
             {isDropdownOpen && (
                 <ul className={styles.propertyList}>
-                    {properties.map((property) => (
+                    {properties.map((property: Property) => (
                         <li
                             key={property.id}
                             onClick={() => handlePropertySelect(property)}

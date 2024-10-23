@@ -157,6 +157,14 @@ const PropertyListingPage = () => {
     }
   }, [displayProperties, id, dispatch]);
 
+  const dummyImages = [
+    { url: "../../assests/lake-escape.jpg", imageName: "Dummy Image 1" },
+    { url: "../../assests/lake-escape.jpg", imageName: "Dummy Image 2" },
+    { url: "../../assests/lake-escape.jpg", imageName: "Dummy Image 3" },
+    { url: "../../assests/lake-escape.jpg", imageName: "Dummy Image 4" },
+    { url: "../../assests/lake-escape.jpg", imageName: "Dummy Image 5" },
+  ];
+
   useEffect(() => {
     const fetchPropertyImages = async () => {
       try {
@@ -166,8 +174,13 @@ const PropertyListingPage = () => {
           return;
         }
         const response = await fetchPropertySpaceImagesByPropertyId(id);
-        setImageDetails(response.data.data);
-        setLoadingImages(false);
+        if (response.data.data.propertySpaceImages.length > 0) {
+          setImageDetails(response.data.data.propertySpaceImages);
+          setLoadingImages(false);
+        } else {
+          // Set dummy images if no images are found
+          setImageDetails(dummyImages);
+        }
       } catch (error) {
         console.error("Error fetching property images:", error);
       }

@@ -31,9 +31,7 @@ function AppRoutes() {
     if (user == null && !isPublicRoute && parsedSession != null) {
       
       dispatch(fetchAuthState());
-    } else {
-      navigate("/login");
-    }
+    } 
   }, [dispatch]);
   return (
     <>

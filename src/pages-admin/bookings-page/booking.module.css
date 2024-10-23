@@ -33,7 +33,9 @@
 }
 
 
-
+.searchContainer{
+  padding: 0 !important;
+}
 
 .refreshIcon {
   color: #75c8d1 !important;
@@ -78,13 +80,12 @@
 .actionsContainer {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
 }
 
 .searchContainer {
   display: flex;
-  align-items: center;
-  width: 450px;
+  align-items: flex-start;
+  width: 550px;
   height: 35px;
   padding: 2px 8px;
   border-radius: 4px !important;
@@ -92,48 +93,8 @@
   font-size: small !important;
   transition: box-shadow 0.3s ease;
   margin-bottom: 10px;
-  margin-left: 120px;
-}
+  justify-content: flex-start;
 
-.actionLink {
-  color: #62a2a9 !important;
-  font-size: 15px !important;
-  text-decoration: underline !important;
-  transition: color 0.3s ease;
-  margin-left: 20px !important;
-  
-
-}
-
-.actionLink:hover {
-  color: #82cfd6 !important;
-  text-decoration: underline !important;
-}
-
-.linksContainer {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-}
-
-.calendarLink {
-  color: white !important;
-  font-size: small !important;
-  display: flex;
-  padding: 15px 12px !important;
-  align-items: center;
-  border-radius: 5px !important;
-  gap: 5px;
-  margin-left: 10px !important;
-  text-decoration: none;
-  height: 30px;
-  background-color: #2d6aa0 !important;
-  margin-bottom:10px !important;
-}
-
-.calendarLink:hover {
-  color: white !important;
-  text-decoration: none !important;
 }
 
 .searchContainer:hover {
@@ -181,13 +142,31 @@
 
 .gridActionContainer {
   display: flex;
-  justify-content: flex-end;
-  padding: 0px 18px;
   background-color: transparent;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   align-items: center;
+  width: 100%;
+  gap: 50px;
+  
+}
+.filtersContainer {
+  display: flex;
+  width: 100%; 
+  padding: 0;  
+  margin: 0; 
+  gap: 15px;  
+  flex-wrap: wrap; 
+ font-size: smaller !important;
+  
+}
+.filtersContainer > div {
+  flex: 1; 
+}
 
+.selectContainer{
+  width: 100%;
+  margin-right: 0; 
 }
 
 .actionButton {
@@ -197,12 +176,10 @@
   text-transform: none !important;
   height: 35px;
   font-size: small !important;
-  padding: 0 16px !important;
   border-radius: 4px !important;
   transition: background-color 0.3s ease !important;
-  margin-left: 15px !important;
   margin-bottom:10px !important;
-  
+  margin-left: 0px !important;
 }
 
 .actionButton:hover {
@@ -211,26 +188,26 @@
 
 .datePickerContainer {
   position: relative;
-  display: inline-block;
-  margin-left: 16px;
+  display: flex;
   margin-bottom: 8px;
+  justify-content: flex-end !important;
 }
 
 .monthPicker {
   width: 200px;
+  justify-content: flex-end !important;
+
 }
 
 .clearDateFilter {
-  position: absolute !important;
-  right: 34px; 
-  top: 50%;
+  position: relative !important;
+  right: 84px; 
   transform: translateY(-50%);
   z-index: 1;
+  margin-top: 17px !important;
 }
 
-.selectContainer {
-  margin-left: 15px !important; 
-}
+
 
 
 .dataGridWrapper {
@@ -242,7 +219,7 @@
   display: flex;
   flex-direction: column;
   margin-top: 1px;
-  height: calc(100vh - 180px);
+  height: calc(100vh - 155px);
 
 }
 
@@ -278,7 +255,7 @@
 }
 
 .dataGrid :global(.MuiDataGrid-toolbarContainer) {
-  padding: 8px;
+  padding: 8px !important;
 }
 
 .dataGrid :global(.MuiButton-root) {

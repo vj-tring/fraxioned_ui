@@ -1,10 +1,11 @@
 import { Role } from "./roles.types";
+
 export interface User {
   id?: number;
   role: Role;
   firstName: string;
   lastName: string;
-  imageURL: string | null;
+  profileImage?: string | null;
   isActive: boolean;
   addressLine1: string | null;
   addressLine2: string | null;
@@ -15,6 +16,9 @@ export interface User {
   lastLoginTime: string;
   updatedBy?: number;
   contactDetails: ContactDetails;
+  password?: string;
+  resetToken?: string;
+  resetTokenExpires?: string;
 }
 
 export interface ContactDetails {
@@ -28,6 +32,7 @@ export interface ContactDetails {
   optionalPhoneOne: string | null;
   optionalPhoneTwo: string | null;
 }
+
 export interface UserState {
   user: User;
   loading: boolean;

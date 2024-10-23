@@ -139,7 +139,6 @@ export default function Component({ initialSpace = {} }) {
     dispatch(fetchAmenities());
   }, [space, dispatch, showBedTypesTab, showBathTypesTab]);
 
-  console.log("propertySpaceAmenities", propertySpaceAmenities);
 
   useEffect(() => {
     if (propertySpaceAmenities.length > 0) {
@@ -283,7 +282,6 @@ export default function Component({ initialSpace = {} }) {
         await propertySpaceImageUpload(formData);
       }
 
-      console.log("Images updated successfully");
       dispatch(fetchImagesByPropertySpaceId(space.id));
       setIsUploading(false);
       setPhotos([]);
@@ -300,7 +298,6 @@ export default function Component({ initialSpace = {} }) {
     if (space?.id) {
       try {
         await dispatch(deleteExistingSpaceProperty(space.id)).unwrap();
-        console.log("Property space deleted successfully");
         setDeleteDialogOpen(false);
         navigate(`/admin/property/${propertyId}/rooms`);
       } catch (error) {

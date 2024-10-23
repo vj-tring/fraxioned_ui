@@ -60,7 +60,18 @@ export const fetchPropertyImages = createAsyncThunk(
 const propertyImagesSlice = createSlice({
   name: "propertyImages",
   initialState,
-  reducers: {},
+  reducers: {
+    removeImageById: (state, action: PayloadAction<number>) => {
+      const imageId = action.payload;
+      Object.values(state.imagesBySpace).forEach((spaceGroup) => {
+        spaceGroup.instances.forEach((instance) => {
+          instance.images = instance.images.filter(
+            (image) => image.id !== imageId
+          );
+        });
+      });
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchPropertyImages.pending, (state) => {
@@ -68,9 +79,18 @@ const propertyImagesSlice = createSlice({
       })
       .addCase(
         fetchPropertyImages.fulfilled,
-        (state, action: PayloadAction<PropertyImage[]>) => {
-          const allPhotos = action.payload;
-          const groupedBySpace = allPhotos.reduce(
+        (
+          state,
+          action: PayloadAction<{
+            propertyAdditionalImages: PropertyImage[];
+            propertySpaceImages: PropertyImage[];
+          }>
+        ) => {
+          const { propertyAdditionalImages, propertySpaceImages } =
+            action.payload;
+
+          // Process property space images
+          const groupedBySpace = propertySpaceImages.reduce(
             (acc: { [key: string]: SpaceGroup }, img: PropertyImage) => {
               const spaceName = img.propertySpace.space.name;
               if (!acc[spaceName]) {
@@ -95,12 +115,28 @@ const propertyImagesSlice = createSlice({
             {}
           );
 
+          // Combine additional images with grouped images
           state.imagesBySpace = {
             "All Photos": {
               name: "All Photos",
-              instances: [{ instanceNumber: 0, images: allPhotos }],
+              instances: [
+                {
+                  instanceNumber: 0,
+                  images: [...propertyAdditionalImages, ...propertySpaceImages],
+                },
+              ],
             },
             ...groupedBySpace,
+            
+            "Additional Photos": {
+              name: "Additional Photos",
+              instances: [
+                {
+                  instanceNumber: 0,
+                  images: [...propertyAdditionalImages], // Store only additional images here
+                },
+              ],
+            },
           };
           state.loading = false;
           state.error = null;
@@ -118,3 +154,4 @@ export const selectPropertyImages = (state: RootState) =>
 export const selectLoading = (state: RootState) => state.propertyImages.loading;
 
 export default propertyImagesSlice.reducer;
+export const { removeImageById } = propertyImagesSlice.actions;

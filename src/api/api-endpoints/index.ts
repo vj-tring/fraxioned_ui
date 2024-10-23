@@ -14,6 +14,13 @@ export interface SpaceProperty {
   };
 }
 
+interface EditPropertyCodePayload {
+  property: number;
+  propertyCodeCategory: number;
+  updatedBy: number;
+  propertyCode: string;
+}
+
 export interface Space {
   id?: number;
   name: string;
@@ -234,7 +241,7 @@ export const propertyImageeditapi = (id: number, formData: FormData) => {
 };
 
 export const deletetpropertyImageById = (id: number) =>
-  axiosInstance.delete(`/property-images/property-image/${id}`);
+  axiosInstance.delete(`/property-space-images/property-space-image/${id}`);
 
 export const getUserBookings = (userId: number) =>
   axiosInstance.get(`/bookings/user/${userId}`);
@@ -354,12 +361,7 @@ export const getAllpropertycodecatogory = () =>
 
 export const editPropertyCode = (
   id: number,
-  payload: {
-    property: number;
-    propertyCodeCategory: number;
-    updatedBy: number;
-    propertyCode: string;
-  }
+  payload: EditPropertyCodePayload
 ) => axiosInstance.patch(`/property-codes/property-code/${id}`, payload);
 
 export const createpropertycodecatogory = (data: {

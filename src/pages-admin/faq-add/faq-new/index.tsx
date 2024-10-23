@@ -74,7 +74,6 @@ const NewQuestionForm: React.FC<NewQuestionFormProps> = ({
         // setSelectedCategory(newCategoryId);
         // setCustomCategory(""); // Clear the input
         setShowCustomCategoryInput(false); // Hide the custom category input
-        console.log("temp")
         dispatch(fetchCategories())
       } else {
         setError("Failed to add category.");
@@ -102,7 +101,6 @@ const NewQuestionForm: React.FC<NewQuestionFormProps> = ({
       createdBy: { id: 1 }, 
     };
 
-    console.log("Submitting question data:", data);
     await dispatch(addQuestion(data));
     onQuestionAdded();
   };

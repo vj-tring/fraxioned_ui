@@ -32,9 +32,8 @@ interface SingleDeviceProps {
   propertyId: number;
 }
 
-
 const ITEMS_PER_PAGE = 2;
-const AMENITIES_PER_PAGE = 12;
+const AMENITIES_PER_PAGE = 3;
 
 const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -49,7 +48,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const [amenitites, setAmenities] = useState<unknown[]>([]);
 
   const [page, setPage] = useState(1);
-  const [showAllAmenities, ] = useState(false);
+  const [showAllAmenities] = useState(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -73,8 +72,8 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   useEffect(() => {
     const imageFetching = async () => {
       try {
-        const response = await fetchPropertySpaceImagesByPropertyId(Number(propertyId));
-        const sortedImages = response.data.data.sort(
+        const response = await getAllSpacePropertyImageById(Number(propertyId));
+        const sortedImages = response.data.data.propertySpaceImages.sort(
           (a: any, b: any) => a.displayOrder - b.displayOrder
         );
         setImagesData(sortedImages); // Sort images by displayOrder
@@ -86,17 +85,21 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
     imageFetching();
   }, [propertyId]); //
 
-  const organizeAmenitiesByAmenityGroup = (data: PropertyAmenity[]) => {
-    if (!Array.isArray(data)) {
-      console.warn("Expected an array, but received:", data);
+  const organizeAmenitiesByAmenityGroup = (data: { amenityGroup: any[] }) => {
+    if (!data || !Array.isArray(data.amenityGroup)) {
+      console.warn(
+        "Expected an array inside amenityGroup, but received:",
+        data
+      );
       return {};
     }
-    return data.reduce((acc, propertyAmenity) => {
-      const groupName = propertyAmenity.amenity.amenityGroup.name;
+
+    return data.amenityGroup.reduce((acc, group) => {
+      const groupName = group.name;
       if (!acc[groupName]) {
         acc[groupName] = [];
       }
-      acc[groupName].push(propertyAmenity.amenity);
+      acc[groupName].push(...group.amenities);
       return acc;
     }, {} as { [key: string]: PropertyAmenity["amenity"][] });
   };
@@ -131,13 +134,12 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const groupedAmenities = organizeAmenitiesByAmenityGroup(
     propertyAmenities || []
   );
-  const allAmenities = Array.isArray(propertyAmenities)
-    ? propertyAmenities.map((pa) => pa.amenity)
+  const allAmenities = Array.isArray(propertyAmenities.amenityGroup)
+    ? propertyAmenities.amenityGroup.map((pa) => pa.amenities)
     : [];
   const displayedAmenities = showAllAmenities
     ? allAmenities
     : allAmenities.slice(0, AMENITIES_PER_PAGE);
-
 
   return (
     <Box
@@ -189,7 +191,6 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                     width: "100%",
                   }}
                 >
-
                   <CardMedia
                     // component="img"
                     image={
@@ -239,7 +240,8 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
         <Typography variant="h6" className="monsterrat checkIn">
           Amenities
         </Typography>
-        {propertyAmenities && propertyAmenities.length > 0 ? (
+        {propertyAmenities.amenityGroup &&
+        propertyAmenities.amenityGroup.length > 0 ? (
           <Box
             sx={{ display: "flex", flexDirection: "column" }}
             className="AmenRes"
@@ -253,37 +255,26 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                   flexDirection: "row",
                 }}
               >
-                {displayedAmenities.map((amenity, index) => (
-                  <Grid item xs={6} key={index}>
-                    <Typography
-                      variant="body2"
-                      className="monsterrat d-flex gap-3"
-                    >
-                      <img
-                        src={getIconUrlByAmenitiesId(amenity.id)}
-                        className="ImgIcons"
-                      />
-                      <div className="pt-1">{amenity.amenityName}</div>
-                    </Typography>
-                  </Grid>
-                ))}
+                {displayedAmenities.map((amenity, index) =>
+                  amenity.map((data, index1) => {
+                    return (
+                      <Grid item xs={6} key={index1}>
+                        <Typography
+                          variant="body2"
+                          className="monsterrat d-flex gap-3"
+                        >
+                          <img
+                            src={getIconUrlByAmenitiesId(data.amenityId)}
+                            className="ImgIcons"
+                          />
+                          <div className="pt-1">{data.amenityName}</div>
+                        </Typography>
+                      </Grid>
+                    );
+                  })
+                )}
               </Grid>
             </Box>
-
-            {/* <Box sx={{ flex: 1 }}>
-              {displayedAmenities
-                .slice(
-                  Math.ceil(displayedAmenities.length / 2),
-                  displayedAmenities.length
-                )
-                .map((amenity, index) => (
-                  <Box key={index} sx={{ marginBottom: 1 }}>
-                    <Typography variant="body2" className="monsterrat">
-                      {amenity.amenityName}
-                    </Typography>
-                  </Box>
-                ))}
-            </Box> */}
           </Box>
         ) : (
           <Typography variant="body1">No amenities available.</Typography>
@@ -347,7 +338,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
                     className="monsterrat amenityName d-flex gap-4 "
                   >
                     <img
-                      src={getIconUrlByAmenitiesId(amenity.id)}
+                      src={getIconUrlByAmenitiesId(amenity.amenityId)}
                       className="ImgIcons"
                     />
                     <div className="pt-1"> {amenity.amenityName}</div>

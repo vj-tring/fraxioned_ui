@@ -11,7 +11,7 @@ const initialState: UserState = {
     },
     firstName: "",
     lastName: "",
-    imageURL: null,
+    profileImage: null,
     isActive: false,
     addressLine1: null,
     addressLine2: null,

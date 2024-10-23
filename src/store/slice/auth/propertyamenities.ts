@@ -76,6 +76,8 @@ export const getByPropertyId = createAsyncThunk(
     }
   }
 );
+
+
 export const getByPropertySpaceId = createAsyncThunk(
   "propertySpaceAmenities/getById",
   async (id: number, { rejectWithValue }) => {

@@ -11,6 +11,7 @@ import UserBookings from "../user-bookings";
 import DocumentManagerCard from "../document";
 import styles from "./tab.module.css";
 import { AppDispatch } from "@/store";
+import { fetchUserPropertiesWithDetailsByUser } from "@/store/action/user-properties";
 
 interface TabSwitchProps {
   onUserUpdated: () => void;
@@ -37,6 +38,7 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
   useEffect(() => {
     if (userId) {
       dispatch(fetchUserById(userId));
+      dispatch(fetchUserPropertiesWithDetailsByUser(userId));
     }
   }, [dispatch, userId]);
 
@@ -123,7 +125,7 @@ const TabSwitch: React.FC<TabSwitchProps> = ({ onUserUpdated }) => {
               onClose={() => setIsEditing(false)}
               onUserUpdated={handleUpdateSuccess}
               formTitle={""}
-              isAdmin={false}
+              isAdmin={true}
             />
           )
         )}

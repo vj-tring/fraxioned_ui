@@ -136,7 +136,7 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
                 <Card
                   key={property.id}
                   imageUrl={property.coverImageUrl || PorpImg}
-                  title={formatCardName(property.name || "No Title")}
+                  title={formatCardName(property.propertyName || "No Title")}
                   text={property.address || "Address not available"}
                   share={
                     property.propertyShare
