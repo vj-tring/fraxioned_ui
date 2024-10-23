@@ -70,6 +70,10 @@ const EditForm: React.FC<EditFormProps> = ({
     }
   }, [selectedHoliday]);
 
+  const formatDateToISODate = (date: Date): string => {
+    return date.toISOString().split("T")[0];
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userId) {
@@ -85,8 +89,8 @@ const EditForm: React.FC<EditFormProps> = ({
     const updatedHolidayData = {
       name,
       year,
-      startDate: startDate.toISOString().split("T")[0],
-      endDate: endDate.toISOString().split("T")[0],
+      startDate: formatDateToISODate(startDate),
+      endDate: formatDateToISODate(endDate),
       properties: selectedProperties.map((id) => ({ id })),
       updatedBy: {
         id: userId,

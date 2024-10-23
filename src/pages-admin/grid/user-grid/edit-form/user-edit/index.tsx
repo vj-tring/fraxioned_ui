@@ -106,6 +106,12 @@ const EditForm: React.FC<EditFormProps> = ({
 
   const handleAddContact = () => setShowSecondaryContact(true);
 
+
+  //takes up the field names of the address and modifies according to the UI representation
+  const formatFieldLabel = (field: string): string => {
+    return field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, " $1");
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -176,7 +182,7 @@ const EditForm: React.FC<EditFormProps> = ({
           {["addressLine1", "addressLine2", "city", "state", "country", "zipcode"].map((field) => (
             <Grid item xs={12} sm={6} key={field}>
               <TextField
-                label={field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, " $1")}
+                label={formatFieldLabel(field)}
                 name={field}
                 value={formData[field as keyof User] || ""}
                 onChange={handleInputChange}
@@ -185,6 +191,7 @@ const EditForm: React.FC<EditFormProps> = ({
               />
             </Grid>
           ))}
+
 
           {/* Role and Active Status - Only shown for non-Admin roles when logged in user is Admin */}
           {shouldShowRoleFields() && (
