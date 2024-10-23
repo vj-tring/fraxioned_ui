@@ -180,7 +180,6 @@ const PropertyListingPage = () => {
         } else {
           // Set dummy images if no images are found
           setImageDetails(dummyImages);
-
         }
       } catch (error) {
         console.error("Error fetching property images:", error);
