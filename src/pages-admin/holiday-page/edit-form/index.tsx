@@ -26,6 +26,7 @@ import { AppDispatch } from "@/store";
 import { fetchPropertyHoliday, updateHoliday } from "@/store/slice/holiday/action";
 import { EditFormProps } from '../holiday.types';
 import { Property } from "@/store/model/holiday.types";
+import { formatDate } from "@/utils/datefunction";
 
 const EditForm: React.FC<EditFormProps> = ({
   onClose,
@@ -70,14 +71,6 @@ const EditForm: React.FC<EditFormProps> = ({
     }
   }, [selectedHoliday]);
 
-  const formatDateToISODate = (date: Date): string => {
-    try {
-      return date.toISOString().substring(0, 10);
-    } catch (error) {
-      return '';
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userId) {
@@ -93,8 +86,8 @@ const EditForm: React.FC<EditFormProps> = ({
     const updatedHolidayData = {
       name,
       year,
-      startDate: formatDateToISODate(startDate),
-      endDate: formatDateToISODate(endDate),
+      startDate: formatDate(startDate),
+      endDate: formatDate(endDate),
       properties: selectedProperties.map((id) => ({ id })),
       updatedBy: {
         id: userId,
