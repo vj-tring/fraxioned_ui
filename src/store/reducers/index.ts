@@ -30,9 +30,9 @@ import addCategoryReducer from '../slice/auth/addcategorySlice';
 import bedReducer from '../slice/bedSlice';
 import propertydetailReducer from '../slice/auth/property-detail'
 import bathroomReducer from '../slice/bathroom-slice';
-import amenityReducer from '../slice/amenity';
+import amenityReducer from '../slice/amenitiesSlice';
 import userDocumentsReducer from '../slice/user-document';
-import propertyImagesReducer from '../slice/auth/additional-image'
+import propertyImagesReducer from '../slice/auth/propertyImagesSlice ';
 import { propertycodecatogoryReducer } from '../slice/auth/propertycodeCatogorySlice';
 import { propertyCodesReducer } from '../slice/auth/propertycodeSlice';
 import PropertyImageReducer from '../slice/additional-image';

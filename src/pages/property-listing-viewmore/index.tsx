@@ -18,12 +18,12 @@ const PropertyMorePhotos: React.FC = () => {
   const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
   const { id } = useParams<{ id: string }>();
 
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0); 
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
 
   const dispatch = useDispatch();
 
   const imagesBySpace = useSelector(selectPropertyImages);
-console.log("spaceImage",imagesBySpace)
+  console.log("imagesBySpace",imagesBySpace)
   useEffect(() => {
     if (id) {
       dispatch(fetchPropertyImages(parseInt(id)));

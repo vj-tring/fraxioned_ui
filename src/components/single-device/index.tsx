@@ -259,7 +259,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
               >
                 {displayedAmenities.map((amenity, index) =>
                   amenity.map((data, index1) => {
-                    console.log("data.amenityName", data.amenityName);
+                    // console.log("data.amenityName", data.amenityName);
                     return (
                       <Grid item xs={6} key={index1}>
                         <Typography
