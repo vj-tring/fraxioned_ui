@@ -722,7 +722,7 @@ export function DatePickerWithRange({
           <div className="flex items-center space-x-4">
             <Moon className="h-6 w-6 text-orange-300" />
             <div className="info">
-              <p className="text-m leading-none">Nights</p>
+              <p className="text-m leading-none">Available Nights</p>
               <p className="text-l font-bold">Peak: {selectedPropertyDetails?.details[
                 selectedYear || new Date().getFullYear()
               ]?.peakRemainingNights || "0"}
