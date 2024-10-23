@@ -69,9 +69,9 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
           propertyId === "all"
             ? mappedData
             : mappedData.filter(
-                (h: { propertyId: string | number | null }) =>
-                  h.propertyId === propertyId
-              )
+              (h: { propertyId: string | number | null }) =>
+                h.propertyId === propertyId
+            )
         );
       } catch (err) {
         console.error("Error fetching holidays:", err);
@@ -158,21 +158,21 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     {
       field: "year",
       headerName: "Year",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "start_date",
       headerName: "Start Date",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "end_date",
       headerName: "End Date",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
@@ -180,7 +180,7 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     {
       field: "actions",
       headerName: "Actions",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
       renderCell: (params) => (
@@ -214,9 +214,8 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
 
   return (
     <div
-      className={`${styles.holidaysContainer} ${
-        isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
-      }`}
+      className={`${styles.holidaysContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
+        }`}
     >
       <div className={styles.titleContainer}>
         <h1 className={styles.title}>Holidays Details</h1>
