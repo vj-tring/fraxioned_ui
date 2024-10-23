@@ -8,35 +8,11 @@ import styles from "./property.module.css";
 import NewPropertyForm from "./NewPropertyForm";
 import ConfirmationModal from "@/components/confirmation-modal";
 import { useNavigate } from "react-router-dom";
-import {
-  fetchProperties,
-  PropertiesState,
-} from "@/store/slice/auth/propertiesSlice";
+import { fetchProperties } from "@/store/slice/property/action";
 import { RootState } from "@/store/reducers";
 import { AppDispatch } from "@/store";
+import { Property as PropertyType } from "@/store/model/properties.types";
 
-interface Property {
-  id: number;
-  ownerRezPropId: number;
-  propertyName: string;
-  address: string;
-  city: string;
-  state: string;
-  country: string;
-  zipcode: number;
-  houseDescription: string;
-  isExclusive: boolean;
-  propertyShare: number;
-  propertyRemainingShare: number;
-  latitude: number;
-  longitude: number;
-  isActive: boolean;
-  displayOrder: number;
-  createdAt: string;
-  updatedAt: string;
-  mailBannerUrl: string;
-  coverImageUrl: string;
-}
 interface PropertyComponentProps {
   isSidebarOpen: boolean;
 }
@@ -44,14 +20,11 @@ interface PropertyComponentProps {
 const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { properties, status, error } = useSelector<RootState, PropertiesState>(
-    (state) => state.property
-  );
+  
+  const { properties, status, error } = useSelector((state: RootState) => state.property);
   const [isNewFormOpen, setIsNewFormOpen] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [propertyToDelete, setPropertyToDelete] = useState<Property | null>(
-    null
-  );
+  const [propertyToDelete, setPropertyToDelete] = useState<PropertyType | null>(null);
 
   useEffect(() => {
     if (status === "idle") {
@@ -63,7 +36,7 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
     navigate(`/admin/property/${id}`);
   };
 
-  const handleDeleteClick = (property: Property) => {
+  const handleDeleteClick = (property: PropertyType) => {
     setPropertyToDelete(property);
     setShowDeleteConfirmation(true);
   };
@@ -99,35 +72,35 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
     {
       field: "city",
       headerName: "City",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "state",
       headerName: "State",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "country",
       headerName: "Country",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "propertyShare",
       headerName: "Property Share",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
       field: "actions",
       headerName: "Actions",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
       renderCell: (params) => (
@@ -198,32 +171,17 @@ const Property: React.FC<PropertyComponentProps> = ({ isSidebarOpen }) => {
               color: "white",
               fontSize: "small",
               textTransform: "uppercase",
-
-              fontFamily: " 'Roboto', sans-serif !important",
+              fontFamily: "'Roboto', sans-serif !important",
             },
             "& .MuiDataGrid-cell": {
               fontSize: "small",
-              fontFamily: " 'Roboto', sans-serif !important ",
-            },
-            "&  .MuiDataGrid-cell--textLeft ": {
-              // position: "sticky",
-              // right: 0,
-              // backgroundColor: "#ebecec",
-              // paddingLeft:"50px"
-            },
-            "& .MuiDataGrid-columnHeader--last": {
-              // backgroundColor: "lightgrey",
-              // position: "sticky",
-              // right: 0,
-              // paddingLeft:"50px"
+              fontFamily: "'Roboto', sans-serif !important",
             },
           }}
           getRowClassName={(params) => {
-            if (params.indexRelativeToCurrentPage % 2 === 0) {
-              return styles.evenRow;
-            } else {
-              return styles.oddRow;
-            }
+            return params.indexRelativeToCurrentPage % 2 === 0
+              ? styles.evenRow
+              : styles.oddRow;
           }}
           pageSizeOptions={[5, 10, 25]}
           disableRowSelectionOnClick

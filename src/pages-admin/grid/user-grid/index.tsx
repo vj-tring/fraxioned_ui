@@ -7,49 +7,8 @@ import { userdetails, propertydetailsapi } from "@/api/api-endpoints";
 import Search from "@/pages-admin/search-user";
 import styles from "./User.module.css";
 import { useNavigate } from "react-router-dom";
+import { UserData, PropertyData } from "./user.types";
 
-interface ContactDetails {
-  id: number;
-  primaryEmail: string;
-  secondaryEmail: string | null;
-  optionalEmailOne: string | null;
-  optionalEmailTwo: string | null;
-  primaryPhone: string;
-  secondaryPhone: string | null;
-  optionalPhoneOne: string | null;
-  optionalPhoneTwo: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface UserData {
-  id: number;
-  role: { id: number; roleName: string };
-  firstName: string;
-  lastName: string;
-  addressLine1: string | null;
-  addressLine2: string | null;
-  city: string | null;
-  state: string | null;
-  country: string | null;
-  zipcode: string | null;
-  isActive: boolean;
-  contactDetails: ContactDetails;
-  createdBy: number;
-  lastLoginTime: string;
-  imageURL: string | null;
-  password?: string;
-  resetToken?: string;
-  resetTokenExpires?: string;
-  updatedBy?: number;
-  properties?: string[];
-}
-
-interface PropertyData {
-  propertyId: number;
-  propertyName: string;
-  owners: { userId: number }[];
-}
 
 const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
   const [users, setUsers] = useState<UserData[]>([]);
@@ -202,7 +161,7 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     {
       field: "properties",
       headerName: "Properties",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
       renderCell: (params) => {
@@ -232,7 +191,7 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     {
       field: "actions",
       headerName: "Actions",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
       renderCell: (params) => (
@@ -255,9 +214,8 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
 
   return (
     <div
-      className={`${styles.usersContainer} ${
-        isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
-      }`}
+      className={`${styles.usersContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
+        }`}
     >
       <div className={styles.headerContainer}>
         <h1 className={styles.title}>Users Details</h1>

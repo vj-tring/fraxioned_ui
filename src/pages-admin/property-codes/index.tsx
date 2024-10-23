@@ -10,43 +10,30 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
+import CustomizedSnackbars from '@/components/customized-snackbar';
 import { fetchPropertyCodes, editPropertyCode, deletePropertyCode } from '@/store/slice/auth/propertycodeSlice';
 import styles from './propertycode.module.css';
 import { RootState } from '@/store/reducers';
 import { AppDispatch } from '@/store';
 import PropertyCodeCategoryModal from './new-propertycode';
-
-interface PropertyCode {
-  id: number;
-  propertyCode: string;
-  property: {
-    id: number;
-    propertyName: string;
-  };
-  propertyCodeCategory: {
-    id: number;
-    name: string;
-  };
-  createdAt: string;
-  updatedAt: string;
-  createdBy: {
-    id: number;
-  };
-  updatedBy: null | {
-    id: number;
-  };
-}
+import { PropertyCodes, SnackbarState } from './property-codes.types';
+import { Loader } from 'lucide-react';
 
 const PropertyCode: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { id: propertyId } = useParams<{ id: string }>();
   const propertyCodes = useSelector((state: RootState) => state.propertycode.propertyCodes);
   const status = useSelector((state: RootState) => state.propertycode.status);
-  const [filteredCodes, setFilteredCodes] = useState<PropertyCode[]>([]);
+  const [filteredCodes, setFilteredCodes] = useState<PropertyCodes[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editValue, setEditValue] = useState('');
+  const [snackbar, setSnackbar] = useState<SnackbarState>({
+    open: false,
+    message: '',
+    severity: 'success'
+  });
 
   useEffect(() => {
     dispatch(fetchPropertyCodes());
@@ -54,7 +41,7 @@ const PropertyCode: React.FC = () => {
 
   useEffect(() => {
     if (propertyCodes.length > 0 && propertyId) {
-      const filtered = propertyCodes.filter((code: { property: { id: number; }; }): code is PropertyCode =>
+      const filtered = propertyCodes.filter((code: { property: { id: number; }; }): code is PropertyCodes =>
         code &&
         typeof code === 'object' &&
         'property' in code &&
@@ -68,18 +55,35 @@ const PropertyCode: React.FC = () => {
     }
   }, [propertyCodes, propertyId]);
 
+  const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') return;
+    setSnackbar(prev => ({ ...prev, open: false }));
+  };
+
+  const showSnackbar = (message: string, severity: 'success' | 'error' | 'info' | 'warning') => {
+    setSnackbar({
+      open: true,
+      message,
+      severity
+    });
+  };
+
   const handleCreateCode = () => setIsModalOpen(true);
-  const handleCloseModal = () => {
+
+  const handleCloseModal = (success?: boolean) => {
     setIsModalOpen(false);
+    if (success) {
+      showSnackbar('Property code created successfully!', 'success');
+    }
     setRefreshTrigger(prev => prev + 1);
   };
 
-  const handleEdit = (code: PropertyCode) => {
+  const handleEdit = (code: PropertyCodes) => {
     setEditingId(code.id);
     setEditValue(code.propertyCode);
   };
 
-  const handleSave = async (code: PropertyCode) => {
+  const handleSave = async (code: PropertyCodes) => {
     if (editValue !== code.propertyCode) {
       try {
         await dispatch(editPropertyCode({
@@ -89,8 +93,10 @@ const PropertyCode: React.FC = () => {
           updatedBy: { id: 1 },
           propertyCode: editValue
         })).unwrap();
+        showSnackbar('Property code updated successfully!', 'success');
         setRefreshTrigger(prev => prev + 1);
       } catch (error) {
+        showSnackbar('Failed to update property code', 'error');
         console.error('Failed to edit property code:', error);
       }
     }
@@ -105,18 +111,26 @@ const PropertyCode: React.FC = () => {
   const handleDelete = async (codeId: number) => {
     try {
       await dispatch(deletePropertyCode(codeId)).unwrap();
+      showSnackbar('Property code deleted successfully!', 'success');
       setRefreshTrigger(prev => prev + 1);
     } catch (error) {
+      showSnackbar('Failed to delete property code', 'error');
       console.error('Failed to delete property code:', error);
     }
   };
 
   if (status === 'loading') {
-    return <div className={styles.loading}>Loading...</div>;
+    return <Loader />;
   }
 
   return (
     <div className={styles.fullContainer}>
+      <CustomizedSnackbars
+        open={snackbar.open}
+        handleClose={handleSnackbarClose}
+        message={snackbar.message}
+        severity={snackbar.severity}
+      />
       <Paper elevation={3} className={styles.content}>
         <div className={styles.header}>
           <Typography variant="h6" component="h2" className={styles.title}>

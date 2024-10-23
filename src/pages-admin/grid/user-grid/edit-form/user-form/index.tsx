@@ -11,31 +11,9 @@ import {
 } from "lucide-react";
 import defaultProfile from "../../../../../assets/images/profile.jpeg";
 import defaultStyles from "./userform.module.css";
-import { User } from "@/store/model/user"; // Ensure you have the User interface defined in your types
+import { UserFormProps } from "../../user.types";
 
-interface UserFormProps {
-  user: User;
-  onEditClick: () => void;
-  header?: string;
-  editButtonName?: string;
-  showActiveStatus?: boolean;
-  customStyles?: {
-    userForm?: string;
-    header?: string;
-    editButton?: string;
-    content?: string;
-    profileSection?: string;
-    imageContainer?: string;
-    profileImage?: string;
-    role?: string;
-    status?: string;
-    activeStatus?: string;
-    inactiveStatus?: string;
-    detailsSection?: string;
-    detailItem?: string;
-    error?: string;
-  };
-}
+
 
 const UserForm: React.FC<UserFormProps> = ({
   user,
@@ -85,30 +63,29 @@ const UserForm: React.FC<UserFormProps> = ({
             />
           </div>
           <div className="d-flex flex-col gap-0 ml-4">
-          <h3>
-            {user.firstName} {user.lastName}
-          </h3>
-          <p className={styles.role}>{user.role.roleName}</p>
-          {showActiveStatus && (
-            <p
-              className={`${styles.status} ${
-                user.isActive ? styles.activeStatus : styles.inactiveStatus
-              }`}
-            >
-              {user.isActive ? "Active" : "Inactive"}
-            </p>
-          )}
-          
+            <h3>
+              {user.firstName} {user.lastName}
+            </h3>
+            <p className={styles.role}>{user.role.roleName}</p>
+            {showActiveStatus && (
+              <p
+                className={`${styles.status} ${user.isActive ? styles.activeStatus : styles.inactiveStatus
+                  }`}
+              >
+                {user.isActive ? "Active" : "Inactive"}
+              </p>
+            )}
+
           </div>
-         
-         
+
+
         </div>
         <div className={styles.detailsSection}>
           <DetailItem
             icon={<Mail size={22} />}
             title="Primary Email "
             content={user.contactDetails.primaryEmail || "N/A"}
-          />                                                
+          />
           <DetailItem
             icon={<Mail size={22} />}
             title="Alternate Email"
@@ -128,8 +105,7 @@ const UserForm: React.FC<UserFormProps> = ({
             icon={<MapPin size={22} />}
             title="Address"
             content={
-              `${user.addressLine1 || "N/A"}${
-                user.addressLine2 ? `, ${user.addressLine2}` : ""
+              `${user.addressLine1 || "N/A"}${user.addressLine2 ? `, ${user.addressLine2}` : ""
               }` || "N/A"
             }
           />
