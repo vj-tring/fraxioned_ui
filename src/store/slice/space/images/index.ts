@@ -103,5 +103,5 @@ const spaceImageSlice = createSlice({
 
 // Selector to Get Images from State
 export const selectSpaceImages = (state: RootState) => state.spaceImage.images;
-export * from './actions'
+export * from "./actions";
 export default spaceImageSlice.reducer;

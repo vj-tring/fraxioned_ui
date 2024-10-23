@@ -2,14 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import "./home.css";
 import Card from "../../components/cards";
 import { useSelector, useDispatch } from "react-redux";
-import image1 from "../../assests/bear-lake-bluffs.jpg";
 import { FaPlus } from "react-icons/fa";
 import PorpImg from "../../assests/lake-escape.jpg";
 import { resetLimits } from "@/store/slice/auth/propertyGuestSlice";
 import { clearDates } from "@/store/slice/datepicker";
-import { User } from "@/store/model";
-import { propertyImageapi, getProperties } from "@/api/api-endpoints"; // Ensure getProperties is imported
-import { fetchProperties } from "@/store/slice/auth/property-slice";
+import {  getProperties } from "@/api/api-endpoints";
 import NewsLetter from "./NewsLetter";
 interface Property {
   id: number;
@@ -43,13 +40,10 @@ interface RootState {
 const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
   paddingLeft = false,
 }) => {
-  // const userId = useSelector((state: any) => state.auth.user?.id);
-  const additionalPropertiesLength = 4;
   const { cards: properties } = useSelector(
     (state: RootState) => state.properties
   );
   const dispatch = useDispatch();
-  const [images, setImages] = useState<Image[]>([]);
   const [additionalProperties, setAdditionalProperties] = useState<Property[]>(
     []
   );
@@ -79,8 +73,6 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
   useEffect(() => {
     dispatch(resetLimits());
     dispatch(clearDates());
-
-    // fetchImages();
     fetchAdditionalProperties();
   }, [dispatch]);
 
@@ -93,9 +85,6 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
       });
     }
   };
-
-  // const Shadow =
-  //   properties.length >= 4 ? "rgba(0, 0, 0, 0.1) 1px 1px 2px 1px" : "none";
 
   const formatCardName = (name: string | undefined) => {
     if (name) {
@@ -125,7 +114,6 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
             </div>
           )}
           <div
-            // style={{ boxShadow: Shadow }}
             className={`Cardcontainer ${showCarousel ? "carousel" : ""}`}
             ref={carouselRef}
           >
@@ -134,7 +122,7 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
                 <Card
                   key={property.id}
                   imageUrl={property.coverImageUrl || PorpImg}
-                  title={formatCardName(property.name || "No Title")}
+                  title={formatCardName(property.propertyName || "No Title")}
                   text={property.address || "Address not available"}
                   share={
                     property.propertyShare

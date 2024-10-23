@@ -22,10 +22,10 @@ import { useSelector, useDispatch } from "react-redux";
 import Loader from "@/components/loader";
 import { RootState } from "@/store/reducers";
 import { AppDispatch } from "@/store";
-import { addHoliday } from "@/store/slice/auth/holidaySlice";
+import { addHoliday } from "@/store/slice/holiday/action";
 import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
-import {NewFormProps} from '../holiday.types';
-
+import { NewFormProps } from "../holiday.types";
+import { formatDate } from "@/utils/datefunction";
 
 const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
   const [name, setName] = useState("");
@@ -50,6 +50,7 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
       dispatch(fetchProperties());
     }
   }, [propertiesStatus, dispatch]);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,8 +104,8 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
       const holidayData = {
         name,
         year: Number(year),
-        startDate: startDate?.toISOString().split("T")[0] ?? "",
-        endDate: endDate?.toISOString().split("T")[0] ?? "",
+        startDate: formatDate(startDate),
+        endDate: formatDate(endDate),
         properties: allPropertiesSelected
           ? properties.map((property) => ({ id: property.id }))
           : selectedProperties.map((id) => ({ id })),
@@ -112,9 +113,9 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
           id: userId,
         },
       };
-      
+
       const resultAction = await dispatch(addHoliday(holidayData));
-      
+
       if (addHoliday.fulfilled.match(resultAction)) {
         onHolidayAdded();
         onClose();

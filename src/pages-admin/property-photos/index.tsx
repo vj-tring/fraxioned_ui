@@ -5,10 +5,11 @@ import {
   propertyImageapi,
   deletetpropertyImageById,
 } from "@/api/api-endpoints";
+import { fetchAdditionalImages } from "@/store/slice/additional-image/action";
 import {
-  fetchAdditionalImages
-} from "@/store/slice/additional-image/action";
-import { clearAdditionalImages, resetPropertyImagesState } from "@/store/slice/additional-image";
+  clearAdditionalImages,
+  resetPropertyImagesState,
+} from "@/store/slice/additional-image";
 import { RootState } from "@/store/reducers";
 import { Trash2, X, Plus } from "lucide-react";
 import Loader from "@/components/loader";
@@ -17,7 +18,12 @@ import ConfirmationModal from "@/components/confirmation-modal";
 import { motion, AnimatePresence } from "framer-motion";
 import AddPhoto from "./new-photoupload";
 import { AppDispatch } from "@/store";
-import { PropertyImage, SpaceGroup, ImagesBySpace } from "./property-photo.types";
+import {
+  PropertyImage,
+  SpaceGroup,
+  ImagesBySpace,
+} from "./property-photo.types";
+import Carousel from "@/pages/property-listing-viewmore/Carousel";
 
 const PropertyPhotos: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -33,6 +39,7 @@ const PropertyPhotos: React.FC = () => {
   const [showNewForm, setShowNewForm] = useState(false);
   const [showAddPhoto, setShowAddPhoto] = useState(false);
   const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0); // To track the current index of carousel
 
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -41,11 +48,13 @@ const PropertyPhotos: React.FC = () => {
   const refreshPhotos = useCallback(async () => {
     setIsLoading(true);
     try {
-      const propertyImagesResponse = await propertyImageapi(parseInt(id || "0"));
+      const propertyImagesResponse = await propertyImageapi(
+        parseInt(id || "0")
+      );
       dispatch(fetchAdditionalImages(parseInt(id || "0")));
       if (propertyImagesResponse.data && propertyImagesResponse.data.success) {
-        const allPhotos: PropertyImage[] = propertyImagesResponse.data.data.propertySpaceImages;
-
+        const allPhotos: PropertyImage[] =
+          propertyImagesResponse.data.data.propertySpaceImages;
 
         const groupedBySpace = allPhotos.reduce(
           (acc: { [key: string]: SpaceGroup }, img: PropertyImage) => {
@@ -98,7 +107,10 @@ const PropertyPhotos: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (location.state && (location.state.fromEdit || location.state.fromUpload)) {
+    if (
+      location.state &&
+      (location.state.fromEdit || location.state.fromUpload)
+    ) {
       refreshPhotos();
       navigate(location.pathname, { replace: true, state: {} });
     }
@@ -115,9 +127,19 @@ const PropertyPhotos: React.FC = () => {
   };
 
   const handleImageClick = (imageUrl: string) => {
-    setSelectedImageUrl(imageUrl);
-  };
+    // Filter the images based on the active section
+    const imagesForCarousel =
+      imagesBySpace[activeTab]?.instances.flatMap(
+        (instance) => instance.images
+      ) || [];
 
+    const clickedImageIndex = imagesForCarousel.findIndex(
+      (img) => img.url === imageUrl
+    );
+
+    setSelectedImageUrl(imageUrl);
+    setSelectedImageIndex(clickedImageIndex);
+  };
   const handleAddPhotoClick = () => {
     setShowAddPhoto(true);
   };
@@ -152,7 +174,9 @@ const PropertyPhotos: React.FC = () => {
   };
 
   const handleImageLoad = (imageId: number) => {
-    setLoadedImages((prevLoadedImages) => new Set(prevLoadedImages).add(imageId));
+    setLoadedImages((prevLoadedImages) =>
+      new Set(prevLoadedImages).add(imageId)
+    );
   };
 
   const renderImages = (images: PropertyImage[]) => (
@@ -178,8 +202,9 @@ const PropertyPhotos: React.FC = () => {
             <img
               src={image.url}
               alt={image.description}
-              className={`${styles.propertyImage} ${loadedImages.has(image.id) ? styles.loaded : ""
-                }`}
+              className={`${styles.propertyImage} ${
+                loadedImages.has(image.id) ? styles.loaded : ""
+              }`}
               onLoad={() => handleImageLoad(image.id)}
             />
             <div className={styles.overlay}>
@@ -191,19 +216,20 @@ const PropertyPhotos: React.FC = () => {
               </button>
             </div>
           </div>
-          <div className={styles.imageDescription}>
-            {image.description}
-            {activeTab === "All Photos" && image.propertySpace && (
-              <span className={styles.spaceTag}>
-                {`${image.propertySpace.space.name} ${image.propertySpace.instanceNumber}`}
-              </span>
-            )}
-          </div>
+          {activeTab === "All Photos" && (
+            <div className={styles.imageDescription}>
+              {image.description}
+              {image.propertySpace && (
+                <span className={styles.spaceTag}>
+                  {`${image.propertySpace.space.name} ${image.propertySpace.instanceNumber}`}
+                </span>
+              )}
+            </div>
+          )}
         </motion.div>
       ))}
     </div>
   );
-
 
   if (fetchError) {
     return <div className={styles.error}>Error: {fetchError}</div>;
@@ -217,8 +243,9 @@ const PropertyPhotos: React.FC = () => {
           {Object.entries(imagesBySpace).map(([spaceName, spaceGroup]) => (
             <button
               key={spaceName}
-              className={`${styles.tab} ${activeTab === spaceName ? styles.activeTab : ""
-                }`}
+              className={`${styles.tab} ${
+                activeTab === spaceName ? styles.activeTab : ""
+              }`}
               onClick={() => handleTabClick(spaceName)}
             >
               {spaceName}
@@ -236,12 +263,15 @@ const PropertyPhotos: React.FC = () => {
             </button>
           ))}
           <button
-            className={`${styles.tab} ${activeTab === "Other Photos" ? styles.activeTab : ""
-              }`}
+            className={`${styles.tab} ${
+              activeTab === "Other Photos" ? styles.activeTab : ""
+            }`}
             onClick={() => handleTabClick("Other Photos")}
           >
             Other Photos
-            <span className={styles.photoCount}>({additionalImages.length})</span>
+            <span className={styles.photoCount}>
+              ({additionalImages.length})
+            </span>
           </button>
         </div>
       </div>
@@ -269,8 +299,8 @@ const PropertyPhotos: React.FC = () => {
                 renderImages(additionalImages)
               )
             ) : imagesBySpace[activeTab]?.instances.flatMap(
-              (instance) => instance.images
-            ).length === 0 ? (
+                (instance) => instance.images
+              ).length === 0 ? (
               <div className={styles.emptyState}>
                 <p>No photos found for this space</p>
               </div>
@@ -315,7 +345,15 @@ const PropertyPhotos: React.FC = () => {
           </motion.div>
         </motion.div>
       )}
-
+      {selectedImageUrl && (
+        <Carousel
+          images={imagesBySpace[activeTab]?.instances.flatMap(
+            (instance) => instance.images
+          )}
+          initialIndex={selectedImageIndex}
+          onClose={() => setSelectedImageUrl(null)}
+        />
+      )}
       <ConfirmationModal
         show={showDeleteConfirmation}
         onHide={() => setShowDeleteConfirmation(false)}
