@@ -3,6 +3,25 @@ export interface Property {
     propertyName: string;
 }
 
+export interface RootState {
+    auth: {
+        user: {
+            id: number;
+        } | null;
+    };
+    property: {
+        properties: Property[];
+        status: 'idle' | 'loading' | 'succeeded' | 'failed';
+        error: string | null;
+    };
+    holiday: HolidayState;
+}
+
+export interface NewFormProps {
+    onClose: () => void;
+    onHolidayAdded: () => void;
+  }
+
 export interface PropertySeasonHoliday {
     id: number;
     property: Property;

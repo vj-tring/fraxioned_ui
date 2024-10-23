@@ -23,9 +23,9 @@ import { RootState } from "@/store/reducers";
 import EventIcon from "@mui/icons-material/Event";
 import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
 import { AppDispatch } from "@/store";
-import { fetchPropertyHoliday, updateHoliday } from "@/store/slice/auth/holidaySlice";
-import {EditFormProps} from '../holiday.types';
-
+import { fetchPropertyHoliday, updateHoliday } from "@/store/slice/holiday/action";
+import { EditFormProps } from '../holiday.types';
+import { Property } from "@/store/model/holiday.types";
 
 const EditForm: React.FC<EditFormProps> = ({
   onClose,
@@ -48,8 +48,7 @@ const EditForm: React.FC<EditFormProps> = ({
   const properties = useSelector((state: RootState) => state.property.properties);
   const propertyStatus = useSelector((state: RootState) => state.property.status);
   const propertyError = useSelector((state: RootState) => state.property.error);
-  
-  // New selectors for holiday state
+
   const selectedHoliday = useSelector((state: RootState) => state.holiday.selectedHoliday);
   const holidayLoading = useSelector((state: RootState) => state.holiday.loading);
   const holidayError = useSelector((state: RootState) => state.holiday.error);
@@ -78,21 +77,26 @@ const EditForm: React.FC<EditFormProps> = ({
       return;
     }
 
+    if (!startDate || !endDate) {
+      setError("Start date and end date are required.");
+      return;
+    }
+
     const updatedHolidayData = {
       name,
       year,
-      startDate: startDate?.toISOString().split("T")[0],
-      endDate: endDate?.toISOString().split("T")[0],
+      startDate: startDate.toISOString().split("T")[0],
+      endDate: endDate.toISOString().split("T")[0],
+      properties: selectedProperties.map((id) => ({ id })),
       updatedBy: {
         id: userId,
       },
-      properties: selectedProperties.map((id) => ({ id })),
     };
 
     try {
-      await dispatch(updateHoliday({ 
-        id: holidayData.id, 
-        updatedHolidayData 
+      await dispatch(updateHoliday({
+        id: holidayData.id,
+        updatedHolidayData
       })).unwrap();
       onHolidayUpdated();
       onClose();
@@ -178,6 +182,7 @@ const EditForm: React.FC<EditFormProps> = ({
                       textField: {
                         fullWidth: true,
                         className: styles.inputField,
+                        required: true,
                       },
                     }}
                   />
@@ -194,6 +199,7 @@ const EditForm: React.FC<EditFormProps> = ({
                       textField: {
                         fullWidth: true,
                         className: styles.inputField,
+                        required: true,
                       },
                     }}
                   />
@@ -213,9 +219,9 @@ const EditForm: React.FC<EditFormProps> = ({
                   <div className={styles.scrollableContainer}>
                     <FormGroup>
                       <Grid container>
-                        {properties.map((property) => (
+                        {properties.map((property: Property) => (
                           <Grid item xs={3} key={property.id}>
-                            <div className="d-flex ">
+                            <div className="d-flex">
                               <FormControlLabel
                                 sx={{
                                   marginRight: "5px",
@@ -247,6 +253,11 @@ const EditForm: React.FC<EditFormProps> = ({
                 </FormControl>
               </Grid>
             </Grid>
+            {error && (
+              <Typography color="error" className={styles.errorMessage}>
+                {error}
+              </Typography>
+            )}
             <Box className={styles.buttonContainer}>
               <Button
                 variant="outlined"
@@ -272,4 +283,3 @@ const EditForm: React.FC<EditFormProps> = ({
 };
 
 export default EditForm;
-

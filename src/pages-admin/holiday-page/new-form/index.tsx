@@ -22,9 +22,9 @@ import { useSelector, useDispatch } from "react-redux";
 import Loader from "@/components/loader";
 import { RootState } from "@/store/reducers";
 import { AppDispatch } from "@/store";
-import { addHoliday } from "@/store/slice/auth/holidaySlice";
+import { addHoliday } from "@/store/slice/holiday/action";
 import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
-import {NewFormProps} from '../holiday.types';
+import { NewFormProps } from "../holiday.types";
 
 
 const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
@@ -112,9 +112,9 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
           id: userId,
         },
       };
-      
+
       const resultAction = await dispatch(addHoliday(holidayData));
-      
+
       if (addHoliday.fulfilled.match(resultAction)) {
         onHolidayAdded();
         onClose();
