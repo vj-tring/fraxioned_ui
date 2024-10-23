@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { propertywithDetails } from '../../../api/api-endpoints/index';
-import { RootState } from '@/store/reducers';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { propertywithDetails } from "../../../api/api-endpoints/index";
+import { RootState } from "@/store/reducers";
 
 export interface LimitsState {
   limits: {
@@ -30,9 +30,8 @@ const initialState: LimitsState = {
   error: null,
 };
 
-
 export const fetchLimits = createAsyncThunk(
-  'limits/fetchLimits',
+  "limits/fetchLimits",
   async (_, { rejectWithValue, getState }) => {
     try {
       const response = await propertywithDetails();
@@ -40,7 +39,9 @@ export const fetchLimits = createAsyncThunk(
 
       if (Array.isArray(response.data) && response.data.length > 0) {
         const propertySelect = response.data;
-        const selectedProperty = propertySelect.find(prop => prop.propertyId === selectedPropertyId);
+        const selectedProperty = propertySelect.find(
+          (prop) => prop.propertyId === selectedPropertyId
+        );
 
         if (selectedProperty) {
           return {
@@ -48,18 +49,18 @@ export const fetchLimits = createAsyncThunk(
             noOfPetsAllowed: selectedProperty.noOfPetsAllowed,
           };
         } else {
-          return rejectWithValue('Property ID not found');
+          return rejectWithValue("Property ID not found");
         }
       } else {
-        return rejectWithValue('Invalid response data');
+        return rejectWithValue("Invalid response data");
       }
     } catch (error) {
-      return rejectWithValue('Failed to fetch limits');
+      return rejectWithValue("Failed to fetch limits");
     }
   }
 );
 const limitsSlice = createSlice({
-  name: 'limits',
+  name: "limits",
   initialState,
   reducers: {
     resetLimits: (state) => {
@@ -68,10 +69,16 @@ const limitsSlice = createSlice({
       state.loading = false;
       state.error = null;
     },
-    updateCount: (state, action: { type: string, payload: { name: string, count: number } }) => {
+    updateCount: (
+      state,
+      action: { type: string; payload: { name: string; count: number } }
+    ) => {
       state.counts[action.payload.name] = action.payload.count;
     },
-    initializeCounts: (state, action: PayloadAction<{ Adults: number; Children: number; Pets: number }>) => {
+    initializeCounts: (
+      state,
+      action: PayloadAction<{ Adults: number; Children: number; Pets: number }>
+    ) => {
       state.counts = action.payload;
     },
   },
@@ -93,6 +100,7 @@ const limitsSlice = createSlice({
   },
 });
 
-export const { resetLimits, updateCount, initializeCounts } = limitsSlice.actions;
+export const { resetLimits, updateCount, initializeCounts } =
+  limitsSlice.actions;
 
 export default limitsSlice.reducer;

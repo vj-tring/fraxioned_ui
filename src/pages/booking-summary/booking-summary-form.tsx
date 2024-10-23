@@ -131,14 +131,15 @@ const BookingSummaryForm: React.FC = () => {
     const fetchPropertyImages = async () => {
       try {
         const response = await propertyImageapi(property.selectedPropertyId);
-        const filterById = response.data.data.filter(
+        const filterById = response.data.data.propertySpaceImages.filter(
           (image: Image) =>
             image.property?.id === currentBookingId && image.displayOrder
         );
         const sortedImages = filterById.sort(
           (a: Image, b: Image) => a.displayOrder - b.displayOrder
         );
-        setImageDetails(response.data.data);
+        setImageDetails(response.data.data.propertySpaceImages);
+        console.log(response.data.data);
       } catch (error) {
         console.error("Error fetching property images:", error);
       }
