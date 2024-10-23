@@ -315,7 +315,6 @@ export default function Component({ initialSpace = {} }) {
     if (space?.id) {
       try {
         await dispatch(deleteExistingSpaceProperty(space.id)).unwrap();
-        console.log("Property space deleted successfully");
         setDeleteDialogOpen(false);
         navigate(`/admin/property/${Number(propertyId)}/rooms`);
       } catch (error) {

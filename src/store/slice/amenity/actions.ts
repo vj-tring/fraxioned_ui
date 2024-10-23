@@ -1,5 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { amenitiesapi, addamenity, updateamenities, deleteAmenity } from "@/api/api-endpoints";
+import {
+  amenitiesapi,
+  addamenity,
+  updateamenities,
+  deleteAmenity,
+} from "@/api/api-endpoints";
 
 interface AddAmenityData {
   amenityGroup: { id: number };
@@ -16,23 +21,25 @@ export const fetchAmenities = createAsyncThunk(
   }
 );
 export const createAmenity = createAsyncThunk(
-  'amenities/addAmenity',
+  "amenities/addAmenity",
   async (data: AddAmenityData, { rejectWithValue }) => {
     try {
       const formData = new FormData();
-      formData.append('amenityGroup', JSON.stringify(data.amenityGroup));
-      formData.append('createdBy', JSON.stringify(data.createdBy));
-      formData.append('amenityName', data.amenityName);
-      formData.append('amenityDescription', data.amenityDescription);
-      
+      formData.append("amenityGroup", JSON.stringify(data.amenityGroup));
+      formData.append("createdBy", JSON.stringify(data.createdBy));
+      formData.append("amenityName", data.amenityName);
+      formData.append("amenityDescription", data.amenityDescription);
+
       if (data.imageFile) {
-        formData.append('imageFile', data.imageFile);
+        formData.append("imageFile", data.imageFile);
       }
 
       const response = await addamenity(formData);
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'An error occurred');
+      return rejectWithValue(
+        error.response?.data?.message || "An error occurred"
+      );
     }
   }
 );
@@ -48,26 +55,33 @@ export const createAmenity = createAsyncThunk(
 //     }
 //   );
 
-  export const updateAmenity = createAsyncThunk(
-    'amenities/updateAmenity',
-    async ({ id, updateData }: { id: number; updateData: FormData }, { rejectWithValue }) => {
-        try {
-            const response = await updateamenities(id, updateData);
-            return response.data;
-        } catch (error: any) {
-            return rejectWithValue(error.response?.data?.message || 'Failed to update amenity');
-        }
+export const updateAmenity = createAsyncThunk(
+  "amenities/updateAmenity",
+  async (
+    { id, updateData }: { id: number; updateData: FormData },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await updateamenities(id, updateData);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to update amenity"
+      );
     }
+  }
 );
 
 export const deleteAmenityAsync = createAsyncThunk(
-    'amenities/deleteAmenity',
-    async (id: number, { rejectWithValue }) => {
-        try {
-            const response = await deleteAmenity(id);
-            return response.data;
-        } catch (error: any) {
-            return rejectWithValue(error.response?.data?.message || 'Failed to delete amenity');
-        }
+  "amenities/deleteAmenity",
+  async (id: number, { rejectWithValue }) => {
+    try {
+      const response = await deleteAmenity(id);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to delete amenity"
+      );
     }
+  }
 );

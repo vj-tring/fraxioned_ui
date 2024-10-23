@@ -30,7 +30,7 @@ function AppRoutes() {
   useEffect(() => {
     if (user == null && !isPublicRoute && parsedSession != null) {
       dispatch(fetchAuthState());
-    }
+    } 
   }, [dispatch]);
   return (
     <>

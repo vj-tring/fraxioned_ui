@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridSortModel } from "@mui/x-data-grid";
 import {
   fetchHolidaysApi,
   propertyseasonholiday,
@@ -31,12 +31,19 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
   const [openEditForm, setOpenEditForm] = useState(false);
   const [holidayToDelete, setHolidayToDelete] = useState<Holiday | null>(null);
   const [selectedHoliday, setSelectedHoliday] = useState<Holiday | null>(null);
-  const [selectedPropertyId, setSelectedPropertyId] = useState<number | string>(
-    "all"
-  );
+  const [selectedPropertyId, setSelectedPropertyId] = useState<number | string>("all");
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric'
+    });
+  };
 
   const fetchHolidays = useCallback(
     async (propertyId: number | string = "all") => {
@@ -53,9 +60,11 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
           return {
             id: holiday.id,
             name: holiday.name,
-            year: holiday.year,
+            year: parseInt(holiday.year),
             start_date: holiday.startDate,
             end_date: holiday.endDate,
+            start_date_formatted: formatDate(holiday.startDate),
+            end_date_formatted: formatDate(holiday.endDate),
             created_at: holiday.createdAt,
             updated_at: holiday.updatedAt,
             created_by: holiday.createdBy ? holiday.createdBy.id : "N/A",
@@ -64,14 +73,17 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
             propertySeasonHolidayId: item.id || null,
           };
         });
-        setHolidays(mappedData);
+
+        const sortedData = mappedData.sort((a: { year: number; }, b: { year: number; }) => a.year - b.year);
+
+        setHolidays(sortedData);
         setFilteredHolidays(
           propertyId === "all"
-            ? mappedData
-            : mappedData.filter(
-                (h: { propertyId: string | number | null }) =>
-                  h.propertyId === propertyId
-              )
+            ? sortedData
+            : sortedData.filter(
+              (h: { propertyId: string | number | null }) =>
+                h.propertyId === propertyId
+            )
         );
       } catch (err) {
         console.error("Error fetching holidays:", err);
@@ -80,6 +92,7 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     },
     []
   );
+
 
   useEffect(() => {
     fetchHolidays();
@@ -158,29 +171,28 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     {
       field: "year",
       headerName: "Year",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
     },
     {
-      field: "start_date",
+      field: "start_date_formatted",
       headerName: "Start Date",
-      flex:1,
+      flex: 1.5,
       align: "center",
       headerAlign: "center",
     },
     {
-      field: "end_date",
+      field: "end_date_formatted",
       headerName: "End Date",
-      flex:1,
+      flex: 1.5,
       align: "center",
       headerAlign: "center",
     },
-
     {
       field: "actions",
       headerName: "Actions",
-      flex:1,
+      flex: 1,
       align: "center",
       headerAlign: "center",
       renderCell: (params) => (
@@ -212,11 +224,11 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     },
   ];
 
+
   return (
     <div
-      className={`${styles.holidaysContainer} ${
-        isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
-      }`}
+      className={`${styles.holidaysContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
+        }`}
     >
       <div className={styles.titleContainer}>
         <h1 className={styles.title}>Holidays Details</h1>
