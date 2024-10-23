@@ -48,7 +48,7 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
     error,
     isAddingProperty,
     isDeletingProperty,
-  } = useAppSelector((state) => state.userProperties);
+  } = useAppSelector((state) => state.userProperties || []);
   const properties = useSelector(
     (state: RootState) => state.property.properties
   );
