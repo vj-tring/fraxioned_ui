@@ -9,15 +9,7 @@ import { RootState } from "@/store/reducers";
 import { User, Role, ContactDetails } from "@/store/model";
 import styles from "./useredit.module.css";
 import { AppDispatch } from "@/store";
-
-interface EditFormProps {
-  user: User;
-  onClose: () => void;
-  onUserUpdated: () => void;
-  showCloseIcon?: boolean;
-  formTitle?: string;
-  isAdmin?: boolean;
-}
+import { EditFormProps } from "./user-edit.types";
 
 const EditForm: React.FC<EditFormProps> = ({
   user,
