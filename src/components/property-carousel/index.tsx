@@ -182,7 +182,7 @@ export default function BasicSelect() {
           <span className="DateHead1 monsterrat">My Home(s)</span>
           <p className="property1 monsterrat">
             {formatCardName(
-              selectedCard ? selectedCard?.name : "Select Property"
+              selectedCard ? selectedCard?.propertyName : "Select Property"
             )}
           </p>
         </div>

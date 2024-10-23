@@ -235,7 +235,6 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
 
 
   const handleEditClick = (id: number) => {
-    console.log("Edit booking with id:", id);
   };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
