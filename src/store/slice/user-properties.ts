@@ -36,7 +36,6 @@ const userPropertiesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fetch user properties with details
       .addCase(fetchUserPropertiesWithDetailsByUser.pending, (state) => {
         state.loading = true;
         state.error = null;
