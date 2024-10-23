@@ -3,7 +3,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { IconButton, Typography, Tooltip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import { getAllUsers, propertydetailsapi } from "@/api/api-endpoints";
+import { getAllUsers, getPropertyWithDetails } from "@/api/api-endpoints";
 import Search from "@/pages-admin/search-user";
 import styles from "./User.module.css";
 import { useNavigate } from "react-router-dom";
@@ -53,7 +53,7 @@ const User: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
 
   const fetchProperties = async () => {
     try {
-      const response = await propertydetailsapi();
+      const response = await getPropertyWithDetails();
       setProperties(response.data);
     } catch (err) {
       console.error("Error fetching properties:", err);

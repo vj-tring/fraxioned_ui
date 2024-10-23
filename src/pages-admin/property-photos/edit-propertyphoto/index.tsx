@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getpropertyImageById, propertyImageeditapi, propertyspaceapi, propertyspacetypesapi } from '@/api/api-endpoints';
+import { getpropertyImageById, propertyImageeditapi, getAllSpaces, propertyspacetypesapi } from '@/api/api-endpoints';
 import Loader from '@/components/loader';
 import styles from './editphoto.module.css';
 import { X } from 'lucide-react';
@@ -39,7 +39,7 @@ const EditPhoto: React.FC<EditPhotoProps> = ({ propertyId, imageId, onClose }) =
     useEffect(() => {
         const fetchSpacesAndTypes = async () => {
             try {
-                const spacesResponse = await propertyspaceapi();
+                const spacesResponse = await getAllSpaces();
                 setSpaces(spacesResponse.data.data);
 
                 const spaceTypesResponse = await propertyspacetypesapi();

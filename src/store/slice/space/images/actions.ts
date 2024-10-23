@@ -6,8 +6,7 @@ import {
   updatePropertySpaceImageById,
   deletePropertySpaceImageById,
   deleteMultiplePropertySpaceImages,
-  fetchPropertyImagesByPropertySpaceIds,
-} from "@/api/api-endpoints";
+  } from "@/api/api-endpoints";
 
 // Fetch All Space Property Images
 export const fetchAllImages = createAsyncThunk(
@@ -39,7 +38,7 @@ export const fetchImagesByPropertySpaceId = createAsyncThunk(
   "spaceImage/fetchImagesByPropertyId",
   async (propertyId: number, { rejectWithValue }) => {
     try {
-      const response = await fetchPropertyImagesByPropertySpaceIds(propertyId);
+      const response = await fetchPropertySpaceImagesByPropertyId(propertyId);
       return response.data.data;
     } catch (error) {
       return rejectWithValue("Failed to fetch images for the property");

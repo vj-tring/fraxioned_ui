@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, Action } from '@reduxjs/toolkit';
 import { Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { RootState } from '@/store/reducers';
-import { updatePropertyapi } from '@/api/api-endpoints';
+import { updatePropertyImage } from '@/api/api-endpoints';
 import { UpdateProperty } from '@/store/model';
 
 export interface EditPropertyState {
@@ -74,7 +74,7 @@ export const editProperty =
                     }
                 };
 
-                const response = await updatePropertyapi(propertyId, updatedPropertyData);
+                const response = await updatePropertyImage(propertyId, updatedPropertyData);
 
                 if (response.status === 200) {
                     dispatch(editPropertySuccess('Property updated successfully!'));

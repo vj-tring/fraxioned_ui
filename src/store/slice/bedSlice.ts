@@ -6,7 +6,7 @@ import {
   CreateOrDeletePropertySpaceBedsDto,
   CreateSpaceBedTypeDto,
   UpdateSpaceBedTypeDto
-} from '@/store/model/space-types';
+} from '@/store/model';
 
 interface BedState {
   propertySpaceBeds: any[];

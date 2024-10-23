@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid, GridColDef, GridFilterModel } from "@mui/x-data-grid";
-import { getBookings, userbookingCancelapi } from "@/api/api-endpoints";
+import { getBookings, cancelBooking } from "@/api/api-endpoints";
 import styles from "./booking.module.css";
 import {
   Alert,
@@ -278,7 +278,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     if (bookingToDelete === null) return;
 
     try {
-      await userbookingCancelapi(bookingToDelete.id, bookingToDelete.userId);
+      await cancelBooking(bookingToDelete.id, bookingToDelete.userId);
 
       const updatedBookings = bookings.map((booking) =>
         booking.id === bookingToDelete.id

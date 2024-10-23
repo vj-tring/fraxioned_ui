@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { propertywithDetails } from '../../../api/api-endpoints/index';
+import { getPropertyWithDetails } from '../../../api/api-endpoints/index';
 import { RootState } from '@/store/reducers';
 
 export interface LimitsState {
@@ -35,7 +35,7 @@ export const fetchLimits = createAsyncThunk(
   'limits/fetchLimits',
   async (_, { rejectWithValue, getState }) => {
     try {
-      const response = await propertywithDetails();
+      const response = await getPropertyWithDetails();
       const { selectedPropertyId } = (getState() as RootState).properties;
 
       if (Array.isArray(response.data) && response.data.length > 0) {

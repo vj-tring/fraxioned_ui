@@ -1,5 +1,5 @@
 import { axiosInstance } from "@/store/axiosSetup";
-import { CreatePropertySpaceBedDto, UpdatePropertySpaceBedDto, CreateOrDeletePropertySpaceBedsDto, CreatePropertySpaceBathroomDto, CreateOrDeletePropertySpaceBathroomsDto, CreateSpaceBedTypeDto, UpdateSpaceBedTypeDto, CreateSpaceBathroomTypesDto, UpdateSpaceBathroomTypesDto, UpdatePropertySpaceBathroomDto } from "@/store/model/space-types";
+import { CreatePropertySpaceBedDto, UpdatePropertySpaceBedDto, CreateOrDeletePropertySpaceBedsDto, CreatePropertySpaceBathroomDto, CreateOrDeletePropertySpaceBathroomsDto, CreateSpaceBedTypeDto, UpdateSpaceBedTypeDto, CreateSpaceBathroomTypesDto, UpdateSpaceBathroomTypesDto, UpdatePropertySpaceBathroomDto } from "@/store/model";
 
 
 export const createPropertySpaceBed = (data: CreatePropertySpaceBedDto) =>
