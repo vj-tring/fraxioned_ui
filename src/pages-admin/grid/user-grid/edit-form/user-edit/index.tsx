@@ -113,6 +113,7 @@ const EditForm: React.FC<EditFormProps> = ({
         ...restFormData,
         updatedBy: id,
         ...(formData.profileImage && { profileImage: formData.profileImage }),
+        
       };
 
       delete (dataToSend as any).profileImage;
