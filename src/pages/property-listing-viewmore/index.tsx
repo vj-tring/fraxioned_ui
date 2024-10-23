@@ -23,7 +23,7 @@ const PropertyMorePhotos: React.FC = () => {
   const dispatch = useDispatch();
 
   const imagesBySpace = useSelector(selectPropertyImages);
-  console.log("imagesBySpace",imagesBySpace)
+  console.log("imagesBySpace", imagesBySpace);
   useEffect(() => {
     if (id) {
       dispatch(fetchPropertyImages(parseInt(id)));
@@ -101,7 +101,8 @@ const PropertyMorePhotos: React.FC = () => {
               onClick={() => handleTabClick(spaceName)}
             >
               {spaceName}
-              {spaceName === "All Photos" ? (
+              {spaceName === "All Photos" ||
+              spaceName === "Additional Photos" ? (
                 <span className={styles.photoCount}>
                   ({spaceGroup.instances[0].images.length})
                 </span>
@@ -171,7 +172,7 @@ const PropertyMorePhotos: React.FC = () => {
                         {image.description}
                         {activeTab === "All Photos" && (
                           <span className={styles.spaceTag}>
-                            {`${image.name} ${image.instanceNumber}`}
+                            {/* {`${image.name} ${image.instanceNumber}`} */}
                           </span>
                         )}
                       </div>

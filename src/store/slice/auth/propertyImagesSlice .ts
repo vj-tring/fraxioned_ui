@@ -47,7 +47,7 @@ export const fetchPropertyImages = createAsyncThunk(
       const response = await propertyImageapi(propertyId);
       console.log("proerpt fetched data", response.data.data);
 
-      return response.data.data; 
+      return response.data.data;
     } catch (error) {
       console.error("Fetching property images failed:", error);
       return rejectWithValue("Failed to fetch property images");
@@ -121,6 +121,15 @@ const propertyImagesSlice = createSlice({
                 {
                   instanceNumber: 0,
                   images: [...propertyAdditionalImages, ...propertySpaceImages],
+                },
+              ],
+            },
+            "Additional Photos": {
+              name: "Additional Photos",
+              instances: [
+                {
+                  instanceNumber: 0,
+                  images: [...propertyAdditionalImages], // Store only additional images here
                 },
               ],
             },
