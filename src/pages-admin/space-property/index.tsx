@@ -20,7 +20,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { fetchAllImages } from "@/store/slice/space/images";
 import Loader from "@/components/loader";
 import { fetchPropertyAllRooms } from "@/store/slice/properties/propertyallrooms/action";
-import { PropertySpace } from "@/store/model/property-all-rooms.types";
+import { PropertySpace, SpaceImage } from "@/store/model/property-all-rooms.types";
 
 const SpaceProperty: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -30,9 +30,7 @@ const SpaceProperty: React.FC = () => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [selectedSpace, setSelectedSpace] = useState<Space | null>(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
     const spaces = useSelector((state: RootState) => state.spaces.spaces || []);
-    const propertySpace = useSelector((state: RootState) => state.spaceProperties.spaceProperties || []);
     const propertySpaceImages = useSelector((state: RootState) => state.spaceImage.images || []);
     const propertyAllRooms = useSelector((state: RootState) => state.propertyAllRooms.data || [])
 
@@ -44,7 +42,7 @@ const SpaceProperty: React.FC = () => {
                 await dispatch(fetchAllSpaces()).unwrap();
                 await dispatch(fetchSpacePropertiesById(Number(id))).unwrap();
             } catch (error) {
-                setError("Failed to load spaces or properties");
+                console.log("Failed to load spaces or properties");
             } finally {
                 setLoading(false);
             }
@@ -74,29 +72,25 @@ const SpaceProperty: React.FC = () => {
                 setIsDialogOpen(false);
                 setSelectedSpace(null);
             } catch (error) {
-                setError("Error creating space property");
+                console.log("Error creating space property");
             } finally {
                 setLoading(false);
             }
         }
     };
 
-    const getSpaceImage = (spaceId: number): string => {
-        const propertyImages = propertySpaceImages
-            .filter((img: any) => img.propertySpace.space.id === spaceId)
-            .sort((a: any, b: any) => a.displayOrder - b.displayOrder);
-
-        if (propertyImages.length > 0) {
-            return propertyImages[0].url;
+    const getSpaceImage = (spaceImages: SpaceImage[]) => {
+        if (spaceImages.length === 1) {
+            spaceImages.sort((a, b) => a.displayOrder - b.displayOrder);
+            if (spaceImages.length > 0) {
+                return spaceImages[0].url;
+            }
         }
-
-        const spaceProperty = spaces.find(sp => sp.id === spaceId);
-        if (spaceProperty && spaceProperty.s3_url) {
-            return spaceProperty.s3_url;
+        else {
+            return spaceImages[0].url;
         }
-
-        return 'https://via.placeholder.com/150';
     };
+
 
     // Navigate to space details page when a space is clicked
     const handleSpaceClick = (space: PropertySpace) => {
@@ -122,7 +116,7 @@ const SpaceProperty: React.FC = () => {
                                 <div className={styles.spaceCard}>
                                     <div className={styles.spaceImageRow}>
                                         <img
-                                            src={getSpaceImage(space.spaceId)}
+                                            src={getSpaceImage(space.propertySpaceImages)}
                                             alt={space.propertySpaceName}
                                             className={styles.spaceImage}
                                             loading="lazy"

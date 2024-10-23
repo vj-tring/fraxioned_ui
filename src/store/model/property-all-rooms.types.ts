@@ -29,7 +29,7 @@ export interface Bathroom {
     spaceBathroomTypeId: number;
 }
 
-interface SpaceImage {
+export interface SpaceImage {
     id: number;
     description: string;
     url: string;

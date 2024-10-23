@@ -15,9 +15,7 @@ import { TabsContent } from "@/components/ui/tabs";
 
 interface AmenitiesTabProps {
   amenitiesStatus: string;
-  propertyAmenitiesLoading: boolean;
   amenitiesError: string | null;
-  propertyAmenitiesError: string | null;
   amenityGroups: Record<string, any>;
   propertyAmenityGroups: Record<string, any>;
   selectedCategory: string;
@@ -33,9 +31,7 @@ interface AmenitiesTabProps {
 
 const AmenitiesTab: React.FC<AmenitiesTabProps> = ({
   amenitiesStatus,
-  propertyAmenitiesLoading,
   amenitiesError,
-  propertyAmenitiesError,
   amenityGroups,
   propertyAmenityGroups,
   selectedCategory,
@@ -55,52 +51,52 @@ const AmenitiesTab: React.FC<AmenitiesTabProps> = ({
     if (choosenCategory === "All") {
       return Object.entries(propertyAmenityGroups).map(([category, amenities]) => (
         <div key={category} className="flex flex-wrap py-1">
-          {/* <h3 className="text-sm font-semibold mb-2">{category}</h3> */}
           <div className="flex gap-1 flex-wrap">
-            {amenities.map((amenity) => (
-              <Badge
-                key={amenity.amenity.id}
-                variant="default"
-                className="text-xs py-1 px-2 flex items-center justify-between rounded bg-[#f29011] hover:bg-[#E28F00]"
-              >
-                <span className="text-md">{amenity.amenity.amenityName}</span>
-                <X
-                  className="h-3 w-3 ml-2 cursor-pointer"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleRemoveAmenity(amenity.amenity.id);
-                  }}
-                />
-              </Badge>
-            ))}
+            {Array.isArray(amenities) && amenities.length > 0 && (
+              amenities.map((amenity) => (
+                <Badge
+                  key={amenity.amenityId}
+                  variant="default"
+                  className="text-xs py-1 px-2 flex items-center justify-between rounded bg-[#f29011] hover:bg-[#E28F00]"
+                >
+                  <span className="text-md">{amenity.amenityName}</span>
+                  <X
+                    className="h-3 w-3 ml-2 cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveAmenity(amenity.amenityId);
+                    }}
+                  />
+                </Badge>
+              )))
+            }
           </div>
         </div>
       ));
     } else {
-      return Object.entries(propertyAmenityGroups).map(
-        ([category, amenities]) =>
-          openCategories[category] && (
-            <div key={category} className="space-y-2">
-              <div className="flex gap-1 flex-wrap">
-                {amenities.map((amenity) => (
-                  <Badge
-                    key={amenity.amenity.id}
-                    variant="default"
-                    className="text-xs py-1 px-2 flex items-center justify-between rounded bg-[#f29011] hover:bg-[#E28F00]"
-                  >
-                    <span className="text-md">{amenity.amenity.amenityName}</span>
-                    <X
-                      className="h-3 w-3 ml-2 cursor-pointer"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleRemoveAmenity(amenity.amenity.id);
-                      }}
-                    />
-                  </Badge>
-                ))}
-              </div>
+      return Object.entries(propertyAmenityGroups).map(([category, amenities]) =>
+        openCategories[category] && (
+          <div key={category} className="space-y-2">
+            <div className="flex gap-1 flex-wrap">
+              {amenities.map((amenity) => (
+                <Badge
+                  key={amenity.amenityId}
+                  variant="default"
+                  className="text-xs py-1 px-2 flex items-center justify-between rounded bg-[#f29011] hover:bg-[#E28F00]"
+                >
+                  <span className="text-md">{amenity.amenityName}</span>
+                  <X
+                    className="h-3 w-3 ml-2 cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemoveAmenity(amenity.amenityId);
+                    }}
+                  />
+                </Badge>
+              ))}
             </div>
-          )
+          </div>
+        )
       );
     }
   };
@@ -108,21 +104,21 @@ const AmenitiesTab: React.FC<AmenitiesTabProps> = ({
   return (
     <TabsContent value="amenities" className="space-y-4 h-100 rounded-md border">
       <div className="h-full flex flex-col">
-        {amenitiesStatus === "loading" || propertyAmenitiesLoading ? (
+        {amenitiesStatus === "loading" ? (
           <div className="flex justify-center items-center h-[300px]">
             <Loader2 className="h-8 w-8 animate-spin" />
           </div>
-        ) : amenitiesStatus === "failed" || propertyAmenitiesError ? (
+        ) : amenitiesStatus === "failed" ? (
           <Alert variant="destructive">
             <AlertTriangle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>
-              {amenitiesError || propertyAmenitiesError || "Failed to load amenities. Please try again later."}
+              {amenitiesError || "Failed to load amenities. Please try again later."}
             </AlertDescription>
           </Alert>
         ) : (
           <>
-            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 p-2">
+            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 p-2 gap-1">
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                 <SelectTrigger className="w-full sm:w-[180px]">
                   <SelectValue placeholder="Category" />
@@ -157,7 +153,7 @@ const AmenitiesTab: React.FC<AmenitiesTabProps> = ({
               <Button
                 onClick={handleAddAmenity}
                 disabled={!selectedAmenity}
-                className="w-full sm:w-auto"
+                className="w-full sm:w-auto text-[#00636d] m-0"
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Add
@@ -202,14 +198,9 @@ const AmenitiesTab: React.FC<AmenitiesTabProps> = ({
             <div className="flex justify-center mt-2 py-2">
               <Button
                 onClick={saveAmenityChanges}
-                disabled={propertyAmenitiesLoading}
                 className="w-1/2 border-2 border-[#c7eaee] bg-[#4b7a7f] text-white rounded"
               >
-                {propertyAmenitiesLoading ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                  <Save className="mr-2 h-4 w-4" />
-                )}
+                <Save className="mr-2 h-4 w-4" />
                 Save Amenities Changes
               </Button>
             </div>
