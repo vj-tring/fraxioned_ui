@@ -25,7 +25,7 @@ import { AppDispatch } from "@/store";
 import { addHoliday } from "@/store/slice/holiday/action";
 import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
 import { NewFormProps } from "../holiday.types";
-import { formatDateToISODate } from "@/utils/datefunction";
+import { formatDate } from "@/utils/datefunction";
 
 const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
   const [name, setName] = useState("");
@@ -51,12 +51,7 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
     }
   }, [propertiesStatus, dispatch]);
 
-  const formatDate = (date: Date | null): string => {
-    if (!date) return "";
-    const localDate = new Date(date);
-    localDate.setHours(12, 0, 0, 0);
-    return formatDateToISODate(localDate);
-  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userId) {
