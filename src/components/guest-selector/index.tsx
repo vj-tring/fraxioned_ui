@@ -191,7 +191,7 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({
   }, [open]);
 
   return (
-    <Box sx={{ width: showIcons ? "16%" : "100%" }}>
+    <Box sx={{ width: showIcons ? "16%" : "100%"}}>
       <Button
         disableRipple
         aria-controls="basic-menu"
