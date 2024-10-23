@@ -156,10 +156,6 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
       noOfShares: 1,
       acquisitionDate: new Date().toISOString().split("T")[0],
     });
-    // setShowPropertyFields(false);
-    setSnackbarMessage("Property details successfully saved");
-    setSnackbarSeverity("success");
-    setShowSnackbar(true);
   };
 
   const handleEditProperty = (index: number) => {
@@ -482,6 +478,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                 </div>
               </div>
 
+              <h3 className={styles.sectionTitle}>PROPERTY LIST</h3>
               {addedProperties.length !== 0 ? (
                 <div className={styles.addedPropertiesList}>
                   {addedProperties.map((property, index) => (
@@ -490,31 +487,11 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                         <>
                           <div className={styles.inlineInputGroup}>
                             <div className={styles.propertyGroup}>
-                              <select
-                                className={styles.propertylist}
-                                value={property.propertyID}
-                                onChange={(e) =>
-                                  setAddedProperties((prev) =>
-                                    prev.map((prop, i) =>
-                                      i === index
-                                        ? {
-                                          ...prop,
-                                          propertyID: parseInt(
-                                            e.target.value,
-                                            10
-                                          ),
-                                        }
-                                        : prop
-                                    )
-                                  )
-                                }
-                              >
-                                {properties.map((prop) => (
-                                  <option key={prop.id} value={prop.id}>
-                                    {prop.propertyName}
-                                  </option>
-                                ))}
-                              </select>
+                              <div className={styles.propertyName}>
+                                <span className={styles.propertylistview}>
+                                  {property.propertyName}
+                                </span>
+                              </div>                   
                             </div>
                             <div className={styles.propertyGroup}>
                               <select
@@ -582,31 +559,33 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                         </>
                       ) : (
                         <>
-                          <span className={styles.propertylistview}>
-                            {property.propertyName}
-                          </span>
-                          <span className={styles.propertyshareview}>
-                            {property.noOfShares}
-                          </span>
-                          <span className={styles.propertydateview}>
-                            {property.acquisitionDate}
-                          </span>
-                          <span className={styles.editsavebutton}>
-                            <button
-                              type="button"
-                              className={styles.editButton}
-                              onClick={() => handleEditProperty(index)}
-                            >
-                              <Edit size={16} />
-                            </button>
-                            <button
-                              type="button"
-                              className={styles.deleteButton}
-                              onClick={() => handleDeleteProperty(index)}
-                            >
-                              <Trash2 size={16} />
-                            </button>
-                          </span>
+                        <div className={styles.propertiesList}>
+                            <span className={styles.propertylistview}>
+                              {property.propertyName}
+                            </span>
+                            <span className={styles.propertyshareview}>
+                              {property.noOfShares}
+                            </span>
+                            <span className={styles.propertydateview}>
+                              {property.acquisitionDate}
+                            </span>
+                            <span className={styles.editsavebutton}>
+                              <button
+                                type="button"
+                                className={styles.editButton}
+                                onClick={() => handleEditProperty(index)}
+                              >
+                                <Edit size={16} />
+                              </button>
+                              <button
+                                type="button"
+                                className={styles.deleteButton}
+                                onClick={() => handleDeleteProperty(index)}
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            </span>
+                          </div>
                         </>
                       )}
                     </div>
