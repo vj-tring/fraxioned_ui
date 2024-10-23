@@ -92,7 +92,7 @@ svg {
 .icons {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-evenly;
   flex-wrap: wrap; /* Allows wrapping of icons if the viewport is narrow */
 }
 

@@ -34,7 +34,7 @@ import {
 } from "@/store/slice/datepicker";
 import { AppDispatch } from "@/store";
 import LastMinuteBookingDialog from "../last-minute-dialog";
-import { BarChart2, CalendarArrowUp, CalendarDays, Clock, Crown, Moon, Mountain, TrendingUp } from "lucide-react";
+import {  CalendarArrowUp, Clock, Moon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface DatePickerWithRangeProps
