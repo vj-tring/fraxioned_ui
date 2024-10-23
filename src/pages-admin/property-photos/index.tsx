@@ -191,14 +191,16 @@ const PropertyPhotos: React.FC = () => {
               </button>
             </div>
           </div>
-          <div className={styles.imageDescription}>
-            {image.description}
-            {activeTab === "All Photos" && image.propertySpace && (
-              <span className={styles.spaceTag}>
-                {`${image.propertySpace.space.name} ${image.propertySpace.instanceNumber}`}
-              </span>
-            )}
-          </div>
+          {activeTab === "All Photos" && (
+            <div className={styles.imageDescription}>
+              {image.description}
+              {image.propertySpace && (
+                <span className={styles.spaceTag}>
+                  {`${image.propertySpace.space.name} ${image.propertySpace.instanceNumber}`}
+                </span>
+              )}
+            </div>
+          )}
         </motion.div>
       ))}
     </div>

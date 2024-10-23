@@ -57,7 +57,7 @@ const UserForm: React.FC<UserFormProps> = ({
         <div className={styles.profileSection}>
           <div className={styles.imageContainer}>
             <img
-              src={user.imageURL || defaultProfile}
+              src={user.profileImage || defaultProfile}
               alt={`${user.firstName} ${user.lastName}`}
               className={styles.profileImage}
             />
