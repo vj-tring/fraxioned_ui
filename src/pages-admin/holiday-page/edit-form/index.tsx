@@ -71,7 +71,11 @@ const EditForm: React.FC<EditFormProps> = ({
   }, [selectedHoliday]);
 
   const formatDateToISODate = (date: Date): string => {
-    return date.toISOString().split("T")[0];
+    try {
+      return date.toISOString().substring(0, 10);
+    } catch (error) {
+      return '';
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
