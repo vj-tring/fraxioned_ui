@@ -49,27 +49,23 @@ const userPropertiesSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       })
-      // Create property
       .addCase(createUserProperty.pending, (state) => {
         state.isAddingProperty = true;
         state.error = null;
       })
       .addCase(createUserProperty.fulfilled, (state, action: PayloadAction<UserProperty>) => {
         state.isAddingProperty = false;
-        // Don't update the state directly - let the refetch handle it
       })
       .addCase(createUserProperty.rejected, (state, action) => {
         state.isAddingProperty = false;
         state.error = action.payload as string;
       })
-      // Delete property
       .addCase(deleteUserProperty.pending, (state) => {
         state.isDeletingProperty = true;
         state.error = null;
       })
       .addCase(deleteUserProperty.fulfilled, (state, action: PayloadAction<{ propertyId: number, id: number }>) => {
         state.isDeletingProperty = false;
-        // Don't update the state directly - let the refetch handle it
       })
       .addCase(deleteUserProperty.rejected, (state, action) => {
         state.isDeletingProperty = false;
