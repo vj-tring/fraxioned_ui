@@ -26,7 +26,6 @@ import { addHoliday } from "@/store/slice/holiday/action";
 import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
 import { NewFormProps } from "../holiday.types";
 
-
 const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
   const [name, setName] = useState("");
   const [year, setYear] = useState<number | "">("");
@@ -50,6 +49,21 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
       dispatch(fetchProperties());
     }
   }, [propertiesStatus, dispatch]);
+
+  const formatDate = (date: Date | null): string => {
+    if (!date) return "";
+    const localDate = new Date(date);
+    localDate.setHours(12, 0, 0, 0);
+    return formatDateToISODate(localDate);
+  };
+
+  const formatDateToISODate = (date: Date): string => {
+    try {
+      return date.toISOString().split('T')[0];
+    } catch (error) {
+      return '';
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,8 +117,8 @@ const NewForm: React.FC<NewFormProps> = ({ onClose, onHolidayAdded }) => {
       const holidayData = {
         name,
         year: Number(year),
-        startDate: startDate?.toISOString().split("T")[0] ?? "",
-        endDate: endDate?.toISOString().split("T")[0] ?? "",
+        startDate: formatDate(startDate),
+        endDate: formatDate(endDate),
         properties: allPropertiesSelected
           ? properties.map((property) => ({ id: property.id }))
           : selectedProperties.map((id) => ({ id })),
