@@ -37,7 +37,7 @@ const AxiosInterceptor: React.FC<AxiosInterceptorProps> = ({ children }) => {
           const searchParams = new URLSearchParams(window.location.search);
           const resetToken = searchParams.get("resetToken");
           // If the access token exists, set it in the Authorization header
-          if (userId && token ) {
+          if (userId && token) {
             config.headers["user-id"] = userId;
             config.headers["access-token"] = token;
           }
@@ -47,16 +47,17 @@ const AxiosInterceptor: React.FC<AxiosInterceptorProps> = ({ children }) => {
           }
 
           const isImageUpload =
-            (config.url?.includes('/propertyImages') || 
-             config.url?.includes('/spaces/space') || 
-             config.url?.includes('/properties/property') ||
-             config.url?.includes('/property-space-images') || 
-             config.url?.includes('/property-documents') ||
-             config.url?.includes('/property-additional-images') ||
-             config.url?.includes('/amenities/amenity')) &&
+            (config.url?.includes('/propertyImages') ||
+              config.url?.includes('/spaces/space') ||
+              config.url?.includes('/properties/property') ||
+              config.url?.includes('/property-space-images') ||
+              config.url?.includes('/property-documents') ||
+              config.url?.includes('/property-additional-images') ||
+              config.url?.includes('/users/user') ||
+              config.url?.includes('/amenities/amenity')) &&
             (config.method === 'post' || config.method === 'patch');
 
-          const isDeleteMultipleSpaceImages = 
+          const isDeleteMultipleSpaceImages =
             config.url === '/property-space-images' && config.method === 'delete';
 
           if (isImageUpload) {
