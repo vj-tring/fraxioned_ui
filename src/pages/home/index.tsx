@@ -51,8 +51,8 @@ const Home: React.FC = () => {
 
       <BookingSearchBar />
 
-      {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
+      {/* {loading && <p>Loading...</p>} */}
+      {/* {error &&  <p>{error}</p>} */}
 
       <div className="Container1">
         <PropertyList />
