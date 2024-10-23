@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getUserById, updateuserapi } from "@/api/api-endpoints";
+import { getUserById, updateUser } from "@/store/services";
 import { User } from "@/store/model";
 
 export const fetchUserById = createAsyncThunk(
@@ -20,7 +20,7 @@ export const updateUserById = createAsyncThunk(
       ...(imageURL && { profileImage: imageURL }),
     };
 
-    const response = await updateuserapi(userId, transformedData);
+    const response = await updateUser(userId, transformedData);
     return response.data.user;
   }
 );
