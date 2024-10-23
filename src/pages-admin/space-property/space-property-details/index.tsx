@@ -28,11 +28,14 @@ import {
 import AmenitiesTab from "./property-space-tabs/amenities-tab";
 import PhotosTab from "./property-space-tabs/photos-tab";
 import BedTypesTab from "./property-space-tabs/bed-type-tab";
-import { ArrowLeft, Box, ChevronLeft, CircleArrowLeft, MoveLeft, Trash2 } from "lucide-react";
+import { ChevronLeft, Trash2 } from "lucide-react";
 import BathTypesTab from "./property-space-tabs/bath-type-tab";
 import { deleteExistingSpaceProperty } from "@/store/slice/space/property";
-import { createOrDeletePropertySpaceBeds, fetchAllPropertySpaceBedsByPropertySpace, fetchAllSpaceBedTypes } from "@/store/slice/bedSlice";
-import { createOrDeletePropertySpaceBathrooms, fetchAllPropertySpaceBathroomsByPropertySpace, fetchAllSpaceBathroomTypes } from "@/store/slice/bathroom-slice";
+import { createOrDeletePropertySpaceBeds, fetchAllSpaceBedTypes } from "@/store/slice/bedSlice";
+import { createOrDeletePropertySpaceBathrooms, fetchAllSpaceBathroomTypes } from "@/store/slice/bathroom-slice";
+import { fetchAllSpaces } from "@/store/slice/space/actions";
+import { fetchPropertyAllRooms } from "@/store/slice/properties/propertyallrooms/action";
+import CustomizedSnackbars from "@/components/customized-snackbar";
 
 export default function Component({ initialSpace = {} }) {
   const location = useLocation();
@@ -40,19 +43,17 @@ export default function Component({ initialSpace = {} }) {
   const navigate = useNavigate();
   const { id: propertyId } = useParams();
   const dispatch = useDispatch<AppDispatch>();
-  const showBedTypesTab = space?.space?.isBedTypeAllowed ?? false;
-  const showBathTypesTab = space?.space?.isBathroomTypeAllowed ?? false;
+  const showBedTypesTab = space?.isBedType ?? false;
+  const showBathTypesTab = space?.isBathroomType ?? false;
   const userId = useSelector((state: RootState) => state.auth.user?.id);
+  const spaceData = useSelector((state: RootState) => state.spaces.spaces || []);
   const {
     amenities: allAmenities,
     status: amenitiesStatus,
     error: amenitiesError,
   } = useSelector((state: RootState) => state.amenities);
-  const {
-    amenities: propertySpaceAmenities,
-    loading: propertyAmenitiesLoading,
-    error: propertyAmenitiesError,
-  } = useSelector((state: RootState) => state.propertyAmenities);
+
+
   const spaceImages = useSelector(selectSpaceImages);
   const spaceImageLoading = useSelector(
     (state: RootState) => state.spaceImage.loading
@@ -60,27 +61,37 @@ export default function Component({ initialSpace = {} }) {
   const spaceImageError = useSelector(
     (state: RootState) => state.spaceImage.error
   );
-  const { propertySpaceBeds, loading: bedTypesLoading, error: bedTypesError } = useSelector((state: RootState) => state.bed);
-  const { propertySpaceBathrooms, loading: bathTypesLoading, error: bathTypesError } = useSelector((state: RootState) => state.bathroom);
+  const properbed = space.propertySpaceBeds || []
+  const properbath = space.propertySpaceBathrooms || []
 
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedAmenity, setSelectedAmenity] = useState<string>("");
   const [updatedAmenities, setUpdatedAmenities] = useState<number[]>([]);
-  const [localPropertyAmenities, setLocalPropertyAmenities] = useState<
-    typeof propertySpaceAmenities
-  >([]);
+  const [localPropertyAmenities, setLocalPropertyAmenities] = useState<any[]>([]);
+  const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({});
   const [photos, setPhotos] = useState<File[]>([]);
   const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
-  const [openCategories, setOpenCategories] = useState<Record<string, boolean>>(
-    {}
-  );
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [imagesToDelete, setImagesToDelete] = useState<number[]>([]);
   const [combinedImages, setCombinedImages] = useState<
     Array<{ id?: number; url: string; isNew?: boolean }>
   >([]);
+  const propertyAmenityGroup = space.amenityGroups || []
+  const [snackbar, setSnackbar] = useState<{
+    open: boolean;
+    message: string;
+    severity: "success" | "info" | "warning" | "error";
+  }>({
+    open: false,
+    message: "",
+    severity: "info",
+  });
+
+  useEffect(() => {
+    dispatch(fetchAllSpaces());
+  }, [dispatch])
 
   const generateTabsList = () => {
     const tabs = [
@@ -101,37 +112,30 @@ export default function Component({ initialSpace = {} }) {
   const tabsList = generateTabsList();
 
   useEffect(() => {
-    if (space?.id) {
-      dispatch(getByPropertySpaceId(space.id));
-      dispatch(fetchImagesByPropertySpaceId(space.id));
+    if (space?.spaceId) {
       dispatch(fetchAllSpaceBedTypes());
       dispatch(fetchAllSpaceBathroomTypes());
-      if (showBedTypesTab) {
-        dispatch(fetchAllPropertySpaceBedsByPropertySpace(space.id));
-      }
-      if (showBathTypesTab) {
-        dispatch(fetchAllPropertySpaceBathroomsByPropertySpace(space.id));
-      }
     }
     dispatch(fetchAmenities());
-  }, [space, dispatch, showBedTypesTab, showBathTypesTab]);
+  }, [space, dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchPropertyAllRooms(Number(propertyId)));
+  }, [])
 
 
   useEffect(() => {
-    if (propertySpaceAmenities.length > 0) {
+    if (propertyAmenityGroup.length > 0) {
       setUpdatedAmenities(
-        propertySpaceAmenities.map((amenity) => amenity.amenity.id)
+        propertyAmenityGroup.flatMap((group) => group.amenities.map((amenity) => amenity.amenityId))
       );
-      setLocalPropertyAmenities(propertySpaceAmenities);
+      setLocalPropertyAmenities(propertyAmenityGroup);
     }
-    else {
-      setUpdatedAmenities([]);
-      setLocalPropertyAmenities([])
-    }
-  }, [propertySpaceAmenities]);
+  }, [propertyAmenityGroup]);
+
 
   useEffect(() => {
-    const fetchedImages = spaceImages.map((img) => ({
+    const fetchedImages = space.propertySpaceImages.map((img) => ({
       id: img.id,
       url: img.url,
     }));
@@ -141,7 +145,7 @@ export default function Component({ initialSpace = {} }) {
       id: `new-${index}`,
     }));
     setCombinedImages([...fetchedImages, ...newImages]);
-  }, [spaceImages, photoPreviews]);
+  }, [space, photoPreviews]);
 
   const amenityGroups = allAmenities.reduce((groups, amenity) => {
     const groupName = amenity.amenityGroup.name;
@@ -153,54 +157,81 @@ export default function Component({ initialSpace = {} }) {
   }, {} as Record<string, typeof allAmenities>);
 
   const propertyAmenityGroups = localPropertyAmenities.reduce(
-    (groups, amenity) => {
-      const groupName = amenity.amenity.amenityGroup.name;
-      if (!groups[groupName]) {
-        groups[groupName] = [];
+    (groups, { name, amenities }) => {
+      if (!groups[name]) {
+        groups[name] = [];
       }
-      groups[groupName].push(amenity);
+      groups[name].push(...amenities);
       return groups;
     },
-    {} as Record<string, typeof localPropertyAmenities>
+    {} as Record<string, any[]>
   );
+  console.log("mapping id", propertyAmenityGroups);
 
   const handleAddAmenity = () => {
     if (selectedAmenity) {
-      const amenityId = parseInt(selectedAmenity);
-      setUpdatedAmenities((prev) => [...prev, amenityId]);
-      const newAmenity = allAmenities.find(
-        (amenity) => amenity.id === amenityId
-      );
+      const amenityId = parseInt(selectedAmenity, 10);
+      const newAmenity = allAmenities.find((amenity) => amenity.id === amenityId);
       if (newAmenity) {
+        setUpdatedAmenities((prev) => [...prev, amenityId]);
         setLocalPropertyAmenities((prev) => [
           ...prev,
           {
-            amenity: newAmenity,
+            name: newAmenity.amenityGroup.name,
+            amenities: [newAmenity],
             propertySpace: { id: space.id },
             createdBy: { id: userId },
+            property: { id: { propertyId } }
           },
         ]);
+      } else {
+        console.warn("New amenity not found", amenityId);
       }
-      setSelectedAmenity("");
+      setSelectedAmenity(""); // Clear the selection
     }
   };
 
+
   const handleRemoveAmenity = (amenityId: number) => {
+    // Update the updatedAmenities state
     setUpdatedAmenities((prev) => prev.filter((id) => id !== amenityId));
+
+    // Remove the amenity from localPropertyAmenities and filter out empty categories
     setLocalPropertyAmenities((prev) =>
-      prev.filter((amenity) => amenity.amenity.id !== amenityId)
+      prev
+        .map((category) => ({
+          ...category,
+          amenities: category.amenities.filter((amenity) => amenity.amenityId !== amenityId), // Filter out the specific amenity
+        }))
+        .filter((category) => category.amenities.length > 0) // Remove categories that have no amenities left
     );
   };
 
-  const saveAmenityChanges = () => {
-    if (space?.id && userId) {
+
+  const saveAmenityChanges = async () => {
+    if (space?.spaceId && userId) {
       const updateData = {
-        property: { id: space.property.id },
+        property: { id: Number(propertyId) },
         propertySpace: { id: space.id },
         amenities: updatedAmenities.map((id) => ({ id })),
         updatedBy: { id: userId },
       };
-      dispatch(updatePropertyAmenities(updateData));
+      const response = await dispatch(updatePropertyAmenities(updateData)).unwrap();
+      if (response.success) {
+        setSnackbar({
+          open: true,
+          message: response.message,
+          severity: "success",
+        });
+        await dispatch(fetchPropertyAllRooms(Number(propertyId)));
+      }
+      else {
+        setSnackbar({
+          open: true,
+          message: response.message,
+          severity: "error",
+        });
+      }
     }
   };
 
@@ -260,7 +291,14 @@ export default function Component({ initialSpace = {} }) {
         await propertySpaceImageuploadapi(formData);
       }
 
-      dispatch(fetchImagesByPropertySpaceId(space.id));
+      console.log("Images updated successfully");
+      setSnackbar({
+        open: true,
+        message: 'Images updated successfully',
+        severity: "success",
+      });
+      await dispatch(fetchImagesByPropertySpaceId(space.id));
+      await dispatch(fetchPropertyAllRooms(Number(propertyId)));
       setIsUploading(false);
       setPhotos([]);
       setPhotoPreviews([]);
@@ -278,7 +316,7 @@ export default function Component({ initialSpace = {} }) {
       try {
         await dispatch(deleteExistingSpaceProperty(space.id)).unwrap();
         setDeleteDialogOpen(false);
-        navigate(`/admin/property/${propertyId}/rooms`);
+        navigate(`/admin/property/${Number(propertyId)}/rooms`);
       } catch (error) {
         console.error("Failed to delete property space:", error);
       }
@@ -297,9 +335,23 @@ export default function Component({ initialSpace = {} }) {
         })),
         updatedBy: { id: userId }
       };
-      await dispatch(createOrDeletePropertySpaceBeds(data));
-      await dispatch(fetchAllPropertySpaceBedsByPropertySpace(space.id));
-
+      const response = await dispatch(createOrDeletePropertySpaceBeds(data)).unwrap();
+      if (response.success) {
+        setSnackbar({
+          open: true,
+          message: response.message,
+          severity: "success",
+        });
+        await dispatch(fetchPropertyAllRooms(Number(propertyId)));
+      }
+      else {
+        setSnackbar({
+          open: true,
+          message: response.message,
+          severity: "error",
+        });
+      }
+      return response;
     }
   };
 
@@ -313,127 +365,157 @@ export default function Component({ initialSpace = {} }) {
         })),
         updatedBy: { id: userId }
       };
-      await dispatch(createOrDeletePropertySpaceBathrooms(data));
-      await dispatch(fetchAllPropertySpaceBathroomsByPropertySpace(space.id));
+
+      const response = await await dispatch(createOrDeletePropertySpaceBathrooms(data)).unwrap();
+      if (response.success) {
+        setSnackbar({
+          open: true,
+          message: response.message,
+          severity: "success",
+        });
+        await dispatch(fetchPropertyAllRooms(Number(propertyId)));
+      }
+      else {
+        setSnackbar({
+          open: true,
+          message: response.message,
+          severity: "error",
+        });
+      }
+      return response;
     }
   };
 
+  const handleSnackbarClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbar({ ...snackbar, open: false });
+  };
+
+
   const handleback = () => {
-    navigate(`/admin/property/${space.property.id}/rooms`);
+    navigate(`/admin/property/${Number(propertyId)}/rooms`);
   };
 
   return (
-    <Card className="w-full m-0 bg-[#fff] text-black h-full rounded-lg flex flex-column justify-between gap-3">
-      <CardHeader className="flex flex-row justify-between items-center py-1 px-3">
-        <CardTitle className="text-2xl font-bold">
-          {space?.space?.name || "Space Name"} {space?.instanceNumber}
-        </CardTitle>
-        <div className="flex justify-between items-center m-0 gap-2 text-sm h-7 ">
-          <Button
-            onClick={handleback}
-            variant="ghost"
-            className="w-[1/2] h-100 border-solid border-1 border-[#00636D]-500 text-center text-sm text-[#00636D] flex justify-center items-center rounded px-2 py-1"
-          >
-            <ChevronLeft style={{ height: '100%', width: '100%' }} /> Back to rooms
-          </Button>
-          <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-            <DialogTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-100 w-[1/2] border-solid border-1 border-[#00636D]-500 text-center text-sm text-[#00636D] flex justify-center items-center rounded px-3 py-1 gap-1">
-                <Trash2 size={12} />Delete
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>
-                  Are you sure you want to delete this room or space?
-                </DialogTitle>
-                <DialogDescription>
-                  This action cannot be undone. This will permanently delete the
-                  room or space and remove all associated data.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="flex justify-end space-x-2">
-                <Button
-                  variant="outline"
-                  onClick={() => setDeleteDialogOpen(false)}
-                >
-                  Cancel
+    <>
+      <Card className="w-full m-0 bg-[#fff] text-black h-full rounded-lg flex flex-column justify-between gap-3">
+        <CardHeader className="flex flex-row justify-between items-center py-1 px-3">
+          <CardTitle className="text-2xl font-bold">
+            {space?.propertySpaceName || "Space Name"}
+          </CardTitle>
+          <div className="flex justify-between items-center m-0 gap-2 text-sm h-7 ">
+            <Button
+              onClick={handleback}
+              variant="ghost"
+              className="w-[1/2] h-100 border-solid border-1 border-[#00636D]-500 text-center text-sm text-[#00636D] flex justify-center items-center rounded px-2 py-1"
+            >
+              <ChevronLeft style={{ height: '100%', width: '100%' }} /> Back to rooms
+            </Button>
+            <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+              <DialogTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-100 w-[1/2] border-solid border-1 border-[#00636D]-500 text-center text-sm text-[#00636D] flex justify-center items-center rounded px-3 py-1 gap-1">
+                  <Trash2 size={12} />Delete
                 </Button>
-                <Button
-                  variant="destructive"
-                  onClick={() => {
-                    handleDeletePropertySpace();
-                    setDeleteDialogOpen(false);
-                  }}
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>
+                    Are you sure you want to delete this room or space?
+                  </DialogTitle>
+                  <DialogDescription>
+                    This action cannot be undone. This will permanently delete the
+                    room or space and remove all associated data.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="flex justify-end space-x-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => setDeleteDialogOpen(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    onClick={() => {
+                      handleDeletePropertySpace();
+                      setDeleteDialogOpen(false);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </CardHeader>
+        <CardContent className="pb-2 h-full">
+          <Tabs defaultValue="photos" className="flex flex-column h-[30rem]">
+            <TabsList className="flex flex-wrap">
+              {tabsList.map((tab) => (
+                <TabsTrigger
+                  key={tab.value}
+                  value={tab.value}
+                  className="flex-1 min-w-[100px]"
                 >
-                  Delete
-                </Button>
-              </div>
-            </DialogContent>
-          </Dialog>
-        </div>
-      </CardHeader>
-      <CardContent className="pb-2 h-full">
-        <Tabs defaultValue="photos" className="flex flex-column h-[30rem]">
-          <TabsList className="flex flex-wrap">
-            {tabsList.map((tab) => (
-              <TabsTrigger
-                key={tab.value}
-                value={tab.value}
-                className="flex-1 min-w-[100px]"
-              >
-                {tab.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-          <PhotosTab
-            combinedImages={combinedImages}
-            spaceImageLoading={spaceImageLoading}
-            spaceImageError={spaceImageError}
-            handleDeletePhoto={handleDeletePhoto}
-            handlePhotoUpload={handlePhotoUpload}
-            handleUploadImages={handleUploadImages}
-            photos={photos}
-            imagesToDelete={imagesToDelete}
-            isUploading={isUploading}
-            uploadError={uploadError}
-          />
-          <AmenitiesTab
-            amenitiesStatus={amenitiesStatus}
-            propertyAmenitiesLoading={propertyAmenitiesLoading}
-            amenitiesError={amenitiesError}
-            propertyAmenitiesError={propertyAmenitiesError}
-            amenityGroups={amenityGroups}
-            propertyAmenityGroups={propertyAmenityGroups}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-            selectedAmenity={selectedAmenity}
-            setSelectedAmenity={setSelectedAmenity}
-            handleAddAmenity={handleAddAmenity}
-            handleRemoveAmenity={handleRemoveAmenity}
-            saveAmenityChanges={saveAmenityChanges}
-            openCategories={openCategories}
-            toggleCategory={toggleCategory}
-          />
-          {showBedTypesTab && (
-            <BedTypesTab
-              propertySpaceBeds={propertySpaceBeds}
-              loading={bedTypesLoading}
-              error={bedTypesError}
-              onSave={handleSaveBedTypes}
+                  {tab.label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+            <PhotosTab
+              combinedImages={combinedImages}
+              spaceImageLoading={spaceImageLoading}
+              spaceImageError={spaceImageError}
+              handleDeletePhoto={handleDeletePhoto}
+              handlePhotoUpload={handlePhotoUpload}
+              handleUploadImages={handleUploadImages}
+              photos={photos}
+              imagesToDelete={imagesToDelete}
+              isUploading={isUploading}
+              uploadError={uploadError}
             />
-          )}
-          {showBathTypesTab && (
-            <BathTypesTab
-              bathTypes={propertySpaceBathrooms}
-              loading={bathTypesLoading}
-              error={bathTypesError}
-              onSave={handleSaveBathTypes}
+            <AmenitiesTab
+              amenitiesStatus={amenitiesStatus}
+              amenitiesError={amenitiesError}
+              amenityGroups={amenityGroups}
+              propertyAmenityGroups={propertyAmenityGroups}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+              selectedAmenity={selectedAmenity}
+              setSelectedAmenity={setSelectedAmenity}
+              handleAddAmenity={handleAddAmenity}
+              handleRemoveAmenity={handleRemoveAmenity}
+              saveAmenityChanges={saveAmenityChanges}
+              openCategories={openCategories}
+              toggleCategory={toggleCategory}
             />
-          )}
-        </Tabs>
-      </CardContent>
-    </Card>
+            {showBedTypesTab && (
+              <BedTypesTab
+                propertySpaceBeds={properbed}
+                onSave={handleSaveBedTypes}
+              />
+            )}
+            {showBathTypesTab && (
+              <BathTypesTab
+                bathTypes={properbath}
+                onSave={handleSaveBathTypes}
+              />
+            )}
+          </Tabs>
+        </CardContent>
+      </Card>
+
+      <CustomizedSnackbars
+        open={snackbar.open}
+        handleClose={handleSnackbarClose}
+        message={snackbar.message}
+        severity={snackbar.severity}
+      />
+    </>
   );
 }
 

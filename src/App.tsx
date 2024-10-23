@@ -22,14 +22,13 @@ function AppRoutes() {
   const publicRoutes = JSON.parse(import.meta.env.VITE_PUBLIC_ROUTES);
   const dispatch = useDispatch();
   const location = useLocation();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.user);
   const session = localStorage.getItem("session");
   const parsedSession = session !== null ? JSON.parse(session) : null;
   const isPublicRoute = publicRoutes.includes(location.pathname);
   useEffect(() => {
     if (user == null && !isPublicRoute && parsedSession != null) {
-      
       dispatch(fetchAuthState());
     } 
   }, [dispatch]);
