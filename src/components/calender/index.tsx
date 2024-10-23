@@ -34,8 +34,9 @@ import {
 } from "@/store/slice/datepicker";
 import { AppDispatch } from "@/store";
 import LastMinuteBookingDialog from "../last-minute-dialog";
-import {  CalendarArrowUp, Clock, Moon } from "lucide-react";
+import {  AlertCircle, CalendarArrowUp, Clock, Moon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 
 interface DatePickerWithRangeProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -631,6 +632,7 @@ export function DatePickerWithRange({
   return (
     <div className={cn("gri flex flex-column calendar", className)}>
       <div className="calendarDiv">
+      
         <Calendar
           mode="range"
           defaultMonth={dateRange?.from}
@@ -671,14 +673,19 @@ export function DatePickerWithRange({
             selectable: "selectable-date",
           }}
         />
-        <div className="error-msg-container ml-5 flex justify-start">
-          <div className="error-msg">
-            {errorMessage && <div className="text-red-600">{errorMessage}</div>}
-            {validationMessage && (
-              <div className="text-yellow-600">{validationMessage}</div>
-            )}
-          </div>
-        </div>
+      {errorMessage || validationMessage ? (
+          <Alert variant="destructive" className="mb-3">
+            <div className="flex items-center">
+              <AlertCircle className="h-4 w-6 pr-2" />            
+              <AlertDescription>
+                {errorMessage && <div className="text-red-600">{errorMessage}</div>}
+                {validationMessage && (
+                  <div className="text-yellow-600">{validationMessage}</div>
+                )}
+              </AlertDescription>
+            </div>
+          </Alert>
+        ) : null}  
       </div>
       <style>{`
          .booked-date {
