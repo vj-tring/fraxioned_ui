@@ -174,15 +174,12 @@ const PropertyListingPage = () => {
           return;
         }
         const response = await propertyImageapi(id);
-        console.log("res", response);
         if (response.data.data.propertySpaceImages.length > 0) {
           setImageDetails(response.data.data.propertySpaceImages);
-          console.log("Image", imageDetails);
           setLoadingImages(false);
         } else {
           // Set dummy images if no images are found
           setImageDetails(dummyImages);
-          console.log("Imagedummy", imageDetails);
 
         }
       } catch (error) {

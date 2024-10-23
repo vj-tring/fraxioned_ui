@@ -137,11 +137,9 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const allAmenities = Array.isArray(propertyAmenities.amenityGroup)
     ? propertyAmenities.amenityGroup.map((pa) => pa.amenities)
     : [];
-  console.log("group amenities", allAmenities);
   const displayedAmenities = showAllAmenities
     ? allAmenities
     : allAmenities.slice(0, AMENITIES_PER_PAGE);
-  console.log("displayedAmenities", displayedAmenities);
 
   return (
     <Box
@@ -259,7 +257,6 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
               >
                 {displayedAmenities.map((amenity, index) =>
                   amenity.map((data, index1) => {
-                    // console.log("data.amenityName", data.amenityName);
                     return (
                       <Grid item xs={6} key={index1}>
                         <Typography

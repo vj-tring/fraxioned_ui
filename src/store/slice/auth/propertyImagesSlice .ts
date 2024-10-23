@@ -45,7 +45,6 @@ export const fetchPropertyImages = createAsyncThunk(
   async (propertyId: number, { rejectWithValue }) => {
     try {
       const response = await propertyImageapi(propertyId);
-      console.log("proerpt fetched data", response.data.data);
 
       return response.data.data;
     } catch (error) {

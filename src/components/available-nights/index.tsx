@@ -39,9 +39,6 @@ export default function AvailableNights() {
       setYears(
         cardwithid.details ? Object.keys(cardwithid.details).map(Number) : []
       );
-      console.log("selectedcard", selectedCard);
-      console.log("years", years);
-      console.log("selectedId", cardwithid);
     } else {
       setSelectedCardIndex(0);
       setSelectedCard(null);

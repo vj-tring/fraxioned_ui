@@ -23,7 +23,6 @@ const PropertyMorePhotos: React.FC = () => {
   const dispatch = useDispatch();
 
   const imagesBySpace = useSelector(selectPropertyImages);
-  console.log("imagesBySpace", imagesBySpace);
   useEffect(() => {
     if (id) {
       dispatch(fetchPropertyImages(parseInt(id)));
