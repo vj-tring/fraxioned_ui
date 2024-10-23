@@ -1,9 +1,6 @@
-import { axiosInstance } from "@/store/axiosSetup";
+import { axiosInstance } from "../axiosSetup";
 
 export const getAllUserProperties = () => axiosInstance.get("/user-properties");
-
-export const getUserPropertiesWithDetailsByUser = (userId: number) =>
-  axiosInstance.get(`/properties/${userId}/user-properties-with-details`);
 
 export const createUserProperty = (createUserPropertyDto: any) =>
   axiosInstance.post("/user-property", createUserPropertyDto);

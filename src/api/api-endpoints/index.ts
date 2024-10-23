@@ -58,9 +58,9 @@ export const sendInvite = async (payload: any) =>
 export const logoutUser = (token: string) =>
   axiosInstance.post("/authentication/logout", { sessionToken: token });
 
-export const fetchHolidaysApi = () => axiosInstance.get("/holidays");
+export const fetchHolidays = () => axiosInstance.get("/holidays");
 
-export const addHolidayApi = (holidayData: {
+export const addHoliday = (holidayData: {
   name: string;
   year: number;
   startDate: string | undefined;
@@ -69,7 +69,7 @@ export const addHolidayApi = (holidayData: {
   properties: { id: number }[];
 }) => axiosInstance.post("/holidays/holiday", holidayData);
 
-export const updateHolidaysApi = (
+export const updateHoliday = (
   id: number,
   updatedHolidayData: {
     name: string;
@@ -81,24 +81,21 @@ export const updateHolidaysApi = (
   }
 ) => axiosInstance.patch(`/holidays/holiday/${id}`, updatedHolidayData);
 
-export const deleteHolidayApi = (id: number) =>
-  axiosInstance.delete(`/holidays/holiday/${id}`);
-
-export const fetchpropertyHolidaysApi = (id: number) =>
+export const fetchHolidayById = (id: number) =>
   axiosInstance.get(`/holidays/holiday/${id}`);
 
-export const deleteHolidaysApi = (id: number) =>
+export const deleteHoliday = (id: number) =>
   axiosInstance.delete(`/holidays/holiday/${id}`);
 
-export const propertyseasonholiday = () =>
+export const getAllPropertySeasonHoliday = () =>
   axiosInstance.get("/property-season-holidays");
 
-export const propertyseasonholidaydelete = (id: number) =>
+export const deletePropertySeasonHoliday = (id: number) =>
   axiosInstance.delete(
     `/property-season-holidays/property-season-holiday/${id}`
   );
 
-export const getPropertySeasonHoliday = (propertyId: number) =>
+export const getPropertySeasonHolidayByPropertyId = (propertyId: number) =>
   axiosInstance.get(`/property-season-holidays/property/${propertyId}`);
 
 export const createBooking = (bookingData: void) =>
@@ -186,7 +183,7 @@ export const updateUser = (id: number, data: any) =>
 export const getPropertyWithDetails = () =>
   axiosInstance.get(`/properties/properties-with-details`);
 
-export const amenitiesapi = () => axiosInstance.get(`/amenities`);
+export const getAllAmenities = () => axiosInstance.get(`/amenities`);
 
 export const getPropertyAmenitiesByPropertyId = (id: number) =>
   axiosInstance.get(`/property-space-amenities/property/${id}`);
@@ -202,7 +199,7 @@ export const getPropertyAmenitiesById = (id: number) =>
 export const getUserByProperty = (id: number) =>
   axiosInstance.get(`/properties/property/${id}/details`);
 
-export const addamenity = (data: FormData) =>
+export const addAmenity = (data: FormData) =>
   axiosInstance.post("/amenities/amenity", data, {
     headers: {
       "Content-Type": "multipart/form-data",
@@ -212,7 +209,7 @@ export const addamenity = (data: FormData) =>
 export const updateAmenitiesForProperty = (updateData: UpdateAmenityPayload) =>
   axiosInstance.patch(`/property-space-amenities`, updateData);
 
-export const updateamenities = (id: number, updateData: FormData) =>
+export const updateAmenities = (id: number, updateData: FormData) =>
   axiosInstance.patch(`/amenities/amenity/${id}`, updateData, {
     headers: {
       "Content-Type": "multipart/form-data",
@@ -268,20 +265,20 @@ export const updatePropertyDocument = (id: number, formData: FormData) =>
 export const deletePropertyDocument = (id: number) =>
   axiosInstance.delete(`/property-documents/property-document/${id}`);
 
-export const getpropertycodes = () => axiosInstance.get(`/property-codes`);
+export const getAllPropertyCodes = () => axiosInstance.get(`/property-codes`);
 
 export const userbookingCancelapi = (id: number, user: number) => {
   return axiosInstance.post(`/bookings/${id}/${user}/cancel`);
 };
 
-export const addamenitygroup = (data: {
+export const addAmenityGroup = (data: {
   createdBy: { id: number };
   name: string;
 }) => axiosInstance.post("/amenity-groups/amenity-group", data);
 
-export const getamenitygroup = () => axiosInstance.get(`/amenity-groups`);
+export const getAllAmenityGroup = () => axiosInstance.get(`/amenity-groups`);
 
-export const getamenitygroupbyId = (id: number) =>
+export const getAmenityGroupById = (id: number) =>
   axiosInstance.get(`/amenity-groups/amenity-group/${id}`);
 
 export const createSpace = (spaceData: FormData) =>
@@ -341,22 +338,19 @@ export const updatePropertySpaceImageById = (
     formData
   );
 
-//for proeprty
-export const getAllpropertycodes = () => axiosInstance.get(`/property-codes`);
-
 //delete a  property code
-export const deletePropertycode = (id: number) =>
+export const deletePropertyCode = (id: number) =>
   axiosInstance.delete(`/property-codes/property-code/${id}`);
 
 //add for a property
-export const postpropertycode = (payload: {
+export const generatePropertyCode = (payload: {
   property: number;
   propertyCodeCategory: number;
   createdBy: number;
   propertyCode: string;
 }) => axiosInstance.post(`/property-codes/property-code`, payload);
 
-export const getAllpropertycodecatogory = () =>
+export const getAllPropertyCodeCatogory = () =>
   axiosInstance.get(`/property-code-categories`);
 
 export const editPropertyCode = (
@@ -364,7 +358,7 @@ export const editPropertyCode = (
   payload: EditPropertyCodePayload
 ) => axiosInstance.patch(`/property-codes/property-code/${id}`, payload);
 
-export const createpropertycodecatogory = (data: {
+export const createPropertyCodeCatogory = (data: {
   name: string;
   createdBy: { id: number };
 }) => axiosInstance.post(`/property-code-categories`, data);
@@ -378,18 +372,18 @@ export const deleteMultiplePropertySpaceImages = (spaceImages: {
   ids: number[];
 }) => axiosInstance.delete(`/property-space-images`, { data: spaceImages });
 
-export const getCategories = () => axiosInstance.get(`/faq-categories`);
+export const getFAQCategories = () => axiosInstance.get(`/faq-categories`);
 
 export const getQuestions = (selectedCategory: number) =>
   axiosInstance.get(`/faq-questions`);
 
-export const getCategoryById = (id: number) =>
+export const getFAQCategoryById = (id: number) =>
   axiosInstance.get(`/faq-categories/category/${id}`);
 
-export const getQuestionsByCategoryId = (id: number) =>
+export const getFaqQuestionsByCategoryId = (id: number) =>
   axiosInstance.get(`/faq-questions/question/${id}`);
 
-export const createQuestion = (data: {
+export const createFaqQuestion = (data: {
   question: string;
   answer: string;
   createdBy: { id: number };
@@ -397,21 +391,21 @@ export const createQuestion = (data: {
   return axiosInstance.post("/faq-questions/question", data);
 };
 
-export const createCategory = (data: {
+export const createFAQCategory = (data: {
   createdBy: { id: number };
   categoryName: string;
 }) => {
   return axiosInstance.post("/faq-categories/category", data);
 };
 
-export const updateQuestion = (
+export const updateFaqQuestion = (
   id: number,
   data: { question: string; answer: string; updatedBy: { id: number } }
 ) => {
   return axiosInstance.patch(`/faq-questions/question/${id}`, data);
 };
 
-export const deleteQuestion = (id: number) => {
+export const deleteFaqQuestion = (id: number) => {
   return axiosInstance.delete(`/faq-questions/question/${id}`);
 };
 
@@ -419,11 +413,11 @@ export const fetchFaqs = () => {
   return axiosInstance.get("/faq-questions");
 };
 
-export const updateCategory = (id: number, data: any) => {
+export const updateFAQCategory = (id: number, data: any) => {
   return axiosInstance.patch(`/faq-categories/category/${id}`, data);
 };
 
-export const deleteCategory = (id: number) => {
+export const deleteFAQCategory = (id: number) => {
   return axiosInstance.delete(`/faq-categories/category/${id}`);
 };
 

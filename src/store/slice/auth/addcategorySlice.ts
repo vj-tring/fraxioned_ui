@@ -1,17 +1,22 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { createCategory, getCategories, updateCategory, deleteCategory } from '@/api/api-endpoints';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  createFAQCategory,
+  getFAQCategories,
+  updateFAQCategory,
+  deleteFAQCategory,
+} from "@/api/api-endpoints";
 
 interface CategoryState {
   data: {
-    id: number;          
-    categoryName: string; 
+    id: number;
+    categoryName: string;
   }[];
   loading: boolean;
   error: string | null;
   success: boolean;
   addSuccess: boolean;
-  editSuccess: boolean;  
-  deleteSuccess: boolean; 
+  editSuccess: boolean;
+  deleteSuccess: boolean;
 }
 
 const initialState: CategoryState = {
@@ -20,64 +25,88 @@ const initialState: CategoryState = {
   error: null,
   success: false,
   addSuccess: false,
-  editSuccess: false,  
-  deleteSuccess: false, 
+  editSuccess: false,
+  deleteSuccess: false,
 };
 
 export const addCategoryName = createAsyncThunk(
-  'categories/addCategoryName',
-  async (data: { createdBy: { id: number }; categoryName: string }, { rejectWithValue }) => {
+  "categories/addCategoryName",
+  async (
+    data: { createdBy: { id: number }; categoryName: string },
+    { rejectWithValue }
+  ) => {
     try {
-      const response = await createCategory(data);
-      return response.data; 
+      const response = await createFAQCategory(data);
+      return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'An error occurred while adding the category');
+      return rejectWithValue(
+        error.response?.data?.message ||
+          "An error occurred while adding the category"
+      );
     }
   }
 );
 
 export const fetchCategories = createAsyncThunk(
-  'categories/fetchCategories',
+  "categories/fetchCategories",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await getCategories();
-      return response.data.data; 
+      const response = await getFAQCategories();
+      return response.data.data;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'An error occurred while fetching categories');
+      return rejectWithValue(
+        error.response?.data?.message ||
+          "An error occurred while fetching categories"
+      );
     }
   }
 );
 
 export const editCategoryAsync = createAsyncThunk(
-  'categories/editCategory',
-  async ({id,payload}:{id:number, payload:{categoryName:string,updatedBy:{id:number}}},{ rejectWithValue }) => {
+  "categories/editCategory",
+  async (
+    {
+      id,
+      payload,
+    }: {
+      id: number;
+      payload: { categoryName: string; updatedBy: { id: number } };
+    },
+    { rejectWithValue }
+  ) => {
     try {
-      const response = await updateCategory(id,payload)
-      return response.data; 
+      const response = await updateFAQCategory(id, payload);
+      return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'An error occurred while updating the category');
+      return rejectWithValue(
+        error.response?.data?.message ||
+          "An error occurred while updating the category"
+      );
     }
   }
 );
 
 export const deleteCategoryAsync = createAsyncThunk(
-  'categories/deleteCategory',
+  "categories/deleteCategory",
   async (id: number, { rejectWithValue }) => {
     try {
-      const response = await deleteCategory(id);
+      const response = await deleteFAQCategory(id);
       return response.data;
     } catch (error: any) {
-      if(error.response.status === 500){
+      if (error.response.status === 500) {
         return error.response.data;
       }
-      return rejectWithValue(error.response?.data?.message || 'An error occurred while deleting the category');
+      return rejectWithValue(
+        error.response?.data?.message ||
+          "An error occurred while deleting the category"
+      );
     }
   }
 );
 
 // Category slice
 const addCategorySlice = createSlice({
-  name: 'categories',
+  name: "categories",
   initialState,
   reducers: {
     resetAddCategoryState: (state) => {
@@ -130,10 +159,15 @@ const addCategorySlice = createSlice({
       .addCase(editCategoryAsync.fulfilled, (state, action) => {
         state.loading = false;
         state.editSuccess = true;
-        const index = state.data.findIndex((cat) => cat.id === action.payload.id);
+        const index = state.data.findIndex(
+          (cat) => cat.id === action.payload.id
+        );
         if (index !== -1) {
           // Update the category in the state
-          state.data[index] = { ...state.data[index], categoryName: action.payload.categoryName };
+          state.data[index] = {
+            ...state.data[index],
+            categoryName: action.payload.categoryName,
+          };
         }
       })
       .addCase(editCategoryAsync.rejected, (state, action) => {
@@ -149,7 +183,9 @@ const addCategorySlice = createSlice({
       .addCase(deleteCategoryAsync.fulfilled, (state, action) => {
         state.loading = false;
         state.deleteSuccess = true;
-        state.data = state.data.filter((category) => category.id !== action.payload); // Remove deleted category
+        state.data = state.data.filter(
+          (category) => category.id !== action.payload
+        ); // Remove deleted category
       })
       .addCase(deleteCategoryAsync.rejected, (state, action) => {
         state.loading = false;
@@ -158,6 +194,10 @@ const addCategorySlice = createSlice({
   },
 });
 
-export const { resetAddCategoryState, resetEditCategoryState, resetDeleteCategoryState } = addCategorySlice.actions;
+export const {
+  resetAddCategoryState,
+  resetEditCategoryState,
+  resetDeleteCategoryState,
+} = addCategorySlice.actions;
 
 export default addCategorySlice.reducer;

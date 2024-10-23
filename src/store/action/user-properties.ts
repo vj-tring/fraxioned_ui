@@ -1,16 +1,17 @@
 import { 
-    getUserProperties, 
-    getUserPropertiesWithDetailsByUser, 
+    getAllUserProperties,  
     createUserProperty as createUserPropertyAPI, 
     updateUserProperty as updateUserPropertyAPI, 
     deleteUserProperty as deleteUserPropertyAPI 
-  } from '@/api/api-endpoints/user-properties';import { createAsyncThunk } from "@reduxjs/toolkit";
+  } from '@/api/api-endpoints/user-properties';
+  import { getUserProperties} from "@/api/api-endpoints"
+  import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchUserProperties = createAsyncThunk(
     'userProperties/fetchUserProperties',
     async (_, { rejectWithValue }) => {
       try {
-        const response = await getUserProperties();
+        const response = await getAllUserProperties();
         return response.data;
       } catch (error: any) {
         return rejectWithValue(error.response?.data || 'An error occurred');
@@ -22,7 +23,7 @@ export const fetchUserProperties = createAsyncThunk(
       'userProperties/fetchUserPropertiesWithDetailsByUser',
       async (userId: number, { rejectWithValue }) => {
         try {
-          const response = await getUserPropertiesWithDetailsByUser(userId);
+          const response = await getUserProperties(userId);
           return response.data;
         } catch (error: any) {
           return rejectWithValue(error.response?.data || 'An error occurred');

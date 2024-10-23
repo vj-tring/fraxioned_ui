@@ -1,19 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { fetchPropertyDetailsById } from "@/store/slice/auth/propertiesSlice";
-import { getpropertycodes } from "@/api/api-endpoints";
+import { getAllPropertyCodes } from "@/api/api-endpoints";
 import EditButton from "@/components/edit";
 import styles from "./propertyrules.module.css";
 import Loader from "@/components/loader";
-import {
-  Users,
-  Clock,
-  Calendar,
-  DollarSign,
-  PawPrint,
-} from "lucide-react";
-import { AppDispatch } from '@/store';
+import { Users, Clock, Calendar, DollarSign, PawPrint } from "lucide-react";
+import { AppDispatch } from "@/store";
 import { RootState } from "@/store/reducers";
 
 interface PropertyCode {
@@ -30,7 +24,9 @@ const PropertyRules: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const rulesData = useSelector((state: RootState) => state.property.selectedPropertyDetails);
+  const rulesData = useSelector(
+    (state: RootState) => state.property.selectedPropertyDetails
+  );
   const status = useSelector((state: RootState) => state.property.status);
   const reduxError = useSelector((state: RootState) => state.property.error);
 
@@ -40,7 +36,7 @@ const PropertyRules: React.FC = () => {
         if (id) {
           dispatch(fetchPropertyDetailsById(Number(id)));
         }
-        const codesResponse = await getpropertycodes();
+        const codesResponse = await getAllPropertyCodes();
         setPropertyCodes(codesResponse.data);
       } catch (err) {
         console.error("Error fetching property codes:", err);
@@ -62,8 +58,9 @@ const PropertyRules: React.FC = () => {
     return `${formattedHour}:00 ${ampm}`;
   };
 
-  if (status === 'loading' || loading) return <Loader />;
-  if (reduxError || error) return <div className={styles.error}>{reduxError || error}</div>;
+  if (status === "loading" || loading) return <Loader />;
+  if (reduxError || error)
+    return <div className={styles.error}>{reduxError || error}</div>;
   if (!rulesData)
     return <div className={styles.noData}>No rules data found.</div>;
 

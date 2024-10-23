@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import { logout } from '../../Api/Logout'
 
 function useNavbarHandler() {
   const [showInviteModal, setShowInviteModal] = useState(false);

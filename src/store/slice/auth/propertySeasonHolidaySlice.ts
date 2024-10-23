@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { getPropertySeasonHoliday } from '../../../api/api-endpoints/index';
-import { RootState } from '@/store/reducers';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { getPropertySeasonHolidayByPropertyId } from "../../../api/api-endpoints/index";
+import { RootState } from "@/store/reducers";
 
 export interface Holiday {
   id: number;
@@ -32,10 +32,10 @@ const initialState: PropertySeasonHolidayState = {
 };
 
 export const fetchPropertySeasonHoliday = createAsyncThunk(
-  'propertySeasonHoliday/fetchPropertySeasonHoliday',
+  "propertySeasonHoliday/fetchPropertySeasonHoliday",
   async (propertyId: number, { rejectWithValue }) => {
     try {
-      const response = await getPropertySeasonHoliday(propertyId);
+      const response = await getPropertySeasonHolidayByPropertyId(propertyId);
       return response.data.data;
     } catch (error) {
       console.error("Fetching property season holiday failed:", error);
@@ -45,7 +45,7 @@ export const fetchPropertySeasonHoliday = createAsyncThunk(
 );
 
 const propertySeasonHolidaySlice = createSlice({
-  name: 'propertySeasonHoliday',
+  name: "propertySeasonHoliday",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -53,11 +53,14 @@ const propertySeasonHolidaySlice = createSlice({
       .addCase(fetchPropertySeasonHoliday.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchPropertySeasonHoliday.fulfilled, (state, action: PayloadAction<SeasonHoliday[]>) => {
-        state.seasonHolidays = action.payload;
-        state.loading = false;
-        state.error = null;
-      })
+      .addCase(
+        fetchPropertySeasonHoliday.fulfilled,
+        (state, action: PayloadAction<SeasonHoliday[]>) => {
+          state.seasonHolidays = action.payload;
+          state.loading = false;
+          state.error = null;
+        }
+      )
       .addCase(fetchPropertySeasonHoliday.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
@@ -65,6 +68,7 @@ const propertySeasonHolidaySlice = createSlice({
   },
 });
 
-export const selectPropertySeasonHolidays = (state: RootState) => state.propertySeasonHoliday.seasonHolidays;
+export const selectPropertySeasonHolidays = (state: RootState) =>
+  state.propertySeasonHoliday.seasonHolidays;
 
 export default propertySeasonHolidaySlice.reducer;
