@@ -131,6 +131,7 @@ const PropertyPhotos: React.FC = () => {
     );
   };
 
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
