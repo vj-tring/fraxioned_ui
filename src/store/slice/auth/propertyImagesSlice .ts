@@ -2,7 +2,6 @@ import {
   createSlice,
   createAsyncThunk,
   PayloadAction,
-  AsyncThunkAction,
 } from "@reduxjs/toolkit";
 import { fetchPropertySpaceImagesByPropertyId } from "@/api/api-endpoints";
 import { RootState } from "@/store/reducers";

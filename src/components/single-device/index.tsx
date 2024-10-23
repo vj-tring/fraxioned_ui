@@ -72,7 +72,7 @@ const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   useEffect(() => {
     const imageFetching = async () => {
       try {
-        const response = await getAllSpacePropertyImageById(Number(propertyId));
+        const response = await fetchPropertySpaceImagesByPropertyId(Number(propertyId));
         const sortedImages = response.data.data.propertySpaceImages.sort(
           (a: any, b: any) => a.displayOrder - b.displayOrder
         );
