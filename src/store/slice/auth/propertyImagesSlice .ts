@@ -1,6 +1,7 @@
-import { createSlice, createAsyncThunk, PayloadAction, AsyncThunkAction  } from '@reduxjs/toolkit';
-import { propertyImageapi } from '@/api/api-endpoints';
-import { RootState } from '@/store/reducers';
+// redux/propertyImagesSlice.ts
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { propertyImageapi } from "@/api/api-endpoints";
+import { RootState } from "@/store/reducers";
 
 interface PropertyImage {
   id: number;
@@ -40,10 +41,11 @@ const initialState: PropertyImagesState = {
 
 // Async thunk to fetch property images
 export const fetchPropertyImages = createAsyncThunk(
-  'propertyImages/fetchPropertyImages',
+  "propertyImages/fetchPropertyImages",
   async (propertyId: number, { rejectWithValue }) => {
     try {
       const response = await propertyImageapi(propertyId);
+
       return response.data.data;
     } catch (error) {
       console.error("Fetching property images failed:", error);
@@ -53,51 +55,90 @@ export const fetchPropertyImages = createAsyncThunk(
 );
 
 const propertyImagesSlice = createSlice({
-  name: 'propertyImages',
+  name: "propertyImages",
   initialState,
-  reducers: {},
+  reducers: {
+    removeImageById: (state, action: PayloadAction<number>) => {
+      const imageId = action.payload;
+      Object.values(state.imagesBySpace).forEach((spaceGroup) => {
+        spaceGroup.instances.forEach((instance) => {
+          instance.images = instance.images.filter(
+            (image) => image.id !== imageId
+          );
+        });
+      });
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchPropertyImages.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchPropertyImages.fulfilled, (state, action: PayloadAction<PropertyImage[]>) => {
-        const allPhotos = action.payload;
-        const groupedBySpace = allPhotos.reduce(
-          (acc: { [key: string]: SpaceGroup }, img: PropertyImage) => {
-            const spaceName = img.propertySpace.space.name;
-            if (!acc[spaceName]) {
-              acc[spaceName] = { name: spaceName, instances: [] };
-            }
+      .addCase(
+        fetchPropertyImages.fulfilled,
+        (
+          state,
+          action: PayloadAction<{
+            propertyAdditionalImages: PropertyImage[];
+            propertySpaceImages: PropertyImage[];
+          }>
+        ) => {
+          const { propertyAdditionalImages, propertySpaceImages } =
+            action.payload;
 
-            let instance = acc[spaceName].instances.find(
-              (i) => i.instanceNumber === img.propertySpace.instanceNumber
-            );
+          // Process property space images
+          const groupedBySpace = propertySpaceImages.reduce(
+            (acc: { [key: string]: SpaceGroup }, img: PropertyImage) => {
+              const spaceName = img.propertySpace.space.name;
+              if (!acc[spaceName]) {
+                acc[spaceName] = { name: spaceName, instances: [] };
+              }
 
-            if (!instance) {
-              instance = {
-                instanceNumber: img.propertySpace.instanceNumber,
-                images: [],
-              };
-              acc[spaceName].instances.push(instance);
-            }
+              let instance = acc[spaceName].instances.find(
+                (i) => i.instanceNumber === img.propertySpace.instanceNumber
+              );
 
-            instance.images.push(img);
-            return acc;
-          },
-          {}
-        );
+              if (!instance) {
+                instance = {
+                  instanceNumber: img.propertySpace.instanceNumber,
+                  images: [],
+                };
+                acc[spaceName].instances.push(instance);
+              }
 
-        state.imagesBySpace = {
-          "All Photos": {
-            name: "All Photos",
-            instances: [{ instanceNumber: 0, images: allPhotos }],
-          },
-          ...groupedBySpace,
-        };
-        state.loading = false;
-        state.error = null;
-      })
+              instance.images.push(img);
+              return acc;
+            },
+            {}
+          );
+
+          // Combine additional images with grouped images
+          state.imagesBySpace = {
+            "All Photos": {
+              name: "All Photos",
+              instances: [
+                {
+                  instanceNumber: 0,
+                  images: [...propertyAdditionalImages, ...propertySpaceImages],
+                },
+              ],
+            },
+            ...groupedBySpace,
+            
+            "Additional Photos": {
+              name: "Additional Photos",
+              instances: [
+                {
+                  instanceNumber: 0,
+                  images: [...propertyAdditionalImages], // Store only additional images here
+                },
+              ],
+            },
+          };
+          state.loading = false;
+          state.error = null;
+        }
+      )
       .addCase(fetchPropertyImages.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
@@ -105,7 +146,9 @@ const propertyImagesSlice = createSlice({
   },
 });
 
-export const selectPropertyImages = (state: RootState) => state.propertyImages.imagesBySpace;
+export const selectPropertyImages = (state: RootState) =>
+  state.propertyImages.imagesBySpace;
 export const selectLoading = (state: RootState) => state.propertyImages.loading;
 
 export default propertyImagesSlice.reducer;
+export const { removeImageById } = propertyImagesSlice.actions;

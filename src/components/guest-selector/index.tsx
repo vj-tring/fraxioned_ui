@@ -115,6 +115,7 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({
   const getTotalGuests = () => {
     return counts.Adults + counts.Children;
   };
+
   const handleCountChange = (name: string, action: "increase" | "decrease") => {
     if (!selectedPropertyLimits) {
       setValidationMessage("Please select a property before making changes.");
@@ -162,8 +163,7 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({
       name === "Pets"
         ? counts.Adults + counts.Children
         : counts.Adults + counts.Children - currentCount + newCount;
-    const onChange = (newTotalGuests: number) => {
-    };
+    const onChange = (newTotalGuests: number) => {};
 
     onChange(newTotalGuests);
     validateCounts();
