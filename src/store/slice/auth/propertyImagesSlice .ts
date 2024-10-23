@@ -123,6 +123,8 @@ const propertyImagesSlice = createSlice({
                 },
               ],
             },
+            ...groupedBySpace,
+            
             "Additional Photos": {
               name: "Additional Photos",
               instances: [
@@ -132,7 +134,6 @@ const propertyImagesSlice = createSlice({
                 },
               ],
             },
-            ...groupedBySpace,
           };
           state.loading = false;
           state.error = null;
