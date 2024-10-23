@@ -34,7 +34,7 @@ import {
 } from "@/store/slice/datepicker";
 import { AppDispatch } from "@/store";
 import LastMinuteBookingDialog from "../last-minute-dialog";
-import {  CalendarArrowUp, Clock, Moon } from "lucide-react";
+import { CalendarArrowUp, Clock, Moon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface DatePickerWithRangeProps
@@ -121,8 +121,7 @@ export function DatePickerWithRange({
     dispatch(fetchBookings());
   }, [dispatch]);
 
-  useEffect(() => {
-  }, [bookings]);
+  useEffect(() => {}, [bookings]);
 
   useEffect(() => {
     dispatch(fetchProperties);
@@ -131,8 +130,6 @@ export function DatePickerWithRange({
   useEffect(() => {
     dispatch(clearBookingMessages());
   }, [dispatch]);
-
-
 
   useEffect(() => {
     if (selectedPropertyDetails?.id) {
@@ -719,60 +716,64 @@ export function DatePickerWithRange({
       {showEndCalendar && (
         <div className="flex items-center justify-between end-calendar">
           <div className="stay-length">
-          <div className="flex items-center space-x-4">
-            <Moon className="h-6 w-6 text-orange-300" />
-            <div className="info">
-              <p className="text-m leading-none">Available Nights</p>
-              <p className="text-l font-bold">Peak: {selectedPropertyDetails?.details[
-                selectedYear || new Date().getFullYear()
-              ]?.peakRemainingNights || "0"}
-              <span className="text-gray-500 font-normal"> | </span> 
-               Off: {selectedPropertyDetails?.details[
-                selectedYear || new Date().getFullYear()
-              ]?.offRemainingNights || "0"}
-              </p>
-            </div>
-            </div>
-          <div className="flex items-center space-x-4 pl-4">
-            <CalendarArrowUp className="h-6 w-6 text-orange-300" />
+            <div className="flex items-center space-x-4">
+              <Moon className="h-6 w-6 text-orange-300" />
               <div className="info">
-              <p className="text-sm font-medium leading-none">Peak Season</p> 
-              <p className="text-l font-bold">
-              {formatDate(
-                selectedPropertyDetails?.details[
-                  selectedYear || new Date().getFullYear()
-                ]?.peakSeasonStartDate
-              )}{" "}
-              -{" "}
-              {formatDate(
-                selectedPropertyDetails?.details[
-                  selectedYear || new Date().getFullYear()
-                ]?.peakSeasonEndDate
-              )}
-              {" "}
-              </p>
-            </div>
+                <p className="text-m leading-none">Available Nights</p>
+                <p className="text-l font-bold">
+                  Peak:{" "}
+                  {selectedPropertyDetails?.details[
+                    selectedYear || new Date().getFullYear()
+                  ]?.peakRemainingNights || "0"}
+                  <span className="text-gray-500 font-normal"> | </span>
+                  Off:{" "}
+                  {selectedPropertyDetails?.details[
+                    selectedYear || new Date().getFullYear()
+                  ]?.offRemainingNights || "0"}
+                </p>
+              </div>
             </div>
             <div className="flex items-center space-x-4 pl-4">
-            <Clock className="h-6 w-6 text-orange-300" />
-            <div className="info">
-              <p className="text-sm font-medium leading-none">Max Stay</p>
-              <p className="text-l font-bold">{selectedPropertyDetails?.details[
-                selectedYear || new Date().getFullYear()
-              ]?.maximumStayLength || "0"} Nights</p>
+              <CalendarArrowUp className="h-6 w-6 text-orange-300" />
+              <div className="info">
+                <p className="text-sm font-medium leading-none">Peak Season</p>
+                <p className="text-l font-bold">
+                  {formatDate(
+                    selectedPropertyDetails?.details[
+                      selectedYear || new Date().getFullYear()
+                    ]?.peakSeasonStartDate
+                  )}{" "}
+                  -{" "}
+                  {formatDate(
+                    selectedPropertyDetails?.details[
+                      selectedYear || new Date().getFullYear()
+                    ]?.peakSeasonEndDate
+                  )}{" "}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-4 pl-4">
+              <Clock className="h-6 w-6 text-orange-300" />
+              <div className="info">
+                <p className="text-sm font-medium leading-none">Max Stay</p>
+                <p className="text-l font-bold">
+                  {selectedPropertyDetails?.details[
+                    selectedYear || new Date().getFullYear()
+                  ]?.maximumStayLength || "0"}{" "}
+                  Nights
+                </p>
               </div>
             </div>
           </div>
           <div className="flex items-center space-x-2">
-          <Badge 
-            variant="outline" 
-            className="text-sm cursor-pointer hover:bg-gray-100"
-            onClick={clearDatesHandler}
-          >
-            Clear dates
-          </Badge>
-        </div>
-          
+            <Badge
+              variant="outline"
+              className="text-sm cursor-pointer hover:bg-gray-100"
+              onClick={clearDatesHandler}
+            >
+              Clear dates
+            </Badge>
+          </div>
         </div>
       )}
       <LastMinuteBookingDialog

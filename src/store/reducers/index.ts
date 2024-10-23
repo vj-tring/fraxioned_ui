@@ -1,44 +1,43 @@
-import { Reducer, combineReducers } from '@reduxjs/toolkit';
-import authReducer from '../slice/authentication';
-import registerReducer from '../slice/auth/register';
-import forgotPasswordReducer from '../slice/auth/forget-password';
-import propertyReducer from '../slice/auth/property-slice';
-import limitsReducer from '../slice/auth/propertyGuestSlice';
-import editpropertyReducer from '../slice/auth/editproperty';
-import addpropertyReducer from '../slice/auth/addproperty';
-import propertySeasonHolidayReducer from '../slice/auth/propertySeasonHolidaySlice';
-import bookingReducer from '../slice/auth/bookingSlice';
-import datePickerReducer from '../slice/datepicker';
+import { Reducer, combineReducers } from "@reduxjs/toolkit";
+import authReducer from "../slice/authentication";
+import registerReducer from "../slice/auth/register";
+import forgotPasswordReducer from "../slice/auth/forget-password";
+import propertyReducer from "../slice/auth/property-slice";
+import limitsReducer from "../slice/auth/propertyGuestSlice";
+import editpropertyReducer from "../slice/auth/editproperty";
+import addpropertyReducer from "../slice/auth/addproperty";
+import propertySeasonHolidayReducer from "../slice/auth/propertySeasonHolidaySlice";
+import bookingReducer from "../slice/auth/bookingSlice";
+import datePickerReducer from "../slice/datepicker";
 import propertyDocumentsReducer from "../slice/property-document";
-import spaceReducer from '../slice/space';
-import spacePropertyReducer from '../slice/space/property';
-import spaceImageReducer from '../slice/space/images'
-import ThingsToKnowReducer from '../slice/auth/ThingstoknowSlice';
-import propertiesReducer from '../slice/auth/propertiesSlice';
-import holidayReducer from '../slice/auth/holidaySlice';
-import amenityGroupsReducer from '../slice/amenity/group'
-import propertyAmenitiesReducer from '../slice/auth/propertyamenities';
-import amenitiesReducer from '../slice/amenity'
-import userDetailsReducer from '../slice/auth/userdetails';
-import userpropertiesReducer from '../slice/user-properties';
-import userReducer from '../slice/user-slice';
-import userpropertyReducer from '../slice/auth/userproperties';
-import rolesReducer from '../slice/roles';
-import addQuestionReducer from '../slice/auth/addfaqSlice';
-import faqPageReducer from '../slice/auth/faqpageSlice';
-import addCategoryReducer from '../slice/auth/addcategorySlice';
-import bedReducer from '../slice/bedSlice';
-import propertydetailReducer from '../slice/auth/property-detail'
-import bathroomReducer from '../slice/bathroom-slice';
-import amenityReducer from '../slice/amenitiesSlice';
-import userDocumentsReducer from '../slice/user-document';
-import propertyImagesReducer from '../slice/auth/propertyImagesSlice ';
-import { propertycodecatogoryReducer } from '../slice/auth/propertycodeCatogorySlice';
-import { propertyCodesReducer } from '../slice/auth/propertycodeSlice';
-import PropertyImageReducer from '../slice/additional-image';
-import PropertyReducer from '../slice/property';
-import usersReducer from '../slice/user';
-
+import spaceReducer from "../slice/space";
+import spacePropertyReducer from "../slice/space/property";
+import spaceImageReducer from "../slice/space/images";
+import ThingsToKnowReducer from "../slice/auth/ThingstoknowSlice";
+import propertiesReducer from "../slice/auth/propertiesSlice";
+import holidayReducer from "../slice/auth/holidaySlice";
+import amenityGroupsReducer from "../slice/amenity/group";
+import propertyAmenitiesReducer from "../slice/auth/propertyamenities";
+import amenitiesReducer from "../slice/amenity";
+import userDetailsReducer from "../slice/auth/userdetails";
+import userpropertiesReducer from "../slice/user-properties";
+import userReducer from "../slice/user-slice";
+import userpropertyReducer from "../slice/auth/userproperties";
+import rolesReducer from "../slice/roles";
+import addQuestionReducer from "../slice/auth/addfaqSlice";
+import faqPageReducer from "../slice/auth/faqpageSlice";
+import addCategoryReducer from "../slice/auth/addcategorySlice";
+import bedReducer from "../slice/bedSlice";
+import propertydetailReducer from "../slice/auth/property-detail";
+import bathroomReducer from "../slice/bathroom-slice";
+import amenityReducer from "../slice/amenitiesSlice";
+import userDocumentsReducer from "../slice/user-document";
+import propertyImagesReducer from "../slice/auth/propertyImagesSlice ";
+import { propertycodecatogoryReducer } from "../slice/auth/propertycodeCatogorySlice";
+import { propertyCodesReducer } from "../slice/auth/propertycodeSlice";
+import PropertyImageReducer from "../slice/additional-image";
+import PropertyReducer from "../slice/property";
+import usersReducer from "../slice/user";
 
 const appReducer: Reducer = combineReducers({
   auth: authReducer,
@@ -80,7 +79,6 @@ const appReducer: Reducer = combineReducers({
   PropertyImage: PropertyImageReducer,
   Property: PropertyReducer,
   Users: usersReducer,
-
 });
 
 const rootReducer = (
