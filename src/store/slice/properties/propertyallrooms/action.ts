@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { fetchAllRoomDetailsByPropertyId } from '@/api/api-endpoints';
+import { fetchAllRoomDetailsByPropertyId } from '@/store/services';
 
 // Async Thunk to Fetch Property Space Details
 export const fetchPropertyAllRooms = createAsyncThunk(

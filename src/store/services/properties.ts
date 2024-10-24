@@ -37,3 +37,6 @@ export const getPropertyWithDetails = () =>
 
 export const getUserByProperty = (id: number) =>
   axiosInstance.get(`/properties/property/${id}/details`);
+
+export const fetchAllRoomDetailsByPropertyId = (propertyId: number) =>
+  axiosInstance.get(`properties/property/${propertyId}/room-details`);
