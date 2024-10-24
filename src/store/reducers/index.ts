@@ -38,6 +38,7 @@ import { propertyCodesReducer } from '../slice/auth/propertycodeSlice';
 import PropertyImageReducer from '../slice/additional-image';
 import PropertyReducer from '../slice/property';
 import usersReducer from '../slice/user';
+import userPropertyReducer from '../slice/user-property'
 
 
 const appReducer: Reducer = combineReducers({
@@ -80,6 +81,7 @@ const appReducer: Reducer = combineReducers({
   PropertyImage: PropertyImageReducer,
   Property: PropertyReducer,
   Users: usersReducer,
+  userproperty: userPropertyReducer,
 
 });
 
