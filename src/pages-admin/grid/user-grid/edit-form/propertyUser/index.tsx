@@ -68,6 +68,23 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
     acquisitionDate: "",
   });
   const [maxShares, setMaxShares] = useState(0);
+  if (loading)
+    return <Typography className={styles.loadingText}>Loading...</Typography>;
+  if (error)
+    return (
+      <Typography className={styles.errorText} color="error">
+        {error}
+      </Typography>
+    );
+
+  if (!userPropertiesWithDetails || userPropertiesWithDetails.status === 404) {
+    return (
+      <Typography className={styles.noPropertiesText}>
+        No properties available for this user.
+      </Typography>
+    );
+  }
+
   const assignedPropertyIds = userPropertiesWithDetails.map(
     (prop: PropertyWithDetailsResponse) => prop.propertyId
   );
@@ -172,23 +189,6 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
     }
   };
 
-
-  if (loading)
-    return <Typography className={styles.loadingText}>Loading...</Typography>;
-  if (error)
-    return (
-      <Typography className={styles.errorText} color="error">
-        {error}
-      </Typography>
-    );
-
-  if (!userPropertiesWithDetails) {
-    return (
-      <Typography className={styles.noPropertiesText}>
-        No properties available for this user.
-      </Typography>
-    );
-  }
 
   const renderNightInfoBlock = (
     userProperty: UserProperty,

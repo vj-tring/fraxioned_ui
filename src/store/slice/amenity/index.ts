@@ -56,7 +56,7 @@ const amenitiesSlice = createSlice({
         state.error = null;
         state.success = false;
       })
-      .addCase(createAmenity.fulfilled, (state,action) => {
+      .addCase(createAmenity.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
         state.success = true;
@@ -66,7 +66,6 @@ const amenitiesSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
         state.success = false;
-        
       })
       .addCase(updateAmenity.pending, (state) => {
         state.loading = true;
