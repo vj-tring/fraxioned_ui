@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "@/components/snackbar-provider";
 import React, { ReactNode, useLayoutEffect } from "react";
 
-
 // const navigate = useNavigate();
 // const { showSnackbar } = useSnackbar();
 // const { handleUnauthorized } = createAuthHelpers(navigate, showSnackbar);
@@ -47,18 +46,19 @@ const AxiosInterceptor: React.FC<AxiosInterceptorProps> = ({ children }) => {
           }
 
           const isImageUpload =
-            (config.url?.includes('/propertyImages') ||
-              config.url?.includes('/spaces/space') ||
-              config.url?.includes('/properties/property') ||
-              config.url?.includes('/property-space-images') ||
-              config.url?.includes('/property-documents') ||
-              config.url?.includes('/property-additional-images') ||
-              config.url?.includes('/users/user') ||
-              config.url?.includes('/amenities/amenity')) &&
-            (config.method === 'post' || config.method === 'patch');
+            (config.url?.includes("/propertyImages") ||
+              config.url?.includes("/spaces/space") ||
+              config.url?.includes("/properties/property") ||
+              config.url?.includes("/property-space-images") ||
+              config.url?.includes("/property-documents") ||
+              config.url?.includes("/property-additional-images") ||
+              config.url?.includes("/users/user") ||
+              config.url?.includes("/amenities/amenity")) &&
+            (config.method === "post" || config.method === "patch");
 
           const isDeleteMultipleSpaceImages =
-            config.url === '/property-space-images' && config.method === 'delete';
+            config.url === "/property-space-images" &&
+            config.method === "delete";
 
           if (isImageUpload) {
             config.headers["Content-Type"] = "multipart/form-data";
