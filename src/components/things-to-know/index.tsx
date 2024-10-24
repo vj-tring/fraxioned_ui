@@ -51,8 +51,8 @@ const HouseRules: FC<HouseRulesProps> = ({ prop }) => {
   }
 
   return (
-    <div className="mt-4">
-      <div  className="ThingstoHead monsterrat" >
+    <div className="mt-3">
+      <div  className="ThingstoHead monsterrat mb-1" >
         House Rules
       </div>
       <div  >
@@ -98,7 +98,7 @@ const SafetyAndProperty = () => {
 
   return (
     <div style={{ padding: "16px" }} className="ThingsHead">
-      <div  className="ThingstoHead monsterrat" >
+      <div  className="ThingstoHead monsterrat mb-1" >
         Safety & Property
       </div>
       <div  >
@@ -165,7 +165,7 @@ const CancellationPolicy: FC<CancellationPolicyProps> = () => {
 
   return (
     <div style={{ padding: "16px" }} className="ThingsHead">
-      <div className="ThingstoHead monsterrat">
+      <div className="ThingstoHead monsterrat mb-1">
         Cancellation Policy
       </div>
       <div>

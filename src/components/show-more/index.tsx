@@ -37,19 +37,18 @@ const ShowMore: React.FC<ShowMoreProps> = ({ description }) => {
                 {showMore ? '< Show less' : 'Show more >'}
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-lg">
+            <DialogContent className="sm:max-w-xl" >
               <DialogHeader>
                 <DialogTitle className="flex items-center justify-between">
                   <span className="font-sans">Property Details</span>
-                  <DialogClose className="absolute right-4 top-4">
-                    <X className="h-4 w-4" />
-                    <span className="sr-only">Close</span>
-                  </DialogClose>
+                
                 </DialogTitle>
               </DialogHeader>
               <div className="font-sans">
                 {description || fullContent}
               </div>
+              <DialogFooter className="sm:justify-end">
+              </DialogFooter>
             </DialogContent>
           </Dialog>
         </div>

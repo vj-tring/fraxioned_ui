@@ -16,15 +16,11 @@
 
 .property-calendar .calendar {
     box-shadow: none !important;
-    margin-left: 18px !important;
+    margin-left: 10px !important;
   }
 
 .property-calendar .end-calendar{
     width: 100% !important
-}
-
-.property-calendar{
-    
 }
 
 .multiple-select-container {
