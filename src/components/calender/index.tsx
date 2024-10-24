@@ -37,7 +37,7 @@ import LastMinuteBookingDialog from "../last-minute-dialog";
 
 import {  AlertCircle, CalendarArrowUp, Clock, Moon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { Alert, AlertDescription } from "../ui/alert";
 
 interface DatePickerWithRangeProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -678,7 +678,7 @@ export function DatePickerWithRange({
               <AlertDescription>
                 {errorMessage && <div className="text-red-600">{errorMessage}</div>}
                 {validationMessage && (
-                  <div className="text-yellow-600">{validationMessage}</div>
+                  {validationMessage}
                 )}
               </AlertDescription>
             </div>
