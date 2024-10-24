@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { deletePropertyDocumentThunk, fetchPropertyDocuments } from '@/store/slice/property-document/actions';
 import { setCurrentDocument } from '@/store/slice/property-document';
 import { PropertyDocument } from './document.types';
+import Loader from '@/components/loader';
 
 const categories = ["Blueprint", "Legal", "General", "Contracts", "Invoices", "Reports"];
 

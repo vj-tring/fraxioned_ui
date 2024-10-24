@@ -17,6 +17,8 @@
   color: gray;
   gap: 1rem;
   padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 2px;
 }
 
 .peak-length {
@@ -109,6 +111,7 @@
   font-family: UberMoveText, system-ui, "Helvetica Neue", Helvetica, Arial,
     sans-serif;
   font-size: 14px;
+  font-weight: 500;
 }
 
 .masl {
@@ -122,6 +125,12 @@
 
 .bold {
   font-weight: 500;
+  /* color: #e48b32; */
+}
+.info {
+  color:#1e1d1c;
+  font-weight: 500;
+  margin-bottom: 2px;
 }
 
 /* .calendar{

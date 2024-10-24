@@ -59,7 +59,6 @@ const PropertyUsers: React.FC = () => {
   const { propertyDetails, loading: propertyLoading, error: propertyError } = useSelector(
     (state: RootState) => state.userProperty
   );
-
   useEffect(() => {
     dispatch(fetchUserDetails());
 
@@ -69,6 +68,8 @@ const PropertyUsers: React.FC = () => {
   }, [dispatch, id]);
 
   const userMap = useMemo<Record<number, User>>(() => {
+  console.log("propertyDetails", propertyDetails)
+  const userMap = useMemo(() => {
     return users.reduce((acc, user) => {
       acc[user.id] = user;
       return acc;

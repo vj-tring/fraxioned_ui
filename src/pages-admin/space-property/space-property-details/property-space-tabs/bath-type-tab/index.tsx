@@ -7,6 +7,7 @@ import { MinusCircle, PlusCircle, Save } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TabsContent } from "@/components/ui/tabs";
 import { RootState } from "@/store/reducers";
+import { Bathroom } from "@/store/model/property-all-rooms.types";
 
 interface BathType {
   id: number;
@@ -14,79 +15,89 @@ interface BathType {
   count: number;
 }
 
-interface PropertySpaceBath {
-  id: number;
-  spaceBathroomType: {
-    id: number;
-    name: string;
-  };
-  count: number;
-}
-
 interface BathTypesTabProps {
-  bathTypes: PropertySpaceBath[] | null;
-  loading: boolean;
-  error: string | null;
+  bathTypes: Bathroom[] | null;
   onSave: (updatedBathTypes: Array<{ id: number; count: number }>) => void;
 }
 
 const BathTypesTab: React.FC<BathTypesTabProps> = ({
   bathTypes: initialBathTypes,
-  loading,
-  error,
   onSave,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const spaceBathroomTypes = useSelector((state: RootState) => state.bathroom.spaceBathroomTypes);
+  const spaceBathroomTypes = useSelector(
+    (state: RootState) => state.bathroom.spaceBathroomTypes
+  );
   const [bathTypes, setBathTypes] = useState<BathType[]>([]);
+  const [hasChanges, setHasChanges] = useState(false);
 
   useEffect(() => {
     dispatch(fetchAllSpaceBathroomTypes());
   }, [dispatch]);
 
   useEffect(() => {
+    setHasChanges(checkForChanges());
+  }, [bathTypes, initialBathTypes]);
+
+  const checkForChanges = () => {
+    return bathTypes.some((bath) => {
+      const initialBath = initialBathTypes?.find(
+        (initial) => initial.spaceBathroomTypeId === bath.id
+      );
+      return !initialBath || initialBath.count !== bath.count;
+    });
+  };
+
+  useEffect(() => {
     if (spaceBathroomTypes && spaceBathroomTypes.length > 0) {
-      let types: BathType[];
-      if (!initialBathTypes) {
-        types = spaceBathroomTypes.map(type => ({
-          id: type.id,
-          name: type.name,
-          count: 0
-        }));
-      } else {
-        const initialCounts = new Map(initialBathTypes.map(bath => [bath.spaceBathroomType.id, bath.count]));
-        types = spaceBathroomTypes.map(type => ({
-          id: type.id,
-          name: type.name,
-          count: initialCounts.get(type.id) || 0
-        }));
-      }
+      const initialCounts = new Map(
+        (initialBathTypes || []).map((bath) => [
+          bath.spaceBathroomTypeId,
+          bath.count,
+        ])
+      );
+
+      const types = spaceBathroomTypes.map((type: BathType) => ({
+        id: type.id,
+        name: type.name,
+        count: initialCounts.get(type.id) || 0,
+      }));
+
       setBathTypes(types);
     }
   }, [spaceBathroomTypes, initialBathTypes]);
-  
+
   const handleBathCountChange = (id: number, increment: number) => {
-    setBathTypes(prevBathTypes =>
-      prevBathTypes.map(bath =>
-        bath.id === id ? { ...bath, count: Math.max(0, bath.count + increment) } : bath
+    setBathTypes((prevBathTypes) =>
+      prevBathTypes.map((bath) =>
+        bath.id === id
+          ? { ...bath, count: Math.max(0, bath.count + increment) }
+          : bath
       )
     );
   };
 
-  const handleSave = () => {
-    const updatedBathTypes = bathTypes.map(bath => ({ id: bath.id, count: bath.count }));
-    onSave(updatedBathTypes);
+  const handleSave = async () => {
+    const updatedBathTypes = bathTypes
+      .map((bath) => ({
+        id: bath.id,
+        count: bath.count,
+      }))
+      .filter((bath) => bath.count > 0); // Exclude baths with count 0
+
+    if (updatedBathTypes.length === 0) {
+      alert("No valid bath types to save.");
+      return;
+    }
+
+    const isSuccess: any = await onSave(updatedBathTypes);
+    if (isSuccess.success) {
+      setHasChanges(false);
+    }
   };
 
-  if (loading) {
-    return <div>Loading bath types...</div>;
-  }
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  if (bathTypes && bathTypes.length ===0) {
+  if (bathTypes && bathTypes.length === 0) {
     return (
       <TabsContent value="bathTypes" className="space-y-4 h-full rounded-md border">
         <div className="h-full flex flex-column justify-center items-center">
@@ -127,7 +138,11 @@ const BathTypesTab: React.FC<BathTypesTabProps> = ({
           </div>
         </ScrollArea>
         <div className="flex justify-center mt-0 py-1">
-          <Button className="w-1/2 border-solid border-2 border-[##4b7a7f] text-center bg-[#4b7a7f] text-[#fff] rounded" onClick={handleSave}>
+          <Button
+            className="w-1/2 border-solid border-2 border-[#4b7a7f] text-center bg-[#4b7a7f] text-[#fff] rounded cursor-pointer"
+            onClick={handleSave}
+            disabled={!hasChanges}
+          >
             <Save className="mr-2 h-4 w-4" />
             Save Bath Types
           </Button>
