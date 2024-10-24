@@ -2,6 +2,7 @@ import { axiosInstance } from "../axiosSetup";
 
 export const getAllUserProperties = () => axiosInstance.get("/user-properties");
 
+
 export const createUserProperty = (createUserPropertyDto: any) =>
   axiosInstance.post("/user-property", createUserPropertyDto);
 

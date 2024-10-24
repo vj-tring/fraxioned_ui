@@ -3,7 +3,6 @@
 // import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 // import { LatLngExpression, Icon } from 'leaflet';
 // import pin from '../../assets/images/fraxionedpng.png';
-// import { getPropertyById } from '@/api';
 // import styles from './location.module.css';
 
 // interface PropertyData {

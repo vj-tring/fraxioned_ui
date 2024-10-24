@@ -1,4 +1,10 @@
-import { getPropertyDocuments, updatePropertyDocument, deletePropertyDocument, createPropertyDocuments, getPropertyDocumentByProperty } from "@/api/api-endpoints";
+import {
+  getPropertyDocuments,
+  updatePropertyDocument,
+  deletePropertyDocument,
+  createPropertyDocuments,
+  getPropertyDocumentByProperty,
+} from "@/store/services";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
 export interface PropertyDocument {
@@ -28,9 +34,6 @@ export interface PropertyDocumentState {
   error: string | null;
 }
 
-
-
-
 // Create async thunks for CRUD operations
 export const fetchPropertyDocuments = createAsyncThunk(
   "propertyDocuments/fetchAll",
@@ -56,7 +59,6 @@ export const fetchPropertyDocumentsByProperty = createAsyncThunk(
   }
 );
 
-
 export const createPropertyDocumentThunk = createAsyncThunk(
   "propertyDocuments/create",
   async (documentData: FormData, { rejectWithValue }) => {
@@ -67,16 +69,19 @@ export const createPropertyDocumentThunk = createAsyncThunk(
       if (error.response) {
         return rejectWithValue(error.response.data);
       } else if (error.request) {
-        return rejectWithValue('No response received from server');
+        return rejectWithValue("No response received from server");
       } else {
-        return rejectWithValue('Error setting up the request');
+        return rejectWithValue("Error setting up the request");
       }
     }
   }
 );
 export const updatePropertyDocumentThunk = createAsyncThunk(
   "propertyDocuments/update",
-  async ({ id, documentData }: { id: number; documentData: FormData }, { rejectWithValue }) => {
+  async (
+    { id, documentData }: { id: number; documentData: FormData },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await updatePropertyDocument(id, documentData);
       return response.data;
@@ -92,13 +97,14 @@ export const deletePropertyDocumentThunk = createAsyncThunk(
     try {
       const response = await deletePropertyDocument(id);
       if (response.data.success) {
-        return id; 
+        return id;
       } else {
         return rejectWithValue(response.data.message);
       }
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'An error occurred');
+      return rejectWithValue(
+        error.response?.data?.message || "An error occurred"
+      );
     }
   }
 );
-

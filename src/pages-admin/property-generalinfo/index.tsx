@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { updatePropertyImage } from "@/api/api-endpoints";
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchPropertyById, fetchPropertyDetailsById } from "@/store/slice/property/action";
-import { AppDispatch } from '@/store';
+import { updatePropertyImage } from "@/store/services";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchPropertyById,
+  fetchPropertyDetailsById,
+} from "@/store/slice/property/action";
+import { AppDispatch } from "@/store";
 import { RootState } from "@/store/reducers";
 import EditButton from "@/components/edit";
 import styles from "./property-generalinfo.module.css";
@@ -28,8 +31,12 @@ const PropertyGeneralInfo: React.FC = () => {
 
   // Redux selectors
   const userId = useSelector((state: RootState) => state.auth.user?.id);
-  const propertyData = useSelector((state: RootState) => state.property.selectedProperty);
-  const propertyDetails = useSelector((state: RootState) => state.property.selectedPropertyDetails);
+  const propertyData = useSelector(
+    (state: RootState) => state.property.selectedProperty
+  );
+  const propertyDetails = useSelector(
+    (state: RootState) => state.property.selectedPropertyDetails
+  );
   const status = useSelector((state: RootState) => state.property.status);
   const error = useSelector((state: RootState) => state.property.error);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -44,8 +51,7 @@ const PropertyGeneralInfo: React.FC = () => {
       dispatch(fetchPropertyDetailsById(Number(id)));
     }
 
-    return () => {
-    };
+    return () => {};
   }, [id, dispatch]);
 
   const handleEdit = () => {
@@ -100,7 +106,9 @@ const PropertyGeneralInfo: React.FC = () => {
             />
             <div className={styles.exclusiveTag}>
               <img src={pinImage} alt="Pin" className={styles.pinIcon} />
-              <span>{propertyData.isExclusive ? "Exclusive" : "Collective"}</span>
+              <span>
+                {propertyData.isExclusive ? "Exclusive" : "Collective"}
+              </span>
             </div>
             <div className={styles.editOverlay}>
               <button className={styles.iconButton} onClick={handleEditImage}>
@@ -111,41 +119,69 @@ const PropertyGeneralInfo: React.FC = () => {
 
           <div className={styles.infoBlock}>
             <div className={styles.infoColumns}>
-              <h3 className={styles.propertyName}>{propertyData.propertyName}</h3>
+              <h3 className={styles.propertyName}>
+                {propertyData.propertyName}
+              </h3>
 
               <div className={styles.addressColumn}>
                 <div className={styles.infoRow}>
-                  <span className={styles.infoLabel}>Address <span>:</span></span>
+                  <span className={styles.infoLabel}>
+                    Address <span>:</span>
+                  </span>
                   <span className={styles.infoValue}>
                     {`${propertyData.address}, ${propertyData.city}, ${propertyData.state}, ${propertyData.country}, ${propertyData.zipcode}`}
                   </span>
                 </div>
                 <div className={styles.infoRow}>
-                  <span className={styles.infoLabel}>Square Footage <span>:</span></span>
-                  <span className={styles.infoValue}>{propertyDetails.squareFootage} sq ft</span>
+                  <span className={styles.infoLabel}>
+                    Square Footage <span>:</span>
+                  </span>
+                  <span className={styles.infoValue}>
+                    {propertyDetails.squareFootage} sq ft
+                  </span>
                 </div>
               </div>
 
               <div className={styles.detailsColumn}>
                 <div className={styles.infoRow}>
-                  <span className={styles.infoLabel}>Property Share <span>:</span></span>
-                  <span className={styles.infoValue}>{propertyData.propertyShare}</span>
+                  <span className={styles.infoLabel}>
+                    Property Share <span>:</span>
+                  </span>
+                  <span className={styles.infoValue}>
+                    {propertyData.propertyShare}
+                  </span>
                 </div>
                 <div className={styles.infoRow}>
-                  <span className={styles.infoLabel}>Bedrooms <span>:</span></span>
-                  <span className={styles.infoValue}>{propertyDetails.noOfBedrooms}</span>
+                  <span className={styles.infoLabel}>
+                    Bedrooms <span>:</span>
+                  </span>
+                  <span className={styles.infoValue}>
+                    {propertyDetails.noOfBedrooms}
+                  </span>
                 </div>
                 <div className={styles.infoRow}>
-                  <span className={styles.infoLabel}>Bathrooms <span>:</span></span>
-                  <span className={styles.infoValue}>{propertyDetails.noOfBathrooms}</span>
+                  <span className={styles.infoLabel}>
+                    Bathrooms <span>:</span>
+                  </span>
+                  <span className={styles.infoValue}>
+                    {propertyDetails.noOfBathrooms}
+                  </span>
                 </div>
                 <div className={styles.infoRow}>
-                  <span className={styles.infoLabel}>Share left <span>:</span></span>
-                  <span className={styles.infoValue}>{propertyData.propertyRemainingShare}</span>
+                  <span className={styles.infoLabel}>
+                    Share left <span>:</span>
+                  </span>
+                  <span className={styles.infoValue}>
+                    {propertyData.propertyRemainingShare}
+                  </span>
                 </div>
                 <div className={styles.infoRow}>
-                  <span className={styles.infoLabel}>Cleaning fee <span>:</span></span>
-                  <span className={styles.infoValue}>{propertyDetails.cleaningFee}</span>
+                  <span className={styles.infoLabel}>
+                    Cleaning fee <span>:</span>
+                  </span>
+                  <span className={styles.infoValue}>
+                    {propertyDetails.cleaningFee}
+                  </span>
                 </div>
               </div>
             </div>
@@ -154,7 +190,9 @@ const PropertyGeneralInfo: React.FC = () => {
           <div className={styles.infoContainer}>
             <div className={styles.infoBlock1}>
               <h4 className={styles.descriptionTitle}>Description</h4>
-              <p className={styles.description}>{propertyData.houseDescription}</p>
+              <p className={styles.description}>
+                {propertyData.houseDescription}
+              </p>
             </div>
           </div>
         </div>
@@ -167,7 +205,9 @@ const PropertyGeneralInfo: React.FC = () => {
         maxWidth="sm"
       >
         <DialogTitle>Upload Image</DialogTitle>
-        <DialogContent sx={{ gap: 4, display: "flex", flexDirection: "column" }}>
+        <DialogContent
+          sx={{ gap: 4, display: "flex", flexDirection: "column" }}
+        >
           <input type="file" accept="image/*" onChange={handleFileChange} />
 
           <div className={styles.imagePreviewContainer}>

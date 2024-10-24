@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { addAmenityGroup, getAllAmenityGroup } from "@/api/api-endpoints";
+import { addAmenityGroup, getAllAmenityGroup } from "@/store/services";
 
 export const fetchAmenityGroups = createAsyncThunk(
   "amenityGroups/fetchAmenityGroups",
@@ -15,7 +15,7 @@ export const fetchAmenityGroups = createAsyncThunk(
   }
 );
 
-export const addAmenityGroup = createAsyncThunk(
+export const createAmenityGroup = createAsyncThunk(
   "amenityGroups/addAmenityGroup",
   async (
     data: { createdBy: { id: number }; name: string },

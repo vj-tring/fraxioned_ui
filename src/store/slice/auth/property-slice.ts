@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { getUserProperties } from "../../../api/api-endpoints";
+import { getUserProperties } from "@/store/services";
 import imageParadiseShores from "../../../assests/bear-lake-bluffs.jpg";
 import imageBlueBearLake from "../../../assests/crown-jewel.jpg";
 import imageCrownJewel from "../../../assests/blue-bear-lake.jpg";
@@ -12,7 +12,7 @@ const mockData: Card[] = [
     name: "The Lake Escape",
     address: "123 Mock Lane",
     image: "imageParadiseShores",
-    coverImageUrl:null,
+    coverImageUrl: null,
     details: {
       2024: {
         offSeason: "2/10",
@@ -25,30 +25,30 @@ const mockData: Card[] = [
         offRemainingHolidayNights: 1,
         peakRemainingHolidayNights: 1,
         maximumStayLength: 14,
-        lastMinute: "", 
-        peakUsedNights: 0, 
-        offUsedNights: 0, 
-        peakBookedNights: 0, 
-        offBookedNights: 0, 
-        peakBookedHolidayNights: 0, 
-        offBookedHolidayNights: 0, 
-        lastMinuteLostNights: 0, 
-        peakCancelledHolidayNights: 0, 
-        offCancelledHolidayNights: 0, 
-        peakLostHolidayNights: 0, 
-        offLostHolidayNights: 0, 
-        offUsedHolidayNights: 0, 
-        peakUsedHolidayNights: 0, 
-        lastMinuteBookedNights: 0, 
+        lastMinute: "",
+        peakUsedNights: 0,
+        offUsedNights: 0,
+        peakBookedNights: 0,
+        offBookedNights: 0,
+        peakBookedHolidayNights: 0,
+        offBookedHolidayNights: 0,
+        lastMinuteLostNights: 0,
+        peakCancelledHolidayNights: 0,
+        offCancelledHolidayNights: 0,
+        peakLostHolidayNights: 0,
+        offLostHolidayNights: 0,
+        offUsedHolidayNights: 0,
+        peakUsedHolidayNights: 0,
+        lastMinuteBookedNights: 0,
         lastMinuteAllottedNights: 0,
         lastMinuteCancelledNights: 0,
         offAllottedHolidayNights: 0,
         peakAllottedHolidayNights: 0,
         peakAllottedNights: 0,
-        offAllottedNights: 0
-        
+        offAllottedNights: 0,
+
         // ... add the other 17 missing properties
-      }
+      },
     },
     propertyShare: 3,
     maxGuestsAllowed: 4,
@@ -103,7 +103,7 @@ const mockData: Card[] = [
         isActive: 1,
         addressLine1: "456 Main St",
         addressLine2: null,
-        coverImageUrl:null,
+        coverImageUrl: null,
         state: "Mock State",
         country: "Mock Country",
         city: "Mock City",
@@ -128,7 +128,7 @@ export interface User {
   lastName: string;
   password: string;
   imageURL: string | null;
-  coverImageUrl: string | null
+  coverImageUrl: string | null;
   isActive: number;
   addressLine1: string;
   addressLine2: string | null;
@@ -185,7 +185,7 @@ export interface Card {
   details: {
     [year: number]: propertyAvailableDaysDetails;
   };
-  coverImageUrl: string | null,
+  coverImageUrl: string | null;
   propertyShare: number;
   maxGuestsAllowed: number;
   maxPetsAllowed: number;
@@ -227,7 +227,7 @@ export interface Card {
   peakSeasonAllottedHolidayNights: number;
   offSeasonAllottedHolidayNights: number;
   lastMinuteBookingAllottedNights: number;
-  
+
   wifiNetwork: string;
   users: User[];
 }

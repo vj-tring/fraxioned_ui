@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   createPropertyAddditionalImage,
   getAdditionalImageforProperty,
-} from "@/api/api-endpoints";
+} from "@/store/services";
 
 interface PropertyImage {
   id?: number;

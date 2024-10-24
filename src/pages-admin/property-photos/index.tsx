@@ -3,8 +3,8 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchPropertySpaceImagesByPropertyId,
-  deletetpropertyImageById,
-} from "@/api/api-endpoints";
+  deletePropertySpaceImageById,
+} from "@/store/services";
 import { fetchAdditionalImages } from "@/store/slice/additional-image/action";
 import {
   clearAdditionalImages,
@@ -156,7 +156,7 @@ const PropertyPhotos: React.FC = () => {
     if (imageToDelete) {
       setIsLoading(true);
       try {
-        await deletetpropertyImageById(imageToDelete);
+        await deletePropertySpaceImageById(imageToDelete);
         await refreshPhotos();
         setShowDeleteConfirmation(false);
         setImageToDelete(null);

@@ -1,10 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
-  addHoliday,
+  createHoliday,
   updateHoliday,
   fetchHolidayById,
-} from "@/api/api-endpoints";
-import { Holiday } from "@/store/model/holiday.types";
+} from "@/store/services";
+import { Holiday } from "@/store/model";
 
 export const fetchPropertyHoliday = createAsyncThunk(
   "holiday/fetchPropertyHoliday",
@@ -22,7 +22,7 @@ export const addHoliday = createAsyncThunk(
   "holiday/addHoliday",
   async (holidayData: Omit<Holiday, "id">, { rejectWithValue }) => {
     try {
-      const response = await addHoliday(holidayData);
+      const response = await createHoliday(holidayData);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -30,7 +30,7 @@ export const addHoliday = createAsyncThunk(
   }
 );
 
-export const updateHoliday = createAsyncThunk(
+export const modifyHoliday = createAsyncThunk(
   "holiday/updateHoliday",
   async (
     {

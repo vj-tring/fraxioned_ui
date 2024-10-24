@@ -3,7 +3,7 @@ import {
   getProperties,
   getPropertyById,
   getPropertyDetailsbyId,
-} from "@/api/api-endpoints";
+} from "@/store/services";
 
 interface Property {
   id: number;

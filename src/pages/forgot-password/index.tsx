@@ -7,7 +7,7 @@ import logo from "../../assets/images/fraxioned.png";
 import Loader from "../../components/loader";
 import axios from "axios";
 import CustomizedSnackbars from "../../components/customized-snackbar";
-import { forgetPassword } from "../../api/api-endpoints";
+import { forgetPassword } from "@/store/services";
 
 const ForgetPassword: React.FC = () => {
   const [email, setEmail] = useState("");

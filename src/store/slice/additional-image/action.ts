@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   createPropertyAddditionalImage,
   getAdditionalImageforProperty,
-} from "@/api/api-endpoints";
+} from "@/store/services";
 
 export const uploadPropertyImages = createAsyncThunk(
   "propertyImages/upload",

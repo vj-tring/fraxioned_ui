@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import {
-  addHoliday,
+  createHoliday,
   updateHoliday,
   fetchHolidayById,
-} from "@/api/api-endpoints";
+} from "@/store/services";
 
 interface Property {
   id: number;
@@ -70,7 +70,7 @@ export const addHoliday = createAsyncThunk(
   "holiday/addHoliday",
   async (holidayData: Omit<Holiday, "id">, { rejectWithValue }) => {
     try {
-      const response = await addHoliday(holidayData);
+      const response = await createHoliday(holidayData);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -78,7 +78,7 @@ export const addHoliday = createAsyncThunk(
   }
 );
 
-export const updateHoliday = createAsyncThunk(
+export const modifyHoliday = createAsyncThunk(
   "holiday/updateHoliday",
   async (
     {
@@ -149,12 +149,12 @@ const holidaySlice = createSlice({
         state.error = action.payload as string;
       })
       // Update Holiday
-      .addCase(updateHoliday.pending, (state) => {
+      .addCase(modifyHoliday.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(
-        updateHoliday.fulfilled,
+        modifyHoliday.fulfilled,
         (state, action: PayloadAction<Holiday>) => {
           state.loading = false;
           const index = state.holidays.findIndex(
@@ -168,7 +168,7 @@ const holidaySlice = createSlice({
           }
         }
       )
-      .addCase(updateHoliday.rejected, (state, action) => {
+      .addCase(modifyHoliday.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

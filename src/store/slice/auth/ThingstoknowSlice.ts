@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { getPropertyDetailsbyId } from "@/api/api-endpoints";
+import { getPropertyDetailsbyId } from "@/store/services";
 import { RootState } from "@/store/reducers";
 
 export interface ThingsToKnowState {

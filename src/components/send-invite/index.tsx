@@ -11,7 +11,7 @@ import MenuItem from '@mui/material/MenuItem'
 import styled  from '@mui/system/styled'
 import useSendInviteHandler from './send-invite-handler'
 import './send-invite.css'
-import { getRoles } from '../../api/api-endpoints'
+import { getRoles } from '@/store/services'
 
 const StyledButton = styled('button')({
   backgroundColor: '#ffffff',

@@ -2,7 +2,7 @@ import { axiosInstance } from "../axiosSetup";
 
 export const fetchHolidays = () => axiosInstance.get("/holidays");
 
-export const addHoliday = (holidayData: {
+export const createHoliday = (holidayData: {
   name: string;
   year: number;
   startDate: string | undefined;

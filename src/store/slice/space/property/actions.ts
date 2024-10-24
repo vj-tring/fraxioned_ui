@@ -4,7 +4,7 @@ import {
   deleteSpaceProperty,
   getAllSpaceProperties,
   getAllSpacePropertiesById,
-} from "@/api/api-endpoints"; // Import your API functions
+} from "@/store/services"; // Import your API functions
 import { SpaceProperty } from "@/store/model";
 
 export const fetchAllSpaceProperties = createAsyncThunk<SpaceProperty[], void>(

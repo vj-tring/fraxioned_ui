@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Search, ChevronDown, ChevronUp } from "lucide-react";
 import styles from "./propertyamenities.module.css";
-import { getAllAmenities } from "@/api/api-endpoints";
+import { getAllAmenities } from "@/store/services";
 import { AppDispatch } from "@/store";
 import { RootState } from "@/store/reducers";
 import {

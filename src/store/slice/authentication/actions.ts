@@ -1,5 +1,5 @@
 import { RootState } from "../../reducers";
-import { loginUser, logoutUser, getUserById } from "../../../api/api-endpoints";
+import { loginUser, signOutUser, getUserById } from "@/store/services";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { User, Session, AuthState } from "../../model";
 
@@ -71,7 +71,7 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
       const sessionToken = state.auth.session?.token;
 
       if (sessionToken) {
-        await logoutUser(sessionToken);
+        await signOutUser(sessionToken);
         localStorage.clear();
       }
     } catch (error: any) {

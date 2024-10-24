@@ -11,7 +11,7 @@ import { User } from "@/store/model";
 import {
   fetchPropertySpaceImagesByPropertyId,
   getProperties,
-} from "@/api/api-endpoints"; // Ensure getProperties is imported
+} from "@/store/services"; // Ensure getProperties is imported
 import { fetchProperties } from "@/store/slice/auth/property-slice";
 import NewsLetter from "./NewsLetter";
 interface Property {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPropertyDetailsById } from "@/store/slice/auth/propertiesSlice";
-import { getAllPropertyCodes } from "@/api/api-endpoints";
+import { getAllPropertyCodes } from "@/store/services"
 import EditButton from "@/components/edit";
 import styles from "./propertyrules.module.css";
 import Loader from "@/components/loader";

@@ -1,6 +1,5 @@
-import { getPropertyAmenitiesByPropertyId } from "@/api/api-endpoints";
+import { getPropertyAmenitiesByPropertyId } from "@/store/services";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-// import { getAmenitiesByPropertyId } from '@/api';
 
 export interface AmenityGroup {
   id: number;

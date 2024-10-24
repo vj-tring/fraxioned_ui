@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { addProperty } from "@/api/api-endpoints";
+import { createProperty } from "@/store/services";
 
 interface PropertyData {
   createdBy: { id: number };
@@ -34,7 +34,7 @@ const initialState: PropertyState = {
 export const addProperty = createAsyncThunk(
   "property/addProperty",
   async (propertyData: PropertyData) => {
-    const response = await addProperty(propertyData);
+    const response = await createProperty(propertyData);
     return response.data;
   }
 );

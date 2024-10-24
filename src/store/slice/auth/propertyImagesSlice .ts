@@ -1,9 +1,5 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  PayloadAction,
-} from "@reduxjs/toolkit";
-import { fetchPropertySpaceImagesByPropertyId } from "@/api/api-endpoints";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { fetchPropertySpaceImagesByPropertyId } from "@/store/services";
 import { RootState } from "@/store/reducers";
 
 interface PropertyImage {
@@ -126,7 +122,7 @@ const propertyImagesSlice = createSlice({
               ],
             },
             ...groupedBySpace,
-            
+
             "Additional Photos": {
               name: "Additional Photos",
               instances: [

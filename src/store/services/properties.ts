@@ -5,7 +5,7 @@ export const getProperties = () => axiosInstance.get("/properties");
 export const getUserProperties = (id: number) =>
   axiosInstance.get(`/properties/${id}/user-properties-with-details`);
 
-export const addProperty = (propertyData: {
+export const createProperty = (propertyData: {
   createdBy: { id: number };
   propertyName: string;
   ownerRezPropId: number;
@@ -36,4 +36,4 @@ export const getPropertyWithDetails = () =>
   axiosInstance.get(`/properties/properties-with-details`);
 
 export const getUserByProperty = (id: number) =>
-    axiosInstance.get(`/properties/property/${id}/details`);
+  axiosInstance.get(`/properties/property/${id}/details`);

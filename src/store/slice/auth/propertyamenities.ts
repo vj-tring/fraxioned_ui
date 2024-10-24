@@ -3,7 +3,7 @@ import {
   getPropertyAmenitiesByPropertyId,
   getAmenitiesByPropertySpaceId,
   updateAmenitiesForProperty,
-} from "@/api/api-endpoints";
+} from "@/store/services";
 
 interface AmenityType {
   id: number;
@@ -76,7 +76,6 @@ export const getByPropertyId = createAsyncThunk(
     }
   }
 );
-
 
 export const getByPropertySpaceId = createAsyncThunk(
   "propertySpaceAmenities/getById",

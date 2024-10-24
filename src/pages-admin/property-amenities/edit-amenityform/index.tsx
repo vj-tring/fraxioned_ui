@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getAllAmenities } from "@/api/api-endpoints";
+import { getAllAmenities } from "@/store/services";
 import styles from "./editamenityform.module.css";
 
 interface Amenity {

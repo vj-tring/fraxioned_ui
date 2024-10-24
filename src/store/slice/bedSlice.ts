@@ -1,12 +1,12 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import * as api from '@/api/api-endpoints/space-type-endpoints';
-import { 
-  CreatePropertySpaceBedDto, 
-  UpdatePropertySpaceBedDto, 
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import * as api from "@/store/services";
+import {
+  CreatePropertySpaceBedDto,
+  UpdatePropertySpaceBedDto,
   CreateOrDeletePropertySpaceBedsDto,
   CreateSpaceBedTypeDto,
-  UpdateSpaceBedTypeDto
-} from '@/store/model';
+  UpdateSpaceBedTypeDto,
+} from "@/store/model";
 
 interface BedState {
   propertySpaceBeds: any[];
@@ -23,7 +23,7 @@ const initialState: BedState = {
 };
 
 export const fetchAllPropertySpaceBeds = createAsyncThunk(
-  'bed/fetchAllPropertySpaceBeds',
+  "bed/fetchAllPropertySpaceBeds",
   async () => {
     const response = await api.getAllPropertySpaceBeds();
     return response.data.data;
@@ -31,15 +31,17 @@ export const fetchAllPropertySpaceBeds = createAsyncThunk(
 );
 
 export const fetchAllPropertySpaceBedsByPropertySpace = createAsyncThunk(
-    'bed/fetchAllPropertySpaceBedsByPropertySpace',
-    async (propertySpaceId: number) => {
-      const response = await api.getAllPropertySpaceBedsByPropertySpace(propertySpaceId);
-      return response.data.data;
-    }
-  );
+  "bed/fetchAllPropertySpaceBedsByPropertySpace",
+  async (propertySpaceId: number) => {
+    const response = await api.getAllPropertySpaceBedsByPropertySpace(
+      propertySpaceId
+    );
+    return response.data.data;
+  }
+);
 
 export const createPropertySpaceBed = createAsyncThunk(
-  'bed/createPropertySpaceBed',
+  "bed/createPropertySpaceBed",
   async (data: CreatePropertySpaceBedDto) => {
     const response = await api.createPropertySpaceBed(data);
     return response.data.data;
@@ -47,7 +49,7 @@ export const createPropertySpaceBed = createAsyncThunk(
 );
 
 export const updatePropertySpaceBed = createAsyncThunk(
-  'bed/updatePropertySpaceBed',
+  "bed/updatePropertySpaceBed",
   async ({ id, data }: { id: number; data: UpdatePropertySpaceBedDto }) => {
     const response = await api.updatePropertySpaceBedDetail(id, data);
     return response.data.data;
@@ -55,7 +57,7 @@ export const updatePropertySpaceBed = createAsyncThunk(
 );
 
 export const deletePropertySpaceBed = createAsyncThunk(
-  'bed/deletePropertySpaceBed',
+  "bed/deletePropertySpaceBed",
   async (id: number) => {
     await api.deletePropertySpaceBed(id);
     return id;
@@ -63,7 +65,7 @@ export const deletePropertySpaceBed = createAsyncThunk(
 );
 
 export const createOrDeletePropertySpaceBeds = createAsyncThunk(
-  'bed/createOrDeletePropertySpaceBeds',
+  "bed/createOrDeletePropertySpaceBeds",
   async (data: CreateOrDeletePropertySpaceBedsDto) => {
     const response = await api.createOrDeletePropertySpaceBeds(data);
     return response.data.data;
@@ -71,7 +73,7 @@ export const createOrDeletePropertySpaceBeds = createAsyncThunk(
 );
 
 export const fetchAllSpaceBedTypes = createAsyncThunk(
-  'bed/fetchAllSpaceBedTypes',
+  "bed/fetchAllSpaceBedTypes",
   async () => {
     const response = await api.getAllSpaceBedTypes();
     return response.data.data;
@@ -79,23 +81,37 @@ export const fetchAllSpaceBedTypes = createAsyncThunk(
 );
 
 export const createSpaceBedType = createAsyncThunk(
-  'bed/createSpaceBedType',
-  async ({ data, imageFile }: { data: CreateSpaceBedTypeDto; imageFile: File }) => {
+  "bed/createSpaceBedType",
+  async ({
+    data,
+    imageFile,
+  }: {
+    data: CreateSpaceBedTypeDto;
+    imageFile: File;
+  }) => {
     const response = await api.createSpaceBedType(data, imageFile);
     return response.data.data;
   }
 );
 
 export const updateSpaceBedType = createAsyncThunk(
-  'bed/updateSpaceBedType',
-  async ({ id, data, imageFile }: { id: number; data: UpdateSpaceBedTypeDto; imageFile?: File }) => {
+  "bed/updateSpaceBedType",
+  async ({
+    id,
+    data,
+    imageFile,
+  }: {
+    id: number;
+    data: UpdateSpaceBedTypeDto;
+    imageFile?: File;
+  }) => {
     const response = await api.updateSpaceBedTypeDetail(id, data, imageFile);
     return response.data.data;
   }
 );
 
 export const deleteSpaceBedType = createAsyncThunk(
-  'bed/deleteSpaceBedType',
+  "bed/deleteSpaceBedType",
   async (id: number) => {
     await api.deleteSpaceBedType(id);
     return id;
@@ -103,7 +119,7 @@ export const deleteSpaceBedType = createAsyncThunk(
 );
 
 const bedSlice = createSlice({
-  name: 'bed',
+  name: "bed",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -122,25 +138,35 @@ const bedSlice = createSlice({
       .addCase(fetchAllPropertySpaceBedsByPropertySpace.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchAllPropertySpaceBedsByPropertySpace.fulfilled, (state, action) => {
-        state.loading = false;
-        state.propertySpaceBeds = action.payload;
-      })
-      .addCase(fetchAllPropertySpaceBedsByPropertySpace.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || null;
-      })
+      .addCase(
+        fetchAllPropertySpaceBedsByPropertySpace.fulfilled,
+        (state, action) => {
+          state.loading = false;
+          state.propertySpaceBeds = action.payload;
+        }
+      )
+      .addCase(
+        fetchAllPropertySpaceBedsByPropertySpace.rejected,
+        (state, action) => {
+          state.loading = false;
+          state.error = action.error.message || null;
+        }
+      )
       .addCase(createPropertySpaceBed.fulfilled, (state, action) => {
         state.propertySpaceBeds.push(action.payload);
       })
       .addCase(updatePropertySpaceBed.fulfilled, (state, action) => {
-        const index = state.propertySpaceBeds.findIndex(bed => bed.id === action.payload.id);
+        const index = state.propertySpaceBeds.findIndex(
+          (bed) => bed.id === action.payload.id
+        );
         if (index !== -1) {
           state.propertySpaceBeds[index] = action.payload;
         }
       })
       .addCase(deletePropertySpaceBed.fulfilled, (state, action) => {
-        state.propertySpaceBeds = state.propertySpaceBeds.filter(bed => bed.id !== action.payload);
+        state.propertySpaceBeds = state.propertySpaceBeds.filter(
+          (bed) => bed.id !== action.payload
+        );
       })
       .addCase(createOrDeletePropertySpaceBeds.fulfilled, (state, action) => {
         state.propertySpaceBeds = action.payload;
@@ -152,13 +178,17 @@ const bedSlice = createSlice({
         state.spaceBedTypes.push(action.payload);
       })
       .addCase(updateSpaceBedType.fulfilled, (state, action) => {
-        const index = state.spaceBedTypes.findIndex(type => type.id === action.payload.id);
+        const index = state.spaceBedTypes.findIndex(
+          (type) => type.id === action.payload.id
+        );
         if (index !== -1) {
           state.spaceBedTypes[index] = action.payload;
         }
       })
       .addCase(deleteSpaceBedType.fulfilled, (state, action) => {
-        state.spaceBedTypes = state.spaceBedTypes.filter(type => type.id !== action.payload);
+        state.spaceBedTypes = state.spaceBedTypes.filter(
+          (type) => type.id !== action.payload
+        );
       });
   },
 });

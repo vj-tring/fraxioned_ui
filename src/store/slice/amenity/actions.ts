@@ -4,7 +4,7 @@ import {
   addAmenity,
   updateAmenities,
   deleteAmenity,
-} from "@/api/api-endpoints";
+} from "@/store/services";
 
 interface AddAmenityData {
   amenityGroup: { id: number };

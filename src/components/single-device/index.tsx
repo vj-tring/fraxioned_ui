@@ -26,7 +26,7 @@ import { fetchSpacePropertiesById } from "@/store/slice/space/property";
 import {
   getAllAmenities,
   fetchPropertySpaceImagesByPropertyId,
-} from "@/api/api-endpoints";
+} from "@/store/services";
 
 interface SingleDeviceProps {
   propertyId: number;

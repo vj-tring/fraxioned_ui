@@ -4,7 +4,7 @@ import {
   getFAQCategories,
   updateFAQCategory,
   deleteFAQCategory,
-} from "@/api/api-endpoints";
+} from "@/store/services";
 
 interface CategoryState {
   data: {

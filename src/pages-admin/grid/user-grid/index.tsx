@@ -3,7 +3,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { IconButton, Typography, Tooltip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import { getAllUsers, getPropertyWithDetails } from "@/api/api-endpoints";
+import { getAllUsers, getPropertyWithDetails } from "@/store/services";
 import Search from "@/pages-admin/search-user";
 import styles from "./User.module.css";
 import { useNavigate } from "react-router-dom";

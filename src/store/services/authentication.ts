@@ -23,5 +23,5 @@ export const recoverPassword = (newPassword: string) =>
 export const sendInvite = async (payload: any) =>
   axiosInstance.post("/authentication/invite", payload);
 
-export const logoutUser = (token: string) =>
+export const signOutUser = (token: string) =>
   axiosInstance.post("/authentication/logout", { sessionToken: token });

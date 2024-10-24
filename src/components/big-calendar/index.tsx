@@ -10,7 +10,7 @@ import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import PropertyDropdown from "../property-dropdown";
-import { getBookings, getAllUsers } from "@/api/api-endpoints";
+import { getBookings, getAllUsers } from "@/store/services";
 import "./big-calender.css";
 import {
   Edit,

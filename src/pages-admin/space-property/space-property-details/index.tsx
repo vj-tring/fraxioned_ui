@@ -7,7 +7,7 @@ import {
   getByPropertySpaceId,
   updatePropertyAmenities,
 } from "@/store/slice/auth/propertyamenities";
-import { propertySpaceImageUpload } from "@/api/api-endpoints";
+import { propertySpaceImageUpload } from "@/store/services";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -138,7 +138,6 @@ export default function Component({ initialSpace = {} }) {
     }
     dispatch(fetchAmenities());
   }, [space, dispatch, showBedTypesTab, showBathTypesTab]);
-
 
   useEffect(() => {
     if (propertySpaceAmenities.length > 0) {

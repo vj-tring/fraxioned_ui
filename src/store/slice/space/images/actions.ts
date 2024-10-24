@@ -6,7 +6,7 @@ import {
   updatePropertySpaceImageById,
   deletePropertySpaceImageById,
   deleteMultiplePropertySpaceImages,
-  } from "@/api/api-endpoints";
+} from "@/store/services";
 
 // Fetch All Space Property Images
 export const fetchAllImages = createAsyncThunk(
