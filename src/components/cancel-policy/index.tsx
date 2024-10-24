@@ -8,7 +8,7 @@ interface CancelPolicyProps {
   showActions?: boolean;
 }
 
-const CancelPolicy: React.FC<CancelPolicyProps> = ({ onConfirm, onCancel,showActions = true }) => {
+const CancelPolicy: React.FC<CancelPolicyProps> = ({ onConfirm, onCancel, showActions = true }) => {
   return (
     <Card className="w-[800px] bg-white rounded-xl shadow-lg">
       <CardHeader className="relative border-b py-4">

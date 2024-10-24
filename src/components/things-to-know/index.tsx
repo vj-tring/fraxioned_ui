@@ -135,7 +135,12 @@ const SafetyAndProperty = () => {
   );
 };
 
-const CancellationPolicy = (showActions?: boolean) => {
+interface CancellationPolicyProps {
+  showActions?: boolean;
+}
+
+const CancellationPolicy: FC<CancellationPolicyProps> = () => {
+  
   const [showMore, setShowMore] = useState(false);
   const [showCancelPolicy, setShowCancelPolicy] = useState(false);
 
@@ -228,7 +233,7 @@ const ThingsToKnow: FC<Thinkprop> = (prop) => {
           <SafetyAndProperty />
         </Grid>
         <Grid item xs={12} sm={4}>
-          <CancellationPolicy />
+          <CancellationPolicy showActions={true} />
         </Grid>
       </Grid>
     </div>
