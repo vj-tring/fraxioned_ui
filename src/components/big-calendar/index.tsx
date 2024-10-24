@@ -22,6 +22,10 @@ import {
   Group,
 } from "@mui/icons-material";
 import { User, Booking, Event } from './big-calender.types';
+import AddIcon from "@mui/icons-material/Add";
+import CreateBookingModal from '../../pages-admin/bookings-page/create-booking';
+
+
 
 const localizer = momentLocalizer(moment);
 const propertyColors: { [key: number]: string } = {
@@ -38,6 +42,8 @@ const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
   const [openEvent, setOpenEvent] = useState(false);
   const [clickedEvent, setClickedEvent] = useState<Event | null>(null);
   const [users, setUsers] = useState<User[]>([]);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
 
   useEffect(() => {
     fetchAllBookings();
@@ -140,7 +146,13 @@ const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     const user = users.find((u) => u.id === userId);
     return user ? `${user.firstName} ${user.lastName}` : "Unknown User";
   };
-
+  const handleCreateClick = () => {
+    setIsCreateModalOpen(true);
+  };
+  
+    const handleCloseCreateModal = () => {
+      setIsCreateModalOpen(false);
+    };
   const handleEdit = () => {
   };
 
@@ -151,7 +163,23 @@ const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     >
       <div className="calendar-header">
         <PropertyDropdown onPropertySelect={handlePropertySelect} />
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={handleCreateClick}
+
+          sx={
+            {
+              backgroundColor:'#75c8d1 !important',
+            }
+            }
+
+        >
+          Create Booking
+        </Button>
       </div>
+
+
       <BigCalendar
         localizer={localizer}
         events={filteredEvents}
@@ -206,6 +234,8 @@ const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
                     {getUserName(clickedEvent.userId)}
                   </span>
                 </div>
+
+
                 <div className="detail-item">
                   <CheckCircle className="detail-icon" />
                   <span className="detail-label">Check-in</span>
@@ -246,6 +276,10 @@ const Calendar: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
           </Button>
         </DialogActions>
       </Dialog>
+      <CreateBookingModal
+        openEvent={isCreateModalOpen}
+        handleClose={handleCloseCreateModal}
+      />
     </div>
   );
 };

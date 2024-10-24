@@ -35,7 +35,8 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { Box, Typography } from '@mui/material';
 import Calendar from '@/components/big-calendar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-
+import AddIcon from "@mui/icons-material/Add";
+import CreateBookingModal from "./create-booking";
 
 
 
@@ -83,6 +84,8 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     null
   );
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
   const [showSuccessSnackbar, setShowSuccessSnackbar] = useState(false);
   const [filterModel] = useState<GridFilterModel>({
     items: [],
@@ -272,6 +275,15 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     setIsViewModalOpen(false);
     setSelectedBookingId(null);
   };
+
+  const handleCreateClick = () => {
+  setIsCreateModalOpen(true);
+};
+
+  const handleCloseCreateModal = () => {
+    setIsCreateModalOpen(false);
+  };
+  
 
   const handleConfirmDelete = async () => {
     if (bookingToDelete === null) return;
@@ -581,12 +593,22 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
                             ))}
                           </Select>
                         </FormControl>
+                        <Button
+                          variant="contained"
+                          startIcon={<AddIcon />}
+                          onClick={handleCreateClick}
+                          className={styles.actionButton}
+                          
+                        >
+                          Create Booking
+                        </Button>
   
                         <Button
                           variant="contained"
                           startIcon={<FileDownloadIcon />}
                           onClick={handleExportCSV}
                           className={styles.actionButton}
+                          
                         >
                           Export
                         </Button>
@@ -654,6 +676,11 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
         openEvent={isViewModalOpen}
         handleClose={handleCloseViewModal}
         eventId={selectedBookingId || 0}
+      />
+
+     <CreateBookingModal
+        openEvent={isCreateModalOpen}
+        handleClose={handleCloseCreateModal}
       />
   
       <ConfirmationModal
