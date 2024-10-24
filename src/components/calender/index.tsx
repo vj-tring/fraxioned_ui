@@ -35,9 +35,9 @@ import {
 import { AppDispatch } from "@/store";
 import LastMinuteBookingDialog from "../last-minute-dialog";
 
-import {  AlertCircle, CalendarArrowUp, Clock, Moon } from "lucide-react";
+import { AlertCircle, CalendarArrowUp, Clock, Moon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { Alert, AlertDescription } from "../ui/alert";
 
 interface DatePickerWithRangeProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -630,7 +630,6 @@ export function DatePickerWithRange({
   return (
     <div className={cn("gri flex flex-column calendar", className)}>
       <div className="calendarDiv">
-      
         <Calendar
           mode="range"
           defaultMonth={dateRange?.from}
@@ -659,6 +658,7 @@ export function DatePickerWithRange({
                     },
                   ]
                 : [],
+            lastMinute: dateRange?.isLastMinuteBooking && dateRange.from ? [dateRange.from] : [],
           }}
           modifiersClassNames={{
             booked: disableStrikethrough
@@ -669,21 +669,23 @@ export function DatePickerWithRange({
             holiday: "holiday-date",
             currentBooking: "current-booking-date",
             selectable: "selectable-date",
+            lastMinute: "last-minute-date",
+
           }}
         />
-      {errorMessage || validationMessage ? (
+        {errorMessage || validationMessage ? (
           <Alert variant="destructive" className="mb-3">
             <div className="flex items-center">
-              <AlertCircle className="h-4 w-6 pr-2" />            
+              <AlertCircle className="h-4 w-6 pr-2" />
               <AlertDescription>
-                {errorMessage && <div className="text-red-600">{errorMessage}</div>}
-                {validationMessage && (
-                  <div className="text-yellow-600">{validationMessage}</div>
+                {errorMessage && (
+                  <div className="text-red-600">{errorMessage}</div>
                 )}
+                {validationMessage && { validationMessage }}
               </AlertDescription>
             </div>
           </Alert>
-        ) : null}  
+        ) : null}
       </div>
       <style>{`
          .booked-date {
@@ -720,6 +722,28 @@ export function DatePickerWithRange({
         .holiday-date {
           color: blue !important;
         }
+        .last-minute-date::after {
+    content: 'LM';
+    position: absolute;
+    top: -8px;
+    left: -7px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 500;
+    color: rgb(219 136 49);
+    background: white;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgb(235 165 91);
+    background-size: 17px;
+}
+
+  .rdp-day_selected.last-minute-date {
+    position: relative;
+  }
       `}</style>
       {showEndCalendar && (
         <div className="flex items-center end-calendar">
