@@ -14,7 +14,6 @@ interface RootState {
   };
 }
 
-import { Dropdown } from "primereact/dropdown";
 const TrackingMyNigts: React.FC = () => {
   const properties = useSelector((state: RootState) => state.properties.cards);
   const [selectedPropertyId, setSelectedPropertyId] = useState<number | null>(
@@ -42,10 +41,30 @@ const TrackingMyNigts: React.FC = () => {
   const selectedProperty = properties.find(
     (property) => property.id === selectedPropertyId
   );
-  const propertyDetails = selectedProperty?.details[selectedYear];
-  const availableYears = Object.keys(selectedProperty?.details || {}).map(
-    (year) => parseInt(year)
-  );
+
+  // Safely access property details with fallback
+  const propertyDetails = selectedProperty?.details?.[selectedYear] || {
+    offAllottedNights: 0,
+    offUsedNights: 0,
+    offBookedNights: 0,
+    offRemainingNights: 0,
+    offAllottedHolidayNights: 0,
+    offUsedHolidayNights: 0,
+    offBookedHolidayNights: 0,
+    offRemainingHolidayNights: 0,
+    peakAllottedNights: 0,
+    peakUsedNights: 0,
+    peakBookedNights: 0,
+    peakRemainingNights: 0,
+    peakAllottedHolidayNights: 0,
+    peakUsedHolidayNights: 0,
+    peakBookedHolidayNights: 0,
+    peakRemainingHolidayNights: 0,
+  };
+
+  const availableYears = selectedProperty?.details
+    ? Object.keys(selectedProperty.details).map((year) => parseInt(year))
+    : [new Date().getFullYear()];
 
   const showselectedimage = (id: number) => {
     const filteredImage = properties
@@ -61,11 +80,18 @@ const TrackingMyNigts: React.FC = () => {
   };
 
   const getOffSeasonDates = (startDate: string, endDate: string) => {
+    if (!startDate || !endDate) {
+      return {
+        offSeasonBefore: { startDate: "", endDate: "" },
+        offSeasonAfter: { startDate: "", endDate: "" },
+      };
+    }
+
     const peakStart = new Date(startDate);
     const peakEnd = new Date(endDate);
 
     const offSeasonBeforeStart = {
-      startDate: new Date(peakStart.getFullYear(), 12, 1), // Dec 31 of the current year
+      startDate: new Date(peakStart.getFullYear(), 12, 1),
       endDate: new Date(
         peakStart.getFullYear(),
         peakStart.getMonth(),
@@ -79,7 +105,7 @@ const TrackingMyNigts: React.FC = () => {
         peakEnd.getMonth(),
         peakEnd.getDate() + 1
       ),
-      endDate: new Date(peakEnd.getFullYear(), 11, 31), // Dec 30 of the same year
+      endDate: new Date(peakEnd.getFullYear(), 11, 31),
     };
 
     if (peakStart.getMonth() < 11) {
@@ -112,15 +138,10 @@ const TrackingMyNigts: React.FC = () => {
     };
   };
 
-  const { offSeasonBefore, offSeasonAfter } = selectedProperty
-    ? getOffSeasonDates(
-        selectedProperty?.peakSeasonStartDate || "",
-        selectedProperty?.peakSeasonEndDate || ""
-      )
-    : {
-        offSeasonBefore: { startDate: "", endDate: "" },
-        offSeasonAfter: { startDate: "", endDate: "" },
-      };
+  const { offSeasonBefore, offSeasonAfter } = getOffSeasonDates(
+    selectedProperty?.peakSeasonStartDate || "",
+    selectedProperty?.peakSeasonEndDate || ""
+  );
 
   const [selectedProperty1, setSelectedProperty1] = useState<number | null>(
     null
