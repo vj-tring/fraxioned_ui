@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import "./home.css";
 import Card from "../../components/cards";
-import { useSelector, useDispatch } from "react-redux";
-import image1 from "../../assests/bear-lake-bluffs.jpg";
+import { useSelector } from "react-redux";
 import { FaPlus } from "react-icons/fa";
 import PorpImg from "../../assests/lake-escape.jpg";
 import { resetLimits } from "@/store/slice/auth/propertyGuestSlice";
@@ -14,6 +13,9 @@ import {
 } from "@/store/services"; // Ensure getProperties is imported
 import { fetchProperties } from "@/store/slice/auth/property-slice";
 import NewsLetter from "./NewsLetter";
+import { useAppSelector, useDispatch } from "@/store";
+import { fetchUserPropertiesWithDetailsByUser } from "@/store/action/user-properties";
+import { PropertyWithDetailsResponse } from "@/store/model/user-properties";
 interface Property {
   id: number;
   name?: string;
@@ -28,63 +30,32 @@ interface Property {
   coverImageUrl?: string;
 }
 
-// Image interface
 export interface Image {
   id: number;
   imageUrl: string;
   property: Property;
 }
 
-interface RootState {
-  properties: {
-    cards: Property[];
-    loading: boolean;
-    error: string | null;
-  };
-}
-
 const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
   paddingLeft = false,
 }) => {
-  // const userId = useSelector((state: any) => state.auth.user?.id);
-  const additionalPropertiesLength = 4;
-  const { cards: properties } = useSelector(
-    (state: RootState) => state.properties
+  const userId = useSelector((state: any) => state.auth.user?.id);
+
+  const { userPropertiesWithDetails } = useAppSelector(
+    (state) => state.userProperties
   );
+
   const dispatch = useDispatch();
-  const [images, setImages] = useState<Image[]>([]);
-  const [additionalProperties, setAdditionalProperties] = useState<Property[]>(
-    []
-  );
+
   const carouselRef = useRef<HTMLDivElement>(null);
-  const showCarousel = properties.length > 4;
+  const showCarousel = userPropertiesWithDetails.length > 4;
   const showPlusIcon = true;
-
-  const fetchAdditionalProperties = async () => {
-    try {
-      const response = await getProperties();
-
-      if (!Array.isArray(response.data)) {
-        throw new Error("Unexpected response format");
-      }
-
-      const allProperties = response.data as Property[];
-      const numberOfUserProperties = properties.length;
-
-      const numberOfPropertiesToShow = 5 - numberOfUserProperties;
-
-      setAdditionalProperties(allProperties.slice(0, numberOfPropertiesToShow));
-    } catch (error) {
-      console.error("Error fetching properties:", error.message || error);
-    }
-  };
 
   useEffect(() => {
     dispatch(resetLimits());
     dispatch(clearDates());
-
-    // fetchImages();
-    fetchAdditionalProperties();
+    dispatch(fetchProperties(userId));
+    dispatch(fetchUserPropertiesWithDetailsByUser(userId));
   }, [dispatch]);
 
   const scroll = (scrollOffset: number) => {
@@ -96,9 +67,6 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
     }
   };
 
-  // const Shadow =
-  //   properties.length >= 4 ? "rgba(0, 0, 0, 0.1) 1px 1px 2px 1px" : "none";
-
   const formatCardName = (name: string | undefined) => {
     if (name) {
       return name.replace(/\s+\(.*\)/, "");
@@ -108,7 +76,11 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
   };
 
   return (
-    <div className={` Container1 ${properties.length > 3 ? "" : "flex"}`}>
+    <div
+      className={` Container1 ${
+        userPropertiesWithDetails.length > 3 ? "" : "flex"
+      }`}
+    >
       <div>
         <div
           className="d-flex flex-row Container4"
@@ -127,26 +99,27 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
             </div>
           )}
           <div
-            // style={{ boxShadow: Shadow }}
             className={`Cardcontainer ${showCarousel ? "carousel" : ""}`}
             ref={carouselRef}
           >
-            {properties.map((property) => {
-              return (
-                <Card
-                  key={property.id}
-                  imageUrl={property.coverImageUrl || PorpImg}
-                  title={formatCardName(property.propertyName || "No Title")}
-                  text={property.address || "Address not available"}
-                  share={
-                    property.propertyShare
-                      ? `You Own ${property?.share}/${property.propertyShare}th share`
-                      : "Share information not available"
-                  }
-                  id={property.id}
-                />
-              );
-            })}
+            {userPropertiesWithDetails.map(
+              (property: PropertyWithDetailsResponse) => {
+                return (
+                  <Card
+                    key={property.propertyId}
+                    imageUrl={property.coverImageUrl || PorpImg}
+                    title={formatCardName(property.propertyName || "No Title")}
+                    text={property.address || "Address not available"}
+                    share={
+                      property.propertyShare
+                        ? `You Own ${property.userProperties[0].noOfShare}/${property.propertyShare}th share`
+                        : "Share information not available"
+                    }
+                    id={property.propertyId}
+                  />
+                );
+              }
+            )}
 
             {showPlusIcon && (
               <div className="FadeProp ">
@@ -181,41 +154,11 @@ const PropertyList: React.FC<{ paddingLeft?: boolean }> = ({
             </div>
           )}
         </div>
-
-        {/* Render additional properties based on user properties count */}
       </div>
 
       <div className="NewsLetter">
         <NewsLetter />
       </div>
-
-      {/* <a href="https://www.fraxioned.com/" target="_blank">
-        <div className="AddProps ">
-          {properties.length <= 4 &&
-            additionalProperties
-              .slice(0, additionalPropertiesLength - properties.length)
-              .map((property) => {
-                const propertyImage = images.find(
-                  (img) => img.property.id === property.id
-                );
-                return (
-                  <Card
-                    key={property.id}
-                    imageUrl={propertyImage?.imageUrl || image1}
-                    title={formatCardName(property.propertyName || "No Title")}
-                    text={property.address || "Address not available"}
-                    // share={
-                    //   property.propertyShare
-                    //     ? `You Own ${property.share}/${property.propertyShare}th share`
-                    //     : "Share information not available"
-                    // }
-                    // id={property.id}
-                    tag="Hot Listing" // Pass the tag here
-                  />
-                );
-              })}
-        </div>
-      </a> */}
     </div>
   );
 };

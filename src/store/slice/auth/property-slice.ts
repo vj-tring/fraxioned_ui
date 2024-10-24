@@ -291,8 +291,6 @@ export const fetchProperties = createAsyncThunk(
               offRemainingHolidayNights: userProp.offRemainingHolidayNights,
               peakRemainingHolidayNights: userProp.peakRemainingHolidayNights,
               maximumStayLength: userProp.maximumStayLength,
-              // peakSeasonStartDate: property.peakSeasonStartDate,
-              // peakSeasonEndDate: property.peakSeasonEndDate,
               peakUsedNights: userProp.peakUsedNights,
               offUsedNights: userProp.offUsedNights,
               peakBookedNights: userProp.peakBookedNights,
@@ -316,30 +314,6 @@ export const fetchProperties = createAsyncThunk(
             };
           }
         });
-
-        // [2024, 2025, 2026].forEach((year) => {
-        //   if (!details[year]) {
-        //     details[year] = {
-        //       offSeason: "undefined",
-        //       peakSeason: "undefined",
-        //       peakHoliday: "undefined",
-        //       offSeasonHoliday: "undefined",
-        //       lastMinute: "undefined",
-        //       peakRemainingNights: 0,
-        //       offRemainingNights: 0,
-        //       lastMinuteRemainingNights: 0,
-        //       offRemainingHolidayNights: 0,
-        //       peakRemainingHolidayNights: 0,
-        //       maximumStayLength: 0,
-        //       peakSeasonStartDate: property.peakSeasonStartDate,
-        //       peakSeasonEndDate: property.peakSeasonEndDate,
-        //       peakUsedNights: property.peakUsedNights,
-        //       offUsedNights: property.offUsedNights,
-        //       peakBookedNights: property.peakBookedNights,
-        //       offBookedNights: property.offBookedNights,
-        //     };
-        //   }
-        // });
 
         return {
           id: property.propertyId,

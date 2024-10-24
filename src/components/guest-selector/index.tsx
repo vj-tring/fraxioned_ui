@@ -191,7 +191,7 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({
   }, [open]);
 
   return (
-    <Box sx={{ width: showIcons ? "16%" : "100%" }}>
+    <Box sx={{ width: showIcons ? "16%" : "100%"}}>
       <Button
         disableRipple
         aria-controls="basic-menu"
@@ -232,7 +232,7 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({
         onClose={handleClose}
         PaperProps={{
           style: {
-            width: showIcons ? 300 : 280,
+            width: showIcons ? 300 :370,
             borderRadius: "8px",
             maxHeight: "320px",
             overflowY: "auto",

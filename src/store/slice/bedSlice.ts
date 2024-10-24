@@ -68,7 +68,7 @@ export const createOrDeletePropertySpaceBeds = createAsyncThunk(
   "bed/createOrDeletePropertySpaceBeds",
   async (data: CreateOrDeletePropertySpaceBedsDto) => {
     const response = await api.createOrDeletePropertySpaceBeds(data);
-    return response.data.data;
+    return response.data;
   }
 );
 

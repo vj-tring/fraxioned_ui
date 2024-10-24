@@ -74,7 +74,7 @@ export const createOrDeletePropertySpaceBathrooms = createAsyncThunk(
   "bathroom/createOrDeletePropertySpaceBathrooms",
   async (data: CreateOrDeletePropertySpaceBathroomsDto) => {
     const response = await api.createOrDeletePropertySpaceBathrooms(data);
-    return response.data.data;
+    return response.data;
   }
 );
 
