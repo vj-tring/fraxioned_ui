@@ -27,7 +27,6 @@ const TrackingMyNigts: React.FC = () => {
     if (properties.length > 0) {
       setSelectedPropertyId(properties[0].id);
     }
-    console.log("proeprtyId", selectedPropertyId);
   }, [properties]);
 
   const handlePropertyChange = (event: SelectChangeEvent<number>) => {
@@ -162,8 +161,10 @@ const TrackingMyNigts: React.FC = () => {
             <Select
               sx={{
                 border: "none",
+                height:"55px",
+                width:"300px"
               }}
-              value={selectedProperty1}
+              value={selectedPropertyId}
               onChange={handlePropertyChange}
               displayEmpty
               renderValue={(selectedPropertyId) => {
@@ -217,8 +218,10 @@ const TrackingMyNigts: React.FC = () => {
 
           <div className=" p-2.5 ">
             <Select
-              sx={{
-                borderRadius: "none",
+               sx={{
+                border: "none",
+                height:"55px",
+                width:"150px"
               }}
               value={selectedYear}
               onChange={handleYearChange}
