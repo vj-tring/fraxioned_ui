@@ -14,7 +14,7 @@ export interface User {
   city: string | null;
   zipcode: string | null;
   lastLoginTime: string;
-  updatedBy?: number;
+  updatedBy: number;
   contactDetails: ContactDetails;
   password?: string;
   resetToken?: string;
@@ -37,4 +37,8 @@ export interface UserState {
   user: User;
   loading: boolean;
   error: string | null;
+}
+export interface UpdateUserData {
+  userId: number;
+  userData: Partial<User>;
 }
