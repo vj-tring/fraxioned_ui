@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as api from '@/api/api-endpoints/space-type-endpoints';
-import { 
-  CreatePropertySpaceBedDto, 
-  UpdatePropertySpaceBedDto, 
+import {
+  CreatePropertySpaceBedDto,
+  UpdatePropertySpaceBedDto,
   CreateOrDeletePropertySpaceBedsDto,
   CreateSpaceBedTypeDto,
   UpdateSpaceBedTypeDto
@@ -31,12 +31,12 @@ export const fetchAllPropertySpaceBeds = createAsyncThunk(
 );
 
 export const fetchAllPropertySpaceBedsByPropertySpace = createAsyncThunk(
-    'bed/fetchAllPropertySpaceBedsByPropertySpace',
-    async (propertySpaceId: number) => {
-      const response = await api.getAllPropertySpaceBedsByPropertySpace(propertySpaceId);
-      return response.data.data;
-    }
-  );
+  'bed/fetchAllPropertySpaceBedsByPropertySpace',
+  async (propertySpaceId: number) => {
+    const response = await api.getAllPropertySpaceBedsByPropertySpace(propertySpaceId);
+    return response.data.data;
+  }
+);
 
 export const createPropertySpaceBed = createAsyncThunk(
   'bed/createPropertySpaceBed',
@@ -66,7 +66,7 @@ export const createOrDeletePropertySpaceBeds = createAsyncThunk(
   'bed/createOrDeletePropertySpaceBeds',
   async (data: CreateOrDeletePropertySpaceBedsDto) => {
     const response = await api.createOrDeletePropertySpaceBeds(data);
-    return response.data.data;
+    return response.data;
   }
 );
 
