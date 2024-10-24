@@ -10,6 +10,7 @@ import CustomizedSnackbars from "@/components/customized-snackbar";
 import { ChangeEvent } from "react";
 import { AppDispatch } from "@/store";
 import { Plus, Save, Trash2, X, Edit } from "lucide-react";
+import clsx from "clsx";
 
 interface RegisterFormContentProps {
   onClose: () => void;
@@ -52,6 +53,8 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
   );
   const [addedProperties, setAddedProperties] = useState<any[]>([]);
   const [numberstate, setNumberstate] = useState<number[]>([]);
+  const [currentSelected, setCurrentSelected] = useState<number>(0);
+  const [propertyEdited, setPropertyEdited] = useState<boolean>(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -88,6 +91,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
   const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = event.target;
     const newValue = parseInt(value, 10);
+    setCurrentSelected(newValue);
     setFormValues({
       ...formValues,
       [name]: newValue,
@@ -158,12 +162,18 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
     });
   };
 
-  const handleEditProperty = (index: number) => {
+  const handleEditProperty = (index: number, propertyID: number) => {
+    setPropertyEdited(true);
+    updateShareholderLimits(propertyID);
     setAddedProperties((prev) =>
       prev.map((property, i) =>
         i === index ? { ...property, isEditing: !property.isEditing } : property
       )
     );
+    if (propertyEdited) {
+      updateShareholderLimits(currentSelected);
+      setPropertyEdited(!propertyEdited)
+    }
   };
 
   const handlecancelProperty = (index: number) => {
@@ -172,6 +182,10 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
         i === index ? { ...property, isEditing: !property.isEditing } : property
       )
     );
+    updateShareholderLimits(currentSelected);
+    if (propertyEdited) {
+      setPropertyEdited(!propertyEdited)
+    }
   };
 
   const handleDeleteProperty = (index: number) => {
@@ -396,7 +410,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                   )}
                 </div>
               </div>
-              
+
             </div>
             <div className={styles.rightContent}>
               <div className="flex justify-between items-center mb-[.8rem]">
@@ -462,12 +476,13 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                   </div>
                   <button
                     type="button"
-                    className='px-4 py-1.5 bg-[#f09200] font-medium rounded-sm text-sm text-white hover:bg-[#e28f25] shadow-sm hover:shadow-md focus:ring-slate-500 border-1 border-[#227ed7b]'
+                    className={clsx('px-4 py-1.5 bg-[#f09200] font-medium rounded-sm text-sm text-white shadow-sm hover:shadow-md focus:ring-slate-500 border-1 border-[#227ed7b]', propertyEdited ? 'cursor-no-drop opacity-15' : 'cursor-pointer hover:bg-[#e28f25]')}
                     onClick={addProperty}
+                    disabled={propertyEdited}
                   >
-                    <div className={styles.addPropertyIcon}>
+                    <span className={styles.addPropertyIcon}>
                       <Plus size={15} /> Add
-                    </div>
+                    </span>
                   </button>
                 </div>
               </div>
@@ -485,7 +500,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                                 <span className={styles.propertylistview}>
                                   {property.propertyName}
                                 </span>
-                              </div>                   
+                              </div>
                             </div>
                             <div className={styles.propertyGroup}>
                               <select
@@ -538,7 +553,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                             <button
                               type="button"
                               className='text-[#e28f25] rounded hover:text-[#e28f25]'
-                              onClick={() => handleEditProperty(index)}
+                              onClick={() => handleEditProperty(index, property.propertyID)}
                             >
                               <Save size={18} />
                             </button>
@@ -553,7 +568,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                         </>
                       ) : (
                         <>
-                        <div className={styles.propertiesList}>
+                          <div className={styles.propertiesList}>
                             <span className={styles.propertylistview}>
                               {property.propertyName}
                             </span>
@@ -567,7 +582,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                               <button
                                 type="button"
                                 className={styles.editButton}
-                                onClick={() => handleEditProperty(index)}
+                                onClick={() => handleEditProperty(index, property.propertyID)}
                               >
                                 <Edit size={16} />
                               </button>
