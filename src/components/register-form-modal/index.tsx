@@ -39,7 +39,7 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
         CREATE A NEW ACCOUNT
         <IconButton
           aria-label="close"
-          sx={{ color: '#fff' }}
+          sx={{ color: '#000'}}
           onClick={handleClose}
         >
           <X size={18} />

@@ -164,12 +164,6 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
         i === index ? { ...property, isEditing: !property.isEditing } : property
       )
     );
-
-    if (addedProperties[index].isEditing && index !== -1) {
-      setSnackbarMessage("Successfully saved");
-      setSnackbarSeverity("success");
-      setShowSnackbar(true);
-    }
   };
 
   const handlecancelProperty = (index: number) => {

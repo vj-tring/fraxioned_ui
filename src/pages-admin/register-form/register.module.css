@@ -67,7 +67,7 @@
   justify-content: space-between;
   align-items: center;
   height: 40px;
-  padding: 5px 10px 5px 10px !important;
+  padding: 5px 10px 5px 20px !important;
   border-bottom: 1px solid #f0f0f0;
   border-radius: 4px;
   gap: 0.4rem;
@@ -103,6 +103,7 @@ input:autofill:focus {
 
 .inlineInputGroup {
   display: flex;
+  padding-left: 10px;
   align-items: center;
   justify-content: space-around;
 }
@@ -136,7 +137,7 @@ input:autofill:focus {
   display: flex;
   flex-direction: column;
   height: 22rem;
-  max-height: 22rem;
+  max-height: 21rem;
   overflow-y: scroll;
   background: #fff;
   margin-top: 10px;
