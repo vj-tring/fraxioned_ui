@@ -202,9 +202,8 @@ const PropertyPhotos: React.FC = () => {
             <img
               src={image.url}
               alt={image.description}
-              className={`${styles.propertyImage} ${
-                loadedImages.has(image.id) ? styles.loaded : ""
-              }`}
+              className={`${styles.propertyImage} ${loadedImages.has(image.id) ? styles.loaded : ""
+                }`}
               onLoad={() => handleImageLoad(image.id)}
             />
             <div className={styles.overlay}>
@@ -243,9 +242,8 @@ const PropertyPhotos: React.FC = () => {
           {Object.entries(imagesBySpace).map(([spaceName, spaceGroup]) => (
             <button
               key={spaceName}
-              className={`${styles.tab} ${
-                activeTab === spaceName ? styles.activeTab : ""
-              }`}
+              className={`${styles.tab} ${activeTab === spaceName ? styles.activeTab : ""
+                }`}
               onClick={() => handleTabClick(spaceName)}
             >
               {spaceName}
@@ -263,9 +261,8 @@ const PropertyPhotos: React.FC = () => {
             </button>
           ))}
           <button
-            className={`${styles.tab} ${
-              activeTab === "Other Photos" ? styles.activeTab : ""
-            }`}
+            className={`${styles.tab} ${activeTab === "Other Photos" ? styles.activeTab : ""
+              }`}
             onClick={() => handleTabClick("Other Photos")}
           >
             Other Photos
@@ -299,8 +296,8 @@ const PropertyPhotos: React.FC = () => {
                 renderImages(additionalImages)
               )
             ) : imagesBySpace[activeTab]?.instances.flatMap(
-                (instance) => instance.images
-              ).length === 0 ? (
+              (instance) => instance.images
+            ).length === 0 ? (
               <div className={styles.emptyState}>
                 <p>No photos found for this space</p>
               </div>
