@@ -22,13 +22,13 @@
   border-top-left-radius: 25px;
   border-bottom-left-radius: 25px;
 
-  width: 25%;
+  /* width: 25%; */
   display: flex;
   float: right;
   height: 50px;
   justify-content: space-around;
   padding-right: 10px;
-  box-shadow: rgb(0 0 0 / 24%) 0px 3px 8px;
+  /* box-shadow: rgb(0 0 0 / 24%) 0px 3px 8px; */
 }
 .Track-btn {
   background-color: #88cdd4;
