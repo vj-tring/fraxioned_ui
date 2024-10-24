@@ -68,7 +68,7 @@ const SpaceProperty: React.FC = () => {
             try {
                 setLoading(true);
                 await dispatch(createNewSpaceProperty(spacePropertyData)).unwrap();
-                await dispatch(fetchSpacePropertiesById(Number(id))).unwrap();
+                await dispatch(fetchPropertyAllRooms(Number(id)))
                 setIsDialogOpen(false);
                 setSelectedSpace(null);
             } catch (error) {
