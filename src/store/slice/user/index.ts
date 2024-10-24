@@ -31,6 +31,7 @@ const initialState: UserState = {
             optionalPhoneOne: null,
             optionalPhoneTwo: null,
         },
+        updatedBy: 0
     },
     loading: false,
     error: null,
