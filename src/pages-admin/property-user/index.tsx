@@ -10,6 +10,7 @@ import { Building, Users, Calendar, Fingerprint } from "lucide-react";
 import profile from "../../assets/images/profile.jpeg";
 import { Avatar } from "@mui/material";
 import { User, PropertyUser } from "./property-user.types";
+
 interface UserCardProps {
   owner: PropertyUser;
   user: User | undefined;
@@ -113,7 +114,7 @@ const PropertyUsers: React.FC = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PropertyUsers;
+export default PropertyUsers
