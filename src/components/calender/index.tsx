@@ -722,7 +722,7 @@ export function DatePickerWithRange({
         }
       `}</style>
       {showEndCalendar && (
-        <div className="flex items-center justify-between end-calendar">
+        <div className="flex items-center end-calendar">
           <div className="stay-length">
             <div className="flex items-center space-x-4">
               <Moon className="h-6 w-6 text-orange-300" />
@@ -776,7 +776,7 @@ export function DatePickerWithRange({
           <div className="flex items-center space-x-2">
             <Badge
               variant="outline"
-              className="text-sm cursor-pointer hover:bg-gray-100"
+              className="text-sm cursor-pointer hover:bg-gray-100 ml-16"
               onClick={clearDatesHandler}
             >
               Clear dates
