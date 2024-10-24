@@ -38,7 +38,7 @@ import {
 } from "@/store/slice/property-document/actions";
 import { setCurrentDocument } from "@/store/slice/property-document";
 import { PropertyDocument } from "./document.types";
-
+import Loader from "@/components/loader";
 const categories = [
   "Blueprint",
   "Legal",
