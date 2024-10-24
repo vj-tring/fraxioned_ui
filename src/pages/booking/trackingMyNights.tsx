@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-
 import "../booking/trackingMyNights.css";
 import { useSelector } from "react-redux";
 import { SelectChangeEvent } from "@mui/material";
 import { Image } from "../property-listing-page";
 import { Card } from "../../store/slice/auth/property-slice";
+import { MenuItem, Select, Avatar } from "@mui/material";
+
 interface RootState {
   properties: {
     cards: Card[];
@@ -27,6 +28,7 @@ const TrackingMyNigts: React.FC = () => {
     if (properties.length > 0) {
       setSelectedPropertyId(properties[0].id);
     }
+    console.log("proeprtyId", selectedPropertyId);
   }, [properties]);
 
   const handlePropertyChange = (event: SelectChangeEvent<number>) => {
@@ -123,6 +125,7 @@ const TrackingMyNigts: React.FC = () => {
   const [selectedProperty1, setSelectedProperty1] = useState<number | null>(
     null
   );
+
   return (
     <div className="Container">
       <div className="My-nights">
@@ -135,60 +138,89 @@ const TrackingMyNigts: React.FC = () => {
       <div className="bar-btn-head">
         <div className="d-flex bar-btn">
           <div className="p-2.5">
-            <Dropdown
-              value={selectedProperty1}
-              onChange={(e) => {
-                setSelectedProperty1(e.value);
-                handlePropertyChange(e);
+            <Select
+              sx={{
+                border: "none",
               }}
-              options={properties.map((property, index) => ({
-                label: ` ${property.propertyName} `,
-                value: property.id,
-                style: {
-                  backgroundColor: "white",
-                  paddingTop: "10px",
-                  paddingBottom: "10px",
-                  width: "250px",
-                  paddingLeft: "25px",
-                  fontSize: "small",
-                  display:"flex",
-                  // position:"relative",
-                  // left:"10px"
-                  
-                },
-              }))}
-              optionLabel="label"
-              placeholder="Select a Property"
-              className="w-full md:w-14rem DropdownLabel"
-            />
+              value={selectedProperty1}
+              onChange={handlePropertyChange}
+              displayEmpty
+              renderValue={(selectedPropertyId) => {
+                const property = properties.find(
+                  (p) => p.id === selectedPropertyId
+                );
+                return property ? (
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <Avatar
+                      variant="square"
+                      src={showselectedimage(property.id)}
+                      alt={property.propertyName}
+                      style={{ marginRight: "10px" }}
+                    />
+                    {property.propertyName}
+                  </div>
+                ) : (
+                  "Select a Property"
+                );
+              }}
+            >
+              {properties.map((property) => (
+                <MenuItem
+                  key={property.id}
+                  value={property.id}
+                  sx={{
+                    width: "350px",
+                    display: "flex",
+                    gap: "15px",
+                    borderRadius: "3px",
+                  }}
+                >
+                  <Avatar
+                    variant="square"
+                    sx={{
+                      width: "100px",
+                      height: "50px",
+                      objectFit: "cover",
+                    }}
+                    src={showselectedimage(property.id)}
+                    alt={property.propertyName}
+                    style={{ marginRight: "10px" }}
+                  />
+                  {property.propertyName}
+                </MenuItem>
+              ))}
+            </Select>
           </div>
 
-          <hr className="vl mt-2"></hr>
+          {/* <hr className="vl mt-2"></hr> */}
 
           <div className=" p-2.5 ">
-            <Dropdown
-              value={selectedYear}
-              onChange={(e) => {
-                setSelectedYear(e.value);
-                handleYearChange(e);
+            <Select
+              sx={{
+                borderRadius: "none",
               }}
-              options={availableYears.map((year, index) => ({
-                label: year,
-                value: year,
-                style: {
-                  backgroundColor: "white",
-                  paddingTop: "10px",
-                  paddingBottom: "10px",
-
-                  width: "100px",
-                  paddingLeft: "27px",
-                  fontSize: "small",
-                },
-              }))}
-              optionLabel="label"
-              placeholder="Select a Property"
-              className="w-full md:w-14rem DropdownLabel1 "
-            />
+              value={selectedYear}
+              onChange={handleYearChange}
+              displayEmpty
+              renderValue={(selectedYear) => (
+                <div>{selectedYear ? selectedYear : "Select a Year"}</div>
+              )}
+            >
+              {availableYears.map((year, index) => (
+                <MenuItem
+                  key={index}
+                  value={year}
+                  sx={{
+                    width: "150px",
+                    display: "flex",
+                    gap: "15px",
+                    borderRadius: "none",
+                  }}
+                >
+                  {year}
+                </MenuItem>
+              ))}
+            </Select>
           </div>
         </div>
       </div>
