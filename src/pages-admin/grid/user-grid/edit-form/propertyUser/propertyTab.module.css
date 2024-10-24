@@ -21,6 +21,11 @@
   object-fit: cover;
 }
 
+.noPropertiesText {
+  align-items: center;
+  
+}
+
 .propertyNoImage {
   width: 100%;
   height: 100%;

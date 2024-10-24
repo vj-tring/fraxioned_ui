@@ -38,7 +38,7 @@ const AMENITIES_PER_PAGE = 3;
 const SingleDevice: React.FC<SingleDeviceProps> = ({ propertyId }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { propertyAmenities: propertyAmenities } = useSelector(
-    (state: RootState) => state.amenitiesID
+    (state: RootState) => state.amenitiesID 
   );
   const propertySpace = useSelector(
     (state: RootState) => state.spaceProperties.spaceProperties || []
