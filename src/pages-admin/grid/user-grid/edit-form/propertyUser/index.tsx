@@ -40,6 +40,7 @@ interface Property {
   propertyName: string;
   propertyRemainingShare: number;
 }
+
 const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
   const dispatch = useDispatch();
   const {
@@ -52,11 +53,11 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
   const properties = useSelector(
     (state: RootState) => state.property.properties
   );
+  const [availableProperties, setAvailableProperties] = useState(properties);
 
   const [selectedYears, setSelectedYears] = useState<{ [key: number]: number }>(
     {}
   );
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [deleteModal, setDeleteModal] = useState({
     show: false,
@@ -68,29 +69,6 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
     acquisitionDate: "",
   });
   const [maxShares, setMaxShares] = useState(0);
-  if (loading)
-    return <Typography className={styles.loadingText}>Loading...</Typography>;
-  if (error)
-    return (
-      <Typography className={styles.errorText} color="error">
-        {error}
-      </Typography>
-    );
-
-  if (!userPropertiesWithDetails || userPropertiesWithDetails.status === 404) {
-    return (
-      <Typography className={styles.noPropertiesText}>
-        No properties available for this user.
-      </Typography>
-    );
-  }
-
-  const assignedPropertyIds = userPropertiesWithDetails.map(
-    (prop: PropertyWithDetailsResponse) => prop.propertyId
-  );
-  const availableProperties = properties.filter(
-    (property: Property) => !assignedPropertyIds.includes(property.id)
-  );
 
   useEffect(() => {
     dispatch(fetchProperties());
@@ -104,11 +82,21 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
   }, [dispatch, isDialogOpen]);
 
   useEffect(() => {
-    const initialYears: { [key: number]: number } = {};
-    userPropertiesWithDetails.forEach((prop: PropertyWithDetailsResponse) => {
-      initialYears[prop.propertyId] = new Date().getFullYear();
-    });
-    setSelectedYears(initialYears);
+    if (Array.isArray(userPropertiesWithDetails)) {
+      const initialYears: { [key: number]: number } = {};
+      userPropertiesWithDetails.forEach((prop: PropertyWithDetailsResponse) => {
+        initialYears[prop.propertyId] = new Date().getFullYear();
+      });
+      setSelectedYears(initialYears);
+      const assignedPropertyIds = userPropertiesWithDetails.map(
+        (prop: PropertyWithDetailsResponse) => prop.propertyId
+      );
+    
+      const availableProperties = properties.filter(
+        (property: Property) => !assignedPropertyIds.includes(property.id)
+      );
+      setAvailableProperties(availableProperties)
+    }
   }, [userPropertiesWithDetails]);
 
   const handlePropertySelect = (value: string) => {
@@ -156,6 +144,7 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
       console.error("Failed to add property:", error);
     }
   };
+
   const handleClose = () => {
     setIsDialogOpen(false);
     setNewProperty({ propertyId: "", noOfShares: "", acquisitionDate: "" });
@@ -179,7 +168,7 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
   const handleConfirmDelete = async () => {
     if (deleteModal.propertyId) {
       try {
-        const propertyId = deleteModal.propertyId
+        const propertyId = deleteModal.propertyId;
         await dispatch(deleteUserProperty({ userId, propertyId })).unwrap();
         dispatch(fetchUserPropertiesWithDetailsByUser(userId));
         handleCloseDeleteModal();
@@ -188,7 +177,6 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
       }
     }
   };
-
 
   const renderNightInfoBlock = (
     userProperty: UserProperty,
@@ -273,6 +261,121 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
     );
   };
 
+  if (loading) {
+    return <Typography className={styles.loadingText}>Loading...</Typography>;
+  }
+
+  if (error) {
+    return (
+      <Typography className={styles.errorText} color="error">
+        {error}
+      </Typography>
+    );
+  }
+
+  if (!userPropertiesWithDetails || !Array.isArray(userPropertiesWithDetails) || userPropertiesWithDetails.length === 0) {
+    return (
+      <div className={styles.propertyTabContainer}>
+        <Button
+          onClick={() => setIsDialogOpen(true)}
+          variant="contained"
+          startIcon={<Plus />}
+          className={styles.addPropertyButton}
+          disabled={isAddingProperty}
+        >
+          {isAddingProperty ? "Adding Property..." : "Add Property"}
+        </Button>
+        <Typography className={styles.noPropertiesText}>
+          No properties available for this user.
+        </Typography>
+        <Dialog
+        open={isDialogOpen}
+        onClose={handleClose}
+        maxWidth="sm"
+        fullWidth
+        className={styles.addPropertyDialog}
+      >
+        <DialogTitle>Add New Property</DialogTitle>
+        <DialogContent>
+          <div
+            style={{
+              marginTop: "16px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "16px",
+            }}
+          >
+            <FormControl fullWidth>
+              <MuiSelect
+                value={newProperty.propertyId}
+                onChange={(e) => handlePropertySelect(e.target.value as string)}
+                displayEmpty
+                placeholder="Select Property"
+              >
+                <MenuItem value="" disabled>
+                  Select Property
+                </MenuItem>
+                {availableProperties.map((property: Property) => (
+                  <MenuItem key={property.id} value={property.id.toString()}>
+                    {property.propertyName}
+                  </MenuItem>
+                ))}
+              </MuiSelect>
+            </FormControl>
+
+            <FormControl fullWidth>
+              <MuiSelect
+                value={newProperty.noOfShares}
+                onChange={(e) => handleShareSelect(e.target.value as string)}
+                displayEmpty
+                disabled={!newProperty.propertyId}
+                placeholder="Select Number of Shares"
+              >
+                <MenuItem value="" disabled>
+                  Select Number of Shares
+                </MenuItem>
+                {[...Array(maxShares)].map((_, i) => (
+                  <MenuItem key={i} value={(i + 1).toString()}>
+                    {i + 1}
+                  </MenuItem>
+                ))}
+              </MuiSelect>
+            </FormControl>
+
+            <TextField
+              type="date"
+              value={newProperty.acquisitionDate}
+              onChange={handleDateChange}
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+              label="Acquisition Date"
+            />
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleAddPropertySubmit}
+            color="primary"
+            variant="contained"
+            disabled={
+              !newProperty.propertyId ||
+              !newProperty.noOfShares ||
+              !newProperty.acquisitionDate
+            }
+          >
+            Add Property
+          </Button>
+        </DialogActions>
+      </Dialog>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.propertyTabContainer}>
       <Button
@@ -294,7 +397,14 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
       >
         <DialogTitle>Add New Property</DialogTitle>
         <DialogContent>
-          <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div
+            style={{
+              marginTop: "16px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "16px",
+            }}
+          >
             <FormControl fullWidth>
               <MuiSelect
                 value={newProperty.propertyId}
@@ -306,10 +416,7 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
                   Select Property
                 </MenuItem>
                 {availableProperties.map((property: Property) => (
-                  <MenuItem
-                    key={property.id}
-                    value={property.id.toString()}
-                  >
+                  <MenuItem key={property.id} value={property.id.toString()}>
                     {property.propertyName}
                   </MenuItem>
                 ))}
@@ -375,7 +482,9 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
 
           const shareFraction = `${userProperty.noOfShare}/${prop.propertyShare}`;
 
-          const propertyDetails = properties.find(p => p.id === prop.propertyId);
+          const propertyDetails = properties.find(
+            (p) => p.id === prop.propertyId
+          );
           const coverImage = propertyDetails?.coverImageUrl;
 
           return (
@@ -383,22 +492,22 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
               <div className={styles.propertyContent}>
                 <div className={styles.propertyLeftContent}>
                   <div className={styles.propertyImageWrapper}>
-                  {coverImage ? (
-                    <img
-                      src={coverImage}
-                      alt={prop.propertyName}
-                      className={styles.propertyImage}
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
-                        const parent = target.parentElement;
-                        if (parent) {
-                          const placeholder = document.createElement('div');
-                          placeholder.className = styles.propertyNoImage;
-                          placeholder.innerHTML = '<svg>...</svg>';
-                          parent.appendChild(placeholder);
-                        }
-                      }}
+                    {coverImage ? (
+                      <img
+                        src={coverImage}
+                        alt={prop.propertyName}
+                        className={styles.propertyImage}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = "none";
+                          const parent = target.parentElement;
+                          if (parent) {
+                            const placeholder = document.createElement("div");
+                            placeholder.className = styles.propertyNoImage;
+                            placeholder.innerHTML = "<svg>...</svg>";
+                            parent.appendChild(placeholder);
+                          }
+                        }}
                       />
                     ) : (
                       <div className={styles.propertyNoImage}>
@@ -468,12 +577,14 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
                       </Button>
                     ))}
                     <Button
-                    variant="contained"
-                    color="error"
-                    onClick={() => handleShowDeleteModal(prop.propertyId)}
-                    className={styles.removePropertyButton}
-                    disabled={isDeletingProperty}
-                  ><Trash2/></Button>
+                      variant="contained"
+                      color="error"
+                      onClick={() => handleShowDeleteModal(prop.propertyId)}
+                      className={styles.removePropertyButton}
+                      disabled={isDeletingProperty}
+                    >
+                      <Trash2 />
+                    </Button>
                   </div>
                   <div className={styles.propertyAvailabilityContainer}>
                     <div className={styles.propertyAvailabilityInfo}>
@@ -493,7 +604,7 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
           );
         }
       )}
-     <ConfirmationModal
+      <ConfirmationModal
         show={deleteModal.show}
         onHide={handleCloseDeleteModal}
         onConfirm={handleConfirmDelete}
