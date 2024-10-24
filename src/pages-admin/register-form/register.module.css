@@ -1,5 +1,6 @@
 .modalContent {
   height: 100%;
+  background: #f8f8f878;
 }
 
 .modalHeader {
@@ -24,24 +25,24 @@
 
 .formContent {
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
   padding: 1.3rem;
   padding-bottom: 0;
   position: relative;
 }
 
 .leftContent {
-  width: 50%;
+  width: 45%;
 }
 
 .rightContent {
-  width: 50%;
+  width: 55%;
 }
 
 .inputGroup {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.1rem;
+  margin-bottom: 5px;
   gap: .25rem;
 }
 
@@ -51,8 +52,7 @@
 .propertyGroup select {
   width: 100%;
   padding: .6rem;
-  border: 1px solid #e4e4e7;
-  border-radius: .3rem;
+  border: 1px solid #e8e8e8;
   font-size: 14px;
   transition: border-color 0.3s ease;
 }
@@ -62,9 +62,20 @@
   font-weight: 400;
 }
 
+.propertiesList {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+  padding: 5px 10px 5px 20px !important;
+  border-bottom: 1px solid #f0f0f0;
+  border-radius: 4px;
+  gap: 0.4rem;
+  font-size: 13px;
+}
 
 .propertyGroupshare {
-  width: 16%;
+  width: 22%;
 }
 
 .propertyGroupshare select {
@@ -92,10 +103,15 @@ input:autofill:focus {
 
 .inlineInputGroup {
   display: flex;
-  gap: .4rem;
+  padding-left: 10px;
   align-items: center;
   justify-content: space-around;
 }
+
+.addPropertyContainer{
+ display: flex;
+}
+
 
 .addPropertySection {
   margin-bottom: 1rem;
@@ -116,15 +132,15 @@ input:autofill:focus {
 
 .addedPropertiesList,
 .noProperty {
-  padding: .8rem .5rem;
   border: 1px solid #e4e4e7;
   border-radius: .3rem;
   display: flex;
   flex-direction: column;
-  gap: 1.3rem;
-  height: 14.5rem;
-  max-height: 15rem;
+  height: 22rem;
+  max-height: 21rem;
   overflow-y: scroll;
+  background: #fff;
+  margin-top: 10px;
 }
 
 .addedPropertiesList::-webkit-scrollbar {
@@ -152,11 +168,16 @@ input:autofill:focus {
 }
 
 .propertylist {
-  width: 14rem !important;
+  width: 11.6rem !important;
 }
 
 .propertyshare {
-  width: 3.5rem !important;
+  width: 7.7rem !important;
+}
+
+.propertyName {
+  width: 185px;
+  padding-left: 10px;
 }
 
 .propertydate {
@@ -165,10 +186,11 @@ input:autofill:focus {
 
 .propertylistview {
   width: 13rem !important;
+  font-weight: 500;
 }
 
 .propertyshareview {
-  width: 1.5rem !important;
+  width: 6rem !important;
 }
 
 .propertydateview {
@@ -184,22 +206,25 @@ input:autofill:focus {
 .inlinebutton {
   display: flex;
   gap: 1rem;
+  padding-left: 10px;
 }
 
 .propertyItem {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  height: 1.5rem;
+  height: 40px;
+  border-bottom: 1px solid #f0f0f0;
   border-radius: 4px;
-  gap: .4rem;
-  font-size: .9rem;
+  gap: 0.4rem;
+  font-size: 13px;
 }
 
 .editsavebutton {
-  gap: .2rem;
+  gap: 0.7rem;
   display: flex;
+  width: 75px;
   color: #e28f25;
+  padding-left: 5px;
 }
 
 .addselectProperty {
@@ -215,6 +240,13 @@ input:autofill:focus {
 .addproptydate {
   width: 100% !important;
   font-size: small !important;
+}
+
+.addPropertyIcon {
+  display: flex;
+  line-height: 15px;
+  gap: 7px;
+  width: 60px;
 }
 
 .propertyActions {
@@ -285,15 +317,16 @@ select {
 }
 
 .sectionTitle {
-  font-size: 1rem;
+  font-size: 14px;
   letter-spacing: .08rem;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 500;
 }
 
-.leftContent .sectionTitle {
-  padding: .3rem 0 1.2rem;
+.registerBasicDetails {
+  padding-top: 15px;
 }
+
 
 .propertyItem select,
 .propertyItem input[type="date"] {
