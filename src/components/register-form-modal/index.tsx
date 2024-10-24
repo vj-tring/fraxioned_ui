@@ -10,6 +10,20 @@ interface FormDialogProps {
 
 
 const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
+
+  const sendInviteHeader = {
+    color: 'black',
+    padding: '6px 24px',
+    letterSpacing: '.18rem',
+    fontSize: 15,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: '48px',
+    border: '1px solid #ccc',
+    background: '#f7f7f7'
+  }
+
   return (
     <Dialog
       open={open}
@@ -17,26 +31,15 @@ const FormDialog: React.FC<FormDialogProps> = ({ open, handleClose }) => {
       aria-labelledby="form-dialog-title"
       keepMounted
       fullWidth
-      PaperProps={{ sx: { borderRadius: 1, maxWidth: '70%', height: '75%' } }}
+      PaperProps={{ sx: { borderRadius: 1, maxWidth: '75%', height: '80%' } }}
     >
       <DialogTitle
-        sx={{
-          background:
-            'linear-gradient(to right, #e28f25 30%, #eea222 60%, #e28f25 100%)',
-          color: 'white',
-          height: '44px',
-          padding: '6px 24px',
-          letterSpacing: '.18rem',
-          fontSize: 15,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}
+        sx={sendInviteHeader}
       >
         CREATE A NEW ACCOUNT
         <IconButton
           aria-label="close"
-          sx={{ color: '#fff' }}
+          sx={{ color: '#000'}}
           onClick={handleClose}
         >
           <X size={18} />
