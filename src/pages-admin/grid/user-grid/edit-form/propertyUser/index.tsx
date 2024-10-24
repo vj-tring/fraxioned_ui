@@ -264,7 +264,7 @@ const PropertyTab: React.FC<EnhancedPropertyTabProps> = ({ userId }) => {
     );
   }
 
-  if (userPropertiesWithDetails || !Array.isArray(userPropertiesWithDetails) || userPropertiesWithDetails.length === 0) {
+  if (!userPropertiesWithDetails || !Array.isArray(userPropertiesWithDetails) || userPropertiesWithDetails.length === 0) {
     return (
       <div className={styles.propertyTabContainer}>
         <Button
