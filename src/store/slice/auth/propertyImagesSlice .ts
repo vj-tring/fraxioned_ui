@@ -1,6 +1,5 @@
-// redux/propertyImagesSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { propertyImageapi } from "@/api/api-endpoints";
+import { fetchPropertySpaceImagesByPropertyId } from "@/store/services";
 import { RootState } from "@/store/reducers";
 
 interface PropertyImage {
@@ -44,8 +43,7 @@ export const fetchPropertyImages = createAsyncThunk(
   "propertyImages/fetchPropertyImages",
   async (propertyId: number, { rejectWithValue }) => {
     try {
-      const response = await propertyImageapi(propertyId);
-
+      const response = await fetchPropertySpaceImagesByPropertyId(propertyId);
       return response.data.data;
     } catch (error) {
       console.error("Fetching property images failed:", error);
@@ -124,7 +122,7 @@ const propertyImagesSlice = createSlice({
               ],
             },
             ...groupedBySpace,
-            
+
             "Additional Photos": {
               name: "Additional Photos",
               instances: [

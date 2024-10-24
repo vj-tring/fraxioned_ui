@@ -1,5 +1,9 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getProperties, getPropertyById, getProperrtDetailsbyId } from '@/api/api-endpoints';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {
+  getProperties,
+  getPropertyById,
+  getPropertyDetailsbyId,
+} from "@/store/services";
 
 interface Property {
   id: number;
@@ -66,7 +70,7 @@ export interface PropertiesState {
   properties: Property[];
   selectedProperty: Property | null;
   selectedPropertyDetails: PropertyDetails | null;
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
 
@@ -74,17 +78,20 @@ const initialState: PropertiesState = {
   properties: [],
   selectedProperty: null,
   selectedPropertyDetails: null,
-  status: 'idle',
+  status: "idle",
   error: null,
 };
 
-export const fetchProperties = createAsyncThunk('properties/fetchProperties', async () => {
-  const response = await getProperties();
-  return response.data;
-});
+export const fetchProperties = createAsyncThunk(
+  "properties/fetchProperties",
+  async () => {
+    const response = await getProperties();
+    return response.data;
+  }
+);
 
 export const fetchPropertyById = createAsyncThunk(
-  'properties/fetchPropertyById',
+  "properties/fetchPropertyById",
   async (id: number) => {
     const response = await getPropertyById(id);
     return response.data;
@@ -92,51 +99,52 @@ export const fetchPropertyById = createAsyncThunk(
 );
 
 export const fetchPropertyDetailsById = createAsyncThunk(
-  'properties/fetchPropertyDetailsById',
+  "properties/fetchPropertyDetailsById",
   async (id: number) => {
-    const response = await getProperrtDetailsbyId(id);
+    const response = await getPropertyDetailsbyId(id);
     return response.data;
   }
 );
 
 const propertiesSlice = createSlice({
-  name: 'property',
+  name: "property",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchProperties.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(fetchProperties.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+        state.status = "succeeded";
         state.properties = action.payload;
       })
       .addCase(fetchProperties.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message || 'Failed to fetch properties';
+        state.status = "failed";
+        state.error = action.error.message || "Failed to fetch properties";
       })
       .addCase(fetchPropertyById.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(fetchPropertyById.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+        state.status = "succeeded";
         state.selectedProperty = action.payload;
       })
       .addCase(fetchPropertyById.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message || 'Failed to fetch property';
+        state.status = "failed";
+        state.error = action.error.message || "Failed to fetch property";
       })
       .addCase(fetchPropertyDetailsById.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(fetchPropertyDetailsById.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+        state.status = "succeeded";
         state.selectedPropertyDetails = action.payload;
       })
       .addCase(fetchPropertyDetailsById.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message || 'Failed to fetch property details';
+        state.status = "failed";
+        state.error =
+          action.error.message || "Failed to fetch property details";
       });
   },
 });

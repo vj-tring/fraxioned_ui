@@ -1,10 +1,10 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { createQuestion } from '@/api';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createFaqQuestion } from "@/store/services";
 
 interface AddQuestionData {
   question: string;
   answer: string;
-  createdBy: { id: number }; 
+  createdBy: { id: number };
 }
 
 export interface AddQuestionState {
@@ -14,13 +14,15 @@ export interface AddQuestionState {
 }
 
 export const addQuestion = createAsyncThunk(
-  'questions/addQuestion',
+  "questions/addQuestion",
   async (data: AddQuestionData, { rejectWithValue }) => {
     try {
-      const response = await createQuestion(data)
+      const response = await createFaqQuestion(data);
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'An error occurred');
+      return rejectWithValue(
+        error.response?.data?.message || "An error occurred"
+      );
     }
   }
 );
@@ -32,7 +34,7 @@ const initialState: AddQuestionState = {
 };
 
 const addQuestionSlice = createSlice({
-  name: 'addQuestion',
+  name: "addQuestion",
   initialState,
   reducers: {
     resetAddQuestionState: (state) => {

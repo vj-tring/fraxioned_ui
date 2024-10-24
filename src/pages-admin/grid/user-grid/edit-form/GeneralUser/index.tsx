@@ -19,7 +19,6 @@
 // } from '@mui/material';
 // import CloseIcon from '@mui/icons-material/Close';
 // import Loader from '@/components/loader';
-// import { updateuserapi, getRoles } from '@/api';
 // import UserBookings from '../user-bookings';
 // import UserForm from '../userform';
 // import styles from './GeneralUser.module.css';

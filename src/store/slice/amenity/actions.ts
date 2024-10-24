@@ -1,10 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
-  amenitiesapi,
-  addamenity,
-  updateamenities,
+  getAllAmenities,
+  addAmenity,
+  updateAmenities,
   deleteAmenity,
-} from "@/api/api-endpoints";
+} from "@/store/services";
 
 interface AddAmenityData {
   amenityGroup: { id: number };
@@ -16,7 +16,7 @@ interface AddAmenityData {
 export const fetchAmenities = createAsyncThunk(
   "amenities/fetchAmenities",
   async () => {
-    const response = await amenitiesapi();
+    const response = await getAllAmenities();
     return response.data;
   }
 );
@@ -34,7 +34,7 @@ export const createAmenity = createAsyncThunk(
         formData.append("imageFile", data.imageFile);
       }
 
-      const response = await addamenity(formData);
+      const response = await addAmenity(formData);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -62,7 +62,7 @@ export const updateAmenity = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const response = await updateamenities(id, updateData);
+      const response = await updateAmenities(id, updateData);
       return response.data;
     } catch (error: any) {
       return rejectWithValue(

@@ -1,5 +1,12 @@
-import { getUserPropertyDocument, createUserPropertyDocuments, updateUserPropertyDocument, deleteUserPropertyDocument, getAllUserPropertyDocuments, getUserPropertyDocumentByUser } from "@/api/api-endpoints";
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import {
+  getUserPropertyDocument,
+  createUserPropertyDocuments,
+  updateUserPropertyDocument,
+  deleteUserPropertyDocument,
+  getAllUserPropertyDocuments,
+  getUserPropertyDocumentByUser,
+} from "@/store/services";
+import { createAsyncThunk, } from "@reduxjs/toolkit";
 
 export interface UserPropertyDocument {
   documentName: any;
@@ -71,7 +78,10 @@ export const createUserPropertyDocumentThunk = createAsyncThunk(
 
 export const updateUserPropertyDocumentThunk = createAsyncThunk(
   "userPropertyDocuments/update",
-  async ({ id, documentData }: { id: number; documentData: FormData }, { rejectWithValue }) => {
+  async (
+    { id, documentData }: { id: number; documentData: FormData },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await updateUserPropertyDocument(id, documentData);
       return response.data;

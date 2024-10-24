@@ -23,7 +23,7 @@ import { RootState } from "@/store/reducers";
 import EventIcon from "@mui/icons-material/Event";
 import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
 import { AppDispatch } from "@/store";
-import { fetchPropertyHoliday, updateHoliday } from "@/store/slice/holiday/action";
+import { fetchPropertyHoliday, modifyHoliday } from "@/store/slice/holiday/action";
 import { EditFormProps } from '../holiday.types';
 import { Property } from "@/store/model/holiday.types";
 import { formatDate } from "@/utils/datefunction";
@@ -95,7 +95,7 @@ const EditForm: React.FC<EditFormProps> = ({
     };
 
     try {
-      await dispatch(updateHoliday({
+      await dispatch(modifyHoliday({
         id: holidayData.id,
         updatedHolidayData
       })).unwrap();

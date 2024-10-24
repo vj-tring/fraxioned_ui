@@ -1,26 +1,33 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { createAddditionalImage, getAdditionalImageforProperty } from "@/api/api-endpoints";
+import {
+  createPropertyAddditionalImage,
+  getAdditionalImageforProperty,
+} from "@/store/services";
 
 export const uploadPropertyImages = createAsyncThunk(
-    "propertyImages/upload",
-    async (data: FormData, { rejectWithValue }) => {
-        try {
-            const response = await createAddditionalImage(data);
-            return response.data;
-        } catch (error: any) {
-            return rejectWithValue(error.response?.data?.message || "Failed to upload images");
-        }
+  "propertyImages/upload",
+  async (data: FormData, { rejectWithValue }) => {
+    try {
+      const response = await createPropertyAddditionalImage(data);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to upload images"
+      );
     }
+  }
 );
 
 export const fetchAdditionalImages = createAsyncThunk(
-    "propertyImages/fetchAdditional",
-    async (propertyId: number, { rejectWithValue }) => {
-        try {
-            const response = await getAdditionalImageforProperty(propertyId);
-            return response.data.data;
-        } catch (error: any) {
-            return rejectWithValue(error.response?.data?.message || "Failed to fetch additional images");
-        }
+  "propertyImages/fetchAdditional",
+  async (propertyId: number, { rejectWithValue }) => {
+    try {
+      const response = await getAdditionalImageforProperty(propertyId);
+      return response.data.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch additional images"
+      );
     }
+  }
 );

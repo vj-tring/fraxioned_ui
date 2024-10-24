@@ -4,7 +4,7 @@ import styles from "./newdocument.module.css";
 import {
   propertyDocumentUploadApi,
   propertyDocumentTypesApi,
-} from "@/api";
+} from "@/store/services";
 import Loader from "@/components/loader";
 import { FileIcon, Trash2 } from "lucide-react";
 
@@ -67,7 +67,9 @@ const DocumentUpload: React.FC = () => {
 
     try {
       await propertyDocumentUploadApi(formData);
-      navigate(`/admin/property/${id}/documents`, { state: { fromUpload: true } });
+      navigate(`/admin/property/${id}/documents`, {
+        state: { fromUpload: true },
+      });
     } catch (error) {
       console.error("Error uploading documents:", error);
       navigate(`/admin/property/${id}/documents`);

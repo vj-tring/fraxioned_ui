@@ -7,7 +7,7 @@ import {
   getByPropertySpaceId,
   updatePropertyAmenities,
 } from "@/store/slice/auth/propertyamenities";
-import { propertySpaceImageuploadapi } from "@/api/api-endpoints";
+import { propertySpaceImageUpload } from "@/store/services";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -288,7 +288,7 @@ export default function Component({ initialSpace = {} }) {
         photos.forEach((photo) => {
           formData.append("imageFiles", photo);
         });
-        await propertySpaceImageuploadapi(formData);
+        await propertySpaceImageUpload(formData);
       }
 
       console.log("Images updated successfully");
@@ -309,7 +309,6 @@ export default function Component({ initialSpace = {} }) {
       setUploadError("Failed to update images. Please try again.");
     }
   };
-
 
   const handleDeletePropertySpace = async () => {
     if (space?.id) {
@@ -333,7 +332,7 @@ export default function Component({ initialSpace = {} }) {
           spaceBedType: { id: bed.id },
           count: bed.count,
         })),
-        updatedBy: { id: userId }
+        updatedBy: { id: userId },
       };
       const response = await dispatch(createOrDeletePropertySpaceBeds(data)).unwrap();
       if (response.success) {
@@ -355,15 +354,17 @@ export default function Component({ initialSpace = {} }) {
     }
   };
 
-  const handleSaveBathTypes = async (updatedBathTypes: Array<{ id: number; count: number }>) => {
+  const handleSaveBathTypes = async (
+    updatedBathTypes: Array<{ id: number; count: number }>
+  ) => {
     if (space?.id) {
       const data = {
         propertySpace: { id: space.id },
-        spaceBathroomTypes: updatedBathTypes.map(bath => ({
+        spaceBathroomTypes: updatedBathTypes.map((bath) => ({
           spaceBathroomType: { id: bath.id },
           count: bath.count,
         })),
-        updatedBy: { id: userId }
+        updatedBy: { id: userId },
       };
 
       const response = await await dispatch(createOrDeletePropertySpaceBathrooms(data)).unwrap();
@@ -518,4 +519,3 @@ export default function Component({ initialSpace = {} }) {
     </>
   );
 }
-

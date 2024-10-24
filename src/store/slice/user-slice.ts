@@ -1,4 +1,4 @@
-import { getUserById, updateuserapi } from "@/api/api-endpoints";
+import { getUserById, updateUser } from "@/store/services";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { UserState, User } from "../model";
 
@@ -47,7 +47,7 @@ export const fetchUserById = createAsyncThunk(
 export const updateUserById = createAsyncThunk(
   "user/updateUserDetails",
   async ({ userId, userData }: { userId: number; userData: User }) => {
-    const response = await updateuserapi(userId, userData);
+    const response = await updateUser(userId, userData);
     return response.data.user;
   }
 );

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AmenityGroupState } from "@/store/model";
-import { addAmenityGroup, fetchAmenityGroups } from "./actions";
+import { createAmenityGroup, fetchAmenityGroups } from "./actions";
 
 const initialState: AmenityGroupState = {
   loading: false,
@@ -30,18 +30,18 @@ const amenityGroupsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // Add Amenity Group cases
-      .addCase(addAmenityGroup.pending, (state) => {
+      .addCase(createAmenityGroup.pending, (state) => {
         state.addLoading = true;
         state.addError = null;
       })
-      .addCase(addAmenityGroup.fulfilled, (state, action) => {
+      .addCase(createAmenityGroup.fulfilled, (state, action) => {
         state.addLoading = false;
         state.addSuccess = true;
         if (state.data) {
           state.data.push(action.payload.data);
         }
       })
-      .addCase(addAmenityGroup.rejected, (state, action) => {
+      .addCase(createAmenityGroup.rejected, (state, action) => {
         state.addLoading = false;
         state.addError = action.payload as string;
       })

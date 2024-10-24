@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { userdetails } from "@/api/api-endpoints";
+import { getAllUsers } from "@/store/services";
 
 interface User {
   id: number;
@@ -50,7 +50,7 @@ const initialState: UserDetailsState = {
 export const fetchUserDetails = createAsyncThunk(
   "userDetails/fetchUserDetails",
   async () => {
-    const response = await userdetails();
+    const response = await getAllUsers();
     return response.data;
   }
 );

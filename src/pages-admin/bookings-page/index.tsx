@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid, GridColDef, GridFilterModel } from "@mui/x-data-grid";
-import { getBookings, userbookingCancelapi } from "@/api/api-endpoints";
+import { getBookings, cancelBooking } from "@/store/services";
 import styles from "./booking.module.css";
 import {
   Alert,
@@ -9,8 +9,6 @@ import {
   Paper,
   InputBase,
   Button,
-  
-
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -31,27 +29,16 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { FormControl, Select, MenuItem } from "@mui/material";
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import { Box, Typography } from '@mui/material';
-import Calendar from '@/components/big-calendar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-
-
-
-
-
-
-
- 
-
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import { Box, Typography } from "@mui/material";
+import Calendar from "@/components/big-calendar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
   isSidebarOpen,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [tabValue, setTabValue] = useState(0);
-
-
 
   const properties = useSelector(
     (state: RootState) => state.property.properties
@@ -100,13 +87,12 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
 
   const getStatusColor = (params: any) => {
     if (params.row.isCancelled) {
-      return '#dd5c5c;';
+      return "#dd5c5c;";
     } else if (params.row.isCompleted) {
-      return '#2d6aa0';
+      return "#2d6aa0";
     }
-    return '#1a95538a';
+    return "#1a95538a";
   };
-
 
   useEffect(() => {
     dispatch(fetchProperties());
@@ -119,7 +105,10 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
         const bookingsResponse = await getBookings();
 
         const userMap = new Map(
-          users.map((user: { id: any; firstName: any; lastName: any; }) => [user.id, `${user.firstName} ${user.lastName}`])
+          users.map((user: { id: any; firstName: any; lastName: any }) => [
+            user.id,
+            `${user.firstName} ${user.lastName}`,
+          ])
         );
         const propertyMap = new Map(
           properties.map((property: Property) => [
@@ -194,8 +183,6 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     setFilteredBookings(filtered);
   }, [filterValue, bookings]);
 
-
-
   useEffect(() => {
     const lowercasedFilter = filterValue.toLowerCase();
 
@@ -231,11 +218,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     setFilteredBookings(filtered);
   }, [filterValue, bookings, selectedOption, startDate, endDate]);
 
-  
-
-
-  const handleEditClick = (id: number) => {
-  };
+  const handleEditClick = (id: number) => {};
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilterValue(event.target.value);
@@ -277,7 +260,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     if (bookingToDelete === null) return;
 
     try {
-      await userbookingCancelapi(bookingToDelete.id, bookingToDelete.userId);
+      await cancelBooking(bookingToDelete.id, bookingToDelete.userId);
 
       const updatedBookings = bookings.map((booking) =>
         booking.id === bookingToDelete.id
@@ -297,12 +280,9 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     setBookingToDelete(null);
   };
 
-  
-
   const handleExportCSV = () => {
     exportBookingsToCSV(filteredBookings);
   };
-
 
   const columns: GridColDef[] = [
     {
@@ -314,35 +294,35 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
         return (
           <Box
             sx={{
-              display: 'flex',
+              display: "flex",
               alignItems: "center",
-              justifyContent: 'center',
-              width: '100%',
-              height: '100%',
+              justifyContent: "center",
+              width: "100%",
+              height: "100%",
             }}
           >
             <Box
               sx={{
-                display: 'flex',
-                alignItems: 'center',
-                width: '100%',
+                display: "flex",
+                alignItems: "center",
+                width: "100%",
               }}
             >
               <BookmarkIcon
                 sx={{
                   color,
-                  marginLeft: '-18px',
-                  transform: 'rotate(-90deg)',
+                  marginLeft: "-18px",
+                  transform: "rotate(-90deg)",
                   fontSize: 50,
                 }}
               />
               <Typography
                 sx={{
-                  fontSize: 'small',
+                  fontSize: "small",
                   fontFamily: "'Roboto', sans-serif !important",
                   flexGrow: 1,
-                  textAlign: 'center',
-                  marginRight: '20px',
+                  textAlign: "center",
+                  marginRight: "20px",
                 }}
               >
                 {params.value}
@@ -373,7 +353,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
       headerName: "No of Nights",
       flex: 1,
       align: "center",
-      headerAlign: "center"
+      headerAlign: "center",
     },
     {
       field: "checkinDate",
@@ -444,22 +424,34 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
     },
   ];
 
-
-
-
   return (
-    <div className={`${styles.bookingsContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed}`}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
+    <div
+      className={`${styles.bookingsContainer} ${
+        isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
+      }`}
+    >
+      <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 2 }}>
         <Tabs defaultValue="0" className={styles.fullWidthTabs}>
           <TabsList className={styles.fullWidthTabsList}>
-            <TabsTrigger value="0" onClick={() => setTabValue(0)} className={styles.fullWidthTabsTrigger}>
+            <TabsTrigger
+              value="0"
+              onClick={() => setTabValue(0)}
+              className={styles.fullWidthTabsTrigger}
+            >
               Calendar
             </TabsTrigger>
-            <TabsTrigger value="1" onClick={() => setTabValue(1)} className={styles.fullWidthTabsTrigger}>
+            <TabsTrigger
+              value="1"
+              onClick={() => setTabValue(1)}
+              className={styles.fullWidthTabsTrigger}
+            >
               Booking Details
             </TabsTrigger>
           </TabsList>
-          <TabsContent value={String(tabValue)} className={styles.fullWidthTabsContent}>
+          <TabsContent
+            value={String(tabValue)}
+            className={styles.fullWidthTabsContent}
+          >
             {tabValue === 0 && <Calendar isSidebarOpen={isSidebarOpen} />}
             {tabValue === 1 && (
               <>
@@ -467,7 +459,11 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
                   <div className={styles.actionsContainer}>
                     <div className={styles.gridActionContainer}>
                       <Paper className={styles.searchContainer} elevation={1}>
-                        <IconButton className={styles.searchIcon} size="small" disableRipple>
+                        <IconButton
+                          className={styles.searchIcon}
+                          size="small"
+                          disableRipple
+                        >
                           <SearchIcon />
                         </IconButton>
                         <InputBase
@@ -477,14 +473,18 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
                           onChange={handleSearchChange}
                         />
                         {filterValue && (
-                          <IconButton className={styles.clearIcon} size="small" onClick={handleSearchClear}>
+                          <IconButton
+                            className={styles.clearIcon}
+                            size="small"
+                            onClick={handleSearchClear}
+                          >
                             <ClearIcon />
                           </IconButton>
                         )}
                       </Paper>
-  
+
                       <div style={{ flex: 1 }} />
-  
+
                       <div className={styles.filtersContainer}>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                           <DatePicker
@@ -494,14 +494,14 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
                             slotProps={{ textField: { helperText: null } }}
                             className={styles.datePicker}
                             sx={{
-                              '& .MuiInputBase-root': { height: '35px' },
-                              '& .MuiInputLabel-root': {
-                                transform: 'translate(14px, 9px) scale(1)',
-                                position: 'absolute',
-                                top: '-5px',
+                              "& .MuiInputBase-root": { height: "35px" },
+                              "& .MuiInputLabel-root": {
+                                transform: "translate(14px, 9px) scale(1)",
+                                position: "absolute",
+                                top: "-5px",
                               },
-                              '& .MuiInputLabel-shrink': {
-                                transform: 'translate(14px, -6px) scale(0.75)',
+                              "& .MuiInputLabel-shrink": {
+                                transform: "translate(14px, -6px) scale(0.75)",
                               },
                             }}
                           />
@@ -512,68 +512,89 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
                             slotProps={{ textField: { helperText: null } }}
                             className={styles.datePicker}
                             sx={{
-                              
-                              '& .MuiInputBase-root': { height: '35px' },
-                              '& .MuiInputLabel-root': {
-                                transform: 'translate(14px, 9px) scale(1)',
-                                position: 'absolute',
-                                top: '-5px',
+                              "& .MuiInputBase-root": { height: "35px" },
+                              "& .MuiInputLabel-root": {
+                                transform: "translate(14px, 9px) scale(1)",
+                                position: "absolute",
+                                top: "-5px",
                               },
-                              '& .MuiInputLabel-shrink': {
-                                transform: 'translate(14px, -6px) scale(0.75)',
+                              "& .MuiInputLabel-shrink": {
+                                transform: "translate(14px, -6px) scale(0.75)",
                               },
                             }}
                           />
                         </LocalizationProvider>
                         {startDate && endDate && (
-                          <IconButton 
-                            className={styles.clearDateFilter} 
-                            size="small" 
-                            onClick={handleClearDateFilter} 
+                          <IconButton
+                            className={styles.clearDateFilter}
+                            size="small"
+                            onClick={handleClearDateFilter}
                             aria-label="Clear date filter"
                           >
                             <ClearIcon />
                           </IconButton>
                         )}
-  
-                        <FormControl variant="outlined" className={styles.selectContainer}>
+
+                        <FormControl
+                          variant="outlined"
+                          className={styles.selectContainer}
+                        >
                           <Select
                             value={selectedOption}
-                            onChange={(e) => setSelectedOption(e.target.value as string)}
+                            onChange={(e) =>
+                              setSelectedOption(e.target.value as string)
+                            }
                             displayEmpty
-                            inputProps={{ 'aria-label': 'Without label' }}
+                            inputProps={{ "aria-label": "Without label" }}
                             sx={{
-                              padding: '0px',
-                              marginBottom: '8px',
-                              height: '37px',
-                              
-                              '& .MuiInputBase-input': {
-                                fontSize: '14px',
-                                height: '4px',
-                                padding: '5px',
+                              padding: "0px",
+                              marginBottom: "8px",
+                              height: "37px",
+
+                              "& .MuiInputBase-input": {
+                                fontSize: "14px",
+                                height: "4px",
+                                padding: "5px",
                               },
-                              '& .MuiInputLabel-shrink': {
-                                transform: 'translate(14px, -6px) scale(0.75)',
+                              "& .MuiInputLabel-shrink": {
+                                transform: "translate(14px, -6px) scale(0.75)",
                               },
                             }}
                           >
                             {options.map((option) => (
                               <MenuItem key={option.value} value={option.value}>
-                                <Box sx={{ display: 'flex', justifyContent: option.value === 'all' ? 'center' : 'center' }}>
-                                  {option.value !== 'all' && (
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    justifyContent:
+                                      option.value === "all"
+                                        ? "center"
+                                        : "center",
+                                  }}
+                                >
+                                  {option.value !== "all" && (
                                     <BookmarkIcon
                                       sx={{
-                                        color: option.value === 'active' ? '#1a95538a'
-                                          : option.value === 'completed' ? '#2d6aa0'
-                                          : option.value === 'cancelled' ? '#dd5c5c'
-                                          : 'inherit',
-                                        transform: 'rotate(-90deg)',
+                                        color:
+                                          option.value === "active"
+                                            ? "#1a95538a"
+                                            : option.value === "completed"
+                                            ? "#2d6aa0"
+                                            : option.value === "cancelled"
+                                            ? "#dd5c5c"
+                                            : "inherit",
+                                        transform: "rotate(-90deg)",
                                         fontSize: 22,
-                                        alignItems: 'center',
+                                        alignItems: "center",
                                       }}
                                     />
                                   )}
-                                  <Box sx={{ marginLeft: option.value !== 'all' ? 1 : 0 }}>
+                                  <Box
+                                    sx={{
+                                      marginLeft:
+                                        option.value !== "all" ? 1 : 0,
+                                    }}
+                                  >
                                     {option.label}
                                   </Box>
                                 </Box>
@@ -581,7 +602,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
                             ))}
                           </Select>
                         </FormControl>
-  
+
                         <Button
                           variant="contained"
                           startIcon={<FileDownloadIcon />}
@@ -594,7 +615,7 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
                     </div>
                   </div>
                 </div>
-  
+
                 <div className={styles.dataGridWrapper}>
                   <DataGrid
                     rows={filteredBookings}
@@ -602,15 +623,15 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
                     rowHeight={40}
                     columnHeaderHeight={40}
                     sx={{
-                      '& .MuiDataGrid-columnHeader': {
-                        backgroundColor: 'grey',
-                        color: 'white',
-                        fontSize: 'small',
-                        textTransform: 'uppercase',
+                      "& .MuiDataGrid-columnHeader": {
+                        backgroundColor: "grey",
+                        color: "white",
+                        fontSize: "small",
+                        textTransform: "uppercase",
                         fontFamily: "'Roboto', sans-serif !important",
                       },
-                      '& .MuiDataGrid-cell': {
-                        fontSize: 'small',
+                      "& .MuiDataGrid-cell": {
+                        fontSize: "small",
                         fontFamily: "'Roboto', sans-serif !important",
                       },
                     }}
@@ -620,7 +641,9 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
                       },
                     }}
                     getRowClassName={(params) =>
-                      params.indexRelativeToCurrentPage % 2 === 0 ? styles.evenRow : styles.oddRow
+                      params.indexRelativeToCurrentPage % 2 === 0
+                        ? styles.evenRow
+                        : styles.oddRow
                     }
                     pageSizeOptions={[5, 10, 25]}
                     disableRowSelectionOnClick
@@ -632,13 +655,16 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
                       noRowsOverlay: () => (
                         <Box
                           sx={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            height: '100%',
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            height: "100%",
                           }}
                         >
-                          <Typography>No bookings found. Try changing the date range, status, or search restrictions.</Typography>
+                          <Typography>
+                            No bookings found. Try changing the date range,
+                            status, or search restrictions.
+                          </Typography>
                         </Box>
                       ),
                     }}
@@ -649,13 +675,13 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
           </TabsContent>
         </Tabs>
       </Box>
-  
+
       <ViewBookings
         openEvent={isViewModalOpen}
         handleClose={handleCloseViewModal}
         eventId={selectedBookingId || 0}
       />
-  
+
       <ConfirmationModal
         show={showDeleteConfirmation}
         onHide={() => setShowDeleteConfirmation(false)}
@@ -665,31 +691,38 @@ const BookingsPage: React.FC<{ isSidebarOpen: boolean }> = ({
         confirmLabel="Cancel Booking"
         cancelLabel="Keep Booking"
       />
-  
+
       <Snackbar
         open={showErrorSnackbar}
         autoHideDuration={6000}
         onClose={() => setShowErrorSnackbar(false)}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert onClose={() => setShowErrorSnackbar(false)} severity="error" sx={{ width: '100%' }}>
+        <Alert
+          onClose={() => setShowErrorSnackbar(false)}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
           {error}
         </Alert>
       </Snackbar>
-  
+
       <Snackbar
         open={showSuccessSnackbar}
         autoHideDuration={6000}
         onClose={() => setShowSuccessSnackbar(false)}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert onClose={() => setShowSuccessSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+        <Alert
+          onClose={() => setShowSuccessSnackbar(false)}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
           Action completed successfully!
         </Alert>
       </Snackbar>
     </div>
   );
 };
-
 
 export default BookingsPage;

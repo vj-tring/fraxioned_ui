@@ -1,6 +1,7 @@
 export * from "./auth.types";
 export * from "./user.types";
 export * from "./roles.types";
+export * from "./holiday.types";
 export * from "./date-picker.types";
 export * from "./space.types";
 export * from "./property-document.types";

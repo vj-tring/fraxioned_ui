@@ -12,6 +12,7 @@ import {
   FormControl,
   FormLabel,
 } from "@mui/material";
+import { getAllUserProperties, getAllUsers, getBookingsReport, getProperties } from "@/store/services";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Grid from "@mui/material/Grid";
 
@@ -66,37 +67,13 @@ const ReportsGrid: React.FC<{ isSidebarOpen: boolean }> = ({
         const userIdFromStorage = user ? user.id : "";
 
         // Fetch properties
-        const propertyResponse = await axios.get(
-          "http://192.168.1.47:3008/api/v1/properties",
-          {
-            headers: {
-              "user-id": userIdFromStorage,
-              "access-token": accessToken,
-            },
-          }
-        );
+        const propertyResponse = await getProperties();
 
         // Fetch users
-        const userResponse = await axios.get(
-          "http://192.168.1.47:3008/api/v1/users",
-          {
-            headers: {
-              "user-id": userIdFromStorage,
-              "access-token": accessToken,
-            },
-          }
-        );
+        const userResponse = await getAllUsers();
 
         // Fetch user properties
-        const userPropertyResponse = await axios.get(
-          "http://192.168.1.47:3008/api/v1/user-properties",
-          {
-            headers: {
-              "user-id": userIdFromStorage,
-              "access-token": accessToken,
-            },
-          }
-        );
+        const userPropertyResponse = await getAllUserProperties();
 
         const properties: any[] = propertyResponse.data;
         const users: any[] = Array.isArray(userResponse.data.users)
@@ -130,7 +107,6 @@ const ReportsGrid: React.FC<{ isSidebarOpen: boolean }> = ({
         setPropertiesMap(propertyMap);
         setUsersMap(userMap);
         setUserPropertyMap(usersPropertyMap);
-
       } catch (error) {
         console.error("Error fetching users or properties:", error);
       }
@@ -159,10 +135,9 @@ const ReportsGrid: React.FC<{ isSidebarOpen: boolean }> = ({
 
     const userProperties = usersPropertyMap.get(Number(selectedUserId)) || [];
 
-
     return Array.from(propertiesMap.entries()).filter(([propertyId]) => {
       const isIncluded = userProperties.includes(Number(propertyId));
-   
+
       return isIncluded;
     });
   };
@@ -221,19 +196,7 @@ const ReportsGrid: React.FC<{ isSidebarOpen: boolean }> = ({
       if (isCompleted) requestData.isCompleted = isCompleted;
       if (withPets) requestData.withPets = withPets;
 
-
-      const response = await axios.post(
-        "http://192.168.1.47:3008/api/v1/bookings-report",
-        requestData,
-        {
-          headers: {
-            "user-id": userIdFromStorage,
-            "access-token": accessToken,
-            Accept: "application/json",
-          },
-          responseType: "blob",
-        }
-      );
+      const response = await getBookingsReport(requestData)
 
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");

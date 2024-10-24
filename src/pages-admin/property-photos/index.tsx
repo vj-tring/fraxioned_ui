@@ -2,9 +2,9 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  propertyImageapi,
-  deletetpropertyImageById,
-} from "@/api/api-endpoints";
+  fetchPropertySpaceImagesByPropertyId,
+  deletePropertySpaceImageById,
+} from "@/store/services";
 import { fetchAdditionalImages } from "@/store/slice/additional-image/action";
 import {
   clearAdditionalImages,
@@ -48,7 +48,7 @@ const PropertyPhotos: React.FC = () => {
   const refreshPhotos = useCallback(async () => {
     setIsLoading(true);
     try {
-      const propertyImagesResponse = await propertyImageapi(
+      const propertyImagesResponse = await fetchPropertySpaceImagesByPropertyId(
         parseInt(id || "0")
       );
       dispatch(fetchAdditionalImages(parseInt(id || "0")));
@@ -159,7 +159,7 @@ const PropertyPhotos: React.FC = () => {
       setIsLoading(true);
 
       try {
-        await deletetpropertyImageById(imageToDelete);
+        await deletePropertySpaceImageById(imageToDelete);
         await refreshPhotos();
         setImageToDelete(null);
       } catch (error) {

@@ -14,7 +14,7 @@ import Change from "./pages/recover-password";
 import Dashboard from "./pages/dashboard";
 import AdminDashboard from "./pages-admin/admin-dashboard";
 import ScrollToTop from "./components/ScrollToTop";
-import AxiosInterceptor from "./api/axiosSetup";
+import AxiosInterceptor from "@/store/axiosSetup";
 import { fetchAuthState } from "./store/slice/authentication/actions";
 import { RootState } from "./store/reducers";
 import PrivateRoute from "./private-route";

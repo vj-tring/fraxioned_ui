@@ -1,9 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, Checkbox, FormControl, FormControlLabel, Grid, IconButton, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch, useSelector } from "react-redux";
-import { getRoles } from "@/api/api-endpoints";
+import { getRoles } from "@/store/services";
 import { updateUserById } from "@/store/slice/user/action";
 import { RootState } from "@/store/reducers";
 import { User, Role, ContactDetails } from "@/store/model";
@@ -20,12 +33,12 @@ const EditForm: React.FC<EditFormProps> = ({
   isAdmin,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const userState = useSelector((state: RootState) => state.Users.user);
   const loading = useSelector((state: RootState) => state.Users.loading);
   const [formData, setFormData] = useState<User>(user);
   const [error, setError] = useState<string | null>(null);
   const [roles, setRoles] = useState<Role[]>([]);
-  const [showSecondaryContact, setShowSecondaryContact] = useState<boolean>(false);
+  const [showSecondaryContact, setShowSecondaryContact] =
+    useState<boolean>(false);
 
   // New function to check if role/active fields should be shown
   const shouldShowRoleFields = () => {
@@ -58,14 +71,12 @@ const EditForm: React.FC<EditFormProps> = ({
     setShowSecondaryContact(!!(secondaryEmail || secondaryPhone));
   }, [formData.contactDetails]);
 
-  useEffect(() => {
-    if (userState) {
-      setFormData(userState);
-    }
-  }, [userState]);
+
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
@@ -98,10 +109,11 @@ const EditForm: React.FC<EditFormProps> = ({
 
   const handleAddContact = () => setShowSecondaryContact(true);
 
-
   //takes up the field names of the address and modifies according to the UI representation
   const formatFieldLabel = (field: string): string => {
-    return field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, " $1");
+    return (
+      field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, " $1")
+    );
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -133,12 +145,21 @@ const EditForm: React.FC<EditFormProps> = ({
 
   return (
     <div className={styles.editFormContainer}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={2}
+      >
         <Typography variant="h6" className={styles.formTitle}>
           {formTitle}
         </Typography>
         {showCloseIcon && (
-          <IconButton onClick={onClose} aria-label="close" className={styles.closeButton}>
+          <IconButton
+            onClick={onClose}
+            aria-label="close"
+            className={styles.closeButton}
+          >
             <CloseIcon />
           </IconButton>
         )}
@@ -171,7 +192,14 @@ const EditForm: React.FC<EditFormProps> = ({
           </Grid>
 
           {/* Address Information */}
-          {["addressLine1", "addressLine2", "city", "state", "country", "zipcode"].map((field) => (
+          {[
+            "addressLine1",
+            "addressLine2",
+            "city",
+            "state",
+            "country",
+            "zipcode",
+          ].map((field) => (
             <Grid item xs={12} sm={6} key={field}>
               <TextField
                 label={formatFieldLabel(field)}
@@ -183,7 +211,6 @@ const EditForm: React.FC<EditFormProps> = ({
               />
             </Grid>
           ))}
-
 
           {/* Role and Active Status - Only shown for non-Admin roles when logged in user is Admin */}
           {shouldShowRoleFields() && (
@@ -233,7 +260,9 @@ const EditForm: React.FC<EditFormProps> = ({
               label="Primary Email"
               name="primaryEmail"
               value={formData.contactDetails.primaryEmail}
-              onChange={(e) => handleContactChange("primaryEmail", e.target.value)}
+              onChange={(e) =>
+                handleContactChange("primaryEmail", e.target.value)
+              }
               fullWidth
               className={styles.inputField}
             />
@@ -243,7 +272,9 @@ const EditForm: React.FC<EditFormProps> = ({
               label="Primary Phone"
               name="primaryPhone"
               value={formData.contactDetails.primaryPhone}
-              onChange={(e) => handleContactChange("primaryPhone", e.target.value)}
+              onChange={(e) =>
+                handleContactChange("primaryPhone", e.target.value)
+              }
               fullWidth
               className={styles.inputField}
             />
@@ -256,7 +287,9 @@ const EditForm: React.FC<EditFormProps> = ({
                   label="Secondary Email"
                   name="secondaryEmail"
                   value={formData.contactDetails.secondaryEmail || ""}
-                  onChange={(e) => handleContactChange("secondaryEmail", e.target.value)}
+                  onChange={(e) =>
+                    handleContactChange("secondaryEmail", e.target.value)
+                  }
                   fullWidth
                   className={styles.inputField}
                 />
@@ -266,7 +299,9 @@ const EditForm: React.FC<EditFormProps> = ({
                   label="Secondary Phone"
                   name="secondaryPhone"
                   value={formData.contactDetails.secondaryPhone || ""}
-                  onChange={(e) => handleContactChange("secondaryPhone", e.target.value)}
+                  onChange={(e) =>
+                    handleContactChange("secondaryPhone", e.target.value)
+                  }
                   fullWidth
                   className={styles.inputField}
                 />

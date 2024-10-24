@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { axiosInstance } from '@/api/axiosSetup';
+import { axiosInstance } from '../../axiosSetup';
 
 interface PropertyCodeCategory {
     id: number;

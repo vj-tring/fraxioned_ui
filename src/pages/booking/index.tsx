@@ -21,7 +21,7 @@ import {
   fetchUserBookings,
 } from "@/store/slice/auth/bookingSlice";
 import { format } from "date-fns";
-import { cancelBooking } from "@/api/api-endpoints";
+import { cancelBooking } from "@/store/services";
 import "../booking/booking.css";
 import EditBookingModal from "./bookingEdit";
 import { fetchProperties } from "@/store/slice/auth/property-slice";

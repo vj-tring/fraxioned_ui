@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { DataGrid, GridColDef, GridSortModel } from "@mui/x-data-grid";
 import {
-  fetchHolidaysApi,
-  propertyseasonholiday,
-  propertyseasonholidaydelete,
-  deleteHolidaysApi,
-} from "@/api/api-endpoints";
+  getAllHolidays,
+  getAllPropertySeasonHoliday,
+  deletePropertySeasonHoliday,
+  deleteHoliday,
+} from "@/store/services";
 import styles from "./holiday.module.css";
 import NewForm from "@/pages-admin/holiday-page/new-form";
 import EditForm from "@/pages-admin/holiday-page/edit-form";
@@ -31,17 +31,19 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
   const [openEditForm, setOpenEditForm] = useState(false);
   const [holidayToDelete, setHolidayToDelete] = useState<Holiday | null>(null);
   const [selectedHoliday, setSelectedHoliday] = useState<Holiday | null>(null);
-  const [selectedPropertyId, setSelectedPropertyId] = useState<number | string>("all");
+  const [selectedPropertyId, setSelectedPropertyId] = useState<number | string>(
+    "all"
+  );
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric'
+    return date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
     });
   };
 
@@ -50,9 +52,9 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
       try {
         let response;
         if (propertyId === "all") {
-          response = await fetchHolidaysApi();
+          response = await getAllHolidays();
         } else {
-          response = await propertyseasonholiday();
+          response = await getAllPropertySeasonHoliday();
         }
 
         const mappedData = response.data.data.map((item: any) => {
@@ -74,16 +76,18 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
           };
         });
 
-        const sortedData = mappedData.sort((a: { year: number; }, b: { year: number; }) => a.year - b.year);
+        const sortedData = mappedData.sort(
+          (a: { year: number }, b: { year: number }) => a.year - b.year
+        );
 
         setHolidays(sortedData);
         setFilteredHolidays(
           propertyId === "all"
             ? sortedData
             : sortedData.filter(
-              (h: { propertyId: string | number | null }) =>
-                h.propertyId === propertyId
-            )
+                (h: { propertyId: string | number | null }) =>
+                  h.propertyId === propertyId
+              )
         );
       } catch (err) {
         console.error("Error fetching holidays:", err);
@@ -92,7 +96,6 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     },
     []
   );
-
 
   useEffect(() => {
     fetchHolidays();
@@ -120,13 +123,13 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
 
     try {
       if (selectedPropertyId === "all") {
-        const response = await deleteHolidaysApi(holidayToDelete.id);
+        const response = await deleteHoliday(holidayToDelete.id);
         if (!response.data.success) {
           throw new Error(response.data.message);
         }
       } else {
         if (holidayToDelete.propertySeasonHolidayId) {
-          await propertyseasonholidaydelete(
+          await deletePropertySeasonHoliday(
             holidayToDelete.propertySeasonHolidayId
           );
         } else {
@@ -224,11 +227,11 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
     },
   ];
 
-
   return (
     <div
-      className={`${styles.holidaysContainer} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
-        }`}
+      className={`${styles.holidaysContainer} ${
+        isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed
+      }`}
     >
       <div className={styles.titleContainer}>
         <h1 className={styles.title}>Holidays Details</h1>

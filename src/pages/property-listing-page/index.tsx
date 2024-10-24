@@ -30,7 +30,7 @@ import {
 } from "@/store/slice/auth/property-slice";
 import { AppDispatch } from "@/store";
 import { Session, User } from "@/store/model";
-import { propertyImageapi } from "@/api/api-endpoints";
+import { fetchPropertySpaceImagesByPropertyId } from "@/store/services";
 import { PiDotsNineBold } from "react-icons/pi";
 import { bookingSummary, saveBooking } from "@/store/slice/auth/bookingSlice";
 import CustomizedSnackbar from "@/components/customized-snackbar";
@@ -173,7 +173,7 @@ const PropertyListingPage = () => {
           console.error("Invalid propertyId:", id);
           return;
         }
-        const response = await propertyImageapi(id);
+        const response = await fetchPropertySpaceImagesByPropertyId(id);
         if (response.data.data.propertySpaceImages.length > 0) {
           setImageDetails(response.data.data.propertySpaceImages);
           setLoadingImages(false);
