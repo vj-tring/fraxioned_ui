@@ -85,7 +85,7 @@
 .searchContainer {
   display: flex;
   align-items: flex-start;
-  width: 550px;
+  width: 375px;
   height: 35px;
   padding: 2px 8px;
   border-radius: 4px !important;
