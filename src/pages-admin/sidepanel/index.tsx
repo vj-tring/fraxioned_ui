@@ -16,10 +16,10 @@ const menuItems: MenuItem[] = [
     { icon: <FaPlane />, label: 'Holidays', path: '/admin/holidays', disabled: false },
     { icon: <FaHome />, label: 'Property', path: '/admin/property', disabled: false },
     { icon: <FaUser />, label: 'User', path: '/admin/user', disabled: false },
+    { icon: <IoIosImages />, label: 'Spaces', path: '/admin/spaces', disabled: false },
     { icon: <FaConciergeBell />, label: 'Amenity', path: '/admin/amenity', disabled: false },
     { icon: <FaFile />, label: 'Documents', path: '/admin/documents', disabled: false },
     { icon: <FaChartBar />, label: 'Reports', path: '/admin/reports', disabled: false },
-    { icon: <IoIosImages />, label: 'Spaces', path: '/admin/spaces', disabled: false },
     { icon: <FaQuestion />, label: 'FAQ', path: '/admin/Faq', disabled: false },
 ];
 

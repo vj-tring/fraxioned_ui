@@ -28,6 +28,23 @@ export interface Space {
   isBathroomTypeAllowed: boolean;
 }
 
+export interface AdminBookingData {
+  user: { id: string };
+  property: { id: string };
+  createdBy: { id: string };
+  checkinDate: string;
+  checkoutDate: string;
+  noOfGuests: number;
+  noOfPets: number;
+  isLastMinuteBooking: boolean;
+  noOfAdults: number;
+  noOfChildren: number;
+  notes: string;
+}
+
+
+
+
 export const loginUser = (email: string, password: string) =>
   axiosInstance.post("/authentication/login", { email, password });
 
@@ -106,6 +123,9 @@ export const getPropertySeasonHoliday = (propertyId: number) =>
 
 export const createBooking = (bookingData: void) =>
   axiosInstance.post(`/bookings/booking`, bookingData);
+
+export const createAdminBooking = (bookingData: AdminBookingData) =>
+  axiosInstance.post(`/bookings/admin-booking`, bookingData);
 
 export const cancelBooking = (bookingId: number, userId: number) =>
   axiosInstance.post(`/bookings/${bookingId}/${userId}/cancel`);
