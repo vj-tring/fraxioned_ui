@@ -1,6 +1,6 @@
 import { axiosInstance } from "../axiosSetup";
 
-export const fetchHolidays = () => axiosInstance.get("/holidays");
+export const getAllHolidays = () => axiosInstance.get("/holidays");
 
 export const createHoliday = (holidayData: {
   name: string;

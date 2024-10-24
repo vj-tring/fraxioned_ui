@@ -33,7 +33,6 @@ const EditForm: React.FC<EditFormProps> = ({
   isAdmin,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const userState = useSelector((state: RootState) => state.Users.user);
   const loading = useSelector((state: RootState) => state.Users.loading);
   const [formData, setFormData] = useState<User>(user);
   const [error, setError] = useState<string | null>(null);
@@ -72,11 +71,7 @@ const EditForm: React.FC<EditFormProps> = ({
     setShowSecondaryContact(!!(secondaryEmail || secondaryPhone));
   }, [formData.contactDetails]);
 
-  useEffect(() => {
-    if (userState) {
-      setFormData(userState);
-    }
-  }, [userState]);
+
 
   const handleInputChange = (
     e: React.ChangeEvent<

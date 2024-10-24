@@ -16,9 +16,7 @@ interface RootState {
 
 const TrackingMyNigts: React.FC = () => {
   const properties = useSelector((state: RootState) => state.properties.cards);
-  const [selectedPropertyId, setSelectedPropertyId] = useState<number | null>(
-    null
-  );
+  const [selectedPropertyId, setSelectedPropertyId] = useState<number>(0);
   const [selectedYear, setSelectedYear] = useState<number>(
     new Date().getFullYear()
   );
@@ -67,8 +65,8 @@ const TrackingMyNigts: React.FC = () => {
 
   const showselectedimage = (id: number) => {
     const filteredImage = properties
-      .filter((image) => image.propertyId === id)
-      .sort((a: Image, b: Image) => a.displayOrder - b.displayOrder);
+      .filter((card: Card) => card.id === id)
+      .sort((a: Card, b: Card) => a.displayOrder - b.displayOrder);
     return filteredImage[0]?.coverImageUrl;
   };
 
@@ -142,10 +140,6 @@ const TrackingMyNigts: React.FC = () => {
     selectedProperty?.peakSeasonEndDate || ""
   );
 
-  const [selectedProperty1, setSelectedProperty1] = useState<number | null>(
-    null
-  );
-
   return (
     <div className="Container">
       <div className="My-nights">
@@ -161,8 +155,8 @@ const TrackingMyNigts: React.FC = () => {
             <Select
               sx={{
                 border: "none",
-                height:"55px",
-                width:"300px"
+                height: "55px",
+                width: "300px",
               }}
               value={selectedPropertyId}
               onChange={handlePropertyChange}
@@ -175,7 +169,7 @@ const TrackingMyNigts: React.FC = () => {
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <Avatar
                       variant="square"
-                      src={showselectedimage(property.id)}
+                      src={showselectedimage(property.id) ?? ''}
                       alt={property.propertyName}
                       style={{ marginRight: "10px" }}
                     />
@@ -204,7 +198,7 @@ const TrackingMyNigts: React.FC = () => {
                       height: "50px",
                       objectFit: "cover",
                     }}
-                    src={showselectedimage(property.id)}
+                    src={showselectedimage(property.id) ?? ''}
                     alt={property.propertyName}
                     style={{ marginRight: "10px" }}
                   />
@@ -218,10 +212,10 @@ const TrackingMyNigts: React.FC = () => {
 
           <div className=" p-2.5 ">
             <Select
-               sx={{
+              sx={{
                 border: "none",
-                height:"55px",
-                width:"150px"
+                height: "55px",
+                width: "150px",
               }}
               value={selectedYear}
               onChange={handleYearChange}

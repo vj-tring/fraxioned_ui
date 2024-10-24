@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { DataGrid, GridColDef, GridSortModel } from "@mui/x-data-grid";
 import {
-  fetchHolidays,
+  getAllHolidays,
   getAllPropertySeasonHoliday,
   deletePropertySeasonHoliday,
   deleteHoliday,
@@ -52,7 +52,7 @@ const Holidays: React.FC<{ isSidebarOpen: boolean }> = ({ isSidebarOpen }) => {
       try {
         let response;
         if (propertyId === "all") {
-          response = await fetchHolidays();
+          response = await getAllHolidays();
         } else {
           response = await getAllPropertySeasonHoliday();
         }
