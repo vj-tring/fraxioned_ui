@@ -118,7 +118,7 @@ const propertyAmenitiesSlice = createSlice({
             .addCase(getByPropertyId.fulfilled, (state, action) => {
                 state.loading = false;
                 state.error = null;
-                state.amenities = action.payload?.data || [];
+                state.amenities = action.payload.data.amenityGroup;
             })
             .addCase(getByPropertyId.rejected, (state, action) => {
                 state.loading = false;

@@ -10,6 +10,7 @@ import CustomizedSnackbars from "@/components/customized-snackbar";
 import { ChangeEvent } from "react";
 import { AppDispatch } from "@/store";
 import { Plus, Save, Trash2, X, Edit } from "lucide-react";
+import clsx from "clsx";
 
 interface RegisterFormContentProps {
   onClose: () => void;
@@ -52,6 +53,8 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
   );
   const [addedProperties, setAddedProperties] = useState<any[]>([]);
   const [numberstate, setNumberstate] = useState<number[]>([]);
+  const [currentSelected, setCurrentSelected] = useState<number>(0);
+  const [propertyEdited, setPropertyEdited] = useState<boolean>(false);
   const [editIndex, setEditIndex] = useState<number | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -88,6 +91,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
   const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = event.target;
     const newValue = parseInt(value, 10);
+    setCurrentSelected(newValue);
     setFormValues({
       ...formValues,
       [name]: newValue,
@@ -156,23 +160,19 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
       noOfShares: 1,
       acquisitionDate: new Date().toISOString().split("T")[0],
     });
-    // setShowPropertyFields(false);
-    setSnackbarMessage("Property details successfully saved");
-    setSnackbarSeverity("success");
-    setShowSnackbar(true);
   };
 
-  const handleEditProperty = (index: number) => {
+  const handleEditProperty = (index: number, propertyID: number) => {
+    setPropertyEdited(true);
+    updateShareholderLimits(propertyID);
     setAddedProperties((prev) =>
       prev.map((property, i) =>
         i === index ? { ...property, isEditing: !property.isEditing } : property
       )
     );
-
-    if (addedProperties[index].isEditing && index !== -1) {
-      setSnackbarMessage("Successfully saved");
-      setSnackbarSeverity("success");
-      setShowSnackbar(true);
+    if (propertyEdited) {
+      updateShareholderLimits(currentSelected);
+      setPropertyEdited(!propertyEdited)
     }
   };
 
@@ -182,6 +182,10 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
         i === index ? { ...property, isEditing: !property.isEditing } : property
       )
     );
+    updateShareholderLimits(currentSelected);
+    if (propertyEdited) {
+      setPropertyEdited(!propertyEdited)
+    }
   };
 
   const handleDeleteProperty = (index: number) => {
@@ -321,93 +325,96 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
           <div className={styles.formContent}>
             <div className={styles.leftContent}>
               <h3 className={styles.sectionTitle}>BASIC DETAILS</h3>
-              <div className={styles.inputGroup}>
-                <select
-                  id="roleId"
-                  name="roleId"
-                  value={formValues.roleId}
-                  onChange={handleSelectChange}
-                >
-                  <option value={0}>Select Role</option>
-                  {roles.map((role) => (
-                    <option key={role.id} value={role.id}>
-                      {role.roleName}
-                    </option>
-                  ))}
-                </select>
-                {errors.roleId && (
-                  <span className={styles.error}>{errors.roleId}</span>
-                )}
+              <div className={styles.registerBasicDetails}>
+                <div className={styles.inputGroup}>
+                  <select
+                    id="roleId"
+                    name="roleId"
+                    value={formValues.roleId}
+                    onChange={handleSelectChange}
+                  >
+                    <option value={0}>Select Role</option>
+                    {roles.map((role) => (
+                      <option key={role.id} value={role.id}>
+                        {role.roleName}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.roleId && (
+                    <span className={styles.error}>{errors.roleId}</span>
+                  )}
+                </div>
+                <div className={styles.inputGroup}>
+                  <input
+                    type="text"
+                    id="firstName"
+                    name="firstName"
+                    placeholder="First Name"
+                    value={formValues.firstName}
+                    onChange={handleTextFieldChange}
+                  />
+                  {errors.firstName && (
+                    <span className={styles.error}>{errors.firstName}</span>
+                  )}
+                </div>
+                <div className={styles.inputGroup}>
+                  <input
+                    type="text"
+                    id="lastName"
+                    name="lastName"
+                    placeholder="Last Name"
+                    value={formValues.lastName}
+                    onChange={handleTextFieldChange}
+                  />
+                  {errors.lastName && (
+                    <span className={styles.error}>{errors.lastName}</span>
+                  )}
+                </div>
+                <div className={styles.inputGroup}>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Email"
+                    value={formValues.email}
+                    onChange={handleTextFieldChange}
+                  />
+                  {errors.email && (
+                    <span className={styles.error}>{errors.email}</span>
+                  )}
+                </div>
+                <div className={styles.inputGroup}>
+                  <input
+                    type="text"
+                    id="addressLine1"
+                    name="addressLine1"
+                    placeholder="Address Line 1"
+                    value={formValues.addressLine1}
+                    onChange={handleTextFieldChange}
+                  />
+                  {errors.addressLine1 && (
+                    <span className={styles.error}>{errors.addressLine1}</span>
+                  )}
+                </div>
+                <div className={styles.inputGroup}>
+                  <input
+                    type="text"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    placeholder="Phone Number"
+                    value={formValues.phoneNumber}
+                    onChange={handleTextFieldChange}
+                  />
+                  {errors.phoneNumber && (
+                    <span className={styles.error}>{errors.phoneNumber}</span>
+                  )}
+                </div>
               </div>
-              <div className={styles.inputGroup}>
-                <input
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  placeholder="First Name"
-                  value={formValues.firstName}
-                  onChange={handleTextFieldChange}
-                />
-                {errors.firstName && (
-                  <span className={styles.error}>{errors.firstName}</span>
-                )}
-              </div>
-              <div className={styles.inputGroup}>
-                <input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  placeholder="Last Name"
-                  value={formValues.lastName}
-                  onChange={handleTextFieldChange}
-                />
-                {errors.lastName && (
-                  <span className={styles.error}>{errors.lastName}</span>
-                )}
-              </div>
-              <div className={styles.inputGroup}>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  placeholder="Email"
-                  value={formValues.email}
-                  onChange={handleTextFieldChange}
-                />
-                {errors.email && (
-                  <span className={styles.error}>{errors.email}</span>
-                )}
-              </div>
-              <div className={styles.inputGroup}>
-                <input
-                  type="text"
-                  id="addressLine1"
-                  name="addressLine1"
-                  placeholder="Address Line 1"
-                  value={formValues.addressLine1}
-                  onChange={handleTextFieldChange}
-                />
-                {errors.addressLine1 && (
-                  <span className={styles.error}>{errors.addressLine1}</span>
-                )}
-              </div>
-              <div className={styles.inputGroup}>
-                <input
-                  type="text"
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  placeholder="Phone Number"
-                  value={formValues.phoneNumber}
-                  onChange={handleTextFieldChange}
-                />
-                {errors.phoneNumber && (
-                  <span className={styles.error}>{errors.phoneNumber}</span>
-                )}
-              </div>
+
             </div>
             <div className={styles.rightContent}>
               <div className="flex justify-between items-center mb-[.8rem]">
-                <h3 className={styles.sectionTitle}>Property Details</h3>
+                <h3 className={styles.sectionTitle}>Add PROPERTY</h3>
                 {/* <button
                   type="button"
                   className='border-1 px-2 py-1 text-sm rounded-sm border-[#008a99] bg-[#007988] text-white hover:bg-[#008a99] flex items-center gap-1'
@@ -418,8 +425,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
               </div>
 
               <div className={styles.addPropertySection}>
-                <h2>Add a Property</h2>
-                <div className={styles.inlineInputGroup}>
+                <div className={styles.addPropertyContainer}>
                   <div className={styles.propertyGroup}>
                     <select
                       id="propertyID"
@@ -470,23 +476,18 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                   </div>
                   <button
                     type="button"
-                    className='p-2 text-[#e28f25] rounded text-sm flex items-center gap-1'
+                    className={clsx('px-4 py-1.5 bg-[#f09200] font-medium rounded-sm text-sm text-white shadow-sm hover:shadow-md focus:ring-slate-500 border-1 border-[#227ed7b]', propertyEdited ? 'cursor-no-drop opacity-15' : 'cursor-pointer hover:bg-[#e28f25]')}
                     onClick={addProperty}
+                    disabled={propertyEdited}
                   >
-                    <Plus size={15} /> Add
+                    <span className={styles.addPropertyIcon}>
+                      <Plus size={15} /> Add
+                    </span>
                   </button>
-                  {/* <button
-                    type="button"
-                    className='p-2 text-[#e28f25] rounded'
-                    onClick={() => {
-                      setShowPropertyFields(false);
-                    }}
-                  >
-                    <X size={18} />
-                  </button> */}
                 </div>
               </div>
 
+              <h3 className={styles.sectionTitle}>PROPERTY LIST</h3>
               {addedProperties.length !== 0 ? (
                 <div className={styles.addedPropertiesList}>
                   {addedProperties.map((property, index) => (
@@ -495,31 +496,11 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                         <>
                           <div className={styles.inlineInputGroup}>
                             <div className={styles.propertyGroup}>
-                              <select
-                                className={styles.propertylist}
-                                value={property.propertyID}
-                                onChange={(e) =>
-                                  setAddedProperties((prev) =>
-                                    prev.map((prop, i) =>
-                                      i === index
-                                        ? {
-                                          ...prop,
-                                          propertyID: parseInt(
-                                            e.target.value,
-                                            10
-                                          ),
-                                        }
-                                        : prop
-                                    )
-                                  )
-                                }
-                              >
-                                {properties.map((prop) => (
-                                  <option key={prop.id} value={prop.id}>
-                                    {prop.propertyName}
-                                  </option>
-                                ))}
-                              </select>
+                              <div className={styles.propertyName}>
+                                <span className={styles.propertylistview}>
+                                  {property.propertyName}
+                                </span>
+                              </div>
                             </div>
                             <div className={styles.propertyGroup}>
                               <select
@@ -572,7 +553,7 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                             <button
                               type="button"
                               className='text-[#e28f25] rounded hover:text-[#e28f25]'
-                              onClick={() => handleEditProperty(index)}
+                              onClick={() => handleEditProperty(index, property.propertyID)}
                             >
                               <Save size={18} />
                             </button>
@@ -587,31 +568,33 @@ const RegisterFormContent: React.FC<RegisterFormContentProps> = ({
                         </>
                       ) : (
                         <>
-                          <span className={styles.propertylistview}>
-                            {property.propertyName}
-                          </span>
-                          <span className={styles.propertyshareview}>
-                            {property.noOfShares}
-                          </span>
-                          <span className={styles.propertydateview}>
-                            {property.acquisitionDate}
-                          </span>
-                          <span className={styles.editsavebutton}>
-                            <button
-                              type="button"
-                              className={styles.editButton}
-                              onClick={() => handleEditProperty(index)}
-                            >
-                              <Edit size={16} />
-                            </button>
-                            <button
-                              type="button"
-                              className={styles.deleteButton}
-                              onClick={() => handleDeleteProperty(index)}
-                            >
-                              <Trash2 size={16} />
-                            </button>
-                          </span>
+                          <div className={styles.propertiesList}>
+                            <span className={styles.propertylistview}>
+                              {property.propertyName}
+                            </span>
+                            <span className={styles.propertyshareview}>
+                              {property.noOfShares}
+                            </span>
+                            <span className={styles.propertydateview}>
+                              {property.acquisitionDate}
+                            </span>
+                            <span className={styles.editsavebutton}>
+                              <button
+                                type="button"
+                                className={styles.editButton}
+                                onClick={() => handleEditProperty(index, property.propertyID)}
+                              >
+                                <Edit size={16} />
+                              </button>
+                              <button
+                                type="button"
+                                className={styles.deleteButton}
+                                onClick={() => handleDeleteProperty(index)}
+                              >
+                                <Trash2 size={16} />
+                              </button>
+                            </span>
+                          </div>
                         </>
                       )}
                     </div>
