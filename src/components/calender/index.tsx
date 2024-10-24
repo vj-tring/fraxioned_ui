@@ -35,6 +35,10 @@ import {
 import { AppDispatch } from "@/store";
 import LastMinuteBookingDialog from "../last-minute-dialog";
 
+import {  AlertCircle, CalendarArrowUp, Clock, Moon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+
 interface DatePickerWithRangeProps
   extends React.HTMLAttributes<HTMLDivElement> {
   onDateSelect?: (range: DateRange | undefined) => void;
@@ -119,8 +123,7 @@ export function DatePickerWithRange({
     dispatch(fetchBookings());
   }, [dispatch]);
 
-  useEffect(() => {
-  }, [bookings]);
+  useEffect(() => {}, [bookings]);
 
   useEffect(() => {
     dispatch(fetchProperties);
@@ -129,8 +132,6 @@ export function DatePickerWithRange({
   useEffect(() => {
     dispatch(clearBookingMessages());
   }, [dispatch]);
-
-
 
   useEffect(() => {
     if (selectedPropertyDetails?.id) {
@@ -629,6 +630,7 @@ export function DatePickerWithRange({
   return (
     <div className={cn("gri flex flex-column calendar", className)}>
       <div className="calendarDiv">
+      
         <Calendar
           mode="range"
           defaultMonth={dateRange?.from}
@@ -669,14 +671,19 @@ export function DatePickerWithRange({
             selectable: "selectable-date",
           }}
         />
-        <div className="error-msg-container ml-5 flex justify-start">
-          <div className="error-msg">
-            {errorMessage && <div className="text-red-600">{errorMessage}</div>}
-            {validationMessage && (
-              <div className="text-yellow-600">{validationMessage}</div>
-            )}
-          </div>
-        </div>
+      {errorMessage || validationMessage ? (
+          <Alert variant="destructive" className="mb-3">
+            <div className="flex items-center">
+              <AlertCircle className="h-4 w-6 pr-2" />            
+              <AlertDescription>
+                {errorMessage && <div className="text-red-600">{errorMessage}</div>}
+                {validationMessage && (
+                  <div className="text-yellow-600">{validationMessage}</div>
+                )}
+              </AlertDescription>
+            </div>
+          </Alert>
+        ) : null}  
       </div>
       <style>{`
          .booked-date {
@@ -715,44 +722,65 @@ export function DatePickerWithRange({
         }
       `}</style>
       {showEndCalendar && (
-        <div className="flex items-center justify-between end-calendar">
+        <div className="flex items-center end-calendar">
           <div className="stay-length">
-            <div>
-              <b className="bold">Nights: [Peak - </b>
-              {selectedPropertyDetails?.details[
-                selectedYear || new Date().getFullYear()
-              ]?.peakRemainingNights || "0"}{" "}
-              , <b className="bold">Off - </b>
-              {selectedPropertyDetails?.details[
-                selectedYear || new Date().getFullYear()
-              ]?.offRemainingNights || "0"}
-              ]
+            <div className="flex items-center space-x-4">
+              <Moon className="h-6 w-6 text-orange-300" />
+              <div className="info">
+                <p className="text-m leading-none">Available Nights</p>
+                <p className="text-l font-bold">
+                  Peak:{" "}
+                  {selectedPropertyDetails?.details[
+                    selectedYear || new Date().getFullYear()
+                  ]?.peakRemainingNights || "0"}
+                  <span className="text-gray-500 font-normal"> | </span>
+                  Off:{" "}
+                  {selectedPropertyDetails?.details[
+                    selectedYear || new Date().getFullYear()
+                  ]?.offRemainingNights || "0"}
+                </p>
+              </div>
             </div>
-            <div>
-              <b className="bold">Peak Season :</b> [
-              {formatDate(
-                selectedPropertyDetails?.details[
-                  selectedYear || new Date().getFullYear()
-                ]?.peakSeasonStartDate
-              )}{" "}
-              -{" "}
-              {formatDate(
-                selectedPropertyDetails?.details[
-                  selectedYear || new Date().getFullYear()
-                ]?.peakSeasonEndDate
-              )}
-              ]{" "}
+            <div className="flex items-center space-x-4 pl-4">
+              <CalendarArrowUp className="h-6 w-6 text-orange-300" />
+              <div className="info">
+                <p className="text-sm font-medium leading-none">Peak Season</p>
+                <p className="text-l font-bold">
+                  {formatDate(
+                    selectedPropertyDetails?.details[
+                      selectedYear || new Date().getFullYear()
+                    ]?.peakSeasonStartDate
+                  )}{" "}
+                  -{" "}
+                  {formatDate(
+                    selectedPropertyDetails?.details[
+                      selectedYear || new Date().getFullYear()
+                    ]?.peakSeasonEndDate
+                  )}{" "}
+                </p>
+              </div>
             </div>
-            <div>
-              <b className="bold">Max Stay :</b>{" "}
-              {selectedPropertyDetails?.details[
-                selectedYear || new Date().getFullYear()
-              ]?.maximumStayLength || "0"}{" "}
-              Nights
+            <div className="flex items-center space-x-4 pl-4">
+              <Clock className="h-6 w-6 text-orange-300" />
+              <div className="info">
+                <p className="text-sm font-medium leading-none">Max Stay</p>
+                <p className="text-l font-bold">
+                  {selectedPropertyDetails?.details[
+                    selectedYear || new Date().getFullYear()
+                  ]?.maximumStayLength || "0"}{" "}
+                  Nights
+                </p>
+              </div>
             </div>
           </div>
-          <div onClick={clearDatesHandler} className="btn-clear">
-            Clear dates
+          <div className="flex items-center space-x-2">
+            <Badge
+              variant="outline"
+              className="text-sm cursor-pointer hover:bg-gray-100 ml-16"
+              onClick={clearDatesHandler}
+            >
+              Clear dates
+            </Badge>
           </div>
         </div>
       )}

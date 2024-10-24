@@ -1,14 +1,14 @@
-import { Reducer, combineReducers } from '@reduxjs/toolkit';
-import authReducer from '../slice/authentication';
-import registerReducer from '../slice/auth/register';
-import forgotPasswordReducer from '../slice/auth/forget-password';
-import propertyReducer from '../slice/auth/property-slice';
-import limitsReducer from '../slice/auth/propertyGuestSlice';
-import editpropertyReducer from '../slice/auth/editproperty';
-import addpropertyReducer from '../slice/auth/addproperty';
-import propertySeasonHolidayReducer from '../slice/auth/propertySeasonHolidaySlice';
-import bookingReducer from '../slice/auth/bookingSlice';
-import datePickerReducer from '../slice/datepicker';
+import { Reducer, combineReducers } from "@reduxjs/toolkit";
+import authReducer from "../slice/authentication";
+import registerReducer from "../slice/auth/register";
+import forgotPasswordReducer from "../slice/auth/forget-password";
+import propertyReducer from "../slice/auth/property-slice";
+import limitsReducer from "../slice/auth/propertyGuestSlice";
+import editpropertyReducer from "../slice/auth/editproperty";
+import addpropertyReducer from "../slice/auth/addproperty";
+import propertySeasonHolidayReducer from "../slice/auth/propertySeasonHolidaySlice";
+import bookingReducer from "../slice/auth/bookingSlice";
+import datePickerReducer from "../slice/datepicker";
 import propertyDocumentsReducer from "../slice/property-document";
 import spaceReducer from '../slice/space';
 import spacePropertyReducer from '../slice/space/property';
@@ -30,16 +30,16 @@ import addCategoryReducer from '../slice/auth/addcategorySlice';
 import bedReducer from '../slice/bedSlice';
 import propertydetailReducer from '../slice/auth/property-detail'
 import bathroomReducer from '../slice/bathroom-slice';
-import amenityReducer from '../slice/amenity';
+import amenityReducer from '../slice/amenitiesSlice';
 import userDocumentsReducer from '../slice/user-document';
-import propertyImagesReducer from '../slice/auth/additional-image'
+import propertyImagesReducer from '../slice/auth/propertyImagesSlice '
 import { propertycodecatogoryReducer } from '../slice/auth/propertycodeCatogorySlice';
 import { propertyCodesReducer } from '../slice/auth/propertycodeSlice';
-import PropertyImageReducer from '../slice/additional-image';
-import PropertyReducer from '../slice/property';
-import usersReducer from '../slice/user';
 import userPropertyReducer from '../slice/user-property'
-
+import propertyAllRoomsSpaceReducer from '../slice/properties/propertyallrooms';
+import PropertyImageReducer from "../slice/additional-image";
+import PropertyReducer from "../slice/property";
+import usersReducer from "../slice/user";
 
 const appReducer: Reducer = combineReducers({
   auth: authReducer,
@@ -54,6 +54,7 @@ const appReducer: Reducer = combineReducers({
   datePicker: datePickerReducer,
   propertyDocuments: propertyDocumentsReducer,
   property: propertiesReducer,
+  propertyAllRooms: propertyAllRoomsSpaceReducer,
   thingsToKnow: ThingsToKnowReducer,
   holiday: holidayReducer,
   amenityGroups: amenityGroupsReducer,
