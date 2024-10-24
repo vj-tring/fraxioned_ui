@@ -9,6 +9,7 @@ import {
   selectError,
   fetchPropertyDetailsById,
 } from "@/store/slice/auth/ThingstoknowSlice";
+import CancelPolicy from "../cancel-policy";
 
 interface HouseRulesProps {
   prop: number;
@@ -134,21 +135,35 @@ const SafetyAndProperty = () => {
   );
 };
 
-const CancellationPolicy = () => {
+const CancellationPolicy = (showActions?: boolean) => {
   const [showMore, setShowMore] = useState(false);
+  const [showCancelPolicy, setShowCancelPolicy] = useState(false);
 
   const policyText = [
-    "Add your trip details to get the cancellation details for this stay.",
+    "Cancellations must be made at least 7 days before the check-in date",
+    "Review the Cancellation policy in details.",
   ];
 
-  const visiblePolicyText = showMore ? policyText : policyText.slice(0, 2);
+  const visiblePolicyText = showMore ? policyText : policyText.slice(0, 4);
+
+  const handleShowMore = () => {
+    setShowMore(!showMore);
+    if (!showMore) {
+      setShowCancelPolicy(true);
+    }
+  };
+
+  const handleConfirmCancel = () => {
+    setShowCancelPolicy(false);
+    setShowMore(false);
+  };
 
   return (
     <div style={{ padding: "16px" }} className="ThingsHead">
-      <div   className="ThingstoHead monsterrat" >
+      <div className="ThingstoHead monsterrat">
         Cancellation Policy
       </div>
-      <div  >
+      <div>
         <ul>
           {visiblePolicyText.map((text, index) => (
             <li
@@ -163,7 +178,7 @@ const CancellationPolicy = () => {
         <Button
           variant="text"
           color="primary"
-          onClick={() => setShowMore(!showMore)}
+          onClick={handleShowMore}
           style={{
             fontSize: "14px",
             textDecoration: "underline",
@@ -175,19 +190,31 @@ const CancellationPolicy = () => {
           }}
           className="monsterrat addDate"
         >
-          {"Add Dates >"}
-          {/* {showMore ? '< Add dates ' : 'Add Dates >'} */}
+          {showMore ? "< Show Less " : "Show more >"}
         </Button>
       </div>
+      
+      {showCancelPolicy && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <CancelPolicy
+            showActions={false}
+            onConfirm={handleConfirmCancel}
+            onCancel={() => {
+              setShowCancelPolicy(false);
+              setShowMore(false);
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };
 
 interface Thinkprop {
-  propId : number;
+  propId: number;
 }
 
-const ThingsToKnow: FC<Thinkprop>= (prop) => {
+const ThingsToKnow: FC<Thinkprop> = (prop) => {
   return (
     <div className="mt-3">
       <div className="ThingstoHead1 monsterrat">

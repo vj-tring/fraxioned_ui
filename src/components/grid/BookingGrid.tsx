@@ -247,48 +247,31 @@ const BookingGrid: React.FC<BookingGridProps> = ({
       />
       {showCancelPopup && (
         <>
+          <Backdrop
+            open={showCancelPopup}
+            sx={{
+              zIndex: 1000,
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            }}
+          />
           <div
             style={{
               position: "fixed",
-              top: 0,
-              left: 0,
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-              zIndex: 1000,
-            }}
-          />
-          <Backdrop
-            open={showCancelPopup}
-            style={{
-              zIndex: 1000,
-              color: "#fff",
-            }}
-          />
-          <Grid
-            container
-            spacing={2}
-            direction="column"
-            justify="center"
-            alignItems="flex-start"
-            style={{
-              position: "fixed",
-              top: "52%",
+              top: "50%",
               left: "50%",
-              width: "70%",
-              height: "80%",
               transform: "translate(-50%, -50%)",
-              backgroundColor: "white",
-              padding: "10px",
-              borderRadius: "8px",
-              boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.4)",
+              width: "100%",
+              maxWidth: "800px", 
+              maxHeight: "90vh",
               zIndex: 1001,
-              // maxHeight: "80vh",
+              margin: "0 20px",
             }}
           >
             <CancelPolicy
               onConfirm={handleConfirmCancel}
               onCancel={handleCloseCancelModal}
             />
-          </Grid>
+          </div>
         </>
       )}
       {editingBooking && (
