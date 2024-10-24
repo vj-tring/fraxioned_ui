@@ -60,16 +60,15 @@
 }
 
 .headerIcon {
-  font-size: 64px;
+  font-size: 69px;
   color: #e28f25;
   margin-right: 12px;
 }
 
 .formTitle {
-  font-size: medium !important;
+  font-size: 20px !important;
   font-weight: 600 !important;
   color: #28282b;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif !important;
 }
 
 .closeButton {
@@ -124,13 +123,13 @@
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 8px;
-  
+
   padding-left: 25px;
 }
 
 .formControlLabel {
   margin-bottom: 0;
-  
+
   font-size: small !important;
 }
 
@@ -154,7 +153,7 @@
 }
 
 .addButton {
-  background-color: #058bdf !important;
+  background-color: #e28f25 !important;
   color: white;
 }
 
@@ -219,6 +218,7 @@
     width: 100%;
   }
 }
+
 /* 
 :global(.MuiOutlinedInput-root) {
     border-radius: 8px;

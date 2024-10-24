@@ -1,57 +1,13 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { propertyImageapi } from "@/api/api-endpoints";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { PropertyImage, PropertyImagesState, SpaceGroup } from "@/store/model/property-images.types";
+import { fetchPropertyImages } from "./action";
 import { RootState } from "@/store/reducers";
-
-interface PropertyImage {
-  id: number;
-  url: string;
-  description: string;
-  propertySpace: {
-    id: number;
-    instanceNumber: number;
-    space: {
-      id: number;
-      name: string;
-    };
-  };
-}
-
-interface SpaceGroup {
-  name: string;
-  instances: {
-    instanceNumber: number;
-    images: PropertyImage[];
-  }[];
-}
-
-interface PropertyImagesState {
-  imagesBySpace: {
-    [key: string]: SpaceGroup;
-  };
-  loading: boolean;
-  error: string | null;
-}
 
 const initialState: PropertyImagesState = {
   imagesBySpace: {},
   loading: false,
   error: null,
 };
-
-// Async thunk to fetch property images
-export const fetchPropertyImages = createAsyncThunk(
-  "propertyImages/fetchPropertyImages",
-  async (propertyId: number, { rejectWithValue }) => {
-    try {
-      const response = await propertyImageapi(propertyId);
-
-      return response.data.data;
-    } catch (error) {
-      console.error("Fetching property images failed:", error);
-      return rejectWithValue("Failed to fetch property images");
-    }
-  }
-);
 
 const propertyImagesSlice = createSlice({
   name: "propertyImages",
@@ -123,13 +79,12 @@ const propertyImagesSlice = createSlice({
               ],
             },
             ...groupedBySpace,
-            
             "Additional Photos": {
               name: "Additional Photos",
               instances: [
                 {
                   instanceNumber: 0,
-                  images: [...propertyAdditionalImages], // Store only additional images here
+                  images: [...propertyAdditionalImages],
                 },
               ],
             },
@@ -145,9 +100,10 @@ const propertyImagesSlice = createSlice({
   },
 });
 
+// Selectors
 export const selectPropertyImages = (state: RootState) =>
   state.propertyImages.imagesBySpace;
 export const selectLoading = (state: RootState) => state.propertyImages.loading;
 
-export default propertyImagesSlice.reducer;
 export const { removeImageById } = propertyImagesSlice.actions;
+export default propertyImagesSlice.reducer;

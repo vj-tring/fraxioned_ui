@@ -20,7 +20,6 @@ const EditForm: React.FC<EditFormProps> = ({
   isAdmin,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const userState = useSelector((state: RootState) => state.Users.user);
   const loading = useSelector((state: RootState) => state.Users.loading);
   const [formData, setFormData] = useState<User>(user);
   const [error, setError] = useState<string | null>(null);
@@ -58,11 +57,7 @@ const EditForm: React.FC<EditFormProps> = ({
     setShowSecondaryContact(!!(secondaryEmail || secondaryPhone));
   }, [formData.contactDetails]);
 
-  useEffect(() => {
-    if (userState) {
-      setFormData(userState);
-    }
-  }, [userState]);
+
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -108,19 +103,35 @@ const EditForm: React.FC<EditFormProps> = ({
     e.preventDefault();
     try {
       const { id, ...restFormData } = formData;
+      const formDataToSend = new FormData();
+      formDataToSend.append("firstName", restFormData.firstName);
+      formDataToSend.append("lastName", restFormData.lastName);
+      formDataToSend.append("addressLine1", restFormData.addressLine1 || "");
+      formDataToSend.append("addressLine2", restFormData.addressLine2 || "");
+      formDataToSend.append("city", restFormData.city || "");
+      formDataToSend.append("state", restFormData.state || "");
+      formDataToSend.append("country", restFormData.country || "");
+      formDataToSend.append("zipcode", restFormData.zipcode || "");
+      formDataToSend.append("isActive", String(restFormData.isActive));
+      formDataToSend.append("role", JSON.stringify({ id: restFormData.role.id }));
+      formDataToSend.append("contactDetails", JSON.stringify({
+        primaryEmail: restFormData.contactDetails.primaryEmail,
+        primaryPhone: restFormData.contactDetails.primaryPhone,
+        secondaryEmail: restFormData.contactDetails.secondaryEmail || "",
+        secondaryPhone: restFormData.contactDetails.secondaryPhone || ""
+      }));
 
-      const dataToSend: Partial<User> = {
-        ...restFormData,
-        updatedBy: id,
-        ...(formData.profileImage && { profileImage: formData.profileImage }),
-      };
-
-      delete (dataToSend as any).profileImage;
-      delete dataToSend.resetToken;
-      delete dataToSend.resetTokenExpires;
+      formDataToSend.append("updatedBy", (id || 0).toString());
+      // Append profile image if it exists
+      if (restFormData.profileImage instanceof File) {
+        formDataToSend.append("profileImage", restFormData.profileImage);
+      }
 
       if (id) {
-        await dispatch(updateUserById({ userId: id, userData: dataToSend }));
+        await dispatch(updateUserById({
+          userId: id,
+          userData: formDataToSend
+        }));
       }
 
       onUserUpdated();

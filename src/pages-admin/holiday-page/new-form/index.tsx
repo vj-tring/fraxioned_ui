@@ -23,7 +23,7 @@ import Loader from "@/components/loader";
 import { RootState } from "@/store/reducers";
 import { AppDispatch } from "@/store";
 import { addHoliday } from "@/store/slice/holiday/action";
-import { fetchProperties } from "@/store/slice/auth/propertiesSlice";
+import { fetchProperties } from "@/store/slice/property/action";
 import { NewFormProps } from "../holiday.types";
 import { formatDate } from "@/utils/datefunction";
 

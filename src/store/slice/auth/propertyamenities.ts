@@ -71,13 +71,15 @@ export const getByPropertyId = createAsyncThunk(
     }
 );
 
-
 export const getByPropertySpaceId = createAsyncThunk(
     'propertySpaceAmenities/getById',
     async (id: number, { rejectWithValue }) => {
         try {
             const response = await getAmenitiesByPropertySpaceId(id);
-            return response.data.data;
+            if (response?.data?.data) {
+                return response.data.data;
+            }
+            return [];
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message || 'An error occurred');
         }
@@ -129,12 +131,9 @@ const propertyAmenitiesSlice = createSlice({
             .addCase(getByPropertySpaceId.fulfilled, (state, action) => {
                 state.loading = false;
                 state.error = null;
-                if (action.payload.length > 0) {
-                    state.amenities = action.payload;
-                }
-                else {
-                    state.amenities = [];
-                }
+                // Safely handle the payload with null checks
+                const amenitiesData = Array.isArray(action.payload) ? action.payload : [];
+                state.amenities = amenitiesData;
             })
             .addCase(getByPropertySpaceId.rejected, (state, action) => {
                 state.loading = false;
