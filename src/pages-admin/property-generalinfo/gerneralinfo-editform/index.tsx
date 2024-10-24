@@ -12,8 +12,8 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchPropertyById, fetchPropertyDetailsById } from "@/store/slice/auth/propertiesSlice";
-import { updatePropertyRules } from "@/store/slice/auth/property-detail";
+import { fetchPropertyById, fetchPropertyDetailsById } from "@/store/slice/property/action";
+import { updatePropertyRules } from "@/store/slice/property-rules/action";
 import Loader from "@/components/loader";
 import styles from "./EditPropertyForm.module.css";
 import { RootState } from "@/store/reducers";

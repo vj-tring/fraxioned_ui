@@ -1,60 +1,12 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { axiosInstance } from '@/api/axiosSetup';
-
-interface PropertyCodeCategory {
-    id: number;
-    name: string;
-    createdAt: string;
-    updatedAt: string;
-    createdBy: {
-        id: number;
-    };
-    updatedBy: null | {
-        id: number;
-    };
-}
-
-interface CreatePropertyCodeCategoryPayload {
-    name: string;
-    createdBy: {
-        id: number;
-    };
-}
-
-interface CreatePropertyCodeCategoryResponse {
-    createdBy: {
-        id: number;
-    };
-    name: string;
-}
-
-interface PropertyCodeCategoriesState {
-    propertyCodeCategories: PropertyCodeCategory[];
-    status: 'idle' | 'loading' | 'succeeded' | 'failed';
-    error: string | null;
-}
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PropertyCodeCategoriesState, PropertyCodeCategory, CreatePropertyCodeCategoryResponse } from '@/store/model/property-category';
+import { fetchPropertyCodeCategories, createPropertyCodeCategory } from './action';
 
 const initialPropertyCodeCategoriesState: PropertyCodeCategoriesState = {
     propertyCodeCategories: [],
     status: 'idle',
     error: null,
 };
-
-export const fetchPropertyCodeCategories = createAsyncThunk(
-    'propertyCodeCategories/fetchPropertyCodeCategories',
-    async () => {
-        const response = await axiosInstance.get('/property-code-categories');
-        return response.data.data;
-    }
-);
-
-export const createPropertyCodeCategory = createAsyncThunk(
-    'propertyCodeCategories/createPropertyCodeCategory',
-    async (payload: CreatePropertyCodeCategoryPayload) => {
-        const response = await axiosInstance.post('/property-code-categories', payload);
-        return response.data;
-    }
-);
 
 const propertyCodeCategoriesSlice = createSlice({
     name: 'propertyCodeCategories',
@@ -94,4 +46,4 @@ const propertyCodeCategoriesSlice = createSlice({
     },
 });
 
-export const propertycodecatogoryReducer = propertyCodeCategoriesSlice.reducer;
+export default propertyCodeCategoriesSlice.reducer;

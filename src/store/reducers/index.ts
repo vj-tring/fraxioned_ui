@@ -35,10 +35,12 @@ import userDocumentsReducer from '../slice/user-document';
 import propertyImagesReducer from '../slice/auth/propertyImagesSlice '
 import { propertycodecatogoryReducer } from '../slice/auth/propertycodeCatogorySlice';
 import { propertyCodesReducer } from '../slice/auth/propertycodeSlice';
+import PropertyImageReducer from '../slice/additional-image';
+import PropertyReducer from '../slice/property';
+import usersReducer from '../slice/user';
+import userPropertyReducer from '../slice/user-property'
 import propertyAllRoomsSpaceReducer from '../slice/properties/propertyallrooms';
-import PropertyImageReducer from "../slice/additional-image";
-import PropertyReducer from "../slice/property";
-import usersReducer from "../slice/user";
+
 
 const appReducer: Reducer = combineReducers({
   auth: authReducer,
@@ -81,6 +83,7 @@ const appReducer: Reducer = combineReducers({
   PropertyImage: PropertyImageReducer,
   Property: PropertyReducer,
   Users: usersReducer,
+  userproperty: userPropertyReducer,
 });
 
 const rootReducer = (

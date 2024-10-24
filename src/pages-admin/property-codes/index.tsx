@@ -11,12 +11,16 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CustomizedSnackbars from '@/components/customized-snackbar';
-import { fetchPropertyCodes, editPropertyCode, deletePropertyCode } from '@/store/slice/auth/propertycodeSlice';
+import {
+  fetchPropertyCodes,
+  editPropertyCode,
+  deletePropertyCode
+} from '@/store/slice/property-code/action';
 import styles from './propertycode.module.css';
 import { RootState } from '@/store/reducers';
 import { AppDispatch } from '@/store';
 import PropertyCodeCategoryModal from './new-propertycode';
-import { PropertyCodes, SnackbarState } from './property-codes.types';
+import { SnackbarState, PropertyCodes } from './property-codes.types';
 import { Loader } from 'lucide-react';
 
 const PropertyCode: React.FC = () => {

@@ -15,7 +15,7 @@ import Loader from '@/components/loader';
 import styles from './editrulesform.module.css';
 import { styled } from '@mui/material/styles';
 import { RootState } from '@/store/reducers';
-import { fetchPropertyDetails, updatePropertyRules } from '@/store/slice/auth/property-detail';
+import { fetchPropertyDetails, updatePropertyRules } from '@/store/slice/property-rules/action';
 import { AppDispatch } from '@/store';
 import { PropertyRulesData } from '../property-rules.types';
 
