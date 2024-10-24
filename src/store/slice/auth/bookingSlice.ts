@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import {
   createBooking,
+  createAdminBooking,
+  AdminBookingData,
   createBookingSummary,
   getBookings,
   getUserBookings,
@@ -120,6 +122,18 @@ export const fetchUserBookings = createAsyncThunk(
         error.response?.data || { message: "An error occurred" }
       );
     }
+  }
+);
+
+export const fetchAdminBookings = createAsyncThunk(
+  'bookings/fetchAdminBookings',
+  async (payload: AdminBookingData, { rejectWithValue }) => {
+      try {
+          const response = await createAdminBooking(payload);
+          return response.data;
+      } catch (error) {
+          return rejectWithValue(error.response?.data || { message: "An error occurred" });
+      }
   }
 );
 

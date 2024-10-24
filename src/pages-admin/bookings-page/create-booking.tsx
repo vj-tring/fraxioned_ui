@@ -8,12 +8,13 @@ import styles from './create-booking.module.css';
 import MultipleSelect from '@/components/guest-selector';
 import { RootState } from '@/store/reducers';
 import { format, addDays } from 'date-fns';
-import { fetchUserBookings } from '@/store/slice/auth/bookingSlice';
+import { fetchAdminBookings } from '@/store/slice/auth/bookingSlice';
 import { AppDispatch } from '@/store';
 import Loader from '../../components/loader';
 import { X } from 'lucide-react';
-import { fetchProperties } from '@/store/slice/auth/property-slice';
 import { SelectChangeEvent } from '@mui/material';
+import { fetchProperties } from '@/store/slice/property/action';
+
 
 
 const style = {
@@ -41,7 +42,7 @@ const dateBoxStyle = {
     height: '50px',
     width: '240px',
     textAlign: 'center',
-    marginLeft:'34px'
+    marginLeft: '34px'
 };
 
 interface CreateBookingModalProps {
@@ -75,8 +76,11 @@ const CreateBookingModal: React.FC<CreateBookingModalProps> = ({ openEvent, hand
     const propertyNames = useSelector((state: RootState) => state.property.properties);
 
     useEffect(() => {
-        dispatch(fetchProperties(userId));
-    }, [dispatch]);
+        if (userId) {
+            dispatch(fetchProperties());
+        }
+    }, [dispatch, userId]);
+
 
     useEffect(() => {
         if (dateRange?.from) {
@@ -128,8 +132,29 @@ const CreateBookingModal: React.FC<CreateBookingModalProps> = ({ openEvent, hand
 
     const handleSubmit = async () => {
         setIsSubmitting(true);
+
+        const payload = {
+            user: {
+                id: userId,
+            },
+            property: {
+                id: propertyNames.find((property: any) => property.propertyName === selectedProperty)?.id,
+            },
+            createdBy: {
+                id: userId,
+            },
+            checkinDate: dateRange?.from ? dateRange.from.toISOString() : null,
+            checkoutDate: dateRange?.to ? dateRange.to.toISOString() : null,
+            noOfGuests: guestCount,
+            noOfPets: 0,
+            isLastMinuteBooking: true,
+            noOfAdults: 0,
+            noOfChildren: 0,
+            notes: "None",
+        };
+
         try {
-            await dispatch(fetchUserBookings(userId));
+            await fetchAdminBookings(payload);
             handleClose();
         } catch (error) {
             console.error('Error updating booking:', error);
@@ -142,7 +167,8 @@ const CreateBookingModal: React.FC<CreateBookingModalProps> = ({ openEvent, hand
             setIsSubmitting(false);
         }
     };
-
+    
+    
     const handleSelectChange = (event: SelectChangeEvent<string>) => {
         setSelectedProperty(event.target.value as string);
     };
@@ -177,8 +203,8 @@ const CreateBookingModal: React.FC<CreateBookingModalProps> = ({ openEvent, hand
                                 }}
                             >
                                 {propertyNames?.map((property: any) => (
-                                    <MenuItem key={property.id} value={property.name}>
-                                        {property.name}
+                                    <MenuItem key={property.id} value={property.propertyName}>
+                                        {property.propertyName}
                                     </MenuItem>
                                 ))}
                             </Select>
@@ -224,7 +250,6 @@ const CreateBookingModal: React.FC<CreateBookingModalProps> = ({ openEvent, hand
                             onDateSelect={handleDateSelect}
                             initialRange={dateRange}
                             propertyColor="#e28f25"
-                            isEditMode={true}
                         />
                     </Grid>
                 </Grid>
