@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-
-import "../booking/trackingMyNights.css";
 import { useSelector } from "react-redux";
 import { SelectChangeEvent } from "@mui/material";
 import { Image } from "../property-listing-page";
 import { Card } from "../../store/slice/auth/property-slice";
+import { Dropdown } from "primereact/dropdown";
+import "../booking/trackingMyNights.css";
+
 interface RootState {
   properties: {
     cards: Card[];
@@ -13,7 +14,6 @@ interface RootState {
   };
 }
 
-import { Dropdown } from "primereact/dropdown";
 const TrackingMyNigts: React.FC = () => {
   const properties = useSelector((state: RootState) => state.properties.cards);
   const [selectedPropertyId, setSelectedPropertyId] = useState<number | null>(
@@ -40,10 +40,30 @@ const TrackingMyNigts: React.FC = () => {
   const selectedProperty = properties.find(
     (property) => property.id === selectedPropertyId
   );
-  const propertyDetails = selectedProperty?.details[selectedYear];
-  const availableYears = Object.keys(selectedProperty?.details || {}).map(
-    (year) => parseInt(year)
-  );
+
+  // Safely access property details with fallback
+  const propertyDetails = selectedProperty?.details?.[selectedYear] || {
+    offAllottedNights: 0,
+    offUsedNights: 0,
+    offBookedNights: 0,
+    offRemainingNights: 0,
+    offAllottedHolidayNights: 0,
+    offUsedHolidayNights: 0,
+    offBookedHolidayNights: 0,
+    offRemainingHolidayNights: 0,
+    peakAllottedNights: 0,
+    peakUsedNights: 0,
+    peakBookedNights: 0,
+    peakRemainingNights: 0,
+    peakAllottedHolidayNights: 0,
+    peakUsedHolidayNights: 0,
+    peakBookedHolidayNights: 0,
+    peakRemainingHolidayNights: 0,
+  };
+
+  const availableYears = selectedProperty?.details
+    ? Object.keys(selectedProperty.details).map((year) => parseInt(year))
+    : [new Date().getFullYear()];
 
   const showselectedimage = (id: number) => {
     const filteredImage = properties
@@ -59,11 +79,18 @@ const TrackingMyNigts: React.FC = () => {
   };
 
   const getOffSeasonDates = (startDate: string, endDate: string) => {
+    if (!startDate || !endDate) {
+      return {
+        offSeasonBefore: { startDate: "", endDate: "" },
+        offSeasonAfter: { startDate: "", endDate: "" },
+      };
+    }
+
     const peakStart = new Date(startDate);
     const peakEnd = new Date(endDate);
 
     const offSeasonBeforeStart = {
-      startDate: new Date(peakStart.getFullYear(), 12, 1), // Dec 31 of the current year
+      startDate: new Date(peakStart.getFullYear(), 12, 1),
       endDate: new Date(
         peakStart.getFullYear(),
         peakStart.getMonth(),
@@ -77,7 +104,7 @@ const TrackingMyNigts: React.FC = () => {
         peakEnd.getMonth(),
         peakEnd.getDate() + 1
       ),
-      endDate: new Date(peakEnd.getFullYear(), 11, 31), // Dec 30 of the same year
+      endDate: new Date(peakEnd.getFullYear(), 11, 31),
     };
 
     if (peakStart.getMonth() < 11) {
@@ -110,19 +137,15 @@ const TrackingMyNigts: React.FC = () => {
     };
   };
 
-  const { offSeasonBefore, offSeasonAfter } = selectedProperty
-    ? getOffSeasonDates(
-        selectedProperty?.peakSeasonStartDate || "",
-        selectedProperty?.peakSeasonEndDate || ""
-      )
-    : {
-        offSeasonBefore: { startDate: "", endDate: "" },
-        offSeasonAfter: { startDate: "", endDate: "" },
-      };
+  const { offSeasonBefore, offSeasonAfter } = getOffSeasonDates(
+    selectedProperty?.peakSeasonStartDate || "",
+    selectedProperty?.peakSeasonEndDate || ""
+  );
 
   const [selectedProperty1, setSelectedProperty1] = useState<number | null>(
     null
   );
+
   return (
     <div className="Container">
       <div className="My-nights">
@@ -141,8 +164,8 @@ const TrackingMyNigts: React.FC = () => {
                 setSelectedProperty1(e.value);
                 handlePropertyChange(e);
               }}
-              options={properties.map((property, index) => ({
-                label: ` ${property.propertyName} `,
+              options={properties.map((property) => ({
+                label: property.propertyName,
                 value: property.id,
                 style: {
                   backgroundColor: "white",
@@ -151,10 +174,7 @@ const TrackingMyNigts: React.FC = () => {
                   width: "250px",
                   paddingLeft: "25px",
                   fontSize: "small",
-                  display:"flex",
-                  // position:"relative",
-                  // left:"10px"
-                  
+                  display: "flex",
                 },
               }))}
               optionLabel="label"
@@ -163,31 +183,30 @@ const TrackingMyNigts: React.FC = () => {
             />
           </div>
 
-          <hr className="vl mt-2"></hr>
+          <hr className="vl mt-2" />
 
-          <div className=" p-2.5 ">
+          <div className="p-2.5">
             <Dropdown
               value={selectedYear}
               onChange={(e) => {
                 setSelectedYear(e.value);
                 handleYearChange(e);
               }}
-              options={availableYears.map((year, index) => ({
-                label: year,
+              options={availableYears.map((year) => ({
+                label: year.toString(),
                 value: year,
                 style: {
                   backgroundColor: "white",
                   paddingTop: "10px",
                   paddingBottom: "10px",
-
                   width: "100px",
                   paddingLeft: "27px",
                   fontSize: "small",
                 },
               }))}
               optionLabel="label"
-              placeholder="Select a Property"
-              className="w-full md:w-14rem DropdownLabel1 "
+              placeholder="Select Year"
+              className="w-full md:w-14rem DropdownLabel1"
             />
           </div>
         </div>
