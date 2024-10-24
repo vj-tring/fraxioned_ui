@@ -23,7 +23,7 @@ const names = [
     description: "Ages 2-12",
     icon: <ChildFriendlyIcon />,
   },
-  { label: "Pets", description: "Animal friend", icon: <PetsIcon /> },
+  { label: "Pets", description: "Non-service animal", icon: <PetsIcon /> },
 ];
 
 interface MultipleSelectProps {
