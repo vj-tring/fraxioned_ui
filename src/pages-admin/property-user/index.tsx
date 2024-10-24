@@ -60,7 +60,6 @@ const PropertyUsers: React.FC = () => {
   const { propertyDetails, loading: propertyLoading, error: propertyError } = useSelector(
     (state: RootState) => state.userProperty
   );
-
   useEffect(() => {
     dispatch(fetchUserDetails());
 
