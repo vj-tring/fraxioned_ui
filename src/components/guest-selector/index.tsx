@@ -10,9 +10,10 @@ import ChildFriendlyIcon from "@mui/icons-material/ChildFriendly";
 import PetsIcon from "@mui/icons-material/Pets";
 import "./guest-selector.css";
 import { RootState } from "@/store/reducers";
-import { CircleMinus, CirclePlus } from "lucide-react";
+import { AlertCircle, CircleMinus, CirclePlus } from "lucide-react";
 import { updateCount } from "@/store/slice/auth/propertyGuestSlice";
 import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined";
+import { Alert, AlertDescription } from "../ui/alert";
 
 
 const names = [
@@ -22,7 +23,7 @@ const names = [
     description: "Ages 2-12",
     icon: <ChildFriendlyIcon />,
   },
-  { label: "Pets", description: "Bringing a service?", icon: <PetsIcon /> },
+  { label: "Pets", description: "Animal friend", icon: <PetsIcon /> },
 ];
 
 interface MultipleSelectProps {
@@ -219,7 +220,7 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({
 
         <div
           className="d-flex align-items-start flex-column"
-          style={{ paddingLeft: showIcons ? 0 : 8 }}
+          style={{ paddingLeft: showIcons ? 0 : 13 }}
         >
           <span className="DateHead1 monsterrat text-sm">Who</span>
           <p className="property1 monsterrat text-xs">{getTotalGuests()} guests</p>
@@ -232,11 +233,12 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({
         onClose={handleClose}
         PaperProps={{
           style: {
-            width: showIcons ? 300 :370,
+            width: showIcons ? 315 :320,
             borderRadius: "8px",
             maxHeight: "320px",
             overflowY: "auto",
-            padding: ".1rem 0",
+            padding: showIcons ? ".3rem 0": "0.3rem 7px",
+            marginTop: "7px",
           },
         }}
       >
@@ -246,8 +248,8 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({
             sx={{
               width: "100%",
               padding: showIcons ? "0 1.5rem" : "0.25rem 1.5rem",
-              margin: ".3rem 0",
-              height: showIcons ? "3rem" : "auto",
+              margin: ".4rem .1rem",
+              height: showIcons ? "3.2rem" : "auto",
             }}
             disableRipple
           >
@@ -307,11 +309,14 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({
             </div>
           </MenuItem>
         ))}
-        {validationMessage && (
-          <div className="validationMsg monsterrat text-xs px-4 py-1">
-            <p style={{ color: "red" }}>{validationMessage}</p>
-          </div>
-        )}
+          {validationMessage && (
+            <Alert className="destructive">
+              <div className="flex items-center">
+                <AlertCircle className="h-4 w-6 pr-2 text-red-600" />
+                <AlertDescription className="text-red-600">{validationMessage}</AlertDescription>
+              </div>
+            </Alert>
+          )}
         <div className="text-gray-600 text-[11px] px-4 pt-2 pb-2 leading-tight">
           <p>{dynamicMessage}</p>
         </div>
