@@ -42,19 +42,20 @@ const PropertyAmenities: React.FC = () => {
     error,
     amenities: propertyAmenities,
   } = useSelector((state: RootState) => state.propertyAmenities);
-
   useEffect(() => {
     if (id) {
       dispatch(getByPropertyId(Number(id)));
     }
     fetchAmenities();
   }, [id, dispatch]);
-
   useEffect(() => {
     if (propertyAmenities.length > 0) {
       setSelectedAmenities(
-        propertyAmenities.map(
-          (item: { amenity: { id: any } }) => item.amenity.id
+        propertyAmenities.reduce(
+          (acc: number[], item: { amenities: [{ amenityId: number }] }) => {
+            return acc.concat(item.amenities.map((item) => item.amenityId));
+          },
+          []
         )
       );
     }

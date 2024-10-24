@@ -106,64 +106,65 @@ export const updatePropertyAmenities = createAsyncThunk(
 );
 
 const propertyAmenitiesSlice = createSlice({
-  name: "propertyAmenities",
-  initialState,
-  reducers: {
-    resetPropertyAmenities: (state) => {
-      state.loading = false;
-      state.error = null;
-      state.success = false;
-      state.amenities = [];
+    name: 'propertyAmenities',
+    initialState,
+    reducers: {
+        resetPropertyAmenities: (state) => {
+            state.loading = false;
+            state.error = null;
+            state.success = false;
+            state.amenities = [];
+        },
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(getByPropertyId.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(getByPropertyId.fulfilled, (state, action) => {
-        state.loading = false;
-        state.error = null;
-        state.amenities = action.payload.data;
-      })
-      .addCase(getByPropertyId.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-      .addCase(getByPropertySpaceId.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(getByPropertySpaceId.fulfilled, (state, action) => {
-        state.loading = false;
-        state.error = null;
-        if (action.payload.length > 0) {
-          state.amenities = action.payload;
-        } else {
-          state.amenities = [];
-        }
-      })
-      .addCase(getByPropertySpaceId.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-      .addCase(updatePropertyAmenities.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-        state.success = false;
-      })
-      .addCase(updatePropertyAmenities.fulfilled, (state) => {
-        state.loading = false;
-        state.error = null;
-        state.success = true;
-      })
-      .addCase(updatePropertyAmenities.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-        state.success = false;
-      });
-  },
+    extraReducers: (builder) => {
+        builder
+            .addCase(getByPropertyId.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getByPropertyId.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = null;
+                state.amenities = action.payload.data.amenityGroup;
+            })
+            .addCase(getByPropertyId.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
+            .addCase(getByPropertySpaceId.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getByPropertySpaceId.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = null;
+                if (action.payload.length > 0) {
+                    state.amenities = action.payload;
+                }
+                else {
+                    state.amenities = [];
+                }
+            })
+            .addCase(getByPropertySpaceId.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
+            .addCase(updatePropertyAmenities.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.success = false;
+            })
+            .addCase(updatePropertyAmenities.fulfilled, (state) => {
+                state.loading = false;
+                state.error = null;
+                state.success = true;
+            })
+            .addCase(updatePropertyAmenities.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+                state.success = false;
+            });
+    },
 });
 
 export const { resetPropertyAmenities } = propertyAmenitiesSlice.actions;
